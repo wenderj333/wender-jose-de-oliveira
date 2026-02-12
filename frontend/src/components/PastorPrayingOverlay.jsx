@@ -1,21 +1,24 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import PrayerBubbles from './PrayerBubbles';
 import { HandHeart, BookOpen, X } from 'lucide-react';
 
 export default function PastorPrayingOverlay({ sessions, totalCount, onClose }) {
+  const { t } = useTranslation();
+
   return (
     <div className="pastor-overlay">
       <button className="pastor-overlay__close" onClick={onClose}>
-        <X size={18} style={{ verticalAlign: 'middle', marginRight: '4px' }} /> Fechar
+        <X size={18} style={{ verticalAlign: 'middle', marginRight: '4px' }} /> {t('pastorOverlay.close')}
       </button>
 
       <div className="pastor-overlay__glow">
         <HandHeart size={64} style={{ color: 'var(--gold-light)' }} />
       </div>
 
-      <h2>Pastores Orando ao Vivo</h2>
+      <h2>{t('pastorOverlay.title')}</h2>
       <p style={{ fontSize: '1.2rem', marginBottom: '1rem', opacity: 0.9 }}>
-        {totalCount} {totalCount === 1 ? 'igreja' : 'igrejas'} em oração neste momento
+        {t('pastorOverlay.churchesInPrayer', { count: totalCount })}
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', alignItems: 'center', marginTop: '1rem' }}>

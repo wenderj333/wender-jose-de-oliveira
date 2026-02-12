@@ -1,21 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import PrayerCard from '../components/PrayerCard';
 import { useAuth } from '../context/AuthContext';
 import { HandHeart, Trophy, Sparkles, AlertTriangle, Plus } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
-
-const CATEGORIES = [
-  { value: '', label: 'Todas' },
-  { value: 'health', label: 'Saúde' },
-  { value: 'work_finance', label: 'Trabalho/Finanças' },
-  { value: 'family', label: 'Família' },
-  { value: 'studies', label: 'Estudos' },
-  { value: 'housing', label: 'Moradia' },
-  { value: 'emotional', label: 'Emocional' },
-  { value: 'decisions', label: 'Decisões' },
-  { value: 'other', label: 'Outros' },
-];
 
 const DEMO_PRAYERS = [
   {
@@ -82,11 +71,24 @@ const DEMO_PRAYERS = [
 
 export default function PrayerFeed() {
   const { user, token } = useAuth();
+  const { t } = useTranslation();
   const [prayers, setPrayers] = useState([]);
   const [tab, setTab] = useState('all');
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ title: '', content: '', category: 'other', is_urgent: false });
   const [loading, setLoading] = useState(true);
+
+  const CATEGORIES = [
+    { value: '', label: t('prayerFeed.categories.all') },
+    { value: 'health', label: t('prayerFeed.categories.health') },
+    { value: 'work_finance', label: t('prayerFeed.categories.work_finance') },
+    { value: 'family', label: t('prayerFeed.categories.family') },
+    { value: 'studies', label: t('prayerFeed.categories.studies') },
+    { value: 'housing', label: t('prayerFeed.categories.housing') },
+    { value: 'emotional', label: t('prayerFeed.categories.emotional') },
+    { value: 'decisions', label: t('prayerFeed.categories.decisions') },
+    { value: 'other', label: t('prayerFeed.categories.other') },
+  ];
 
   const fetchPrayers = async () => {
     setLoading(true);
@@ -96,7 +98,6 @@ export default function PrayerFeed() {
       const data = await res.json();
       setPrayers(data.prayers || []);
     } catch {
-      // Use demo data if API unavailable
       setPrayers(tab === 'answered' ? [] : DEMO_PRAYERS);
     }
     setLoading(false);
@@ -134,37 +135,37 @@ export default function PrayerFeed() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
         <h2 style={{ color: 'var(--green-dark)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          {tab === 'answered' ? <><Trophy size={24} /> Mural de Vitórias</> : <><HandHeart size={24} /> Pedidos de Oração</>}
+          {tab === 'answered' ? <><Trophy size={24} /> {t('prayerFeed.victoryWall')}</> : <><HandHeart size={24} /> {t('prayerFeed.prayerRequests')}</>}
         </h2>
         {user && (
           <button className="btn btn-green" onClick={() => setShowForm(!showForm)}>
-            <Plus size={18} /> Novo Pedido
+            <Plus size={18} /> {t('prayerFeed.newRequest')}
           </button>
         )}
       </div>
 
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         <button className={`btn ${tab === 'all' ? 'btn-green' : 'btn-outline'}`} style={tab !== 'all' ? { color: 'var(--green)', borderColor: 'var(--green)' } : {}} onClick={() => setTab('all')}>
-          Todos os Pedidos
+          {t('prayerFeed.allRequests')}
         </button>
         <button className={`btn ${tab === 'answered' ? 'btn-primary' : 'btn-outline'}`} style={tab !== 'answered' ? { color: 'var(--gold-dark)', borderColor: 'var(--gold)' } : {}} onClick={() => setTab('answered')}>
-          <Sparkles size={16} /> Orações Respondidas
+          <Sparkles size={16} /> {t('prayerFeed.answeredPrayers')}
         </button>
       </div>
 
       {showForm && (
         <form onSubmit={handleSubmit} className="card" style={{ marginBottom: '1.5rem' }}>
-          <h3 style={{ color: 'var(--green-dark)', marginBottom: '1rem' }}>Novo Pedido de Oração</h3>
+          <h3 style={{ color: 'var(--green-dark)', marginBottom: '1rem' }}>{t('prayerFeed.newPrayerRequest')}</h3>
           <div className="form-group">
-            <label>Título (opcional)</label>
-            <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Ex: Oração pela minha família" />
+            <label>{t('prayerFeed.titleOptional')}</label>
+            <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder={t('prayerFeed.titlePlaceholder')} />
           </div>
           <div className="form-group">
-            <label>Seu pedido *</label>
-            <textarea rows={4} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} placeholder="Compartilhe seu pedido de oração..." required />
+            <label>{t('prayerFeed.yourRequest')}</label>
+            <textarea rows={4} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} placeholder={t('prayerFeed.requestPlaceholder')} required />
           </div>
           <div className="form-group">
-            <label>Categoria</label>
+            <label>{t('prayerFeed.category')}</label>
             <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
               {CATEGORIES.filter(c => c.value).map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
             </select>
@@ -172,19 +173,19 @@ export default function PrayerFeed() {
           <div className="form-group">
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <input type="checkbox" checked={form.is_urgent} onChange={(e) => setForm({ ...form, is_urgent: e.target.checked })} />
-              <AlertTriangle size={16} style={{ color: 'var(--red)' }} /> Pedido urgente
+              <AlertTriangle size={16} style={{ color: 'var(--red)' }} /> {t('prayerFeed.urgentRequest')}
             </label>
           </div>
-          <button type="submit" className="btn btn-green"><HandHeart size={18} /> Enviar Pedido</button>
+          <button type="submit" className="btn btn-green"><HandHeart size={18} /> {t('prayerFeed.submitRequest')}</button>
         </form>
       )}
 
       {loading ? (
-        <p style={{ textAlign: 'center', color: 'var(--gray-500)' }}>Carregando orações...</p>
+        <p style={{ textAlign: 'center', color: 'var(--gray-500)' }}>{t('prayerFeed.loading')}</p>
       ) : prayers.length === 0 ? (
         <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
           <HandHeart size={48} style={{ color: 'var(--gray-200)', margin: '0 auto 1rem' }} />
-          <p style={{ color: 'var(--gray-500)' }}>Nenhum pedido de oração ainda. Seja o primeiro!</p>
+          <p style={{ color: 'var(--gray-500)' }}>{t('prayerFeed.noRequests')}</p>
         </div>
       ) : (
         prayers.map((prayer) => (

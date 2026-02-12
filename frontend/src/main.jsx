@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { AuthProvider } from './context/AuthContext';
 import { WebSocketProvider } from './context/WebSocketContext';
+import './i18n';
 import './styles/main.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(

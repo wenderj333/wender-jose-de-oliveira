@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Heart, MessageCircle, Share2, Video, Image, BookOpen, Award, Play } from 'lucide-react';
 
 const TYPE_STYLES = {
@@ -10,6 +11,7 @@ const TYPE_STYLES = {
 };
 
 export default function FeedPost({ post }) {
+  const { t } = useTranslation();
   const [amem, setAmem] = useState(false);
   const [amemCount, setAmemCount] = useState(post.amemCount || 0);
 
@@ -27,7 +29,7 @@ export default function FeedPost({ post }) {
         return (
           <div className="feed-post__video-placeholder">
             <Play size={48} />
-            <span>Toque para assistir</span>
+            <span>{t('feedPost.tapToWatch')}</span>
             {post.content && <p className="feed-post__text">{post.content}</p>}
           </div>
         );
@@ -35,7 +37,7 @@ export default function FeedPost({ post }) {
         return (
           <div className="feed-post__image-placeholder">
             <Image size={48} />
-            <span>Foto</span>
+            <span>{t('feedPost.photo')}</span>
             {post.content && <p className="feed-post__text">{post.content}</p>}
           </div>
         );
@@ -56,9 +58,7 @@ export default function FeedPost({ post }) {
   return (
     <article className={`feed-post feed-post--${post.type}`} style={{ borderLeftColor: style.borderColor }}>
       <div className="feed-post__header">
-        <div className="feed-post__avatar" style={{ background: style.borderColor }}>
-          {post.authorInitials}
-        </div>
+        <div className="feed-post__avatar" style={{ background: style.borderColor }}>{post.authorInitials}</div>
         <div className="feed-post__author-info">
           <span className="feed-post__author-name">{post.authorName}</span>
           <span className="feed-post__author-church">{post.church}</span>
@@ -69,14 +69,12 @@ export default function FeedPost({ post }) {
         </div>
       </div>
 
-      <div className="feed-post__content">
-        {renderContent()}
-      </div>
+      <div className="feed-post__content">{renderContent()}</div>
 
       <div className="feed-post__footer">
         <button className={`feed-post__amem-btn ${amem ? 'feed-post__amem-btn--active' : ''}`} onClick={toggleAmem}>
           <Heart size={18} fill={amem ? 'var(--gold)' : 'none'} />
-          <span>Amém {amemCount > 0 && `(${amemCount})`}</span>
+          <span>{t('feedPost.amem')} {amemCount > 0 && `(${amemCount})`}</span>
         </button>
         <button className="feed-post__action-btn">
           <MessageCircle size={18} />
@@ -84,7 +82,7 @@ export default function FeedPost({ post }) {
         </button>
         <button className="feed-post__action-btn">
           <Share2 size={18} />
-          <span>Partilhar</span>
+          <span>{t('feedPost.share')}</span>
         </button>
       </div>
     </article>
