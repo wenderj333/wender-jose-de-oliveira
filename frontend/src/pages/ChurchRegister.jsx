@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Church, MapPin, Phone, User, BookOpen, CheckCircle } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 export default function ChurchRegister() {
   const { token, user } = useAuth();
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ export default function ChurchRegister() {
 
     setLoading(true);
     try {
-      const res = await fetch('/api/churches', {
+      const res = await fetch(`${API_BASE}/api/churches`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(form),

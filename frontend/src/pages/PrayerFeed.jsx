@@ -3,6 +3,8 @@ import PrayerCard from '../components/PrayerCard';
 import { useAuth } from '../context/AuthContext';
 import { HandHeart, Trophy, Sparkles, AlertTriangle, Plus } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 const CATEGORIES = [
   { value: '', label: 'Todas' },
   { value: 'health', label: 'Saúde' },
@@ -88,7 +90,7 @@ export default function PrayerFeed() {
 
   const fetchPrayers = async () => {
     setLoading(true);
-    const endpoint = tab === 'answered' ? '/api/prayers/answered' : '/api/prayers';
+    const endpoint = tab === 'answered' ? `${API_BASE}/api/prayers/answered` : `${API_BASE}/api/prayers`;
     try {
       const res = await fetch(endpoint);
       const data = await res.json();
@@ -105,7 +107,7 @@ export default function PrayerFeed() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.content.trim()) return;
-    await fetch('/api/prayers', {
+    await fetch(`${API_BASE}/api/prayers`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(form),
@@ -120,7 +122,7 @@ export default function PrayerFeed() {
       setPrayers(prev => prev.map(p => p.id === prayerId ? { ...p, prayer_count: (p.prayer_count || 0) + 1 } : p));
       return;
     }
-    await fetch(`/api/prayers/${prayerId}/pray`, {
+    await fetch(`${API_BASE}/api/prayers/${prayerId}/pray`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ message: '' }),

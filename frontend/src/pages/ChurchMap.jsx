@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import ChurchPin from '../components/ChurchPin';
 import { MapPin, Search, Church } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 const DEMO_CHURCHES = [
   {
     id: 'demo-1',
@@ -82,7 +84,7 @@ export default function ChurchMap() {
     setLoading(true);
     setSearched(true);
     try {
-      const res = await fetch(`/api/churches/search?city=${encodeURIComponent(searchQuery)}`);
+      const res = await fetch(`${API_BASE}/api/churches/search?city=${encodeURIComponent(searchQuery)}`);
       const data = await res.json();
       setApiChurches(data.churches || []);
     } catch {

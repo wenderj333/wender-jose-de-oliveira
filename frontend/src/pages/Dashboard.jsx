@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LayoutDashboard, Users, HandHeart, Sparkles, Heart, Church, BookOpen, Plus, ArrowRight, Clock, Star } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 export default function Dashboard() {
   const { token } = useAuth();
   const [stats, setStats] = useState(null);
@@ -13,7 +15,7 @@ export default function Dashboard() {
     if (!token) return;
     const headers = { Authorization: `Bearer ${token}` };
 
-    fetch('/api/dashboard/stats', { headers })
+    fetch(`${API_BASE}/api/dashboard/stats`, { headers })
       .then(r => r.json())
       .then(data => {
         setStats(data.stats);

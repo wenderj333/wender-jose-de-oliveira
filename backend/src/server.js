@@ -8,7 +8,18 @@ const app = express();
 const server = http.createServer(app);
 
 // Middleware
-app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' }));
+app.use(cors({
+  origin: function (origin, callback) {
+    const allowed = (process.env.CORS_ORIGIN || 'http://localhost:5173').split(',').map(s => s.trim());
+    // Allow requests with no origin (mobile apps, curl, etc)
+    if (!origin) return callback(null, true);
+    // Allow any .vercel.app domain
+    if (/\.vercel\.app$/.test(origin)) return callback(null, true);
+    if (allowed.includes(origin)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
 // Routes
