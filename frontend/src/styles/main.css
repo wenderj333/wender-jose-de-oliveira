@@ -280,22 +280,126 @@ body {
 /* ===== HOME PAGE ===== */
 .hero {
   text-align: center;
-  padding: 4rem 1rem;
-  background: linear-gradient(135deg, #1b3a5c, #3b5998, #2d8a4e);
+  padding: 4rem 1.5rem 3rem;
+  background: linear-gradient(135deg, #0f2744, #1b3a5c, #3b5998, #2d6a3e);
+  background-size: 300% 300%;
+  animation: heroGradient 12s ease infinite;
   color: var(--white);
   border-radius: var(--radius);
   margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
-.hero h1 {
-  font-size: 3rem;
+.hero--loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+@keyframes heroGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Partículas douradas */
+.hero__particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero__particle {
+  position: absolute;
+  bottom: -10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-light), transparent);
+  opacity: 0;
+  animation: particleFloat linear infinite;
+}
+@keyframes particleFloat {
+  0% { opacity: 0; transform: translateY(0) scale(0.5); }
+  15% { opacity: 0.7; }
+  85% { opacity: 0.3; }
+  100% { opacity: 0; transform: translateY(-500px) scale(0); }
+}
+
+/* Ícone com glow */
+.hero__icon-glow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 208, 63, 0.25), transparent 70%);
+  margin-bottom: 1rem;
+  animation: iconPulse 3s ease-in-out infinite;
+}
+@keyframes iconPulse {
+  0%, 100% { box-shadow: 0 0 30px rgba(244, 208, 63, 0.2); transform: scale(1); }
+  50% { box-shadow: 0 0 60px rgba(244, 208, 63, 0.4); transform: scale(1.05); }
+}
+
+.hero__title {
+  font-size: 3.2rem;
   margin-bottom: 0.5rem;
   color: var(--gold-light);
+  letter-spacing: -1px;
+  text-shadow: 0 2px 20px rgba(244, 208, 63, 0.3);
 }
-.hero p {
+.hero__subtitle {
   font-size: 1.25rem;
   opacity: 0.9;
   max-width: 600px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+}
+
+/* Versículo do dia */
+.hero__verse {
+  max-width: 550px;
   margin: 0 auto 2rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(244, 208, 63, 0.2);
+  backdrop-filter: blur(4px);
+}
+.hero__verse-text {
+  display: block;
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 0.4rem;
+}
+.hero__verse-ref {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold-light);
+}
+
+/* Stats ao vivo */
+.hero__stats {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.hero__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  backdrop-filter: blur(4px);
 }
 
 .features {
@@ -691,9 +795,12 @@ body {
     padding: 0.6rem 1rem;
     min-height: 44px;
   }
-  .hero { padding: 2.5rem 1rem; }
-  .hero h1 { font-size: 2rem; }
-  .hero p { font-size: 1rem; }
+  .hero { padding: 2.5rem 1rem 2rem; }
+  .hero__title { font-size: 2.2rem; }
+  .hero__subtitle { font-size: 1rem; }
+  .hero__icon-glow { width: 85px; height: 85px; }
+  .hero__verse { padding: 0.75rem 1rem; }
+  .hero__verse-text { font-size: 0.95rem; }
   .features {
     grid-template-columns: 1fr;
   }

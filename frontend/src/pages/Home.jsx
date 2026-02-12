@@ -1,32 +1,77 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useWebSocket } from '../context/WebSocketContext';
-import { HandHeart, Radio, MapPin, LayoutDashboard, Heart, BookOpen, Baby, Church, Newspaper } from 'lucide-react';
+import { HandHeart, Radio, MapPin, LayoutDashboard, Heart, BookOpen, Baby, Church, Newspaper, Sparkles, Users, CheckCircle } from 'lucide-react';
+
+const versiculos = [
+  { texto: "Porque onde estiverem dois ou três reunidos em meu nome, ali estou no meio deles.", ref: "Mateus 18:20" },
+  { texto: "Tudo posso naquele que me fortalece.", ref: "Filipenses 4:13" },
+  { texto: "O Senhor é o meu pastor; nada me faltará.", ref: "Salmos 23:1" },
+  { texto: "Confie no Senhor de todo o seu coração e não se apoie no seu próprio entendimento.", ref: "Provérbios 3:5" },
+  { texto: "Pois eu sei os planos que tenho para vocês, planos de dar a vocês esperança e um futuro.", ref: "Jeremias 29:11" },
+  { texto: "Sejam fortes e corajosos. Não tenham medo, pois o Senhor estará com vocês.", ref: "Deuteronômio 31:6" },
+  { texto: "A oração de um justo é poderosa e eficaz.", ref: "Tiago 5:16" },
+];
+
+function getVersiculoDoDia() {
+  const hoje = new Date();
+  const idx = (hoje.getFullYear() * 366 + hoje.getMonth() * 31 + hoje.getDate()) % versiculos.length;
+  return versiculos[idx];
+}
 
 export default function Home() {
   const { totalChurchesPraying } = useWebSocket();
+  const [loaded, setLoaded] = useState(false);
+  const versiculo = getVersiculoDoDia();
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoaded(true), 100);
+    return () => clearTimeout(t);
+  }, []);
 
   const iconStyle = { color: '#3b5998', strokeWidth: 1.5 };
   const goldIcon = { color: '#daa520', strokeWidth: 1.5 };
 
   return (
     <div>
-      <section className="hero">
-        <BookOpen size={56} style={{ color: '#f4d03f', strokeWidth: 1.5, marginBottom: '0.5rem' }} />
-        <h1>Sigo com Fé</h1>
-        <p>A rede social cristã que conecta igrejas, fortalece a fé e coloca a tecnologia a serviço do Reino.</p>
+      <section className={`hero ${loaded ? 'hero--loaded' : ''}`}>
+        <div className="hero__particles">
+          {[...Array(12)].map((_, i) => (
+            <span key={i} className="hero__particle" style={{
+              left: `${8 + (i * 7.5) % 85}%`,
+              animationDelay: `${i * 0.7}s`,
+              animationDuration: `${4 + (i % 3) * 2}s`
+            }} />
+          ))}
+        </div>
+
+        <div className="hero__icon-glow">
+          <BookOpen size={64} style={{ color: '#f4d03f', strokeWidth: 1.5 }} />
+        </div>
+
+        <h1 className="hero__title">Sigo com Fé</h1>
+        <p className="hero__subtitle">Ore, conecte-se e fortaleça sua fé com milhares de irmãos ao redor do mundo.</p>
+
+        <div className="hero__verse">
+          <span className="hero__verse-text">"{versiculo.texto}"</span>
+          <span className="hero__verse-ref">— {versiculo.ref}</span>
+        </div>
+
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link to="/cadastro" className="btn btn-primary btn-lg">Comece Agora</Link>
           <Link to="/oracoes" className="btn btn-outline btn-lg" style={{ borderColor: '#f4d03f', color: '#f4d03f' }}>
             Ver Pedidos de Oração
           </Link>
         </div>
-        {totalChurchesPraying > 0 && (
-          <p style={{ marginTop: '2rem', fontSize: '1.1rem' }}>
-            <Radio size={18} style={{ color: '#ff4444', verticalAlign: 'middle' }} />
-            {' '}<strong>{totalChurchesPraying} {totalChurchesPraying === 1 ? 'igreja orando' : 'igrejas orando'} neste momento!</strong>
-          </p>
-        )}
+
+        <div className="hero__stats">
+          {totalChurchesPraying > 0 && (
+            <div className="hero__stat">
+              <Radio size={18} style={{ color: '#ff4444' }} />
+              <strong>{totalChurchesPraying} {totalChurchesPraying === 1 ? 'igreja orando' : 'igrejas orando'} agora!</strong>
+            </div>
+          )}
+        </div>
       </section>
 
       <section className="features">
