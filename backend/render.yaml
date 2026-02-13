@@ -3,7 +3,7 @@ services:
     name: sigo-com-fe-api
     env: node
     plan: free
-    buildCommand: npm install
+    buildCommand: npm install && node src/db/migrate.js
     startCommand: node src/server.js
     envVars:
       - key: JWT_SECRET
