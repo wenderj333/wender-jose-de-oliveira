@@ -129,11 +129,17 @@ export default function Login() {
             <>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <select value={countryCode} onChange={(e) => setCountryCode(e.target.value)} style={{ width: '90px', padding: '0.6rem', borderRadius: '8px', border: '1px solid var(--gray-300)', fontSize: '0.95rem' }}>
+                  <option value="+352">🇱🇺 +352</option>
                   <option value="+55">🇧🇷 +55</option>
                   <option value="+49">🇩🇪 +49</option>
-                  <option value="+1">🇺🇸 +1</option>
                   <option value="+34">🇪🇸 +34</option>
                   <option value="+351">🇵🇹 +351</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+33">🇫🇷 +33</option>
+                  <option value="+39">🇮🇹 +39</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+31">🇳🇱 +31</option>
+                  <option value="+32">🇧🇪 +32</option>
                 </select>
                 <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder={t('login.phoneNumber')} style={{ flex: 1, padding: '0.6rem', borderRadius: '8px', border: '1px solid var(--gray-300)', fontSize: '0.95rem' }} />
               </div>
