@@ -319,37 +319,52 @@ export default function Profile() {
             </button>
           )}
 
-          {/* Edit Form */}
+          {/* Edit Form — Modal overlay */}
           {editing && (
             <div style={{
-              background: 'rgba(255,255,255,0.08)', borderRadius: 12, padding: '1.25rem', marginTop: '1rem',
-              border: '2px solid #daa520',
-            }}>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#daa520', fontSize: '0.8rem', textTransform: 'uppercase' }}>Display Name</label>
-                <input value={form.display_name} onChange={e => setForm({ ...form, display_name: e.target.value })}
-                  style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)', background: 'rgba(0,0,0,0.3)', color: '#fff', boxSizing: 'border-box' }} />
-              </div>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#daa520', fontSize: '0.8rem', textTransform: 'uppercase' }}>{t('profile.bio')}</label>
-                <textarea value={form.bio} onChange={e => setForm({ ...form, bio: e.target.value })} rows={3}
-                  style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)', background: 'rgba(0,0,0,0.3)', color: '#fff', boxSizing: 'border-box', resize: 'vertical' }} />
-              </div>
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <button onClick={handleSave} disabled={saving} style={{
-                  flex: 1, padding: '0.6rem', borderRadius: 8, border: 'none',
-                  background: '#daa520', color: '#1a0a3e', fontWeight: 700, cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                }}>
-                  <Save size={16} /> {t('profile.save')}
-                </button>
-                <button onClick={() => setEditing(false)} style={{
-                  flex: 1, padding: '0.6rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)',
-                  background: 'transparent', color: '#ccc', fontWeight: 600, cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                }}>
-                  <X size={16} /> {t('profile.cancel')}
-                </button>
+              position: 'fixed', inset: 0, zIndex: 9999,
+              background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: '1rem',
+            }} onClick={(e) => { if (e.target === e.currentTarget) setEditing(false); }}>
+              <div style={{
+                background: '#1a0a3e', borderRadius: 16, padding: '1.5rem', width: '100%', maxWidth: 420,
+                border: '2px solid #daa520', maxHeight: '80vh', overflowY: 'auto',
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                  <h3 style={{ margin: 0, color: '#daa520', fontSize: '1.1rem' }}>✏️ Editar Perfil</h3>
+                  <button onClick={() => setEditing(false)} style={{
+                    background: 'none', border: 'none', color: '#999', cursor: 'pointer', padding: 4,
+                  }}>
+                    <X size={22} />
+                  </button>
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                  <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#daa520', fontSize: '0.8rem', textTransform: 'uppercase' }}>Display Name</label>
+                  <input value={form.display_name} onChange={e => setForm({ ...form, display_name: e.target.value })}
+                    style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)', background: 'rgba(0,0,0,0.3)', color: '#fff', boxSizing: 'border-box' }} />
+                </div>
+                <div style={{ marginBottom: '1.25rem' }}>
+                  <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#daa520', fontSize: '0.8rem', textTransform: 'uppercase' }}>{t('profile.bio')}</label>
+                  <textarea value={form.bio} onChange={e => setForm({ ...form, bio: e.target.value })} rows={4}
+                    style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)', background: 'rgba(0,0,0,0.3)', color: '#fff', boxSizing: 'border-box', resize: 'vertical' }} />
+                </div>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <button onClick={handleSave} disabled={saving} style={{
+                    flex: 1, padding: '0.7rem', borderRadius: 8, border: 'none',
+                    background: '#daa520', color: '#1a0a3e', fontWeight: 700, cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: '0.95rem',
+                  }}>
+                    <Save size={16} /> {t('profile.save')}
+                  </button>
+                  <button onClick={() => setEditing(false)} style={{
+                    flex: 1, padding: '0.7rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)',
+                    background: 'transparent', color: '#ccc', fontWeight: 600, cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: '0.95rem',
+                  }}>
+                    <X size={16} /> {t('profile.cancel')}
+                  </button>
+                </div>
               </div>
             </div>
           )}
