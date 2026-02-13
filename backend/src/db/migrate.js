@@ -266,9 +266,35 @@ function migrate() {
       assigned_church_id TEXT REFERENCES churches(id),
       created_at TEXT DEFAULT (datetime('now'))
     );
+
+    -- ============ CHAT PASTORAL ============
+    CREATE TABLE IF NOT EXISTS chat_rooms (
+      id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(4)) || '-' || hex(randomblob(2)) || '-4' || substr(hex(randomblob(2)),2) || '-' || substr('89ab', abs(random()) % 4 + 1, 1) || substr(hex(randomblob(2)),2) || '-' || hex(randomblob(6)))),
+      requester_name TEXT,
+      requester_language TEXT DEFAULT 'pt',
+      help_type TEXT,
+      pastor_name TEXT,
+      pastor_language TEXT,
+      status TEXT DEFAULT 'waiting' CHECK (status IN ('waiting', 'active', 'closed')),
+      created_at TEXT DEFAULT (datetime('now')),
+      closed_at TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS chat_messages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      room_id TEXT NOT NULL REFERENCES chat_rooms(id) ON DELETE CASCADE,
+      sender_role TEXT NOT NULL CHECK (sender_role IN ('requester', 'pastor')),
+      sender_name TEXT,
+      original_text TEXT NOT NULL,
+      translated_text TEXT,
+      original_lang TEXT,
+      target_lang TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_chat_messages_room ON chat_messages(room_id, created_at);
   `);
 
-  console.log('✅ Migração concluída com sucesso! (13 tabelas criadas)');
+  console.log('✅ Migração concluída com sucesso! (15 tabelas criadas)');
 }
 
 migrate();

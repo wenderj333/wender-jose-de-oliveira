@@ -50,6 +50,10 @@ export function WebSocketProvider({ children }) {
         case 'amem':
         case 'new_help_request':
         case 'help_request_update':
+        case 'chat_new_message':
+        case 'chat_user_joined':
+        case 'chat_user_left':
+        case 'chat_typing':
           setLastEvent(data);
           break;
       }

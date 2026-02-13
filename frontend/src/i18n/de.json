@@ -12,7 +12,8 @@
     "hello": "Hallo, {{name}}",
     "logout": "Abmelden",
     "login": "Anmelden",
-    "register": "Registrieren"
+    "register": "Registrieren",
+    "chatPastoral": "Seelsorge-Chat"
   },
   "footer": "© 2026 Sigo com Fé — Technologie im Dienste des Reiches Gottes",
   "home": {
@@ -300,6 +301,35 @@
   },
   "langSwitcher": {
     "label": "Sprache"
+  },
+  "pastorChat": {
+    "title": "Seelsorge-Chat",
+    "subtitle": "Sprechen Sie direkt mit einem Pastor. Automatische Übersetzung inklusive.",
+    "yourName": "Ihr Name",
+    "selectHelp": "Was brauchen Sie?",
+    "selectLanguage": "Ihre Sprache",
+    "startChat": "Chat starten",
+    "waiting": "Warten auf einen Pastor...",
+    "waitingDesc": "Ein Pastor wird sich bald melden. Haben Sie Vertrauen!",
+    "imPastor": "Ich bin Pastor",
+    "imPerson": "Ich brauche Hilfe",
+    "waitingRooms": "Wartende Personen",
+    "noWaiting": "Niemand wartet im Moment.",
+    "joinChat": "Beitreten",
+    "pastorName": "Ihr Name (Pastor)",
+    "endChat": "Gespräch beenden",
+    "chatEnded": "Gespräch beendet. Gott segne Sie!",
+    "typeMessage": "Nachricht eingeben...",
+    "send": "Senden",
+    "typing": "schreibt...",
+    "translated": "Übersetzung",
+    "joinedChat": "ist dem Gespräch beigetreten",
+    "leftChat": "hat das Gespräch verlassen",
+    "langPt": "Português",
+    "langEn": "English",
+    "langEs": "Español",
+    "langDe": "Deutsch",
+    "autoTranslate": "🌍 Automatische Übersetzung aktiviert"
   },
   "helpRequests": {
     "title": "Hilfsanfragen",

@@ -12,7 +12,8 @@
     "hello": "Hi, {{name}}",
     "logout": "Log out",
     "login": "Log in",
-    "register": "Sign up"
+    "register": "Sign up",
+    "chatPastoral": "Pastoral Chat"
   },
   "footer": "© 2026 Sigo com Fé — Technology at the service of the Kingdom",
   "home": {
@@ -300,6 +301,35 @@
   },
   "langSwitcher": {
     "label": "Language"
+  },
+  "pastorChat": {
+    "title": "Pastoral Chat",
+    "subtitle": "Talk directly with a pastor. Auto-translation included.",
+    "yourName": "Your name",
+    "selectHelp": "What do you need?",
+    "selectLanguage": "Your language",
+    "startChat": "Start Chat",
+    "waiting": "Waiting for a pastor...",
+    "waitingDesc": "A pastor will join the conversation soon. Have faith!",
+    "imPastor": "I'm a Pastor",
+    "imPerson": "I Need Help",
+    "waitingRooms": "People waiting",
+    "noWaiting": "No one waiting at the moment.",
+    "joinChat": "Join",
+    "pastorName": "Your name (pastor)",
+    "endChat": "End conversation",
+    "chatEnded": "Conversation ended. God bless!",
+    "typeMessage": "Type your message...",
+    "send": "Send",
+    "typing": "typing...",
+    "translated": "Translation",
+    "joinedChat": "joined the conversation",
+    "leftChat": "left the conversation",
+    "langPt": "Português",
+    "langEn": "English",
+    "langEs": "Español",
+    "langDe": "Deutsch",
+    "autoTranslate": "🌍 Auto-translation enabled"
   },
   "helpRequests": {
     "title": "Help Requests",

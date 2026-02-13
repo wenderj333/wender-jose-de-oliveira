@@ -32,6 +32,7 @@ app.use('/api/churches', require('./routes/churches'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/feed', require('./routes/feed'));
 app.use('/api/help-requests', require('./routes/help'));
+app.use('/api/chat', require('./routes/chat'));
 
 // Health check
 app.get('/api/health', (req, res) => {
