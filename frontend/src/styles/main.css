@@ -958,13 +958,37 @@ body {
   }
   .nav-links--open {
     display: flex;
+    background: linear-gradient(135deg, #6c2d91, #8e44ad, #5b2480);
+    border-radius: 0 0 16px 16px;
+    padding: 1rem 0.75rem;
+    margin-top: 0.5rem;
   }
   .nav-links a, .nav-links .btn {
     width: 100%;
     text-align: center;
     justify-content: center;
-    padding: 0.6rem 1rem;
+    padding: 0.7rem 1rem;
     min-height: 44px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+  .nav-links a:hover, .nav-links a:active {
+    background: rgba(255,255,255,0.15);
+  }
+  .nav-links .btn-outline {
+    border-color: rgba(255,255,255,0.5);
+    color: #fff;
+  }
+  .nav-links .btn-primary {
+    background: var(--gold);
+    color: var(--green-dark);
+  }
+  .nav-user {
+    color: #ffd700;
+    font-weight: 600;
   }
   .hero { padding: 1.5rem 1rem 1rem; }
   .hero__title { font-size: 1.6rem; }
