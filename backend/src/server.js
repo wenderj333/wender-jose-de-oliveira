@@ -215,6 +215,7 @@ app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/feed', require('./routes/feed'));
 app.use('/api/help-requests', require('./routes/help'));
 app.use('/api/chat', require('./routes/chat'));
+app.use('/api/pastoral-ai', require('./routes/pastoral-ai'));
 
 // Root route
 app.get('/', (req, res) => {
