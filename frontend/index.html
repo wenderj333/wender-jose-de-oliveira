@@ -3,11 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sigo com Fé - Rede Social Cristã</title>
+    <title>Sigo com Fé — Rede Social Cristã</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="Sigo com Fé — Rede social cristã para oração, comunidade e evangelização. Conecte-se com igrejas e pastores ao redor do mundo.">
+    <meta name="keywords" content="cristão, oração, igreja, fé, comunidade cristã, pastor, evangelização, rede social cristã">
+    <meta name="author" content="Sigo com Fé">
+    <meta name="theme-color" content="#1a3a5c">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Sigo com Fé — Rede Social Cristã">
+    <meta property="og:description" content="Ore, conecte-se e fortaleça sua fé com milhares de irmãos ao redor do mundo.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sigocomfe.vercel.app">
+    <meta property="og:image" content="/og-image.png">
+    <meta property="og:locale" content="pt_BR">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sigo com Fé — Rede Social Cristã">
+    <meta name="twitter:description" content="Ore, conecte-se e fortaleça sua fé com milhares de irmãos ao redor do mundo.">
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
+    </script>
   </body>
 </html>

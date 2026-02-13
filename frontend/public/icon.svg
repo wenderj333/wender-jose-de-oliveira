@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="64" fill="#1a3a5c"/>
+  <text x="256" y="200" text-anchor="middle" font-size="120" fill="#f4d03f" font-family="serif">✝</text>
+  <text x="256" y="340" text-anchor="middle" font-size="64" fill="#ffffff" font-weight="bold" font-family="sans-serif">Sigo</text>
+  <text x="256" y="410" text-anchor="middle" font-size="48" fill="#f4d03f" font-family="sans-serif">com Fé</text>
+</svg>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWebSocket } from '../context/WebSocketContext';
 import { MessageCircle, Send, X, RefreshCw, Church } from 'lucide-react';
@@ -84,6 +84,22 @@ export default function PastorChat() {
   const messagesEndRef = useRef(null);
   const typingTimeout = useRef(null);
 
+  const playNotificationSound = useCallback(() => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 660;
+      osc.type = 'sine';
+      gain.gain.value = 0.15;
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      osc.stop(ctx.currentTime + 0.3);
+    } catch (e) {}
+  }, []);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -106,10 +122,12 @@ export default function PastorChat() {
           timestamp: lastEvent.timestamp,
         }]);
         setTyping(null);
+        if (lastEvent.role !== role) playNotificationSound();
         break;
       case 'chat_user_joined':
         setMessages((prev) => [...prev, { system: true, text: `${lastEvent.name} ${t('pastorChat.joinedChat')}` }]);
         if (view === 'waiting') setView('chat');
+        playNotificationSound();
         break;
       case 'chat_user_left':
         setMessages((prev) => [...prev, { system: true, text: `${lastEvent.name} ${t('pastorChat.leftChat')}` }]);
@@ -131,7 +149,10 @@ export default function PastorChat() {
   };
 
   useEffect(() => {
-    if (isPastor) fetchRooms();
+    if (!isPastor) return;
+    fetchRooms();
+    const interval = setInterval(fetchRooms, 10000);
+    return () => clearInterval(interval);
   }, [isPastor]);
 
   // Fetch churches for selection

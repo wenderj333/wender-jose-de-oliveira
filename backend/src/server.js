@@ -21,6 +21,19 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
+app.use(require('helmet')());
+
+// Rate limiting
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100, message: { error: 'Muitas requisições. Tente novamente em 15 minutos.' } });
+const chatLimiter = rateLimit({ windowMs: 1 * 60 * 1000, max: 30, message: { error: 'Limite de mensagens atingido.' } });
+app.use('/api/', limiter);
+app.use('/api/chat', chatLimiter);
+
+// JWT secret warning
+if (process.env.JWT_SECRET === 'sigocomfe-secret-key-2026-mudar-em-producao') {
+  console.warn('⚠️  AVISO: Usando JWT_SECRET padrão! Defina um segredo forte em produção.');
+}
 
 // Run migrations on startup
 require('./db/migrate');

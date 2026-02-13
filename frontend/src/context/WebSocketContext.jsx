@@ -60,11 +60,9 @@ export function WebSocketProvider({ children }) {
     };
 
     ws.onclose = () => {
-      // Reconnect after 3s
+      console.log('WebSocket desconectado, reconectando em 3s...');
       setTimeout(() => {
-        if (wsRef.current?.readyState === WebSocket.CLOSED) {
-          // Component will re-mount or we can trigger reconnect
-        }
+        setLiveSessions([]);
       }, 3000);
     };
 
