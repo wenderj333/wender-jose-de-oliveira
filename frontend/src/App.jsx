@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './context/AuthContext';
-import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users } from 'lucide-react';
+import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users, User } from 'lucide-react';
 import Home from './pages/Home';
 import PrayerFeed from './pages/PrayerFeed';
 import LivePrayer from './pages/LivePrayer';
@@ -66,6 +66,9 @@ export default function App() {
           )}
           {user ? (
             <>
+              <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)} onClick={() => setMenuOpen(false)} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <User size={16} style={{ verticalAlign: 'middle' }} />{t('nav.myProfile', 'Mi Perfil')}
+              </Link>
               <span className="nav-user">{t('nav.hello', { name: user.full_name?.split(' ')[0] })}</span>
               <button onClick={() => { logout(); setMenuOpen(false); }} className="btn btn-outline btn-sm">{t('nav.logout')}</button>
             </>
