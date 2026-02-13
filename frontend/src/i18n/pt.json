@@ -13,7 +13,8 @@
     "logout": "Sair",
     "login": "Entrar",
     "register": "Cadastrar",
-    "chatPastoral": "Chat Pastoral",`n    "pastoralAI": "IA Pastoral"
+    "chatPastoral": "Chat Pastoral",
+    "pastoralAI": "IA Pastoral"
   },
   "footer": "© 2026 Sigo com Fé — Tecnologia a serviço do Reino",
   "home": {
@@ -309,7 +310,7 @@
     "selectHelp": "O que você precisa?",
     "selectLanguage": "Seu idioma",
     "startChat": "Iniciar Conversa",
-    "anyChurch": "Qualquer igreja dispon�vel",
+    "anyChurch": "Qualquer igreja dispon�vel",
     "waiting": "Aguardando um pastor...",
     "waitingDesc": "Um pastor vai entrar na conversa em breve. Tenha fé!",
     "imPastor": "Sou Pastor",

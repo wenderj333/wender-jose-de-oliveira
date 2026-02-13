@@ -13,7 +13,8 @@
     "logout": "Abmelden",
     "login": "Anmelden",
     "register": "Registrieren",
-    "chatPastoral": "Seelsorge-Chat",`n    "pastoralAI": "Pastorale KI"
+    "chatPastoral": "Seelsorge-Chat",
+    "pastoralAI": "Pastorale KI"
   },
   "footer": "© 2026 Sigo com Fé — Technologie im Dienste des Reiches Gottes",
   "home": {
@@ -309,7 +310,7 @@
     "selectHelp": "Was brauchen Sie?",
     "selectLanguage": "Ihre Sprache",
     "startChat": "Chat starten",
-    "anyChurch": "Jede verf�gbare Kirche",
+    "anyChurch": "Jede verf�gbare Kirche",
     "waiting": "Warten auf einen Pastor...",
     "waitingDesc": "Ein Pastor wird sich bald melden. Haben Sie Vertrauen!",
     "imPastor": "Ich bin Pastor",
