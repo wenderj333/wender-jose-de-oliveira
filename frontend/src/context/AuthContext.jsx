@@ -12,24 +12,32 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
-  // Listen for Firebase auth state changes
+  // Listen for Firebase auth state changes (for page reload with active Google session)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        // User signed in with Google
-        const idToken = await firebaseUser.getIdToken();
-        const userData = {
-          id: firebaseUser.uid,
-          email: firebaseUser.email,
-          full_name: firebaseUser.displayName || firebaseUser.email,
-          photo: firebaseUser.photoURL,
-          role: 'member',
-          provider: 'google'
-        };
-        setUser(userData);
-        setToken(idToken);
-        localStorage.setItem('token', idToken);
-        localStorage.setItem('user', JSON.stringify(userData));
+      if (firebaseUser && !localStorage.getItem('token')) {
+        // Firebase session exists but no local token — re-sync with backend
+        try {
+          const res = await fetch(`${API}/auth/google`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              full_name: firebaseUser.displayName || firebaseUser.email,
+              photo: firebaseUser.photoURL,
+            }),
+          });
+          const data = await res.json();
+          if (res.ok) {
+            setUser(data.user);
+            setToken(data.token);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+          }
+        } catch (e) {
+          // Backend offline, ignore
+        }
       }
       setLoading(false);
     });
@@ -88,20 +96,26 @@ export function AuthProvider({ children }) {
   const loginWithGoogle = async () => {
     const result = await signInWithPopup(auth, googleProvider);
     const firebaseUser = result.user;
-    const idToken = await firebaseUser.getIdToken();
-    const userData = {
-      id: firebaseUser.uid,
-      email: firebaseUser.email,
-      full_name: firebaseUser.displayName || firebaseUser.email,
-      photo: firebaseUser.photoURL,
-      role: 'member',
-      provider: 'google'
-    };
-    setUser(userData);
-    setToken(idToken);
-    localStorage.setItem('token', idToken);
-    localStorage.setItem('user', JSON.stringify(userData));
-    return { user: userData, token: idToken };
+
+    // Sync with our backend — creates local user if needed, returns our JWT
+    const res = await fetch(`${API}/auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        full_name: firebaseUser.displayName || firebaseUser.email,
+        photo: firebaseUser.photoURL,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erro ao sincronizar com servidor');
+
+    setUser(data.user);
+    setToken(data.token);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    return data;
   };
 
   const register = async (email, password, full_name, role) => {

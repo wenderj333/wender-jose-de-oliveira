@@ -49,6 +49,48 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// POST /api/auth/google — sync Firebase Google user to local DB
+router.post('/google', async (req, res) => {
+  try {
+    const { uid, email, full_name, photo } = req.body;
+    if (!uid || !email) {
+      return res.status(400).json({ error: 'uid e email são obrigatórios' });
+    }
+
+    // Check if user already exists (by email)
+    let user = await User.findByEmail(email);
+    if (!user) {
+      // Create local user with a random password (won't be used for Google users)
+      const crypto = require('crypto');
+      const randomPass = crypto.randomBytes(32).toString('hex');
+      user = await User.create({
+        email,
+        password: randomPass,
+        full_name: full_name || email,
+        role: 'member'
+      });
+      // Update avatar if provided
+      if (photo) {
+        const db = require('../db/connection');
+        db.prepare('UPDATE users SET avatar_url = ? WHERE id = ?').run(photo, user.id);
+        user.avatar_url = photo;
+      }
+    }
+
+    // Generate our own JWT for this user
+    const token = generateToken(user);
+    await User.updateLastSeen(user.id);
+
+    res.json({
+      user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, avatar_url: user.avatar_url },
+      token,
+    });
+  } catch (err) {
+    console.error('Erro no login Google:', err);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 // GET /api/auth/me
 router.get('/me', authenticate, (req, res) => {
   res.json({ user: req.user });
