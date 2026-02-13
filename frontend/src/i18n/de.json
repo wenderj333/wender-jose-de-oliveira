@@ -14,9 +14,11 @@
     "login": "Anmelden",
     "register": "Registrieren",
     "chatPastoral": "Seelsorge-Chat",
-    "pastoralAI": "Pastorale KI"
+    "pastoralAI": "Pastorale KI",
+    "friends": "Freunde",
+    "bibleAI": "Bibel-KI"
   },
-  "footer": "© 2026 Sigo com Fé — Technologie im Dienste des Reiches Gottes",
+  "footer": "© 2026 Sigo com Fé - Technologie im Dienste des Reiches Gottes",
   "home": {
     "subtitle": "Bete, verbinde dich und stärke deinen Glauben mit Tausenden von Geschwistern auf der ganzen Welt.",
     "startNow": "Jetzt starten",
@@ -228,7 +230,7 @@
     "playAgain": "Nochmal spielen",
     "weekVerse": "Vers der Woche",
     "weekVerseText": "Denn so sehr hat Gott die Welt geliebt, dass er seinen eingeborenen Sohn gab, damit jeder, der an ihn glaubt, nicht verloren geht, sondern ewiges Leben hat.",
-    "weekVerseRef": "— Johannes 3:16",
+    "weekVerseRef": "- Johannes 3:16",
     "memorized": "Auswendig gelernt!",
     "memorize": "Schon auswendig!",
     "activities": "Aktivitäten",
@@ -333,6 +335,23 @@
     "langDe": "Deutsch",
     "autoTranslate": "🌍 Automatische Übersetzung aktiviert"
   },
+  "friends": {
+    "title": "Freunde",
+    "search": "Suchen",
+    "myFriends": "Meine Freunde",
+    "requests": "Anfragen",
+    "addFriend": "Hinzufügen",
+    "pending": "Ausstehend",
+    "accept": "Annehmen",
+    "reject": "Ablehnen",
+    "removeFriend": "Entfernen",
+    "noFriends": "Du hast noch keine Freunde. Suche nach Personen!",
+    "noRequests": "Keine ausstehenden Freundschaftsanfragen.",
+    "searchPlaceholder": "Nach Name suchen...",
+    "requestSent": "Freundschaftsanfrage gesendet!",
+    "friendAdded": "Freundschaft angenommen!",
+    "friendRemoved": "Freund entfernt."
+  },
   "helpRequests": {
     "title": "Hilfsanfragen",
     "subtitle": "Menschen, die geistliche Unterstützung und Gebet brauchen. Antworte mit Liebe.",
@@ -345,6 +364,18 @@
     "filter_resolved": "Erledigt",
     "markInProgress": "Ich helfe",
     "markResolved": "Erledigt",
-    "resolved": "Erledigt"
+    "resolved": "Erledigt" 
+  },
+  "profile": {
+    "title": "Profil",
+    "memberSince": "Mitglied seit",
+    "editProfile": "Profil bearbeiten",
+    "prayers": "Gebete",
+    "posts": "Beiträge",
+    "friends": "Freunde",
+    "bio": "Über",
+    "noBio": "Noch keine Bio",
+    "save": "Speichern",
+    "cancel": "Abbrechen"
   }
 }

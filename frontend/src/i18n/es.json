@@ -14,9 +14,11 @@
     "login": "Entrar",
     "register": "Registrarse",
     "chatPastoral": "Chat Pastoral",
-    "pastoralAI": "IA Pastoral"
+    "pastoralAI": "IA Pastoral",
+    "friends": "Amigos",
+    "bibleAI": "IA Bíblica"
   },
-  "footer": "© 2026 Sigo com Fé — Tecnología al servicio del Reino",
+  "footer": "© 2026 Sigo com Fé - Tecnología al servicio del Reino",
   "home": {
     "subtitle": "Ora, conéctate y fortalece tu fe con miles de hermanos alrededor del mundo.",
     "startNow": "Empieza Ahora",
@@ -228,7 +230,7 @@
     "playAgain": "Jugar de Nuevo",
     "weekVerse": "Versículo de la Semana",
     "weekVerseText": "Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree no se pierda, sino que tenga vida eterna.",
-    "weekVerseRef": "— Juan 3:16",
+    "weekVerseRef": "- Juan 3:16",
     "memorized": "¡Memorizado!",
     "memorize": "¡Ya lo memoricé!",
     "activities": "Actividades",
@@ -333,6 +335,23 @@
     "langDe": "Deutsch",
     "autoTranslate": "🌍 Traducción automática activada"
   },
+  "friends": {
+    "title": "Amigos",
+    "search": "Buscar",
+    "myFriends": "Mis Amigos",
+    "requests": "Solicitudes",
+    "addFriend": "Agregar",
+    "pending": "Pendiente",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "removeFriend": "Eliminar",
+    "noFriends": "Aún no tienes amigos. ¡Busca personas para conectarte!",
+    "noRequests": "No hay solicitudes de amistad pendientes.",
+    "searchPlaceholder": "Buscar por nombre...",
+    "requestSent": "¡Solicitud de amistad enviada!",
+    "friendAdded": "¡Amistad aceptada!",
+    "friendRemoved": "Amigo eliminado."
+  },
   "helpRequests": {
     "title": "Pedidos de Ayuda",
     "subtitle": "Personas que necesitan apoyo espiritual y oración. Responde con amor.",
@@ -345,6 +364,18 @@
     "filter_resolved": "Resueltos",
     "markInProgress": "Estoy atendiendo",
     "markResolved": "Resuelto",
-    "resolved": "Atendido"
+    "resolved": "Atendido" 
+  },
+  "profile": {
+    "title": "Perfil",
+    "memberSince": "Miembro desde",
+    "editProfile": "Editar Perfil",
+    "prayers": "Oraciones",
+    "posts": "Publicaciones",
+    "friends": "Amigos",
+    "bio": "Acerca de",
+    "noBio": "Sin bio aún",
+    "save": "Guardar",
+    "cancel": "Cancelar"
   }
 }

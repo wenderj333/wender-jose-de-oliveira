@@ -14,9 +14,11 @@
     "login": "Log in",
     "register": "Sign up",
     "chatPastoral": "Pastoral Chat",
-    "pastoralAI": "Pastoral AI"
+    "pastoralAI": "Pastoral AI",
+    "friends": "Friends",
+    "bibleAI": "Bible AI"
   },
-  "footer": "© 2026 Sigo com Fé — Technology at the service of the Kingdom",
+  "footer": "© 2026 Sigo com Fé - Technology at the service of the Kingdom",
   "home": {
     "subtitle": "Pray, connect and strengthen your faith with thousands of brothers and sisters around the world.",
     "startNow": "Get Started",
@@ -228,7 +230,7 @@
     "playAgain": "Play Again",
     "weekVerse": "Verse of the Week",
     "weekVerseText": "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
-    "weekVerseRef": "— John 3:16",
+    "weekVerseRef": "- John 3:16",
     "memorized": "Memorized!",
     "memorize": "I memorized it!",
     "activities": "Activities",
@@ -333,6 +335,23 @@
     "langDe": "Deutsch",
     "autoTranslate": "🌍 Auto-translation enabled"
   },
+  "friends": {
+    "title": "Friends",
+    "search": "Search",
+    "myFriends": "My Friends",
+    "requests": "Requests",
+    "addFriend": "Add Friend",
+    "pending": "Pending",
+    "accept": "Accept",
+    "reject": "Reject",
+    "removeFriend": "Remove",
+    "noFriends": "You have no friends yet. Search for people to connect!",
+    "noRequests": "No pending friend requests.",
+    "searchPlaceholder": "Search by name...",
+    "requestSent": "Friend request sent!",
+    "friendAdded": "Friendship accepted!",
+    "friendRemoved": "Friend removed."
+  },
   "helpRequests": {
     "title": "Help Requests",
     "subtitle": "People in need of spiritual support and prayer. Respond with love.",
@@ -345,6 +364,18 @@
     "filter_resolved": "Resolved",
     "markInProgress": "I'm helping",
     "markResolved": "Resolved",
-    "resolved": "Resolved"
+    "resolved": "Resolved" 
+  },
+  "profile": {
+    "title": "Profile",
+    "memberSince": "Member since",
+    "editProfile": "Edit Profile",
+    "prayers": "Prayers",
+    "posts": "Posts",
+    "friends": "Friends",
+    "bio": "About",
+    "noBio": "No bio yet",
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }

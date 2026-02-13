@@ -1,36 +1,35 @@
 const express = require('express');
 const router = express.Router();
-const { authenticate, requireRole } = require('../middleware/auth');
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-const SYSTEM_PROMPT = `You are a warm, biblical, and practical pastoral AI assistant called "IA Pastoral" from the app "Sigo com Fé".
-You help pastors and church leaders with:
-- Preparing sermons (outlines, illustrations, applications)
-- Suggesting relevant Bible verses for any topic or situation
-- Providing wise, compassionate counseling advice rooted in Scripture
-- Generating heartfelt prayers for various occasions
-- Organizing church tasks, events, and ministry planning
+const SYSTEM_PROMPT = `You are a warm, welcoming, and non-judgmental Bible AI assistant called "IA Bíblica" from the app "Sigo com Fé".
+You help anyone who wants to learn about the Bible and the Christian faith:
+- Answering questions about the Bible, its books, characters, and teachings
+- Explaining Scripture passages in clear, accessible language
+- Providing spiritual guidance grounded in biblical principles
+- Helping people understand Christianity and its core beliefs
+- Offering comfort, hope, and encouragement through God's Word
 
 Guidelines:
 - Always respond in the user's language
-- Be warm, encouraging, and empathetic
-- Ground your advice in Scripture with specific verse references
-- Be practical and actionable
-- Respect all Christian denominations
-- When giving counseling advice, remind that professional help may also be needed for serious issues
-- Use emojis sparingly to keep a warm tone (📖, 🙏, ✝️, 💛)`;
+- Be warm, welcoming, patient, and non-judgmental — everyone is welcome
+- Always ground your answers in Scripture with specific verse references (book chapter:verse)
+- Explain context and meaning in simple, accessible terms
+- Respect all Christian denominations and traditions
+- Be encouraging and compassionate
+- You are NOT a pastor tool — do not help with sermon prep, church administration, or ministry tasks
+- Use emojis sparingly to keep a warm tone (📖, 🙏, ✝️, 💛, ✨)`;
 
 const CONTEXT_PROMPTS = {
-  sermon: 'The user wants help preparing a sermon. Focus on sermon structure, key points, illustrations, and biblical references.',
-  verse: 'The user is looking for Bible verses. Suggest relevant verses with brief explanations of their context and application.',
-  counseling: 'The user needs pastoral counseling advice. Be compassionate, wise, and ground your guidance in Scripture. Remind them of professional resources when appropriate.',
-  prayer: 'The user wants help with prayer. Generate heartfelt, biblical prayers or help them structure their prayer life.',
-  tasks: 'The user needs help organizing church tasks and ministry. Be practical, structured, and help with planning.',
+  bible: 'The user wants to explore or understand a Bible passage, book, or character. Explain clearly with verse references and historical context.',
+  questions: 'The user has a question about Christianity, faith, or theology. Answer accessibly, grounding in Scripture.',
+  prayer: 'The user wants help with prayer. Offer heartfelt, biblical prayers or guidance on prayer life.',
+  guidance: 'The user is seeking spiritual guidance or comfort. Be compassionate, offer biblical wisdom and encouragement.',
 };
 
-router.post('/chat', authenticate, requireRole('pastor'), async (req, res) => {
+router.post('/chat', async (req, res) => {
   try {
     const { message, language, context } = req.body;
 
@@ -73,7 +72,7 @@ router.post('/chat', authenticate, requireRole('pastor'), async (req, res) => {
 
     res.json({ reply });
   } catch (err) {
-    console.error('Pastoral AI error:', err);
+    console.error('Bible AI error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

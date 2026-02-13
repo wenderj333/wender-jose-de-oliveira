@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './context/AuthContext';
-import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot } from 'lucide-react';
+import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users } from 'lucide-react';
 import Home from './pages/Home';
 import PrayerFeed from './pages/PrayerFeed';
 import LivePrayer from './pages/LivePrayer';
@@ -16,6 +16,9 @@ import ChurchRegister from './pages/ChurchRegister';
 import HelpRequests from './pages/HelpRequests';
 import PastorChat from './pages/PastorChat';
 import PastoralAI from './pages/PastoralAI';
+import BibleAI from './pages/BibleAI';
+import Profile from './pages/Profile';
+import Friends from './pages/Friends';
 import LanguageSwitcher from './components/LanguageSwitcher';
 
 function ProtectedRoute({ children }) {
@@ -55,7 +58,9 @@ export default function App() {
           <Link to="/kids" className={isActive('/kids')} onClick={() => setMenuOpen(false)}><Baby size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.kids')}</Link>
           <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')} onClick={() => setMenuOpen(false)}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#e74c3c' }} />{t('nav.helpRequests')}</Link>
           <Link to="/chat-pastoral" className={isActive('/chat-pastoral')} onClick={() => setMenuOpen(false)}><MessageCircle size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.chatPastoral')}</Link>
-          <Link to="/ia-pastoral" className={isActive('/ia-pastoral')} onClick={() => setMenuOpen(false)}><Bot size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.pastoralAI', 'IA Pastoral')}</Link>
+          <Link to="/ia-biblica" className={isActive('/ia-biblica')} onClick={() => setMenuOpen(false)}><BookOpen size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#2c3e80' }} />{t('nav.bibleAI', 'IA Bíblica')}</Link>
+          {user?.role === 'pastor' && <Link to="/ia-pastoral" className={isActive('/ia-pastoral')} onClick={() => setMenuOpen(false)}><Bot size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.pastoralAI', 'IA Pastoral')}</Link>}
+          {user && <Link to="/amigos" className={isActive('/amigos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#667eea' }} />{t('nav.friends')}</Link>}
           {user && (
             <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setMenuOpen(false)}><LayoutDashboard size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.dashboard')}</Link>
           )}
@@ -85,8 +90,11 @@ export default function App() {
           <Route path="/kids" element={<Kids />} />
           <Route path="/pedidos-ajuda" element={<HelpRequests />} />
           <Route path="/chat-pastoral" element={<PastorChat />} />
+          <Route path="/ia-biblica" element={<BibleAI />} />
           <Route path="/ia-pastoral" element={<ProtectedRoute><PastoralAI /></ProtectedRoute>} />
           <Route path="/cadastrar-igreja" element={<ProtectedRoute><ChurchRegister /></ProtectedRoute>} />
+          <Route path="/amigos" element={<ProtectedRoute><Friends /></ProtectedRoute>} />
+          <Route path="/perfil/:userId" element={<Profile />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         </Routes>
       </main>

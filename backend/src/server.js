@@ -187,6 +187,15 @@ const { Pool: MigratePool } = require('pg');
         is_read BOOLEAN DEFAULT false,
         created_at TIMESTAMPTZ DEFAULT NOW()
       );
+      CREATE TABLE IF NOT EXISTS friendships (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        requester_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        addressee_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        status VARCHAR(20) DEFAULT 'pending',
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        updated_at TIMESTAMPTZ DEFAULT NOW(),
+        UNIQUE(requester_id, addressee_id)
+      );
       CREATE TABLE IF NOT EXISTS pastor_prayer_sessions (
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
         pastor_id UUID NOT NULL REFERENCES users(id),
@@ -216,6 +225,9 @@ app.use('/api/feed', require('./routes/feed'));
 app.use('/api/help-requests', require('./routes/help'));
 app.use('/api/chat', require('./routes/chat'));
 app.use('/api/pastoral-ai', require('./routes/pastoral-ai'));
+app.use('/api/bible-ai', require('./routes/bible-ai'));
+app.use('/api/profile', require('./routes/profile'));
+app.use('/api/friends', require('./routes/friends'));
 
 // Root route
 app.get('/', (req, res) => {

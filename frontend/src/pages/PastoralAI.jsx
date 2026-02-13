@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Send, Bot, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../context/AuthContext';
 
 const API = import.meta.env.VITE_API_URL || '';
 
@@ -51,6 +52,22 @@ export default function PastoralAI() {
   const lang = (i18nInstance.language || 'pt').substring(0, 2);
   const t = i18n[lang] || i18n.pt;
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  if (!user || user.role !== 'pastor') {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #f3e7f9 0%, #e8d5f5 100%)', flexDirection: 'column', gap: '16px', padding: '20px', textAlign: 'center' }}>
+        <Bot size={48} color="#8e44ad" />
+        <h2 style={{ color: '#8e44ad', margin: 0 }}>🔒 {lang === 'en' ? 'Access Restricted' : lang === 'es' ? 'Acceso Restringido' : lang === 'de' ? 'Zugang eingeschränkt' : 'Acesso Restrito'}</h2>
+        <p style={{ color: '#666', maxWidth: '400px' }}>
+          {lang === 'en' ? 'This tool is exclusively for pastors.' : lang === 'es' ? 'Esta herramienta es exclusiva para pastores.' : lang === 'de' ? 'Dieses Tool ist ausschließlich für Pastoren.' : 'Esta ferramenta é exclusiva para pastores.'}
+        </p>
+        <button onClick={() => navigate('/')} style={{ padding: '10px 24px', borderRadius: '24px', background: '#8e44ad', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '1rem' }}>
+          {lang === 'en' ? 'Go Home' : lang === 'es' ? 'Ir al Inicio' : lang === 'de' ? 'Zur Startseite' : 'Ir para Início'}
+        </button>
+      </div>
+    );
+  }
 
   const [messages, setMessages] = useState([
     { role: 'ai', text: t.welcome },
@@ -73,9 +90,10 @@ export default function PastoralAI() {
     setLoading(true);
 
     try {
+      const token = localStorage.getItem('token');
       const res = await fetch(`${API}/api/pastoral-ai/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(token && { Authorization: `Bearer ${token}` }) },
         body: JSON.stringify({ message: text, language: lang, context }),
       });
       const data = await res.json();
