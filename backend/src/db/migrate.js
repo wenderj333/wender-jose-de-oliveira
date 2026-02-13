@@ -275,6 +275,8 @@ function migrate() {
       help_type TEXT,
       pastor_name TEXT,
       pastor_language TEXT,
+      target_church_id TEXT REFERENCES churches(id),
+      target_church_name TEXT,
       status TEXT DEFAULT 'waiting' CHECK (status IN ('waiting', 'active', 'closed')),
       created_at TEXT DEFAULT (datetime('now')),
       closed_at TEXT
@@ -293,6 +295,10 @@ function migrate() {
     );
     CREATE INDEX IF NOT EXISTS idx_chat_messages_room ON chat_messages(room_id, created_at);
   `);
+
+  // Add church columns if missing (migration for existing DBs)
+  try { db.exec(`ALTER TABLE chat_rooms ADD COLUMN target_church_id TEXT REFERENCES churches(id)`); } catch (e) { /* already exists */ }
+  try { db.exec(`ALTER TABLE chat_rooms ADD COLUMN target_church_name TEXT`); } catch (e) { /* already exists */ }
 
   console.log('✅ Migração concluída com sucesso! (15 tabelas criadas)');
 }

@@ -2,14 +2,26 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 
+// GET /api/chat/churches-online — churches with active pastors or all registered
+router.get('/churches-online', (req, res) => {
+  try {
+    const churches = db.prepare(
+      `SELECT id, name, city, country, denomination, languages FROM churches ORDER BY name ASC`
+    ).all();
+    res.json(churches);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to list churches' });
+  }
+});
+
 // POST /api/chat/request — person creates a help chat request
 router.post('/request', (req, res) => {
   try {
-    const { language = 'pt', name, helpType } = req.body;
+    const { language = 'pt', name, helpType, churchId, churchName } = req.body;
     const stmt = db.prepare(
-      `INSERT INTO chat_rooms (requester_name, requester_language, help_type) VALUES (?, ?, ?)`
+      `INSERT INTO chat_rooms (requester_name, requester_language, help_type, target_church_id, target_church_name) VALUES (?, ?, ?, ?, ?)`
     );
-    const result = stmt.run(name || 'Anônimo', language, helpType || 'general');
+    const result = stmt.run(name || 'Anônimo', language, helpType || 'general', churchId || null, churchName || null);
     // Get the created room
     const room = db.prepare('SELECT * FROM chat_rooms WHERE rowid = ?').get(result.lastInsertRowid);
     res.json({ success: true, roomId: room.id, room });

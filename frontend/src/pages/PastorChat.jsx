@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWebSocket } from '../context/WebSocketContext';
-import { MessageCircle, Send, X, RefreshCw } from 'lucide-react';
+import { MessageCircle, Send, X, RefreshCw, Church } from 'lucide-react';
 
 const API = import.meta.env.VITE_API_URL || '';
 
@@ -75,6 +75,8 @@ export default function PastorChat() {
   const [inputText, setInputText] = useState('');
   const [typing, setTyping] = useState(null);
   const [rooms, setRooms] = useState([]);
+  const [churches, setChurches] = useState([]);
+  const [selectedChurch, setSelectedChurch] = useState('');
   const [pastorName, setPastorName] = useState('');
   const [pastorLang, setPastorLang] = useState('pt');
   const [otherLang, setOtherLang] = useState(null);
@@ -132,13 +134,25 @@ export default function PastorChat() {
     if (isPastor) fetchRooms();
   }, [isPastor]);
 
+  // Fetch churches for selection
+  useEffect(() => {
+    fetch(`${API}/api/chat/churches-online`)
+      .then(r => r.json())
+      .then(data => setChurches(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, []);
+
   const handleRequestChat = async (e) => {
     e.preventDefault();
     try {
       const res = await fetch(`${API}/api/chat/request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name || 'Anônimo', language, helpType }),
+        body: JSON.stringify({
+          name: name || 'Anônimo', language, helpType,
+          churchId: selectedChurch || null,
+          churchName: churches.find(c => c.id === selectedChurch)?.name || null,
+        }),
       });
       const data = await res.json();
       setRoomId(data.roomId);
@@ -243,6 +257,14 @@ export default function PastorChat() {
                 <option key={l.code} value={l.code}>{l.label}</option>
               ))}
             </select>
+            {churches.length > 0 && (
+              <select style={styles.select} value={selectedChurch} onChange={(e) => setSelectedChurch(e.target.value)}>
+                <option value="">{t('pastorChat.anyChurch')}</option>
+                {churches.map((c) => (
+                  <option key={c.id} value={c.id}>⛪ {c.name}{c.city ? ` — ${c.city}` : ''}</option>
+                ))}
+              </select>
+            )}
             <button type="submit" style={styles.submitBtn}>{t('pastorChat.startChat')}</button>
           </form>
         ) : (
@@ -267,6 +289,11 @@ export default function PastorChat() {
                     <div style={{ fontSize: '0.85rem', color: '#7f8c8d' }}>
                       {room.help_type} · {languages.find(l => l.code === room.requester_language)?.label || room.requester_language}
                     </div>
+                    {room.target_church_name && (
+                      <div style={{ fontSize: '0.8rem', color: '#8e44ad', display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
+                        <Church size={12} /> {room.target_church_name}
+                      </div>
+                    )}
                     <div style={{ fontSize: '0.75rem', color: '#bdc3c7' }}>{new Date(room.created_at).toLocaleTimeString()}</div>
                   </div>
                   <button style={styles.joinBtn} onClick={() => { setOtherLang(room.requester_language); handleJoinRoom(room); }} disabled={!pastorName.trim()}>
