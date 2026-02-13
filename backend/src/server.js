@@ -46,6 +46,11 @@ app.use('/api/feed', require('./routes/feed'));
 app.use('/api/help-requests', require('./routes/help'));
 app.use('/api/chat', require('./routes/chat'));
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ name: 'Sigo com Fé API', status: 'online', version: '1.0.0' });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', name: 'Sigo com Fé API', version: '1.0.0' });
