@@ -36,9 +36,13 @@ export function AuthProvider({ children }) {
   // Handle redirect result (mobile Google sign-in)
   useEffect(() => {
     getRedirectResult(auth).then(async (result) => {
-      if (result?.user && !localStorage.getItem('token')) {
+      if (result?.user) {
         try {
           await syncFirebaseUser(result.user);
+          // Redirect to home after successful Google login on mobile
+          if (window.location.pathname === '/login' || window.location.pathname === '/cadastro') {
+            window.location.href = '/';
+          }
         } catch (e) {
           // Backend offline, ignore
         }
