@@ -14,6 +14,28 @@ export default function Home() {
   const { totalChurchesPraying } = useWebSocket();
   const [loaded, setLoaded] = useState(false);
   const [helpSelected, setHelpSelected] = useState(null);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstall, setShowInstall] = useState(false);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstall(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setShowInstall(false);
+    }
+    setDeferredPrompt(null);
+  };
   const [helpForm, setHelpForm] = useState({ name: '', contact: '', message: '' });
   const [helpSent, setHelpSent] = useState(false);
   const { t } = useTranslation();
@@ -80,6 +102,23 @@ export default function Home() {
             {t('home.seePrayerRequests')}
           </Link>
         </div>
+
+        {showInstall && (
+          <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+            <button onClick={handleInstall} className="btn btn-sm" style={{
+              background: 'rgba(218,165,32,0.15)',
+              color: '#f4d03f',
+              border: '1px solid rgba(218,165,32,0.4)',
+              borderRadius: 20,
+              padding: '6px 18px',
+              fontSize: 13,
+              cursor: 'pointer',
+              backdropFilter: 'blur(4px)'
+            }}>
+              📲 {t('home.installApp', { defaultValue: 'Instalar App' })}
+            </button>
+          </div>
+        )}
 
         <div className="hero__stats">
           {totalChurchesPraying > 0 && (
