@@ -478,84 +478,72 @@ body {
 .feature-card--help {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460) !important;
+  background: linear-gradient(135deg, #0a1628, #0d1f3c, #0a2a1a) !important;
   border: none !important;
   border-image: none !important;
   border-radius: 16px !important;
 }
+/* Luz 1: branca — vagueia sem rumo */
 .feature-card--help::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0%,
-    rgba(138, 100, 255, 0.15) 10%,
-    transparent 20%,
-    rgba(100, 200, 255, 0.12) 30%,
-    transparent 40%,
-    rgba(255, 215, 100, 0.1) 50%,
-    transparent 60%,
-    rgba(138, 100, 255, 0.15) 70%,
-    transparent 80%,
-    rgba(100, 200, 255, 0.12) 90%,
-    transparent 100%
-  );
-  animation: auroraRotate 8s linear infinite;
+  width: 120%;
+  height: 120%;
+  top: -10%;
+  left: -10%;
+  background:
+    radial-gradient(circle at 25% 40%, rgba(255,255,255,0.18) 0%, transparent 45%),
+    radial-gradient(circle at 70% 65%, rgba(255,255,255,0.12) 0%, transparent 40%);
+  animation: wanderLight1 7s ease-in-out infinite alternate;
   z-index: 0;
 }
+/* Luz 2: dourada + verde suave — vagueia pro outro lado */
 .feature-card--help::after {
   content: '';
   position: absolute;
-  top: -30%;
-  left: -30%;
-  width: 160%;
-  height: 160%;
-  background: radial-gradient(
-    ellipse at 30% 50%,
-    rgba(138, 100, 255, 0.12) 0%,
-    transparent 50%
-  ),
-  radial-gradient(
-    ellipse at 70% 30%,
-    rgba(100, 200, 255, 0.1) 0%,
-    transparent 50%
-  ),
-  radial-gradient(
-    ellipse at 50% 80%,
-    rgba(255, 215, 100, 0.08) 0%,
-    transparent 50%
-  );
-  animation: auroraPulse 6s ease-in-out infinite alternate;
+  width: 140%;
+  height: 140%;
+  top: -20%;
+  left: -20%;
+  background:
+    radial-gradient(circle at 60% 30%, rgba(255,215,80,0.16) 0%, transparent 45%),
+    radial-gradient(circle at 35% 70%, rgba(100,200,120,0.14) 0%, transparent 45%),
+    radial-gradient(circle at 75% 80%, rgba(255,255,255,0.08) 0%, transparent 35%);
+  animation: wanderLight2 9s ease-in-out infinite alternate;
   z-index: 0;
 }
 .feature-card--help > * { position: relative; z-index: 1; }
-.feature-card--help h3 { color: #e0d4ff !important; text-shadow: 0 0 12px rgba(138,100,255,0.4); }
-.feature-card--help p { color: #c8d6e5 !important; }
-.feature-card--help .feature-card__icon svg { color: #c8a2ff !important; filter: drop-shadow(0 0 8px rgba(138,100,255,0.5)); }
+.feature-card--help h3 { color: #f0e6c0 !important; text-shadow: 0 0 12px rgba(255,215,80,0.4); }
+.feature-card--help p { color: #d0dcc8 !important; }
+.feature-card--help .feature-card__icon svg { color: #ffd750 !important; filter: drop-shadow(0 0 10px rgba(255,215,80,0.5)); }
 .feature-card--help .btn {
-  background: linear-gradient(135deg, #7c5cbf, #5b8def) !important;
+  background: linear-gradient(135deg, #c5a03f, #4a9e5c) !important;
   border: none !important;
   color: #fff !important;
-  box-shadow: 0 0 16px rgba(138,100,255,0.4);
+  box-shadow: 0 0 16px rgba(255,215,80,0.3), 0 0 8px rgba(100,200,120,0.2);
   transition: all 0.3s;
 }
 .feature-card--help .btn:hover {
-  box-shadow: 0 0 24px rgba(138,100,255,0.6);
+  box-shadow: 0 0 28px rgba(255,215,80,0.5), 0 0 14px rgba(100,200,120,0.4);
   transform: scale(1.05);
 }
 
-@keyframes auroraRotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* Luzes que vagueiam sem direção fixa */
+@keyframes wanderLight1 {
+  0%   { transform: translate(0%, 0%) scale(1); opacity: 0.7; }
+  15%  { transform: translate(8%, -12%) scale(1.05); opacity: 0.9; }
+  35%  { transform: translate(-10%, 6%) scale(0.95); opacity: 0.6; }
+  55%  { transform: translate(5%, 10%) scale(1.08); opacity: 1; }
+  75%  { transform: translate(-7%, -5%) scale(0.98); opacity: 0.75; }
+  100% { transform: translate(3%, 8%) scale(1.02); opacity: 0.85; }
 }
-@keyframes auroraPulse {
-  0% { opacity: 0.6; transform: translate(-5%, -5%) scale(1); }
-  50% { opacity: 1; transform: translate(5%, 5%) scale(1.05); }
-  100% { opacity: 0.7; transform: translate(-3%, 3%) scale(1.02); }
+@keyframes wanderLight2 {
+  0%   { transform: translate(0%, 0%) rotate(0deg) scale(1); opacity: 0.6; }
+  20%  { transform: translate(-8%, 10%) rotate(3deg) scale(1.06); opacity: 0.85; }
+  40%  { transform: translate(10%, -6%) rotate(-2deg) scale(0.94); opacity: 0.7; }
+  60%  { transform: translate(-5%, -10%) rotate(4deg) scale(1.1); opacity: 1; }
+  80%  { transform: translate(7%, 4%) rotate(-3deg) scale(0.97); opacity: 0.65; }
+  100% { transform: translate(-3%, 7%) rotate(1deg) scale(1.03); opacity: 0.8; }
 }
 .help-compact-options {
   display: grid;
