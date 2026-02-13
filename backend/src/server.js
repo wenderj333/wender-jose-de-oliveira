@@ -31,6 +31,7 @@ app.use('/api/prayers', require('./routes/prayer'));
 app.use('/api/churches', require('./routes/churches'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/feed', require('./routes/feed'));
+app.use('/api/help-requests', require('./routes/help'));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -38,7 +39,11 @@ app.get('/api/health', (req, res) => {
 });
 
 // WebSocket
-setupWebSocket(server);
+const wss = setupWebSocket(server);
+
+// Give help route access to WSS for broadcasting
+const helpRoute = require('./routes/help');
+helpRoute.setWss(wss);
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {

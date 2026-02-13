@@ -52,7 +52,7 @@ export default function Register() {
               <option value="pastor">{t('register.pastor')}</option>
             </select>
           </div>
-          <button type="submit" className="btn btn-green btn-lg" style={{ width: '100%' }}>
+          <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
             <UserPlus size={18} /> {t('register.submit')}
           </button>
         </form>

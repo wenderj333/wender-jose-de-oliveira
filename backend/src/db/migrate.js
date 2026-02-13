@@ -254,6 +254,18 @@ function migrate() {
     CREATE INDEX IF NOT EXISTS idx_feed_posts_created ON feed_posts(created_at);
     CREATE INDEX IF NOT EXISTS idx_feed_posts_category ON feed_posts(category);
     CREATE INDEX IF NOT EXISTS idx_feed_posts_church ON feed_posts(church_id, created_at);
+
+    -- ============ PEDIDOS DE AJUDA ============
+    CREATE TABLE IF NOT EXISTS help_requests (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      type TEXT NOT NULL,
+      name TEXT,
+      contact TEXT NOT NULL,
+      message TEXT,
+      status TEXT DEFAULT 'pending',
+      assigned_church_id TEXT REFERENCES churches(id),
+      created_at TEXT DEFAULT (datetime('now'))
+    );
   `);
 
   console.log('✅ Migração concluída com sucesso! (13 tabelas criadas)');

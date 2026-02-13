@@ -7,6 +7,7 @@
     "churches": "Kirchen",
     "registerChurch": "Kirche registrieren",
     "kids": "Kids",
+    "helpRequests": "Hilfsanfragen",
     "dashboard": "Dashboard",
     "hello": "Hallo, {{name}}",
     "logout": "Abmelden",
@@ -36,6 +37,19 @@
     "featureChurchDesc": "Registriere deine Kirche auf der Plattform und verbinde dich mit Gläubigen aus aller Welt.",
     "explore": "Entdecken",
     "registerBtn": "Registrieren",
+    "helpTitle": "Brauchst du Hilfe?",
+    "helpSubtitle": "Du bist nicht allein. Eine Kirche kann dir helfen.",
+    "helpSeeThings": "👁️ Ich sehe Dinge",
+    "helpHearThings": "👂 Ich höre Geräusche",
+    "helpFeelAlone": "💔 Ich fühle mich allein",
+    "helpNeedPrayer": "🙏 Ich brauche Gebet",
+    "helpAnxious": "😰 Ich bin ängstlich",
+    "helpDepressed": "😢 Ich bin traurig/deprimiert",
+    "helpSent": "✅ Deine Anfrage wurde gesendet! Eine Kirche in deiner Nähe wird sich melden. Gott segne dich! 🙏",
+    "helpNamePlaceholder": "Dein Name (optional)",
+    "helpContactPlaceholder": "Telefon oder E-Mail",
+    "helpMessagePlaceholder": "Erzähl uns ein wenig mehr darüber, wie du dich fühlst...",
+    "helpSend": "Um Hilfe bitten",
     "verses": [
       { "text": "Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.", "ref": "Matthäus 18:20" },
       { "text": "Ich vermag alles durch den, der mich stark macht.", "ref": "Philipper 4:13" },
@@ -285,5 +299,19 @@
   },
   "langSwitcher": {
     "label": "Sprache"
+  },
+  "helpRequests": {
+    "title": "Hilfsanfragen",
+    "subtitle": "Menschen, die geistliche Unterstützung und Gebet brauchen. Antworte mit Liebe.",
+    "loading": "Laden...",
+    "empty": "Keine Hilfsanfragen im Moment. Gott sei Dank!",
+    "justNow": "gerade",
+    "filter_all": "Alle",
+    "filter_pending": "Ausstehend",
+    "filter_in_progress": "In Bearbeitung",
+    "filter_resolved": "Erledigt",
+    "markInProgress": "Ich helfe",
+    "markResolved": "Erledigt",
+    "resolved": "Erledigt"
   }
 }

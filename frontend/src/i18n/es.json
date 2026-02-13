@@ -7,6 +7,7 @@
     "churches": "Iglesias",
     "registerChurch": "Registrar Iglesia",
     "kids": "Kids",
+    "helpRequests": "Pedidos de Ayuda",
     "dashboard": "Dashboard",
     "hello": "Hola, {{name}}",
     "logout": "Salir",
@@ -36,6 +37,19 @@
     "featureChurchDesc": "Registra tu iglesia en la plataforma y conéctate con fieles de todo el mundo.",
     "explore": "Explorar",
     "registerBtn": "Registrar",
+    "helpTitle": "¿Necesitas Ayuda?",
+    "helpSubtitle": "No estás solo(a). Una iglesia puede ayudarte.",
+    "helpSeeThings": "👁️ Veo cosas",
+    "helpHearThings": "👂 Escucho ruidos",
+    "helpFeelAlone": "💔 Me siento solo(a)",
+    "helpNeedPrayer": "🙏 Necesito oración",
+    "helpAnxious": "😰 Estoy ansioso(a)",
+    "helpDepressed": "😢 Estoy triste/deprimido(a)",
+    "helpSent": "✅ ¡Tu pedido fue enviado! Una iglesia cercana se pondrá en contacto para ayudarte. ¡Dios te bendiga! 🙏",
+    "helpNamePlaceholder": "Tu nombre (opcional)",
+    "helpContactPlaceholder": "Teléfono o email de contacto",
+    "helpMessagePlaceholder": "Cuéntanos un poco más sobre lo que sientes...",
+    "helpSend": "Pedir Ayuda",
     "verses": [
       { "text": "Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos.", "ref": "Mateo 18:20" },
       { "text": "Todo lo puedo en Cristo que me fortalece.", "ref": "Filipenses 4:13" },
@@ -285,5 +299,19 @@
   },
   "langSwitcher": {
     "label": "Idioma"
+  },
+  "helpRequests": {
+    "title": "Pedidos de Ayuda",
+    "subtitle": "Personas que necesitan apoyo espiritual y oración. Responde con amor.",
+    "loading": "Cargando...",
+    "empty": "No hay pedidos de ayuda en este momento. ¡Gloria a Dios!",
+    "justNow": "ahora",
+    "filter_all": "Todos",
+    "filter_pending": "Pendientes",
+    "filter_in_progress": "En curso",
+    "filter_resolved": "Resueltos",
+    "markInProgress": "Estoy atendiendo",
+    "markResolved": "Resuelto",
+    "resolved": "Atendido"
   }
 }

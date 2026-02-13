@@ -48,6 +48,8 @@ export function WebSocketProvider({ children }) {
           break;
         case 'new_prayer_response':
         case 'amem':
+        case 'new_help_request':
+        case 'help_request_update':
           setLastEvent(data);
           break;
       }

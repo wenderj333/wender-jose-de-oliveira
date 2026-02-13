@@ -7,6 +7,7 @@
     "churches": "Churches",
     "registerChurch": "Register Church",
     "kids": "Kids",
+    "helpRequests": "Help Requests",
     "dashboard": "Dashboard",
     "hello": "Hi, {{name}}",
     "logout": "Log out",
@@ -36,6 +37,19 @@
     "featureChurchDesc": "Register your church on the platform and connect with believers from around the world.",
     "explore": "Explore",
     "registerBtn": "Register",
+    "helpTitle": "Need Help?",
+    "helpSubtitle": "You are not alone. A church can help you.",
+    "helpSeeThings": "👁️ I see things",
+    "helpHearThings": "👂 I hear noises",
+    "helpFeelAlone": "💔 I feel alone",
+    "helpNeedPrayer": "🙏 I need prayer",
+    "helpAnxious": "😰 I feel anxious",
+    "helpDepressed": "😢 I feel sad/depressed",
+    "helpSent": "✅ Your request was sent! A nearby church will contact you to help. God bless you! 🙏",
+    "helpNamePlaceholder": "Your name (optional)",
+    "helpContactPlaceholder": "Phone or email for contact",
+    "helpMessagePlaceholder": "Tell us a little more about how you're feeling...",
+    "helpSend": "Ask for Help",
     "verses": [
       { "text": "For where two or three gather in my name, there am I with them.", "ref": "Matthew 18:20" },
       { "text": "I can do all things through Christ who strengthens me.", "ref": "Philippians 4:13" },
@@ -285,5 +299,19 @@
   },
   "langSwitcher": {
     "label": "Language"
+  },
+  "helpRequests": {
+    "title": "Help Requests",
+    "subtitle": "People in need of spiritual support and prayer. Respond with love.",
+    "loading": "Loading...",
+    "empty": "No help requests at the moment. Praise God!",
+    "justNow": "just now",
+    "filter_all": "All",
+    "filter_pending": "Pending",
+    "filter_in_progress": "In Progress",
+    "filter_resolved": "Resolved",
+    "markInProgress": "I'm helping",
+    "markResolved": "Resolved",
+    "resolved": "Resolved"
   }
 }

@@ -85,7 +85,7 @@ function setupWebSocket(server) {
     });
   });
 
-  return wss;
+  return wss; // returned to server.js
 }
 
 function broadcast(wss, data) {

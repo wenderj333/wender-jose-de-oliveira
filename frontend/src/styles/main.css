@@ -424,6 +424,56 @@ body {
   margin-bottom: 0.5rem;
 }
 
+/* ===== HELP SECTION ===== */
+.help-section {
+  margin: 2rem 0;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #fff5f5, #fef2f2);
+  border-radius: 16px;
+  border: 2px solid #e74c3c33;
+  text-align: center;
+}
+.help-section__inner { max-width: 500px; margin: 0 auto; }
+.help-section__title { color: #c0392b; font-size: 1.4rem; margin-bottom: 0.25rem; }
+.help-section__subtitle { color: #666; font-size: 0.95rem; margin-bottom: 1.25rem; }
+.help-section__options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+.help-option-btn {
+  padding: 0.75rem 0.5rem;
+  border: 2px solid #e74c3c44;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+.help-option-btn:hover { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.help-section__form { display: flex; flex-direction: column; gap: 0.6rem; }
+.help-section__chosen {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #e74c3c; color: #fff; padding: 0.5rem 1rem;
+  border-radius: 20px; font-weight: 600; font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+.help-input {
+  padding: 0.7rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.help-input:focus { border-color: #e74c3c; outline: none; }
+.help-section__sent {
+  background: #d4edda; color: #155724;
+  padding: 1rem; border-radius: 12px;
+  font-size: 1rem; font-weight: 500;
+}
+
 /* ===== FORMS ===== */
 .form-page {
   max-width: 440px;
@@ -795,14 +845,39 @@ body {
     padding: 0.6rem 1rem;
     min-height: 44px;
   }
-  .hero { padding: 2.5rem 1rem 2rem; }
-  .hero__title { font-size: 2.2rem; }
-  .hero__subtitle { font-size: 1rem; }
-  .hero__icon-glow { width: 85px; height: 85px; }
-  .hero__verse { padding: 0.75rem 1rem; }
-  .hero__verse-text { font-size: 0.95rem; }
+  .hero { padding: 1.5rem 1rem 1rem; }
+  .hero__title { font-size: 1.6rem; }
+  .hero__subtitle { font-size: 0.85rem; }
+  .hero__icon-glow { width: 60px; height: 60px; }
+  .hero__verse { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
+  .hero__verse-text { font-size: 0.8rem; }
+  .btn-lg { font-size: 0.85rem; padding: 0.5rem 1.2rem; }
   .features {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    margin: 1rem 0;
+  }
+  .feature-card {
+    padding: 0.75rem 0.5rem;
+  }
+  .feature-card__icon {
+    margin-bottom: 0.4rem;
+  }
+  .feature-card__icon svg {
+    width: 28px;
+    height: 28px;
+  }
+  .feature-card h3 {
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+  }
+  .feature-card p {
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+  .feature-card .btn-sm {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
   }
   .church-grid {
     grid-template-columns: 1fr;

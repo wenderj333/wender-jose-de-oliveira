@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useWebSocket } from '../context/WebSocketContext';
-import { HandHeart, Radio, MapPin, LayoutDashboard, Heart, BookOpen, Baby, Church, Newspaper, Sparkles, Users, CheckCircle } from 'lucide-react';
+import { HandHeart, Radio, MapPin, LayoutDashboard, Heart, BookOpen, Baby, Church, Newspaper, Sparkles, Users, CheckCircle, ShieldAlert } from 'lucide-react';
 
 function getVersiculoDoDia(verses) {
   const hoje = new Date();
@@ -13,6 +13,9 @@ function getVersiculoDoDia(verses) {
 export default function Home() {
   const { totalChurchesPraying } = useWebSocket();
   const [loaded, setLoaded] = useState(false);
+  const [helpSelected, setHelpSelected] = useState(null);
+  const [helpForm, setHelpForm] = useState({ name: '', contact: '', message: '' });
+  const [helpSent, setHelpSent] = useState(false);
   const { t } = useTranslation();
   const verses = t('home.verses', { returnObjects: true });
   const versiculo = getVersiculoDoDia(verses);
@@ -21,6 +24,27 @@ export default function Home() {
     const ti = setTimeout(() => setLoaded(true), 100);
     return () => clearTimeout(ti);
   }, []);
+
+  const helpOptions = [
+    { key: 'seeThings', label: t('home.helpSeeThings') },
+    { key: 'hearThings', label: t('home.helpHearThings') },
+    { key: 'feelAlone', label: t('home.helpFeelAlone') },
+    { key: 'needPrayer', label: t('home.helpNeedPrayer') },
+    { key: 'anxious', label: t('home.helpAnxious') },
+    { key: 'depressed', label: t('home.helpDepressed') },
+  ];
+
+  const submitHelp = async () => {
+    try {
+      await fetch('/api/help-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: helpSelected, ...helpForm }),
+      });
+    } catch (e) { /* ok */ }
+    setHelpSent(true);
+    setTimeout(() => { setHelpSent(false); setHelpSelected(null); setHelpForm({ name: '', contact: '', message: '' }); }, 5000);
+  };
 
   const iconStyle = { color: '#3b5998', strokeWidth: 1.5 };
   const goldIcon = { color: '#daa520', strokeWidth: 1.5 };
@@ -105,6 +129,52 @@ export default function Home() {
           <h3>{t('home.featureChurch')}</h3>
           <p>{t('home.featureChurchDesc')}</p>
           <Link to="/cadastrar-igreja" className="btn btn-primary btn-sm" style={{ marginTop: '0.75rem' }}>{t('home.registerBtn')}</Link>
+        </div>
+      </section>
+
+      {/* Help Section */}
+      <section className="help-section">
+        <div className="help-section__inner">
+          <ShieldAlert size={40} style={{ color: '#e74c3c', marginBottom: '0.5rem' }} />
+          <h2 className="help-section__title">{t('home.helpTitle')}</h2>
+          <p className="help-section__subtitle">{t('home.helpSubtitle')}</p>
+
+          {helpSent ? (
+            <div className="help-section__sent">{t('home.helpSent')}</div>
+          ) : !helpSelected ? (
+            <div className="help-section__options">
+              {helpOptions.map(opt => (
+                <button key={opt.key} className="help-option-btn" onClick={() => setHelpSelected(opt.key)}>
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="help-section__form">
+              <div className="help-section__chosen">
+                {helpOptions.find(o => o.key === helpSelected)?.label}
+                <button onClick={() => setHelpSelected(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: '8px', fontSize: '1rem' }}>✕</button>
+              </div>
+              <input
+                type="text" placeholder={t('home.helpNamePlaceholder')}
+                value={helpForm.name} onChange={e => setHelpForm(f => ({ ...f, name: e.target.value }))}
+                className="help-input"
+              />
+              <input
+                type="text" placeholder={t('home.helpContactPlaceholder')}
+                value={helpForm.contact} onChange={e => setHelpForm(f => ({ ...f, contact: e.target.value }))}
+                className="help-input"
+              />
+              <textarea
+                placeholder={t('home.helpMessagePlaceholder')}
+                value={helpForm.message} onChange={e => setHelpForm(f => ({ ...f, message: e.target.value }))}
+                className="help-input" rows={3}
+              />
+              <button className="btn btn-primary" onClick={submitHelp} disabled={!helpForm.contact}>
+                {t('home.helpSend')}
+              </button>
+            </div>
+          )}
         </div>
       </section>
     </div>
