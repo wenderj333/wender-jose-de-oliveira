@@ -443,7 +443,7 @@ body {
 }
 .help-option-btn {
   padding: 0.75rem 0.5rem;
-  border: 2px solid #e74c3c44;
+  border: 2px solid rgba(124,92,191,0.3);
   border-radius: 12px;
   background: #fff;
   cursor: pointer;
@@ -451,7 +451,7 @@ body {
   transition: all 0.2s;
   font-weight: 500;
 }
-.help-option-btn:hover { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.help-option-btn:hover { background: linear-gradient(135deg, #7c5cbf, #5b8def); color: #fff; border-color: #7c5cbf; }
 .help-section__form { display: flex; flex-direction: column; gap: 0.6rem; }
 .help-section__chosen {
   display: inline-flex; align-items: center; justify-content: center;
@@ -474,12 +474,89 @@ body {
   font-size: 1rem; font-weight: 500;
 }
 
-/* ===== HELP CARD (compact, inside feature grid) ===== */
+/* ===== HELP CARD (spiritual aurora effect) ===== */
 .feature-card--help {
-  background: linear-gradient(135deg, #fff5f5, #fef2f2) !important;
-  border-image: linear-gradient(135deg, #e74c3c66, #f39c1266) 1 !important;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460) !important;
+  border: none !important;
+  border-image: none !important;
+  border-radius: 16px !important;
 }
-.feature-card--help h3 { color: #c0392b !important; }
+.feature-card--help::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(138, 100, 255, 0.15) 10%,
+    transparent 20%,
+    rgba(100, 200, 255, 0.12) 30%,
+    transparent 40%,
+    rgba(255, 215, 100, 0.1) 50%,
+    transparent 60%,
+    rgba(138, 100, 255, 0.15) 70%,
+    transparent 80%,
+    rgba(100, 200, 255, 0.12) 90%,
+    transparent 100%
+  );
+  animation: auroraRotate 8s linear infinite;
+  z-index: 0;
+}
+.feature-card--help::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: -30%;
+  width: 160%;
+  height: 160%;
+  background: radial-gradient(
+    ellipse at 30% 50%,
+    rgba(138, 100, 255, 0.12) 0%,
+    transparent 50%
+  ),
+  radial-gradient(
+    ellipse at 70% 30%,
+    rgba(100, 200, 255, 0.1) 0%,
+    transparent 50%
+  ),
+  radial-gradient(
+    ellipse at 50% 80%,
+    rgba(255, 215, 100, 0.08) 0%,
+    transparent 50%
+  );
+  animation: auroraPulse 6s ease-in-out infinite alternate;
+  z-index: 0;
+}
+.feature-card--help > * { position: relative; z-index: 1; }
+.feature-card--help h3 { color: #e0d4ff !important; text-shadow: 0 0 12px rgba(138,100,255,0.4); }
+.feature-card--help p { color: #c8d6e5 !important; }
+.feature-card--help .feature-card__icon svg { color: #c8a2ff !important; filter: drop-shadow(0 0 8px rgba(138,100,255,0.5)); }
+.feature-card--help .btn {
+  background: linear-gradient(135deg, #7c5cbf, #5b8def) !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: 0 0 16px rgba(138,100,255,0.4);
+  transition: all 0.3s;
+}
+.feature-card--help .btn:hover {
+  box-shadow: 0 0 24px rgba(138,100,255,0.6);
+  transform: scale(1.05);
+}
+
+@keyframes auroraRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes auroraPulse {
+  0% { opacity: 0.6; transform: translate(-5%, -5%) scale(1); }
+  50% { opacity: 1; transform: translate(5%, 5%) scale(1.05); }
+  100% { opacity: 0.7; transform: translate(-3%, 3%) scale(1.02); }
+}
 .help-compact-options {
   display: grid;
   grid-template-columns: 1fr 1fr;

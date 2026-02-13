@@ -136,7 +136,7 @@ export default function Home() {
           <div className="feature-card__icon"><ShieldAlert size={48} style={{ color: '#e74c3c', strokeWidth: 1.5 }} /></div>
           <h3>{t('home.helpTitle')}</h3>
           <p>{t('home.helpSubtitle')}</p>
-          <button className="btn btn-primary btn-sm" style={{ marginTop: '0.75rem', background: '#e74c3c', borderColor: '#e74c3c' }} onClick={() => setHelpSelected('open')}>
+          <button className="btn btn-primary btn-sm" style={{ marginTop: '0.75rem' }} onClick={() => setHelpSelected('open')}>
             {t('home.helpBtn')}
           </button>
         </div>
@@ -147,8 +147,8 @@ export default function Home() {
         <div className="help-modal-overlay" onClick={() => { setHelpSelected(null); setHelpSent(false); }}>
           <div className="help-modal" onClick={e => e.stopPropagation()}>
             <button className="help-modal__close" onClick={() => { setHelpSelected(null); setHelpSent(false); }}>✕</button>
-            <ShieldAlert size={32} style={{ color: '#e74c3c', marginBottom: '0.5rem' }} />
-            <h3 style={{ color: '#c0392b', marginBottom: '0.25rem' }}>{t('home.helpTitle')}</h3>
+            <ShieldAlert size={32} style={{ color: '#7c5cbf', marginBottom: '0.5rem' }} />
+            <h3 style={{ color: '#5b3d99', marginBottom: '0.25rem' }}>{t('home.helpTitle')}</h3>
             <p style={{ color: '#666', fontSize: '0.85rem', marginBottom: '1rem' }}>{t('home.helpSubtitle')}</p>
 
             {helpSent ? (
@@ -165,13 +165,13 @@ export default function Home() {
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#e74c3c', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: '16px', fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.25rem' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #7c5cbf, #5b8def)', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: '16px', fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.25rem' }}>
                   {helpOptions.find(o => o.key === helpSelected)?.label}
                 </div>
                 <input type="text" placeholder={t('home.helpNamePlaceholder')} value={helpForm.name} onChange={e => setHelpForm(f => ({ ...f, name: e.target.value }))} className="help-input" />
                 <input type="text" placeholder={t('home.helpContactPlaceholder')} value={helpForm.contact} onChange={e => setHelpForm(f => ({ ...f, contact: e.target.value }))} className="help-input" />
                 <textarea placeholder={t('home.helpMessagePlaceholder')} value={helpForm.message} onChange={e => setHelpForm(f => ({ ...f, message: e.target.value }))} className="help-input" rows={3} />
-                <button className="btn btn-primary" onClick={submitHelp} disabled={!helpForm.contact} style={{ background: '#e74c3c', borderColor: '#e74c3c' }}>
+                <button className="btn btn-primary" onClick={submitHelp} disabled={!helpForm.contact} style={{ background: 'linear-gradient(135deg, #7c5cbf, #5b8def)', borderColor: '#7c5cbf' }}>
                   {t('home.helpSend')}
                 </button>
               </div>
