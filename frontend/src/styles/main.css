@@ -148,7 +148,7 @@ body {
 
 .btn-outline {
   background: transparent;
-  color: var(--white);
+  color: var(--gold-light);
   border-color: var(--gold-light);
 }
 .btn-outline:hover {
