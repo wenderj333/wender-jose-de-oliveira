@@ -63,7 +63,7 @@ export default function Home() {
         </div>
 
         <div className="hero__icon-glow">
-          <BookOpen size={64} style={{ color: '#f4d03f', strokeWidth: 1.5 }} />
+          <img src="/logo.svg" alt="Sigo com Fé" style={{ width: 120, height: 120 }} />
         </div>
 
         <h1 className="hero__title">{t('brand')}</h1>
