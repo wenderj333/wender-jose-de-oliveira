@@ -74,6 +74,13 @@
     "submit": "Log in",
     "or": "or",
     "google": "Log in with Google",
+    "facebook": "Log in with Facebook",
+    "phone": "Log in with Phone",
+    "phoneNumber": "Phone number",
+    "sendCode": "Send code",
+    "verifyCode": "Verify code",
+    "codeSent": "Code sent!",
+    "codePlaceholder": "6-digit code",
     "noAccount": "Don't have an account?",
     "signUp": "Sign up"
   },
@@ -92,6 +99,8 @@
     "submit": "Sign up",
     "or": "or",
     "google": "Sign up with Google",
+    "facebook": "Sign up with Facebook",
+    "phone": "Sign up with Phone",
     "hasAccount": "Already have an account?",
     "signIn": "Log in"
   },

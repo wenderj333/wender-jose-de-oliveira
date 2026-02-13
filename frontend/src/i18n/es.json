@@ -74,6 +74,13 @@
     "submit": "Entrar",
     "or": "o",
     "google": "Entrar con Google",
+    "facebook": "Entrar con Facebook",
+    "phone": "Entrar con Teléfono",
+    "phoneNumber": "Número de teléfono",
+    "sendCode": "Enviar código",
+    "verifyCode": "Verificar código",
+    "codeSent": "¡Código enviado!",
+    "codePlaceholder": "Código de 6 dígitos",
     "noAccount": "¿No tienes cuenta?",
     "signUp": "Regístrate"
   },
@@ -92,6 +99,8 @@
     "submit": "Registrarse",
     "or": "o",
     "google": "Registrarse con Google",
+    "facebook": "Registrarse con Facebook",
+    "phone": "Registrarse con Teléfono",
     "hasAccount": "¿Ya tienes cuenta?",
     "signIn": "Entrar"
   },

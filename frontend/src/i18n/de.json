@@ -74,6 +74,13 @@
     "submit": "Anmelden",
     "or": "oder",
     "google": "Mit Google anmelden",
+    "facebook": "Mit Facebook anmelden",
+    "phone": "Mit Telefon anmelden",
+    "phoneNumber": "Telefonnummer",
+    "sendCode": "Code senden",
+    "verifyCode": "Code verifizieren",
+    "codeSent": "Code gesendet!",
+    "codePlaceholder": "6-stelliger Code",
     "noAccount": "Kein Konto?",
     "signUp": "Registrieren"
   },
@@ -92,6 +99,8 @@
     "submit": "Registrieren",
     "or": "oder",
     "google": "Mit Google registrieren",
+    "facebook": "Mit Facebook registrieren",
+    "phone": "Mit Telefon registrieren",
     "hasAccount": "Schon ein Konto?",
     "signIn": "Anmelden"
   },

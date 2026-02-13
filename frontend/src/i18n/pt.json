@@ -74,6 +74,13 @@
     "submit": "Entrar",
     "or": "ou",
     "google": "Entrar com Google",
+    "facebook": "Entrar com Facebook",
+    "phone": "Entrar com Telefone",
+    "phoneNumber": "Número de telefone",
+    "sendCode": "Enviar código",
+    "verifyCode": "Verificar código",
+    "codeSent": "Código enviado!",
+    "codePlaceholder": "Código de 6 dígitos",
     "noAccount": "Não tem conta?",
     "signUp": "Cadastre-se"
   },
@@ -92,6 +99,8 @@
     "submit": "Cadastrar",
     "or": "ou",
     "google": "Cadastrar com Google",
+    "facebook": "Cadastrar com Facebook",
+    "phone": "Cadastrar com Telefone",
     "hasAccount": "Já tem conta?",
     "signIn": "Entrar"
   },

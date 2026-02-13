@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth, googleProvider } from '../firebase';
-import { signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth, googleProvider, facebookProvider } from '../firebase';
+import { signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 const AuthContext = createContext(null);
 
@@ -12,9 +12,9 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
-  // Helper: sync Firebase user with our backend
+  // Helper: sync Firebase user with our backend (social login)
   const syncFirebaseUser = async (firebaseUser) => {
-    const res = await fetch(`${API}/auth/google`, {
+    const res = await fetch(`${API}/auth/social`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -129,6 +129,47 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const loginWithFacebook = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      return await syncFirebaseUser(result.user);
+    } catch (err) {
+      if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+        await signInWithRedirect(auth, facebookProvider);
+        return;
+      }
+      throw err;
+    }
+  };
+
+  const sendPhoneCode = async (phoneNumber, recaptchaContainerId) => {
+    const recaptchaVerifier = new RecaptchaVerifier(auth, recaptchaContainerId, { size: 'invisible' });
+    const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+    return confirmationResult;
+  };
+
+  const verifyPhoneCode = async (confirmationResult, code) => {
+    const result = await confirmationResult.confirm(code);
+    // Sync with backend via phone endpoint
+    const firebaseUser = result.user;
+    const res = await fetch(`${API}/auth/phone`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        uid: firebaseUser.uid,
+        phone: firebaseUser.phoneNumber,
+        full_name: firebaseUser.displayName || firebaseUser.phoneNumber,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erro ao sincronizar com servidor');
+    setUser(data.user);
+    setToken(data.token);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    return data;
+  };
+
   const register = async (email, password, full_name, role) => {
     const res = await fetch(`${API}/auth/register`, {
       method: 'POST',
@@ -157,7 +198,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, loginWithGoogle, register, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
