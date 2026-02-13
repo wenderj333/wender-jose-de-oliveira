@@ -113,10 +113,12 @@ export default function Login() {
           {t('login.google')}
         </button>
 
+        {/* Facebook login - desativado até configurar app no Meta
         <button className="btn" type="button" onClick={handleFacebookLogin} style={{ width: '100%', marginTop: '0.5rem', background: '#1877F2', color: '#fff', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.75rem', borderRadius: '8px', fontSize: '1rem', fontWeight: 600, cursor: 'pointer' }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           {t('login.facebook')}
         </button>
+        */}
 
         <div className="auth-divider" style={{ margin: '1rem 0' }}>
           <span>{t('login.phone')}</span>
