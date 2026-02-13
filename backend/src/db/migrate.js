@@ -304,6 +304,9 @@ async function migrate() {
     CREATE INDEX IF NOT EXISTS idx_chat_messages_room ON chat_messages(room_id, created_at);
   `);
 
+  // Add new columns
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_private BOOLEAN DEFAULT false`);
+
   console.log('✅ Migração PostgreSQL concluída com sucesso! (15+ tabelas criadas)');
   await pool.end();
 }

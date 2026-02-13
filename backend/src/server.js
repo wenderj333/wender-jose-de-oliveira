@@ -208,6 +208,8 @@ const { Pool: MigratePool } = require('pg');
         duration_minutes INT
       );
     `);
+    // Add is_private column to users
+    await mp.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_private BOOLEAN DEFAULT false`);
     console.log('✅ Auto-migração concluída!');
   } catch (err) {
     console.error('⚠️  Erro na auto-migração (continuando):', err.message);
@@ -215,6 +217,10 @@ const { Pool: MigratePool } = require('pg');
     await mp.end();
   }
 })();
+
+// Serve uploaded files
+const path = require('path');
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
