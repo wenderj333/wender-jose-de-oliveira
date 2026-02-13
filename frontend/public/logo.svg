@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Bible book -->
+  <rect x="96" y="120" width="320" height="280" rx="16" fill="#8e44ad" />
+  <rect x="96" y="120" width="320" height="280" rx="16" stroke="#6c2d91" stroke-width="6" fill="none"/>
+  <!-- Book spine -->
+  <rect x="96" y="120" width="24" height="280" rx="8" fill="#6c2d91"/>
+  <!-- Book pages (inner) -->
+  <rect x="132" y="140" width="268" height="240" rx="8" fill="#f5eef8"/>
+  <!-- Cross on the book -->
+  <rect x="248" y="160" width="16" height="80" rx="4" fill="#d4a017"/>
+  <rect x="228" y="185" width="56" height="16" rx="4" fill="#d4a017"/>
+  <!-- Heart below cross -->
+  <path d="M256 290 C256 290 218 258 218 238 C218 224 230 214 244 218 C250 220 254 226 256 230 C258 226 262 220 268 218 C282 214 294 224 294 238 C294 258 256 290 256 290Z" fill="#e74c3c"/>
+  <!-- Small glow around heart -->
+  <circle cx="256" cy="260" r="50" fill="none" stroke="#e74c3c" stroke-width="1.5" opacity="0.2"/>
+  <!-- Text: Sigo com Fé -->
+  <text x="256" y="440" text-anchor="middle" font-family="Georgia, serif" font-size="42" font-weight="700" fill="#2c3e50">Sigo com Fé</text>
+  <!-- Subtitle -->
+  <text x="256" y="470" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#7f8c8d">Rede Social Cristã</text>
+</svg>
