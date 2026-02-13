@@ -130,47 +130,32 @@ export default function Home() {
           <p>{t('home.featureChurchDesc')}</p>
           <Link to="/cadastrar-igreja" className="btn btn-primary btn-sm" style={{ marginTop: '0.75rem' }}>{t('home.registerBtn')}</Link>
         </div>
-      </section>
 
-      {/* Help Section */}
-      <section className="help-section">
-        <div className="help-section__inner">
-          <ShieldAlert size={40} style={{ color: '#e74c3c', marginBottom: '0.5rem' }} />
-          <h2 className="help-section__title">{t('home.helpTitle')}</h2>
-          <p className="help-section__subtitle">{t('home.helpSubtitle')}</p>
+        {/* Help card — same size as others */}
+        <div className="card feature-card feature-card--help">
+          <div className="feature-card__icon"><ShieldAlert size={48} style={{ color: '#e74c3c', strokeWidth: 1.5 }} /></div>
+          <h3>{t('home.helpTitle')}</h3>
 
           {helpSent ? (
-            <div className="help-section__sent">{t('home.helpSent')}</div>
+            <p style={{ color: 'var(--green)', fontWeight: 600, fontSize: '0.85rem' }}>{t('home.helpSent')}</p>
           ) : !helpSelected ? (
-            <div className="help-section__options">
+            <div className="help-compact-options">
               {helpOptions.map(opt => (
-                <button key={opt.key} className="help-option-btn" onClick={() => setHelpSelected(opt.key)}>
+                <button key={opt.key} className="help-compact-btn" onClick={() => setHelpSelected(opt.key)}>
                   {opt.label}
                 </button>
               ))}
             </div>
           ) : (
-            <div className="help-section__form">
-              <div className="help-section__chosen">
+            <div className="help-compact-form">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', marginBottom: '0.4rem', fontSize: '0.8rem', fontWeight: 600 }}>
                 {helpOptions.find(o => o.key === helpSelected)?.label}
-                <button onClick={() => setHelpSelected(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: '8px', fontSize: '1rem' }}>✕</button>
+                <button onClick={() => setHelpSelected(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem', color: '#e74c3c' }}>✕</button>
               </div>
-              <input
-                type="text" placeholder={t('home.helpNamePlaceholder')}
-                value={helpForm.name} onChange={e => setHelpForm(f => ({ ...f, name: e.target.value }))}
-                className="help-input"
-              />
-              <input
-                type="text" placeholder={t('home.helpContactPlaceholder')}
-                value={helpForm.contact} onChange={e => setHelpForm(f => ({ ...f, contact: e.target.value }))}
-                className="help-input"
-              />
-              <textarea
-                placeholder={t('home.helpMessagePlaceholder')}
-                value={helpForm.message} onChange={e => setHelpForm(f => ({ ...f, message: e.target.value }))}
-                className="help-input" rows={3}
-              />
-              <button className="btn btn-primary" onClick={submitHelp} disabled={!helpForm.contact}>
+              <input type="text" placeholder={t('home.helpNamePlaceholder')} value={helpForm.name} onChange={e => setHelpForm(f => ({ ...f, name: e.target.value }))} className="help-compact-input" />
+              <input type="text" placeholder={t('home.helpContactPlaceholder')} value={helpForm.contact} onChange={e => setHelpForm(f => ({ ...f, contact: e.target.value }))} className="help-compact-input" />
+              <textarea placeholder={t('home.helpMessagePlaceholder')} value={helpForm.message} onChange={e => setHelpForm(f => ({ ...f, message: e.target.value }))} className="help-compact-input" rows={2} />
+              <button className="btn btn-primary btn-sm" onClick={submitHelp} disabled={!helpForm.contact} style={{ marginTop: '0.4rem' }}>
                 {t('home.helpSend')}
               </button>
             </div>

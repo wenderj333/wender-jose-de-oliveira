@@ -474,6 +474,40 @@ body {
   font-size: 1rem; font-weight: 500;
 }
 
+/* ===== HELP CARD (compact, inside feature grid) ===== */
+.feature-card--help {
+  background: linear-gradient(135deg, #fff5f5, #fef2f2) !important;
+  border-image: linear-gradient(135deg, #e74c3c66, #f39c1266) 1 !important;
+}
+.feature-card--help h3 { color: #c0392b !important; }
+.help-compact-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+.help-compact-btn {
+  padding: 0.4rem 0.3rem;
+  border: 1.5px solid #e74c3c44;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.help-compact-btn:hover { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.help-compact-form { display: flex; flex-direction: column; gap: 0.3rem; }
+.help-compact-input {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.help-compact-input:focus { border-color: #e74c3c; outline: none; }
+
 /* ===== FORMS ===== */
 .form-page {
   max-width: 440px;
