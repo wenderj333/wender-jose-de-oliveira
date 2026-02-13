@@ -35,8 +35,7 @@ if (process.env.JWT_SECRET === 'sigocomfe-secret-key-2026-mudar-em-producao') {
   console.warn('⚠️  AVISO: Usando JWT_SECRET padrão! Defina um segredo forte em produção.');
 }
 
-// Run migrations on startup
-require('./db/migrate');
+// Migrations run separately via: node src/db/migrate.js
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));

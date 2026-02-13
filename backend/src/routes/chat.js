@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 
-// GET /api/chat/churches-online — churches with active pastors or all registered
-router.get('/churches-online', (req, res) => {
+// GET /api/chat/churches-online
+router.get('/churches-online', async (req, res) => {
   try {
-    const churches = db.prepare(
+    const churches = await db.prepare(
       `SELECT id, name, city, country, denomination, languages FROM churches ORDER BY name ASC`
     ).all();
     res.json(churches);
@@ -14,27 +14,24 @@ router.get('/churches-online', (req, res) => {
   }
 });
 
-// POST /api/chat/request — person creates a help chat request
-router.post('/request', (req, res) => {
+// POST /api/chat/request
+router.post('/request', async (req, res) => {
   try {
     const { language = 'pt', name, helpType, churchId, churchName } = req.body;
-    const stmt = db.prepare(
-      `INSERT INTO chat_rooms (requester_name, requester_language, help_type, target_church_id, target_church_name) VALUES (?, ?, ?, ?, ?)`
-    );
-    const result = stmt.run(name || 'Anônimo', language, helpType || 'general', churchId || null, churchName || null);
-    // Get the created room
-    const room = db.prepare('SELECT * FROM chat_rooms WHERE rowid = ?').get(result.lastInsertRowid);
-    res.json({ success: true, roomId: room.id, room });
+    const result = await db.prepare(
+      `INSERT INTO chat_rooms (requester_name, requester_language, help_type, target_church_id, target_church_name) VALUES (?, ?, ?, ?, ?) RETURNING *`
+    ).get(name || 'Anônimo', language, helpType || 'general', churchId || null, churchName || null);
+    res.json({ success: true, roomId: result.id, room: result });
   } catch (err) {
     console.error('Error creating chat room:', err);
     res.status(500).json({ error: 'Failed to create chat room' });
   }
 });
 
-// GET /api/chat/rooms — list active rooms waiting for a pastor
-router.get('/rooms', (req, res) => {
+// GET /api/chat/rooms
+router.get('/rooms', async (req, res) => {
   try {
-    const rooms = db.prepare(
+    const rooms = await db.prepare(
       `SELECT * FROM chat_rooms WHERE status = 'waiting' ORDER BY created_at DESC`
     ).all();
     res.json(rooms);
@@ -44,10 +41,10 @@ router.get('/rooms', (req, res) => {
   }
 });
 
-// GET /api/chat/rooms/:roomId/messages — get message history
-router.get('/rooms/:roomId/messages', (req, res) => {
+// GET /api/chat/rooms/:roomId/messages
+router.get('/rooms/:roomId/messages', async (req, res) => {
   try {
-    const messages = db.prepare(
+    const messages = await db.prepare(
       `SELECT * FROM chat_messages WHERE room_id = ? ORDER BY created_at ASC`
     ).all(req.params.roomId);
     res.json(messages);
@@ -57,14 +54,14 @@ router.get('/rooms/:roomId/messages', (req, res) => {
   }
 });
 
-// POST /api/chat/rooms/:roomId/join — pastor joins a room
-router.post('/rooms/:roomId/join', (req, res) => {
+// POST /api/chat/rooms/:roomId/join
+router.post('/rooms/:roomId/join', async (req, res) => {
   try {
     const { pastorName, language } = req.body;
-    db.prepare(
+    await db.prepare(
       `UPDATE chat_rooms SET pastor_name = ?, pastor_language = ?, status = 'active' WHERE id = ?`
     ).run(pastorName || 'Pastor', language || 'pt', req.params.roomId);
-    const room = db.prepare('SELECT * FROM chat_rooms WHERE id = ?').get(req.params.roomId);
+    const room = await db.prepare('SELECT * FROM chat_rooms WHERE id = ?').get(req.params.roomId);
     res.json({ success: true, room });
   } catch (err) {
     console.error('Error joining chat room:', err);
@@ -72,11 +69,11 @@ router.post('/rooms/:roomId/join', (req, res) => {
   }
 });
 
-// POST /api/chat/rooms/:roomId/close — close/end chat
-router.post('/rooms/:roomId/close', (req, res) => {
+// POST /api/chat/rooms/:roomId/close
+router.post('/rooms/:roomId/close', async (req, res) => {
   try {
-    db.prepare(
-      `UPDATE chat_rooms SET status = 'closed', closed_at = datetime('now') WHERE id = ?`
+    await db.prepare(
+      `UPDATE chat_rooms SET status = 'closed', closed_at = NOW() WHERE id = ?`
     ).run(req.params.roomId);
     res.json({ success: true });
   } catch (err) {

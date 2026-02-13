@@ -7,7 +7,7 @@ const { authenticate, requireRole } = require('../middleware/auth');
 // GET /api/churches - List all churches
 router.get('/', async (req, res) => {
   try {
-    const churches = db.prepare(
+    const churches = await db.prepare(
       `SELECT c.*, u.full_name AS pastor_name
        FROM churches c LEFT JOIN users u ON c.pastor_id = u.id
        ORDER BY c.created_at DESC LIMIT 50`
