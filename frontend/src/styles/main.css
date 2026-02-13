@@ -508,6 +508,28 @@ body {
 }
 .help-compact-input:focus { border-color: #e74c3c; outline: none; }
 
+/* Help Modal */
+.help-modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5); z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.help-modal {
+  background: #fff; border-radius: 16px; padding: 1.5rem;
+  max-width: 420px; width: 100%; text-align: center;
+  position: relative; max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.help-modal__close {
+  position: absolute; top: 10px; right: 14px;
+  background: none; border: none; font-size: 1.2rem;
+  cursor: pointer; color: #999;
+}
+.help-modal__options {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;
+}
+
 /* ===== FORMS ===== */
 .form-page {
   max-width: 440px;

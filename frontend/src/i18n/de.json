@@ -50,6 +50,7 @@
     "helpContactPlaceholder": "Telefon oder E-Mail",
     "helpMessagePlaceholder": "Erzähl uns ein wenig mehr darüber, wie du dich fühlst...",
     "helpSend": "Um Hilfe bitten",
+    "helpBtn": "Um Hilfe bitten",
     "verses": [
       { "text": "Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.", "ref": "Matthäus 18:20" },
       { "text": "Ich vermag alles durch den, der mich stark macht.", "ref": "Philipper 4:13" },

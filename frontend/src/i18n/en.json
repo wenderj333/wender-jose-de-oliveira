@@ -50,6 +50,7 @@
     "helpContactPlaceholder": "Phone or email for contact",
     "helpMessagePlaceholder": "Tell us a little more about how you're feeling...",
     "helpSend": "Ask for Help",
+    "helpBtn": "Ask for Help",
     "verses": [
       { "text": "For where two or three gather in my name, there am I with them.", "ref": "Matthew 18:20" },
       { "text": "I can do all things through Christ who strengthens me.", "ref": "Philippians 4:13" },

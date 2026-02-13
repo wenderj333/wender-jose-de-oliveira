@@ -50,6 +50,7 @@
     "helpContactPlaceholder": "Telefone ou email para contato",
     "helpMessagePlaceholder": "Conte um pouco mais sobre o que está sentindo...",
     "helpSend": "Pedir Ajuda",
+    "helpBtn": "Pedir Ajuda",
     "verses": [
       { "text": "Porque onde estiverem dois ou três reunidos em meu nome, ali estou no meio deles.", "ref": "Mateus 18:20" },
       { "text": "Tudo posso naquele que me fortalece.", "ref": "Filipenses 4:13" },
