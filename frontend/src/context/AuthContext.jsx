@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth, googleProvider } from '../firebase';
-import { signInWithPopup, onAuthStateChanged, signOut } from 'firebase/auth';
+import { signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from 'firebase/auth';
 
 const AuthContext = createContext(null);
 
@@ -12,29 +12,46 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
+  // Helper: sync Firebase user with our backend
+  const syncFirebaseUser = async (firebaseUser) => {
+    const res = await fetch(`${API}/auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        full_name: firebaseUser.displayName || firebaseUser.email,
+        photo: firebaseUser.photoURL,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erro ao sincronizar com servidor');
+    setUser(data.user);
+    setToken(data.token);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    return data;
+  };
+
+  // Handle redirect result (mobile Google sign-in)
+  useEffect(() => {
+    getRedirectResult(auth).then(async (result) => {
+      if (result?.user && !localStorage.getItem('token')) {
+        try {
+          await syncFirebaseUser(result.user);
+        } catch (e) {
+          // Backend offline, ignore
+        }
+      }
+    }).catch(() => {});
+  }, []);
+
   // Listen for Firebase auth state changes (for page reload with active Google session)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser && !localStorage.getItem('token')) {
-        // Firebase session exists but no local token — re-sync with backend
         try {
-          const res = await fetch(`${API}/auth/google`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              uid: firebaseUser.uid,
-              email: firebaseUser.email,
-              full_name: firebaseUser.displayName || firebaseUser.email,
-              photo: firebaseUser.photoURL,
-            }),
-          });
-          const data = await res.json();
-          if (res.ok) {
-            setUser(data.user);
-            setToken(data.token);
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-          }
+          await syncFirebaseUser(firebaseUser);
         } catch (e) {
           // Backend offline, ignore
         }
@@ -93,29 +110,20 @@ export function AuthProvider({ children }) {
     return data;
   };
 
+  // Detect mobile
+  const isMobile = () => /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+
   const loginWithGoogle = async () => {
+    if (isMobile()) {
+      // Mobile: use redirect (popups are blocked on most mobile browsers)
+      await signInWithRedirect(auth, googleProvider);
+      // Page will reload — redirect result is handled in useEffect above
+      return;
+    }
+
+    // Desktop: use popup
     const result = await signInWithPopup(auth, googleProvider);
-    const firebaseUser = result.user;
-
-    // Sync with our backend — creates local user if needed, returns our JWT
-    const res = await fetch(`${API}/auth/google`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        full_name: firebaseUser.displayName || firebaseUser.email,
-        photo: firebaseUser.photoURL,
-      }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Erro ao sincronizar com servidor');
-
-    setUser(data.user);
-    setToken(data.token);
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    return data;
+    return await syncFirebaseUser(result.user);
   };
 
   const register = async (email, password, full_name, role) => {
