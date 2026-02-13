@@ -114,20 +114,19 @@ export function AuthProvider({ children }) {
     return data;
   };
 
-  // Detect mobile
-  const isMobile = () => /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-
   const loginWithGoogle = async () => {
-    if (isMobile()) {
-      // Mobile: use redirect (popups are blocked on most mobile browsers)
-      await signInWithRedirect(auth, googleProvider);
-      // Page will reload — redirect result is handled in useEffect above
-      return;
+    try {
+      // Try popup first (works on desktop and some mobile browsers)
+      const result = await signInWithPopup(auth, googleProvider);
+      return await syncFirebaseUser(result.user);
+    } catch (err) {
+      // If popup blocked/failed on mobile, fall back to redirect
+      if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+        await signInWithRedirect(auth, googleProvider);
+        return; // Page will reload — redirect result handled in useEffect
+      }
+      throw err;
     }
-
-    // Desktop: use popup
-    const result = await signInWithPopup(auth, googleProvider);
-    return await syncFirebaseUser(result.user);
   };
 
   const register = async (email, password, full_name, role) => {
