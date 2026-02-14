@@ -263,34 +263,34 @@ export default function Profile() {
 
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '0' }}>
-      {/* Header - compact Instagram style */}
+      {/* Header - bolha de água dourada */}
       <div style={{
-        background: 'rgba(26, 10, 62, 0.6)', // Fundo semitransparente mais leve
+        background: 'linear-gradient(160deg, rgba(255,255,255,0.35), rgba(218,165,32,0.10), rgba(255,255,255,0.2))',
         padding: '1.5rem 1.25rem 1rem',
-        color: '#fff',
+        color: '#1a1a2e',
         position: 'relative',
         overflow: 'hidden',
-        borderRadius: '16px',
-        marginBottom: '1.5rem',
-        boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
-        backdropFilter: 'blur(8px)', // Efeito de vidro
-        WebkitBackdropFilter: 'blur(8px)',
+        borderRadius: '24px',
+        border: '1.5px solid rgba(218,165,32,0.4)',
+        boxShadow: '0 8px 32px rgba(218,165,32,0.15), inset 0 2px 4px rgba(255,255,255,0.6)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
       }}>
-        {/* Bolhas Douradas (pseudo-elementos seriam melhores em CSS puro, mas inline para o exemplo) */}
+        {/* Reflexo brilhante no topo da bolha */}
         <div style={{
-          position: 'absolute', top: '10%', left: '15%', width: 80, height: 80, borderRadius: '50%',
-          background: 'rgba(218,165,32,0.15)', filter: 'blur(15px)', zIndex: 0,
+          position: 'absolute', top: -15, left: '15%', width: '70%', height: 40,
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(255,255,255,0.6), transparent 70%)',
+          zIndex: 0,
         }} />
+        {/* Brilho dourado suave */}
         <div style={{
-          position: 'absolute', bottom: '20%', right: '10%', width: 100, height: 100, borderRadius: '50%',
-          background: 'rgba(218,165,32,0.1)', filter: 'blur(20px)', zIndex: 0,
-        }} />
-        <div style={{
-          position: 'absolute', top: '50%', left: '50%', width: 60, height: 60, borderRadius: '50%',
-          background: 'rgba(218,165,32,0.1)', filter: 'blur(10px)', zIndex: 0,
+          position: 'absolute', bottom: 10, right: '5%', width: 100, height: 100,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(218,165,32,0.15), transparent 60%)',
+          zIndex: 0,
         }} />
 
-        {/* Conteúdo do Header com z-index maior para ficar acima das bolhas */}
         <div style={{ position: 'relative', zIndex: 1 }}>
           {/* Top row: Avatar + Stats + Actions */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '0.75rem' }}>
@@ -337,20 +337,20 @@ export default function Profile() {
               { value: stats.prayers, label: 'Orações' },
             ].map((s, i) => (
               <div key={i}>
-                <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff' }}>{s.value}</div>
-                <div style={{ fontSize: '0.7rem', color: '#aaa', marginTop: 2 }}>{s.label}</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#1a1a2e' }}>{s.value}</div>
+                <div style={{ fontSize: '0.7rem', color: '#8b7355', marginTop: 2 }}>{s.label}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Name & bio */}
-        <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700 }}>{profile.full_name}</h2>
+        <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#1a1a2e' }}>{profile.full_name}</h2>
         {profile.display_name && (
-          <p style={{ margin: '0.15rem 0 0', opacity: 0.6, fontSize: '0.85rem', color: '#ccc' }}>@{profile.display_name}</p>
+          <p style={{ margin: '0.15rem 0 0', opacity: 0.7, fontSize: '0.85rem', color: '#8b7355' }}>@{profile.display_name}</p>
         )}
         {profile.bio && (
-          <p style={{ margin: '0.4rem 0 0', fontSize: '0.85rem', color: '#ddd', lineHeight: 1.4 }}>{profile.bio}</p>
+          <p style={{ margin: '0.4rem 0 0', fontSize: '0.85rem', color: '#444', lineHeight: 1.4 }}>{profile.bio}</p>
         )}
 
         {/* Role badge + church */}
@@ -420,10 +420,13 @@ export default function Profile() {
         <>
           {/* Tabs */}
           <div style={{
-            display: 'flex', background: 'rgba(18, 8, 51, 0.7)',
+            display: 'flex',
+            background: 'linear-gradient(160deg, rgba(255,255,255,0.3), rgba(218,165,32,0.08))',
+            borderBottom: '1px solid rgba(218,165,32,0.25)',
+            backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+            borderTopLeftRadius: '24px', borderTopRightRadius: '24px',
+            border: '1.5px solid rgba(218,165,32,0.3)',
             borderBottom: '1px solid rgba(218,165,32,0.2)',
-            backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-            borderTopLeftRadius: '16px', borderTopRightRadius: '16px',
           }}>
             {[
               { key: 'posts', icon: <Grid3x3 size={20} />, label: 'Posts' },
@@ -447,11 +450,15 @@ export default function Profile() {
 
           {/* Tab content */}
           <div style={{
-            background: 'rgba(26, 10, 62, 0.6)', minHeight: 300,
-            backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-            borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px',
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(218,165,32,0.05))',
+            minHeight: 300,
+            backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+            borderBottomLeftRadius: '24px', borderBottomRightRadius: '24px',
             marginBottom: '1.5rem',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
+            boxShadow: '0 8px 32px rgba(218,165,32,0.1)',
+            borderLeft: '1.5px solid rgba(218,165,32,0.3)',
+            borderRight: '1.5px solid rgba(218,165,32,0.3)',
+            borderBottom: '1.5px solid rgba(218,165,32,0.3)',
           }}>
             {/* POSTS tab */}
             {activeTab === 'posts' && (
