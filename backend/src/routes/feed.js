@@ -34,17 +34,16 @@ router.get('/', async (req, res) => {
     const limit = Math.min(parseInt(req.query.limit) || 20, 50);
     const offset = (page - 1) * limit;
 
-    const { rows } = await db.query(
+    const posts = await db.prepare(
       `SELECT fp.*, u.full_name AS author_name, u.display_name AS author_display_name, u.avatar_url AS author_avatar
        FROM feed_posts fp
        JOIN users u ON u.id = fp.author_id
        WHERE fp.visibility = 'public'
        ORDER BY fp.created_at DESC
-       LIMIT $1 OFFSET $2`,
-      [limit, offset]
-    );
+       LIMIT ? OFFSET ?`
+    ).all(limit, offset);
 
-    res.json({ posts: rows, page, limit });
+    res.json({ posts, page, limit });
   } catch (err) {
     console.error('Erro ao buscar feed:', err);
     res.status(500).json({ error: 'Erro interno do servidor' });
@@ -58,22 +57,20 @@ router.get('/user/:userId', async (req, res) => {
     const limit = Math.min(parseInt(req.query.limit) || 20, 50);
     const offset = (page - 1) * limit;
 
-    const { rows } = await db.query(
+    const posts = await db.prepare(
       `SELECT fp.*, u.full_name AS author_name, u.display_name AS author_display_name, u.avatar_url AS author_avatar
        FROM feed_posts fp
        JOIN users u ON u.id = fp.author_id
-       WHERE fp.author_id = $1
+       WHERE fp.author_id = ?
        ORDER BY fp.created_at DESC
-       LIMIT $2 OFFSET $3`,
-      [req.params.userId, limit, offset]
-    );
+       LIMIT ? OFFSET ?`
+    ).all(req.params.userId, limit, offset);
 
-    const countResult = await db.query(
-      'SELECT COUNT(*) AS total FROM feed_posts WHERE author_id = $1',
-      [req.params.userId]
-    );
+    const countRow = await db.prepare(
+      'SELECT COUNT(*) AS total FROM feed_posts WHERE author_id = ?'
+    ).get(req.params.userId);
 
-    res.json({ posts: rows, total: parseInt(countResult.rows[0].total), page, limit });
+    res.json({ posts, total: parseInt(countRow?.total || 0), page, limit });
   } catch (err) {
     console.error('Erro ao buscar posts do usuário:', err);
     res.status(500).json({ error: 'Erro interno do servidor' });
@@ -92,14 +89,13 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
     const cat = category || 'testemunho';
     const vis = visibility || 'public';
 
-    const { rows } = await db.query(
+    // Insert and get the created post
+    const result = await db.prepare(
       `INSERT INTO feed_posts (author_id, content, category, media_url, verse_reference, visibility)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       RETURNING *`,
-      [req.user.id, content, cat, mediaUrl, verse_reference || null, vis]
-    );
+       VALUES (?, ?, ?, ?, ?, ?) RETURNING *`
+    ).get(req.user.id, content, cat, mediaUrl, verse_reference || null, vis);
 
-    res.status(201).json({ post: rows[0] });
+    res.status(201).json({ post: result });
   } catch (err) {
     console.error('Erro ao criar publicação:', err);
     res.status(500).json({ error: 'Erro interno do servidor' });
@@ -109,12 +105,12 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
 // DELETE /api/feed/:id — delete own post
 router.delete('/:id', authenticate, async (req, res) => {
   try {
-    const { rows } = await db.query(
-      'DELETE FROM feed_posts WHERE id = $1 AND author_id = $2 RETURNING *',
-      [req.params.id, req.user.id]
-    );
-    if (rows.length === 0) return res.status(404).json({ error: 'Post não encontrado' });
-    res.json({ message: 'Post deletado', post: rows[0] });
+    const result = await db.prepare(
+      'DELETE FROM feed_posts WHERE id = ? AND author_id = ? RETURNING *'
+    ).get(req.params.id, req.user.id);
+
+    if (!result) return res.status(404).json({ error: 'Post não encontrado' });
+    res.json({ message: 'Post deletado', post: result });
   } catch (err) {
     console.error('Erro ao deletar post:', err);
     res.status(500).json({ error: 'Erro interno do servidor' });
