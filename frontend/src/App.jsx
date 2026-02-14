@@ -90,7 +90,7 @@ export default function App() {
 
       <main className="main-content">
         <Routes>
-          <Route path="/" element={user ? <Navigate to={`/perfil/${user.id}`} /> : <Home />} />
+          <Route path="/" element={user ? <Navigate to="/mural" /> : <Home />} />
           <Route path="/oracoes" element={<PrayerFeed />} />
           <Route path="/mural" element={<Mural />} />
           <Route path="/ao-vivo" element={<LivePrayer />} />
