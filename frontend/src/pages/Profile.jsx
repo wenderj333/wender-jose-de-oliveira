@@ -265,14 +265,14 @@ export default function Profile() {
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '0' }}>
       {/* Header - bolha de água dourada */}
       <div style={{
-        background: 'linear-gradient(160deg, rgba(255,255,255,0.35), rgba(218,165,32,0.10), rgba(255,255,255,0.2))',
+        background: 'linear-gradient(160deg, rgba(255,255,255,0.35), rgba(76,175,80,0.10), rgba(255,255,255,0.2))',
         padding: '1.5rem 1.25rem 1rem',
         color: '#1a1a2e',
         position: 'relative',
         overflow: 'hidden',
         borderRadius: '24px',
-        border: '1.5px solid rgba(218,165,32,0.4)',
-        boxShadow: '0 8px 32px rgba(218,165,32,0.15), inset 0 2px 4px rgba(255,255,255,0.6)',
+        border: '1.5px solid rgba(76,175,80,0.35)',
+        boxShadow: '0 8px 32px rgba(76,175,80,0.12), inset 0 2px 4px rgba(255,255,255,0.6)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
       }}>
@@ -287,7 +287,7 @@ export default function Profile() {
         <div style={{
           position: 'absolute', bottom: 10, right: '5%', width: 100, height: 100,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(218,165,32,0.15), transparent 60%)',
+          background: 'radial-gradient(circle, rgba(76,175,80,0.12), transparent 60%)',
           zIndex: 0,
         }} />
 
@@ -422,12 +422,12 @@ export default function Profile() {
           {/* Tabs */}
           <div style={{
             display: 'flex',
-            background: 'linear-gradient(160deg, rgba(255,255,255,0.3), rgba(218,165,32,0.08))',
-            borderBottom: '1px solid rgba(218,165,32,0.25)',
+            background: 'linear-gradient(160deg, rgba(255,255,255,0.3), rgba(76,175,80,0.06))',
+            borderBottom: '1px solid rgba(76,175,80,0.2)',
             backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
             borderTopLeftRadius: '24px', borderTopRightRadius: '24px',
-            border: '1.5px solid rgba(218,165,32,0.3)',
-            borderBottom: '1px solid rgba(218,165,32,0.2)',
+            border: '1.5px solid rgba(76,175,80,0.25)',
+            borderBottom: '1px solid rgba(76,175,80,0.15)',
           }}>
             {[
               { key: 'posts', icon: <Grid3x3 size={20} />, label: 'Posts' },
@@ -451,15 +451,15 @@ export default function Profile() {
 
           {/* Tab content */}
           <div style={{
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(218,165,32,0.05))',
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(76,175,80,0.04))',
             minHeight: 300,
             backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
             borderBottomLeftRadius: '24px', borderBottomRightRadius: '24px',
             marginBottom: '1.5rem',
-            boxShadow: '0 8px 32px rgba(218,165,32,0.1)',
-            borderLeft: '1.5px solid rgba(218,165,32,0.3)',
-            borderRight: '1.5px solid rgba(218,165,32,0.3)',
-            borderBottom: '1.5px solid rgba(218,165,32,0.3)',
+            boxShadow: '0 8px 32px rgba(76,175,80,0.08)',
+            borderLeft: '1.5px solid rgba(76,175,80,0.25)',
+            borderRight: '1.5px solid rgba(76,175,80,0.25)',
+            borderBottom: '1.5px solid rgba(76,175,80,0.25)',
           }}>
             {/* POSTS tab */}
             {activeTab === 'posts' && (
