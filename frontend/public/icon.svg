@@ -1,51 +1,38 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
-  <!-- Shadow under book -->
-  <ellipse cx="128" cy="220" rx="90" ry="12" fill="#3a1560" opacity="0.25"/>
+  <!-- Open Bible - Left Page -->
+  <path d="M20 65 C20 55 28 48 38 48 L118 42 C124 41 128 45 128 50 L128 195 C128 195 122 192 118 192 L38 186 C28 185 20 178 20 168Z" fill="#ffffff" stroke="#daa520" stroke-width="3"/>
 
-  <!-- Left page -->
-  <path d="M28 60 C28 55 32 50 38 48 L120 38 C124 37 128 40 128 44 L128 200 C128 200 124 198 120 198 L38 188 C32 187 28 182 28 176Z" fill="#fff9ee"/>
-  <!-- Left page shadow/fold -->
-  <path d="M28 60 C28 55 32 50 38 48 L48 46 L48 186 L38 188 C32 187 28 182 28 176Z" fill="#f0e6d0"/>
+  <!-- Open Bible - Right Page -->
+  <path d="M236 65 C236 55 228 48 218 48 L138 42 C132 41 128 45 128 50 L128 195 C128 195 134 192 138 192 L218 186 C228 185 236 178 236 168Z" fill="#ffffff" stroke="#daa520" stroke-width="3"/>
 
-  <!-- Right page -->
-  <path d="M228 60 C228 55 224 50 218 48 L136 38 C132 37 128 40 128 44 L128 200 C128 200 132 198 136 198 L218 188 C224 187 228 182 228 176Z" fill="#fff9ee"/>
-  <!-- Right page shadow/fold -->
-  <path d="M228 60 C228 55 224 50 218 48 L208 46 L208 186 L218 188 C224 187 228 182 228 176Z" fill="#f0e6d0"/>
+  <!-- Center spine -->
+  <line x1="128" y1="42" x2="128" y2="195" stroke="#daa520" stroke-width="3"/>
 
-  <!-- Center spine/fold -->
-  <path d="M124 38 C126 37 130 37 132 38 L132 200 C130 199 126 199 124 200Z" fill="#d4c5a9"/>
-  <line x1="128" y1="38" x2="128" y2="200" stroke="#c4b594" stroke-width="1.5"/>
+  <!-- Left page text lines -->
+  <line x1="44" y1="78" x2="108" y2="73" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="44" y1="98" x2="108" y2="93" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="44" y1="118" x2="108" y2="113" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="44" y1="138" x2="108" y2="133" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="44" y1="158" x2="108" y2="153" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
 
-  <!-- Left page lines -->
-  <line x1="46" y1="72" x2="114" y2="66" stroke="#d4c5a9" stroke-width="1.5"/>
-  <line x1="46" y1="90" x2="114" y2="84" stroke="#d4c5a9" stroke-width="1.5"/>
-  <line x1="46" y1="108" x2="114" y2="102" stroke="#d4c5a9" stroke-width="1.5"/>
-  <line x1="46" y1="126" x2="114" y2="120" stroke="#d4c5a9" stroke-width="1.5"/>
-  <line x1="46" y1="144" x2="114" y2="138" stroke="#d4c5a9" stroke-width="1.5"/>
-  <line x1="46" y1="162" x2="114" y2="156" stroke="#d4c5a9" stroke-width="1.5"/>
+  <!-- Right page text lines -->
+  <line x1="148" y1="73" x2="212" y2="78" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="148" y1="93" x2="212" y2="98" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="148" y1="113" x2="212" y2="118" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="148" y1="133" x2="212" y2="138" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="148" y1="153" x2="212" y2="158" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
 
-  <!-- Right page lines -->
-  <line x1="142" y1="66" x2="210" y2="72" stroke="#d4c5a9" stroke-width="1.5"/>
-  <line x1="142" y1="84" x2="210" y2="90" stroke="#d4c5a9" stroke-width="1.5"/>
-  <line x1="142" y1="102" x2="210" y2="108" stroke="#d4c5a9" stroke-width="1.5"/>
-  <line x1="142" y1="120" x2="210" y2="126" stroke="#d4c5a9" stroke-width="1.5"/>
-  <line x1="142" y1="138" x2="210" y2="144" stroke="#d4c5a9" stroke-width="1.5"/>
-  <line x1="142" y1="156" x2="210" y2="162" stroke="#d4c5a9" stroke-width="1.5"/>
+  <!-- Golden Cross - centered and bold -->
+  <rect x="120" y="52" width="16" height="50" rx="3" fill="#daa520"/>
+  <rect x="108" y="64" width="40" height="14" rx="3" fill="#daa520"/>
+  <!-- Cross highlight -->
+  <rect x="122" y="54" width="12" height="46" rx="2" fill="#f0c040" opacity="0.5"/>
+  <rect x="110" y="66" width="36" height="10" rx="2" fill="#f0c040" opacity="0.5"/>
 
-  <!-- Golden cross in center -->
-  <rect x="122" y="52" width="12" height="40" rx="2" fill="#d4a017"/>
-  <rect x="114" y="60" width="28" height="10" rx="2" fill="#d4a017"/>
-  <!-- Cross glow -->
-  <rect x="123" y="53" width="10" height="38" rx="2" fill="#e8b828" opacity="0.5"/>
-  <rect x="115" y="61" width="26" height="8" rx="2" fill="#e8b828" opacity="0.5"/>
-
-  <!-- Soft light rays from cross -->
-  <line x1="128" y1="48" x2="128" y2="36" stroke="#d4a017" stroke-width="1.5" opacity="0.4"/>
-  <line x1="108" y1="65" x2="98" y2="60" stroke="#d4a017" stroke-width="1.5" opacity="0.3"/>
-  <line x1="148" y1="65" x2="158" y2="60" stroke="#d4a017" stroke-width="1.5" opacity="0.3"/>
-
-  <!-- Ribbon bookmark left -->
-  <path d="M90 38 L90 58 L94 52 L98 58 L98 38" fill="#e74c3c"/>
-  <!-- Ribbon bookmark right -->
-  <path d="M158 38 L158 58 L162 52 L166 58 L166 38" fill="#8e44ad"/>
+  <!-- Light rays from cross -->
+  <line x1="128" y1="44" x2="128" y2="32" stroke="#daa520" stroke-width="2.5" opacity="0.5" stroke-linecap="round"/>
+  <line x1="100" y1="71" x2="90" y2="64" stroke="#daa520" stroke-width="2.5" opacity="0.35" stroke-linecap="round"/>
+  <line x1="156" y1="71" x2="166" y2="64" stroke="#daa520" stroke-width="2.5" opacity="0.35" stroke-linecap="round"/>
+  <line x1="104" y1="56" x2="96" y2="48" stroke="#daa520" stroke-width="2" opacity="0.25" stroke-linecap="round"/>
+  <line x1="152" y1="56" x2="160" y2="48" stroke="#daa520" stroke-width="2" opacity="0.25" stroke-linecap="round"/>
 </svg>

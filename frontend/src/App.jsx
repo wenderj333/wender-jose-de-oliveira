@@ -40,7 +40,7 @@ export default function App() {
       <nav className="navbar">
         <div className="navbar__top">
           <Link to="/" className="nav-brand" onClick={() => setMenuOpen(false)}>
-            <img src="/icon.svg" alt="" style={{ width: 24, height: 24, verticalAlign: 'middle', marginRight: '6px' }} />{t('brand')}
+            <img src="/icon.svg" alt="" style={{ width: 30, height: 30, verticalAlign: 'middle', marginRight: '6px' }} />{t('brand')}
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <LanguageSwitcher />
