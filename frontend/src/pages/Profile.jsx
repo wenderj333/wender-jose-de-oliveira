@@ -400,7 +400,8 @@ export default function Profile() {
             </button>
           ) : null}
         </div>
-      </div>
+      </div> {/* fecha zIndex wrapper */}
+      </div> {/* fecha header */}
 
       {/* Private profile lock */}
       {isPrivateAndNotOwner ? (
