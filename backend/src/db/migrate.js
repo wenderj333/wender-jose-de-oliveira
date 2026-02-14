@@ -307,7 +307,40 @@ async function migrate() {
   // Add new columns
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_private BOOLEAN DEFAULT false`);
 
-  console.log('✅ Migração PostgreSQL concluída com sucesso! (15+ tabelas criadas)');
+  // ============ GRUPOS (tipo Facebook) ============
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS groups (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      name VARCHAR(255) NOT NULL,
+      description TEXT,
+      cover_url TEXT,
+      creator_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      privacy VARCHAR(20) DEFAULT 'public' CHECK (privacy IN ('public', 'private')),
+      member_count INT DEFAULT 1,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS group_members (
+      group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+      user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      role VARCHAR(20) DEFAULT 'member' CHECK (role IN ('admin', 'moderator', 'member')),
+      joined_at TIMESTAMPTZ DEFAULT NOW(),
+      PRIMARY KEY (group_id, user_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS group_posts (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+      author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      content TEXT NOT NULL,
+      media_url TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_group_posts_group ON group_posts(group_id, created_at DESC);
+  `);
+
+  console.log('✅ Migração PostgreSQL concluída com sucesso! (18+ tabelas criadas)');
   await pool.end();
 }
 
