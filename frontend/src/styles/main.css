@@ -982,16 +982,19 @@ body {
     justify-content: flex-start;
     padding: 0.5rem 0.75rem;
     min-height: 36px;
-    color: #fff;
+    color: #3a2a0a;
     font-size: 0.9rem;
     font-weight: 500;
     border-radius: 6px;
     transition: background 0.2s;
-    background: rgba(26, 10, 62, 0.85);
+    background: rgba(255, 215, 0, 0.25);
+    border: 1px solid rgba(218, 165, 32, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   .nav-links a:hover, .nav-links a:active {
-    background: rgba(218,165,32,0.25);
-    color: #daa520;
+    background: rgba(218, 165, 32, 0.45);
+    color: #1a0a3e;
   }
   .nav-links .btn-outline {
     border-color: rgba(218,165,32,0.4);
