@@ -333,6 +333,150 @@ const GAMES = [
 ];
 
 // ─── Main Page ───
+// ─── Full Bible Stories for Children ───
+const FULL_STORIES = [
+  {
+    title: '⚔️ Davi e Golias',
+    emoji: '🪨',
+    pages: [
+      { text: 'Há muito tempo, existia um povo chamado Israel que vivia com medo. Um gigante enorme chamado Golias aparecia todos os dias e gritava:\n\n— "Quem tem coragem de lutar comigo?"\n\nNinguém tinha coragem! Os soldados tremiam de medo. Golias era tão grande que parecia uma torre!', img: '⚔️' },
+      { text: 'Mas um dia, um menino pastor chamado Davi chegou ao campo de batalha. Ele trazia comida para seus irmãos. Quando ouviu Golias zombando, ficou indignado:\n\n— "Como esse gigante ousa desafiar o exército do Deus vivo?"', img: '👦' },
+      { text: 'O Rei Saul quis dar sua armadura a Davi, mas era muito grande!\n\nDavi disse: "Não preciso de armadura. Deus vai me ajudar!"\n\nEle pegou apenas sua funda e cinco pedras lisas do rio.', img: '🪨' },
+      { text: 'Golias riu quando viu o menino:\n\n— "Você vem lutar comigo com paus e pedras?"\n\nDavi respondeu com coragem:\n\n— "Você vem com espada e lança, mas eu venho em nome do Senhor!"', img: '💪' },
+      { text: 'Davi girou sua funda e lançou UMA pedra. A pedra acertou Golias bem na testa! O gigante caiu no chão com um estrondo!\n\nTodo o exército de Israel comemorou! 🎉\n\n✨ Lição: Com Deus ao nosso lado, podemos vencer qualquer gigante na nossa vida!', img: '🏆' },
+    ],
+  },
+  {
+    title: '🚢 A Arca de Noé',
+    emoji: '🌈',
+    pages: [
+      { text: 'Deus olhou para o mundo e ficou muito triste. As pessoas tinham esquecido dele e faziam muitas coisas ruins.\n\nMas havia um homem que amava a Deus de todo coração. Seu nome era Noé! 🙏', img: '🌍' },
+      { text: 'Deus falou com Noé:\n\n— "Noé, vai chover muito, muito mesmo! Quero que você construa um barco enorme — uma ARCA!"\n\nNoé obedeceu, mesmo quando todos riam dele. "Um barco no meio da terra? Que loucura!" diziam as pessoas.', img: '🔨' },
+      { text: 'Noé trabalhou por muitos anos construindo a arca. Era GIGANTE!\n\nQuando ficou pronta, Deus mandou os animais virem — dois a dois! 🐘🐘🦒🦒🐕🐕\n\nLeões, girafas, elefantes, passarinhos, borboletas... todos entraram na arca!', img: '🦁' },
+      { text: 'Então Deus fechou a porta da arca e começou a chover. Choveu por 40 dias e 40 noites sem parar! 🌧️\n\nA água cobriu tudo — até as montanhas mais altas! Mas dentro da arca, Noé, sua família e todos os animais estavam seguros e protegidos.', img: '🌧️' },
+      { text: 'Depois de muitos dias, a chuva parou. Noé soltou uma pomba 🕊️ que voltou com um ramo de oliveira — sinal de que a terra estava secando!\n\nQuando saíram da arca, Deus colocou um lindo ARCO-ÍRIS no céu 🌈 e prometeu:\n\n— "Nunca mais destruirei a terra com água!"\n\n✨ Lição: Deus sempre cuida de quem confia nele e obedece!', img: '🌈' },
+    ],
+  },
+  {
+    title: '🐋 Jonas e a Baleia',
+    emoji: '🐋',
+    pages: [
+      { text: 'Jonas era um profeta de Deus. Um dia, Deus disse:\n\n— "Jonas, vá à cidade de Nínive e diga ao povo que se arrependa!"\n\nMas Jonas não queria ir! Ele teve medo e decidiu fugir. Correu para o porto e embarcou num navio indo para o lado oposto! 🚢', img: '🏃' },
+      { text: 'No meio do mar, Deus mandou uma tempestade terrível! ⛈️\n\nO navio balançava de um lado para o outro. Os marinheiros estavam apavorados!\n\nJonas sabia que a culpa era dele:\n\n— "Me joguem no mar e a tempestade vai parar!"', img: '⛈️' },
+      { text: 'Os marinheiros jogaram Jonas no mar e... a tempestade parou na hora!\n\nMas Jonas não morreu. Deus enviou um PEIXE ENORME que engoliu Jonas! 🐋\n\nJonas ficou dentro da barriga do peixe por 3 dias e 3 noites!', img: '🐋' },
+      { text: 'Dentro do peixe, no escuro, Jonas orou com todo seu coração:\n\n— "Senhor, me perdoa! Eu devia ter obedecido. Prometo que vou fazer o que você pediu!"\n\nDeus ouviu sua oração e o peixe cuspiu Jonas na praia! 🏖️', img: '🙏' },
+      { text: 'Desta vez Jonas obedeceu! Foi a Nínive e pregou ao povo.\n\nE sabe o que aconteceu? O povo TODO se arrependeu! Do rei ao mais humilde, todos pediram perdão a Deus! 🎉\n\n✨ Lição: Não adianta fugir de Deus — Ele está em todo lugar! É melhor obedecer de primeira!', img: '✅' },
+    ],
+  },
+  {
+    title: '🦁 Daniel na Cova dos Leões',
+    emoji: '🦁',
+    pages: [
+      { text: 'Daniel era um homem muito sábio que amava a Deus. Ele orava 3 vezes por dia, todos os dias, de joelhos na janela. 🙏\n\nO rei Dario gostava muito de Daniel e queria torná-lo o líder de todo o reino!', img: '👑' },
+      { text: 'Mas os outros governantes tinham inveja de Daniel! Eles criaram uma lei malvada:\n\n— "Quem orar a qualquer deus que não seja o rei será jogado na cova dos leões!"\n\nO rei assinou a lei sem saber que era uma armadilha contra Daniel.', img: '📜' },
+      { text: 'Daniel soube da lei, mas não teve medo! Abriu a janela como sempre e orou a Deus de joelhos, 3 vezes.\n\nOs homens maus viram e correram para contar ao rei:\n\n— "Daniel desobedeceu a lei! Deve ser jogado aos leões!"', img: '🙏' },
+      { text: 'O rei ficou muito triste, mas não podia mudar a lei. Daniel foi jogado na cova cheia de leões famintos! 🦁🦁🦁\n\nO rei não dormiu a noite toda, preocupado com Daniel.\n\nDe manhã cedo, correu até a cova e gritou:\n\n— "Daniel! Seu Deus te salvou?"', img: '🦁' },
+      { text: 'E de dentro da cova, Daniel respondeu:\n\n— "Rei, Deus enviou um anjo que FECHOU a boca dos leões! 👼 Eles não me fizeram nenhum mal!"\n\nO rei ficou tão feliz que mandou todos adorarem o Deus de Daniel!\n\n✨ Lição: Quando somos fiéis a Deus, Ele nos protege mesmo nas situações mais perigosas!', img: '😇' },
+    ],
+  },
+  {
+    title: '🌊 Moisés e o Mar Vermelho',
+    emoji: '🌊',
+    pages: [
+      { text: 'O povo de Israel vivia como escravo no Egito. Trabalhavam muito e sofriam demais. 😢\n\nMas Deus escolheu Moisés para libertar seu povo!\n\nDeus mandou 10 pragas ao Egito e finalmente o Faraó disse:\n\n— "Podem ir embora!"', img: '⛓️' },
+      { text: 'Moisés guiou o povo para fora do Egito! Milhares de pessoas caminhando juntas, com seus filhos e animais. Estavam livres! 🎉\n\nMas o Faraó mudou de ideia:\n\n— "Tragam eles de volta!"\n\nE mandou todo o seu exército atrás deles! 🐎⚔️', img: '🏇' },
+      { text: 'O povo de Israel ficou encurralado! Na frente deles: o Mar Vermelho, imenso e profundo. 🌊\nAtrás deles: o exército do Faraó se aproximando!\n\nTodos gritavam de medo:\n— "Vamos morrer!"\n\nMas Moisés disse:\n— "Não tenham medo! Deus vai lutar por vocês!"', img: '😰' },
+      { text: 'Então Deus disse a Moisés:\n\n— "Levante seu cajado sobre o mar!"\n\nMoisés levantou o cajado e... o MAR SE ABRIU! 🌊💨\n\nAs águas se separaram formando dois muros enormes de água, e no meio apareceu um caminho SECO!\n\nTodo o povo atravessou em segurança!', img: '🌊' },
+      { text: 'Quando o exército do Faraó tentou seguir pelo mesmo caminho, Deus fez as águas voltarem! 💦\n\nO povo de Israel estava salvo do outro lado! Todos dançaram e cantaram louvores a Deus! 🎶💃\n\n✨ Lição: Quando parece que não tem saída, Deus abre um caminho! Confie nele!', img: '🎉' },
+    ],
+  },
+];
+
+function StoryModal({ story, color, onClose }) {
+  const [page, setPage] = useState(0);
+  const total = story.pages.length;
+  const current = story.pages[page];
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 9999,
+      background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(4px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
+    }} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div style={{
+        background: '#1a0a3e', borderRadius: 20, width: '100%', maxWidth: 440,
+        maxHeight: '90vh', overflow: 'hidden', border: `3px solid ${color}`,
+        display: 'flex', flexDirection: 'column',
+      }}>
+        {/* Header */}
+        <div style={{
+          background: `linear-gradient(135deg, ${color}, ${color}dd)`,
+          padding: '1rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        }}>
+          <h3 style={{ margin: 0, color: '#fff', fontSize: '1.1rem' }}>{story.title}</h3>
+          <button onClick={onClose} style={{
+            background: 'rgba(0,0,0,0.3)', border: 'none', color: '#fff', borderRadius: '50%',
+            width: 32, height: 32, cursor: 'pointer', fontSize: '1.1rem',
+          }}>✕</button>
+        </div>
+
+        {/* Story Content */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
+          <div style={{
+            fontSize: '3.5rem', textAlign: 'center', marginBottom: '1rem',
+            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))',
+          }}>
+            {current.img}
+          </div>
+          <p style={{
+            color: '#e0e0e0', fontSize: '1rem', lineHeight: 1.8,
+            whiteSpace: 'pre-line', margin: 0,
+          }}>
+            {current.text}
+          </p>
+        </div>
+
+        {/* Navigation */}
+        <div style={{
+          padding: '1rem 1.25rem', borderTop: '1px solid rgba(255,255,255,0.1)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        }}>
+          <button onClick={() => setPage(p => p - 1)} disabled={page === 0} style={{
+            padding: '0.5rem 1.25rem', borderRadius: 10, border: 'none',
+            background: page > 0 ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.05)',
+            color: page > 0 ? '#fff' : '#555', cursor: page > 0 ? 'pointer' : 'default',
+            fontWeight: 600, fontSize: '0.9rem',
+          }}>← Voltar</button>
+
+          <div style={{ display: 'flex', gap: 6 }}>
+            {story.pages.map((_, i) => (
+              <div key={i} style={{
+                width: 8, height: 8, borderRadius: '50%',
+                background: i === page ? color : 'rgba(255,255,255,0.2)',
+                transition: 'all 0.3s',
+              }} />
+            ))}
+          </div>
+
+          {page < total - 1 ? (
+            <button onClick={() => setPage(p => p + 1)} style={{
+              padding: '0.5rem 1.25rem', borderRadius: 10, border: 'none',
+              background: color, color: '#fff', cursor: 'pointer',
+              fontWeight: 600, fontSize: '0.9rem',
+            }}>Próximo →</button>
+          ) : (
+            <button onClick={onClose} style={{
+              padding: '0.5rem 1.25rem', borderRadius: 10, border: 'none',
+              background: '#daa520', color: '#1a0a3e', cursor: 'pointer',
+              fontWeight: 700, fontSize: '0.9rem',
+            }}>✨ Fim!</button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Kids() {
   const { t } = useTranslation();
   const [quizStep, setQuizStep] = useState(0);
@@ -341,6 +485,7 @@ export default function Kids() {
   const [quizDone, setQuizDone] = useState(false);
   const [memorized, setMemorized] = useState(false);
   const [activeGame, setActiveGame] = useState('coloring');
+  const [openStory, setOpenStory] = useState(null);
 
   const stories = t('kids.stories', { returnObjects: true });
   const quiz = t('kids.quiz', { returnObjects: true });
@@ -379,11 +524,16 @@ export default function Kids() {
               <h3>{s.title}</h3>
               <p>{s.desc}</p>
               <span className="kids-age-badge" style={{ background: STORY_COLORS[i] }}>{s.age} {t('kids.years')}</span>
-              <button className="btn btn-primary btn-sm" style={{ marginTop: '0.75rem', width: '100%' }}>{t('kids.readStory')}</button>
+              <button className="btn btn-primary btn-sm" style={{ marginTop: '0.75rem', width: '100%' }} onClick={() => setOpenStory(i)}>{t('kids.readStory')}</button>
             </div>
           ))}
         </div>
       </section>
+
+      {/* Story Modal */}
+      {openStory !== null && (
+        <StoryModal story={FULL_STORIES[openStory]} color={STORY_COLORS[openStory]} onClose={() => setOpenStory(null)} />
+      )}
 
       {/* Quiz */}
       <section className="kids-section">
