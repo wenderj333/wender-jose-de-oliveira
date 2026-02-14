@@ -273,6 +273,7 @@ app.use('/api/bible-ai', require('./routes/bible-ai'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/friends', require('./routes/friends'));
 app.use('/api/members', require('./routes/members'));
+app.use('/api/messages', require('./routes/messages'));
 app.use('/api/offerings', require('./routes/offerings'));
 
 // Root route

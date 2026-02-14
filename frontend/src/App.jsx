@@ -20,6 +20,7 @@ import BibleAI from './pages/BibleAI';
 import Profile from './pages/Profile';
 import Friends from './pages/Friends';
 import Members from './pages/Members';
+import MessagesPage from './pages/Messages';
 import Offerings from './pages/Offerings';
 import LanguageSwitcher from './components/LanguageSwitcher';
 
@@ -93,6 +94,7 @@ export default function App() {
           {user?.role === 'pastor' && <Link to="/ia-pastoral" className={isActive('/ia-pastoral')} onClick={() => setMenuOpen(false)}><Bot size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.pastoralAI', 'IA Pastoral')}</Link>}
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/membros" className={isActive('/membros')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4caf50' }} />Membros</Link>}
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/ofertas" className={isActive('/ofertas')} onClick={() => setMenuOpen(false)}>❤️ Ofertas</Link>}
+          {user && <Link to="/mensagens" className={isActive('/mensagens')} onClick={() => setMenuOpen(false)}><MessageCircle size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4caf50' }} />Mensagens</Link>}
           {user && <Link to="/amigos" className={isActive('/amigos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#667eea' }} />{t('nav.friends')}</Link>}
           {user && (
             <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setMenuOpen(false)}><LayoutDashboard size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.dashboard')}</Link>
@@ -131,6 +133,7 @@ export default function App() {
           <Route path="/cadastrar-igreja" element={<ChurchRegister />} />
           <Route path="/amigos" element={<Friends />} />
           <Route path="/perfil/:userId" element={<Profile />} />
+          <Route path="/mensagens" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
           <Route path="/membros" element={<ProtectedRoute><Members /></ProtectedRoute>} />
           <Route path="/ofertas" element={<ProtectedRoute><Offerings /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
