@@ -5,27 +5,39 @@ const path = require('path');
 const fs = require('fs');
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
+const cloudinary = require('cloudinary').v2;
 
-// Ensure uploads directory exists
-const postsDir = path.join(__dirname, '..', '..', 'uploads', 'posts');
-fs.mkdirSync(postsDir, { recursive: true });
-
-// Multer config for post images
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, postsDir),
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname) || '.jpg';
-    cb(null, `${req.user.id}-${Date.now()}${ext}`);
-  },
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'degxiuf43',
+  api_key: process.env.CLOUDINARY_API_KEY || '914835643241235',
+  api_secret: process.env.CLOUDINARY_API_SECRET || '7Eu52T0NYAAy2hmXHl0i4C0TgUo',
 });
+
+// Multer: store in memory for Cloudinary upload
 const upload = multer({
-  storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB para vídeos
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 50 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (/^(image\/(jpeg|png|gif|webp)|video\/(mp4|webm|quicktime))$/.test(file.mimetype)) cb(null, true);
     else cb(new Error('Apenas imagens e vídeos são permitidos'));
   },
 });
+
+// Upload to Cloudinary helper
+function uploadToCloudinary(buffer, mimetype) {
+  return new Promise((resolve, reject) => {
+    const resourceType = mimetype.startsWith('video/') ? 'video' : 'image';
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: 'sigo-com-fe/posts', resource_type: resourceType },
+      (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      }
+    );
+    stream.end(buffer);
+  });
+}
 
 // GET /api/feed — list all posts (newest first, paginated)
 router.get('/', async (req, res) => {
@@ -85,8 +97,18 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
       return res.status(400).json({ error: 'Conteúdo é obrigatório' });
     }
 
-    const mediaUrl = req.file ? `/uploads/posts/${req.file.filename}` : null;
-    const mediaType = req.file ? (req.file.mimetype.startsWith('video/') ? 'video' : 'image') : null;
+    let mediaUrl = null;
+    let mediaType = null;
+    if (req.file) {
+      try {
+        const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
+        mediaUrl = result.secure_url;
+        mediaType = req.file.mimetype.startsWith('video/') ? 'video' : 'image';
+      } catch (uploadErr) {
+        console.error('Cloudinary upload error:', uploadErr);
+        return res.status(500).json({ error: 'Erro ao enviar mídia' });
+      }
+    }
     const cat = category || 'testemunho';
     const vis = visibility || 'public';
 

@@ -1,25 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
+const cloudinary = require('cloudinary').v2;
 
-// Ensure uploads directory exists
-const avatarDir = path.join(__dirname, '..', '..', 'uploads', 'avatars');
-fs.mkdirSync(avatarDir, { recursive: true });
-
-// Multer config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, avatarDir),
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname) || '.jpg';
-    cb(null, `${req.user.id}-${Date.now()}${ext}`);
-  },
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'degxiuf43',
+  api_key: process.env.CLOUDINARY_API_KEY || '914835643241235',
+  api_secret: process.env.CLOUDINARY_API_SECRET || '7Eu52T0NYAAy2hmXHl0i4C0TgUo',
 });
+
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (/^image\/(jpeg|png|gif|webp)$/.test(file.mimetype)) cb(null, true);
@@ -77,7 +70,16 @@ router.post('/avatar', authenticate, upload.single('avatar'), async (req, res) =
   try {
     if (!req.file) return res.status(400).json({ error: 'Nenhuma imagem enviada' });
 
-    const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+    // Upload to Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: 'sigo-com-fe/avatars', resource_type: 'image' },
+        (err, result) => err ? reject(err) : resolve(result)
+      );
+      stream.end(req.file.buffer);
+    });
+
+    const avatarUrl = result.secure_url;
     await db.prepare('UPDATE users SET avatar_url = ?, updated_at = NOW() WHERE id = ?')
       .run(avatarUrl, req.user.id);
 
