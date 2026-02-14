@@ -221,6 +221,33 @@ const { Pool: MigratePool } = require('pg');
         created_at TIMESTAMPTZ DEFAULT NOW()
       )
     `);
+    // Offerings config and records
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS offering_config (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        pastor_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE UNIQUE,
+        pix_key VARCHAR(255),
+        pix_name VARCHAR(255),
+        paypal_email VARCHAR(255),
+        bank_name VARCHAR(100),
+        bank_agency VARCHAR(20),
+        bank_account VARCHAR(30),
+        bank_holder VARCHAR(255),
+        custom_message TEXT,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      );
+      CREATE TABLE IF NOT EXISTS offering_records (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        donor_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        pastor_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        amount DECIMAL(10,2) NOT NULL,
+        type VARCHAR(20) DEFAULT 'oferta',
+        method VARCHAR(20) DEFAULT 'pix',
+        note TEXT,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      )
+    `);
     console.log('✅ Auto-migração concluída!');
   } catch (err) {
     console.error('⚠️  Erro na auto-migração (continuando):', err.message);
@@ -246,6 +273,7 @@ app.use('/api/bible-ai', require('./routes/bible-ai'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/friends', require('./routes/friends'));
 app.use('/api/members', require('./routes/members'));
+app.use('/api/offerings', require('./routes/offerings'));
 
 // Root route
 app.get('/', (req, res) => {
