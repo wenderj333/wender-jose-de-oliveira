@@ -76,7 +76,7 @@ async function socialLoginHandler(req, res) {
       // Update avatar if provided
       if (photo) {
         const db = require('../db/connection');
-        db.prepare('UPDATE users SET avatar_url = ? WHERE id = ?').run(photo, user.id);
+        await db.prepare('UPDATE users SET avatar_url = ? WHERE id = ?').run(photo, user.id);
         user.avatar_url = photo;
       }
     }
@@ -106,7 +106,7 @@ router.post('/phone', async (req, res) => {
     const db = require('../db/connection');
 
     // Try to find user by uid (stored in email field as phone:uid pattern) or phone
-    let user = db.prepare('SELECT * FROM users WHERE email = ?').get(`phone:${uid}`);
+    let user = await db.prepare('SELECT * FROM users WHERE email = ?').get(`phone:${uid}`);
     if (!user) {
       // Create local user for phone auth
       const crypto = require('crypto');
@@ -117,13 +117,12 @@ router.post('/phone', async (req, res) => {
         full_name: full_name || phone,
         role: 'member'
       });
-      // Store phone number
+      // Store phone number (column added via migration, safe to ignore if missing)
       try {
-        db.prepare('ALTER TABLE users ADD COLUMN phone TEXT').run();
+        await db.prepare('UPDATE users SET phone = ? WHERE id = ?').run(phone, user.id);
       } catch (e) {
-        // Column may already exist
+        console.warn('Could not set phone:', e.message);
       }
-      db.prepare('UPDATE users SET phone = ? WHERE id = ?').run(phone, user.id);
       user.phone = phone;
     }
 

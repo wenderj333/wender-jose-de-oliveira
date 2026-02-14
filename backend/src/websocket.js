@@ -104,7 +104,7 @@ function setupWebSocket(server) {
               } catch (e) { console.error('Translation error:', e); }
             }
             const chatDb = require('./db/connection');
-            chatDb.prepare(
+            await chatDb.prepare(
               'INSERT INTO chat_messages (room_id, sender_role, sender_name, original_text, translated_text, original_lang, target_lang) VALUES (?, ?, ?, ?, ?, ?, ?)'
             ).run(msg.roomId, msg.role, msg.name, msg.text, translated, msg.sourceLang, msg.targetLang);
             broadcastToRoom(wss, clients, msg.roomId, {

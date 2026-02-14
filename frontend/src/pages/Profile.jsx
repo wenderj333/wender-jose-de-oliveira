@@ -229,7 +229,7 @@ export default function Profile() {
       await fetch(`${API}/friends/request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ friendId: userId }),
+        body: JSON.stringify({ addressee_id: userId }),
       });
     } catch (err) {
       console.error('Error sending friend request:', err);
