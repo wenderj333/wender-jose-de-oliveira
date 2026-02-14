@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { useAuth } from './AuthContext';
+import { playNotificationSound } from '../utils/notification-sound';
 
 const WebSocketContext = createContext(null);
 
@@ -55,6 +56,10 @@ export function WebSocketProvider({ children }) {
         case 'chat_user_left':
         case 'chat_typing':
           setLastEvent(data);
+          // Play notification sound for messages and important events
+          if (['chat_new_message', 'new_help_request', 'new_prayer_response'].includes(data.type)) {
+            playNotificationSound();
+          }
           break;
       }
     };
