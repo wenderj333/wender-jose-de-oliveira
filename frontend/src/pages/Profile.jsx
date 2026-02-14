@@ -265,13 +265,35 @@ export default function Profile() {
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '0' }}>
       {/* Header - compact Instagram style */}
       <div style={{
-        background: 'linear-gradient(135deg, #1a0a3e 0%, #2d1b69 50%, #1a0a3e 100%)',
+        background: 'rgba(26, 10, 62, 0.6)', // Fundo semitransparente mais leve
         padding: '1.5rem 1.25rem 1rem',
         color: '#fff',
         position: 'relative',
+        overflow: 'hidden',
+        borderRadius: '16px',
+        marginBottom: '1.5rem',
+        boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
+        backdropFilter: 'blur(8px)', // Efeito de vidro
+        WebkitBackdropFilter: 'blur(8px)',
       }}>
-        {/* Top row: Avatar + Stats + Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '0.75rem' }}>
+        {/* Bolhas Douradas (pseudo-elementos seriam melhores em CSS puro, mas inline para o exemplo) */}
+        <div style={{
+          position: 'absolute', top: '10%', left: '15%', width: 80, height: 80, borderRadius: '50%',
+          background: 'rgba(218,165,32,0.15)', filter: 'blur(15px)', zIndex: 0,
+        }} />
+        <div style={{
+          position: 'absolute', bottom: '20%', right: '10%', width: 100, height: 100, borderRadius: '50%',
+          background: 'rgba(218,165,32,0.1)', filter: 'blur(20px)', zIndex: 0,
+        }} />
+        <div style={{
+          position: 'absolute', top: '50%', left: '50%', width: 60, height: 60, borderRadius: '50%',
+          background: 'rgba(218,165,32,0.1)', filter: 'blur(10px)', zIndex: 0,
+        }} />
+
+        {/* Conteúdo do Header com z-index maior para ficar acima das bolhas */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          {/* Top row: Avatar + Stats + Actions */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '0.75rem' }}>
           {/* Avatar */}
           <div style={{ position: 'relative', flexShrink: 0 }}>
             <div style={{
@@ -383,7 +405,12 @@ export default function Profile() {
       {/* Private profile lock */}
       {isPrivateAndNotOwner ? (
         <div style={{
-          background: '#120833', padding: '3rem 2rem', textAlign: 'center', color: '#999',
+          background: 'rgba(18, 8, 51, 0.7)', // Fundo semitransparente mais leve
+          padding: '3rem 2rem', textAlign: 'center', color: '#999',
+          borderRadius: '16px', // Adiciona borda arredondada
+          boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
+          backdropFilter: 'blur(8px)', // Efeito de vidro
+          WebkitBackdropFilter: 'blur(8px)',
         }}>
           <Lock size={48} color="#daa520" style={{ marginBottom: '1rem', opacity: 0.6 }} />
           <h3 style={{ color: '#fff', margin: '0 0 0.5rem' }}>Conta Privada</h3>
@@ -393,8 +420,10 @@ export default function Profile() {
         <>
           {/* Tabs */}
           <div style={{
-            display: 'flex', background: '#120833',
+            display: 'flex', background: 'rgba(18, 8, 51, 0.7)',
             borderBottom: '1px solid rgba(218,165,32,0.2)',
+            backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+            borderTopLeftRadius: '16px', borderTopRightRadius: '16px',
           }}>
             {[
               { key: 'posts', icon: <Grid3x3 size={20} />, label: 'Posts' },
@@ -417,7 +446,13 @@ export default function Profile() {
           </div>
 
           {/* Tab content */}
-          <div style={{ background: '#1a0a3e', minHeight: 300 }}>
+          <div style={{
+            background: 'rgba(26, 10, 62, 0.6)', minHeight: 300,
+            backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+            borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px',
+            marginBottom: '1.5rem',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
+          }}>
             {/* POSTS tab */}
             {activeTab === 'posts' && (
               <div>
