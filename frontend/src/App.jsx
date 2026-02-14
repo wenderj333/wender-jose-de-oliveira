@@ -19,6 +19,7 @@ import PastoralAI from './pages/PastoralAI';
 import BibleAI from './pages/BibleAI';
 import Profile from './pages/Profile';
 import Friends from './pages/Friends';
+import Members from './pages/Members';
 import LanguageSwitcher from './components/LanguageSwitcher';
 
 function ProtectedRoute({ children }) {
@@ -89,6 +90,7 @@ export default function App() {
           <Link to="/chat-pastoral" className={isActive('/chat-pastoral')} onClick={() => setMenuOpen(false)}><MessageCircle size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.chatPastoral')}</Link>
           <Link to="/ia-biblica" className={isActive('/ia-biblica')} onClick={() => setMenuOpen(false)}><BookOpen size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#2c3e80' }} />{t('nav.bibleAI', 'IA Bíblica')}</Link>
           {user?.role === 'pastor' && <Link to="/ia-pastoral" className={isActive('/ia-pastoral')} onClick={() => setMenuOpen(false)}><Bot size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.pastoralAI', 'IA Pastoral')}</Link>}
+          {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/membros" className={isActive('/membros')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4caf50' }} />Membros</Link>}
           {user && <Link to="/amigos" className={isActive('/amigos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#667eea' }} />{t('nav.friends')}</Link>}
           {user && (
             <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setMenuOpen(false)}><LayoutDashboard size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.dashboard')}</Link>
@@ -127,6 +129,7 @@ export default function App() {
           <Route path="/cadastrar-igreja" element={<ChurchRegister />} />
           <Route path="/amigos" element={<Friends />} />
           <Route path="/perfil/:userId" element={<Profile />} />
+          <Route path="/membros" element={<ProtectedRoute><Members /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         </Routes>
       </main>

@@ -210,6 +210,17 @@ const { Pool: MigratePool } = require('pg');
     `);
     // Add is_private column to users
     await mp.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_private BOOLEAN DEFAULT false`);
+    // Direct messages table
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS direct_messages (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        sender_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        receiver_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        content TEXT NOT NULL,
+        is_read BOOLEAN DEFAULT false,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      )
+    `);
     console.log('✅ Auto-migração concluída!');
   } catch (err) {
     console.error('⚠️  Erro na auto-migração (continuando):', err.message);
@@ -234,6 +245,7 @@ app.use('/api/pastoral-ai', require('./routes/pastoral-ai'));
 app.use('/api/bible-ai', require('./routes/bible-ai'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/friends', require('./routes/friends'));
+app.use('/api/members', require('./routes/members'));
 
 // Root route
 app.get('/', (req, res) => {
