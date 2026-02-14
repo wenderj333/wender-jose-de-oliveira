@@ -304,11 +304,17 @@ export default function Mural() {
               )}
 
               {/* Actions */}
-              <div style={{ display: 'flex', gap: 16, padding: '0.5rem 1rem 0.75rem' }}>
-                <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#999', fontSize: '0.8rem' }}>
-                  <Heart size={18} /> Amém
+              <div style={{ display: 'flex', gap: 16, padding: '0.5rem 1rem 0.5rem' }}>
+                <button onClick={() => {
+                  if (!user) { alert('Faça login para curtir!'); return; }
+                  setPosts(prev => prev.map(p => p.id === post.id ? {...p, liked: !p.liked, likes: (p.likes||0) + (p.liked ? -1 : 1)} : p));
+                }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: post.liked ? '#e74c3c' : '#999', fontSize: '0.8rem' }}>
+                  <Heart size={18} fill={post.liked ? '#e74c3c' : 'none'} /> {post.likes || 0} Amém
                 </button>
-                <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#999', fontSize: '0.8rem' }}>
+                <button onClick={() => {
+                  if (!user) { alert('Faça login para comentar!'); return; }
+                  setPosts(prev => prev.map(p => p.id === post.id ? {...p, showComments: !p.showComments} : p));
+                }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#999', fontSize: '0.8rem' }}>
                   <MessageCircle size={18} /> Comentar
                 </button>
                 <button onClick={() => {
@@ -317,12 +323,37 @@ export default function Mural() {
                     navigator.share({ title: 'Sigo com Fé', text: shareText, url: 'https://sigo-com-fe.vercel.app' }).catch(() => {});
                   } else {
                     navigator.clipboard.writeText(shareText);
-                    alert('Link copiado! Cole no Facebook, Instagram, WhatsApp ou TikTok');
+                    alert('Link copiado!');
                   }
                 }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#999', fontSize: '0.8rem' }}>
                   <Share2 size={18} /> Compartilhar
                 </button>
               </div>
+              {/* Comments section */}
+              {post.showComments && user && (
+                <div style={{ padding: '0 1rem 0.75rem' }}>
+                  {(post.comments || []).map((c, i) => (
+                    <div key={i} style={{ fontSize: '0.8rem', padding: '4px 0', borderTop: '1px solid #f0f0f0' }}>
+                      <strong>{c.name}</strong>: {c.text}
+                    </div>
+                  ))}
+                  <form onSubmit={(e) => {
+                    e.preventDefault();
+                    const input = e.target.elements.comment;
+                    if (!input.value.trim()) return;
+                    setPosts(prev => prev.map(p => p.id === post.id ? {
+                      ...p, comments: [...(p.comments||[]), { name: user.full_name?.split(' ')[0], text: input.value }]
+                    } : p));
+                    input.value = '';
+                  }} style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+                    <input name="comment" placeholder="Escreva um comentário..."
+                      style={{ flex: 1, padding: '0.4rem 0.7rem', borderRadius: 20, border: '1px solid #ddd', fontSize: '0.8rem' }} />
+                    <button type="submit" style={{ padding: '0.4rem 0.8rem', borderRadius: 20, border: 'none', background: '#daa520', color: '#fff', fontSize: '0.8rem', cursor: 'pointer' }}>
+                      Enviar
+                    </button>
+                  </form>
+                </div>
+              )}
             </div>
           ))}
         </div>
