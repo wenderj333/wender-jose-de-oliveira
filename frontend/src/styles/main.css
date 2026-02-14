@@ -987,13 +987,12 @@ body {
     font-weight: 500;
     border-radius: 12px;
     transition: background 0.2s;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: none;
+    border: none;
   }
   .nav-links a:hover, .nav-links a:active {
-    background: rgba(255, 255, 255, 0.12);
+    background: none;
+    opacity: 0.7;
     color: #fff;
   }
   .nav-links .btn-outline {
