@@ -44,26 +44,38 @@ router.post('/chat', async (req, res) => {
     const contextHint = CONTEXT_PROMPTS[context] || '';
     const langHint = language ? `Respond in ${language}.` : '';
 
-    const response = await fetch(GEMINI_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: `${SYSTEM_PROMPT}\n\n${contextHint}\n${langHint}\n\nUser message: ${message}` }],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 2048,
+    const requestBody = JSON.stringify({
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: `${SYSTEM_PROMPT}\n\n${contextHint}\n${langHint}\n\nUser message: ${message}` }],
         },
-      }),
+      ],
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 2048,
+      },
     });
+
+    // Retry up to 3 times on 429 (rate limit)
+    let response;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      response = await fetch(GEMINI_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: requestBody,
+      });
+      if (response.status !== 429) break;
+      console.log(`Gemini 429 rate limit, retry ${attempt + 1}/3...`);
+      await new Promise(r => setTimeout(r, (attempt + 1) * 2000)); // wait 2s, 4s, 6s
+    }
 
     if (!response.ok) {
       const errBody = await response.text();
       console.error('Gemini API error:', response.status, errBody);
+      if (response.status === 429) {
+        return res.status(429).json({ error: 'La IA está ocupada. Intenta de nuevo en unos segundos.' });
+      }
       return res.status(502).json({ error: 'Failed to get AI response' });
     }
 
