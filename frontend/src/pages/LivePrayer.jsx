@@ -81,14 +81,45 @@ export default function LivePrayer() {
       {liveSessions.length > 0 && (
         <>
           <h3 style={{ color: 'var(--primary-dark)', margin: '2rem 0 1rem' }}>{t('livePrayer.pastorsPraying')}</h3>
-          <div className="live-sessions">
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
             {liveSessions.map((session) => (
-              <div key={session.id} className="live-session-card" onClick={() => setShowOverlay(true)}>
-                <h3>{session.church_name || session.churchName}</h3>
-                <p>Pastor {session.pastor_name || session.pastorName}</p>
-                {(session.prayer_focus || session.prayerFocus) && (
-                  <p style={{ opacity: 0.8, marginTop: '0.5rem' }}>"{session.prayer_focus || session.prayerFocus}"</p>
-                )}
+              <div key={session.id} onClick={() => setShowOverlay(true)} style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+                cursor: 'pointer', padding: '1rem', minWidth: 120,
+              }}>
+                {/* Green pulsing ball */}
+                <div style={{
+                  position: 'relative', width: 70, height: 70, borderRadius: '50%',
+                  background: 'radial-gradient(circle, #4caf50, #2e7d32)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 0 20px rgba(76,175,80,0.6)',
+                  animation: 'greenPulse 2s ease-in-out infinite',
+                }}>
+                  <HandHeart size={28} color="#fff" />
+                  {/* Online dot */}
+                  <div style={{
+                    position: 'absolute', bottom: 2, right: 2,
+                    width: 16, height: 16, borderRadius: '50%',
+                    background: '#00e676', border: '2.5px solid #fff',
+                    boxShadow: '0 0 8px rgba(0,230,118,0.8)',
+                  }} />
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e' }}>
+                    {session.pastor_name || session.pastorName}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#4caf50', fontWeight: 600 }}>
+                    🟢 En Vivo
+                  </div>
+                  <div style={{ fontSize: '0.7rem', color: '#666', marginTop: 2 }}>
+                    {session.church_name || session.churchName}
+                  </div>
+                  {(session.prayer_focus || session.prayerFocus) && (
+                    <div style={{ fontSize: '0.7rem', color: '#999', fontStyle: 'italic', marginTop: 2 }}>
+                      "{session.prayer_focus || session.prayerFocus}"
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
