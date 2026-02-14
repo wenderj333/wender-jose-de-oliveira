@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './context/AuthContext';
-import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users, User } from 'lucide-react';
+import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users, User, Download } from 'lucide-react';
 import Home from './pages/Home';
 import PrayerFeed from './pages/PrayerFeed';
 import LivePrayer from './pages/LivePrayer';
@@ -38,6 +38,28 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const { t } = useTranslation();
+  const [installPrompt, setInstallPrompt] = useState(null);
+  const [showInstallBtn, setShowInstallBtn] = useState(false);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+      setShowInstallBtn(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const result = await installPrompt.userChoice;
+    if (result.outcome === 'accepted') {
+      setShowInstallBtn(false);
+    }
+    setInstallPrompt(null);
+  };
 
   const isActive = (path) => location.pathname === path ? 'nav-link--active' : '';
 
@@ -110,6 +132,17 @@ export default function App() {
       </main>
 
       <footer className="footer">
+        {showInstallBtn && (
+          <button onClick={handleInstall} style={{
+            display: 'flex', alignItems: 'center', gap: 8, margin: '0 auto 0.75rem',
+            padding: '0.6rem 1.5rem', borderRadius: 25, border: 'none',
+            background: 'linear-gradient(135deg, #daa520, #f4c542)', color: '#1a0a3e',
+            fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(218,165,32,0.4)',
+          }}>
+            <Download size={18} /> 📲 Instalar App
+          </button>
+        )}
         <p>{t('footer')} <BookOpen size={16} style={{ verticalAlign: 'middle' }} /></p>
       </footer>
     </div>
