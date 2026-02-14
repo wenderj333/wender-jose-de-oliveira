@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { Plus, Filter, X, Send, Heart, MessageCircle, Image, Video, Play, User } from 'lucide-react';
+import { Plus, Filter, X, Send, Heart, MessageCircle, Image, Video, Play, User, Share2 } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
@@ -310,6 +310,17 @@ export default function Mural() {
                 </button>
                 <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#999', fontSize: '0.8rem' }}>
                   <MessageCircle size={18} /> Comentar
+                </button>
+                <button onClick={() => {
+                  const shareText = `${post.content}${post.verse_reference ? '\n📖 ' + post.verse_reference : ''}\n\n🙏 Sigo com Fé - Rede Social Cristã\nhttps://sigo-com-fe.vercel.app`;
+                  if (navigator.share) {
+                    navigator.share({ title: 'Sigo com Fé', text: shareText, url: 'https://sigo-com-fe.vercel.app' }).catch(() => {});
+                  } else {
+                    navigator.clipboard.writeText(shareText);
+                    alert('Link copiado! Cole no Facebook, Instagram, WhatsApp ou TikTok');
+                  }
+                }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#999', fontSize: '0.8rem' }}>
+                  <Share2 size={18} /> Compartilhar
                 </button>
               </div>
             </div>
