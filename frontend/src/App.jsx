@@ -29,7 +29,7 @@ function ProtectedRoute({ children }) {
 
 function RedirectIfLoggedIn({ children }) {
   const { user } = useAuth();
-  if (user) return <Navigate to={`/perfil/${user.id}`} />;
+  if (user) return <Navigate to="/mural" />;
   return children;
 }
 
