@@ -240,6 +240,28 @@ app.get('/', (req, res) => {
   res.json({ name: 'Sigo com Fé API', status: 'online', version: '1.0.0' });
 });
 
+// Temporary admin route - set user role
+const db = require('./db/connection');
+app.get('/api/admin/users', async (req, res) => {
+  try {
+    const users = await db.prepare('SELECT id, email, full_name, role, created_at FROM users ORDER BY created_at DESC LIMIT 50').all();
+    res.json({ users });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.post('/api/admin/set-role', async (req, res) => {
+  try {
+    const { email, role } = req.body;
+    if (!['member', 'leader', 'pastor', 'admin'].includes(role)) return res.status(400).json({ error: 'Role inválido' });
+    const user = await db.prepare('UPDATE users SET role = ? WHERE email = ? RETURNING id, email, full_name, role').get(role, email);
+    if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+    res.json({ message: 'Role atualizado!', user });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', name: 'Sigo com Fé API', version: '1.0.0' });
