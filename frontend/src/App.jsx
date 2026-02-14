@@ -27,6 +27,12 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
+function RedirectIfLoggedIn({ children }) {
+  const { user } = useAuth();
+  if (user) return <Navigate to={`/perfil/${user.id}`} />;
+  return children;
+}
+
 export default function App() {
   const { user, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -84,20 +90,20 @@ export default function App() {
 
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={user ? <Navigate to={`/perfil/${user.id}`} /> : <Home />} />
           <Route path="/oracoes" element={<PrayerFeed />} />
           <Route path="/mural" element={<Mural />} />
           <Route path="/ao-vivo" element={<LivePrayer />} />
           <Route path="/igrejas" element={<ChurchMap />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/cadastro" element={<Register />} />
+          <Route path="/login" element={<RedirectIfLoggedIn><Login /></RedirectIfLoggedIn>} />
+          <Route path="/cadastro" element={<RedirectIfLoggedIn><Register /></RedirectIfLoggedIn>} />
           <Route path="/kids" element={<Kids />} />
           <Route path="/pedidos-ajuda" element={<HelpRequests />} />
           <Route path="/chat-pastoral" element={<PastorChat />} />
           <Route path="/ia-biblica" element={<BibleAI />} />
           <Route path="/ia-pastoral" element={<ProtectedRoute><PastoralAI /></ProtectedRoute>} />
-          <Route path="/cadastrar-igreja" element={<ProtectedRoute><ChurchRegister /></ProtectedRoute>} />
-          <Route path="/amigos" element={<ProtectedRoute><Friends /></ProtectedRoute>} />
+          <Route path="/cadastrar-igreja" element={<ChurchRegister />} />
+          <Route path="/amigos" element={<Friends />} />
           <Route path="/perfil/:userId" element={<Profile />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         </Routes>
