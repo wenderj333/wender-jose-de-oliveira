@@ -1,99 +1,333 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Filter, X, Send } from 'lucide-react';
-import FeedPost from '../components/FeedPost';
+import { useAuth } from '../context/AuthContext';
+import { Plus, Filter, X, Send, Heart, MessageCircle, Image, Video, Play, User } from 'lucide-react';
 
-const DEMO_POSTS = [
-  { id: 1, type: 'testemunho', authorInitials: 'MC', authorName: 'Maria Clara', church: 'Igreja Batista Central', time: 'Há 2 horas', content: 'Glória a Deus! Depois de 3 anos desempregada, o Senhor abriu as portas e fui aprovada no concurso público. Nunca desistam de orar, irmãos! Deus é fiel e cumpre cada promessa. Ele me sustentou em cada momento de dificuldade e hoje posso testemunhar a Sua bondade.', amemCount: 47, commentCount: 12 },
-  { id: 2, type: 'louvor', authorInitials: 'PR', authorName: 'Paulo Ricardo', church: 'Comunidade Graça e Paz', time: 'Há 4 horas', content: 'Novo louvor do ministério de adoração da nossa igreja. Que o Espírito Santo toque cada coração!', amemCount: 31, commentCount: 8 },
-  { id: 3, type: 'foto', authorInitials: 'AS', authorName: 'Ana Souza', church: 'Igreja Metodista Renovada', time: 'Há 6 horas', content: 'Batismo nas águas de 15 novos irmãos! Que momento abençoado. O céu está em festa!', amemCount: 89, commentCount: 23 },
-  { id: 4, type: 'reflexao', authorInitials: 'JL', authorName: 'Pastor João Lucas', church: 'Igreja Presbiteriana do Centro', time: 'Há 8 horas', content: 'Muitas vezes queremos que Deus mude as circunstâncias, mas Ele quer mudar o nosso coração primeiro. A transformação interior precede a transformação exterior. Quando permitimos que o Senhor trabalhe em nós, tudo ao nosso redor começa a mudar. Confie no processo de Deus para a sua vida.', amemCount: 65, commentCount: 18 },
-  { id: 5, type: 'versiculo', authorInitials: 'DF', authorName: 'Daniela Ferreira', church: 'Assembleia de Deus', time: 'Há 10 horas', content: 'Porque eu bem sei os pensamentos que penso de vós, diz o Senhor; pensamentos de paz e não de mal, para vos dar o fim que esperais.', reference: 'Jeremias 29:11', amemCount: 112, commentCount: 5 },
-  { id: 6, type: 'testemunho', authorInitials: 'RS', authorName: 'Roberto Santos', church: 'Igreja do Nazareno', time: 'Há 12 horas', content: 'Minha mãe recebeu alta do hospital hoje após uma cirurgia delicada. Os médicos disseram que a recuperação foi surpreendente. Obrigado a todos que oraram! O poder da oração coletiva é real.', amemCount: 73, commentCount: 15 },
+const API_BASE = import.meta.env.VITE_API_URL || '';
+const API = `${API_BASE}/api`;
+
+const CATEGORIES = [
+  { value: 'testemunho', label: '🙏 Testemunho', color: '#daa520' },
+  { value: 'louvor', label: '🎵 Louvor', color: '#9b59b6' },
+  { value: 'foto', label: '📸 Foto/Vídeo', color: '#3498db' },
+  { value: 'versiculo', label: '📖 Versículo', color: '#27ae60' },
+  { value: 'reflexao', label: '💭 Reflexão', color: '#e67e22' },
 ];
+
+function isVideo(url) {
+  if (!url) return false;
+  return /\.(mp4|webm|mov)$/i.test(url);
+}
+
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Agora';
+  if (mins < 60) return `Há ${mins}min`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `Há ${hrs}h`;
+  const days = Math.floor(hrs / 24);
+  return `Há ${days}d`;
+}
 
 export default function Mural() {
   const { t } = useTranslation();
+  const { user, token } = useAuth();
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('todas');
+
+  // New post
   const [showForm, setShowForm] = useState(false);
-  const [newPostText, setNewPostText] = useState('');
-  const [newPostCategory, setNewPostCategory] = useState('testemunho');
-  const [posts, setPosts] = useState(DEMO_POSTS);
+  const [newText, setNewText] = useState('');
+  const [newCategory, setNewCategory] = useState('testemunho');
+  const [newMedia, setNewMedia] = useState(null);
+  const [newMediaPreview, setNewMediaPreview] = useState(null);
+  const [newMediaIsVideo, setNewMediaIsVideo] = useState(false);
+  const [posting, setPosting] = useState(false);
+  const fileRef = useRef(null);
+
+  useEffect(() => { fetchPosts(); }, []);
+
+  async function fetchPosts() {
+    try {
+      const res = await fetch(`${API}/feed?limit=50`);
+      const data = await res.json();
+      setPosts(data.posts || []);
+    } catch (err) {
+      console.error('Error fetching feed:', err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleMediaSelect(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setNewMedia(file);
+    const isVid = file.type.startsWith('video/');
+    setNewMediaIsVideo(isVid);
+    if (isVid) {
+      setNewMediaPreview(URL.createObjectURL(file));
+    } else {
+      const reader = new FileReader();
+      reader.onload = () => setNewMediaPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async function handlePost(e) {
+    e.preventDefault();
+    if (!newText.trim() || !token) return;
+    setPosting(true);
+    try {
+      const formData = new FormData();
+      formData.append('content', newText);
+      formData.append('category', newCategory);
+      if (newMedia) formData.append('image', newMedia);
+
+      const res = await fetch(`${API}/feed`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.post) {
+        // Add author info
+        data.post.author_name = user.full_name;
+        data.post.author_avatar = user.avatar_url;
+        setPosts(prev => [data.post, ...prev]);
+        setNewText('');
+        setNewMedia(null);
+        setNewMediaPreview(null);
+        setNewMediaIsVideo(false);
+        setShowForm(false);
+      }
+    } catch (err) {
+      console.error('Error creating post:', err);
+    } finally {
+      setPosting(false);
+    }
+  }
+
+  const getMediaUrl = (url) => url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
+  const getAvatarUrl = (url) => url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
+
+  const filteredPosts = activeFilter === 'todas'
+    ? posts
+    : activeFilter === 'video'
+    ? posts.filter(p => p.media_url && isVideo(p.media_url))
+    : posts.filter(p => p.category === activeFilter);
 
   const FILTERS = [
-    { key: 'todas', label: t('mural.filters.all') },
-    { key: 'minha-igreja', label: t('mural.filters.myChurch') },
-    { key: 'testemunho', label: t('mural.filters.testimonies') },
-    { key: 'louvor', label: t('mural.filters.worship') },
-    { key: 'versiculo', label: t('mural.filters.verses') },
+    { key: 'todas', label: 'Todas' },
+    { key: 'video', label: '🎬 Vídeos' },
+    { key: 'testemunho', label: '🙏 Testemunhos' },
+    { key: 'louvor', label: '🎵 Louvor' },
+    { key: 'versiculo', label: '📖 Versículos' },
   ];
-
-  const CATEGORIES = [
-    { value: 'testemunho', label: t('mural.categories.testemunho') },
-    { value: 'louvor', label: t('mural.categories.louvor') },
-    { value: 'reflexao', label: t('mural.categories.reflexao') },
-    { value: 'versiculo', label: t('mural.categories.versiculo') },
-    { value: 'foto', label: t('mural.categories.foto') },
-  ];
-
-  const filteredPosts = activeFilter === 'todas' || activeFilter === 'minha-igreja'
-    ? posts
-    : posts.filter(p => p.type === activeFilter);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!newPostText.trim()) return;
-    const newPost = { id: Date.now(), type: newPostCategory, authorInitials: 'EU', authorName: 'Você', church: 'Sua Igreja', time: 'Agora', content: newPostText, amemCount: 0, commentCount: 0 };
-    setPosts([newPost, ...posts]);
-    setNewPostText('');
-    setShowForm(false);
-  };
 
   return (
-    <div className="mural-page">
-      <div className="mural-header">
-        <div className="mural-header__top">
-          <h1 className="mural-title">{t('mural.title')}</h1>
-          <button className="btn btn-primary btn-sm" onClick={() => setShowForm(!showForm)}>
+    <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#1a0a3e' }}>📰 {t('mural.title', 'Mural')}</h1>
+        {user && (
+          <button onClick={() => setShowForm(!showForm)} style={{
+            padding: '0.5rem 1rem', borderRadius: 20, border: 'none',
+            background: showForm ? '#e74c3c' : '#daa520', color: '#fff',
+            fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+          }}>
             {showForm ? <X size={16} /> : <Plus size={16} />}
-            {showForm ? t('mural.cancel') : t('mural.newPost')}
+            {showForm ? 'Cancelar' : 'Publicar'}
           </button>
-        </div>
-        <p className="mural-subtitle">{t('mural.subtitle')}</p>
+        )}
       </div>
 
-      {showForm && (
-        <form className="mural-new-post card" onSubmit={handleSubmit}>
-          <h3>{t('mural.shareWithCommunity')}</h3>
-          <div className="form-group">
-            <label>{t('mural.categoryLabel')}</label>
-            <select value={newPostCategory} onChange={e => setNewPostCategory(e.target.value)}>
-              {CATEGORIES.map(c => (<option key={c.value} value={c.value}>{c.label}</option>))}
-            </select>
+      {/* New Post Form */}
+      {showForm && user && (
+        <form onSubmit={handlePost} style={{
+          background: '#fff', borderRadius: 16, padding: '1rem', marginBottom: '1rem',
+          border: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+        }}>
+          {/* Category */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '0.75rem' }}>
+            {CATEGORIES.map(cat => (
+              <button type="button" key={cat.value} onClick={() => setNewCategory(cat.value)} style={{
+                padding: '4px 12px', borderRadius: 16, border: 'none', cursor: 'pointer',
+                fontSize: '0.8rem',
+                background: newCategory === cat.value ? cat.color + '22' : '#f5f5f5',
+                color: newCategory === cat.value ? cat.color : '#666',
+                fontWeight: newCategory === cat.value ? 600 : 400,
+              }}>
+                {cat.label}
+              </button>
+            ))}
           </div>
-          <div className="form-group">
-            <label>{t('mural.message')}</label>
-            <textarea rows={4} placeholder={t('mural.messagePlaceholder')} value={newPostText} onChange={e => setNewPostText(e.target.value)} />
+
+          {/* Text */}
+          <textarea value={newText} onChange={e => setNewText(e.target.value)}
+            placeholder="Compartilhe algo com a comunidade..."
+            rows={3} style={{
+              width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd',
+              fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box', marginBottom: '0.5rem',
+            }} />
+
+          {/* Media preview */}
+          {newMediaPreview && (
+            <div style={{ position: 'relative', marginBottom: '0.5rem', borderRadius: 10, overflow: 'hidden' }}>
+              {newMediaIsVideo ? (
+                <video src={newMediaPreview} controls style={{ width: '100%', maxHeight: 300, borderRadius: 10 }} />
+              ) : (
+                <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 300, objectFit: 'cover', borderRadius: 10 }} />
+              )}
+              <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); }} style={{
+                position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.6)', border: 'none',
+                borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+              }}><X size={16} color="#fff" /></button>
+            </div>
+          )}
+
+          {/* Actions */}
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <button type="button" onClick={() => fileRef.current?.click()} style={{
+              padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #ddd',
+              background: '#f9f9f9', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
+              fontSize: '0.8rem', color: '#666',
+            }}>
+              <Image size={16} /> Foto
+            </button>
+            <button type="button" onClick={() => fileRef.current?.click()} style={{
+              padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #ddd',
+              background: '#f9f9f9', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
+              fontSize: '0.8rem', color: '#666',
+            }}>
+              <Video size={16} /> Vídeo
+            </button>
+            <div style={{ flex: 1 }} />
+            <button type="submit" disabled={posting || !newText.trim()} style={{
+              padding: '0.5rem 1.2rem', borderRadius: 20, border: 'none',
+              background: newText.trim() ? '#daa520' : '#ccc', color: '#fff',
+              fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+            }}>
+              <Send size={16} /> {posting ? 'Enviando...' : 'Publicar'}
+            </button>
           </div>
-          <button type="submit" className="btn btn-primary"><Send size={16} /> {t('mural.publish')}</button>
+          <input ref={fileRef} type="file" accept="image/*,video/mp4,video/webm,video/quicktime" style={{ display: 'none' }}
+            onChange={handleMediaSelect} />
         </form>
       )}
 
-      <div className="mural-filters">
-        <Filter size={16} style={{ color: 'var(--gray-500)' }} />
+      {/* Filters */}
+      <div style={{ display: 'flex', gap: 6, marginBottom: '1rem', overflowX: 'auto', paddingBottom: 4 }}>
         {FILTERS.map(f => (
-          <button key={f.key} className={`mural-filter-tab ${activeFilter === f.key ? 'mural-filter-tab--active' : ''}`} onClick={() => setActiveFilter(f.key)}>
+          <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{
+            padding: '6px 14px', borderRadius: 20, border: 'none', cursor: 'pointer',
+            fontSize: '0.8rem', whiteSpace: 'nowrap',
+            background: activeFilter === f.key ? '#1a0a3e' : '#f0f0f0',
+            color: activeFilter === f.key ? '#fff' : '#666',
+            fontWeight: activeFilter === f.key ? 600 : 400,
+          }}>
             {f.label}
           </button>
         ))}
       </div>
 
-      <div className="mural-feed">
-        {filteredPosts.map(post => (<FeedPost key={post.id} post={post} />))}
-        {filteredPosts.length === 0 && (
-          <div className="mural-empty card"><p>{t('mural.noPostsFound')}</p></div>
-        )}
-      </div>
+      {/* Feed */}
+      {loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}>
+          <div className="loading-spinner" />
+        </div>
+      ) : filteredPosts.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>
+          <p>Nenhuma publicação ainda. {user ? 'Seja o primeiro a publicar!' : 'Faça login para publicar!'}</p>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {filteredPosts.map(post => (
+            <div key={post.id} style={{
+              background: '#fff', borderRadius: 16, overflow: 'hidden',
+              border: '1px solid #eee', boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+            }}>
+              {/* Author header */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0.75rem 1rem 0.5rem' }}>
+                <div style={{
+                  width: 38, height: 38, borderRadius: '50%', background: '#daa520',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0,
+                }}>
+                  {post.author_avatar ? (
+                    <img src={getAvatarUrl(post.author_avatar)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <User size={20} color="#fff" />
+                  )}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1a1a2e' }}>{post.author_name}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#999' }}>{timeAgo(post.created_at)}</div>
+                </div>
+                <span style={{
+                  fontSize: '0.7rem', padding: '2px 8px', borderRadius: 10,
+                  background: (CATEGORIES.find(c => c.value === post.category)?.color || '#999') + '15',
+                  color: CATEGORIES.find(c => c.value === post.category)?.color || '#999',
+                }}>
+                  {CATEGORIES.find(c => c.value === post.category)?.label?.split(' ')[0] || '📝'}
+                </span>
+              </div>
+
+              {/* Content */}
+              <div style={{ padding: '0 1rem 0.5rem', fontSize: '0.9rem', lineHeight: 1.5, color: '#333' }}>
+                {post.content}
+              </div>
+
+              {/* Verse reference */}
+              {post.verse_reference && (
+                <div style={{ padding: '0 1rem 0.5rem', fontSize: '0.85rem', color: '#daa520', fontStyle: 'italic' }}>
+                  📖 {post.verse_reference}
+                </div>
+              )}
+
+              {/* Media — image or video */}
+              {post.media_url && (
+                <div style={{ width: '100%' }}>
+                  {isVideo(post.media_url) ? (
+                    <video
+                      src={getMediaUrl(post.media_url)}
+                      controls
+                      playsInline
+                      preload="metadata"
+                      style={{ width: '100%', maxHeight: 500, background: '#000' }}
+                    />
+                  ) : (
+                    <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', maxHeight: 500, objectFit: 'cover' }} />
+                  )}
+                </div>
+              )}
+
+              {/* Actions */}
+              <div style={{ display: 'flex', gap: 16, padding: '0.5rem 1rem 0.75rem' }}>
+                <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#999', fontSize: '0.8rem' }}>
+                  <Heart size={18} /> Amém
+                </button>
+                <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#999', fontSize: '0.8rem' }}>
+                  <MessageCircle size={18} /> Comentar
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Login prompt for non-logged users */}
+      {!user && (
+        <div style={{
+          position: 'fixed', bottom: 0, left: 0, right: 0, padding: '1rem',
+          background: 'linear-gradient(transparent, #fff 30%)', textAlign: 'center',
+        }}>
+          <p style={{ margin: '0 0 0.5rem', color: '#666', fontSize: '0.9rem' }}>
+            Faça login para publicar e interagir!
+          </p>
+        </div>
+      )}
     </div>
   );
 }

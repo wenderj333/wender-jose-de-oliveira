@@ -20,10 +20,10 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB para vídeos
   fileFilter: (req, file, cb) => {
-    if (/^image\/(jpeg|png|gif|webp)$/.test(file.mimetype)) cb(null, true);
-    else cb(new Error('Apenas imagens são permitidas'));
+    if (/^(image\/(jpeg|png|gif|webp)|video\/(mp4|webm|quicktime))$/.test(file.mimetype)) cb(null, true);
+    else cb(new Error('Apenas imagens e vídeos são permitidos'));
   },
 });
 
@@ -86,6 +86,7 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
     }
 
     const mediaUrl = req.file ? `/uploads/posts/${req.file.filename}` : null;
+    const mediaType = req.file ? (req.file.mimetype.startsWith('video/') ? 'video' : 'image') : null;
     const cat = category || 'testemunho';
     const vis = visibility || 'public';
 
