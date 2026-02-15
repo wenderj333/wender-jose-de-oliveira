@@ -1,390 +1,490 @@
-{
-  "brand": "Sigo com Fé",
-  "nav": {
-    "prayers": "Orações",
-    "mural": "Mural",
-    "live": "Ao Vivo",
-    "churches": "Igrejas",
-    "registerChurch": "Cadastrar Igreja",
-    "kids": "Kids",
-    "helpRequests": "Pedidos de Ajuda",
-    "dashboard": "Dashboard",
-    "hello": "Olá, {{name}}",
-    "logout": "Sair",
-    "login": "Entrar",
-    "register": "Cadastrar",
-    "chatPastoral": "Chat Pastoral",
-    "pastoralAI": "IA Pastoral",
-    "friends": "Amigos",
-    "bibleAI": "IA Bíblica"
-  },
-  "footer": "© 2026 Sigo com Fé - Tecnologia a serviço do Reino",
-  "home": {
-    "subtitle": "Ore, conecte-se e fortaleça sua fé com milhares de irmãos ao redor do mundo.",
-    "startNow": "Comece Agora",
-    "seePrayerRequests": "Ver Pedidos de Oração",
-    "churchPraying_one": "{{count}} igreja orando agora!",
-    "churchPraying_other": "{{count}} igrejas orando agora!",
-    "featurePrayers": "Pedidos de Oração",
-    "featurePrayersDesc": "Compartilhe seus pedidos e ore pelos irmãos. Veja o poder da oração coletiva e celebre as vitórias!",
-    "featureLive": "Pastor Orando ao Vivo",
-    "featureLiveDesc": "Saiba quando seu pastor está orando em tempo real. Bolhas de oração sobem como incenso ao céu.",
-    "featureMap": "Mapa de Igrejas",
-    "featureMapDesc": "Encontre igrejas em qualquer cidade. Perfeito para viajantes e famílias em mudança.",
-    "featureDashboard": "Dashboard Pastoral",
-    "featureDashboardDesc": "Ferramentas completas de gestão para pastores: membros, finanças, campanhas e muito mais.",
-    "featureMural": "Mural da Comunidade",
-    "featureMuralDesc": "Compartilhe testemunhos, louvores e versículos com a comunidade cristã.",
-    "featureKids": "Cantinho Kids",
-    "featureKidsDesc": "Histórias bíblicas, quiz interativo e atividades para as crianças aprenderem sobre a Bíblia!",
-    "featureChurch": "Cadastre Sua Igreja",
-    "featureChurchDesc": "Registre sua igreja na plataforma e conecte-se com fiéis de todo o mundo.",
-    "explore": "Explorar",
-    "registerBtn": "Cadastrar",
-    "helpTitle": "Precisa de Ajuda?",
-    "helpSubtitle": "Você não está sozinho. Uma igreja pode te ajudar.",
-    "helpSeeThings": "👁️ Vejo coisas",
-    "helpHearThings": "👂 Escuto barulhos",
-    "helpFeelAlone": "💔 Me sinto sozinho(a)",
-    "helpNeedPrayer": "🙏 Preciso de oração",
-    "helpAnxious": "😰 Estou ansioso(a)",
-    "helpDepressed": "😢 Estou triste/deprimido(a)",
-    "helpSent": "✅ Seu pedido foi enviado! Uma igreja próxima entrará em contato para te ajudar. Deus te abençoe! 🙏",
-    "helpNamePlaceholder": "Seu nome (opcional)",
-    "helpContactPlaceholder": "Telefone ou email para contato",
-    "helpMessagePlaceholder": "Conte um pouco mais sobre o que está sentindo...",
-    "helpSend": "Pedir Ajuda",
-    "helpBtn": "Pedir Ajuda",
-    "verses": [
-      { "text": "Porque onde estiverem dois ou três reunidos em meu nome, ali estou no meio deles.", "ref": "Mateus 18:20" },
-      { "text": "Tudo posso naquele que me fortalece.", "ref": "Filipenses 4:13" },
-      { "text": "O Senhor é o meu pastor; nada me faltará.", "ref": "Salmos 23:1" },
-      { "text": "Confie no Senhor de todo o seu coração e não se apoie no seu próprio entendimento.", "ref": "Provérbios 3:5" },
-      { "text": "Pois eu sei os planos que tenho para vocês, planos de dar a vocês esperança e um futuro.", "ref": "Jeremias 29:11" },
-      { "text": "Sejam fortes e corajosos. Não tenham medo, pois o Senhor estará com vocês.", "ref": "Deuteronômio 31:6" },
-      { "text": "A oração de um justo é poderosa e eficaz.", "ref": "Tiago 5:16" }
-    ]
-  },
-  "login": {
-    "welcomeBack": "Bem-vindo de volta!",
-    "email": "Email",
-    "emailPlaceholder": "seu@email.com",
-    "password": "Senha",
-    "passwordPlaceholder": "Sua senha",
-    "submit": "Entrar",
-    "or": "ou",
-    "google": "Entrar com Google",
-    "facebook": "Entrar com Facebook",
-    "phone": "Entrar com Telefone",
-    "phoneNumber": "Número de telefone",
-    "sendCode": "Enviar código",
-    "verifyCode": "Verificar código",
-    "codeSent": "Código enviado!",
-    "codePlaceholder": "Código de 6 dígitos",
-    "noAccount": "Não tem conta?",
-    "signUp": "Cadastre-se"
-  },
-  "register": {
-    "joinCommunity": "Junte-se à comunidade!",
-    "fullName": "Nome Completo",
-    "fullNamePlaceholder": "Seu nome completo",
-    "email": "Email",
-    "emailPlaceholder": "seu@email.com",
-    "password": "Senha",
-    "passwordPlaceholder": "Mínimo 6 caracteres",
-    "passwordError": "A senha deve ter no mínimo 6 caracteres",
-    "iAm": "Eu sou:",
-    "member": "Membro / Fiel",
-    "pastor": "Pastor / Líder",
-    "submit": "Cadastrar",
-    "or": "ou",
-    "google": "Cadastrar com Google",
-    "facebook": "Cadastrar com Facebook",
-    "phone": "Cadastrar com Telefone",
-    "hasAccount": "Já tem conta?",
-    "signIn": "Entrar"
-  },
-  "prayerFeed": {
-    "victoryWall": "Mural de Vitórias",
-    "prayerRequests": "Pedidos de Oração",
-    "newRequest": "Novo Pedido",
-    "allRequests": "Todos os Pedidos",
-    "answeredPrayers": "Orações Respondidas",
-    "newPrayerRequest": "Novo Pedido de Oração",
-    "titleOptional": "Título (opcional)",
-    "titlePlaceholder": "Ex: Oração pela minha família",
-    "yourRequest": "Seu pedido *",
-    "requestPlaceholder": "Compartilhe seu pedido de oração...",
-    "category": "Categoria",
-    "urgentRequest": "Pedido urgente",
-    "submitRequest": "Enviar Pedido",
-    "loading": "Carregando orações...",
-    "noRequests": "Nenhum pedido de oração ainda. Seja o primeiro!",
-    "categories": {
-      "all": "Todas",
-      "health": "Saúde",
-      "work_finance": "Trabalho/Finanças",
-      "family": "Família",
-      "studies": "Estudos",
-      "housing": "Moradia",
-      "emotional": "Emocional",
-      "decisions": "Decisões",
-      "other": "Outros"
-    }
-  },
-  "livePrayer": {
-    "title": "Oração ao Vivo",
-    "churchPraying_one": "igreja orando",
-    "churchPraying_other": "igrejas orando",
-    "rightNow": "neste momento",
-    "closeOverlay": "Fechar Overlay",
-    "immersiveView": "Ver Oração Imersiva",
-    "pastorPanel": "Painel do Pastor",
-    "focusOptional": "Foco da oração (opcional)",
-    "focusPlaceholder": "Ex: Orando pelas famílias",
-    "startLive": "Iniciar Oração ao Vivo",
-    "prayingLive": "Você está orando ao vivo...",
-    "endPrayer": "Encerrar Oração",
-    "pastorsPraying": "Pastores orando agora:",
-    "noPastors": "Nenhum pastor orando ao vivo neste momento.",
-    "comeBack": "Volte em breve!"
-  },
-  "churchMap": {
-    "title": "Mapa de Igrejas",
-    "searchPlaceholder": "Buscar por cidade, país ou nome...",
-    "search": "Buscar",
-    "searching": "Buscando igrejas...",
-    "noResults": "Nenhuma igreja encontrada para \"{{query}}\". Cadastre a sua!"
-  },
-  "churchRegister": {
-    "title": "Cadastrar Igreja",
-    "subtitle": "Registre sua igreja na plataforma Sigo com Fé",
-    "churchName": "Nome da Igreja *",
-    "churchNamePlaceholder": "Ex: Igreja Batista Central",
-    "denomination": "Denominação",
-    "denominationPlaceholder": "Ex: Batista, Assembleia de Deus, etc.",
-    "address": "Endereço",
-    "addressPlaceholder": "Rua, número, bairro",
-    "city": "Cidade",
-    "cityPlaceholder": "Sua cidade",
-    "country": "País",
-    "countryPlaceholder": "País",
-    "phone": "Telefone",
-    "phonePlaceholder": "+55 11 99999-9999",
-    "pastorName": "Nome do Pastor",
-    "pastorNamePlaceholder": "Nome do pastor responsável",
-    "submit": "Cadastrar Igreja",
-    "submitting": "Cadastrando...",
-    "success": "Igreja Cadastrada!",
-    "redirecting": "Redirecionando para o mapa de igrejas...",
-    "nameRequired": "Nome da igreja é obrigatório",
-    "loginRequired": "Você precisa estar logado para cadastrar uma igreja.",
-    "error": "Erro ao cadastrar"
-  },
-  "dashboard": {
-    "title": "Dashboard",
-    "loading": "Carregando dados...",
-    "users": "Usuários",
-    "churches": "Igrejas",
-    "prayerRequests": "Pedidos de Oração",
-    "answeredPrayers": "Orações Respondidas",
-    "quickActions": "Ações Rápidas",
-    "newPrayerRequest": "Novo Pedido de Oração",
-    "registerChurch": "Cadastrar Igreja",
-    "kidsCorner": "Cantinho Kids",
-    "recentActivity": "Atividade Recente",
-    "requestedPrayer": "pediu oração:",
-    "noActivity": "Nenhuma atividade recente. Comece criando um pedido de oração!",
-    "viewAll": "Ver todos os pedidos"
-  },
-  "mural": {
-    "title": "Mural da Comunidade",
-    "subtitle": "Compartilhe testemunhos, louvores e versículos com a comunidade cristã",
-    "newPost": "Novo Post",
-    "cancel": "Cancelar",
-    "shareWithCommunity": "Compartilhar com a Comunidade",
-    "categoryLabel": "Categoria",
-    "message": "Mensagem",
-    "messagePlaceholder": "Escreva seu testemunho, reflexão ou versículo...",
-    "publish": "Publicar",
-    "noPostsFound": "Nenhuma publicação encontrada nesta categoria.",
-    "filters": {
-      "all": "Todas",
-      "myChurch": "Minha Igreja",
-      "testimonies": "Testemunhos",
-      "worship": "Louvores",
-      "verses": "Versículos"
-    },
-    "categories": {
-      "testemunho": "Testemunho",
-      "louvor": "Louvor / Vídeo",
-      "reflexao": "Reflexão Bíblica",
-      "versiculo": "Versículo",
-      "foto": "Foto"
-    }
-  },
-  "kids": {
-    "title": "Escola Dominical Digital",
-    "subtitle": "Aprenda sobre a Bíblia de um jeito divertido!",
-    "bibleStories": "Histórias Bíblicas",
-    "readStory": "Ler História",
-    "years": "anos",
-    "bibleQuiz": "Quiz Bíblico",
-    "question": "Pergunta {{current}} de {{total}}",
-    "congrats": "Parabéns!",
-    "scoreResult": "Você acertou <strong>{{score}}</strong> de <strong>{{total}}</strong>!",
-    "perfect": "Perfeito! Você é um campeão da Bíblia!",
-    "good": "Muito bem! Continue estudando!",
-    "tryAgain": "Não desista! Tente de novo!",
-    "playAgain": "Jogar de Novo",
-    "weekVerse": "Versículo da Semana",
-    "weekVerseText": "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna.",
-    "weekVerseRef": "- João 3:16",
-    "memorized": "Memorizado!",
-    "memorize": "Já memorizei!",
-    "activities": "Atividades",
-    "comingSoon": "Em breve!",
-    "stories": [
-      { "title": "Davi e Golias", "desc": "Um menino corajoso que venceu um gigante com uma pedra e muita fé em Deus", "age": "6-8" },
-      { "title": "A Arca de Noé", "desc": "Noé construiu um barco enorme e salvou todos os animais do grande dilúvio", "age": "3-5" },
-      { "title": "Jonas e a Baleia", "desc": "Jonas fugiu de Deus mas aprendeu que Ele está em todo lugar", "age": "6-8" },
-      { "title": "Daniel na Cova dos Leões", "desc": "Daniel orou com fé e Deus fechou a boca dos leões", "age": "9-12" },
-      { "title": "Moisés e o Mar Vermelho", "desc": "Deus abriu o mar para Seu povo passar em segurança", "age": "6-8" }
-    ],
-    "quiz": [
-      { "q": "Quem derrotou o gigante Golias?", "opts": ["Saul", "Davi", "Moisés", "Josué"] },
-      { "q": "Quantos dias durou o dilúvio?", "opts": ["10 dias", "20 dias", "40 dias", "100 dias"] },
-      { "q": "Quem foi jogado na cova dos leões?", "opts": ["Jonas", "Daniel", "Paulo", "Pedro"] },
-      { "q": "Qual o primeiro livro da Bíblia?", "opts": ["Êxodo", "Salmos", "Gênesis", "Mateus"] },
-      { "q": "Jesus nasceu em qual cidade?", "opts": ["Jerusalém", "Nazaré", "Belém", "Cafarnaum"] }
-    ],
-    "activityList": [
-      { "title": "Colorir", "desc": "Pinte personagens bíblicos com cores lindas" },
-      { "title": "Caça-Palavras", "desc": "Encontre palavras da Bíblia escondidas" },
-      { "title": "Jogo da Memória", "desc": "Encontre os pares dos 12 apóstolos" },
-      { "title": "Quebra-Cabeça", "desc": "Monte cenas bíblicas incríveis" }
-    ]
-  },
-  "feedPost": {
-    "tapToWatch": "Toque para assistir",
-    "photo": "Foto",
-    "amem": "Amém",
-    "share": "Partilhar"
-  },
-  "prayerCard": {
-    "urgent": "URGENTE",
-    "testimony": "Testemunho:",
-    "personPraying_one": "{{count}} pessoa orando",
-    "personPraying_other": "{{count}} pessoas orando",
-    "timeAgo": {
-      "min": "{{count}}min atrás",
-      "hour": "{{count}}h atrás",
-      "day": "{{count}}d atrás"
-    },
-    "categories": {
-      "health": "Saúde",
-      "work_finance": "Trabalho/Finanças",
-      "family": "Família",
-      "studies": "Estudos",
-      "housing": "Moradia",
-      "emotional": "Emocional",
-      "decisions": "Decisões",
-      "other": "Outros"
-    }
-  },
-  "amemButton": {
-    "praying": "Estou Orando!",
-    "prayForYou": "Estou Orando por Você"
-  },
-  "pastorOverlay": {
-    "title": "Pastores Orando ao Vivo",
-    "churchesInPrayer_one": "{{count}} igreja em oração neste momento",
-    "churchesInPrayer_other": "{{count}} igrejas em oração neste momento",
-    "close": "Fechar"
-  },
-  "churchPin": {
-    "pastor": "Pastor {{name}}",
-    "members": "{{count}} membros",
-    "following": "Seguindo",
-    "follow": "Seguir",
-    "directions": "Como Chegar",
-    "share": "Compartilhar",
-    "shareText": "Conheça {{name}} no Sigo com Fé!"
-  },
-  "langSwitcher": {
-    "label": "Idioma"
-  },
-  "pastorChat": {
-    "title": "Chat Pastoral",
-    "subtitle": "Converse diretamente com um pastor. Tradução automática incluída.",
-    "yourName": "Seu nome",
-    "selectHelp": "O que você precisa?",
-    "selectLanguage": "Seu idioma",
-    "startChat": "Iniciar Conversa",
-    "anyChurch": "Qualquer igreja dispon�vel",
-    "waiting": "Aguardando um pastor...",
-    "waitingDesc": "Um pastor vai entrar na conversa em breve. Tenha fé!",
-    "imPastor": "Sou Pastor",
-    "imPerson": "Preciso de Ajuda",
-    "waitingRooms": "Pessoas aguardando",
-    "noWaiting": "Nenhuma pessoa aguardando no momento.",
-    "joinChat": "Atender",
-    "pastorName": "Seu nome (pastor)",
-    "endChat": "Encerrar conversa",
-    "chatEnded": "Conversa encerrada. Deus abençoe!",
-    "typeMessage": "Digite sua mensagem...",
-    "send": "Enviar",
-    "typing": "digitando...",
-    "translated": "Tradução",
-    "joinedChat": "entrou na conversa",
-    "leftChat": "saiu da conversa",
-    "langPt": "Português",
-    "langEn": "English",
-    "langEs": "Español",
-    "langDe": "Deutsch",
-    "autoTranslate": "🌍 Tradução automática ativada"
-  },
-  "friends": {
-    "title": "Amigos",
-    "search": "Buscar",
-    "myFriends": "Meus Amigos",
-    "requests": "Pedidos",
-    "addFriend": "Adicionar",
-    "pending": "Pendente",
-    "accept": "Aceitar",
-    "reject": "Rejeitar",
-    "removeFriend": "Remover",
-    "noFriends": "Você ainda não tem amigos. Busque pessoas para se conectar!",
-    "noRequests": "Nenhum pedido de amizade pendente.",
-    "searchPlaceholder": "Buscar por nome...",
-    "requestSent": "Pedido de amizade enviado!",
-    "friendAdded": "Amizade aceita!",
-    "friendRemoved": "Amigo removido."
-  },
-  "helpRequests": {
-    "title": "Pedidos de Ajuda",
-    "subtitle": "Pessoas precisando de apoio espiritual e oração. Atenda com amor.",
-    "loading": "Carregando...",
-    "empty": "Nenhum pedido de ajuda no momento. Glória a Deus!",
-    "justNow": "agora",
-    "filter_all": "Todos",
-    "filter_pending": "Pendentes",
-    "filter_in_progress": "Em andamento",
-    "filter_resolved": "Resolvidos",
-    "markInProgress": "Estou atendendo",
-    "markResolved": "Resolvido",
-    "resolved": "Atendido" 
-  },
-  "profile": {
-    "title": "Perfil",
-    "memberSince": "Membro desde",
-    "editProfile": "Editar Perfil",
-    "prayers": "Orações",
-    "posts": "Publicações",
-    "friends": "Amigos",
-    "bio": "Sobre",
-    "noBio": "Nenhuma bio ainda",
-    "save": "Salvar",
-    "cancel": "Cancelar"
-  }
+﻿{
+    "brand":  "Sigo com FÃ©",
+    "nav":  {
+                "prayers":  "OraÃ§Ãµes",
+                "mural":  "Mural",
+                "live":  "Ao Vivo",
+                "churches":  "Igrejas",
+                "registerChurch":  "Cadastrar Igreja",
+                "kids":  "Kids",
+                "helpRequests":  "Pedidos de Ajuda",
+                "dashboard":  "Dashboard",
+                "hello":  "OlÃ¡, {{name}}",
+                "logout":  "Sair",
+                "login":  "Entrar",
+                "register":  "Cadastrar",
+                "chatPastoral":  "Chat Pastoral",
+                "pastoralAI":  "IA Pastoral",
+                "friends":  "Amigos",
+                "bibleAI":  "IA BÃ­blica",
+                "messages":  "Mensagens",
+                "groups":  "Grupos",
+                "consecration":  "Consagração",
+                "members":  "Membros",
+                "offerings":  "Ofertas",
+                "notifications":  "Notificações",
+                "myProfile":  "Meu Perfil"
+            },
+    "footer":  "Â© 2026 Sigo com FÃ© - Tecnologia a serviÃ§o do Reino",
+    "home":  {
+                 "subtitle":  "Ore, conecte-se e fortaleÃ§a sua fÃ© com milhares de irmÃ£os ao redor do mundo.",
+                 "startNow":  "Comece Agora",
+                 "seePrayerRequests":  "Ver Pedidos de OraÃ§Ã£o",
+                 "churchPraying_one":  "{{count}} igreja orando agora!",
+                 "churchPraying_other":  "{{count}} igrejas orando agora!",
+                 "featurePrayers":  "Pedidos de OraÃ§Ã£o",
+                 "featurePrayersDesc":  "Compartilhe seus pedidos e ore pelos irmÃ£os. Veja o poder da oraÃ§Ã£o coletiva e celebre as vitÃ³rias!",
+                 "featureLive":  "Pastor Orando ao Vivo",
+                 "featureLiveDesc":  "Saiba quando seu pastor estÃ¡ orando em tempo real. Bolhas de oraÃ§Ã£o sobem como incenso ao cÃ©u.",
+                 "featureMap":  "Mapa de Igrejas",
+                 "featureMapDesc":  "Encontre igrejas em qualquer cidade. Perfeito para viajantes e famÃ­lias em mudanÃ§a.",
+                 "featureDashboard":  "Dashboard Pastoral",
+                 "featureDashboardDesc":  "Ferramentas completas de gestÃ£o para pastores: membros, finanÃ§as, campanhas e muito mais.",
+                 "featureMural":  "Mural da Comunidade",
+                 "featureMuralDesc":  "Compartilhe testemunhos, louvores e versÃ­culos com a comunidade cristÃ£.",
+                 "featureKids":  "Cantinho Kids",
+                 "featureKidsDesc":  "HistÃ³rias bÃ­blicas, quiz interativo e atividades para as crianÃ§as aprenderem sobre a BÃ­blia!",
+                 "featureChurch":  "Cadastre Sua Igreja",
+                 "featureChurchDesc":  "Registre sua igreja na plataforma e conecte-se com fiÃ©is de todo o mundo.",
+                 "explore":  "Explorar",
+                 "registerBtn":  "Cadastrar",
+                 "helpTitle":  "Precisa de Ajuda?",
+                 "helpSubtitle":  "VocÃª nÃ£o estÃ¡ sozinho. Uma igreja pode te ajudar.",
+                 "helpSeeThings":  "ðŸ‘ï¸ Vejo coisas",
+                 "helpHearThings":  "ðŸ‘‚ Escuto barulhos",
+                 "helpFeelAlone":  "ðŸ’” Me sinto sozinho(a)",
+                 "helpNeedPrayer":  "ðŸ™ Preciso de oraÃ§Ã£o",
+                 "helpAnxious":  "ðŸ˜° Estou ansioso(a)",
+                 "helpDepressed":  "ðŸ˜¢ Estou triste/deprimido(a)",
+                 "helpSent":  "âœ… Seu pedido foi enviado! Uma igreja prÃ³xima entrarÃ¡ em contato para te ajudar. Deus te abenÃ§oe! ðŸ™",
+                 "helpNamePlaceholder":  "Seu nome (opcional)",
+                 "helpContactPlaceholder":  "Telefone ou email para contato",
+                 "helpMessagePlaceholder":  "Conte um pouco mais sobre o que estÃ¡ sentindo...",
+                 "helpSend":  "Pedir Ajuda",
+                 "helpBtn":  "Pedir Ajuda",
+                 "verses":  [
+                                {
+                                    "text":  "Porque onde estiverem dois ou trÃªs reunidos em meu nome, ali estou no meio deles.",
+                                    "ref":  "Mateus 18:20"
+                                },
+                                {
+                                    "text":  "Tudo posso naquele que me fortalece.",
+                                    "ref":  "Filipenses 4:13"
+                                },
+                                {
+                                    "text":  "O Senhor Ã© o meu pastor; nada me faltarÃ¡.",
+                                    "ref":  "Salmos 23:1"
+                                },
+                                {
+                                    "text":  "Confie no Senhor de todo o seu coraÃ§Ã£o e nÃ£o se apoie no seu prÃ³prio entendimento.",
+                                    "ref":  "ProvÃ©rbios 3:5"
+                                },
+                                {
+                                    "text":  "Pois eu sei os planos que tenho para vocÃªs, planos de dar a vocÃªs esperanÃ§a e um futuro.",
+                                    "ref":  "Jeremias 29:11"
+                                },
+                                {
+                                    "text":  "Sejam fortes e corajosos. NÃ£o tenham medo, pois o Senhor estarÃ¡ com vocÃªs.",
+                                    "ref":  "DeuteronÃ´mio 31:6"
+                                },
+                                {
+                                    "text":  "A oraÃ§Ã£o de um justo Ã© poderosa e eficaz.",
+                                    "ref":  "Tiago 5:16"
+                                }
+                            ]
+             },
+    "login":  {
+                  "welcomeBack":  "Bem-vindo de volta!",
+                  "email":  "Email",
+                  "emailPlaceholder":  "seu@email.com",
+                  "password":  "Senha",
+                  "passwordPlaceholder":  "Sua senha",
+                  "submit":  "Entrar",
+                  "or":  "ou",
+                  "google":  "Entrar com Google",
+                  "facebook":  "Entrar com Facebook",
+                  "phone":  "Entrar com Telefone",
+                  "phoneNumber":  "NÃºmero de telefone",
+                  "sendCode":  "Enviar cÃ³digo",
+                  "verifyCode":  "Verificar cÃ³digo",
+                  "codeSent":  "CÃ³digo enviado!",
+                  "codePlaceholder":  "CÃ³digo de 6 dÃ­gitos",
+                  "noAccount":  "NÃ£o tem conta?",
+                  "signUp":  "Cadastre-se"
+              },
+    "register":  {
+                     "joinCommunity":  "Junte-se Ã  comunidade!",
+                     "fullName":  "Nome Completo",
+                     "fullNamePlaceholder":  "Seu nome completo",
+                     "email":  "Email",
+                     "emailPlaceholder":  "seu@email.com",
+                     "password":  "Senha",
+                     "passwordPlaceholder":  "MÃ­nimo 6 caracteres",
+                     "passwordError":  "A senha deve ter no mÃ­nimo 6 caracteres",
+                     "iAm":  "Eu sou:",
+                     "member":  "Membro / Fiel",
+                     "pastor":  "Pastor / LÃ­der",
+                     "submit":  "Cadastrar",
+                     "or":  "ou",
+                     "google":  "Cadastrar com Google",
+                     "facebook":  "Cadastrar com Facebook",
+                     "phone":  "Cadastrar com Telefone",
+                     "hasAccount":  "JÃ¡ tem conta?",
+                     "signIn":  "Entrar"
+                 },
+    "prayerFeed":  {
+                       "victoryWall":  "Mural de VitÃ³rias",
+                       "prayerRequests":  "Pedidos de OraÃ§Ã£o",
+                       "newRequest":  "Novo Pedido",
+                       "allRequests":  "Todos os Pedidos",
+                       "answeredPrayers":  "OraÃ§Ãµes Respondidas",
+                       "newPrayerRequest":  "Novo Pedido de OraÃ§Ã£o",
+                       "titleOptional":  "TÃ­tulo (opcional)",
+                       "titlePlaceholder":  "Ex: OraÃ§Ã£o pela minha famÃ­lia",
+                       "yourRequest":  "Seu pedido *",
+                       "requestPlaceholder":  "Compartilhe seu pedido de oraÃ§Ã£o...",
+                       "category":  "Categoria",
+                       "urgentRequest":  "Pedido urgente",
+                       "submitRequest":  "Enviar Pedido",
+                       "loading":  "Carregando oraÃ§Ãµes...",
+                       "noRequests":  "Nenhum pedido de oraÃ§Ã£o ainda. Seja o primeiro!",
+                       "categories":  {
+                                          "all":  "Todas",
+                                          "health":  "SaÃºde",
+                                          "work_finance":  "Trabalho/FinanÃ§as",
+                                          "family":  "FamÃ­lia",
+                                          "studies":  "Estudos",
+                                          "housing":  "Moradia",
+                                          "emotional":  "Emocional",
+                                          "decisions":  "DecisÃµes",
+                                          "other":  "Outros"
+                                      }
+                   },
+    "livePrayer":  {
+                       "title":  "OraÃ§Ã£o ao Vivo",
+                       "churchPraying_one":  "igreja orando",
+                       "churchPraying_other":  "igrejas orando",
+                       "rightNow":  "neste momento",
+                       "closeOverlay":  "Fechar Overlay",
+                       "immersiveView":  "Ver OraÃ§Ã£o Imersiva",
+                       "pastorPanel":  "Painel do Pastor",
+                       "focusOptional":  "Foco da oraÃ§Ã£o (opcional)",
+                       "focusPlaceholder":  "Ex: Orando pelas famÃ­lias",
+                       "startLive":  "Iniciar OraÃ§Ã£o ao Vivo",
+                       "prayingLive":  "VocÃª estÃ¡ orando ao vivo...",
+                       "endPrayer":  "Encerrar OraÃ§Ã£o",
+                       "pastorsPraying":  "Pastores orando agora:",
+                       "noPastors":  "Nenhum pastor orando ao vivo neste momento.",
+                       "comeBack":  "Volte em breve!"
+                   },
+    "churchMap":  {
+                      "title":  "Mapa de Igrejas",
+                      "searchPlaceholder":  "Buscar por cidade, paÃ­s ou nome...",
+                      "search":  "Buscar",
+                      "searching":  "Buscando igrejas...",
+                      "noResults":  "Nenhuma igreja encontrada para \"{{query}}\". Cadastre a sua!"
+                  },
+    "churchRegister":  {
+                           "title":  "Cadastrar Igreja",
+                           "subtitle":  "Registre sua igreja na plataforma Sigo com FÃ©",
+                           "churchName":  "Nome da Igreja *",
+                           "churchNamePlaceholder":  "Ex: Igreja Batista Central",
+                           "denomination":  "DenominaÃ§Ã£o",
+                           "denominationPlaceholder":  "Ex: Batista, Assembleia de Deus, etc.",
+                           "address":  "EndereÃ§o",
+                           "addressPlaceholder":  "Rua, nÃºmero, bairro",
+                           "city":  "Cidade",
+                           "cityPlaceholder":  "Sua cidade",
+                           "country":  "PaÃ­s",
+                           "countryPlaceholder":  "PaÃ­s",
+                           "phone":  "Telefone",
+                           "phonePlaceholder":  "+55 11 99999-9999",
+                           "pastorName":  "Nome do Pastor",
+                           "pastorNamePlaceholder":  "Nome do pastor responsÃ¡vel",
+                           "submit":  "Cadastrar Igreja",
+                           "submitting":  "Cadastrando...",
+                           "success":  "Igreja Cadastrada!",
+                           "redirecting":  "Redirecionando para o mapa de igrejas...",
+                           "nameRequired":  "Nome da igreja Ã© obrigatÃ³rio",
+                           "loginRequired":  "VocÃª precisa estar logado para cadastrar uma igreja.",
+                           "error":  "Erro ao cadastrar"
+                       },
+    "dashboard":  {
+                      "title":  "Dashboard",
+                      "loading":  "Carregando dados...",
+                      "users":  "UsuÃ¡rios",
+                      "churches":  "Igrejas",
+                      "prayerRequests":  "Pedidos de OraÃ§Ã£o",
+                      "answeredPrayers":  "OraÃ§Ãµes Respondidas",
+                      "quickActions":  "AÃ§Ãµes RÃ¡pidas",
+                      "newPrayerRequest":  "Novo Pedido de OraÃ§Ã£o",
+                      "registerChurch":  "Cadastrar Igreja",
+                      "kidsCorner":  "Cantinho Kids",
+                      "recentActivity":  "Atividade Recente",
+                      "requestedPrayer":  "pediu oraÃ§Ã£o:",
+                      "noActivity":  "Nenhuma atividade recente. Comece criando um pedido de oraÃ§Ã£o!",
+                      "viewAll":  "Ver todos os pedidos"
+                  },
+    "mural":  {
+                  "title":  "Mural da Comunidade",
+                  "subtitle":  "Compartilhe testemunhos, louvores e versÃ­culos com a comunidade cristÃ£",
+                  "newPost":  "Novo Post",
+                  "cancel":  "Cancelar",
+                  "shareWithCommunity":  "Compartilhar com a Comunidade",
+                  "categoryLabel":  "Categoria",
+                  "message":  "Mensagem",
+                  "messagePlaceholder":  "Escreva seu testemunho, reflexÃ£o ou versÃ­culo...",
+                  "publish":  "Publicar",
+                  "noPostsFound":  "Nenhuma publicaÃ§Ã£o encontrada nesta categoria.",
+                  "filters":  {
+                                  "all":  "Todas",
+                                  "myChurch":  "Minha Igreja",
+                                  "testimonies":  "Testemunhos",
+                                  "worship":  "Louvores",
+                                  "verses":  "VersÃ­culos"
+                              },
+                  "categories":  {
+                                     "testemunho":  "Testemunho",
+                                     "louvor":  "Louvor / VÃ­deo",
+                                     "reflexao":  "ReflexÃ£o BÃ­blica",
+                                     "versiculo":  "VersÃ­culo",
+                                     "foto":  "Foto"
+                                 }
+              },
+    "kids":  {
+                 "title":  "Escola Dominical Digital",
+                 "subtitle":  "Aprenda sobre a BÃ­blia de um jeito divertido!",
+                 "bibleStories":  "HistÃ³rias BÃ­blicas",
+                 "readStory":  "Ler HistÃ³ria",
+                 "years":  "anos",
+                 "bibleQuiz":  "Quiz BÃ­blico",
+                 "question":  "Pergunta {{current}} de {{total}}",
+                 "congrats":  "ParabÃ©ns!",
+                 "scoreResult":  "VocÃª acertou \u003cstrong\u003e{{score}}\u003c/strong\u003e de \u003cstrong\u003e{{total}}\u003c/strong\u003e!",
+                 "perfect":  "Perfeito! VocÃª Ã© um campeÃ£o da BÃ­blia!",
+                 "good":  "Muito bem! Continue estudando!",
+                 "tryAgain":  "NÃ£o desista! Tente de novo!",
+                 "playAgain":  "Jogar de Novo",
+                 "weekVerse":  "VersÃ­culo da Semana",
+                 "weekVerseText":  "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigÃªnito, para que todo aquele que nele crÃª nÃ£o pereÃ§a, mas tenha a vida eterna.",
+                 "weekVerseRef":  "- JoÃ£o 3:16",
+                 "memorized":  "Memorizado!",
+                 "memorize":  "JÃ¡ memorizei!",
+                 "activities":  "Atividades",
+                 "comingSoon":  "Em breve!",
+                 "stories":  [
+                                 {
+                                     "title":  "Davi e Golias",
+                                     "desc":  "Um menino corajoso que venceu um gigante com uma pedra e muita fÃ© em Deus",
+                                     "age":  "6-8"
+                                 },
+                                 {
+                                     "title":  "A Arca de NoÃ©",
+                                     "desc":  "NoÃ© construiu um barco enorme e salvou todos os animais do grande dilÃºvio",
+                                     "age":  "3-5"
+                                 },
+                                 {
+                                     "title":  "Jonas e a Baleia",
+                                     "desc":  "Jonas fugiu de Deus mas aprendeu que Ele estÃ¡ em todo lugar",
+                                     "age":  "6-8"
+                                 },
+                                 {
+                                     "title":  "Daniel na Cova dos LeÃµes",
+                                     "desc":  "Daniel orou com fÃ© e Deus fechou a boca dos leÃµes",
+                                     "age":  "9-12"
+                                 },
+                                 {
+                                     "title":  "MoisÃ©s e o Mar Vermelho",
+                                     "desc":  "Deus abriu o mar para Seu povo passar em seguranÃ§a",
+                                     "age":  "6-8"
+                                 }
+                             ],
+                 "quiz":  [
+                              {
+                                  "q":  "Quem derrotou o gigante Golias?",
+                                  "opts":  [
+                                               "Saul",
+                                               "Davi",
+                                               "MoisÃ©s",
+                                               "JosuÃ©"
+                                           ]
+                              },
+                              {
+                                  "q":  "Quantos dias durou o dilÃºvio?",
+                                  "opts":  [
+                                               "10 dias",
+                                               "20 dias",
+                                               "40 dias",
+                                               "100 dias"
+                                           ]
+                              },
+                              {
+                                  "q":  "Quem foi jogado na cova dos leÃµes?",
+                                  "opts":  [
+                                               "Jonas",
+                                               "Daniel",
+                                               "Paulo",
+                                               "Pedro"
+                                           ]
+                              },
+                              {
+                                  "q":  "Qual o primeiro livro da BÃ­blia?",
+                                  "opts":  [
+                                               "ÃŠxodo",
+                                               "Salmos",
+                                               "GÃªnesis",
+                                               "Mateus"
+                                           ]
+                              },
+                              {
+                                  "q":  "Jesus nasceu em qual cidade?",
+                                  "opts":  [
+                                               "JerusalÃ©m",
+                                               "NazarÃ©",
+                                               "BelÃ©m",
+                                               "Cafarnaum"
+                                           ]
+                              }
+                          ],
+                 "activityList":  [
+                                      {
+                                          "title":  "Colorir",
+                                          "desc":  "Pinte personagens bÃ­blicos com cores lindas"
+                                      },
+                                      {
+                                          "title":  "CaÃ§a-Palavras",
+                                          "desc":  "Encontre palavras da BÃ­blia escondidas"
+                                      },
+                                      {
+                                          "title":  "Jogo da MemÃ³ria",
+                                          "desc":  "Encontre os pares dos 12 apÃ³stolos"
+                                      },
+                                      {
+                                          "title":  "Quebra-CabeÃ§a",
+                                          "desc":  "Monte cenas bÃ­blicas incrÃ­veis"
+                                      }
+                                  ]
+             },
+    "feedPost":  {
+                     "tapToWatch":  "Toque para assistir",
+                     "photo":  "Foto",
+                     "amem":  "AmÃ©m",
+                     "share":  "Partilhar"
+                 },
+    "prayerCard":  {
+                       "urgent":  "URGENTE",
+                       "testimony":  "Testemunho:",
+                       "personPraying_one":  "{{count}} pessoa orando",
+                       "personPraying_other":  "{{count}} pessoas orando",
+                       "timeAgo":  {
+                                       "min":  "{{count}}min atrÃ¡s",
+                                       "hour":  "{{count}}h atrÃ¡s",
+                                       "day":  "{{count}}d atrÃ¡s"
+                                   },
+                       "categories":  {
+                                          "health":  "SaÃºde",
+                                          "work_finance":  "Trabalho/FinanÃ§as",
+                                          "family":  "FamÃ­lia",
+                                          "studies":  "Estudos",
+                                          "housing":  "Moradia",
+                                          "emotional":  "Emocional",
+                                          "decisions":  "DecisÃµes",
+                                          "other":  "Outros"
+                                      }
+                   },
+    "amemButton":  {
+                       "praying":  "Estou Orando!",
+                       "prayForYou":  "Estou Orando por VocÃª"
+                   },
+    "pastorOverlay":  {
+                          "title":  "Pastores Orando ao Vivo",
+                          "churchesInPrayer_one":  "{{count}} igreja em oraÃ§Ã£o neste momento",
+                          "churchesInPrayer_other":  "{{count}} igrejas em oraÃ§Ã£o neste momento",
+                          "close":  "Fechar"
+                      },
+    "churchPin":  {
+                      "pastor":  "Pastor {{name}}",
+                      "members":  "{{count}} membros",
+                      "following":  "Seguindo",
+                      "follow":  "Seguir",
+                      "directions":  "Como Chegar",
+                      "share":  "Compartilhar",
+                      "shareText":  "ConheÃ§a {{name}} no Sigo com FÃ©!"
+                  },
+    "langSwitcher":  {
+                         "label":  "Idioma"
+                     },
+    "pastorChat":  {
+                       "title":  "Chat Pastoral",
+                       "subtitle":  "Converse diretamente com um pastor. TraduÃ§Ã£o automÃ¡tica incluÃ­da.",
+                       "yourName":  "Seu nome",
+                       "selectHelp":  "O que vocÃª precisa?",
+                       "selectLanguage":  "Seu idioma",
+                       "startChat":  "Iniciar Conversa",
+                       "anyChurch":  "Qualquer igreja disponï¿½vel",
+                       "waiting":  "Aguardando um pastor...",
+                       "waitingDesc":  "Um pastor vai entrar na conversa em breve. Tenha fÃ©!",
+                       "imPastor":  "Sou Pastor",
+                       "imPerson":  "Preciso de Ajuda",
+                       "waitingRooms":  "Pessoas aguardando",
+                       "noWaiting":  "Nenhuma pessoa aguardando no momento.",
+                       "joinChat":  "Atender",
+                       "pastorName":  "Seu nome (pastor)",
+                       "endChat":  "Encerrar conversa",
+                       "chatEnded":  "Conversa encerrada. Deus abenÃ§oe!",
+                       "typeMessage":  "Digite sua mensagem...",
+                       "send":  "Enviar",
+                       "typing":  "digitando...",
+                       "translated":  "TraduÃ§Ã£o",
+                       "joinedChat":  "entrou na conversa",
+                       "leftChat":  "saiu da conversa",
+                       "langPt":  "PortuguÃªs",
+                       "langEn":  "English",
+                       "langEs":  "EspaÃ±ol",
+                       "langDe":  "Deutsch",
+                       "autoTranslate":  "ðŸŒ TraduÃ§Ã£o automÃ¡tica ativada"
+                   },
+    "friends":  {
+                    "title":  "Amigos",
+                    "search":  "Buscar",
+                    "myFriends":  "Meus Amigos",
+                    "requests":  "Pedidos",
+                    "addFriend":  "Adicionar",
+                    "pending":  "Pendente",
+                    "accept":  "Aceitar",
+                    "reject":  "Rejeitar",
+                    "removeFriend":  "Remover",
+                    "noFriends":  "VocÃª ainda nÃ£o tem amigos. Busque pessoas para se conectar!",
+                    "noRequests":  "Nenhum pedido de amizade pendente.",
+                    "searchPlaceholder":  "Buscar por nome...",
+                    "requestSent":  "Pedido de amizade enviado!",
+                    "friendAdded":  "Amizade aceita!",
+                    "friendRemoved":  "Amigo removido."
+                },
+    "helpRequests":  {
+                         "title":  "Pedidos de Ajuda",
+                         "subtitle":  "Pessoas precisando de apoio espiritual e oraÃ§Ã£o. Atenda com amor.",
+                         "loading":  "Carregando...",
+                         "empty":  "Nenhum pedido de ajuda no momento. GlÃ³ria a Deus!",
+                         "justNow":  "agora",
+                         "filter_all":  "Todos",
+                         "filter_pending":  "Pendentes",
+                         "filter_in_progress":  "Em andamento",
+                         "filter_resolved":  "Resolvidos",
+                         "markInProgress":  "Estou atendendo",
+                         "markResolved":  "Resolvido",
+                         "resolved":  "Atendido"
+                     },
+    "profile":  {
+                    "title":  "Perfil",
+                    "memberSince":  "Membro desde",
+                    "editProfile":  "Editar Perfil",
+                    "prayers":  "OraÃ§Ãµes",
+                    "posts":  "PublicaÃ§Ãµes",
+                    "friends":  "Amigos",
+                    "bio":  "Sobre",
+                    "noBio":  "Nenhuma bio ainda",
+                    "save":  "Salvar",
+                    "cancel":  "Cancelar"
+                }
 }
