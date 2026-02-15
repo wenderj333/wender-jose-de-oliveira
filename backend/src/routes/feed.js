@@ -17,7 +17,7 @@ cloudinary.config({
 // Multer: store in memory for Cloudinary upload
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 50 * 1024 * 1024 },
+  limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (/^(image\/(jpeg|png|gif|webp)|video\/(mp4|webm|quicktime))$/.test(file.mimetype)) cb(null, true);
     else cb(new Error('Apenas imagens e vídeos são permitidos'));
@@ -29,7 +29,7 @@ function uploadToCloudinary(buffer, mimetype) {
   return new Promise((resolve, reject) => {
     const resourceType = mimetype.startsWith('video/') ? 'video' : 'image';
     const stream = cloudinary.uploader.upload_stream(
-      { folder: 'sigo-com-fe/posts', resource_type: resourceType },
+      { folder: 'sigo-com-fe/posts', resource_type: resourceType, timeout: 120000 },
       (err, result) => {
         if (err) reject(err);
         else resolve(result);
@@ -38,6 +38,22 @@ function uploadToCloudinary(buffer, mimetype) {
     stream.end(buffer);
   });
 }
+
+// GET /api/feed/cloudinary-signature — para upload direto do frontend (vídeos grandes)
+router.get('/cloudinary-signature', authenticate, (req, res) => {
+  const timestamp = Math.round(Date.now() / 1000);
+  const signature = cloudinary.utils.api_sign_request(
+    { timestamp, folder: 'sigo-com-fe/posts' },
+    process.env.CLOUDINARY_API_SECRET || '7Eu52T0NYAAy2hmXHl0i4C0TgUo'
+  );
+  res.json({
+    signature,
+    timestamp,
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || 'degxiuf43',
+    apiKey: process.env.CLOUDINARY_API_KEY || '914835643241235',
+    folder: 'sigo-com-fe/posts',
+  });
+});
 
 // GET /api/feed — list all posts (newest first, paginated)
 router.get('/', async (req, res) => {
@@ -97,8 +113,10 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
       return res.status(400).json({ error: 'Conteúdo é obrigatório' });
     }
 
-    let mediaUrl = null;
-    let mediaType = null;
+    let mediaUrl = req.body.media_url || null;
+    let mediaType = req.body.media_type || null;
+
+    // Se veio arquivo via multer (upload pequeno pelo backend)
     if (req.file) {
       try {
         const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);

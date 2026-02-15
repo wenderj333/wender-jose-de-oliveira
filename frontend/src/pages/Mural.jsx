@@ -82,15 +82,57 @@ export default function Mural() {
     }
   }
 
+  // Upload direto ao Cloudinary (para vídeos grandes que dariam timeout no backend)
+  async function uploadDirectToCloudinary(file) {
+    // Pegar assinatura do backend
+    const sigRes = await fetch(`${API}/feed/cloudinary-signature`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const { signature, timestamp, cloudName, apiKey, folder } = await sigRes.json();
+
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('api_key', apiKey);
+    fd.append('timestamp', timestamp);
+    fd.append('signature', signature);
+    fd.append('folder', folder);
+    fd.append('resource_type', 'video');
+
+    const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/video/upload`, {
+      method: 'POST',
+      body: fd,
+    });
+    const result = await uploadRes.json();
+    if (result.error) throw new Error(result.error.message);
+    return result.secure_url;
+  }
+
   async function handlePost(e) {
     e.preventDefault();
     if (!newText.trim() || !token) return;
     setPosting(true);
     try {
+      let directMediaUrl = null;
+      let directMediaType = null;
+
+      // Vídeos: upload direto ao Cloudinary (evita timeout do Render)
+      if (newMedia && newMedia.type.startsWith('video/')) {
+        directMediaUrl = await uploadDirectToCloudinary(newMedia);
+        directMediaType = 'video';
+      }
+
       const formData = new FormData();
       formData.append('content', newText);
       formData.append('category', newCategory);
-      if (newMedia) formData.append('image', newMedia);
+
+      if (directMediaUrl) {
+        // Vídeo já foi enviado direto ao Cloudinary
+        formData.append('media_url', directMediaUrl);
+        formData.append('media_type', directMediaType);
+      } else if (newMedia) {
+        // Imagem: upload via backend (rápido)
+        formData.append('image', newMedia);
+      }
 
       const res = await fetch(`${API}/feed`, {
         method: 'POST',
@@ -99,7 +141,6 @@ export default function Mural() {
       });
       const data = await res.json();
       if (data.post) {
-        // Add author info
         data.post.author_name = user.full_name;
         data.post.author_avatar = user.avatar_url;
         setPosts(prev => [data.post, ...prev]);
@@ -111,6 +152,7 @@ export default function Mural() {
       }
     } catch (err) {
       console.error('Error creating post:', err);
+      alert('Erro ao publicar. Tente novamente.');
     } finally {
       setPosting(false);
     }
