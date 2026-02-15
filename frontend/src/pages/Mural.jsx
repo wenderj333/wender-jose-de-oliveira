@@ -82,8 +82,11 @@ export default function Mural() {
     }
   }
 
-  // Upload direto ao Cloudinary (para vídeos grandes que dariam timeout no backend)
+  // Upload direto ao Cloudinary (evita timeout do Render Free)
   async function uploadDirectToCloudinary(file) {
+    const isVid = file.type.startsWith('video/');
+    const resourceType = isVid ? 'video' : 'image';
+
     // Pegar assinatura do backend
     const sigRes = await fetch(`${API}/feed/cloudinary-signature`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -96,15 +99,14 @@ export default function Mural() {
     fd.append('timestamp', timestamp);
     fd.append('signature', signature);
     fd.append('folder', folder);
-    fd.append('resource_type', 'video');
 
-    const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/video/upload`, {
+    const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`, {
       method: 'POST',
       body: fd,
     });
     const result = await uploadRes.json();
     if (result.error) throw new Error(result.error.message);
-    return result.secure_url;
+    return { url: result.secure_url, type: resourceType };
   }
 
   async function handlePost(e) {
@@ -112,26 +114,15 @@ export default function Mural() {
     if (!newText.trim() || !token) return;
     setPosting(true);
     try {
-      let directMediaUrl = null;
-      let directMediaType = null;
-
-      // Vídeos: upload direto ao Cloudinary (evita timeout do Render)
-      if (newMedia && newMedia.type.startsWith('video/')) {
-        directMediaUrl = await uploadDirectToCloudinary(newMedia);
-        directMediaType = 'video';
-      }
-
       const formData = new FormData();
       formData.append('content', newText);
       formData.append('category', newCategory);
 
-      if (directMediaUrl) {
-        // Vídeo já foi enviado direto ao Cloudinary
-        formData.append('media_url', directMediaUrl);
-        formData.append('media_type', directMediaType);
-      } else if (newMedia) {
-        // Imagem: upload via backend (rápido)
-        formData.append('image', newMedia);
+      // Upload mídia direto ao Cloudinary (fotos E vídeos)
+      if (newMedia) {
+        const result = await uploadDirectToCloudinary(newMedia);
+        formData.append('media_url', result.url);
+        formData.append('media_type', result.type);
       }
 
       const res = await fetch(`${API}/feed`, {
