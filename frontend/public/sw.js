@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sigocomfe-v2';
+const CACHE_NAME = 'sigocomfe-v3';
 const STATIC_ASSETS = ['/', '/icon.svg', '/favicon.svg', '/manifest.json'];
 
 self.addEventListener('install', (event) => {
@@ -58,5 +58,26 @@ self.addEventListener('fetch', (event) => {
   // Default: network with cache fallback
   event.respondWith(
     fetch(request).catch(() => caches.match(request))
+  );
+});
+
+// Push notifications
+self.addEventListener('push', (event) => {
+  const data = event.data ? event.data.json() : { title: 'Sigo com Fé', body: 'Nova notificação!' };
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'Sigo com Fé', {
+      body: data.body || '',
+      icon: '/icon-192.png',
+      badge: '/icon-192.png',
+      data: data.url || '/',
+      vibrate: [200, 100, 200],
+    })
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow(event.notification.data || '/')
   );
 });

@@ -16,7 +16,7 @@ const CATEGORIES = [
 
 function isVideo(url) {
   if (!url) return false;
-  return /\.(mp4|webm|mov)$/i.test(url);
+  return /\.(mp4|webm|mov)/i.test(url) || url.includes('/video/') || url.includes('resource_type=video');
 }
 
 function timeAgo(dateStr) {
@@ -47,7 +47,13 @@ export default function Mural() {
   const [posting, setPosting] = useState(false);
   const fileRef = useRef(null);
 
-  useEffect(() => { fetchPosts(); }, []);
+  useEffect(() => {
+    fetchPosts();
+    // Request push notification permission
+    if ('Notification' in window && Notification.permission === 'default') {
+      setTimeout(() => Notification.requestPermission(), 3000);
+    }
+  }, []);
 
   async function fetchPosts() {
     try {
@@ -289,7 +295,7 @@ export default function Mural() {
               {/* Media — image or video */}
               {post.media_url && (
                 <div style={{ width: '100%' }}>
-                  {isVideo(post.media_url) ? (
+                  {(post.media_type === 'video' || isVideo(post.media_url)) ? (
                     <video
                       src={getMediaUrl(post.media_url)}
                       controls
@@ -328,6 +334,22 @@ export default function Mural() {
                 }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#999', fontSize: '0.8rem' }}>
                   <Share2 size={18} /> Compartilhar
                 </button>
+                {user && post.author_id !== user.id && (
+                  <button onClick={async () => {
+                    if (confirm('Denunciar este post como inadequado?')) {
+                      try {
+                        await fetch(`${API}/feed/${post.id}/report`, {
+                          method: 'POST',
+                          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ reason: 'Conteúdo inadequado' }),
+                        });
+                        alert('Post denunciado! Os moderadores irão avaliar.');
+                      } catch (err) { console.error(err); }
+                    }
+                  }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#ccc', fontSize: '0.75rem', marginLeft: 'auto' }}>
+                    ⚠️
+                  </button>
+                )}
               </div>
               {/* Comments section */}
               {post.showComments && user && (

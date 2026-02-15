@@ -114,15 +114,44 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
 
     // Insert and get the created post
     const result = await db.prepare(
-      `INSERT INTO feed_posts (author_id, content, category, media_url, verse_reference, visibility)
-       VALUES (?, ?, ?, ?, ?, ?) RETURNING *`
-    ).get(req.user.id, content, cat, mediaUrl, verse_reference || null, vis);
+      `INSERT INTO feed_posts (author_id, content, category, media_url, media_type, verse_reference, visibility)
+       VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *`
+    ).get(req.user.id, content, cat, mediaUrl, mediaType, verse_reference || null, vis);
 
     res.status(201).json({ post: result });
   } catch (err) {
     console.error('Erro ao criar publicação:', err);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
+});
+
+// POST /api/feed/:id/report — report/flag a post
+router.post('/:id/report', authenticate, async (req, res) => {
+  try {
+    await db.prepare('UPDATE feed_posts SET is_flagged = true, flag_reason = ? WHERE id = ?')
+      .run(req.body.reason || 'Conteúdo inadequado', req.params.id);
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// GET /api/feed/flagged — pastor/admin: see flagged posts
+router.get('/flagged', authenticate, async (req, res) => {
+  try {
+    if (req.user.role !== 'pastor' && req.user.role !== 'admin') return res.status(403).json({ error: 'Sem permissão' });
+    const posts = await db.prepare(
+      `SELECT fp.*, u.full_name AS author_name FROM feed_posts fp JOIN users u ON u.id = fp.author_id WHERE fp.is_flagged = true ORDER BY fp.created_at DESC`
+    ).all();
+    res.json({ posts });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// DELETE /api/feed/:id/moderate — pastor/admin: remove flagged post
+router.delete('/:id/moderate', authenticate, async (req, res) => {
+  try {
+    if (req.user.role !== 'pastor' && req.user.role !== 'admin') return res.status(403).json({ error: 'Sem permissão' });
+    await db.prepare('DELETE FROM feed_posts WHERE id = ?').run(req.params.id);
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 // DELETE /api/feed/:id — delete own post
