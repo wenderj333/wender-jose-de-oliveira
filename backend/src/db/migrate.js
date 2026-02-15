@@ -358,7 +358,23 @@ async function migrate() {
     CREATE INDEX IF NOT EXISTS idx_consecrations_user ON consecrations(user_id, created_at DESC);
   `);
 
-  console.log('✅ Migração PostgreSQL concluída com sucesso! (19+ tabelas criadas)');
+  // ============ RELATÓRIOS DE PROBLEMAS TÉCNICOS ============
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS technical_issues (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      reporter_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      issue_type VARCHAR(50) DEFAULT 'bug' CHECK (issue_type IN ('bug', 'feature_request', 'other')),
+      description TEXT NOT NULL,
+      severity VARCHAR(20) DEFAULT 'medium' CHECK (severity IN ('low', 'medium', 'high', 'critical')),
+      status VARCHAR(20) DEFAULT 'open' CHECK (status IN ('open', 'in_progress', 'resolved', 'closed')),
+      assigned_to UUID REFERENCES users(id),
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_technical_issues_status ON technical_issues(status);
+  `);
+
+  console.log('✅ Migração PostgreSQL concluída com sucesso! (20+ tabelas criadas)');
   await pool.end();
 }
 

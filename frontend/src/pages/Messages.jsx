@@ -30,7 +30,15 @@ export default function Messages() {
   const chatEndRef = useRef(null);
   const pollRef = useRef(null);
 
-  useEffect(() => { fetchConversations(); }, []);
+  useEffect(() => {
+    fetchConversations();
+    // Mark all notifications as read when opening messages
+    if (token) {
+      fetch(`${API}/notifications/read-all`, {
+        method: 'POST', headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => {});
+    }
+  }, []);
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
   // Poll for new messages every 5 seconds when in a chat
