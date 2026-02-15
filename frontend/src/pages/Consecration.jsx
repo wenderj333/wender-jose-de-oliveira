@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { Flame, ChevronDown, ChevronUp, User } from 'lucide-react';
 
@@ -108,6 +109,7 @@ function timeAgo(d) {
 }
 
 export default function Consecration() {
+  const { t } = useTranslation();
   const { user, token } = useAuth();
   const [stats, setStats] = useState({ totalConsecrations: 0, todayFasting: 0, recent: [] });
   const [loading, setLoading] = useState(true);
@@ -128,7 +130,7 @@ export default function Consecration() {
   }
 
   async function handleConsecrate() {
-    if (!user) { alert('Faça login para consagrar!'); return; }
+    if (!user) { alert(t('consecration.loginRequired')); return; }
     if (consecrating) return;
     setConsecrating(true);
     setShowFire(true);
@@ -152,10 +154,10 @@ export default function Consecration() {
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
         <h1 style={{ fontSize: '1.6rem', color: '#1a0a3e', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <Flame size={28} color="#ff6600" /> Consagração
+          <Flame size={28} color="#ff6600" /> {t('consecration.title')}
         </h1>
         <p style={{ color: '#666', fontSize: '0.85rem', margin: '0.5rem 0 0' }}>
-          Jejum e oração — fortaleça sua fé
+          {t('consecration.subtitle')}
         </p>
       </div>
 
@@ -163,11 +165,11 @@ export default function Consecration() {
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginBottom: '1.5rem' }}>
         <div style={{ background: 'linear-gradient(135deg, #ff6600, #ff3300)', borderRadius: 16, padding: '1rem 1.5rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 160 }}>
           <div style={{ fontSize: '1.8rem', fontWeight: 800 }}>🔥 {stats.totalConsecrations}</div>
-          <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>Total consagrações</div>
+          <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>{t('consecration.totalConsecrations')}</div>
         </div>
         <div style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', borderRadius: 16, padding: '1rem 1.5rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 160 }}>
           <div style={{ fontSize: '1.8rem', fontWeight: 800 }}>🙏 {stats.todayFasting}</div>
-          <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>Jejuando hoje</div>
+          <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>{t('consecration.fastingToday')}</div>
         </div>
       </div>
 
@@ -189,7 +191,7 @@ export default function Consecration() {
           zIndex: 5,
         }}>
           <Flame size={40} />
-          {consecrating ? '🔥 Consagrando...' : 'Estou Consagrando'}
+          {consecrating ? `🔥 ${t('consecration.consecrating')}` : t('consecration.imConsecrating')}
         </button>
       </div>
 
@@ -262,7 +264,7 @@ export default function Consecration() {
         <div style={{ textAlign: 'center', color: '#999', padding: '1rem' }}>Carregando...</div>
       ) : stats.recent?.length === 0 ? (
         <div style={{ textAlign: 'center', color: '#999', padding: '2rem' }}>
-          Ninguém consagrando ainda. Seja o primeiro! 🔥
+          {t('consecration.noOneYet')} 🔥
         </div>
       ) : (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'center' }}>

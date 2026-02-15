@@ -312,16 +312,16 @@ export default function Mural() {
               {/* Actions */}
               <div style={{ display: 'flex', gap: 16, padding: '0.5rem 1rem 0.5rem' }}>
                 <button onClick={() => {
-                  if (!user) { alert('Faça login para curtir!'); return; }
+                  if (!user) { alert(t('common.loginToLike')); return; }
                   setPosts(prev => prev.map(p => p.id === post.id ? {...p, liked: !p.liked, likes: (p.likes||0) + (p.liked ? -1 : 1)} : p));
                 }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: post.liked ? '#e74c3c' : '#999', fontSize: '0.8rem' }}>
                   <Heart size={18} fill={post.liked ? '#e74c3c' : 'none'} /> {post.likes || 0} Amém
                 </button>
                 <button onClick={() => {
-                  if (!user) { alert('Faça login para comentar!'); return; }
+                  if (!user) { alert(t('common.loginToComment')); return; }
                   setPosts(prev => prev.map(p => p.id === post.id ? {...p, showComments: !p.showComments} : p));
                 }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#999', fontSize: '0.8rem' }}>
-                  <MessageCircle size={18} /> Comentar
+                  <MessageCircle size={18} /> {t('common.comment')}
                 </button>
                 <button onClick={() => {
                   const shareText = `${post.content}${post.verse_reference ? '\n📖 ' + post.verse_reference : ''}\n\n🙏 Sigo com Fé - Rede Social Cristã\nhttps://sigo-com-fe.vercel.app`;
@@ -329,21 +329,21 @@ export default function Mural() {
                     navigator.share({ title: 'Sigo com Fé', text: shareText, url: 'https://sigo-com-fe.vercel.app' }).catch(() => {});
                   } else {
                     navigator.clipboard.writeText(shareText);
-                    alert('Link copiado!');
+                    alert(t('common.linkCopied'));
                   }
                 }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#999', fontSize: '0.8rem' }}>
-                  <Share2 size={18} /> Compartilhar
+                  <Share2 size={18} /> {t('common.share')}
                 </button>
                 {user && post.author_id !== user.id && (
                   <button onClick={async () => {
-                    if (confirm('Denunciar este post como inadequado?')) {
+                    if (confirm(t('common.reportConfirm'))) {
                       try {
                         await fetch(`${API}/feed/${post.id}/report`, {
                           method: 'POST',
                           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
                           body: JSON.stringify({ reason: 'Conteúdo inadequado' }),
                         });
-                        alert('Post denunciado! Os moderadores irão avaliar.');
+                        alert(t('common.reported'));
                       } catch (err) { console.error(err); }
                     }
                   }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#ccc', fontSize: '0.75rem', marginLeft: 'auto' }}>
@@ -368,7 +368,7 @@ export default function Mural() {
                     } : p));
                     input.value = '';
                   }} style={{ display: 'flex', gap: 6, marginTop: 6 }}>
-                    <input name="comment" placeholder="Escreva um comentário..."
+                    <input name="comment" placeholder={t('common.writeComment')}
                       style={{ flex: 1, padding: '0.4rem 0.7rem', borderRadius: 20, border: '1px solid #ddd', fontSize: '0.8rem' }} />
                     <button type="submit" style={{ padding: '0.4rem 0.8rem', borderRadius: 20, border: 'none', background: '#daa520', color: '#fff', fontSize: '0.8rem', cursor: 'pointer' }}>
                       Enviar

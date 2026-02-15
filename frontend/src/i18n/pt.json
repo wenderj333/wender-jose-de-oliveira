@@ -486,5 +486,75 @@
                     "noBio":  "Nenhuma bio ainda",
                     "save":  "Salvar",
                     "cancel":  "Cancelar"
-                }
+                },
+    "messages":  {
+                     "writePlaceholder":  "Escreva sua mensagem...",
+                     "whenSomeone":  "Quando alguém te enviar uma mensagem, aparecerá aqui!",
+                     "noConversations":  "Nenhuma conversa ainda",
+                     "back":  "Voltar",
+                     "noMessages":  "Nenhuma mensagem ainda",
+                     "title":  "Mensagens",
+                     "loading":  "Carregando..."
+                 },
+    "groups":  {
+                   "newGroup":  "Criar Novo Grupo",
+                   "noPosts":  "Nenhuma publicação ainda",
+                   "public":  "Público",
+                   "groupName":  "Nome do grupo",
+                   "back":  "Voltar",
+                   "cancel":  "Cancelar",
+                   "creating":  "Criando...",
+                   "leave":  "Sair do Grupo",
+                   "private":  "Privado",
+                   "description":  "Descrição (opcional)",
+                   "createGroup":  "Criar Grupo",
+                   "writePlaceholder":  "Escreva no grupo...",
+                   "title":  "Grupos",
+                   "join":  "Entrar no Grupo",
+                   "noGroups":  "Nenhum grupo ainda",
+                   "members":  "membros",
+                   "createFirst":  "Crie o primeiro grupo da comunidade!"
+               },
+    "consecration":  {
+                         "consecratingNow":  "Consagrando agora",
+                         "subtitle":  "Jejum e oração — fortaleça sua fé",
+                         "fastingToday":  "Jejuando hoje",
+                         "benefits":  "Benefícios do Jejum",
+                         "consecrating":  "Consagrando...",
+                         "noOneYet":  "Ninguém consagrando ainda. Seja o primeiro!",
+                         "totalConsecrations":  "Total consagrações",
+                         "conclusion":  "O jejum: Não é dieta. Não é sacrifício vazio. É obediência, alinhamento e dependência de Deus.",
+                         "title":  "Consagração",
+                         "imConsecrating":  "Estou Consagrando",
+                         "loginRequired":  "Faça login para consagrar!"
+                     },
+    "notifications":  {
+                          "title":  "Notificações",
+                          "markAllRead":  "Marcar todas como lidas",
+                          "noNotifications":  "Nenhuma notificação por enquanto.",
+                          "flaggedPost":  "Post Denunciado"
+                      },
+    "common":  {
+                   "edit":  "Editar",
+                   "report":  "Denunciar",
+                   "save":  "Salvar",
+                   "shareCommunity":  "Compartilhe algo com a comunidade...",
+                   "writeComment":  "Escreva um comentário...",
+                   "noPostsYet":  "Nenhuma publicação ainda.",
+                   "share":  "Compartilhar",
+                   "send":  "Enviar",
+                   "reportConfirm":  "Denunciar este post como inadequado?",
+                   "loading":  "Carregando...",
+                   "reported":  "Post denunciado! Os moderadores irão avaliar.",
+                   "publish":  "Publicar",
+                   "comment":  "Comentar",
+                   "confirm":  "Confirmar",
+                   "beFirst":  "Seja o primeiro a publicar!",
+                   "publishing":  "Enviando...",
+                   "loginToLike":  "Faça login para curtir!",
+                   "loginToComment":  "Faça login para comentar!",
+                   "linkCopied":  "Link copiado!",
+                   "close":  "Fechar",
+                   "delete":  "Excluir"
+               }
 }

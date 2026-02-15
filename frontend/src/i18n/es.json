@@ -486,5 +486,75 @@
                     "noBio":  "Sin bio aÃºn",
                     "save":  "Guardar",
                     "cancel":  "Cancelar"
-                }
+                },
+    "messages":  {
+                     "writePlaceholder":  "Escribe tu mensaje...",
+                     "whenSomeone":  "Cuando alguien te envíe un mensaje, aparecerá aquí!",
+                     "noConversations":  "Ninguna conversación aún",
+                     "back":  "Volver",
+                     "noMessages":  "Ningún mensaje aún",
+                     "title":  "Mensajes",
+                     "loading":  "Cargando..."
+                 },
+    "groups":  {
+                   "newGroup":  "Crear Nuevo Grupo",
+                   "noPosts":  "Ninguna publicación aún",
+                   "public":  "Público",
+                   "groupName":  "Nombre del grupo",
+                   "back":  "Volver",
+                   "cancel":  "Cancelar",
+                   "creating":  "Creando...",
+                   "leave":  "Salir del Grupo",
+                   "private":  "Privado",
+                   "description":  "Descripción (opcional)",
+                   "createGroup":  "Crear Grupo",
+                   "writePlaceholder":  "Escribe en el grupo...",
+                   "title":  "Grupos",
+                   "join":  "Unirse al Grupo",
+                   "noGroups":  "Ningún grupo aún",
+                   "members":  "miembros",
+                   "createFirst":  "¡Crea el primer grupo de la comunidad!"
+               },
+    "consecration":  {
+                         "consecratingNow":  "Consagrando ahora",
+                         "subtitle":  "Ayuno y oración — fortalece tu fe",
+                         "fastingToday":  "Ayunando hoy",
+                         "benefits":  "Beneficios del Ayuno",
+                         "consecrating":  "Consagrando...",
+                         "noOneYet":  "Nadie consagrando aún. ¡Sé el primero!",
+                         "totalConsecrations":  "Total consagraciones",
+                         "conclusion":  "El ayuno: No es dieta. No es sacrificio vacío. Es obediencia, alineación y dependencia de Dios.",
+                         "title":  "Consagración",
+                         "imConsecrating":  "Estoy Consagrando",
+                         "loginRequired":  "¡Inicia sesión para consagrar!"
+                     },
+    "notifications":  {
+                          "title":  "Notificaciones",
+                          "markAllRead":  "Marcar todas como leídas",
+                          "noNotifications":  "Ninguna notificación por ahora.",
+                          "flaggedPost":  "Post Denunciado"
+                      },
+    "common":  {
+                   "edit":  "Editar",
+                   "report":  "Denunciar",
+                   "save":  "Guardar",
+                   "shareCommunity":  "Comparte algo con la comunidad...",
+                   "writeComment":  "Escribe un comentario...",
+                   "noPostsYet":  "Aún no hay publicaciones.",
+                   "share":  "Compartir",
+                   "send":  "Enviar",
+                   "reportConfirm":  "¿Denunciar este post como inadecuado?",
+                   "loading":  "Cargando...",
+                   "reported":  "¡Post denunciado! Los moderadores lo evaluarán.",
+                   "publish":  "Publicar",
+                   "comment":  "Comentar",
+                   "confirm":  "Confirmar",
+                   "beFirst":  "¡Sé el primero en publicar!",
+                   "publishing":  "Enviando...",
+                   "loginToLike":  "¡Inicia sesión para dar me gusta!",
+                   "loginToComment":  "¡Inicia sesión para comentar!",
+                   "linkCopied":  "¡Enlace copiado!",
+                   "close":  "Cerrar",
+                   "delete":  "Eliminar"
+               }
 }

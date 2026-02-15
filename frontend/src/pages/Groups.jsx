@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { Users, Plus, Lock, Globe, ArrowLeft, Send, Image, User } from 'lucide-react';
 
@@ -16,6 +17,7 @@ function timeAgo(d) {
 }
 
 export default function Groups() {
+  const { t } = useTranslation();
   const { user, token } = useAuth();
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -193,49 +195,49 @@ export default function Groups() {
     <div style={{ maxWidth: 650, margin: '0 auto', padding: '1rem 0.5rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <h1 style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '1.5rem', color: '#1a0a3e', margin: 0 }}>
-          <Users size={24} /> Grupos
+          <Users size={24} /> {t('groups.title')}
         </h1>
         {user && (
           <button onClick={() => setShowCreate(true)} style={{
             display: 'flex', alignItems: 'center', gap: 4, padding: '0.5rem 1rem',
             borderRadius: 20, border: 'none', background: '#daa520', color: '#fff',
             fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem',
-          }}><Plus size={16} /> Criar Grupo</button>
+          }}><Plus size={16} /> {t('groups.createGroup')}</button>
         )}
       </div>
 
       {/* Create group modal */}
       {showCreate && (
         <div style={{ background: '#fff', borderRadius: 16, padding: '1.5rem', marginBottom: '1rem', border: '2px solid #daa520' }}>
-          <h3 style={{ margin: '0 0 1rem', color: '#1a0a3e' }}>Criar Novo Grupo</h3>
+          <h3 style={{ margin: '0 0 1rem', color: '#1a0a3e' }}>{t('groups.newGroup')}</h3>
           <form onSubmit={createGroup}>
             <input value={newName} onChange={e => setNewName(e.target.value)}
-              placeholder="Nome do grupo" required
+              placeholder={t('groups.groupName')} required
               style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid #ddd', marginBottom: 8, fontSize: '0.9rem', boxSizing: 'border-box' }} />
             <textarea value={newDesc} onChange={e => setNewDesc(e.target.value)}
-              placeholder="Descrição (opcional)" rows={3}
+              placeholder={t('groups.description')} rows={3}
               style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid #ddd', marginBottom: 8, fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box' }} />
             <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
               <button type="button" onClick={() => setNewPrivacy('public')} style={{
                 padding: '0.4rem 1rem', borderRadius: 20, border: 'none', cursor: 'pointer',
                 background: newPrivacy === 'public' ? '#4caf50' : '#eee',
                 color: newPrivacy === 'public' ? '#fff' : '#666',
-              }}><Globe size={14} style={{ verticalAlign: 'middle' }} /> Público</button>
+              }}><Globe size={14} style={{ verticalAlign: 'middle' }} /> {t('groups.public')}</button>
               <button type="button" onClick={() => setNewPrivacy('private')} style={{
                 padding: '0.4rem 1rem', borderRadius: 20, border: 'none', cursor: 'pointer',
                 background: newPrivacy === 'private' ? '#e74c3c' : '#eee',
                 color: newPrivacy === 'private' ? '#fff' : '#666',
-              }}><Lock size={14} style={{ verticalAlign: 'middle' }} /> Privado</button>
+              }}><Lock size={14} style={{ verticalAlign: 'middle' }} /> {t('groups.private')}</button>
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button type="submit" disabled={creating} style={{
                 padding: '0.5rem 1.5rem', borderRadius: 20, border: 'none',
                 background: '#daa520', color: '#fff', fontWeight: 600, cursor: 'pointer',
-              }}>{creating ? 'Criando...' : 'Criar Grupo'}</button>
+              }}>{creating ? t('groups.creating') : t('groups.createGroup')}</button>
               <button type="button" onClick={() => setShowCreate(false)} style={{
                 padding: '0.5rem 1rem', borderRadius: 20, border: '1px solid #ddd',
                 background: '#fff', color: '#666', cursor: 'pointer',
-              }}>Cancelar</button>
+              }}>{t('groups.cancel')}</button>
             </div>
           </form>
         </div>
@@ -246,8 +248,8 @@ export default function Groups() {
       ) : groups.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>
           <Users size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
-          <p>Nenhum grupo ainda</p>
-          <p style={{ fontSize: '0.85rem' }}>Crie o primeiro grupo da comunidade!</p>
+          <p>{t('groups.noGroups')}</p>
+          <p style={{ fontSize: '0.85rem' }}>{t('groups.createFirst')}</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

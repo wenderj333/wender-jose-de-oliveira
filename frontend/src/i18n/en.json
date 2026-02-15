@@ -486,5 +486,75 @@
                     "noBio":  "No bio yet",
                     "save":  "Save",
                     "cancel":  "Cancel"
-                }
+                },
+    "messages":  {
+                     "writePlaceholder":  "Write your message...",
+                     "whenSomeone":  "When someone sends you a message, it will appear here!",
+                     "noConversations":  "No conversations yet",
+                     "back":  "Back",
+                     "noMessages":  "No messages yet",
+                     "title":  "Messages",
+                     "loading":  "Loading..."
+                 },
+    "groups":  {
+                   "newGroup":  "Create New Group",
+                   "noPosts":  "No posts yet",
+                   "public":  "Public",
+                   "groupName":  "Group name",
+                   "back":  "Back",
+                   "cancel":  "Cancel",
+                   "creating":  "Creating...",
+                   "leave":  "Leave Group",
+                   "private":  "Private",
+                   "description":  "Description (optional)",
+                   "createGroup":  "Create Group",
+                   "writePlaceholder":  "Write in the group...",
+                   "title":  "Groups",
+                   "join":  "Join Group",
+                   "noGroups":  "No groups yet",
+                   "members":  "members",
+                   "createFirst":  "Create the first community group!"
+               },
+    "consecration":  {
+                         "consecratingNow":  "Consecrating now",
+                         "subtitle":  "Fasting and prayer — strengthen your faith",
+                         "fastingToday":  "Fasting today",
+                         "benefits":  "Benefits of Fasting",
+                         "consecrating":  "Consecrating...",
+                         "noOneYet":  "No one consecrating yet. Be the first!",
+                         "totalConsecrations":  "Total consecrations",
+                         "conclusion":  "Fasting: Not a diet. Not an empty sacrifice. It is obedience, alignment and dependence on God.",
+                         "title":  "Consecration",
+                         "imConsecrating":  "I\u0027m Consecrating",
+                         "loginRequired":  "Log in to consecrate!"
+                     },
+    "notifications":  {
+                          "title":  "Notifications",
+                          "markAllRead":  "Mark all as read",
+                          "noNotifications":  "No notifications yet.",
+                          "flaggedPost":  "Flagged Post"
+                      },
+    "common":  {
+                   "edit":  "Edit",
+                   "report":  "Report",
+                   "save":  "Save",
+                   "shareCommunity":  "Share something with the community...",
+                   "writeComment":  "Write a comment...",
+                   "noPostsYet":  "No posts yet.",
+                   "share":  "Share",
+                   "send":  "Send",
+                   "reportConfirm":  "Report this post as inappropriate?",
+                   "loading":  "Loading...",
+                   "reported":  "Post reported! Moderators will review it.",
+                   "publish":  "Publish",
+                   "comment":  "Comment",
+                   "confirm":  "Confirm",
+                   "beFirst":  "Be the first to post!",
+                   "publishing":  "Posting...",
+                   "loginToLike":  "Log in to like!",
+                   "loginToComment":  "Log in to comment!",
+                   "linkCopied":  "Link copied!",
+                   "close":  "Close",
+                   "delete":  "Delete"
+               }
 }

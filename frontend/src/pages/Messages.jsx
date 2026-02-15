@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import { playNotificationSound } from '../utils/notification-sound';
@@ -18,6 +19,7 @@ function timeAgo(d) {
 }
 
 export default function Messages() {
+  const { t } = useTranslation();
   const { user, token } = useAuth();
   const { lastEvent } = useWebSocket();
   const [conversations, setConversations] = useState([]);
@@ -137,7 +139,7 @@ export default function Messages() {
           ) : messages.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
               <MessageCircle size={40} style={{ opacity: 0.3, marginBottom: 8 }} />
-              <p>Nenhuma mensagem ainda</p>
+              <p>{t('messages.noMessages')}</p>
             </div>
           ) : (
             messages.map(msg => {
@@ -162,7 +164,7 @@ export default function Messages() {
 
         <form onSubmit={sendMessage} style={{ display: 'flex', gap: 8, padding: '0.5rem 0' }}>
           <input value={newMsg} onChange={e => setNewMsg(e.target.value)}
-            placeholder="Escreva sua mensagem..."
+            placeholder={t('messages.writePlaceholder')}
             style={{ flex: 1, padding: '0.7rem 1rem', borderRadius: 25, border: '1px solid #ddd', fontSize: '0.9rem' }} />
           <button type="submit" disabled={sending || !newMsg.trim()} style={{
             width: 44, height: 44, borderRadius: '50%', border: 'none',
@@ -180,16 +182,16 @@ export default function Messages() {
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem' }}>
       <h1 style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '1.5rem', color: '#1a0a3e', marginBottom: '1rem' }}>
-        <Inbox size={24} /> Mensagens
+        <Inbox size={24} /> {t('messages.title')}
       </h1>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>Carregando...</div>
+        <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>{t('messages.loading')}</div>
       ) : conversations.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>
           <MessageCircle size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
-          <p>Nenhuma conversa ainda</p>
-          <p style={{ fontSize: '0.85rem' }}>Quando alguém te enviar uma mensagem, aparecerá aqui!</p>
+          <p>{t('messages.noConversations')}</p>
+          <p style={{ fontSize: '0.85rem' }}>{t('messages.whenSomeone')}</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

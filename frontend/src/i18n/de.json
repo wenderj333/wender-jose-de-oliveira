@@ -486,5 +486,75 @@
                     "noBio":  "Noch keine Bio",
                     "save":  "Speichern",
                     "cancel":  "Abbrechen"
-                }
+                },
+    "messages":  {
+                     "writePlaceholder":  "Schreibe deine Nachricht...",
+                     "whenSomeone":  "Wenn dir jemand eine Nachricht sendet, erscheint sie hier!",
+                     "noConversations":  "Noch keine Gespräche",
+                     "back":  "Zurück",
+                     "noMessages":  "Noch keine Nachrichten",
+                     "title":  "Nachrichten",
+                     "loading":  "Laden..."
+                 },
+    "groups":  {
+                   "newGroup":  "Neue Gruppe erstellen",
+                   "noPosts":  "Noch keine Beiträge",
+                   "public":  "Öffentlich",
+                   "groupName":  "Gruppenname",
+                   "back":  "Zurück",
+                   "cancel":  "Abbrechen",
+                   "creating":  "Erstellen...",
+                   "leave":  "Gruppe verlassen",
+                   "private":  "Privat",
+                   "description":  "Beschreibung (optional)",
+                   "createGroup":  "Gruppe erstellen",
+                   "writePlaceholder":  "Schreibe in der Gruppe...",
+                   "title":  "Gruppen",
+                   "join":  "Gruppe beitreten",
+                   "noGroups":  "Noch keine Gruppen",
+                   "members":  "Mitglieder",
+                   "createFirst":  "Erstelle die erste Gemeinschaftsgruppe!"
+               },
+    "consecration":  {
+                         "consecratingNow":  "Jetzt weihend",
+                         "subtitle":  "Fasten und Gebet — stärke deinen Glauben",
+                         "fastingToday":  "Heute fastend",
+                         "benefits":  "Vorteile des Fastens",
+                         "consecrating":  "Weihe läuft...",
+                         "noOneYet":  "Noch niemand weihend. Sei der Erste!",
+                         "totalConsecrations":  "Gesamte Weihen",
+                         "conclusion":  "Fasten: Keine Diät. Kein leeres Opfer. Es ist Gehorsam, Ausrichtung und Abhängigkeit von Gott.",
+                         "title":  "Weihe",
+                         "imConsecrating":  "Ich weihe mich",
+                         "loginRequired":  "Melde dich an um zu weihen!"
+                     },
+    "notifications":  {
+                          "title":  "Benachrichtigungen",
+                          "markAllRead":  "Alle als gelesen markieren",
+                          "noNotifications":  "Noch keine Benachrichtigungen.",
+                          "flaggedPost":  "Gemeldeter Beitrag"
+                      },
+    "common":  {
+                   "edit":  "Bearbeiten",
+                   "report":  "Melden",
+                   "save":  "Speichern",
+                   "shareCommunity":  "Teile etwas mit der Gemeinschaft...",
+                   "writeComment":  "Schreibe einen Kommentar...",
+                   "noPostsYet":  "Noch keine Beiträge.",
+                   "share":  "Teilen",
+                   "send":  "Senden",
+                   "reportConfirm":  "Diesen Beitrag als unangemessen melden?",
+                   "loading":  "Laden...",
+                   "reported":  "Beitrag gemeldet! Moderatoren werden ihn prüfen.",
+                   "publish":  "Veröffentlichen",
+                   "comment":  "Kommentieren",
+                   "confirm":  "Bestätigen",
+                   "beFirst":  "Sei der Erste!",
+                   "publishing":  "Wird gesendet...",
+                   "loginToLike":  "Melde dich an um zu liken!",
+                   "loginToComment":  "Melde dich an um zu kommentieren!",
+                   "linkCopied":  "Link kopiert!",
+                   "close":  "Schließen",
+                   "delete":  "Löschen"
+               }
 }
