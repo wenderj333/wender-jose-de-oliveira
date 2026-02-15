@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Component } from 'react';
 import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './context/AuthContext';
@@ -36,6 +36,25 @@ function RedirectIfLoggedIn({ children }) {
   const { user } = useAuth();
   if (user) return <Navigate to="/mural" />;
   return children;
+}
+
+class ErrorBoundary extends Component {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(err) { console.error('ErrorBoundary:', err); }
+  render() {
+    if (this.state.hasError) return (
+      <div style={{ textAlign: 'center', padding: '3rem' }}>
+        <h2>😔 Algo deu errado</h2>
+        <p>Tente recarregar a página.</p>
+        <button onClick={() => { this.setState({ hasError: false }); window.location.reload(); }}
+          style={{ padding: '0.5rem 1.5rem', borderRadius: 20, border: 'none', background: '#daa520', color: '#fff', cursor: 'pointer', fontWeight: 600 }}>
+          🔄 Recarregar
+        </button>
+      </div>
+    );
+    return this.props.children;
+  }
 }
 
 export default function App() {
@@ -154,6 +173,7 @@ export default function App() {
       </nav>
 
       <main className="main-content">
+        <ErrorBoundary>
         <Routes>
           <Route path="/" element={user ? <Navigate to="/mural" /> : <Home />} />
           <Route path="/oracoes" element={<PrayerFeed />} />
@@ -177,6 +197,7 @@ export default function App() {
           <Route path="/ofertas" element={<ProtectedRoute><Offerings /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         </Routes>
+        </ErrorBoundary>
       </main>
 
       <footer className="footer">

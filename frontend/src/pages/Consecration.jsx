@@ -123,8 +123,10 @@ export default function Consecration() {
   async function fetchStats() {
     try {
       const res = await fetch(`${API}/consecration/stats`);
-      const data = await res.json();
-      setStats(data);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && !data.error) setStats(data);
+      }
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
   }
