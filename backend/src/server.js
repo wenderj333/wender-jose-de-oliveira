@@ -291,6 +291,13 @@ const { Pool: MigratePool } = require('pg');
       );
     `);
 
+    // Add missing columns to feed_posts
+    await mp.query(`
+      ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS media_type VARCHAR(20);
+      ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS is_flagged BOOLEAN DEFAULT false;
+      ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS flag_reason TEXT;
+    `);
+
     // Technical issues
     await mp.query(`
       CREATE TABLE IF NOT EXISTS technical_issues (
