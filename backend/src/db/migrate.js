@@ -343,7 +343,22 @@ async function migrate() {
     CREATE INDEX IF NOT EXISTS idx_group_posts_group ON group_posts(group_id, created_at DESC);
   `);
 
-  console.log('✅ Migração PostgreSQL concluída com sucesso! (18+ tabelas criadas)');
+  // ============ CONSAGRAÇÃO / JEJUM ============
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS consecrations (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      type VARCHAR(50) DEFAULT 'fasting' CHECK (type IN ('fasting', 'prayer', 'meditation', 'other')),
+      start_date TIMESTAMPTZ DEFAULT NOW(),
+      end_date TIMESTAMPTZ,
+      purpose TEXT,
+      count INT DEFAULT 1, -- Quantas vezes o usuário 'consagrou' nesse período ou tipo
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_consecrations_user ON consecrations(user_id, created_at DESC);
+  `);
+
+  console.log('✅ Migração PostgreSQL concluída com sucesso! (19+ tabelas criadas)');
   await pool.end();
 }
 

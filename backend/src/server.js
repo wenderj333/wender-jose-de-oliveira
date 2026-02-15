@@ -275,6 +275,7 @@ app.use('/api/friends', require('./routes/friends'));
 app.use('/api/members', require('./routes/members'));
 app.use('/api/messages', require('./routes/messages'));
 app.use('/api/groups', require('./routes/groups'));
+app.use('/api/consecration', require('./routes/consecration'));
 app.use('/api/offerings', require('./routes/offerings'));
 
 // Root route
