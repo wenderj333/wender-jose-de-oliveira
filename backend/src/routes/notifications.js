@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
-const { authenticate, adminOnly } = require('../middleware/auth');
+const { authenticate } = require('../middleware/auth');
 
 // Helper para criar notificações
 async function createNotification(userId, type, title, body, data = {}) {
@@ -55,7 +55,8 @@ router.post('/:id/read', authenticate, async (req, res) => {
 });
 
 // GET /api/notifications/admin-issues — Admin/Pastor vê relatórios de problemas
-router.get('/admin-issues', authenticate, adminOnly, async (req, res) => {
+router.get('/admin-issues', authenticate, async (req, res) => {
+  if (req.user.role !== 'pastor' && req.user.role !== 'admin') return res.status(403).json({ error: 'Sem permissão' });
   try {
     const issues = await db.prepare(
       `SELECT n.*, u.full_name AS reporter_name FROM notifications n
