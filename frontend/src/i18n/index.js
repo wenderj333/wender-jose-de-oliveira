@@ -6,6 +6,8 @@ import pt from './pt.json';
 import en from './en.json';
 import es from './es.json';
 import de from './de.json';
+import ro from './ro.json';
+import ru from './ru.json';
 
 i18n
   .use(LanguageDetector)
@@ -16,6 +18,8 @@ i18n
       en: { translation: en },
       es: { translation: es },
       de: { translation: de },
+      ro: { translation: ro },
+      ru: { translation: ru },
     },
     fallbackLng: 'pt',
     interpolation: {
