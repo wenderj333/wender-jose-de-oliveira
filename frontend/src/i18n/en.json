@@ -1,591 +1,605 @@
-﻿{
-    "brand":  "Sigo com FÃ©",
-    "nav":  {
-                "prayers":  "Prayers",
-                "mural":  "Community Wall",
-                "live":  "Live",
-                "churches":  "Churches",
-                "registerChurch":  "Register Church",
-                "kids":  "Kids",
-                "helpRequests":  "Help Requests",
-                "dashboard":  "Dashboard",
-                "hello":  "Hi, {{name}}",
-                "logout":  "Log out",
-                "login":  "Log in",
-                "register":  "Sign up",
-                "chatPastoral":  "Pastoral Chat",
-                "pastoralAI":  "Pastoral AI",
-                "friends":  "Friends",
-                "bibleAI":  "Bible AI",
-                "messages":  "Messages",
-                "groups":  "Groups",
-                "consecration":  "Consecration",
-                "members":  "Members",
-                "offerings":  "Offerings",
-                "notifications":  "Notifications",
-                "myProfile":  "My Profile"
-            },
-    "footer":  "Ã‚Â© 2026 Sigo com FÃ© - Technology at the service of the Kingdom",
-    "home":  {
-                 "subtitle":  "Pray, connect and strengthen your faith with thousands of brothers and sisters around the world.",
-                 "startNow":  "Get Started",
-                 "seePrayerRequests":  "See Prayer Requests",
-                 "churchPraying_one":  "{{count}} church praying now!",
-                 "churchPraying_other":  "{{count}} churches praying now!",
-                 "featurePrayers":  "Prayer Requests",
-                 "featurePrayersDesc":  "Share your requests and pray for others. See the power of collective prayer and celebrate victories!",
-                 "featureLive":  "Pastor Praying Live",
-                 "featureLiveDesc":  "Know when your pastor is praying in real time. Prayer bubbles rise like incense to heaven.",
-                 "featureMap":  "Church Map",
-                 "featureMapDesc":  "Find churches in any city. Perfect for travelers and families on the move.",
-                 "featureDashboard":  "Pastoral Dashboard",
-                 "featureDashboardDesc":  "Complete management tools for pastors: members, finances, campaigns and much more.",
-                 "featureMural":  "Community Wall",
-                 "featureMuralDesc":  "Share testimonies, worship and verses with the Christian community.",
-                 "featureKids":  "Kids Corner",
-                 "featureKidsDesc":  "Bible stories, interactive quiz and activities for children to learn about the Bible!",
-                 "featureChurch":  "Register Your Church",
-                 "featureChurchDesc":  "Register your church on the platform and connect with believers from around the world.",
-                 "explore":  "Explore",
-                 "registerBtn":  "Register",
-                 "helpTitle":  "Need Help?",
-                 "helpSubtitle":  "You are not alone. A church can help you.",
-                 "helpSeeThings":  "Ã°Å¸â€˜ÂÃ¯Â¸Â I see things",
-                 "helpHearThings":  "Ã°Å¸â€˜â€š I hear noises",
-                 "helpFeelAlone":  "Ã°Å¸â€™â€ I feel alone",
-                 "helpNeedPrayer":  "Ã°Å¸â„¢Â I need prayer",
-                 "helpAnxious":  "Ã°Å¸ËœÂ° I feel anxious",
-                 "helpDepressed":  "Ã°Å¸ËœÂ¢ I feel sad/depressed",
-                 "helpSent":  "Ã¢Å“â€¦ Your request was sent! A nearby church will contact you to help. God bless you! Ã°Å¸â„¢Â",
-                 "helpNamePlaceholder":  "Your name (optional)",
-                 "helpContactPlaceholder":  "Phone or email for contact",
-                 "helpMessagePlaceholder":  "Tell us a little more about how you\u0027re feeling...",
-                 "helpSend":  "Ask for Help",
-                 "helpBtn":  "Ask for Help",
-                 "verses":  [
-                                {
-                                    "text":  "For where two or three gather in my name, there am I with them.",
-                                    "ref":  "Matthew 18:20"
-                                },
-                                {
-                                    "text":  "I can do all things through Christ who strengthens me.",
-                                    "ref":  "Philippians 4:13"
-                                },
-                                {
-                                    "text":  "The Lord is my shepherd; I shall not want.",
-                                    "ref":  "Psalm 23:1"
-                                },
-                                {
-                                    "text":  "Trust in the Lord with all your heart and lean not on your own understanding.",
-                                    "ref":  "Proverbs 3:5"
-                                },
-                                {
-                                    "text":  "For I know the plans I have for you, plans to give you hope and a future.",
-                                    "ref":  "Jeremiah 29:11"
-                                },
-                                {
-                                    "text":  "Be strong and courageous. Do not be afraid, for the Lord will be with you.",
-                                    "ref":  "Deuteronomy 31:6"
-                                },
-                                {
-                                    "text":  "The prayer of a righteous person is powerful and effective.",
-                                    "ref":  "James 5:16"
-                                }
-                            ]
-             },
-    "login":  {
-                  "welcomeBack":  "Welcome back!",
-                  "email":  "Email",
-                  "emailPlaceholder":  "your@email.com",
-                  "password":  "Password",
-                  "passwordPlaceholder":  "Your password",
-                  "submit":  "Log in",
-                  "or":  "or",
-                  "google":  "Log in with Google",
-                  "facebook":  "Log in with Facebook",
-                  "phone":  "Log in with Phone",
-                  "phoneNumber":  "Phone number",
-                  "sendCode":  "Send code",
-                  "verifyCode":  "Verify code",
-                  "codeSent":  "Code sent!",
-                  "codePlaceholder":  "6-digit code",
-                  "noAccount":  "Don\u0027t have an account?",
-                  "signUp":  "Sign up"
-              },
-    "register":  {
-                     "joinCommunity":  "Join the community!",
-                     "fullName":  "Full Name",
-                     "fullNamePlaceholder":  "Your full name",
-                     "email":  "Email",
-                     "emailPlaceholder":  "your@email.com",
-                     "password":  "Password",
-                     "passwordPlaceholder":  "Minimum 6 characters",
-                     "passwordError":  "Password must be at least 6 characters",
-                     "iAm":  "I am:",
-                     "member":  "Member / Faithful",
-                     "pastor":  "Pastor / Leader",
-                     "submit":  "Sign up",
-                     "or":  "or",
-                     "google":  "Sign up with Google",
-                     "facebook":  "Sign up with Facebook",
-                     "phone":  "Sign up with Phone",
-                     "hasAccount":  "Already have an account?",
-                     "signIn":  "Log in"
-                 },
-    "prayerFeed":  {
-                       "victoryWall":  "Victory Wall",
-                       "prayerRequests":  "Prayer Requests",
-                       "newRequest":  "New Request",
-                       "allRequests":  "All Requests",
-                       "answeredPrayers":  "Answered Prayers",
-                       "newPrayerRequest":  "New Prayer Request",
-                       "titleOptional":  "Title (optional)",
-                       "titlePlaceholder":  "E.g.: Prayer for my family",
-                       "yourRequest":  "Your request *",
-                       "requestPlaceholder":  "Share your prayer request...",
-                       "category":  "Category",
-                       "urgentRequest":  "Urgent request",
-                       "submitRequest":  "Submit Request",
-                       "loading":  "Loading prayers...",
-                       "noRequests":  "No prayer requests yet. Be the first!",
-                       "categories":  {
-                                          "all":  "All",
-                                          "health":  "Health",
-                                          "work_finance":  "Work/Finance",
-                                          "family":  "Family",
-                                          "studies":  "Studies",
-                                          "housing":  "Housing",
-                                          "emotional":  "Emotional",
-                                          "decisions":  "Decisions",
-                                          "other":  "Other"
-                                      }
-                   },
-    "livePrayer":  {
-                       "title":  "Live Prayer",
-                       "churchPraying_one":  "church praying",
-                       "churchPraying_other":  "churches praying",
-                       "rightNow":  "right now",
-                       "closeOverlay":  "Close Overlay",
-                       "immersiveView":  "Immersive Prayer View",
-                       "pastorPanel":  "Pastor Panel",
-                       "focusOptional":  "Prayer focus (optional)",
-                       "focusPlaceholder":  "E.g.: Praying for families",
-                       "startLive":  "Start Live Prayer",
-                       "prayingLive":  "You are praying live...",
-                       "endPrayer":  "End Prayer",
-                       "pastorsPraying":  "Pastors praying now:",
-                       "noPastors":  "No pastor praying live at this moment.",
-                       "comeBack":  "Come back soon!"
-                   },
-    "churchMap":  {
-                      "title":  "Church Map",
-                      "searchPlaceholder":  "Search by city, country or name...",
-                      "search":  "Search",
-                      "searching":  "Searching churches...",
-                      "noResults":  "No churches found for \"{{query}}\". Register yours!"
-                  },
-    "churchRegister":  {
-                           "title":  "Register Church",
-                           "subtitle":  "Register your church on the Sigo com FÃ© platform",
-                           "churchName":  "Church Name *",
-                           "churchNamePlaceholder":  "E.g.: Central Baptist Church",
-                           "denomination":  "Denomination",
-                           "denominationPlaceholder":  "E.g.: Baptist, Assembly of God, etc.",
-                           "address":  "Address",
-                           "addressPlaceholder":  "Street, number, neighborhood",
-                           "city":  "City",
-                           "cityPlaceholder":  "Your city",
-                           "country":  "Country",
-                           "countryPlaceholder":  "Country",
-                           "phone":  "Phone",
-                           "phonePlaceholder":  "+1 555 123-4567",
-                           "pastorName":  "Pastor Name",
-                           "pastorNamePlaceholder":  "Name of the responsible pastor",
-                           "submit":  "Register Church",
-                           "submitting":  "Registering...",
-                           "success":  "Church Registered!",
-                           "redirecting":  "Redirecting to the church map...",
-                           "nameRequired":  "Church name is required",
-                           "loginRequired":  "You must be logged in to register a church.",
-                           "error":  "Error registering"
-                       },
-    "dashboard":  {
-                      "title":  "Dashboard",
-                      "loading":  "Loading data...",
-                      "users":  "Users",
-                      "churches":  "Churches",
-                      "prayerRequests":  "Prayer Requests",
-                      "answeredPrayers":  "Answered Prayers",
-                      "quickActions":  "Quick Actions",
-                      "newPrayerRequest":  "New Prayer Request",
-                      "registerChurch":  "Register Church",
-                      "kidsCorner":  "Kids Corner",
-                      "recentActivity":  "Recent Activity",
-                      "requestedPrayer":  "requested prayer:",
-                      "noActivity":  "No recent activity. Start by creating a prayer request!",
-                      "viewAll":  "View all requests"
-                  },
-    "mural":  {
-                  "title":  "Community Wall",
-                  "subtitle":  "Share testimonies, worship and verses with the Christian community",
-                  "newPost":  "New Post",
-                  "cancel":  "Cancel",
-                  "shareWithCommunity":  "Share with the Community",
-                  "categoryLabel":  "Category",
-                  "message":  "Message",
-                  "messagePlaceholder":  "Write your testimony, reflection or verse...",
-                  "publish":  "Publish",
-                  "noPostsFound":  "No posts found in this category.",
-                  "filters":  {
-                                  "all":  "All",
-                                  "myChurch":  "My Church",
-                                  "testimonies":  "Testimonies",
-                                  "worship":  "Worship",
-                                  "verses":  "Verses"
-                              },
-                  "categories":  {
-                                     "testemunho":  "Testimony",
-                                     "louvor":  "Worship / Video",
-                                     "reflexao":  "Bible Reflection",
-                                     "versiculo":  "Verse",
-                                     "foto":  "Photo"
-                                 }
-              },
-    "kids":  {
-                 "title":  "Digital Sunday School",
-                 "subtitle":  "Learn about the Bible in a fun way!",
-                 "bibleStories":  "Bible Stories",
-                 "readStory":  "Read Story",
-                 "years":  "years",
-                 "bibleQuiz":  "Bible Quiz",
-                 "question":  "Question {{current}} of {{total}}",
-                 "congrats":  "Congratulations!",
-                 "scoreResult":  "You got \u003cstrong\u003e{{score}}\u003c/strong\u003e out of \u003cstrong\u003e{{total}}\u003c/strong\u003e!",
-                 "perfect":  "Perfect! You are a Bible champion!",
-                 "good":  "Great job! Keep studying!",
-                 "tryAgain":  "Don\u0027t give up! Try again!",
-                 "playAgain":  "Play Again",
-                 "weekVerse":  "Verse of the Week",
-                 "weekVerseText":  "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
-                 "weekVerseRef":  "- John 3:16",
-                 "memorized":  "Memorized!",
-                 "memorize":  "I memorized it!",
-                 "activities":  "Activities",
-                 "comingSoon":  "Coming soon!",
-                 "stories":  [
-                                 {
-                                     "title":  "David and Goliath",
-                                     "desc":  "A brave boy who defeated a giant with a stone and great faith in God",
-                                     "age":  "6-8"
-                                 },
-                                 {
-                                     "title":  "Noah\u0027s Ark",
-                                     "desc":  "Noah built a huge boat and saved all the animals from the great flood",
-                                     "age":  "3-5"
-                                 },
-                                 {
-                                     "title":  "Jonah and the Whale",
-                                     "desc":  "Jonah ran from God but learned that He is everywhere",
-                                     "age":  "6-8"
-                                 },
-                                 {
-                                     "title":  "Daniel in the Lions\u0027 Den",
-                                     "desc":  "Daniel prayed with faith and God shut the lions\u0027 mouths",
-                                     "age":  "9-12"
-                                 },
-                                 {
-                                     "title":  "Moses and the Red Sea",
-                                     "desc":  "God parted the sea for His people to pass safely",
-                                     "age":  "6-8"
-                                 }
-                             ],
-                 "quiz":  [
-                              {
-                                  "q":  "Who defeated the giant Goliath?",
-                                  "opts":  [
-                                               "Saul",
-                                               "David",
-                                               "Moses",
-                                               "Joshua"
-                                           ]
-                              },
-                              {
-                                  "q":  "How many days did the flood last?",
-                                  "opts":  [
-                                               "10 days",
-                                               "20 days",
-                                               "40 days",
-                                               "100 days"
-                                           ]
-                              },
-                              {
-                                  "q":  "Who was thrown into the lions\u0027 den?",
-                                  "opts":  [
-                                               "Jonah",
-                                               "Daniel",
-                                               "Paul",
-                                               "Peter"
-                                           ]
-                              },
-                              {
-                                  "q":  "What is the first book of the Bible?",
-                                  "opts":  [
-                                               "Exodus",
-                                               "Psalms",
-                                               "Genesis",
-                                               "Matthew"
-                                           ]
-                              },
-                              {
-                                  "q":  "In which city was Jesus born?",
-                                  "opts":  [
-                                               "Jerusalem",
-                                               "Nazareth",
-                                               "Bethlehem",
-                                               "Capernaum"
-                                           ]
-                              }
-                          ],
-                 "activityList":  [
-                                      {
-                                          "title":  "Coloring",
-                                          "desc":  "Color biblical characters with beautiful colors"
-                                      },
-                                      {
-                                          "title":  "Word Search",
-                                          "desc":  "Find hidden Bible words"
-                                      },
-                                      {
-                                          "title":  "Memory Game",
-                                          "desc":  "Find the pairs of the 12 apostles"
-                                      },
-                                      {
-                                          "title":  "Puzzle",
-                                          "desc":  "Assemble amazing biblical scenes"
-                                      }
-                                  ]
-             },
-    "feedPost":  {
-                     "tapToWatch":  "Tap to watch",
-                     "photo":  "Photo",
-                     "amem":  "Amen",
-                     "share":  "Share"
-                 },
-    "prayerCard":  {
-                       "urgent":  "URGENT",
-                       "testimony":  "Testimony:",
-                       "personPraying_one":  "{{count}} person praying",
-                       "personPraying_other":  "{{count}} people praying",
-                       "timeAgo":  {
-                                       "min":  "{{count}}min ago",
-                                       "hour":  "{{count}}h ago",
-                                       "day":  "{{count}}d ago"
-                                   },
-                       "categories":  {
-                                          "health":  "Health",
-                                          "work_finance":  "Work/Finance",
-                                          "family":  "Family",
-                                          "studies":  "Studies",
-                                          "housing":  "Housing",
-                                          "emotional":  "Emotional",
-                                          "decisions":  "Decisions",
-                                          "other":  "Other"
-                                      }
-                   },
-    "amemButton":  {
-                       "praying":  "Praying!",
-                       "prayForYou":  "Praying for You"
-                   },
-    "pastorOverlay":  {
-                          "title":  "Pastors Praying Live",
-                          "churchesInPrayer_one":  "{{count}} church in prayer right now",
-                          "churchesInPrayer_other":  "{{count}} churches in prayer right now",
-                          "close":  "Close"
-                      },
-    "churchPin":  {
-                      "pastor":  "Pastor {{name}}",
-                      "members":  "{{count}} members",
-                      "following":  "Following",
-                      "follow":  "Follow",
-                      "directions":  "Get Directions",
-                      "share":  "Share",
-                      "shareText":  "Check out {{name}} on Sigo com FÃ©!"
-                  },
-    "langSwitcher":  {
-                         "label":  "Language"
-                     },
-    "pastorChat":  {
-                       "title":  "Pastoral Chat",
-                       "subtitle":  "Talk directly with a pastor. Auto-translation included.",
-                       "yourName":  "Your name",
-                       "selectHelp":  "What do you need?",
-                       "selectLanguage":  "Your language",
-                       "startChat":  "Start Chat",
-                       "anyChurch":  "Any available church",
-                       "waiting":  "Waiting for a pastor...",
-                       "waitingDesc":  "A pastor will join the conversation soon. Have faith!",
-                       "imPastor":  "I\u0027m a Pastor",
-                       "imPerson":  "I Need Help",
-                       "waitingRooms":  "People waiting",
-                       "noWaiting":  "No one waiting at the moment.",
-                       "joinChat":  "Join",
-                       "pastorName":  "Your name (pastor)",
-                       "endChat":  "End conversation",
-                       "chatEnded":  "Conversation ended. God bless!",
-                       "typeMessage":  "Type your message...",
-                       "send":  "Send",
-                       "typing":  "typing...",
-                       "translated":  "Translation",
-                       "joinedChat":  "joined the conversation",
-                       "leftChat":  "left the conversation",
-                       "langPt":  "PortuguÃƒÂªs",
-                       "langEn":  "English",
-                       "langEs":  "EspaÃƒÂ±ol",
-                       "langDe":  "Deutsch",
-                       "autoTranslate":  "Ã°Å¸Å’Â Auto-translation enabled"
-                   },
-    "friends":  {
-                    "title":  "Friends",
-                    "search":  "Search",
-                    "myFriends":  "My Friends",
-                    "requests":  "Requests",
-                    "addFriend":  "Add Friend",
-                    "pending":  "Pending",
-                    "accept":  "Accept",
-                    "reject":  "Reject",
-                    "removeFriend":  "Remove",
-                    "noFriends":  "You have no friends yet. Search for people to connect!",
-                    "noRequests":  "No pending friend requests.",
-                    "searchPlaceholder":  "Search by name...",
-                    "requestSent":  "Friend request sent!",
-                    "friendAdded":  "Friendship accepted!",
-                    "friendRemoved":  "Friend removed."
-                },
-    "helpRequests":  {
-                         "title":  "Help Requests",
-                         "subtitle":  "People in need of spiritual support and prayer. Respond with love.",
-                         "loading":  "Loading...",
-                         "empty":  "No help requests at the moment. Praise God!",
-                         "justNow":  "just now",
-                         "filter_all":  "All",
-                         "filter_pending":  "Pending",
-                         "filter_in_progress":  "In Progress",
-                         "filter_resolved":  "Resolved",
-                         "markInProgress":  "I\u0027m helping",
-                         "markResolved":  "Resolved",
-                         "resolved":  "Resolved"
-                     },
-    "profile":  {
-                    "title":  "Profile",
-                    "memberSince":  "Member since",
-                    "editProfile":  "Edit Profile",
-                    "prayers":  "Prayers",
-                    "posts":  "Posts",
-                    "friends":  "Friends",
-                    "bio":  "About",
-                    "noBio":  "No bio yet",
-                    "save":  "Save",
-                    "cancel":  "Cancel"
-                },
-    "messages":  {
-                     "writePlaceholder":  "Write your message...",
-                     "whenSomeone":  "When someone sends you a message, it will appear here!",
-                     "noConversations":  "No conversations yet",
-                     "back":  "Back",
-                     "noMessages":  "No messages yet",
-                     "title":  "Messages",
-                     "loading":  "Loading..."
-                 },
-    "groups":  {
-                   "newGroup":  "Create New Group",
-                   "noPosts":  "No posts yet",
-                   "public":  "Public",
-                   "groupName":  "Group name",
-                   "back":  "Back",
-                   "cancel":  "Cancel",
-                   "creating":  "Creating...",
-                   "leave":  "Leave Group",
-                   "private":  "Private",
-                   "description":  "Description (optional)",
-                   "createGroup":  "Create Group",
-                   "writePlaceholder":  "Write in the group...",
-                   "title":  "Groups",
-                   "join":  "Join Group",
-                   "noGroups":  "No groups yet",
-                   "members":  "members",
-                   "createFirst":  "Create the first community group!"
-               },
-    "consecration":  {
-                         "consecratingNow":  "Consecrating now",
-                         "subtitle":  "Fasting and prayer â€” strengthen your faith",
-                         "fastingToday":  "Fasting today",
-                         "benefits":  "Benefits of Fasting",
-                         "consecrating":  "Consecrating...",
-                         "noOneYet":  "No one consecrating yet. Be the first!",
-                         "totalConsecrations":  "Total consecrations",
-                         "conclusion":  "Fasting: Not a diet. Not an empty sacrifice. It is obedience, alignment and dependence on God.",
-                         "title":  "Consecration",
-                         "imConsecrating":  "I\u0027m Consecrating",
-                         "loginRequired":  "Log in to consecrate!"
-                     },
-    "notifications":  {
-                          "title":  "Notifications",
-                          "markAllRead":  "Mark all as read",
-                          "noNotifications":  "No notifications yet.",
-                          "flaggedPost":  "Flagged Post"
-                      },
-    "common":  {
-                   "edit":  "Edit",
-                   "report":  "Report",
-                   "save":  "Save",
-                   "shareCommunity":  "Share something with the community...",
-                   "writeComment":  "Write a comment...",
-                   "noPostsYet":  "No posts yet.",
-                   "share":  "Share",
-                   "send":  "Send",
-                   "reportConfirm":  "Report this post as inappropriate?",
-                   "loading":  "Loading...",
-                   "reported":  "Post reported! Moderators will review it.",
-                   "publish":  "Publish",
-                   "comment":  "Comment",
-                   "confirm":  "Confirm",
-                   "beFirst":  "Be the first to post!",
-                   "publishing":  "Posting...",
-                   "loginToLike":  "Log in to like!",
-                   "loginToComment":  "Log in to comment!",
-                   "linkCopied":  "Link copied!",
-                   "close":  "Close",
-                   "delete":  "Delete",
-                   "translate":  "Translate",
-                   "translation":  "Translation",
-                   "hideTranslation":  "Hide translation"
-               },
-    "offerings":  {
-                      "notPastor":  "To contribute, contact your church pastor.",
-                      "records":  "Records",
-                      "paypalEmail":  "PayPal Email",
-                      "offering":  "Offering",
-                      "tithe":  "Tithe",
-                      "bank":  "Bank",
-                      "holder":  "Holder",
-                      "saving":  "Saving...",
-                      "pixNamePlaceholder":  "Name on PIX",
-                      "noContributions":  "No contributions recorded yet",
-                      "contributions":  "Contributions",
-                      "holderPlaceholder":  "Account holder name",
-                      "save":  "Save Settings",
-                      "title":  "Offerings and Tithes",
-                      "messagePlaceholder":  "God bless your offering!",
-                      "pixKey":  "PIX Key (CPF, Email, Phone or Random)",
-                      "account":  "Account",
-                      "bankTransfer":  "Bank Transfer",
-                      "pixKeyPlaceholder":  "Your PIX key",
-                      "configure":  "Configure",
-                      "agency":  "Branch",
-                      "saved":  "Saved!",
-                      "thisMonth":  "This month",
-                      "pixName":  "Account Holder",
-                      "totalGeneral":  "Total",
-                      "messageToMembers":  "Message to Members"
-                  }
+{
+  "brand": "Sigo com FÃ©",
+  "nav": {
+    "prayers": "Prayers",
+    "mural": "Community Wall",
+    "live": "Live",
+    "churches": "Churches",
+    "registerChurch": "Register Church",
+    "kids": "Kids",
+    "helpRequests": "Help Requests",
+    "dashboard": "Dashboard",
+    "hello": "Hi, {{name}}",
+    "logout": "Log out",
+    "login": "Log in",
+    "register": "Sign up",
+    "chatPastoral": "Pastoral Chat",
+    "pastoralAI": "Pastoral AI",
+    "friends": "Friends",
+    "bibleAI": "Bible AI",
+    "messages": "Messages",
+    "groups": "Groups",
+    "consecration": "Consecration",
+    "members": "Members",
+    "offerings": "Offerings",
+    "notifications": "Notifications",
+    "myProfile": "My Profile",
+    "music": "Music"
+  },
+  "footer": "Ã‚Â© 2026 Sigo com FÃ© - Technology at the service of the Kingdom",
+  "home": {
+    "subtitle": "Pray, connect and strengthen your faith with thousands of brothers and sisters around the world.",
+    "startNow": "Get Started",
+    "seePrayerRequests": "See Prayer Requests",
+    "churchPraying_one": "{{count}} church praying now!",
+    "churchPraying_other": "{{count}} churches praying now!",
+    "featurePrayers": "Prayer Requests",
+    "featurePrayersDesc": "Share your requests and pray for others. See the power of collective prayer and celebrate victories!",
+    "featureLive": "Pastor Praying Live",
+    "featureLiveDesc": "Know when your pastor is praying in real time. Prayer bubbles rise like incense to heaven.",
+    "featureMap": "Church Map",
+    "featureMapDesc": "Find churches in any city. Perfect for travelers and families on the move.",
+    "featureDashboard": "Pastoral Dashboard",
+    "featureDashboardDesc": "Complete management tools for pastors: members, finances, campaigns and much more.",
+    "featureMural": "Community Wall",
+    "featureMuralDesc": "Share testimonies, worship and verses with the Christian community.",
+    "featureKids": "Kids Corner",
+    "featureKidsDesc": "Bible stories, interactive quiz and activities for children to learn about the Bible!",
+    "featureChurch": "Register Your Church",
+    "featureChurchDesc": "Register your church on the platform and connect with believers from around the world.",
+    "explore": "Explore",
+    "registerBtn": "Register",
+    "helpTitle": "Need Help?",
+    "helpSubtitle": "You are not alone. A church can help you.",
+    "helpSeeThings": "Ã°Å¸â€˜ÂÃ¯Â¸Â I see things",
+    "helpHearThings": "Ã°Å¸â€˜â€š I hear noises",
+    "helpFeelAlone": "Ã°Å¸â€™â€ I feel alone",
+    "helpNeedPrayer": "Ã°Å¸â„¢Â I need prayer",
+    "helpAnxious": "Ã°Å¸ËœÂ° I feel anxious",
+    "helpDepressed": "Ã°Å¸ËœÂ¢ I feel sad/depressed",
+    "helpSent": "Ã¢Å“â€¦ Your request was sent! A nearby church will contact you to help. God bless you! Ã°Å¸â„¢Â",
+    "helpNamePlaceholder": "Your name (optional)",
+    "helpContactPlaceholder": "Phone or email for contact",
+    "helpMessagePlaceholder": "Tell us a little more about how you're feeling...",
+    "helpSend": "Ask for Help",
+    "helpBtn": "Ask for Help",
+    "verses": [
+      {
+        "text": "For where two or three gather in my name, there am I with them.",
+        "ref": "Matthew 18:20"
+      },
+      {
+        "text": "I can do all things through Christ who strengthens me.",
+        "ref": "Philippians 4:13"
+      },
+      {
+        "text": "The Lord is my shepherd; I shall not want.",
+        "ref": "Psalm 23:1"
+      },
+      {
+        "text": "Trust in the Lord with all your heart and lean not on your own understanding.",
+        "ref": "Proverbs 3:5"
+      },
+      {
+        "text": "For I know the plans I have for you, plans to give you hope and a future.",
+        "ref": "Jeremiah 29:11"
+      },
+      {
+        "text": "Be strong and courageous. Do not be afraid, for the Lord will be with you.",
+        "ref": "Deuteronomy 31:6"
+      },
+      {
+        "text": "The prayer of a righteous person is powerful and effective.",
+        "ref": "James 5:16"
+      }
+    ]
+  },
+  "login": {
+    "welcomeBack": "Welcome back!",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "Your password",
+    "submit": "Log in",
+    "or": "or",
+    "google": "Log in with Google",
+    "facebook": "Log in with Facebook",
+    "phone": "Log in with Phone",
+    "phoneNumber": "Phone number",
+    "sendCode": "Send code",
+    "verifyCode": "Verify code",
+    "codeSent": "Code sent!",
+    "codePlaceholder": "6-digit code",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up"
+  },
+  "register": {
+    "joinCommunity": "Join the community!",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Your full name",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "Minimum 6 characters",
+    "passwordError": "Password must be at least 6 characters",
+    "iAm": "I am:",
+    "member": "Member / Faithful",
+    "pastor": "Pastor / Leader",
+    "submit": "Sign up",
+    "or": "or",
+    "google": "Sign up with Google",
+    "facebook": "Sign up with Facebook",
+    "phone": "Sign up with Phone",
+    "hasAccount": "Already have an account?",
+    "signIn": "Log in"
+  },
+  "prayerFeed": {
+    "victoryWall": "Victory Wall",
+    "prayerRequests": "Prayer Requests",
+    "newRequest": "New Request",
+    "allRequests": "All Requests",
+    "answeredPrayers": "Answered Prayers",
+    "newPrayerRequest": "New Prayer Request",
+    "titleOptional": "Title (optional)",
+    "titlePlaceholder": "E.g.: Prayer for my family",
+    "yourRequest": "Your request *",
+    "requestPlaceholder": "Share your prayer request...",
+    "category": "Category",
+    "urgentRequest": "Urgent request",
+    "submitRequest": "Submit Request",
+    "loading": "Loading prayers...",
+    "noRequests": "No prayer requests yet. Be the first!",
+    "categories": {
+      "all": "All",
+      "health": "Health",
+      "work_finance": "Work/Finance",
+      "family": "Family",
+      "studies": "Studies",
+      "housing": "Housing",
+      "emotional": "Emotional",
+      "decisions": "Decisions",
+      "other": "Other"
+    }
+  },
+  "livePrayer": {
+    "title": "Live Prayer",
+    "churchPraying_one": "church praying",
+    "churchPraying_other": "churches praying",
+    "rightNow": "right now",
+    "closeOverlay": "Close Overlay",
+    "immersiveView": "Immersive Prayer View",
+    "pastorPanel": "Pastor Panel",
+    "focusOptional": "Prayer focus (optional)",
+    "focusPlaceholder": "E.g.: Praying for families",
+    "startLive": "Start Live Prayer",
+    "prayingLive": "You are praying live...",
+    "endPrayer": "End Prayer",
+    "pastorsPraying": "Pastors praying now:",
+    "noPastors": "No pastor praying live at this moment.",
+    "comeBack": "Come back soon!"
+  },
+  "churchMap": {
+    "title": "Church Map",
+    "searchPlaceholder": "Search by city, country or name...",
+    "search": "Search",
+    "searching": "Searching churches...",
+    "noResults": "No churches found for \"{{query}}\". Register yours!"
+  },
+  "churchRegister": {
+    "title": "Register Church",
+    "subtitle": "Register your church on the Sigo com FÃ© platform",
+    "churchName": "Church Name *",
+    "churchNamePlaceholder": "E.g.: Central Baptist Church",
+    "denomination": "Denomination",
+    "denominationPlaceholder": "E.g.: Baptist, Assembly of God, etc.",
+    "address": "Address",
+    "addressPlaceholder": "Street, number, neighborhood",
+    "city": "City",
+    "cityPlaceholder": "Your city",
+    "country": "Country",
+    "countryPlaceholder": "Country",
+    "phone": "Phone",
+    "phonePlaceholder": "+1 555 123-4567",
+    "pastorName": "Pastor Name",
+    "pastorNamePlaceholder": "Name of the responsible pastor",
+    "submit": "Register Church",
+    "submitting": "Registering...",
+    "success": "Church Registered!",
+    "redirecting": "Redirecting to the church map...",
+    "nameRequired": "Church name is required",
+    "loginRequired": "You must be logged in to register a church.",
+    "error": "Error registering"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "loading": "Loading data...",
+    "users": "Users",
+    "churches": "Churches",
+    "prayerRequests": "Prayer Requests",
+    "answeredPrayers": "Answered Prayers",
+    "quickActions": "Quick Actions",
+    "newPrayerRequest": "New Prayer Request",
+    "registerChurch": "Register Church",
+    "kidsCorner": "Kids Corner",
+    "recentActivity": "Recent Activity",
+    "requestedPrayer": "requested prayer:",
+    "noActivity": "No recent activity. Start by creating a prayer request!",
+    "viewAll": "View all requests"
+  },
+  "mural": {
+    "title": "Community Wall",
+    "subtitle": "Share testimonies, worship and verses with the Christian community",
+    "newPost": "New Post",
+    "cancel": "Cancel",
+    "shareWithCommunity": "Share with the Community",
+    "categoryLabel": "Category",
+    "message": "Message",
+    "messagePlaceholder": "Write your testimony, reflection or verse...",
+    "publish": "Publish",
+    "noPostsFound": "No posts found in this category.",
+    "filters": {
+      "all": "All",
+      "myChurch": "My Church",
+      "testimonies": "Testimonies",
+      "worship": "Worship",
+      "verses": "Verses"
+    },
+    "categories": {
+      "testemunho": "Testimony",
+      "louvor": "Worship / Video",
+      "reflexao": "Bible Reflection",
+      "versiculo": "Verse",
+      "foto": "Photo"
+    }
+  },
+  "kids": {
+    "title": "Digital Sunday School",
+    "subtitle": "Learn about the Bible in a fun way!",
+    "bibleStories": "Bible Stories",
+    "readStory": "Read Story",
+    "years": "years",
+    "bibleQuiz": "Bible Quiz",
+    "question": "Question {{current}} of {{total}}",
+    "congrats": "Congratulations!",
+    "scoreResult": "You got <strong>{{score}}</strong> out of <strong>{{total}}</strong>!",
+    "perfect": "Perfect! You are a Bible champion!",
+    "good": "Great job! Keep studying!",
+    "tryAgain": "Don't give up! Try again!",
+    "playAgain": "Play Again",
+    "weekVerse": "Verse of the Week",
+    "weekVerseText": "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
+    "weekVerseRef": "- John 3:16",
+    "memorized": "Memorized!",
+    "memorize": "I memorized it!",
+    "activities": "Activities",
+    "comingSoon": "Coming soon!",
+    "stories": [
+      {
+        "title": "David and Goliath",
+        "desc": "A brave boy who defeated a giant with a stone and great faith in God",
+        "age": "6-8"
+      },
+      {
+        "title": "Noah's Ark",
+        "desc": "Noah built a huge boat and saved all the animals from the great flood",
+        "age": "3-5"
+      },
+      {
+        "title": "Jonah and the Whale",
+        "desc": "Jonah ran from God but learned that He is everywhere",
+        "age": "6-8"
+      },
+      {
+        "title": "Daniel in the Lions' Den",
+        "desc": "Daniel prayed with faith and God shut the lions' mouths",
+        "age": "9-12"
+      },
+      {
+        "title": "Moses and the Red Sea",
+        "desc": "God parted the sea for His people to pass safely",
+        "age": "6-8"
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Who defeated the giant Goliath?",
+        "opts": [
+          "Saul",
+          "David",
+          "Moses",
+          "Joshua"
+        ]
+      },
+      {
+        "q": "How many days did the flood last?",
+        "opts": [
+          "10 days",
+          "20 days",
+          "40 days",
+          "100 days"
+        ]
+      },
+      {
+        "q": "Who was thrown into the lions' den?",
+        "opts": [
+          "Jonah",
+          "Daniel",
+          "Paul",
+          "Peter"
+        ]
+      },
+      {
+        "q": "What is the first book of the Bible?",
+        "opts": [
+          "Exodus",
+          "Psalms",
+          "Genesis",
+          "Matthew"
+        ]
+      },
+      {
+        "q": "In which city was Jesus born?",
+        "opts": [
+          "Jerusalem",
+          "Nazareth",
+          "Bethlehem",
+          "Capernaum"
+        ]
+      }
+    ],
+    "activityList": [
+      {
+        "title": "Coloring",
+        "desc": "Color biblical characters with beautiful colors"
+      },
+      {
+        "title": "Word Search",
+        "desc": "Find hidden Bible words"
+      },
+      {
+        "title": "Memory Game",
+        "desc": "Find the pairs of the 12 apostles"
+      },
+      {
+        "title": "Puzzle",
+        "desc": "Assemble amazing biblical scenes"
+      }
+    ]
+  },
+  "feedPost": {
+    "tapToWatch": "Tap to watch",
+    "photo": "Photo",
+    "amem": "Amen",
+    "share": "Share"
+  },
+  "prayerCard": {
+    "urgent": "URGENT",
+    "testimony": "Testimony:",
+    "personPraying_one": "{{count}} person praying",
+    "personPraying_other": "{{count}} people praying",
+    "timeAgo": {
+      "min": "{{count}}min ago",
+      "hour": "{{count}}h ago",
+      "day": "{{count}}d ago"
+    },
+    "categories": {
+      "health": "Health",
+      "work_finance": "Work/Finance",
+      "family": "Family",
+      "studies": "Studies",
+      "housing": "Housing",
+      "emotional": "Emotional",
+      "decisions": "Decisions",
+      "other": "Other"
+    }
+  },
+  "amemButton": {
+    "praying": "Praying!",
+    "prayForYou": "Praying for You"
+  },
+  "pastorOverlay": {
+    "title": "Pastors Praying Live",
+    "churchesInPrayer_one": "{{count}} church in prayer right now",
+    "churchesInPrayer_other": "{{count}} churches in prayer right now",
+    "close": "Close"
+  },
+  "churchPin": {
+    "pastor": "Pastor {{name}}",
+    "members": "{{count}} members",
+    "following": "Following",
+    "follow": "Follow",
+    "directions": "Get Directions",
+    "share": "Share",
+    "shareText": "Check out {{name}} on Sigo com FÃ©!"
+  },
+  "langSwitcher": {
+    "label": "Language"
+  },
+  "pastorChat": {
+    "title": "Pastoral Chat",
+    "subtitle": "Talk directly with a pastor. Auto-translation included.",
+    "yourName": "Your name",
+    "selectHelp": "What do you need?",
+    "selectLanguage": "Your language",
+    "startChat": "Start Chat",
+    "anyChurch": "Any available church",
+    "waiting": "Waiting for a pastor...",
+    "waitingDesc": "A pastor will join the conversation soon. Have faith!",
+    "imPastor": "I'm a Pastor",
+    "imPerson": "I Need Help",
+    "waitingRooms": "People waiting",
+    "noWaiting": "No one waiting at the moment.",
+    "joinChat": "Join",
+    "pastorName": "Your name (pastor)",
+    "endChat": "End conversation",
+    "chatEnded": "Conversation ended. God bless!",
+    "typeMessage": "Type your message...",
+    "send": "Send",
+    "typing": "typing...",
+    "translated": "Translation",
+    "joinedChat": "joined the conversation",
+    "leftChat": "left the conversation",
+    "langPt": "PortuguÃƒÂªs",
+    "langEn": "English",
+    "langEs": "EspaÃƒÂ±ol",
+    "langDe": "Deutsch",
+    "autoTranslate": "Ã°Å¸Å’Â Auto-translation enabled"
+  },
+  "friends": {
+    "title": "Friends",
+    "search": "Search",
+    "myFriends": "My Friends",
+    "requests": "Requests",
+    "addFriend": "Add Friend",
+    "pending": "Pending",
+    "accept": "Accept",
+    "reject": "Reject",
+    "removeFriend": "Remove",
+    "noFriends": "You have no friends yet. Search for people to connect!",
+    "noRequests": "No pending friend requests.",
+    "searchPlaceholder": "Search by name...",
+    "requestSent": "Friend request sent!",
+    "friendAdded": "Friendship accepted!",
+    "friendRemoved": "Friend removed."
+  },
+  "helpRequests": {
+    "title": "Help Requests",
+    "subtitle": "People in need of spiritual support and prayer. Respond with love.",
+    "loading": "Loading...",
+    "empty": "No help requests at the moment. Praise God!",
+    "justNow": "just now",
+    "filter_all": "All",
+    "filter_pending": "Pending",
+    "filter_in_progress": "In Progress",
+    "filter_resolved": "Resolved",
+    "markInProgress": "I'm helping",
+    "markResolved": "Resolved",
+    "resolved": "Resolved"
+  },
+  "profile": {
+    "title": "Profile",
+    "memberSince": "Member since",
+    "editProfile": "Edit Profile",
+    "prayers": "Prayers",
+    "posts": "Posts",
+    "friends": "Friends",
+    "bio": "About",
+    "noBio": "No bio yet",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "messages": {
+    "writePlaceholder": "Write your message...",
+    "whenSomeone": "When someone sends you a message, it will appear here!",
+    "noConversations": "No conversations yet",
+    "back": "Back",
+    "noMessages": "No messages yet",
+    "title": "Messages",
+    "loading": "Loading..."
+  },
+  "groups": {
+    "newGroup": "Create New Group",
+    "noPosts": "No posts yet",
+    "public": "Public",
+    "groupName": "Group name",
+    "back": "Back",
+    "cancel": "Cancel",
+    "creating": "Creating...",
+    "leave": "Leave Group",
+    "private": "Private",
+    "description": "Description (optional)",
+    "createGroup": "Create Group",
+    "writePlaceholder": "Write in the group...",
+    "title": "Groups",
+    "join": "Join Group",
+    "noGroups": "No groups yet",
+    "members": "members",
+    "createFirst": "Create the first community group!"
+  },
+  "consecration": {
+    "consecratingNow": "Consecrating now",
+    "subtitle": "Fasting and prayer â€” strengthen your faith",
+    "fastingToday": "Fasting today",
+    "benefits": "Benefits of Fasting",
+    "consecrating": "Consecrating...",
+    "noOneYet": "No one consecrating yet. Be the first!",
+    "totalConsecrations": "Total consecrations",
+    "conclusion": "Fasting: Not a diet. Not an empty sacrifice. It is obedience, alignment and dependence on God.",
+    "title": "Consecration",
+    "imConsecrating": "I'm Consecrating",
+    "loginRequired": "Log in to consecrate!"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "noNotifications": "No notifications yet.",
+    "flaggedPost": "Flagged Post"
+  },
+  "common": {
+    "edit": "Edit",
+    "report": "Report",
+    "save": "Save",
+    "shareCommunity": "Share something with the community...",
+    "writeComment": "Write a comment...",
+    "noPostsYet": "No posts yet.",
+    "share": "Share",
+    "send": "Send",
+    "reportConfirm": "Report this post as inappropriate?",
+    "loading": "Loading...",
+    "reported": "Post reported! Moderators will review it.",
+    "publish": "Publish",
+    "comment": "Comment",
+    "confirm": "Confirm",
+    "beFirst": "Be the first to post!",
+    "publishing": "Posting...",
+    "loginToLike": "Log in to like!",
+    "loginToComment": "Log in to comment!",
+    "linkCopied": "Link copied!",
+    "close": "Close",
+    "delete": "Delete",
+    "translate": "Translate",
+    "translation": "Translation",
+    "hideTranslation": "Hide translation"
+  },
+  "offerings": {
+    "notPastor": "To contribute, contact your church pastor.",
+    "records": "Records",
+    "paypalEmail": "PayPal Email",
+    "offering": "Offering",
+    "tithe": "Tithe",
+    "bank": "Bank",
+    "holder": "Holder",
+    "saving": "Saving...",
+    "pixNamePlaceholder": "Name on PIX",
+    "noContributions": "No contributions recorded yet",
+    "contributions": "Contributions",
+    "holderPlaceholder": "Account holder name",
+    "save": "Save Settings",
+    "title": "Offerings and Tithes",
+    "messagePlaceholder": "God bless your offering!",
+    "pixKey": "PIX Key (CPF, Email, Phone or Random)",
+    "account": "Account",
+    "bankTransfer": "Bank Transfer",
+    "pixKeyPlaceholder": "Your PIX key",
+    "configure": "Configure",
+    "agency": "Branch",
+    "saved": "Saved!",
+    "thisMonth": "This month",
+    "pixName": "Account Holder",
+    "totalGeneral": "Total",
+    "messageToMembers": "Message to Members"
+  },
+  "music": {
+    "title": "Music Library",
+    "subtitle": "Free worship & praise music",
+    "worship": "Worship & Praise",
+    "hymns": "Classic Hymns",
+    "instrumental": "Instrumental",
+    "kids": "Kids Gospel",
+    "prayer": "Prayer Music",
+    "favorites": "Favorites",
+    "noFavorites": "No favorites yet",
+    "tapHeart": "Tap ❤️ to save songs",
+    "freeSources": "More free music"
+  }
 }
