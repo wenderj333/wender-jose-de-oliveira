@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './context/AuthContext';
-import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users, User, Download } from 'lucide-react';
+import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users, User, Download, Bell } from 'lucide-react';
 import Home from './pages/Home';
 import PrayerFeed from './pages/PrayerFeed';
 import LivePrayer from './pages/LivePrayer';
@@ -45,6 +45,26 @@ export default function App() {
   const { t } = useTranslation();
   const [installPrompt, setInstallPrompt] = useState(null);
   const [showInstallBtn, setShowInstallBtn] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Poll unread notifications every 60 seconds
+  useEffect(() => {
+    if (!user) return;
+    const API = (import.meta.env.VITE_API_URL || '') + '/api';
+    const token = localStorage.getItem('token');
+    async function checkUnread() {
+      try {
+        const res = await fetch(`${API}/notifications/unread-count`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        setUnreadCount(data.count || 0);
+      } catch (e) {}
+    }
+    checkUnread();
+    const interval = setInterval(checkUnread, 60000);
+    return () => clearInterval(interval);
+  }, [user]);
 
   useEffect(() => {
     const handler = (e) => {
@@ -76,6 +96,19 @@ export default function App() {
             <img src="/icon.svg" alt="" style={{ width: 30, height: 30, verticalAlign: 'middle', marginRight: '6px' }} />{t('brand')}
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {user && (
+              <Link to="/mensagens" style={{ position: 'relative', color: '#fff', textDecoration: 'none' }}>
+                <Bell size={22} />
+                {unreadCount > 0 && (
+                  <span style={{
+                    position: 'absolute', top: -6, right: -8,
+                    background: '#e74c3c', color: '#fff', borderRadius: '50%',
+                    width: 18, height: 18, fontSize: '0.65rem', fontWeight: 700,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>{unreadCount > 9 ? '9+' : unreadCount}</span>
+                )}
+              </Link>
+            )}
             <LanguageSwitcher />
             <button className="nav-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
