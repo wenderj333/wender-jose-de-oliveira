@@ -227,6 +227,43 @@ export default function Mural() {
             </div>
           )}
 
+          {/* Dica de edição para vídeos */}
+          {newMediaIsVideo && (
+            <div style={{
+              background: '#fff8e1', border: '1px solid #ffe082', borderRadius: 10,
+              padding: '0.7rem', marginBottom: '0.5rem', fontSize: '0.8rem', color: '#6d4c00',
+            }}>
+              <strong>💡 Dica:</strong> Edite seu vídeo e adicione música antes de postar!
+              <div style={{ marginTop: 6, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                <a href="https://www.capcut.com" target="_blank" rel="noopener" style={{
+                  background: '#fff', padding: '3px 10px', borderRadius: 12, border: '1px solid #ddd',
+                  textDecoration: 'none', color: '#333', fontSize: '0.75rem',
+                }}>🎬 CapCut (grátis)</a>
+                <a href="https://inshot.com" target="_blank" rel="noopener" style={{
+                  background: '#fff', padding: '3px 10px', borderRadius: 12, border: '1px solid #ddd',
+                  textDecoration: 'none', color: '#333', fontSize: '0.75rem',
+                }}>✂️ InShot (grátis)</a>
+              </div>
+              <div style={{ marginTop: 8 }}>
+                <strong>🎵 Músicas evangélicas sem copyright:</strong>
+                <div style={{ marginTop: 4, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  <a href="https://www.youtube.com/results?search_query=m%C3%BAsica+evang%C3%A9lica+sem+copyright" target="_blank" rel="noopener" style={{
+                    background: '#fff', padding: '3px 10px', borderRadius: 12, border: '1px solid #ddd',
+                    textDecoration: 'none', color: '#c00', fontSize: '0.75rem',
+                  }}>▶️ YouTube</a>
+                  <a href="https://pixabay.com/music/search/worship/" target="_blank" rel="noopener" style={{
+                    background: '#fff', padding: '3px 10px', borderRadius: 12, border: '1px solid #ddd',
+                    textDecoration: 'none', color: '#333', fontSize: '0.75rem',
+                  }}>🎶 Pixabay Music</a>
+                  <a href="https://uppbeat.io/browse/music/christian" target="_blank" rel="noopener" style={{
+                    background: '#fff', padding: '3px 10px', borderRadius: 12, border: '1px solid #ddd',
+                    textDecoration: 'none', color: '#333', fontSize: '0.75rem',
+                  }}>🎹 Uppbeat</a>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Actions */}
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <button type="button" onClick={() => fileRef.current?.click()} style={{
