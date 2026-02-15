@@ -87,22 +87,39 @@ export default function Mural() {
     const isVid = file.type.startsWith('video/');
     const resourceType = isVid ? 'video' : 'image';
 
-    // Pegar assinatura do backend
-    const sigRes = await fetch(`${API}/feed/cloudinary-signature`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const { signature, timestamp, cloudName, apiKey, folder } = await sigRes.json();
+    // Tentar upload assinado via backend
+    try {
+      const sigRes = await fetch(`${API}/feed/cloudinary-signature`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (sigRes.ok) {
+        const { signature, timestamp, cloudName, apiKey, folder } = await sigRes.json();
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('api_key', apiKey);
+        fd.append('timestamp', timestamp);
+        fd.append('signature', signature);
+        fd.append('folder', folder);
 
+        const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`, {
+          method: 'POST', body: fd,
+        });
+        const result = await uploadRes.json();
+        if (result.secure_url) return { url: result.secure_url, type: resourceType };
+        console.error('Cloudinary signed upload error:', result);
+      }
+    } catch (e) {
+      console.error('Signed upload failed, trying unsigned:', e);
+    }
+
+    // Fallback: upload unsigned (precisa de upload preset no Cloudinary)
     const fd = new FormData();
     fd.append('file', file);
-    fd.append('api_key', apiKey);
-    fd.append('timestamp', timestamp);
-    fd.append('signature', signature);
-    fd.append('folder', folder);
+    fd.append('upload_preset', 'sigo_com_fe');
+    fd.append('folder', 'sigo-com-fe/posts');
 
-    const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`, {
-      method: 'POST',
-      body: fd,
+    const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/${resourceType}/upload`, {
+      method: 'POST', body: fd,
     });
     const result = await uploadRes.json();
     if (result.error) throw new Error(result.error.message);
