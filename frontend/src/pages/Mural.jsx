@@ -135,11 +135,16 @@ export default function Mural() {
       formData.append('content', newText);
       formData.append('category', newCategory);
 
-      // Upload mídia direto ao Cloudinary (fotos E vídeos)
+      // Upload mídia: tenta direto ao Cloudinary, fallback via backend
       if (newMedia) {
-        const result = await uploadDirectToCloudinary(newMedia);
-        formData.append('media_url', result.url);
-        formData.append('media_type', result.type);
+        try {
+          const result = await uploadDirectToCloudinary(newMedia);
+          formData.append('media_url', result.url);
+          formData.append('media_type', result.type);
+        } catch (uploadErr) {
+          console.warn('Direct upload failed, sending via backend:', uploadErr);
+          formData.append('image', newMedia);
+        }
       }
 
       const res = await fetch(`${API}/feed`, {
@@ -147,6 +152,7 @@ export default function Mural() {
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
+      if (!res.ok) throw new Error(`Server error ${res.status}`);
       const data = await res.json();
       if (data.post) {
         data.post.author_name = user.full_name;
