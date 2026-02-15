@@ -173,6 +173,34 @@ export default function Mural() {
   }
 
   const getMediaUrl = (url) => url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
+
+  // Tradução automática via MyMemory API (gratuita)
+  async function translatePost(postId, text) {
+    const lang = localStorage.getItem('i18nextLng') || 'pt';
+    const targetLang = lang.substring(0, 2);
+    setPosts(prev => prev.map(p => p.id === postId ? {...p, translating: true} : p));
+    try {
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.substring(0, 500))}&langpair=auto|${targetLang}`);
+      const data = await res.json();
+      const translated = data?.responseData?.translatedText || '';
+      // Para textos longos, traduzir em partes
+      let fullTranslation = translated;
+      if (text.length > 500) {
+        const parts = [];
+        for (let i = 0; i < text.length; i += 500) {
+          const part = text.substring(i, i + 500);
+          const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(part)}&langpair=auto|${targetLang}`);
+          const d = await r.json();
+          parts.push(d?.responseData?.translatedText || part);
+        }
+        fullTranslation = parts.join('');
+      }
+      setPosts(prev => prev.map(p => p.id === postId ? {...p, translatedContent: fullTranslation, showTranslation: true, translating: false} : p));
+    } catch (err) {
+      console.error('Translation error:', err);
+      setPosts(prev => prev.map(p => p.id === postId ? {...p, translating: false} : p));
+    }
+  }
   const getAvatarUrl = (url) => url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
 
   const filteredPosts = activeFilter === 'todas'
@@ -376,6 +404,32 @@ export default function Mural() {
               {/* Content */}
               <div style={{ padding: '0 1rem 0.5rem', fontSize: '0.9rem', lineHeight: 1.5, color: '#333' }}>
                 {post.content}
+              </div>
+
+              {/* Translation */}
+              {post.showTranslation && post.translatedContent && (
+                <div style={{ padding: '0 1rem 0.5rem', fontSize: '0.85rem', lineHeight: 1.5, color: '#1a0a3e', background: '#f0f4ff', borderRadius: 8, margin: '0 0.5rem 0.5rem', padding: '0.5rem 0.75rem' }}>
+                  <div style={{ fontSize: '0.7rem', color: '#666', marginBottom: 4 }}>🌍 {t('common.translation', 'Tradução')}</div>
+                  {post.translatedContent}
+                </div>
+              )}
+
+              {/* Translate button */}
+              <div style={{ padding: '0 1rem 0.25rem' }}>
+                <button onClick={() => {
+                  if (post.showTranslation) {
+                    setPosts(prev => prev.map(p => p.id === post.id ? {...p, showTranslation: false} : p));
+                  } else if (post.translatedContent) {
+                    setPosts(prev => prev.map(p => p.id === post.id ? {...p, showTranslation: true} : p));
+                  } else {
+                    translatePost(post.id, post.content);
+                  }
+                }} disabled={post.translating} style={{
+                  background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem',
+                  color: post.showTranslation ? '#1a0a3e' : '#999', display: 'flex', alignItems: 'center', gap: 4,
+                }}>
+                  🌍 {post.translating ? t('common.loading', 'Traduzindo...') : post.showTranslation ? t('common.close', 'Ocultar tradução') : t('common.translate', 'Traduzir')}
+                </button>
               </div>
 
               {/* Verse reference */}

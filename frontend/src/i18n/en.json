@@ -1,5 +1,5 @@
-{
-    "brand":  "Sigo com Fé",
+﻿{
+    "brand":  "Sigo com FÃ©",
     "nav":  {
                 "prayers":  "Prayers",
                 "mural":  "Community Wall",
@@ -25,7 +25,7 @@
                 "notifications":  "Notifications",
                 "myProfile":  "My Profile"
             },
-    "footer":  "Â© 2026 Sigo com Fé - Technology at the service of the Kingdom",
+    "footer":  "Ã‚Â© 2026 Sigo com FÃ© - Technology at the service of the Kingdom",
     "home":  {
                  "subtitle":  "Pray, connect and strengthen your faith with thousands of brothers and sisters around the world.",
                  "startNow":  "Get Started",
@@ -50,13 +50,13 @@
                  "registerBtn":  "Register",
                  "helpTitle":  "Need Help?",
                  "helpSubtitle":  "You are not alone. A church can help you.",
-                 "helpSeeThings":  "ðŸ‘ï¸ I see things",
-                 "helpHearThings":  "ðŸ‘‚ I hear noises",
-                 "helpFeelAlone":  "ðŸ’” I feel alone",
-                 "helpNeedPrayer":  "ðŸ™ I need prayer",
-                 "helpAnxious":  "ðŸ˜° I feel anxious",
-                 "helpDepressed":  "ðŸ˜¢ I feel sad/depressed",
-                 "helpSent":  "âœ… Your request was sent! A nearby church will contact you to help. God bless you! ðŸ™",
+                 "helpSeeThings":  "Ã°Å¸â€˜ÂÃ¯Â¸Â I see things",
+                 "helpHearThings":  "Ã°Å¸â€˜â€š I hear noises",
+                 "helpFeelAlone":  "Ã°Å¸â€™â€ I feel alone",
+                 "helpNeedPrayer":  "Ã°Å¸â„¢Â I need prayer",
+                 "helpAnxious":  "Ã°Å¸ËœÂ° I feel anxious",
+                 "helpDepressed":  "Ã°Å¸ËœÂ¢ I feel sad/depressed",
+                 "helpSent":  "Ã¢Å“â€¦ Your request was sent! A nearby church will contact you to help. God bless you! Ã°Å¸â„¢Â",
                  "helpNamePlaceholder":  "Your name (optional)",
                  "helpContactPlaceholder":  "Phone or email for contact",
                  "helpMessagePlaceholder":  "Tell us a little more about how you\u0027re feeling...",
@@ -186,7 +186,7 @@
                   },
     "churchRegister":  {
                            "title":  "Register Church",
-                           "subtitle":  "Register your church on the Sigo com Fé platform",
+                           "subtitle":  "Register your church on the Sigo com FÃ© platform",
                            "churchName":  "Church Name *",
                            "churchNamePlaceholder":  "E.g.: Central Baptist Church",
                            "denomination":  "Denomination",
@@ -409,7 +409,7 @@
                       "follow":  "Follow",
                       "directions":  "Get Directions",
                       "share":  "Share",
-                      "shareText":  "Check out {{name}} on Sigo com Fé!"
+                      "shareText":  "Check out {{name}} on Sigo com FÃ©!"
                   },
     "langSwitcher":  {
                          "label":  "Language"
@@ -438,11 +438,11 @@
                        "translated":  "Translation",
                        "joinedChat":  "joined the conversation",
                        "leftChat":  "left the conversation",
-                       "langPt":  "PortuguÃªs",
+                       "langPt":  "PortuguÃƒÂªs",
                        "langEn":  "English",
-                       "langEs":  "EspaÃ±ol",
+                       "langEs":  "EspaÃƒÂ±ol",
                        "langDe":  "Deutsch",
-                       "autoTranslate":  "ðŸŒ Auto-translation enabled"
+                       "autoTranslate":  "Ã°Å¸Å’Â Auto-translation enabled"
                    },
     "friends":  {
                     "title":  "Friends",
@@ -517,7 +517,7 @@
                },
     "consecration":  {
                          "consecratingNow":  "Consecrating now",
-                         "subtitle":  "Fasting and prayer — strengthen your faith",
+                         "subtitle":  "Fasting and prayer â€” strengthen your faith",
                          "fastingToday":  "Fasting today",
                          "benefits":  "Benefits of Fasting",
                          "consecrating":  "Consecrating...",
@@ -555,7 +555,10 @@
                    "loginToComment":  "Log in to comment!",
                    "linkCopied":  "Link copied!",
                    "close":  "Close",
-                   "delete":  "Delete"
+                   "delete":  "Delete",
+                   "translate":  "Translate",
+                   "translation":  "Translation",
+                   "hideTranslation":  "Hide translation"
                },
     "offerings":  {
                       "notPastor":  "To contribute, contact your church pastor.",

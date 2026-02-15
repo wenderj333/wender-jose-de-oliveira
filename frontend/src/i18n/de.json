@@ -1,5 +1,5 @@
-{
-    "brand":  "Sigo com Fé",
+﻿{
+    "brand":  "Sigo com FÃ©",
     "nav":  {
                 "prayers":  "Gebete",
                 "mural":  "Pinnwand",
@@ -25,47 +25,47 @@
                 "notifications":  "Benachrichtigungen",
                 "myProfile":  "Mein Profil"
             },
-    "footer":  "Â© 2026 Sigo com Fé - Technologie im Dienste des Reiches Gottes",
+    "footer":  "Ã‚Â© 2026 Sigo com FÃ© - Technologie im Dienste des Reiches Gottes",
     "home":  {
-                 "subtitle":  "Bete, verbinde dich und stÃ¤rke deinen Glauben mit Tausenden von Geschwistern auf der ganzen Welt.",
+                 "subtitle":  "Bete, verbinde dich und stÃƒÂ¤rke deinen Glauben mit Tausenden von Geschwistern auf der ganzen Welt.",
                  "startNow":  "Jetzt starten",
                  "seePrayerRequests":  "Gebetsanliegen ansehen",
                  "churchPraying_one":  "{{count}} Kirche betet jetzt!",
                  "churchPraying_other":  "{{count}} Kirchen beten jetzt!",
                  "featurePrayers":  "Gebetsanliegen",
-                 "featurePrayersDesc":  "Teile deine Anliegen und bete fÃ¼r andere. Erlebe die Kraft des gemeinsamen Gebets und feiere Siege!",
+                 "featurePrayersDesc":  "Teile deine Anliegen und bete fÃƒÂ¼r andere. Erlebe die Kraft des gemeinsamen Gebets und feiere Siege!",
                  "featureLive":  "Pastor betet live",
                  "featureLiveDesc":  "Erfahre, wenn dein Pastor in Echtzeit betet. Gebetsblasen steigen wie Weihrauch zum Himmel auf.",
                  "featureMap":  "Kirchenkarte",
-                 "featureMapDesc":  "Finde Kirchen in jeder Stadt. Perfekt fÃ¼r Reisende und Familien im Umzug.",
+                 "featureMapDesc":  "Finde Kirchen in jeder Stadt. Perfekt fÃƒÂ¼r Reisende und Familien im Umzug.",
                  "featureDashboard":  "Pastorales Dashboard",
-                 "featureDashboardDesc":  "Komplette Verwaltungstools fÃ¼r Pastoren: Mitglieder, Finanzen, Kampagnen und vieles mehr.",
+                 "featureDashboardDesc":  "Komplette Verwaltungstools fÃƒÂ¼r Pastoren: Mitglieder, Finanzen, Kampagnen und vieles mehr.",
                  "featureMural":  "Gemeinde-Pinnwand",
                  "featureMuralDesc":  "Teile Zeugnisse, Lobpreis und Verse mit der christlichen Gemeinschaft.",
                  "featureKids":  "Kids-Ecke",
-                 "featureKidsDesc":  "Bibelgeschichten, interaktives Quiz und AktivitÃ¤ten fÃ¼r Kinder zum Bibellernen!",
+                 "featureKidsDesc":  "Bibelgeschichten, interaktives Quiz und AktivitÃƒÂ¤ten fÃƒÂ¼r Kinder zum Bibellernen!",
                  "featureChurch":  "Registriere deine Kirche",
-                 "featureChurchDesc":  "Registriere deine Kirche auf der Plattform und verbinde dich mit GlÃ¤ubigen aus aller Welt.",
+                 "featureChurchDesc":  "Registriere deine Kirche auf der Plattform und verbinde dich mit GlÃƒÂ¤ubigen aus aller Welt.",
                  "explore":  "Entdecken",
                  "registerBtn":  "Registrieren",
                  "helpTitle":  "Brauchst du Hilfe?",
                  "helpSubtitle":  "Du bist nicht allein. Eine Kirche kann dir helfen.",
-                 "helpSeeThings":  "ðŸ‘ï¸ Ich sehe Dinge",
-                 "helpHearThings":  "ðŸ‘‚ Ich hÃ¶re GerÃ¤usche",
-                 "helpFeelAlone":  "ðŸ’” Ich fÃ¼hle mich allein",
-                 "helpNeedPrayer":  "ðŸ™ Ich brauche Gebet",
-                 "helpAnxious":  "ðŸ˜° Ich bin Ã¤ngstlich",
-                 "helpDepressed":  "ðŸ˜¢ Ich bin traurig/deprimiert",
-                 "helpSent":  "âœ… Deine Anfrage wurde gesendet! Eine Kirche in deiner NÃ¤he wird sich melden. Gott segne dich! ðŸ™",
+                 "helpSeeThings":  "Ã°Å¸â€˜ÂÃ¯Â¸Â Ich sehe Dinge",
+                 "helpHearThings":  "Ã°Å¸â€˜â€š Ich hÃƒÂ¶re GerÃƒÂ¤usche",
+                 "helpFeelAlone":  "Ã°Å¸â€™â€ Ich fÃƒÂ¼hle mich allein",
+                 "helpNeedPrayer":  "Ã°Å¸â„¢Â Ich brauche Gebet",
+                 "helpAnxious":  "Ã°Å¸ËœÂ° Ich bin ÃƒÂ¤ngstlich",
+                 "helpDepressed":  "Ã°Å¸ËœÂ¢ Ich bin traurig/deprimiert",
+                 "helpSent":  "Ã¢Å“â€¦ Deine Anfrage wurde gesendet! Eine Kirche in deiner NÃƒÂ¤he wird sich melden. Gott segne dich! Ã°Å¸â„¢Â",
                  "helpNamePlaceholder":  "Dein Name (optional)",
                  "helpContactPlaceholder":  "Telefon oder E-Mail",
-                 "helpMessagePlaceholder":  "ErzÃ¤hl uns ein wenig mehr darÃ¼ber, wie du dich fÃ¼hlst...",
+                 "helpMessagePlaceholder":  "ErzÃƒÂ¤hl uns ein wenig mehr darÃƒÂ¼ber, wie du dich fÃƒÂ¼hlst...",
                  "helpSend":  "Um Hilfe bitten",
                  "helpBtn":  "Um Hilfe bitten",
                  "verses":  [
                                 {
                                     "text":  "Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.",
-                                    "ref":  "MatthÃ¤us 18:20"
+                                    "ref":  "MatthÃƒÂ¤us 18:20"
                                 },
                                 {
                                     "text":  "Ich vermag alles durch den, der mich stark macht.",
@@ -76,25 +76,25 @@
                                     "ref":  "Psalm 23:1"
                                 },
                                 {
-                                    "text":  "Vertraue auf den Herrn von ganzem Herzen und stÃ¼tze dich nicht auf deinen Verstand.",
-                                    "ref":  "SprÃ¼che 3:5"
+                                    "text":  "Vertraue auf den Herrn von ganzem Herzen und stÃƒÂ¼tze dich nicht auf deinen Verstand.",
+                                    "ref":  "SprÃƒÂ¼che 3:5"
                                 },
                                 {
-                                    "text":  "Denn ich weiÃŸ, was fÃ¼r PlÃ¤ne ich fÃ¼r euch habe, PlÃ¤ne des Heils und nicht des Unheils, euch eine Zukunft und Hoffnung zu geben.",
+                                    "text":  "Denn ich weiÃƒÅ¸, was fÃƒÂ¼r PlÃƒÂ¤ne ich fÃƒÂ¼r euch habe, PlÃƒÂ¤ne des Heils und nicht des Unheils, euch eine Zukunft und Hoffnung zu geben.",
                                     "ref":  "Jeremia 29:11"
                                 },
                                 {
-                                    "text":  "Seid stark und mutig. FÃ¼rchtet euch nicht, denn der Herr wird mit euch sein.",
+                                    "text":  "Seid stark und mutig. FÃƒÂ¼rchtet euch nicht, denn der Herr wird mit euch sein.",
                                     "ref":  "5. Mose 31:6"
                                 },
                                 {
-                                    "text":  "Das Gebet eines Gerechten ist mÃ¤chtig und wirksam.",
+                                    "text":  "Das Gebet eines Gerechten ist mÃƒÂ¤chtig und wirksam.",
                                     "ref":  "Jakobus 5:16"
                                 }
                             ]
              },
     "login":  {
-                  "welcomeBack":  "Willkommen zurÃ¼ck!",
+                  "welcomeBack":  "Willkommen zurÃƒÂ¼ck!",
                   "email":  "E-Mail",
                   "emailPlaceholder":  "deine@email.com",
                   "password":  "Passwort",
@@ -114,15 +114,15 @@
               },
     "register":  {
                      "joinCommunity":  "Tritt der Gemeinschaft bei!",
-                     "fullName":  "VollstÃ¤ndiger Name",
-                     "fullNamePlaceholder":  "Dein vollstÃ¤ndiger Name",
+                     "fullName":  "VollstÃƒÂ¤ndiger Name",
+                     "fullNamePlaceholder":  "Dein vollstÃƒÂ¤ndiger Name",
                      "email":  "E-Mail",
                      "emailPlaceholder":  "deine@email.com",
                      "password":  "Passwort",
                      "passwordPlaceholder":  "Mindestens 6 Zeichen",
                      "passwordError":  "Das Passwort muss mindestens 6 Zeichen haben",
                      "iAm":  "Ich bin:",
-                     "member":  "Mitglied / GlÃ¤ubiger",
+                     "member":  "Mitglied / GlÃƒÂ¤ubiger",
                      "pastor":  "Pastor / Leiter",
                      "submit":  "Registrieren",
                      "or":  "oder",
@@ -137,10 +137,10 @@
                        "prayerRequests":  "Gebetsanliegen",
                        "newRequest":  "Neues Anliegen",
                        "allRequests":  "Alle Anliegen",
-                       "answeredPrayers":  "ErhÃ¶rte Gebete",
+                       "answeredPrayers":  "ErhÃƒÂ¶rte Gebete",
                        "newPrayerRequest":  "Neues Gebetsanliegen",
                        "titleOptional":  "Titel (optional)",
-                       "titlePlaceholder":  "Z.B.: Gebet fÃ¼r meine Familie",
+                       "titlePlaceholder":  "Z.B.: Gebet fÃƒÂ¼r meine Familie",
                        "yourRequest":  "Dein Anliegen *",
                        "requestPlaceholder":  "Teile dein Gebetsanliegen...",
                        "category":  "Kategorie",
@@ -165,11 +165,11 @@
                        "churchPraying_one":  "Kirche betet",
                        "churchPraying_other":  "Kirchen beten",
                        "rightNow":  "gerade jetzt",
-                       "closeOverlay":  "Overlay schlieÃŸen",
+                       "closeOverlay":  "Overlay schlieÃƒÅ¸en",
                        "immersiveView":  "Immersive Gebetsansicht",
                        "pastorPanel":  "Pastor-Panel",
                        "focusOptional":  "Gebetsfokus (optional)",
-                       "focusPlaceholder":  "Z.B.: Gebet fÃ¼r Familien",
+                       "focusPlaceholder":  "Z.B.: Gebet fÃƒÂ¼r Familien",
                        "startLive":  "Live-Gebet starten",
                        "prayingLive":  "Du betest live...",
                        "endPrayer":  "Gebet beenden",
@@ -182,17 +182,17 @@
                       "searchPlaceholder":  "Suche nach Stadt, Land oder Name...",
                       "search":  "Suchen",
                       "searching":  "Kirchen werden gesucht...",
-                      "noResults":  "Keine Kirchen fÃ¼r \"{{query}}\" gefunden. Registriere deine!"
+                      "noResults":  "Keine Kirchen fÃƒÂ¼r \"{{query}}\" gefunden. Registriere deine!"
                   },
     "churchRegister":  {
                            "title":  "Kirche registrieren",
-                           "subtitle":  "Registriere deine Kirche auf der Sigo com Fé Plattform",
+                           "subtitle":  "Registriere deine Kirche auf der Sigo com FÃ© Plattform",
                            "churchName":  "Name der Kirche *",
                            "churchNamePlaceholder":  "Z.B.: Zentrale Baptistengemeinde",
                            "denomination":  "Konfession",
                            "denominationPlaceholder":  "Z.B.: Baptisten, Assembleia de Deus, etc.",
                            "address":  "Adresse",
-                           "addressPlaceholder":  "StraÃŸe, Hausnummer, Stadtteil",
+                           "addressPlaceholder":  "StraÃƒÅ¸e, Hausnummer, Stadtteil",
                            "city":  "Stadt",
                            "cityPlaceholder":  "Deine Stadt",
                            "country":  "Land",
@@ -215,14 +215,14 @@
                       "users":  "Benutzer",
                       "churches":  "Kirchen",
                       "prayerRequests":  "Gebetsanliegen",
-                      "answeredPrayers":  "ErhÃ¶rte Gebete",
+                      "answeredPrayers":  "ErhÃƒÂ¶rte Gebete",
                       "quickActions":  "Schnellaktionen",
                       "newPrayerRequest":  "Neues Gebetsanliegen",
                       "registerChurch":  "Kirche registrieren",
                       "kidsCorner":  "Kids-Ecke",
-                      "recentActivity":  "Letzte AktivitÃ¤t",
+                      "recentActivity":  "Letzte AktivitÃƒÂ¤t",
                       "requestedPrayer":  "bat um Gebet:",
-                      "noActivity":  "Keine AktivitÃ¤t. Erstelle ein Gebetsanliegen!",
+                      "noActivity":  "Keine AktivitÃƒÂ¤t. Erstelle ein Gebetsanliegen!",
                       "viewAll":  "Alle Anliegen ansehen"
                   },
     "mural":  {
@@ -234,8 +234,8 @@
                   "categoryLabel":  "Kategorie",
                   "message":  "Nachricht",
                   "messagePlaceholder":  "Schreibe dein Zeugnis, deine Reflexion oder deinen Vers...",
-                  "publish":  "VerÃ¶ffentlichen",
-                  "noPostsFound":  "Keine BeitrÃ¤ge in dieser Kategorie gefunden.",
+                  "publish":  "VerÃƒÂ¶ffentlichen",
+                  "noPostsFound":  "Keine BeitrÃƒÂ¤ge in dieser Kategorie gefunden.",
                   "filters":  {
                                   "all":  "Alle",
                                   "myChurch":  "Meine Kirche",
@@ -259,7 +259,7 @@
                  "years":  "Jahre",
                  "bibleQuiz":  "Bibel-Quiz",
                  "question":  "Frage {{current}} von {{total}}",
-                 "congrats":  "Herzlichen GlÃ¼ckwunsch!",
+                 "congrats":  "Herzlichen GlÃƒÂ¼ckwunsch!",
                  "scoreResult":  "Du hast \u003cstrong\u003e{{score}}\u003c/strong\u003e von \u003cstrong\u003e{{total}}\u003c/strong\u003e richtig!",
                  "perfect":  "Perfekt! Du bist ein Bibel-Champion!",
                  "good":  "Sehr gut! Lerne weiter!",
@@ -270,27 +270,27 @@
                  "weekVerseRef":  "- Johannes 3:16",
                  "memorized":  "Auswendig gelernt!",
                  "memorize":  "Schon auswendig!",
-                 "activities":  "AktivitÃ¤ten",
-                 "comingSoon":  "DemnÃ¤chst!",
+                 "activities":  "AktivitÃƒÂ¤ten",
+                 "comingSoon":  "DemnÃƒÂ¤chst!",
                  "stories":  [
                                  {
                                      "title":  "David und Goliath",
-                                     "desc":  "Ein mutiger Junge, der einen Riesen mit einem Stein und groÃŸem Glauben an Gott besiegte",
+                                     "desc":  "Ein mutiger Junge, der einen Riesen mit einem Stein und groÃƒÅ¸em Glauben an Gott besiegte",
                                      "age":  "6-8"
                                  },
                                  {
                                      "title":  "Die Arche Noah",
-                                     "desc":  "Noah baute ein riesiges Boot und rettete alle Tiere vor der groÃŸen Flut",
+                                     "desc":  "Noah baute ein riesiges Boot und rettete alle Tiere vor der groÃƒÅ¸en Flut",
                                      "age":  "3-5"
                                  },
                                  {
                                      "title":  "Jona und der Wal",
-                                     "desc":  "Jona floh vor Gott, lernte aber, dass Er Ã¼berall ist",
+                                     "desc":  "Jona floh vor Gott, lernte aber, dass Er ÃƒÂ¼berall ist",
                                      "age":  "6-8"
                                  },
                                  {
-                                     "title":  "Daniel in der LÃ¶wengrube",
-                                     "desc":  "Daniel betete im Glauben und Gott verschloss den LÃ¶wen das Maul",
+                                     "title":  "Daniel in der LÃƒÂ¶wengrube",
+                                     "desc":  "Daniel betete im Glauben und Gott verschloss den LÃƒÂ¶wen das Maul",
                                      "age":  "9-12"
                                  },
                                  {
@@ -319,7 +319,7 @@
                                            ]
                               },
                               {
-                                  "q":  "Wer wurde in die LÃ¶wengrube geworfen?",
+                                  "q":  "Wer wurde in die LÃƒÂ¶wengrube geworfen?",
                                   "opts":  [
                                                "Jona",
                                                "Daniel",
@@ -333,7 +333,7 @@
                                                "Exodus",
                                                "Psalmen",
                                                "Genesis",
-                                               "MatthÃ¤us"
+                                               "MatthÃƒÂ¤us"
                                            ]
                               },
                               {
@@ -349,11 +349,11 @@
                  "activityList":  [
                                       {
                                           "title":  "Ausmalen",
-                                          "desc":  "Male biblische Figuren mit schÃ¶nen Farben"
+                                          "desc":  "Male biblische Figuren mit schÃƒÂ¶nen Farben"
                                       },
                                       {
-                                          "title":  "WortsuchrÃ¤tsel",
-                                          "desc":  "Finde versteckte BibelwÃ¶rter"
+                                          "title":  "WortsuchrÃƒÂ¤tsel",
+                                          "desc":  "Finde versteckte BibelwÃƒÂ¶rter"
                                       },
                                       {
                                           "title":  "Memory-Spiel",
@@ -394,13 +394,13 @@
                    },
     "amemButton":  {
                        "praying":  "Ich bete!",
-                       "prayForYou":  "Ich bete fÃ¼r dich"
+                       "prayForYou":  "Ich bete fÃƒÂ¼r dich"
                    },
     "pastorOverlay":  {
                           "title":  "Pastoren beten live",
                           "churchesInPrayer_one":  "{{count}} Kirche betet gerade",
                           "churchesInPrayer_other":  "{{count}} Kirchen beten gerade",
-                          "close":  "SchlieÃŸen"
+                          "close":  "SchlieÃƒÅ¸en"
                       },
     "churchPin":  {
                       "pastor":  "Pastor {{name}}",
@@ -409,19 +409,19 @@
                       "follow":  "Folgen",
                       "directions":  "Route planen",
                       "share":  "Teilen",
-                      "shareText":  "Entdecke {{name}} auf Sigo com Fé!"
+                      "shareText":  "Entdecke {{name}} auf Sigo com FÃ©!"
                   },
     "langSwitcher":  {
                          "label":  "Sprache"
                      },
     "pastorChat":  {
                        "title":  "Seelsorge-Chat",
-                       "subtitle":  "Sprechen Sie direkt mit einem Pastor. Automatische Ãœbersetzung inklusive.",
+                       "subtitle":  "Sprechen Sie direkt mit einem Pastor. Automatische ÃƒÅ“bersetzung inklusive.",
                        "yourName":  "Ihr Name",
                        "selectHelp":  "Was brauchen Sie?",
                        "selectLanguage":  "Ihre Sprache",
                        "startChat":  "Chat starten",
-                       "anyChurch":  "Jede verfï¿½gbare Kirche",
+                       "anyChurch":  "Jede verfÃ¯Â¿Â½gbare Kirche",
                        "waiting":  "Warten auf einen Pastor...",
                        "waitingDesc":  "Ein Pastor wird sich bald melden. Haben Sie Vertrauen!",
                        "imPastor":  "Ich bin Pastor",
@@ -430,26 +430,26 @@
                        "noWaiting":  "Niemand wartet im Moment.",
                        "joinChat":  "Beitreten",
                        "pastorName":  "Ihr Name (Pastor)",
-                       "endChat":  "GesprÃ¤ch beenden",
-                       "chatEnded":  "GesprÃ¤ch beendet. Gott segne Sie!",
+                       "endChat":  "GesprÃƒÂ¤ch beenden",
+                       "chatEnded":  "GesprÃƒÂ¤ch beendet. Gott segne Sie!",
                        "typeMessage":  "Nachricht eingeben...",
                        "send":  "Senden",
                        "typing":  "schreibt...",
-                       "translated":  "Ãœbersetzung",
-                       "joinedChat":  "ist dem GesprÃ¤ch beigetreten",
-                       "leftChat":  "hat das GesprÃ¤ch verlassen",
-                       "langPt":  "PortuguÃªs",
+                       "translated":  "ÃƒÅ“bersetzung",
+                       "joinedChat":  "ist dem GesprÃƒÂ¤ch beigetreten",
+                       "leftChat":  "hat das GesprÃƒÂ¤ch verlassen",
+                       "langPt":  "PortuguÃƒÂªs",
                        "langEn":  "English",
-                       "langEs":  "EspaÃ±ol",
+                       "langEs":  "EspaÃƒÂ±ol",
                        "langDe":  "Deutsch",
-                       "autoTranslate":  "ðŸŒ Automatische Ãœbersetzung aktiviert"
+                       "autoTranslate":  "Ã°Å¸Å’Â Automatische ÃƒÅ“bersetzung aktiviert"
                    },
     "friends":  {
                     "title":  "Freunde",
                     "search":  "Suchen",
                     "myFriends":  "Meine Freunde",
                     "requests":  "Anfragen",
-                    "addFriend":  "HinzufÃ¼gen",
+                    "addFriend":  "HinzufÃƒÂ¼gen",
                     "pending":  "Ausstehend",
                     "accept":  "Annehmen",
                     "reject":  "Ablehnen",
@@ -463,7 +463,7 @@
                 },
     "helpRequests":  {
                          "title":  "Hilfsanfragen",
-                         "subtitle":  "Menschen, die geistliche UnterstÃ¼tzung und Gebet brauchen. Antworte mit Liebe.",
+                         "subtitle":  "Menschen, die geistliche UnterstÃƒÂ¼tzung und Gebet brauchen. Antworte mit Liebe.",
                          "loading":  "Laden...",
                          "empty":  "Keine Hilfsanfragen im Moment. Gott sei Dank!",
                          "justNow":  "gerade",
@@ -480,9 +480,9 @@
                     "memberSince":  "Mitglied seit",
                     "editProfile":  "Profil bearbeiten",
                     "prayers":  "Gebete",
-                    "posts":  "BeitrÃ¤ge",
+                    "posts":  "BeitrÃƒÂ¤ge",
                     "friends":  "Freunde",
-                    "bio":  "Ãœber",
+                    "bio":  "ÃƒÅ“ber",
                     "noBio":  "Noch keine Bio",
                     "save":  "Speichern",
                     "cancel":  "Abbrechen"
@@ -490,18 +490,18 @@
     "messages":  {
                      "writePlaceholder":  "Schreibe deine Nachricht...",
                      "whenSomeone":  "Wenn dir jemand eine Nachricht sendet, erscheint sie hier!",
-                     "noConversations":  "Noch keine Gespräche",
-                     "back":  "Zurück",
+                     "noConversations":  "Noch keine GesprÃ¤che",
+                     "back":  "ZurÃ¼ck",
                      "noMessages":  "Noch keine Nachrichten",
                      "title":  "Nachrichten",
                      "loading":  "Laden..."
                  },
     "groups":  {
                    "newGroup":  "Neue Gruppe erstellen",
-                   "noPosts":  "Noch keine Beiträge",
-                   "public":  "Öffentlich",
+                   "noPosts":  "Noch keine BeitrÃ¤ge",
+                   "public":  "Ã–ffentlich",
                    "groupName":  "Gruppenname",
-                   "back":  "Zurück",
+                   "back":  "ZurÃ¼ck",
                    "cancel":  "Abbrechen",
                    "creating":  "Erstellen...",
                    "leave":  "Gruppe verlassen",
@@ -517,13 +517,13 @@
                },
     "consecration":  {
                          "consecratingNow":  "Jetzt weihend",
-                         "subtitle":  "Fasten und Gebet — stärke deinen Glauben",
+                         "subtitle":  "Fasten und Gebet â€” stÃ¤rke deinen Glauben",
                          "fastingToday":  "Heute fastend",
                          "benefits":  "Vorteile des Fastens",
-                         "consecrating":  "Weihe läuft...",
+                         "consecrating":  "Weihe lÃ¤uft...",
                          "noOneYet":  "Noch niemand weihend. Sei der Erste!",
                          "totalConsecrations":  "Gesamte Weihen",
-                         "conclusion":  "Fasten: Keine Diät. Kein leeres Opfer. Es ist Gehorsam, Ausrichtung und Abhängigkeit von Gott.",
+                         "conclusion":  "Fasten: Keine DiÃ¤t. Kein leeres Opfer. Es ist Gehorsam, Ausrichtung und AbhÃ¤ngigkeit von Gott.",
                          "title":  "Weihe",
                          "imConsecrating":  "Ich weihe mich",
                          "loginRequired":  "Melde dich an um zu weihen!"
@@ -540,22 +540,25 @@
                    "save":  "Speichern",
                    "shareCommunity":  "Teile etwas mit der Gemeinschaft...",
                    "writeComment":  "Schreibe einen Kommentar...",
-                   "noPostsYet":  "Noch keine Beiträge.",
+                   "noPostsYet":  "Noch keine BeitrÃ¤ge.",
                    "share":  "Teilen",
                    "send":  "Senden",
                    "reportConfirm":  "Diesen Beitrag als unangemessen melden?",
                    "loading":  "Laden...",
-                   "reported":  "Beitrag gemeldet! Moderatoren werden ihn prüfen.",
-                   "publish":  "Veröffentlichen",
+                   "reported":  "Beitrag gemeldet! Moderatoren werden ihn prÃ¼fen.",
+                   "publish":  "VerÃ¶ffentlichen",
                    "comment":  "Kommentieren",
-                   "confirm":  "Bestätigen",
+                   "confirm":  "BestÃ¤tigen",
                    "beFirst":  "Sei der Erste!",
                    "publishing":  "Wird gesendet...",
                    "loginToLike":  "Melde dich an um zu liken!",
                    "loginToComment":  "Melde dich an um zu kommentieren!",
                    "linkCopied":  "Link kopiert!",
-                   "close":  "Schließen",
-                   "delete":  "Löschen"
+                   "close":  "SchlieÃŸen",
+                   "delete":  "LÃ¶schen",
+                   "translate":  "Übersetzen",
+                   "translation":  "Übersetzung",
+                   "hideTranslation":  "Übersetzung ausblenden"
                },
     "offerings":  {
                       "notPastor":  "Um beizutragen, kontaktieren Sie Ihren Gemeindepastor.",
@@ -567,16 +570,16 @@
                       "holder":  "Inhaber",
                       "saving":  "Wird gespeichert...",
                       "pixNamePlaceholder":  "Name bei PIX",
-                      "noContributions":  "Noch keine Beiträge erfasst",
-                      "contributions":  "Beiträge",
+                      "noContributions":  "Noch keine BeitrÃ¤ge erfasst",
+                      "contributions":  "BeitrÃ¤ge",
                       "holderPlaceholder":  "Name des Kontoinhabers",
                       "save":  "Einstellungen speichern",
                       "title":  "Opfergaben und Zehnten",
                       "messagePlaceholder":  "Gott segne Ihre Gabe!",
-                      "pixKey":  "PIX-Schlüssel (CPF, E-Mail, Telefon oder Zufällig)",
+                      "pixKey":  "PIX-SchlÃ¼ssel (CPF, E-Mail, Telefon oder ZufÃ¤llig)",
                       "account":  "Konto",
-                      "bankTransfer":  "Banküberweisung",
-                      "pixKeyPlaceholder":  "Ihr PIX-Schlüssel",
+                      "bankTransfer":  "BankÃ¼berweisung",
+                      "pixKeyPlaceholder":  "Ihr PIX-SchlÃ¼ssel",
                       "configure":  "Konfigurieren",
                       "agency":  "Filiale",
                       "saved":  "Gespeichert!",
