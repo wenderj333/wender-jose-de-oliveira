@@ -248,6 +248,64 @@ const { Pool: MigratePool } = require('pg');
         created_at TIMESTAMPTZ DEFAULT NOW()
       )
     `);
+    // Groups
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS groups (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        name VARCHAR(255) NOT NULL,
+        description TEXT,
+        privacy VARCHAR(20) DEFAULT 'public',
+        creator_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        avatar_url TEXT,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+      CREATE TABLE IF NOT EXISTS group_members (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        role VARCHAR(20) DEFAULT 'member',
+        joined_at TIMESTAMPTZ DEFAULT NOW(),
+        UNIQUE(group_id, user_id)
+      );
+      CREATE TABLE IF NOT EXISTS group_posts (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+        author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        content TEXT NOT NULL,
+        media_url TEXT,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+
+    // Consecrations
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS consecrations (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        type VARCHAR(50) DEFAULT 'fasting',
+        start_date TIMESTAMPTZ DEFAULT NOW(),
+        end_date TIMESTAMPTZ,
+        purpose TEXT,
+        count INT DEFAULT 1,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+
+    // Technical issues
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS technical_issues (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        reporter_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        issue_type VARCHAR(50) DEFAULT 'bug',
+        description TEXT NOT NULL,
+        severity VARCHAR(20) DEFAULT 'medium',
+        status VARCHAR(20) DEFAULT 'open',
+        assigned_to UUID REFERENCES users(id),
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+
     console.log('✅ Auto-migração concluída!');
   } catch (err) {
     console.error('⚠️  Erro na auto-migração (continuando):', err.message);
