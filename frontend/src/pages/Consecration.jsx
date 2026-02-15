@@ -112,7 +112,7 @@ export default function Consecration() {
   const [stats, setStats] = useState({ totalConsecrations: 0, todayFasting: 0, recent: [] });
   const [loading, setLoading] = useState(true);
   const [showFire, setShowFire] = useState(false);
-  const [showBenefits, setShowBenefits] = useState(false);
+  const [showBenefits, setShowBenefits] = useState(true); // Começa aberto
   const [consecrating, setConsecrating] = useState(false);
   const [expandedSection, setExpandedSection] = useState(null);
 
