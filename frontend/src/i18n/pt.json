@@ -1,5 +1,5 @@
-﻿{
-    "brand":  "Sigo com FÃ©",
+{
+    "brand":  "Sigo com Fé",
     "nav":  {
                 "prayers":  "OraÃ§Ãµes",
                 "mural":  "Mural",
@@ -25,7 +25,7 @@
                 "notifications":  "Notificações",
                 "myProfile":  "Meu Perfil"
             },
-    "footer":  "Â© 2026 Sigo com FÃ© - Tecnologia a serviÃ§o do Reino",
+    "footer":  "Â© 2026 Sigo com Fé - Tecnologia a serviÃ§o do Reino",
     "home":  {
                  "subtitle":  "Ore, conecte-se e fortaleÃ§a sua fÃ© com milhares de irmÃ£os ao redor do mundo.",
                  "startNow":  "Comece Agora",
@@ -186,7 +186,7 @@
                   },
     "churchRegister":  {
                            "title":  "Cadastrar Igreja",
-                           "subtitle":  "Registre sua igreja na plataforma Sigo com FÃ©",
+                           "subtitle":  "Registre sua igreja na plataforma Sigo com Fé",
                            "churchName":  "Nome da Igreja *",
                            "churchNamePlaceholder":  "Ex: Igreja Batista Central",
                            "denomination":  "DenominaÃ§Ã£o",
@@ -409,7 +409,7 @@
                       "follow":  "Seguir",
                       "directions":  "Como Chegar",
                       "share":  "Compartilhar",
-                      "shareText":  "ConheÃ§a {{name}} no Sigo com FÃ©!"
+                      "shareText":  "ConheÃ§a {{name}} no Sigo com Fé!"
                   },
     "langSwitcher":  {
                          "label":  "Idioma"
@@ -556,5 +556,33 @@
                    "linkCopied":  "Link copiado!",
                    "close":  "Fechar",
                    "delete":  "Excluir"
-               }
+               },
+    "offerings":  {
+                      "notPastor":  "Para contribuir, entre em contato com o pastor da sua igreja.",
+                      "records":  "Registros",
+                      "paypalEmail":  "Email do PayPal",
+                      "offering":  "Oferta",
+                      "tithe":  "Dízimo",
+                      "bank":  "Banco",
+                      "holder":  "Titular",
+                      "saving":  "Salvando...",
+                      "pixNamePlaceholder":  "Nome que aparece no PIX",
+                      "noContributions":  "Nenhuma contribuição registrada ainda",
+                      "contributions":  "Contribuições",
+                      "holderPlaceholder":  "Nome do titular",
+                      "save":  "Salvar Configurações",
+                      "title":  "Ofertas e Dízimos",
+                      "messagePlaceholder":  "Deus abençoe a sua oferta!",
+                      "pixKey":  "Chave PIX (CPF, Email, Telefone ou Aleatória)",
+                      "account":  "Conta",
+                      "bankTransfer":  "Transferência Bancária",
+                      "pixKeyPlaceholder":  "Sua chave PIX",
+                      "configure":  "Configurar",
+                      "agency":  "Agência",
+                      "saved":  "Salvo!",
+                      "thisMonth":  "Este mês",
+                      "pixName":  "Nome do Titular",
+                      "totalGeneral":  "Total geral",
+                      "messageToMembers":  "Mensagem para os Membros"
+                  }
 }

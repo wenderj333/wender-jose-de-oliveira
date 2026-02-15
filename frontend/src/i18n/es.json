@@ -1,5 +1,5 @@
-﻿{
-    "brand":  "Sigo com FÃ©",
+{
+    "brand":  "Sigo com Fé",
     "nav":  {
                 "prayers":  "Oraciones",
                 "mural":  "Mural",
@@ -25,7 +25,7 @@
                 "notifications":  "Notificaciones",
                 "myProfile":  "Mi Perfil"
             },
-    "footer":  "Â© 2026 Sigo com FÃ© - TecnologÃ­a al servicio del Reino",
+    "footer":  "Â© 2026 Sigo com Fé - TecnologÃ­a al servicio del Reino",
     "home":  {
                  "subtitle":  "Ora, conÃ©ctate y fortalece tu fe con miles de hermanos alrededor del mundo.",
                  "startNow":  "Empieza Ahora",
@@ -186,7 +186,7 @@
                   },
     "churchRegister":  {
                            "title":  "Registrar Iglesia",
-                           "subtitle":  "Registra tu iglesia en la plataforma Sigo com FÃ©",
+                           "subtitle":  "Registra tu iglesia en la plataforma Sigo com Fé",
                            "churchName":  "Nombre de la Iglesia *",
                            "churchNamePlaceholder":  "Ej: Iglesia Bautista Central",
                            "denomination":  "DenominaciÃ³n",
@@ -409,7 +409,7 @@
                       "follow":  "Seguir",
                       "directions":  "CÃ³mo Llegar",
                       "share":  "Compartir",
-                      "shareText":  "Â¡Conoce {{name}} en Sigo com FÃ©!"
+                      "shareText":  "Â¡Conoce {{name}} en Sigo com Fé!"
                   },
     "langSwitcher":  {
                          "label":  "Idioma"
@@ -556,5 +556,33 @@
                    "linkCopied":  "¡Enlace copiado!",
                    "close":  "Cerrar",
                    "delete":  "Eliminar"
-               }
+               },
+    "offerings":  {
+                      "notPastor":  "Para contribuir, contacte al pastor de su iglesia.",
+                      "records":  "Registros",
+                      "paypalEmail":  "Email de PayPal",
+                      "offering":  "Ofrenda",
+                      "tithe":  "Diezmo",
+                      "bank":  "Banco",
+                      "holder":  "Titular",
+                      "saving":  "Guardando...",
+                      "pixNamePlaceholder":  "Nombre que aparece en PIX",
+                      "noContributions":  "Ninguna contribución registrada aún",
+                      "contributions":  "Contribuciones",
+                      "holderPlaceholder":  "Nombre del titular",
+                      "save":  "Guardar Configuración",
+                      "title":  "Ofrendas y Diezmos",
+                      "messagePlaceholder":  "¡Dios bendiga su ofrenda!",
+                      "pixKey":  "Clave PIX (CPF, Email, Teléfono o Aleatoria)",
+                      "account":  "Cuenta",
+                      "bankTransfer":  "Transferencia Bancaria",
+                      "pixKeyPlaceholder":  "Su clave PIX",
+                      "configure":  "Configurar",
+                      "agency":  "Agencia",
+                      "saved":  "¡Guardado!",
+                      "thisMonth":  "Este mes",
+                      "pixName":  "Nombre del Titular",
+                      "totalGeneral":  "Total general",
+                      "messageToMembers":  "Mensaje para los Miembros"
+                  }
 }

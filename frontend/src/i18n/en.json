@@ -1,5 +1,5 @@
-﻿{
-    "brand":  "Sigo com FÃ©",
+{
+    "brand":  "Sigo com Fé",
     "nav":  {
                 "prayers":  "Prayers",
                 "mural":  "Community Wall",
@@ -25,7 +25,7 @@
                 "notifications":  "Notifications",
                 "myProfile":  "My Profile"
             },
-    "footer":  "Â© 2026 Sigo com FÃ© - Technology at the service of the Kingdom",
+    "footer":  "Â© 2026 Sigo com Fé - Technology at the service of the Kingdom",
     "home":  {
                  "subtitle":  "Pray, connect and strengthen your faith with thousands of brothers and sisters around the world.",
                  "startNow":  "Get Started",
@@ -186,7 +186,7 @@
                   },
     "churchRegister":  {
                            "title":  "Register Church",
-                           "subtitle":  "Register your church on the Sigo com FÃ© platform",
+                           "subtitle":  "Register your church on the Sigo com Fé platform",
                            "churchName":  "Church Name *",
                            "churchNamePlaceholder":  "E.g.: Central Baptist Church",
                            "denomination":  "Denomination",
@@ -409,7 +409,7 @@
                       "follow":  "Follow",
                       "directions":  "Get Directions",
                       "share":  "Share",
-                      "shareText":  "Check out {{name}} on Sigo com FÃ©!"
+                      "shareText":  "Check out {{name}} on Sigo com Fé!"
                   },
     "langSwitcher":  {
                          "label":  "Language"
@@ -556,5 +556,33 @@
                    "linkCopied":  "Link copied!",
                    "close":  "Close",
                    "delete":  "Delete"
-               }
+               },
+    "offerings":  {
+                      "notPastor":  "To contribute, contact your church pastor.",
+                      "records":  "Records",
+                      "paypalEmail":  "PayPal Email",
+                      "offering":  "Offering",
+                      "tithe":  "Tithe",
+                      "bank":  "Bank",
+                      "holder":  "Holder",
+                      "saving":  "Saving...",
+                      "pixNamePlaceholder":  "Name on PIX",
+                      "noContributions":  "No contributions recorded yet",
+                      "contributions":  "Contributions",
+                      "holderPlaceholder":  "Account holder name",
+                      "save":  "Save Settings",
+                      "title":  "Offerings and Tithes",
+                      "messagePlaceholder":  "God bless your offering!",
+                      "pixKey":  "PIX Key (CPF, Email, Phone or Random)",
+                      "account":  "Account",
+                      "bankTransfer":  "Bank Transfer",
+                      "pixKeyPlaceholder":  "Your PIX key",
+                      "configure":  "Configure",
+                      "agency":  "Branch",
+                      "saved":  "Saved!",
+                      "thisMonth":  "This month",
+                      "pixName":  "Account Holder",
+                      "totalGeneral":  "Total",
+                      "messageToMembers":  "Message to Members"
+                  }
 }

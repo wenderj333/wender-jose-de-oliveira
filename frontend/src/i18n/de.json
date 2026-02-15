@@ -1,5 +1,5 @@
-﻿{
-    "brand":  "Sigo com FÃ©",
+{
+    "brand":  "Sigo com Fé",
     "nav":  {
                 "prayers":  "Gebete",
                 "mural":  "Pinnwand",
@@ -25,7 +25,7 @@
                 "notifications":  "Benachrichtigungen",
                 "myProfile":  "Mein Profil"
             },
-    "footer":  "Â© 2026 Sigo com FÃ© - Technologie im Dienste des Reiches Gottes",
+    "footer":  "Â© 2026 Sigo com Fé - Technologie im Dienste des Reiches Gottes",
     "home":  {
                  "subtitle":  "Bete, verbinde dich und stÃ¤rke deinen Glauben mit Tausenden von Geschwistern auf der ganzen Welt.",
                  "startNow":  "Jetzt starten",
@@ -186,7 +186,7 @@
                   },
     "churchRegister":  {
                            "title":  "Kirche registrieren",
-                           "subtitle":  "Registriere deine Kirche auf der Sigo com FÃ© Plattform",
+                           "subtitle":  "Registriere deine Kirche auf der Sigo com Fé Plattform",
                            "churchName":  "Name der Kirche *",
                            "churchNamePlaceholder":  "Z.B.: Zentrale Baptistengemeinde",
                            "denomination":  "Konfession",
@@ -409,7 +409,7 @@
                       "follow":  "Folgen",
                       "directions":  "Route planen",
                       "share":  "Teilen",
-                      "shareText":  "Entdecke {{name}} auf Sigo com FÃ©!"
+                      "shareText":  "Entdecke {{name}} auf Sigo com Fé!"
                   },
     "langSwitcher":  {
                          "label":  "Sprache"
@@ -556,5 +556,33 @@
                    "linkCopied":  "Link kopiert!",
                    "close":  "Schließen",
                    "delete":  "Löschen"
-               }
+               },
+    "offerings":  {
+                      "notPastor":  "Um beizutragen, kontaktieren Sie Ihren Gemeindepastor.",
+                      "records":  "Aufzeichnungen",
+                      "paypalEmail":  "PayPal-E-Mail",
+                      "offering":  "Opfergabe",
+                      "tithe":  "Zehnter",
+                      "bank":  "Bank",
+                      "holder":  "Inhaber",
+                      "saving":  "Wird gespeichert...",
+                      "pixNamePlaceholder":  "Name bei PIX",
+                      "noContributions":  "Noch keine Beiträge erfasst",
+                      "contributions":  "Beiträge",
+                      "holderPlaceholder":  "Name des Kontoinhabers",
+                      "save":  "Einstellungen speichern",
+                      "title":  "Opfergaben und Zehnten",
+                      "messagePlaceholder":  "Gott segne Ihre Gabe!",
+                      "pixKey":  "PIX-Schlüssel (CPF, E-Mail, Telefon oder Zufällig)",
+                      "account":  "Konto",
+                      "bankTransfer":  "Banküberweisung",
+                      "pixKeyPlaceholder":  "Ihr PIX-Schlüssel",
+                      "configure":  "Konfigurieren",
+                      "agency":  "Filiale",
+                      "saved":  "Gespeichert!",
+                      "thisMonth":  "Diesen Monat",
+                      "pixName":  "Name des Kontoinhabers",
+                      "totalGeneral":  "Gesamt",
+                      "messageToMembers":  "Nachricht an Mitglieder"
+                  }
 }
