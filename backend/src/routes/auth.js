@@ -6,7 +6,7 @@ const { generateToken, authenticate } = require('../middleware/auth');
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, full_name, role } = req.body;
+    const { email, password, full_name, role, avatar_url } = req.body;
     if (!email || !password || !full_name) {
       return res.status(400).json({ error: 'Email, senha e nome completo são obrigatórios' });
     }
@@ -15,6 +15,14 @@ router.post('/register', async (req, res) => {
     if (existing) return res.status(409).json({ error: 'Email já cadastrado' });
 
     const user = await User.create({ email, password, full_name, role });
+
+    // Salvar avatar se fornecido
+    if (avatar_url) {
+      const db = require('../db/connection');
+      await db.prepare('UPDATE users SET avatar_url = ? WHERE id = ?').run(avatar_url, user.id);
+      user.avatar_url = avatar_url;
+    }
+
     const token = generateToken(user);
     res.status(201).json({ user, token });
   } catch (err) {

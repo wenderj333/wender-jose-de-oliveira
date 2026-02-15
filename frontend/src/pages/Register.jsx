@@ -2,15 +2,27 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, UserPlus, Mail, Lock, User, LogIn, Phone } from 'lucide-react';
+import { BookOpen, UserPlus, Mail, Lock, User, LogIn, Phone, Camera } from 'lucide-react';
 
 export default function Register() {
   const { register, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'member' });
+  const [avatar, setAvatar] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
   const [error, setError] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
+
+  function handleAvatarSelect(e) {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setAvatar(file);
+      const reader = new FileReader();
+      reader.onload = () => setAvatarPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  }
   const [phoneNumber, setPhoneNumber] = useState('');
   const [countryCode, setCountryCode] = useState('+55');
   const [confirmationResult, setConfirmationResult] = useState(null);
@@ -23,7 +35,20 @@ export default function Register() {
     setError('');
     if (form.password.length < 6) return setError(t('register.passwordError'));
     try {
-      await register(form.email, form.password, form.full_name, form.role);
+      // Upload avatar ao Cloudinary se selecionado
+      let avatarUrl = null;
+      if (avatar) {
+        try {
+          const fd = new FormData();
+          fd.append('file', avatar);
+          fd.append('upload_preset', 'sigo_com_fe');
+          fd.append('folder', 'sigo-com-fe/avatars');
+          const uploadRes = await fetch('https://api.cloudinary.com/v1_1/degxiuf43/image/upload', { method: 'POST', body: fd });
+          const uploadData = await uploadRes.json();
+          if (uploadData.secure_url) avatarUrl = uploadData.secure_url;
+        } catch (uploadErr) { console.error('Avatar upload error:', uploadErr); }
+      }
+      await register(form.email, form.password, form.full_name, form.role, avatarUrl);
       navigate('/');
     } catch (err) {
       setError(err.message);
@@ -136,6 +161,27 @@ export default function Register() {
         </div>
 
         <form onSubmit={handleSubmit}>
+          {/* Avatar */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+            <label style={{ cursor: 'pointer', position: 'relative' }}>
+              <div style={{
+                width: 80, height: 80, borderRadius: '50%', background: avatarPreview ? 'none' : '#f0f0f0',
+                border: '2px dashed #daa520', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                overflow: 'hidden',
+              }}>
+                {avatarPreview ? (
+                  <img src={avatarPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <Camera size={28} color="#daa520" />
+                )}
+              </div>
+              <div style={{ textAlign: 'center', fontSize: '0.75rem', color: '#daa520', marginTop: 4, fontWeight: 600 }}>
+                📷 {t('register.addPhoto', 'Adicionar foto')}
+              </div>
+              <input type="file" accept="image/*" onChange={handleAvatarSelect} style={{ display: 'none' }} />
+            </label>
+          </div>
+
           <div className="form-group">
             <label><User size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.fullName')}</label>
             <input value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} placeholder={t('register.fullNamePlaceholder')} required />
