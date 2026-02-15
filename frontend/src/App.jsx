@@ -144,6 +144,11 @@ export default function App() {
           <Link to="/kids" className={isActive('/kids')} onClick={() => setMenuOpen(false)}><Baby size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.kids')}</Link>
           <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')} onClick={() => setMenuOpen(false)}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#e74c3c' }} />{t('nav.helpRequests')}</Link>
           <Link to="/chat-pastoral" className={isActive('/chat-pastoral')} onClick={() => setMenuOpen(false)}><MessageCircle size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.chatPastoral')}</Link>
+          {user && (
+            <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)} onClick={() => setMenuOpen(false)} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              <User size={16} style={{ verticalAlign: 'middle', color: '#daa520' }} />{t('nav.myProfile', 'Meu Perfil')}
+            </Link>
+          )}
           <Link to="/ia-biblica" className={isActive('/ia-biblica')} onClick={() => setMenuOpen(false)}><BookOpen size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#2c3e80' }} />{t('nav.bibleAI', 'IA Bíblica')}</Link>
           {user?.role === 'pastor' && <Link to="/ia-pastoral" className={isActive('/ia-pastoral')} onClick={() => setMenuOpen(false)}><Bot size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.pastoralAI', 'IA Pastoral')}</Link>}
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/membros" className={isActive('/membros')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4caf50' }} />{t('nav.members', 'Membros')}</Link>}
@@ -157,9 +162,6 @@ export default function App() {
           )}
           {user ? (
             <>
-              <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)} onClick={() => setMenuOpen(false)} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                <User size={16} style={{ verticalAlign: 'middle' }} />{t('nav.myProfile', 'Mi Perfil')}
-              </Link>
               <span className="nav-user">{t('nav.hello', { name: user.full_name?.split(' ')[0] })}</span>
               <button onClick={() => { logout(); setMenuOpen(false); }} className="btn btn-outline btn-sm">{t('nav.logout')}</button>
             </>

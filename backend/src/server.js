@@ -298,6 +298,31 @@ const { Pool: MigratePool } = require('pg');
       ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS flag_reason TEXT;
     `);
 
+    // Post likes
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS post_likes (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        post_id UUID NOT NULL REFERENCES feed_posts(id) ON DELETE CASCADE,
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        UNIQUE(post_id, user_id)
+      );
+    `);
+
+    // Post comments
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS post_comments (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        post_id UUID NOT NULL REFERENCES feed_posts(id) ON DELETE CASCADE,
+        author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        content TEXT NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+
+    // Add like_count to feed_posts if missing
+    await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS like_count INT DEFAULT 0`);
+
     // Technical issues
     await mp.query(`
       CREATE TABLE IF NOT EXISTS technical_issues (

@@ -187,4 +187,99 @@ router.delete('/:id', authenticate, async (req, res) => {
   }
 });
 
+// ===== LIKES =====
+
+// POST /api/feed/:id/like — toggle like
+router.post('/:id/like', authenticate, async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const existing = await db.prepare(
+      'SELECT id FROM post_likes WHERE post_id = ? AND user_id = ?'
+    ).get(postId, req.user.id);
+
+    if (existing) {
+      await db.prepare('DELETE FROM post_likes WHERE post_id = ? AND user_id = ?').run(postId, req.user.id);
+      await db.prepare('UPDATE feed_posts SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?').run(postId);
+      res.json({ liked: false });
+    } else {
+      await db.prepare('INSERT INTO post_likes (post_id, user_id) VALUES (?, ?)').run(postId, req.user.id);
+      await db.prepare('UPDATE feed_posts SET like_count = like_count + 1 WHERE id = ?').run(postId);
+      res.json({ liked: true });
+    }
+  } catch (err) {
+    console.error('Erro ao curtir:', err);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+// GET /api/feed/:id/liked — check if current user liked
+router.get('/:id/liked', authenticate, async (req, res) => {
+  try {
+    const row = await db.prepare(
+      'SELECT id FROM post_likes WHERE post_id = ? AND user_id = ?'
+    ).get(req.params.id, req.user.id);
+    res.json({ liked: !!row });
+  } catch (err) {
+    res.json({ liked: false });
+  }
+});
+
+// ===== COMMENTS =====
+
+// GET /api/feed/:id/comments — list comments
+router.get('/:id/comments', async (req, res) => {
+  try {
+    const comments = await db.prepare(
+      `SELECT pc.*, u.full_name AS author_name, u.avatar_url AS author_avatar
+       FROM post_comments pc
+       JOIN users u ON u.id = pc.author_id
+       WHERE pc.post_id = ?
+       ORDER BY pc.created_at ASC`
+    ).all(req.params.id);
+    res.json({ comments });
+  } catch (err) {
+    console.error('Erro ao buscar comentários:', err);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+// POST /api/feed/:id/comments — add comment
+router.post('/:id/comments', authenticate, async (req, res) => {
+  try {
+    const { content } = req.body;
+    if (!content?.trim()) return res.status(400).json({ error: 'Comentário vazio' });
+
+    const comment = await db.prepare(
+      `INSERT INTO post_comments (post_id, author_id, content) VALUES (?, ?, ?) RETURNING *`
+    ).get(req.params.id, req.user.id, content.trim());
+
+    await db.prepare('UPDATE feed_posts SET comment_count = comment_count + 1 WHERE id = ?').run(req.params.id);
+
+    // Get author info
+    const author = await db.prepare('SELECT full_name, avatar_url FROM users WHERE id = ?').get(req.user.id);
+    comment.author_name = author?.full_name;
+    comment.author_avatar = author?.avatar_url;
+
+    res.status(201).json({ comment });
+  } catch (err) {
+    console.error('Erro ao comentar:', err);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+// DELETE /api/feed/comments/:commentId — delete own comment
+router.delete('/comments/:commentId', authenticate, async (req, res) => {
+  try {
+    const comment = await db.prepare(
+      'DELETE FROM post_comments WHERE id = ? AND author_id = ? RETURNING post_id'
+    ).get(req.params.commentId, req.user.id);
+    if (comment) {
+      await db.prepare('UPDATE feed_posts SET comment_count = GREATEST(comment_count - 1, 0) WHERE id = ?').run(comment.post_id);
+    }
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
 module.exports = router;

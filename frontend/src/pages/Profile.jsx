@@ -1,15 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { User, Calendar, Edit, Heart, Users, Church, Save, X, Camera, Lock, Globe, Plus, Image, BookOpen, Info, Grid3x3, MessageCircle } from 'lucide-react';
+import {
+  User, Calendar, Edit, Heart, Users, Church, Save, X, Camera, Lock, Globe,
+  Plus, Image, BookOpen, Info, Grid3x3, MessageCircle, Play, Send, Trash2,
+  ChevronLeft, MoreHorizontal, Share2, Bookmark, Video, Smile
+} from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
+const CLOUD_NAME = 'degxiuf43';
+const UPLOAD_PRESET = 'sigo_com_fe';
 
 const CATEGORIES = [
   { value: 'testemunho', label: '🙏 Testemunho', color: '#daa520' },
-  { value: 'louvor', label: '🎵 Louvor', color: '#9b59b6' },
+  { value: 'louvor', label: '🎵 Louvor / Vídeo', color: '#9b59b6' },
   { value: 'foto', label: '📸 Foto', color: '#3498db' },
   { value: 'versiculo', label: '📖 Versículo', color: '#27ae60' },
   { value: 'reflexao', label: '💭 Reflexão', color: '#e67e22' },
@@ -28,27 +34,41 @@ export default function Profile() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Tabs & content
   const [activeTab, setActiveTab] = useState('posts');
   const [posts, setPosts] = useState([]);
   const [prayers, setPrayers] = useState([]);
   const [loadingContent, setLoadingContent] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
 
-  // New post modal
+  // Comments & likes
+  const [comments, setComments] = useState([]);
+  const [loadingComments, setLoadingComments] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [sendingComment, setSendingComment] = useState(false);
+  const [likedPosts, setLikedPosts] = useState({});
+  const [likeCounts, setLikeCounts] = useState({});
+
+  // New post
   const [showNewPost, setShowNewPost] = useState(false);
-  const [newPost, setNewPost] = useState({ content: '', category: 'testemunho', verse_reference: '' });
-  const [newPostImage, setNewPostImage] = useState(null);
+  const [newPost, setNewPost] = useState({ content: '', category: 'foto', verse_reference: '' });
+  const [newPostMedia, setNewPostMedia] = useState(null);
   const [newPostPreview, setNewPostPreview] = useState(null);
+  const [newPostMediaType, setNewPostMediaType] = useState(null);
   const [creatingPost, setCreatingPost] = useState(false);
-  const postImageRef = useRef(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const postMediaRef = useRef(null);
+  const commentInputRef = useRef(null);
+
+  // Friend status
+  const [friendStatus, setFriendStatus] = useState(null); // null, 'pending', 'accepted'
 
   const isOwnProfile = currentUser?.id === userId;
 
   useEffect(() => {
     fetchProfile();
     fetchStats();
-  }, [userId]);
+    if (currentUser && !isOwnProfile) checkFriendship();
+  }, [userId, currentUser]);
 
   useEffect(() => {
     if (activeTab === 'posts') fetchPosts();
@@ -68,11 +88,8 @@ export default function Profile() {
           phone: '',
         });
       }
-    } catch (err) {
-      console.error('Error fetching profile:', err);
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { console.error(err); }
+    finally { setLoading(false); }
   }
 
   async function fetchStats() {
@@ -80,9 +97,7 @@ export default function Profile() {
       const res = await fetch(`${API}/profile/${userId}/stats`);
       const data = await res.json();
       setStats(data);
-    } catch (err) {
-      console.error('Error fetching stats:', err);
-    }
+    } catch (err) { console.error(err); }
   }
 
   async function fetchPosts() {
@@ -90,12 +105,26 @@ export default function Profile() {
     try {
       const res = await fetch(`${API}/feed/user/${userId}`);
       const data = await res.json();
-      setPosts(data.posts || []);
-    } catch (err) {
-      console.error('Error fetching posts:', err);
-    } finally {
-      setLoadingContent(false);
-    }
+      const p = data.posts || [];
+      setPosts(p);
+      // Init like counts
+      const lc = {};
+      p.forEach(post => { lc[post.id] = post.like_count || 0; });
+      setLikeCounts(lc);
+      // Check which posts are liked
+      if (token) {
+        for (const post of p.slice(0, 30)) {
+          try {
+            const r = await fetch(`${API}/feed/${post.id}/liked`, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            const d = await r.json();
+            if (d.liked) setLikedPosts(prev => ({ ...prev, [post.id]: true }));
+          } catch {}
+        }
+      }
+    } catch (err) { console.error(err); }
+    finally { setLoadingContent(false); }
   }
 
   async function fetchPrayers() {
@@ -104,11 +133,20 @@ export default function Profile() {
       const res = await fetch(`${API}/prayers?authorId=${userId}`);
       const data = await res.json();
       setPrayers(data.prayers || []);
-    } catch (err) {
-      console.error('Error fetching prayers:', err);
-    } finally {
-      setLoadingContent(false);
-    }
+    } catch (err) { console.error(err); }
+    finally { setLoadingContent(false); }
+  }
+
+  async function checkFriendship() {
+    try {
+      const res = await fetch(`${API}/friends/list`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      const friends = data.friends || [];
+      const match = friends.find(f => f.id === userId || f.friend_id === userId);
+      if (match) setFriendStatus('accepted');
+    } catch {}
   }
 
   async function handleAvatarUpload(e) {
@@ -116,23 +154,27 @@ export default function Profile() {
     if (!file) return;
     setUploadingAvatar(true);
     try {
-      const formData = new FormData();
-      formData.append('avatar', file);
-      const res = await fetch(`${API}/profile/avatar`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
+      // Upload to Cloudinary directly
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('upload_preset', UPLOAD_PRESET);
+      fd.append('folder', 'sigo-com-fe/avatars');
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+        method: 'POST', body: fd
       });
       const data = await res.json();
-      if (data.avatar_url) {
-        setProfile(prev => ({ ...prev, avatar_url: data.avatar_url }));
-        setForm(prev => ({ ...prev, avatar_url: data.avatar_url }));
+      if (data.secure_url) {
+        // Save to backend
+        await fetch(`${API}/profile`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ ...form, avatar_url: data.secure_url, is_private: profile.is_private }),
+        });
+        setProfile(prev => ({ ...prev, avatar_url: data.secure_url }));
+        setForm(prev => ({ ...prev, avatar_url: data.secure_url }));
       }
-    } catch (err) {
-      console.error('Error uploading avatar:', err);
-    } finally {
-      setUploadingAvatar(false);
-    }
+    } catch (err) { console.error(err); }
+    finally { setUploadingAvatar(false); }
   }
 
   async function handleTogglePrivacy() {
@@ -145,9 +187,7 @@ export default function Profile() {
       });
       const data = await res.json();
       if (data.user) setProfile(prev => ({ ...prev, ...data.user }));
-    } catch (err) {
-      console.error('Error toggling privacy:', err);
-    }
+    } catch (err) { console.error(err); }
   }
 
   async function handleSave() {
@@ -159,26 +199,56 @@ export default function Profile() {
         body: JSON.stringify({ ...form, is_private: profile.is_private }),
       });
       const data = await res.json();
-      if (data.user) {
-        setProfile(prev => ({ ...prev, ...data.user }));
-        setEditing(false);
-      }
-    } catch (err) {
-      console.error('Error saving profile:', err);
-    } finally {
-      setSaving(false);
-    }
+      if (data.user) { setProfile(prev => ({ ...prev, ...data.user })); setEditing(false); }
+    } catch (err) { console.error(err); }
+    finally { setSaving(false); }
+  }
+
+  // Upload media to Cloudinary
+  async function uploadToCloudinary(file) {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', UPLOAD_PRESET);
+    fd.append('folder', 'sigo-com-fe/posts');
+    const resourceType = file.type.startsWith('video/') ? 'video' : 'image';
+
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`);
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) setUploadProgress(Math.round((e.loaded / e.total) * 100));
+      };
+      xhr.onload = () => {
+        if (xhr.status === 200) resolve(JSON.parse(xhr.responseText));
+        else reject(new Error('Upload failed'));
+      };
+      xhr.onerror = () => reject(new Error('Upload error'));
+      xhr.send(fd);
+    });
   }
 
   async function handleCreatePost() {
-    if (!newPost.content.trim()) return;
+    if (!newPost.content.trim() && !newPostMedia) return;
     setCreatingPost(true);
+    setUploadProgress(0);
     try {
+      let mediaUrl = null;
+      let mediaType = null;
+
+      if (newPostMedia) {
+        const result = await uploadToCloudinary(newPostMedia);
+        mediaUrl = result.secure_url;
+        mediaType = newPostMediaType;
+      }
+
       const formData = new FormData();
-      formData.append('content', newPost.content);
+      formData.append('content', newPost.content || (newPost.category === 'foto' ? '📸' : '🎵'));
       formData.append('category', newPost.category);
       if (newPost.verse_reference) formData.append('verse_reference', newPost.verse_reference);
-      if (newPostImage) formData.append('image', newPostImage);
+      if (mediaUrl) {
+        formData.append('media_url', mediaUrl);
+        formData.append('media_type', mediaType);
+      }
 
       const res = await fetch(`${API}/feed`, {
         method: 'POST',
@@ -190,15 +260,13 @@ export default function Profile() {
         setPosts(prev => [data.post, ...prev]);
         setStats(prev => ({ ...prev, posts: prev.posts + 1 }));
         setShowNewPost(false);
-        setNewPost({ content: '', category: 'testemunho', verse_reference: '' });
-        setNewPostImage(null);
+        setNewPost({ content: '', category: 'foto', verse_reference: '' });
+        setNewPostMedia(null);
         setNewPostPreview(null);
+        setNewPostMediaType(null);
       }
-    } catch (err) {
-      console.error('Error creating post:', err);
-    } finally {
-      setCreatingPost(false);
-    }
+    } catch (err) { console.error(err); }
+    finally { setCreatingPost(false); setUploadProgress(0); }
   }
 
   async function handleDeletePost(postId) {
@@ -210,18 +278,88 @@ export default function Profile() {
       setPosts(prev => prev.filter(p => p.id !== postId));
       setStats(prev => ({ ...prev, posts: Math.max(0, prev.posts - 1) }));
       setSelectedPost(null);
-    } catch (err) {
-      console.error('Error deleting post:', err);
+    } catch (err) { console.error(err); }
+  }
+
+  // Like toggle
+  async function handleLike(postId) {
+    if (!token) return;
+    const wasLiked = likedPosts[postId];
+    setLikedPosts(prev => ({ ...prev, [postId]: !wasLiked }));
+    setLikeCounts(prev => ({ ...prev, [postId]: (prev[postId] || 0) + (wasLiked ? -1 : 1) }));
+    try {
+      await fetch(`${API}/feed/${postId}/like`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch {
+      setLikedPosts(prev => ({ ...prev, [postId]: wasLiked }));
+      setLikeCounts(prev => ({ ...prev, [postId]: (prev[postId] || 0) + (wasLiked ? 1 : -1) }));
     }
   }
 
-  function handlePostImageSelect(e) {
+  // Comments
+  async function fetchComments(postId) {
+    setLoadingComments(true);
+    try {
+      const res = await fetch(`${API}/feed/${postId}/comments`);
+      const data = await res.json();
+      setComments(data.comments || []);
+    } catch { setComments([]); }
+    finally { setLoadingComments(false); }
+  }
+
+  async function handleSendComment(postId) {
+    if (!newComment.trim() || !token) return;
+    setSendingComment(true);
+    try {
+      const res = await fetch(`${API}/feed/${postId}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ content: newComment.trim() }),
+      });
+      const data = await res.json();
+      if (data.comment) {
+        setComments(prev => [...prev, data.comment]);
+        setNewComment('');
+        // Update post comment count
+        setPosts(prev => prev.map(p => p.id === postId ? { ...p, comment_count: (p.comment_count || 0) + 1 } : p));
+      }
+    } catch (err) { console.error(err); }
+    finally { setSendingComment(false); }
+  }
+
+  async function handleDeleteComment(commentId, postId) {
+    try {
+      await fetch(`${API}/feed/comments/${commentId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setComments(prev => prev.filter(c => c.id !== commentId));
+      setPosts(prev => prev.map(p => p.id === postId ? { ...p, comment_count: Math.max(0, (p.comment_count || 0) - 1) } : p));
+    } catch {}
+  }
+
+  function openPost(post) {
+    setSelectedPost(post);
+    setComments([]);
+    setNewComment('');
+    fetchComments(post.id);
+  }
+
+  function handleMediaSelect(e) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setNewPostImage(file);
-    const reader = new FileReader();
-    reader.onload = () => setNewPostPreview(reader.result);
-    reader.readAsDataURL(file);
+    const isVideo = file.type.startsWith('video/');
+    setNewPostMedia(file);
+    setNewPostMediaType(isVideo ? 'video' : 'image');
+    if (isVideo) {
+      setNewPostPreview(URL.createObjectURL(file));
+    } else {
+      const reader = new FileReader();
+      reader.onload = () => setNewPostPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
   }
 
   async function handleAddFriend() {
@@ -231,292 +369,273 @@ export default function Profile() {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ addressee_id: userId }),
       });
-    } catch (err) {
-      console.error('Error sending friend request:', err);
-    }
+      setFriendStatus('pending');
+    } catch (err) { console.error(err); }
   }
 
-  if (loading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem' }}>
-        <div className="loading-spinner" />
-      </div>
-    );
+  function timeAgo(dateStr) {
+    const diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
+    if (diff < 60) return 'agora';
+    if (diff < 3600) return `${Math.floor(diff / 60)}min`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
+    return `${Math.floor(diff / 86400)}d`;
   }
-
-  if (!profile) {
-    return (
-      <div style={{ textAlign: 'center', padding: '4rem', color: '#999' }}>
-        <User size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
-        <p>Usuário não encontrado</p>
-      </div>
-    );
-  }
-
-  const isPrivateAndNotOwner = profile.is_private && !isOwnProfile;
-  const memberSince = new Date(profile.created_at).toLocaleDateString();
-  const avatarSrc = profile.avatar_url
-    ? (profile.avatar_url.startsWith('http') ? profile.avatar_url : `${API_BASE}${profile.avatar_url}`)
-    : null;
 
   const getMediaUrl = (url) => url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
 
+  if (loading) return <div style={{ display: 'flex', justifyContent: 'center', padding: '4rem' }}><div className="loading-spinner" /></div>;
+  if (!profile) return <div style={{ textAlign: 'center', padding: '4rem', color: '#999' }}><User size={48} style={{ opacity: 0.5, marginBottom: '1rem' }} /><p>Usuário não encontrado</p></div>;
+
+  const isPrivateAndNotOwner = profile.is_private && !isOwnProfile && friendStatus !== 'accepted';
+  const memberSince = new Date(profile.created_at).toLocaleDateString();
+  const avatarSrc = profile.avatar_url ? (profile.avatar_url.startsWith('http') ? profile.avatar_url : `${API_BASE}${profile.avatar_url}`) : null;
+
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto', padding: '0' }}>
-      {/* Header - bolha de água dourada */}
+    <div style={{ maxWidth: 600, margin: '0 auto', padding: '0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+
+      {/* ======= HEADER PROFILE CARD ======= */}
       <div style={{
-        background: 'linear-gradient(160deg, rgba(255,255,255,0.35), rgba(76,175,80,0.10), rgba(255,255,255,0.2))',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         padding: '1.5rem 1.25rem 1rem',
-        color: '#1a1a2e',
         position: 'relative',
         overflow: 'hidden',
-        borderRadius: '24px',
-        border: '1.5px solid rgba(76,175,80,0.35)',
-        boxShadow: '0 8px 32px rgba(76,175,80,0.12), inset 0 2px 4px rgba(255,255,255,0.6)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
+        borderRadius: '0 0 28px 28px',
       }}>
-        {/* Reflexo brilhante no topo da bolha */}
-        <div style={{
-          position: 'absolute', top: -15, left: '15%', width: '70%', height: 40,
-          borderRadius: '50%',
-          background: 'radial-gradient(ellipse, rgba(255,255,255,0.6), transparent 70%)',
-          zIndex: 0,
-        }} />
-        {/* Brilho dourado suave */}
-        <div style={{
-          position: 'absolute', bottom: 10, right: '5%', width: 100, height: 100,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(76,175,80,0.12), transparent 60%)',
-          zIndex: 0,
-        }} />
+        {/* Decorative circles */}
+        <div style={{ position: 'absolute', top: -40, right: -40, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} />
+        <div style={{ position: 'absolute', bottom: -20, left: -20, width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
 
         <div style={{ position: 'relative', zIndex: 1 }}>
-          {/* Top row: Avatar + Stats + Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '0.75rem' }}>
-          {/* Avatar */}
-          <div style={{ position: 'relative', flexShrink: 0 }}>
-            <div style={{
-              width: 86, height: 86, borderRadius: '50%',
-              background: 'rgba(218,165,32,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '3px solid #daa520', overflow: 'hidden', cursor: isOwnProfile ? 'pointer' : 'default',
-            }} onClick={() => isOwnProfile && fileInputRef.current?.click()}>
-              {avatarSrc ? (
-                <img src={avatarSrc} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              ) : (
-                <User size={40} color="#daa520" />
-              )}
-              {uploadingAvatar && (
+          {/* Avatar + Stats Row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '0.85rem' }}>
+            {/* Avatar with ring */}
+            <div style={{ position: 'relative', flexShrink: 0 }}>
+              <div style={{
+                width: 92, height: 92, borderRadius: '50%',
+                background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)',
+                padding: 3, cursor: isOwnProfile ? 'pointer' : 'default',
+              }} onClick={() => isOwnProfile && fileInputRef.current?.click()}>
                 <div style={{
-                  position: 'absolute', inset: 0, borderRadius: '50%',
-                  background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: '100%', height: '100%', borderRadius: '50%',
+                  border: '3px solid #1a1a2e', overflow: 'hidden',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: '#2d1b69',
                 }}>
+                  {avatarSrc ? (
+                    <img src={avatarSrc} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <User size={40} color="#daa520" />
+                  )}
+                </div>
+              </div>
+              {uploadingAvatar && (
+                <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <div className="loading-spinner" style={{ width: 20, height: 20 }} />
                 </div>
               )}
+              {isOwnProfile && (
+                <div style={{
+                  position: 'absolute', bottom: 2, right: 2,
+                  background: '#3b82f6', borderRadius: '50%', width: 28, height: 28,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', border: '2px solid #1a1a2e',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                }} onClick={() => fileInputRef.current?.click()}>
+                  <Camera size={14} color="#fff" />
+                </div>
+              )}
+              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarUpload} />
             </div>
-            {isOwnProfile && (
-              <div style={{
-                position: 'absolute', bottom: 0, right: 0,
-                background: '#daa520', borderRadius: '50%', width: 26, height: 26,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', border: '2px solid #1a0a3e',
-              }} onClick={() => fileInputRef.current?.click()}>
-                <Camera size={13} color="#1a0a3e" />
-              </div>
-            )}
-            <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }}
-              onChange={handleAvatarUpload} />
+
+            {/* Stats */}
+            <div style={{ display: 'flex', flex: 1, justifyContent: 'space-around', textAlign: 'center' }}>
+              {[
+                { value: stats.posts, label: 'Posts' },
+                { value: stats.friends, label: 'Amigos' },
+                { value: stats.prayers, label: 'Orações' },
+              ].map((s, i) => (
+                <div key={i} style={{ cursor: 'pointer' }}>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#fff', lineHeight: 1.2 }}>{s.value}</div>
+                  <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.7)', marginTop: 2, letterSpacing: 0.3 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Stats inline */}
-          <div style={{ display: 'flex', flex: 1, justifyContent: 'space-around', textAlign: 'center' }}>
-            {[
-              { value: stats.posts, label: 'Posts' },
-              { value: stats.friends, label: 'Amigos' },
-              { value: stats.prayers, label: 'Orações' },
-            ].map((s, i) => (
-              <div key={i}>
-                <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#1a1a2e' }}>{s.value}</div>
-                <div style={{ fontSize: '0.7rem', color: '#8b7355', marginTop: 2 }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Name & bio */}
-        <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#1a1a2e' }}>{profile.full_name}</h2>
-        {profile.display_name && (
-          <p style={{ margin: '0.15rem 0 0', opacity: 0.7, fontSize: '0.85rem', color: '#8b7355' }}>@{profile.display_name}</p>
-        )}
-        {profile.bio && (
-          <p style={{ margin: '0.4rem 0 0', fontSize: '0.85rem', color: '#444', lineHeight: 1.4 }}>{profile.bio}</p>
-        )}
-
-        {/* Role badge + church */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: '0.5rem', flexWrap: 'wrap' }}>
-          <span style={{
-            padding: '3px 10px', borderRadius: 12, fontSize: '0.7rem', fontWeight: 600,
-            textTransform: 'uppercase', background: 'rgba(218,165,32,0.2)', color: '#daa520',
-            border: '1px solid rgba(218,165,32,0.3)',
-          }}>
-            {profile.role}
-          </span>
-          {profile.church_name && (
-            <span style={{ fontSize: '0.8rem', color: '#aaa' }}>
-              <Church size={12} style={{ verticalAlign: 'middle', marginRight: 3 }} />
-              {profile.church_name}
-            </span>
+          {/* Name & bio */}
+          <h2 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 700, color: '#fff' }}>
+            {profile.full_name}
+          </h2>
+          {profile.display_name && (
+            <p style={{ margin: '0.1rem 0 0', color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem' }}>@{profile.display_name}</p>
           )}
-        </div>
+          {profile.bio && (
+            <p style={{ margin: '0.4rem 0 0', fontSize: '0.85rem', color: 'rgba(255,255,255,0.85)', lineHeight: 1.4 }}>{profile.bio}</p>
+          )}
 
-        {/* Action buttons */}
-        <div style={{ display: 'flex', gap: 8, marginTop: '0.75rem' }}>
-          {isOwnProfile ? (
-            <>
-              <button onClick={() => setEditing(true)} style={{
-                flex: 1, padding: '0.45rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.5)',
-                background: 'rgba(255,255,255,0.08)', color: '#daa520', fontWeight: 600, fontSize: '0.85rem',
-                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-              }}>
-                <Edit size={14} /> Editar
-              </button>
-              <button onClick={handleTogglePrivacy} style={{
-                padding: '0.45rem 0.75rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)',
-                background: 'rgba(255,255,255,0.05)', color: '#aaa', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem',
-              }}>
-                {profile.is_private ? <Lock size={14} /> : <Globe size={14} />}
-                {profile.is_private ? 'Privado' : 'Público'}
-              </button>
-            </>
-          ) : currentUser ? (
-            <button onClick={handleAddFriend} style={{
-              flex: 1, padding: '0.5rem', borderRadius: 8, border: 'none',
-              background: '#daa520', color: '#1a0a3e', fontWeight: 700, fontSize: '0.9rem',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+          {/* Role & church badges */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: '0.5rem', flexWrap: 'wrap' }}>
+            <span style={{
+              padding: '3px 12px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 700,
+              textTransform: 'uppercase', letterSpacing: 0.5,
+              background: 'rgba(255,255,255,0.15)', color: '#ffd700',
+              backdropFilter: 'blur(10px)',
             }}>
-              <Users size={16} /> Adicionar Amigo
-            </button>
-          ) : null}
-        </div>
-      </div> {/* fecha zIndex wrapper */}
-      </div> {/* fecha header */}
+              ✝️ {profile.role}
+            </span>
+            {profile.church_name && (
+              <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)' }}>
+                <Church size={12} style={{ verticalAlign: 'middle', marginRight: 3 }} />
+                {profile.church_name}
+              </span>
+            )}
+          </div>
 
-      {/* Private profile lock */}
+          {/* Action buttons */}
+          <div style={{ display: 'flex', gap: 8, marginTop: '0.85rem' }}>
+            {isOwnProfile ? (
+              <>
+                <button onClick={() => setEditing(true)} style={{
+                  flex: 1, padding: '0.5rem', borderRadius: 10, border: 'none',
+                  background: 'rgba(255,255,255,0.2)', color: '#fff', fontWeight: 600, fontSize: '0.85rem',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  backdropFilter: 'blur(10px)',
+                }}>
+                  <Edit size={14} /> Editar Perfil
+                </button>
+                <button onClick={handleTogglePrivacy} style={{
+                  padding: '0.5rem 0.85rem', borderRadius: 10, border: 'none',
+                  background: profile.is_private ? 'rgba(239,68,68,0.3)' : 'rgba(34,197,94,0.3)',
+                  color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.8rem',
+                  backdropFilter: 'blur(10px)',
+                }}>
+                  {profile.is_private ? <Lock size={14} /> : <Globe size={14} />}
+                  {profile.is_private ? 'Privado' : 'Público'}
+                </button>
+              </>
+            ) : currentUser ? (
+              <>
+                <button onClick={handleAddFriend} disabled={friendStatus === 'pending' || friendStatus === 'accepted'} style={{
+                  flex: 1, padding: '0.55rem', borderRadius: 10, border: 'none',
+                  background: friendStatus === 'accepted' ? 'rgba(34,197,94,0.3)' : friendStatus === 'pending' ? 'rgba(255,255,255,0.15)' : '#3b82f6',
+                  color: '#fff', fontWeight: 700, fontSize: '0.9rem', cursor: friendStatus ? 'default' : 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                }}>
+                  <Users size={16} />
+                  {friendStatus === 'accepted' ? '✓ Amigos' : friendStatus === 'pending' ? 'Pendente' : 'Adicionar'}
+                </button>
+                <Link to="/mensagens" style={{
+                  padding: '0.55rem 1rem', borderRadius: 10, border: 'none',
+                  background: 'rgba(255,255,255,0.2)', color: '#fff', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 5, textDecoration: 'none',
+                  backdropFilter: 'blur(10px)',
+                }}>
+                  <MessageCircle size={16} />
+                </Link>
+              </>
+            ) : null}
+          </div>
+        </div>
+      </div>
+
+      {/* Private lock */}
       {isPrivateAndNotOwner ? (
         <div style={{
-          background: 'rgba(18, 8, 51, 0.7)', // Fundo semitransparente mais leve
-          padding: '3rem 2rem', textAlign: 'center', color: '#999',
-          borderRadius: '16px', // Adiciona borda arredondada
-          boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
-          backdropFilter: 'blur(8px)', // Efeito de vidro
-          WebkitBackdropFilter: 'blur(8px)',
+          background: 'rgba(255,255,255,0.05)', padding: '3rem 2rem', textAlign: 'center',
+          borderRadius: 20, margin: '1rem 0.5rem', border: '1px solid rgba(255,255,255,0.1)',
         }}>
-          <Lock size={48} color="#daa520" style={{ marginBottom: '1rem', opacity: 0.6 }} />
-          <h3 style={{ color: '#fff', margin: '0 0 0.5rem' }}>Conta Privada</h3>
-          <p style={{ margin: 0, fontSize: '0.9rem' }}>Adicione como amigo para ver o perfil completo.</p>
+          <Lock size={52} color="#666" style={{ marginBottom: '1rem' }} />
+          <h3 style={{ color: '#fff', margin: '0 0 0.5rem', fontSize: '1.1rem' }}>Conta Privada</h3>
+          <p style={{ margin: 0, fontSize: '0.9rem', color: '#888' }}>Adicione como amigo para ver as publicações</p>
         </div>
       ) : (
         <>
-          {/* Tabs */}
+          {/* ======= TABS ======= */}
           <div style={{
-            display: 'flex',
-            background: 'linear-gradient(160deg, rgba(255,255,255,0.3), rgba(76,175,80,0.06))',
-            borderBottom: '1px solid rgba(76,175,80,0.2)',
-            backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-            borderTopLeftRadius: '24px', borderTopRightRadius: '24px',
-            border: '1.5px solid rgba(76,175,80,0.25)',
-            borderBottom: '1px solid rgba(76,175,80,0.15)',
+            display: 'flex', margin: '0.5rem 0 0',
+            borderBottom: '1px solid rgba(255,255,255,0.1)',
           }}>
             {[
-              { key: 'posts', icon: <Grid3x3 size={20} />, label: 'Posts' },
-              { key: 'prayers', icon: <Heart size={20} />, label: 'Orações' },
-              { key: 'info', icon: <Info size={20} />, label: 'Info' },
+              { key: 'posts', icon: <Grid3x3 size={22} /> },
+              { key: 'prayers', icon: <Heart size={22} /> },
+              { key: 'info', icon: <Info size={22} /> },
             ].map(tab => (
               <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
-                flex: 1, padding: '0.75rem 0', border: 'none',
-                background: 'transparent', cursor: 'pointer',
-                color: activeTab === tab.key ? '#daa520' : '#666',
-                borderBottom: activeTab === tab.key ? '2px solid #daa520' : '2px solid transparent',
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-                fontSize: '0.7rem', fontWeight: activeTab === tab.key ? 600 : 400,
-                transition: 'all 0.2s',
+                flex: 1, padding: '0.85rem 0', border: 'none', background: 'transparent', cursor: 'pointer',
+                color: activeTab === tab.key ? '#667eea' : '#666',
+                borderBottom: activeTab === tab.key ? '2px solid #667eea' : '2px solid transparent',
+                display: 'flex', justifyContent: 'center', transition: 'all 0.2s',
               }}>
                 {tab.icon}
-                {tab.label}
               </button>
             ))}
           </div>
 
-          {/* Tab content */}
-          <div style={{
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.2), rgba(76,175,80,0.04))',
-            minHeight: 300,
-            backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-            borderBottomLeftRadius: '24px', borderBottomRightRadius: '24px',
-            marginBottom: '1.5rem',
-            boxShadow: '0 8px 32px rgba(76,175,80,0.08)',
-            borderLeft: '1.5px solid rgba(76,175,80,0.25)',
-            borderRight: '1.5px solid rgba(76,175,80,0.25)',
-            borderBottom: '1.5px solid rgba(76,175,80,0.25)',
-          }}>
-            {/* POSTS tab */}
+          {/* ======= TAB CONTENT ======= */}
+          <div style={{ minHeight: 300, paddingBottom: '2rem' }}>
+
+            {/* POSTS GRID */}
             {activeTab === 'posts' && (
               <div>
-                {/* New post button for own profile */}
                 {isOwnProfile && (
                   <button onClick={() => setShowNewPost(true)} style={{
-                    width: '100%', padding: '0.75rem', border: 'none',
-                    background: 'rgba(218,165,32,0.1)', color: '#daa520',
-                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                    fontSize: '0.9rem', fontWeight: 600,
-                    borderBottom: '1px solid rgba(218,165,32,0.15)',
+                    width: '100%', padding: '0.85rem', border: 'none',
+                    background: 'linear-gradient(135deg, rgba(102,126,234,0.15), rgba(118,75,162,0.15))',
+                    color: '#667eea', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    fontSize: '0.9rem', fontWeight: 700,
+                    borderBottom: '1px solid rgba(255,255,255,0.05)',
                   }}>
-                    <Plus size={18} /> Nova Publicação
+                    <Plus size={20} /> Nova Publicação
                   </button>
                 )}
 
                 {loadingContent ? (
-                  <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}>
-                    <div className="loading-spinner" />
-                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="loading-spinner" /></div>
                 ) : posts.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '3rem', color: '#666' }}>
-                    <Image size={48} style={{ marginBottom: '0.75rem', opacity: 0.4 }} />
-                    <p style={{ margin: 0, fontSize: '0.9rem' }}>Nenhuma publicação ainda</p>
+                    <Camera size={52} style={{ opacity: 0.3, marginBottom: '0.75rem' }} />
+                    <p style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>Sem publicações</p>
+                    <p style={{ margin: '0.3rem 0 0', fontSize: '0.85rem', color: '#555' }}>
+                      {isOwnProfile ? 'Compartilhe seus momentos de fé!' : 'Este perfil ainda não publicou nada.'}
+                    </p>
                   </div>
                 ) : (
-                  /* 3-column grid */
-                  <div style={{
-                    display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, padding: 2,
-                  }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
                     {posts.map(post => (
-                      <div key={post.id} onClick={() => setSelectedPost(post)} style={{
+                      <div key={post.id} onClick={() => openPost(post)} style={{
                         aspectRatio: '1', cursor: 'pointer', position: 'relative',
-                        background: '#2d1b69', overflow: 'hidden',
+                        overflow: 'hidden', background: '#1a1a2e',
                       }}>
                         {post.media_url ? (
-                          <img src={getMediaUrl(post.media_url)} alt="" style={{
-                            width: '100%', height: '100%', objectFit: 'cover',
-                          }} />
+                          post.media_type === 'video' ? (
+                            <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+                              <video src={getMediaUrl(post.media_url)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+                              <Play size={28} color="#fff" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }} />
+                            </div>
+                          ) : (
+                            <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          )
                         ) : (
                           <div style={{
-                            width: '100%', height: '100%', display: 'flex',
-                            alignItems: 'center', justifyContent: 'center', padding: 8,
-                            fontSize: '0.75rem', color: '#ccc', textAlign: 'center',
-                            background: `linear-gradient(135deg, #2d1b69, #1a0a3e)`,
+                            width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            padding: 10, fontSize: '0.72rem', color: '#ccc', textAlign: 'center',
+                            background: `linear-gradient(135deg, #667eea, #764ba2)`,
                           }}>
-                            {post.content.substring(0, 80)}{post.content.length > 80 ? '...' : ''}
+                            {post.content?.substring(0, 60)}{post.content?.length > 60 ? '...' : ''}
                           </div>
                         )}
-                        {/* Category badge */}
+                        {/* Hover overlay with likes/comments */}
                         <div style={{
-                          position: 'absolute', top: 4, left: 4,
-                          fontSize: '0.65rem', padding: '2px 6px', borderRadius: 4,
-                          background: 'rgba(0,0,0,0.6)', color: '#daa520',
-                        }}>
-                          {CATEGORIES.find(c => c.value === post.category)?.label?.split(' ')[0] || '📝'}
+                          position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16,
+                          opacity: 0, transition: 'opacity 0.2s',
+                        }} className="grid-overlay">
+                          <span style={{ color: '#fff', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <Heart size={16} fill="#fff" /> {likeCounts[post.id] || 0}
+                          </span>
+                          <span style={{ color: '#fff', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <MessageCircle size={16} fill="#fff" /> {post.comment_count || 0}
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -529,32 +648,26 @@ export default function Profile() {
             {activeTab === 'prayers' && (
               <div style={{ padding: '1rem' }}>
                 {loadingContent ? (
-                  <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}>
-                    <div className="loading-spinner" />
-                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="loading-spinner" /></div>
                 ) : prayers.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '3rem', color: '#666' }}>
-                    <Heart size={48} style={{ marginBottom: '0.75rem', opacity: 0.4 }} />
-                    <p style={{ margin: 0, fontSize: '0.9rem' }}>Nenhuma oração ainda</p>
+                    <Heart size={48} style={{ opacity: 0.3 }} />
+                    <p style={{ margin: '0.75rem 0 0' }}>Nenhuma oração</p>
                   </div>
                 ) : (
                   prayers.map(prayer => (
                     <div key={prayer.id} style={{
-                      background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: '1rem',
-                      marginBottom: '0.75rem', border: '1px solid rgba(218,165,32,0.15)',
+                      background: 'rgba(255,255,255,0.04)', borderRadius: 16, padding: '1rem',
+                      marginBottom: '0.75rem', border: '1px solid rgba(255,255,255,0.08)',
                     }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                        <span style={{ fontSize: '0.75rem', color: '#daa520', fontWeight: 600, textTransform: 'uppercase' }}>
-                          {prayer.category}
-                        </span>
-                        {prayer.is_urgent && (
-                          <span style={{ fontSize: '0.7rem', color: '#e74c3c', fontWeight: 600 }}>🔴 Urgente</span>
-                        )}
+                        <span style={{ fontSize: '0.72rem', color: '#667eea', fontWeight: 700, textTransform: 'uppercase' }}>{prayer.category}</span>
+                        {prayer.is_urgent && <span style={{ fontSize: '0.7rem', color: '#ef4444', fontWeight: 600 }}>🔴 Urgente</span>}
                       </div>
                       {prayer.title && <h4 style={{ margin: '0 0 0.4rem', color: '#fff', fontSize: '0.95rem' }}>{prayer.title}</h4>}
                       <p style={{ margin: 0, color: '#ccc', fontSize: '0.85rem', lineHeight: 1.5 }}>{prayer.content}</p>
                       <div style={{ marginTop: 8, fontSize: '0.75rem', color: '#888' }}>
-                        🙏 {prayer.prayer_count || 0} orando · {new Date(prayer.created_at).toLocaleDateString()}
+                        🙏 {prayer.prayer_count || 0} orando · {timeAgo(prayer.created_at)}
                       </div>
                     </div>
                   ))
@@ -566,31 +679,26 @@ export default function Profile() {
             {activeTab === 'info' && (
               <div style={{ padding: '1.25rem' }}>
                 <div style={{
-                  background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: '1rem',
-                  border: '1px solid rgba(218,165,32,0.15)',
+                  background: 'rgba(255,255,255,0.04)', borderRadius: 16, padding: '1.25rem',
+                  border: '1px solid rgba(255,255,255,0.08)',
                 }}>
-                  <h3 style={{ margin: '0 0 0.75rem', fontSize: '0.85rem', color: '#daa520', textTransform: 'uppercase' }}>
-                    {t('profile.bio')}
-                  </h3>
-                  <p style={{ margin: '0 0 1rem', color: profile.bio ? '#ddd' : '#666', fontStyle: profile.bio ? 'normal' : 'italic', lineHeight: 1.5 }}>
-                    {profile.bio || t('profile.noBio')}
+                  <h3 style={{ margin: '0 0 0.75rem', fontSize: '0.8rem', color: '#667eea', textTransform: 'uppercase', letterSpacing: 1 }}>Sobre</h3>
+                  <p style={{ margin: '0 0 1.25rem', color: profile.bio ? '#ddd' : '#666', fontStyle: profile.bio ? 'normal' : 'italic', lineHeight: 1.6 }}>
+                    {profile.bio || 'Nenhuma bio ainda'}
                   </p>
-
                   {profile.church_name && (
-                    <div style={{ marginBottom: '0.75rem' }}>
-                      <span style={{ fontSize: '0.75rem', color: '#daa520', fontWeight: 600 }}>IGREJA</span>
+                    <div style={{ marginBottom: '1rem' }}>
+                      <span style={{ fontSize: '0.72rem', color: '#667eea', fontWeight: 700, letterSpacing: 0.5 }}>IGREJA</span>
                       <p style={{ margin: '0.25rem 0 0', color: '#ccc', fontSize: '0.9rem' }}>
                         <Church size={14} style={{ verticalAlign: 'middle', marginRight: 4 }} />
-                        {profile.church_name} {profile.church_role && `· ${profile.church_role}`}
+                        {profile.church_name}
                       </p>
                     </div>
                   )}
-
                   <div>
-                    <span style={{ fontSize: '0.75rem', color: '#daa520', fontWeight: 600 }}>MEMBRO DESDE</span>
+                    <span style={{ fontSize: '0.72rem', color: '#667eea', fontWeight: 700, letterSpacing: 0.5 }}>MEMBRO DESDE</span>
                     <p style={{ margin: '0.25rem 0 0', color: '#ccc', fontSize: '0.9rem' }}>
-                      <Calendar size={14} style={{ verticalAlign: 'middle', marginRight: 4 }} />
-                      {memberSince}
+                      <Calendar size={14} style={{ verticalAlign: 'middle', marginRight: 4 }} /> {memberSince}
                     </p>
                   </div>
                 </div>
@@ -600,102 +708,113 @@ export default function Profile() {
         </>
       )}
 
-      {/* ===== MODALS ===== */}
-
-      {/* Edit Profile Modal */}
+      {/* ======= EDIT PROFILE MODAL ======= */}
       {editing && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 9999,
-          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
+          background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
         }} onClick={(e) => { if (e.target === e.currentTarget) setEditing(false); }}>
           <div style={{
-            background: '#1a0a3e', borderRadius: 16, padding: '1.5rem', width: '100%', maxWidth: 420,
-            border: '2px solid #daa520', maxHeight: '80vh', overflowY: 'auto',
+            background: 'linear-gradient(180deg, #1e1e3f, #12122b)', borderRadius: 20, padding: '1.5rem', width: '100%', maxWidth: 420,
+            border: '1px solid rgba(102,126,234,0.3)', maxHeight: '80vh', overflowY: 'auto',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-              <h3 style={{ margin: 0, color: '#daa520', fontSize: '1.1rem' }}>✏️ Editar Perfil</h3>
-              <button onClick={() => setEditing(false)} style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer' }}>
-                <X size={22} />
-              </button>
+              <h3 style={{ margin: 0, color: '#fff', fontSize: '1.1rem', fontWeight: 700 }}>Editar Perfil</h3>
+              <button onClick={() => setEditing(false)} style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer' }}><X size={22} /></button>
             </div>
             <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#daa520', fontSize: '0.8rem', textTransform: 'uppercase' }}>Display Name</label>
+              <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#667eea', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: 0.5 }}>Nome de exibição</label>
               <input value={form.display_name} onChange={e => setForm({ ...form, display_name: e.target.value })}
-                style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)', background: 'rgba(0,0,0,0.3)', color: '#fff', boxSizing: 'border-box' }} />
+                style={{ width: '100%', padding: '0.65rem 0.85rem', borderRadius: 12, border: '1px solid rgba(102,126,234,0.3)', background: 'rgba(255,255,255,0.06)', color: '#fff', boxSizing: 'border-box', fontSize: '0.9rem' }} />
             </div>
             <div style={{ marginBottom: '1.25rem' }}>
-              <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#daa520', fontSize: '0.8rem', textTransform: 'uppercase' }}>{t('profile.bio')}</label>
+              <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#667eea', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: 0.5 }}>Bio</label>
               <textarea value={form.bio} onChange={e => setForm({ ...form, bio: e.target.value })} rows={4}
-                style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)', background: 'rgba(0,0,0,0.3)', color: '#fff', boxSizing: 'border-box', resize: 'vertical' }} />
+                style={{ width: '100%', padding: '0.65rem 0.85rem', borderRadius: 12, border: '1px solid rgba(102,126,234,0.3)', background: 'rgba(255,255,255,0.06)', color: '#fff', boxSizing: 'border-box', resize: 'vertical', fontSize: '0.9rem' }} />
             </div>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <button onClick={handleSave} disabled={saving} style={{
-                flex: 1, padding: '0.7rem', borderRadius: 8, border: 'none',
-                background: '#daa520', color: '#1a0a3e', fontWeight: 700, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: '0.95rem',
+                flex: 1, padding: '0.7rem', borderRadius: 12, border: 'none',
+                background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem',
               }}>
-                <Save size={16} /> {t('profile.save')}
+                {saving ? 'Salvando...' : '✓ Salvar'}
               </button>
               <button onClick={() => setEditing(false)} style={{
-                flex: 1, padding: '0.7rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)',
-                background: 'transparent', color: '#ccc', fontWeight: 600, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: '0.95rem',
+                flex: 1, padding: '0.7rem', borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)',
+                background: 'transparent', color: '#ccc', fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem',
               }}>
-                <X size={16} /> {t('profile.cancel')}
+                Cancelar
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* New Post Modal */}
+      {/* ======= NEW POST MODAL ======= */}
       {showNewPost && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 9999,
-          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
-        }} onClick={(e) => { if (e.target === e.currentTarget) setShowNewPost(false); }}>
+          background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(8px)',
+          display: 'flex', flexDirection: 'column',
+        }}>
+          {/* Top bar */}
           <div style={{
-            background: '#1a0a3e', borderRadius: 16, padding: '1.5rem', width: '100%', maxWidth: 420,
-            border: '2px solid #daa520', maxHeight: '85vh', overflowY: 'auto',
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            padding: '1rem 1.25rem', borderBottom: '1px solid rgba(255,255,255,0.1)',
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h3 style={{ margin: 0, color: '#daa520', fontSize: '1.1rem' }}>📸 Nova Publicação</h3>
-              <button onClick={() => setShowNewPost(false)} style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer' }}>
-                <X size={22} />
-              </button>
-            </div>
+            <button onClick={() => { setShowNewPost(false); setNewPostMedia(null); setNewPostPreview(null); }} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '1rem' }}>
+              Cancelar
+            </button>
+            <h3 style={{ margin: 0, color: '#fff', fontSize: '1rem', fontWeight: 700 }}>Nova Publicação</h3>
+            <button onClick={handleCreatePost} disabled={creatingPost || (!newPost.content.trim() && !newPostMedia)} style={{
+              background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', fontWeight: 700,
+              color: (newPost.content.trim() || newPostMedia) ? '#667eea' : '#444',
+            }}>
+              {creatingPost ? 'Enviando...' : 'Publicar'}
+            </button>
+          </div>
 
-            {/* Image upload area */}
-            <div onClick={() => postImageRef.current?.click()} style={{
-              width: '100%', aspectRatio: '1', borderRadius: 12, marginBottom: '1rem',
-              border: '2px dashed rgba(218,165,32,0.4)', cursor: 'pointer',
+          <div style={{ flex: 1, overflowY: 'auto', padding: '1rem 1.25rem' }}>
+            {/* Media upload area */}
+            <div onClick={() => postMediaRef.current?.click()} style={{
+              width: '100%', aspectRatio: '1', borderRadius: 16, marginBottom: '1rem',
+              border: newPostPreview ? 'none' : '2px dashed rgba(102,126,234,0.4)', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column',
-              background: newPostPreview ? 'transparent' : 'rgba(0,0,0,0.2)',
+              background: newPostPreview ? '#000' : 'rgba(255,255,255,0.03)',
               overflow: 'hidden', position: 'relative',
             }}>
               {newPostPreview ? (
-                <img src={newPostPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                newPostMediaType === 'video' ? (
+                  <video src={newPostPreview} style={{ width: '100%', height: '100%', objectFit: 'contain' }} controls />
+                ) : (
+                  <img src={newPostPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                )
               ) : (
                 <>
-                  <Camera size={40} color="#daa520" style={{ opacity: 0.5, marginBottom: 8 }} />
-                  <span style={{ color: '#888', fontSize: '0.85rem' }}>Toque para adicionar foto</span>
+                  <div style={{ display: 'flex', gap: 16, marginBottom: 12 }}>
+                    <Camera size={36} color="#667eea" style={{ opacity: 0.6 }} />
+                    <Video size={36} color="#764ba2" style={{ opacity: 0.6 }} />
+                  </div>
+                  <span style={{ color: '#888', fontSize: '0.9rem' }}>Toque para adicionar foto ou vídeo</span>
                 </>
               )}
+              {creatingPost && uploadProgress > 0 && (
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 4, background: 'rgba(255,255,255,0.1)' }}>
+                  <div style={{ height: '100%', width: `${uploadProgress}%`, background: 'linear-gradient(90deg, #667eea, #764ba2)', transition: 'width 0.3s' }} />
+                </div>
+              )}
             </div>
-            <input ref={postImageRef} type="file" accept="image/*" style={{ display: 'none' }}
-              onChange={handlePostImageSelect} />
+            <input ref={postMediaRef} type="file" accept="image/*,video/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
 
-            {/* Category selector */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1rem' }}>
+            {/* Category chips */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: '1rem' }}>
               {CATEGORIES.map(cat => (
                 <button key={cat.value} onClick={() => setNewPost({ ...newPost, category: cat.value })} style={{
-                  padding: '6px 12px', borderRadius: 20, border: 'none', cursor: 'pointer',
-                  fontSize: '0.8rem', fontWeight: 500,
-                  background: newPost.category === cat.value ? 'rgba(218,165,32,0.3)' : 'rgba(255,255,255,0.08)',
-                  color: newPost.category === cat.value ? '#daa520' : '#aaa',
-                  transition: 'all 0.2s',
+                  padding: '7px 14px', borderRadius: 20, border: 'none', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600,
+                  background: newPost.category === cat.value ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'rgba(255,255,255,0.08)',
+                  color: newPost.category === cat.value ? '#fff' : '#aaa', transition: 'all 0.2s',
                 }}>
                   {cat.label}
                 </button>
@@ -706,90 +825,210 @@ export default function Profile() {
             <textarea value={newPost.content} onChange={e => setNewPost({ ...newPost, content: e.target.value })}
               placeholder="Compartilhe algo com a comunidade..."
               rows={3} style={{
-                width: '100%', padding: '0.7rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)',
-                background: 'rgba(0,0,0,0.3)', color: '#fff', boxSizing: 'border-box', resize: 'vertical',
-                marginBottom: '0.75rem', fontSize: '0.9rem',
+                width: '100%', padding: '0.75rem', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)',
+                background: 'rgba(255,255,255,0.05)', color: '#fff', boxSizing: 'border-box', resize: 'vertical',
+                fontSize: '0.9rem',
               }} />
 
-            {/* Verse reference (optional) */}
             {(newPost.category === 'versiculo' || newPost.category === 'reflexao') && (
               <input value={newPost.verse_reference} onChange={e => setNewPost({ ...newPost, verse_reference: e.target.value })}
                 placeholder="Referência bíblica (ex: João 3:16)"
                 style={{
-                  width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid rgba(218,165,32,0.3)',
-                  background: 'rgba(0,0,0,0.3)', color: '#fff', boxSizing: 'border-box', marginBottom: '1rem',
-                  fontSize: '0.85rem',
+                  width: '100%', padding: '0.65rem', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)',
+                  background: 'rgba(255,255,255,0.05)', color: '#fff', boxSizing: 'border-box', marginTop: '0.75rem', fontSize: '0.85rem',
                 }} />
             )}
-
-            <button onClick={handleCreatePost} disabled={creatingPost || !newPost.content.trim()} style={{
-              width: '100%', padding: '0.75rem', borderRadius: 10, border: 'none',
-              background: newPost.content.trim() ? '#daa520' : 'rgba(218,165,32,0.3)',
-              color: '#1a0a3e', fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            }}>
-              {creatingPost ? 'Publicando...' : '✨ Publicar'}
-            </button>
           </div>
         </div>
       )}
 
-      {/* Post Detail Modal */}
+      {/* ======= POST DETAIL MODAL (Instagram-style) ======= */}
       {selectedPost && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 9999,
-          background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(4px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
-        }} onClick={(e) => { if (e.target === e.currentTarget) setSelectedPost(null); }}>
+          background: 'rgba(0,0,0,0.95)',
+          display: 'flex', flexDirection: 'column',
+        }}>
+          {/* Top bar */}
           <div style={{
-            background: '#1a0a3e', borderRadius: 16, width: '100%', maxWidth: 480,
-            maxHeight: '90vh', overflowY: 'auto', border: '1px solid rgba(218,165,32,0.3)',
+            display: 'flex', alignItems: 'center', padding: '0.75rem 1rem',
+            borderBottom: '1px solid rgba(255,255,255,0.1)',
           }}>
-            {/* Post image */}
-            {selectedPost.media_url && (
-              <img src={getMediaUrl(selectedPost.media_url)} alt="" style={{
-                width: '100%', maxHeight: 400, objectFit: 'cover', borderRadius: '16px 16px 0 0',
-              }} />
-            )}
-            <div style={{ padding: '1.25rem' }}>
-              {/* Category & date */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                <span style={{
-                  fontSize: '0.8rem', padding: '3px 10px', borderRadius: 12,
-                  background: 'rgba(218,165,32,0.2)', color: '#daa520',
-                }}>
-                  {CATEGORIES.find(c => c.value === selectedPost.category)?.label || selectedPost.category}
-                </span>
-                <span style={{ fontSize: '0.75rem', color: '#888' }}>
-                  {new Date(selectedPost.created_at).toLocaleDateString()}
-                </span>
+            <button onClick={() => setSelectedPost(null)} style={{
+              background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: '4px',
+            }}>
+              <ChevronLeft size={24} />
+            </button>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, marginLeft: 8 }}>
+              <div style={{
+                width: 32, height: 32, borderRadius: '50%', overflow: 'hidden',
+                background: '#2d1b69', flexShrink: 0,
+              }}>
+                {avatarSrc ? <img src={avatarSrc} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User size={18} color="#667eea" style={{ margin: 7 }} />}
               </div>
+              <span style={{ color: '#fff', fontWeight: 600, fontSize: '0.9rem' }}>{profile.full_name}</span>
+            </div>
+            {isOwnProfile && (
+              <button onClick={() => handleDeletePost(selectedPost.id)} style={{
+                background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer',
+              }}>
+                <Trash2 size={20} />
+              </button>
+            )}
+          </div>
 
-              {/* Content */}
-              <p style={{ margin: '0.5rem 0', color: '#e0e0e0', fontSize: '0.95rem', lineHeight: 1.6 }}>
-                {selectedPost.content}
-              </p>
+          {/* Content area - scrollable */}
+          <div style={{ flex: 1, overflowY: 'auto' }}>
+            {/* Media */}
+            {selectedPost.media_url && (
+              selectedPost.media_type === 'video' ? (
+                <video src={getMediaUrl(selectedPost.media_url)} controls style={{
+                  width: '100%', maxHeight: '55vh', objectFit: 'contain', background: '#000',
+                }} />
+              ) : (
+                <img src={getMediaUrl(selectedPost.media_url)} alt="" style={{
+                  width: '100%', maxHeight: '55vh', objectFit: 'contain', background: '#000',
+                }} />
+              )
+            )}
 
-              {selectedPost.verse_reference && (
-                <p style={{ margin: '0.5rem 0 0', color: '#daa520', fontSize: '0.85rem', fontStyle: 'italic' }}>
-                  📖 {selectedPost.verse_reference}
+            {/* Actions bar */}
+            <div style={{ padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: 16 }}>
+              <button onClick={() => handleLike(selectedPost.id)} style={{
+                background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                transform: likedPosts[selectedPost.id] ? 'scale(1.1)' : 'scale(1)',
+                transition: 'transform 0.2s',
+              }}>
+                <Heart size={26} color={likedPosts[selectedPost.id] ? '#ef4444' : '#fff'} fill={likedPosts[selectedPost.id] ? '#ef4444' : 'none'} />
+              </button>
+              <button onClick={() => commentInputRef.current?.focus()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                <MessageCircle size={24} color="#fff" />
+              </button>
+              <button onClick={() => {
+                const url = `${window.location.origin}/perfil/${userId}`;
+                navigator.clipboard?.writeText(url);
+              }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                <Share2 size={22} color="#fff" />
+              </button>
+            </div>
+
+            {/* Like count */}
+            {(likeCounts[selectedPost.id] || 0) > 0 && (
+              <div style={{ padding: '0 1rem 0.3rem', color: '#fff', fontSize: '0.85rem', fontWeight: 700 }}>
+                {likeCounts[selectedPost.id]} {likeCounts[selectedPost.id] === 1 ? 'curtida' : 'curtidas'}
+              </div>
+            )}
+
+            {/* Caption */}
+            <div style={{ padding: '0 1rem 0.5rem' }}>
+              <span style={{ color: '#fff', fontWeight: 700, fontSize: '0.85rem', marginRight: 6 }}>{profile.display_name || profile.full_name?.split(' ')[0]}</span>
+              <span style={{ color: '#ddd', fontSize: '0.85rem', lineHeight: 1.5 }}>{selectedPost.content}</span>
+            </div>
+
+            {selectedPost.verse_reference && (
+              <div style={{ padding: '0 1rem 0.5rem', color: '#667eea', fontSize: '0.82rem', fontStyle: 'italic' }}>
+                📖 {selectedPost.verse_reference}
+              </div>
+            )}
+
+            {/* Category + time */}
+            <div style={{ padding: '0 1rem 0.75rem', display: 'flex', gap: 12, alignItems: 'center' }}>
+              <span style={{
+                fontSize: '0.72rem', padding: '3px 10px', borderRadius: 12,
+                background: 'rgba(102,126,234,0.2)', color: '#667eea',
+              }}>
+                {CATEGORIES.find(c => c.value === selectedPost.category)?.label || selectedPost.category}
+              </span>
+              <span style={{ fontSize: '0.72rem', color: '#666' }}>{timeAgo(selectedPost.created_at)}</span>
+            </div>
+
+            {/* Comments section */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', padding: '0.75rem 1rem' }}>
+              {loadingComments ? (
+                <div style={{ textAlign: 'center', padding: '1rem' }}><div className="loading-spinner" style={{ width: 20, height: 20 }} /></div>
+              ) : comments.length === 0 ? (
+                <p style={{ color: '#555', fontSize: '0.85rem', textAlign: 'center', padding: '0.5rem 0' }}>
+                  Sem comentários ainda. Seja o primeiro! 💬
                 </p>
-              )}
-
-              {/* Delete button for own posts */}
-              {isOwnProfile && (
-                <button onClick={() => handleDeletePost(selectedPost.id)} style={{
-                  marginTop: '1rem', width: '100%', padding: '0.6rem', borderRadius: 8,
-                  border: '1px solid rgba(231,76,60,0.4)', background: 'rgba(231,76,60,0.1)',
-                  color: '#e74c3c', cursor: 'pointer', fontSize: '0.85rem',
-                }}>
-                  🗑️ Deletar publicação
-                </button>
+              ) : (
+                comments.map(c => (
+                  <div key={c.id} style={{ display: 'flex', gap: 10, marginBottom: '0.85rem' }}>
+                    <div style={{
+                      width: 30, height: 30, borderRadius: '50%', background: '#2d1b69', flexShrink: 0,
+                      overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      {c.author_avatar ? (
+                        <img src={c.author_avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        <User size={14} color="#667eea" />
+                      )}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <span style={{ color: '#fff', fontWeight: 700, fontSize: '0.82rem', marginRight: 6 }}>
+                        {c.author_name}
+                      </span>
+                      <span style={{ color: '#ccc', fontSize: '0.82rem' }}>{c.content}</span>
+                      <div style={{ display: 'flex', gap: 12, marginTop: 3, alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.7rem', color: '#666' }}>{timeAgo(c.created_at)}</span>
+                        {c.author_id === currentUser?.id && (
+                          <button onClick={() => handleDeleteComment(c.id, selectedPost.id)} style={{
+                            background: 'none', border: 'none', color: '#666', cursor: 'pointer', padding: 0, fontSize: '0.7rem',
+                          }}>
+                            Excluir
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))
               )}
             </div>
           </div>
+
+          {/* Comment input bar (fixed at bottom) */}
+          {token && (
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 10, padding: '0.65rem 1rem',
+              borderTop: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.95)',
+            }}>
+              <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#2d1b69', flexShrink: 0, overflow: 'hidden' }}>
+                {currentUser?.avatar_url ? (
+                  <img src={currentUser.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <User size={14} color="#667eea" style={{ margin: 8 }} />
+                )}
+              </div>
+              <input
+                ref={commentInputRef}
+                value={newComment}
+                onChange={e => setNewComment(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendComment(selectedPost.id); } }}
+                placeholder="Adicionar comentário..."
+                style={{
+                  flex: 1, padding: '0.55rem 0.85rem', borderRadius: 20, border: '1px solid rgba(255,255,255,0.12)',
+                  background: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '0.85rem', outline: 'none',
+                }}
+              />
+              <button
+                onClick={() => handleSendComment(selectedPost.id)}
+                disabled={!newComment.trim() || sendingComment}
+                style={{
+                  background: 'none', border: 'none', cursor: newComment.trim() ? 'pointer' : 'default',
+                  color: newComment.trim() ? '#667eea' : '#444', fontWeight: 700, fontSize: '0.9rem',
+                }}
+              >
+                <Send size={20} />
+              </button>
+            </div>
+          )}
         </div>
       )}
+
+      {/* Hover effect CSS */}
+      <style>{`
+        .grid-overlay:hover { opacity: 1 !important; }
+        @media (hover: none) { .grid-overlay { display: none !important; } }
+      `}</style>
     </div>
   );
 }
