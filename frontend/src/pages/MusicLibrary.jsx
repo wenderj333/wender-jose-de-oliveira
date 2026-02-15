@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Music, Play, Headphones, Heart, ChevronRight, Radio, Mic2, Baby, BookOpen, Guitar } from 'lucide-react';
+import { useMusic } from '../context/MusicContext';
 
 const CATEGORIES = [
   { id: 'worship', icon: <Mic2 size={20} />, gradient: 'linear-gradient(135deg, #667eea, #764ba2)' },
@@ -55,7 +56,9 @@ const PLAYLISTS = {
 export default function MusicLibrary() {
   const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState('worship');
-  const [playingVideo, setPlayingVideo] = useState(null);
+  const { currentSong, playSong, setIsMinimized } = useMusic();
+  const playingVideo = currentSong;
+  const setPlayingVideo = (song) => { if (song) { playSong(song); setIsMinimized(false); } };
   const [favorites, setFavorites] = useState(() => {
     try { return JSON.parse(localStorage.getItem('music_favs') || '[]'); } catch { return []; }
   });
@@ -151,37 +154,30 @@ export default function MusicLibrary() {
         ))}
       </div>
 
-      {/* Now playing */}
+      {/* Now playing indicator */}
       {playingVideo && (
         <div style={{
-          margin: '0 1rem 1rem', borderRadius: 16, overflow: 'hidden',
-          boxShadow: '0 8px 32px rgba(102,126,234,0.3)',
+          margin: '0 1rem 1rem', padding: '0.75rem 1rem', borderRadius: 16,
+          background: 'linear-gradient(135deg, rgba(102,126,234,0.15), rgba(118,75,162,0.15))',
           border: '1px solid rgba(102,126,234,0.3)',
+          display: 'flex', alignItems: 'center', gap: 12,
         }}>
           <div style={{
-            position: 'relative', paddingBottom: '56.25%', height: 0,
+            width: 44, height: 44, borderRadius: 10, overflow: 'hidden', flexShrink: 0,
           }}>
-            <iframe
-              src={`https://www.youtube.com/embed/${playingVideo.id}?autoplay=1&rel=0`}
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-              title={playingVideo.title}
-            />
+            <img src={`https://img.youtube.com/vi/${playingVideo.id}/mqdefault.jpg`}
+              alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
-          <div style={{
-            padding: '0.75rem 1rem',
-            background: 'linear-gradient(135deg, rgba(102,126,234,0.15), rgba(118,75,162,0.15))',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          }}>
-            <div>
-              <div style={{ color: '#fff', fontWeight: 700, fontSize: '0.9rem' }}>{playingVideo.title}</div>
-              <div style={{ color: '#aaa', fontSize: '0.78rem' }}>{playingVideo.artist}</div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ color: '#fff', fontWeight: 700, fontSize: '0.88rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              🎵 {playingVideo.title}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Radio size={16} color="#667eea" className="pulse-icon" />
-              <span style={{ color: '#667eea', fontSize: '0.75rem', fontWeight: 600 }}>AO VIVO</span>
-            </div>
+            <div style={{ color: '#888', fontSize: '0.75rem' }}>Tocando — minimize para navegar com música</div>
+          </div>
+          <div style={{ display: 'flex', gap: 2, alignItems: 'flex-end', height: 16 }}>
+            {[0, 1, 2].map(i => (
+              <div key={i} style={{ width: 3, background: '#667eea', borderRadius: 2, animation: `musicBar 0.6s ${i * 0.15}s ease-in-out infinite alternate` }} />
+            ))}
           </div>
         </div>
       )}

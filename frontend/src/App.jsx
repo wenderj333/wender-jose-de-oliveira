@@ -25,6 +25,8 @@ import Consecration from './pages/Consecration';
 import MessagesPage from './pages/Messages';
 import Offerings from './pages/Offerings';
 import MusicLibrary from './pages/MusicLibrary';
+import { MusicProvider } from './context/MusicContext';
+import MusicPlayer from './components/MusicPlayer';
 import LanguageSwitcher from './components/LanguageSwitcher';
 
 function ProtectedRoute({ children }) {
@@ -109,6 +111,7 @@ export default function App() {
   const isActive = (path) => location.pathname === path ? 'nav-link--active' : '';
 
   return (
+    <MusicProvider>
     <div className="app">
       <nav className="navbar">
         <div className="navbar__top">
@@ -130,6 +133,7 @@ export default function App() {
               </Link>
             )}
             <LanguageSwitcher />
+            <div id="google_translate_element" style={{ display: 'inline-block' }} />
             <button className="nav-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -205,7 +209,10 @@ export default function App() {
         </ErrorBoundary>
       </main>
 
-      <footer className="footer">
+      {/* Global Music Player - persists across pages */}
+      <MusicPlayer />
+
+      <footer className="footer" style={{ paddingBottom: '70px' }}>
         {showInstallBtn && (
           <button onClick={handleInstall} style={{
             display: 'flex', alignItems: 'center', gap: 8, margin: '0 auto 0.75rem',
@@ -220,5 +227,6 @@ export default function App() {
         <p>{t('footer')} <BookOpen size={16} style={{ verticalAlign: 'middle' }} /></p>
       </footer>
     </div>
+    </MusicProvider>
   );
 }
