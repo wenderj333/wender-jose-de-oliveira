@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, Component } from 'react';
 import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './context/AuthContext';
-import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users, User, Download, Bell } from 'lucide-react';
+import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users, User, Download, Bell, Music } from 'lucide-react';
 import Home from './pages/Home';
 import PrayerFeed from './pages/PrayerFeed';
 import LivePrayer from './pages/LivePrayer';
@@ -25,7 +25,7 @@ import Consecration from './pages/Consecration';
 import MessagesPage from './pages/Messages';
 import Offerings from './pages/Offerings';
 // Music temporarily disabled for redesign
-// import MusicLibrary from './pages/MusicLibrary';
+import MusicLibrary from './pages/MusicLibrary';
 // import { MusicProvider } from './context/MusicContext';
 // import MusicPlayer from './components/MusicPlayer';
 import LanguageSwitcher from './components/LanguageSwitcher';
