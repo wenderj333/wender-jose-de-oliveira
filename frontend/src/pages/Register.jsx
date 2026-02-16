@@ -14,6 +14,13 @@ export default function Register() {
   const [error, setError] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  // 3 mandatory photos
+  const [photos, setPhotos] = useState([null, null, null]);
+  const [photoPreviews, setPhotoPreviews] = useState([null, null, null]);
+  const [step, setStep] = useState(1); // 1 = register form, 2 = upload 3 photos
+  const [uploadingPhotos, setUploadingPhotos] = useState(false);
+  const [registeredToken, setRegisteredToken] = useState(null);
+
   function handleAvatarSelect(e) {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith('image/')) {
@@ -48,12 +55,147 @@ export default function Register() {
           if (uploadData.secure_url) avatarUrl = uploadData.secure_url;
         } catch (uploadErr) { console.error('Avatar upload error:', uploadErr); }
       }
-      await register(form.email, form.password, form.full_name, form.role, avatarUrl);
-      navigate('/');
+      const result = await register(form.email, form.password, form.full_name, form.role, avatarUrl);
+      // Go to step 2: upload 3 photos
+      setRegisteredToken(localStorage.getItem('token'));
+      setStep(2);
     } catch (err) {
       setError(err.message);
     }
   };
+
+  function handlePhotoSelect(index, e) {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    const newPhotos = [...photos];
+    newPhotos[index] = file;
+    setPhotos(newPhotos);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const newPreviews = [...photoPreviews];
+      newPreviews[index] = reader.result;
+      setPhotoPreviews(newPreviews);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function handleUploadPhotos() {
+    const validPhotos = photos.filter(p => p !== null);
+    if (validPhotos.length < 3) {
+      setError('Suba pelo menos 3 fotos para continuar!');
+      return;
+    }
+    setUploadingPhotos(true);
+    setError('');
+    const tkn = registeredToken || localStorage.getItem('token');
+    try {
+      for (const photo of validPhotos) {
+        // Upload to Cloudinary
+        const fd = new FormData();
+        fd.append('file', photo);
+        fd.append('upload_preset', 'sigo_com_fe');
+        fd.append('folder', 'sigo-com-fe/posts');
+        const uploadRes = await fetch('https://api.cloudinary.com/v1_1/degxiuf43/image/upload', { method: 'POST', body: fd });
+        const uploadData = await uploadRes.json();
+        if (uploadData.secure_url) {
+          // Create feed post with photo
+          const postFd = new FormData();
+          postFd.append('content', '📸');
+          postFd.append('category', 'foto');
+          postFd.append('media_url', uploadData.secure_url);
+          postFd.append('media_type', 'image');
+          await fetch((import.meta.env.VITE_API_URL || '') + '/api/feed', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${tkn}` },
+            body: postFd,
+          });
+        }
+      }
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      setError('Erro ao subir fotos. Tente novamente.');
+    } finally {
+      setUploadingPhotos(false);
+    }
+  }
+
+  // Step 2: Upload 3 photos
+  if (step === 2) {
+    const photosCount = photos.filter(p => p !== null).length;
+    return (
+      <div className="form-page">
+        <div className="card auth-card">
+          <div className="auth-brand">
+            <Camera size={40} style={{ color: 'var(--gold)' }} />
+            <h1>📸 Suba suas fotos!</h1>
+            <p style={{ fontSize: '0.9rem', color: '#666' }}>
+              Suba pelo menos <strong>3 fotos</strong> para completar seu perfil. Elas aparecerão no seu perfil para seus amigos verem!
+            </p>
+          </div>
+          {error && <p className="form-error" style={{ textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: '1.5rem' }}>
+            {[0, 1, 2].map(i => (
+              <label key={i} style={{ cursor: 'pointer' }}>
+                <div style={{
+                  aspectRatio: '1', borderRadius: 14, overflow: 'hidden',
+                  border: photoPreviews[i] ? '2px solid #4caf50' : '2px dashed #daa520',
+                  background: photoPreviews[i] ? '#000' : '#f9f5e8',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexDirection: 'column', position: 'relative',
+                }}>
+                  {photoPreviews[i] ? (
+                    <>
+                      <img src={photoPreviews[i]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div style={{ position: 'absolute', top: 6, right: 6, background: '#4caf50', borderRadius: '50%', width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ color: '#fff', fontSize: '0.75rem', fontWeight: 700 }}>✓</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Camera size={28} color="#daa520" />
+                      <span style={{ fontSize: '0.7rem', color: '#daa520', marginTop: 4, fontWeight: 600 }}>Foto {i + 1}</span>
+                    </>
+                  )}
+                </div>
+                <input type="file" accept="image/*" onChange={(e) => handlePhotoSelect(i, e)} style={{ display: 'none' }} />
+              </label>
+            ))}
+          </div>
+
+          {/* Progress */}
+          <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginBottom: 8 }}>
+              {[0, 1, 2].map(i => (
+                <div key={i} style={{
+                  width: 10, height: 10, borderRadius: '50%',
+                  background: photos[i] ? '#4caf50' : '#ddd',
+                  transition: 'background 0.3s',
+                }} />
+              ))}
+            </div>
+            <span style={{ fontSize: '0.85rem', color: photosCount >= 3 ? '#4caf50' : '#999', fontWeight: 600 }}>
+              {photosCount}/3 fotos
+            </span>
+          </div>
+
+          <button
+            onClick={handleUploadPhotos}
+            disabled={photosCount < 3 || uploadingPhotos}
+            className="btn btn-primary btn-lg"
+            style={{
+              width: '100%',
+              opacity: photosCount < 3 ? 0.5 : 1,
+              background: photosCount >= 3 ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#ccc',
+            }}
+          >
+            {uploadingPhotos ? '📤 Subindo fotos...' : photosCount >= 3 ? '🚀 Entrar no Sigo com Fé!' : `Falta ${3 - photosCount} foto${3 - photosCount > 1 ? 's' : ''}`}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="form-page">
