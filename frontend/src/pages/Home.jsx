@@ -85,7 +85,7 @@ export default function Home() {
         </div>
 
         <div className="hero__icon-glow">
-          <img src="/logo.svg" alt="Sigo com Fé" style={{ width: 120, height: 120 }} />
+          <img src="/logo.jpg" alt="Sigo com Fé" style={{ width: 120, height: 120, borderRadius: '50%', objectFit: 'cover' }} />
         </div>
 
         <h1 className="hero__title">{t('brand')}</h1>
