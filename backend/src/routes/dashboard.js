@@ -10,13 +10,16 @@ router.get('/stats', authenticate, async (req, res) => {
     const churchesCount = await db.prepare('SELECT COUNT(*) AS count FROM churches').get();
     const prayersCount = await db.prepare('SELECT COUNT(*) AS count FROM prayers').get();
     const answeredCount = await db.prepare("SELECT COUNT(*) AS count FROM prayers WHERE is_answered = true").get();
-    const recentPrayers = await db.prepare(
-      `SELECT p.id, p.title, p.content, p.category, p.is_urgent, p.prayer_count, p.created_at,
-              u.full_name AS author_name
-       FROM prayers p JOIN users u ON p.author_id = u.id
-       WHERE p.visibility = 'public'
-       ORDER BY p.created_at DESC LIMIT 5`
-    ).all();
+    let recentPrayers = [];
+    if (req.user.role === 'pastor' || req.user.role === 'admin') {
+      recentPrayers = await db.prepare(
+        `SELECT p.id, p.title, p.content, p.category, p.is_urgent, p.prayer_count, p.created_at,
+                u.full_name AS author_name
+         FROM prayers p JOIN users u ON p.author_id = u.id
+         WHERE p.visibility = 'public'
+         ORDER BY p.created_at DESC LIMIT 5`
+      ).all();
+    }
 
     res.json({
       stats: {
@@ -95,6 +98,30 @@ router.get('/:churchId/growth', authenticate, async (req, res) => {
     ).all(req.params.churchId);
     res.json({ growth: rows });
   } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+// GET /api/dashboard/users
+router.get('/users', authenticate, async (req, res) => {
+  try {
+    const users = await db.prepare('SELECT id, full_name, avatar_url FROM users ORDER BY full_name').all();
+    res.json({ users });
+  } catch (err) {
+    console.error('Erro ao buscar usuários:', err);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+// GET /api/dashboard/users - Lista de todos os usuários
+router.get('/users', authenticate, async (req, res) => {
+  try {
+    const users = await db.prepare(
+      'SELECT id, full_name, avatar_url FROM users ORDER BY full_name'
+    ).all();
+    res.json({ users });
+  } catch (err) {
+    console.error('Erro ao buscar usuários:', err);
     res.status(500).json({ error: 'Erro interno' });
   }
 });

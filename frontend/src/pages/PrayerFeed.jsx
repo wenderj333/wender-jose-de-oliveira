@@ -90,15 +90,23 @@ export default function PrayerFeed() {
     { value: 'other', label: t('prayerFeed.categories.other') },
   ];
 
+  const isPastor = user?.role === 'pastor' || user?.role === 'admin';
+
   const fetchPrayers = async () => {
     setLoading(true);
     const endpoint = tab === 'answered' ? `${API_BASE}/api/prayers/answered` : `${API_BASE}/api/prayers`;
     try {
-      const res = await fetch(endpoint);
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch(endpoint, { headers });
       const data = await res.json();
-      setPrayers(data.prayers || []);
+      let result = data.prayers || [];
+      // Non-pastors only see their own prayers
+      if (user && !isPastor) {
+        result = result.filter(p => p.author_id === user.id);
+      }
+      setPrayers(result);
     } catch {
-      setPrayers(tab === 'answered' ? [] : DEMO_PRAYERS);
+      setPrayers(tab === 'answered' ? [] : (user ? [] : DEMO_PRAYERS));
     }
     setLoading(false);
   };
@@ -178,6 +186,12 @@ export default function PrayerFeed() {
           </div>
           <button type="submit" className="btn btn-green"><HandHeart size={18} /> {t('prayerFeed.submitRequest')}</button>
         </form>
+      )}
+
+      {user && !isPastor && (
+        <div className="card" style={{ marginBottom: '1rem', padding: '0.75rem 1rem', background: 'rgba(102,126,234,0.1)', borderLeft: '3px solid var(--primary)' }}>
+          <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--gray-500)' }}>🔒 Seus pedidos de oração são privados. Somente você e os pastores podem ver.</p>
+        </div>
       )}
 
       {loading ? (

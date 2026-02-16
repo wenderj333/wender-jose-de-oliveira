@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, Users, HandHeart, Sparkles, Heart, Church, BookOpen, Plus, ArrowRight, Clock, Star } from 'lucide-react';
+import { LayoutDashboard, Users, HandHeart, Sparkles, Heart, Church, BookOpen, Plus, ArrowRight, Clock, Star, X } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -12,6 +12,9 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [recentActivity, setRecentActivity] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showUsersModal, setShowUsersModal] = useState(false);
+  const [usersList, setUsersList] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -22,6 +25,18 @@ export default function Dashboard() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [token]);
+
+  const fetchUsers = async () => {
+    setLoadingUsers(true);
+    setShowUsersModal(true);
+    try {
+      const headers = { Authorization: `Bearer ${token}` };
+      const res = await fetch(`${API_BASE}/api/dashboard/users`, { headers });
+      const data = await res.json();
+      setUsersList(data.users || []);
+    } catch { setUsersList([]); }
+    finally { setLoadingUsers(false); }
+  };
 
   const timeAgo = (date) => {
     const diff = Date.now() - new Date(date).getTime();
@@ -43,7 +58,7 @@ export default function Dashboard() {
       ) : (
         <>
           <div className="dashboard-grid">
-            <div className="stat-card">
+            <div className="stat-card" onClick={fetchUsers} style={{ cursor: 'pointer' }}>
               <Users size={28} style={{ color: 'var(--primary)', marginBottom: '0.5rem' }} />
               <div className="stat-card__value">{stats?.totalUsers || 0}</div>
               <div className="stat-card__label">{t('dashboard.users')}</div>
@@ -104,6 +119,35 @@ export default function Dashboard() {
             </Link>
           </div>
         </>
+      )}
+
+      {showUsersModal && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }} onClick={(e) => { if (e.target === e.currentTarget) setShowUsersModal(false); }}>
+          <div style={{ background: 'var(--bg-card, #1e1e3f)', borderRadius: 16, padding: '1.5rem', width: '100%', maxWidth: 400, maxHeight: '70vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <h3 style={{ margin: 0, color: 'var(--primary)' }}><Users size={20} /> Usuários</h3>
+              <button onClick={() => setShowUsersModal(false)} style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer' }}><X size={20} /></button>
+            </div>
+            {loadingUsers ? (
+              <p style={{ textAlign: 'center', color: 'var(--gray-500)' }}>Carregando...</p>
+            ) : usersList.length === 0 ? (
+              <p style={{ color: 'var(--gray-500)' }}>Nenhum usuário encontrado.</p>
+            ) : (
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {usersList.map(u => (
+                  <li key={u.id} style={{ padding: '0.5rem 0', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                    <Link to={`/perfil/${u.id}`} onClick={() => setShowUsersModal(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', color: 'inherit' }}>
+                      <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#2d1b69', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Users size={16} style={{ color: 'var(--primary)' }} />}
+                      </div>
+                      <span style={{ fontWeight: 600 }}>{u.full_name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

@@ -20,6 +20,64 @@ const CATEGORIES = [
   { value: 'reflexao', label: '💭 Reflexão', color: '#e67e22' },
 ];
 
+function NewPrayerForm({ token, API, onCreated }) {
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [urgent, setUrgent] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!content.trim()) return;
+    setSending(true);
+    try {
+      const res = await fetch(`${API}/prayers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ title: title.trim(), content: content.trim(), is_urgent: urgent, category: 'pessoal', visibility: 'private' }),
+      });
+      const data = await res.json();
+      if (data.prayer) {
+        onCreated(data.prayer);
+        setTitle(''); setContent(''); setUrgent(false); setOpen(false);
+      }
+    } catch (err) { console.error(err); alert('Erro ao criar pedido'); }
+    finally { setSending(false); }
+  }
+
+  if (!open) return (
+    <button onClick={() => setOpen(true)} style={{
+      width: '100%', padding: '0.75rem', borderRadius: 12, border: '1px dashed rgba(218,165,32,0.4)',
+      background: 'rgba(218,165,32,0.08)', color: '#daa520', fontWeight: 600, fontSize: '0.9rem',
+      cursor: 'pointer', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+    }}>🙏 Novo Pedido de Oração</button>
+  );
+
+  return (
+    <form onSubmit={handleSubmit} style={{
+      background: 'rgba(255,255,255,0.04)', borderRadius: 16, padding: '1rem', marginBottom: '1rem',
+      border: '1px solid rgba(218,165,32,0.2)',
+    }}>
+      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Título (opcional)"
+        style={{ width: '100%', padding: '0.5rem 0.75rem', borderRadius: 10, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '0.85rem', marginBottom: '0.5rem', boxSizing: 'border-box' }} />
+      <textarea value={content} onChange={e => setContent(e.target.value)} placeholder="Escreva seu pedido de oração..." rows={3}
+        style={{ width: '100%', padding: '0.5rem 0.75rem', borderRadius: 10, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '0.85rem', resize: 'vertical', boxSizing: 'border-box', marginBottom: '0.5rem' }} />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: '0.82rem', color: urgent ? '#ef4444' : '#888' }}>
+          <input type="checkbox" checked={urgent} onChange={e => setUrgent(e.target.checked)} /> 🔴 Urgente
+        </label>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button type="button" onClick={() => setOpen(false)} style={{ padding: '0.4rem 1rem', borderRadius: 20, border: '1px solid rgba(255,255,255,0.12)', background: 'transparent', color: '#888', cursor: 'pointer', fontSize: '0.8rem' }}>Cancelar</button>
+          <button type="submit" disabled={!content.trim() || sending} style={{ padding: '0.4rem 1.2rem', borderRadius: 20, border: 'none', background: content.trim() ? '#daa520' : '#333', color: '#fff', fontWeight: 600, cursor: 'pointer', fontSize: '0.8rem' }}>
+            {sending ? 'Enviando...' : '🙏 Enviar'}
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
 export default function Profile() {
   const { userId } = useParams();
   const { t } = useTranslation();
@@ -719,7 +777,7 @@ export default function Profile() {
           }}>
             {[
               { key: 'posts', icon: <Grid3x3 size={22} /> },
-              { key: 'prayers', icon: <Heart size={22} /> },
+              ...((isOwnProfile || currentUser?.role === 'pastor' || currentUser?.role === 'admin') ? [{ key: 'prayers', icon: <Heart size={22} /> }] : []),
               ...(token ? [{ key: 'messages', icon: <Mail size={22} /> }] : []),
               { key: 'info', icon: <Info size={22} /> },
             ].map(tab => (
@@ -810,12 +868,23 @@ export default function Profile() {
             {/* PRAYERS tab */}
             {activeTab === 'prayers' && (
               <div style={{ padding: '1rem' }}>
+                {/* Privacy notice */}
+                <div style={{ background: 'rgba(102,126,234,0.1)', border: '1px solid rgba(102,126,234,0.2)', borderRadius: 12, padding: '0.75rem 1rem', marginBottom: '1rem', fontSize: '0.82rem', color: '#a0b0ff' }}>
+                  🔒 Seus pedidos de oração são <strong>privados</strong>. Somente você e os pastores podem ver.
+                </div>
+
+                {/* New prayer form (own profile only) */}
+                {isOwnProfile && token && (
+                  <NewPrayerForm token={token} API={API} onCreated={(prayer) => setPrayers(prev => [prayer, ...prev])} />
+                )}
+
                 {loadingContent ? (
                   <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="loading-spinner" /></div>
                 ) : prayers.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '3rem', color: '#666' }}>
                     <Heart size={48} style={{ opacity: 0.3 }} />
-                    <p style={{ margin: '0.75rem 0 0' }}>Nenhuma oração</p>
+                    <p style={{ margin: '0.75rem 0 0' }}>Nenhum pedido de oração ainda</p>
+                    {isOwnProfile && <p style={{ fontSize: '0.8rem', color: '#888' }}>Use o botão acima para criar seu primeiro pedido!</p>}
                   </div>
                 ) : (
                   prayers.map(prayer => (
