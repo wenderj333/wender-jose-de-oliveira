@@ -116,7 +116,7 @@ export default function App() {
       <nav className="navbar">
         <div className="navbar__top">
           <Link to="/" className="nav-brand" onClick={() => setMenuOpen(false)}>
-            <img src="/icon.svg" alt="" style={{ width: 30, height: 30, verticalAlign: 'middle', marginRight: '6px' }} />{t('brand')}
+            <img src="/logo.jpg" alt="Sigo com Fé" style={{ width: 36, height: 36, verticalAlign: 'middle', marginRight: '8px', borderRadius: '50%', objectFit: 'cover' }} />{t('brand')}
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {user && (
