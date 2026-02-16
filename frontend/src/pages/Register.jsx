@@ -81,8 +81,8 @@ export default function Register() {
 
   async function handleUploadPhotos() {
     const validPhotos = photos.filter(p => p !== null);
-    if (validPhotos.length < 3) {
-      setError('Suba pelo menos 3 fotos para continuar!');
+    if (validPhotos.length < 1) {
+      setError('Suba pelo menos 1 foto para continuar!');
       return;
     }
     setUploadingPhotos(true);
@@ -130,7 +130,7 @@ export default function Register() {
             <Camera size={40} style={{ color: 'var(--gold)' }} />
             <h1>📸 Suba suas fotos!</h1>
             <p style={{ fontSize: '0.9rem', color: '#666' }}>
-              Suba pelo menos <strong>3 fotos</strong> para completar seu perfil. Elas aparecerão no seu perfil para seus amigos verem!
+              Suba pelo menos <strong>1 foto</strong> para completar seu perfil. Pode adicionar até 3!
             </p>
           </div>
           {error && <p className="form-error" style={{ textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
@@ -182,15 +182,15 @@ export default function Register() {
 
           <button
             onClick={handleUploadPhotos}
-            disabled={photosCount < 3 || uploadingPhotos}
+            disabled={photosCount < 1 || uploadingPhotos}
             className="btn btn-primary btn-lg"
             style={{
               width: '100%',
-              opacity: photosCount < 3 ? 0.5 : 1,
-              background: photosCount >= 3 ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#ccc',
+              opacity: photosCount < 1 ? 0.5 : 1,
+              background: photosCount >= 1 ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#ccc',
             }}
           >
-            {uploadingPhotos ? '📤 Subindo fotos...' : photosCount >= 3 ? '🚀 Entrar no Sigo com Fé!' : `Falta ${3 - photosCount} foto${3 - photosCount > 1 ? 's' : ''}`}
+            {uploadingPhotos ? '📤 Subindo fotos...' : photosCount >= 1 ? '🚀 Entrar no Sigo com Fé!' : 'Suba pelo menos 1 foto'}
           </button>
         </div>
       </div>
