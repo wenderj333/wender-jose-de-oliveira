@@ -31,10 +31,7 @@ export default function Profile() {
   const [form, setForm] = useState({ display_name: '', bio: '', avatar_url: '', phone: '' });
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
-  const [avatarFileToCrop, setAvatarFileToCrop] = useState(null);
-  const [croppedAvatarBlob, setCroppedAvatarBlob] = useState(null);
-  const [croppedAvatarPreview, setCroppedAvatarPreview] = useState(null);
-  const avatarCropCanvasRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [updatingPrivacy, setUpdatingPrivacy] = useState(false);
   const [privacyError, setPrivacyError] = useState('');
 
@@ -162,93 +159,7 @@ export default function Profile() {
     } catch {}
   }
 
-  // Avatar crop state
-  const [cropImage, setCropImage] = useState(null); // base64 of selected image
-  const [cropScale, setCropScale] = useState(1);
-  const [cropPos, setCropPos] = useState({ x: 0, y: 0 });
-  const cropCanvasRef = useRef(null);
-  const cropDragging = useRef(false);
-  const cropLastPos = useRef({ x: 0, y: 0 });
-
-  function handleAvatarSelect(e) {
-    const file = e.target.files?.[0];
-    if (!file || !file.type.startsWith('image/')) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setCropImage(reader.result);
-      setCropScale(1);
-      setCropPos({ x: 0, y: 0 });
-    };
-    reader.readAsDataURL(file);
-    e.target.value = '';
-  }
-
-  function drawCropPreview() {
-    if (!cropCanvasRef.current || !cropImage) return;
-    const canvas = cropCanvasRef.current;
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-    img.src = cropImage;
-    img.onload = () => {
-      const size = 280;
-      canvas.width = size;
-      canvas.height = size;
-      ctx.clearRect(0, 0, size, size);
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-      ctx.clip();
-      const scale = cropScale;
-      const w = img.width * scale;
-      const h = img.height * scale;
-      const x = (size - w) / 2 + cropPos.x;
-      const y = (size - h) / 2 + cropPos.y;
-      ctx.drawImage(img, x, y, w, h);
-      ctx.restore();
-    };
-  }
-
-  useEffect(() => { if (cropImage) drawCropPreview(); }, [cropImage, cropScale, cropPos]);
-
-  function handleCropPointerDown(e) {
-    cropDragging.current = true;
-    cropLastPos.current = { x: e.clientX, y: e.clientY };
-  }
-  function handleCropPointerMove(e) {
-    if (!cropDragging.current) return;
-    const dx = e.clientX - cropLastPos.current.x;
-    const dy = e.clientY - cropLastPos.current.y;
-    cropLastPos.current = { x: e.clientX, y: e.clientY };
-    setCropPos(prev => ({ x: prev.x + dx, y: prev.y + dy }));
-  }
-  function handleCropPointerUp() { cropDragging.current = false; }
-
-  async function handleCropSave() {
-    if (!cropCanvasRef.current) return;
-    setUploadingAvatar(true);
-    try {
-      const blob = await new Promise(resolve => cropCanvasRef.current.toBlob(resolve, 'image/jpeg', 0.9));
-      const fd = new FormData();
-      fd.append('file', blob);
-      fd.append('upload_preset', UPLOAD_PRESET);
-      fd.append('folder', 'sigo-com-fe/avatars');
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: fd });
-      const data = await res.json();
-      if (data.secure_url) {
-        await fetch(`${API}/profile`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ ...form, avatar_url: data.secure_url, is_private: profile.is_private }),
-        });
-        setProfile(prev => ({ ...prev, avatar_url: data.secure_url }));
-        setForm(prev => ({ ...prev, avatar_url: data.secure_url }));
-      }
-      setCropImage(null);
-    } catch (err) { console.error(err); }
-    finally { setUploadingAvatar(false); }
-  }
-
-  // Legacy direct upload fallback
+  // Simple direct avatar upload (no crop - works on all devices)
   async function handleAvatarUpload(e) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -567,36 +478,15 @@ export default function Profile() {
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
 
-      {/* ======= CROP MODAL ======= */}
-      {cropImage && (
+      {/* Avatar uploading indicator */}
+      {uploadingAvatar && (
         <div style={{
-          position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.85)',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem',
+          position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.7)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          <h3 style={{ color: '#fff', marginBottom: '0.5rem', fontSize: '1rem' }}>📷 Ajustar Foto</h3>
-          <p style={{ color: '#aaa', fontSize: '0.8rem', marginBottom: '0.75rem' }}>Arraste para mover · Use o slider para zoom</p>
-          <canvas ref={cropCanvasRef} style={{ width: 280, height: 280, borderRadius: '50%', cursor: 'grab', touchAction: 'none' }}
-            onPointerDown={handleCropPointerDown}
-            onPointerMove={handleCropPointerMove}
-            onPointerUp={handleCropPointerUp}
-            onPointerLeave={handleCropPointerUp}
-          />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: '1rem', width: 280 }}>
-            <span style={{ color: '#aaa', fontSize: '0.75rem' }}>🔍</span>
-            <input type="range" min="0.5" max="3" step="0.05" value={cropScale}
-              onChange={e => setCropScale(parseFloat(e.target.value))}
-              style={{ flex: 1, accentColor: '#667eea' }} />
-            <span style={{ color: '#aaa', fontSize: '0.75rem' }}>{Math.round(cropScale * 100)}%</span>
-          </div>
-          <div style={{ display: 'flex', gap: 12, marginTop: '1rem' }}>
-            <button onClick={() => setCropImage(null)} style={{
-              padding: '0.6rem 1.5rem', borderRadius: 10, border: 'none',
-              background: 'rgba(255,255,255,0.15)', color: '#fff', cursor: 'pointer', fontSize: '0.9rem',
-            }}>✕ Cancelar</button>
-            <button onClick={handleCropSave} disabled={uploadingAvatar} style={{
-              padding: '0.6rem 1.5rem', borderRadius: 10, border: 'none',
-              background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600,
-            }}>{uploadingAvatar ? '⏳ Salvando...' : '✓ Salvar'}</button>
+          <div style={{ color: '#fff', textAlign: 'center' }}>
+            <div className="loading-spinner" style={{ margin: '0 auto 1rem' }} />
+            <p>Subindo foto...</p>
           </div>
         </div>
       )}
@@ -652,7 +542,7 @@ export default function Profile() {
                   <Camera size={14} color="#fff" />
                 </div>
               )}
-              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarSelect} />
+              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarUpload} />
             </div>
 
             {/* Stats */}
