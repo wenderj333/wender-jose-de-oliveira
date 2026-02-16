@@ -188,43 +188,76 @@ export default function MusicLibrary() {
         </div>
       )}
 
-      {/* Upload form */}
+      {/* Upload form - step by step */}
       {showUpload && (
         <div style={{ padding: '0 1rem', marginBottom: '1rem' }}>
-          <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 16, padding: '1rem', border: '1px solid rgba(102,126,234,0.2)' }}>
-            <div style={{ marginBottom: '0.75rem' }}>
+          <div style={{ background: '#fff', borderRadius: 16, padding: '1.2rem', border: '1px solid #e0e0e0', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+
+            {/* Step 1 */}
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '0.5rem' }}>
+                <span style={{ width: 28, height: 28, borderRadius: '50%', background: uploadFile ? '#4caf50' : '#667eea', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.85rem', flexShrink: 0 }}>1</span>
+                <span style={{ fontWeight: 600, color: '#333', fontSize: '0.95rem' }}>{t('music.step1', 'Escolha o arquivo de musica')}</span>
+              </div>
               <input id="mp3-input" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg,.aac" onChange={e => setUploadFile(e.target.files?.[0])}
                 style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }} />
               <div onClick={() => document.getElementById('mp3-input')?.click()} style={{
-                padding: '1.5rem', borderRadius: 12, border: '2px dashed rgba(255,255,255,0.15)',
-                background: uploadFile ? 'rgba(76,175,80,0.1)' : 'rgba(255,255,255,0.03)',
+                padding: '1.2rem', borderRadius: 12, border: '2px dashed #ccc',
+                background: uploadFile ? '#e8f5e9' : '#f9f9f9',
                 textAlign: 'center', cursor: 'pointer',
               }}>
                 {uploadFile ? (
-                  <p style={{ margin: 0, color: '#4caf50', fontWeight: 600, fontSize: '0.85rem' }}>{uploadFile.name}</p>
+                  <p style={{ margin: 0, color: '#2e7d32', fontWeight: 600, fontSize: '0.9rem' }}>
+                    {uploadFile.name}
+                  </p>
                 ) : (
                   <>
-                    <Music size={32} color="#667eea" style={{ marginBottom: 6 }} />
-                    <p style={{ margin: 0, color: '#aaa', fontSize: '0.85rem' }}>Toque aqui para escolher MP3</p>
+                    <Music size={36} color="#667eea" style={{ marginBottom: 6 }} />
+                    <p style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>{t('music.tapToChoose', 'Toque aqui para escolher MP3')}</p>
                   </>
                 )}
               </div>
             </div>
-            <input value={uploadTitle} onChange={e => setUploadTitle(e.target.value)} placeholder="Nome da musica *" style={{
-              width: '100%', padding: '0.6rem 0.85rem', borderRadius: 10, border: '1px solid #ccc',
-              background: '#fff', color: '#333', fontSize: '0.85rem', marginBottom: '0.5rem', outline: 'none', boxSizing: 'border-box',
-            }} />
-            <input value={uploadArtist} onChange={e => setUploadArtist(e.target.value)} placeholder="Artista (opcional)" style={{
-              width: '100%', padding: '0.6rem 0.85rem', borderRadius: 10, border: '1px solid #ccc',
-              background: '#fff', color: '#333', fontSize: '0.85rem', marginBottom: '0.75rem', outline: 'none', boxSizing: 'border-box',
-            }} />
-            <button onClick={handleUpload} disabled={!uploadFile || !uploadTitle.trim() || uploading} style={{
-              width: '100%', padding: '0.7rem', borderRadius: 12, border: 'none',
-              background: uploadFile && uploadTitle.trim() ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'rgba(255,255,255,0.1)',
-              color: '#fff', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer',
-            }}>
-              {uploading ? 'Subindo...' : 'Subir Musica'}
-            </button>
+
+            {/* Step 2 */}
+            <div style={{ marginBottom: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '0.4rem' }}>
+                <span style={{ width: 28, height: 28, borderRadius: '50%', background: uploadTitle.trim() ? '#4caf50' : '#667eea', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.85rem', flexShrink: 0 }}>2</span>
+                <span style={{ fontWeight: 600, color: '#333', fontSize: '0.95rem' }}>{t('music.step2', 'Nome da musica')}</span>
+              </div>
+              <input value={uploadTitle} onChange={e => setUploadTitle(e.target.value)} placeholder={t('music.titlePlaceholder', 'Ex: Grande e o Senhor')} style={{
+                width: '100%', padding: '0.7rem 0.85rem', borderRadius: 10, border: '1px solid #ccc',
+                background: '#fff', color: '#333', fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box',
+              }} />
+            </div>
+
+            {/* Step 3 */}
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '0.4rem' }}>
+                <span style={{ width: 28, height: 28, borderRadius: '50%', background: '#667eea', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.85rem', flexShrink: 0 }}>3</span>
+                <span style={{ fontWeight: 600, color: '#333', fontSize: '0.95rem' }}>{t('music.step3', 'Artista (opcional)')}</span>
+              </div>
+              <input value={uploadArtist} onChange={e => setUploadArtist(e.target.value)} placeholder={t('music.artistPlaceholder', 'Ex: Aline Barros')} style={{
+                width: '100%', padding: '0.7rem 0.85rem', borderRadius: 10, border: '1px solid #ccc',
+                background: '#fff', color: '#333', fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box',
+              }} />
+            </div>
+
+            {/* Step 4 */}
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '0.5rem' }}>
+                <span style={{ width: 28, height: 28, borderRadius: '50%', background: (uploadFile && uploadTitle.trim()) ? '#4caf50' : '#999', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.85rem', flexShrink: 0 }}>4</span>
+                <span style={{ fontWeight: 600, color: '#333', fontSize: '0.95rem' }}>{t('music.step4', 'Publicar para a comunidade!')}</span>
+              </div>
+              <button onClick={handleUpload} disabled={!uploadFile || !uploadTitle.trim() || uploading} style={{
+                width: '100%', padding: '0.8rem', borderRadius: 12, border: 'none',
+                background: uploadFile && uploadTitle.trim() ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#e0e0e0',
+                color: uploadFile && uploadTitle.trim() ? '#fff' : '#999', fontWeight: 700, fontSize: '1rem', cursor: 'pointer',
+              }}>
+                {uploading ? 'Subindo...' : t('music.uploadBtn', 'Subir Musica')}
+              </button>
+            </div>
+
           </div>
         </div>
       )}
