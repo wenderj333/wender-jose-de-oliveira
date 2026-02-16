@@ -338,6 +338,19 @@ const { Pool: MigratePool } = require('pg');
       );
     `);
 
+    // Music table
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS music (
+        id SERIAL PRIMARY KEY,
+        user_id UUID REFERENCES users(id),
+        title VARCHAR(255) NOT NULL,
+        artist VARCHAR(255),
+        url TEXT NOT NULL,
+        user_name VARCHAR(255),
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+
     console.log('✅ Auto-migração concluída!');
   } catch (err) {
     console.error('⚠️  Erro na auto-migração (continuando):', err.message);
@@ -361,6 +374,7 @@ app.use('/api/chat', require('./routes/chat'));
 app.use('/api/pastoral-ai', require('./routes/pastoral-ai'));
 app.use('/api/bible-ai', require('./routes/bible-ai'));
 app.use('/api/profile', require('./routes/profile'));
+app.use('/api/music', require('./routes/music'));
 app.use('/api/friends', require('./routes/friends'));
 app.use('/api/members', require('./routes/members'));
 app.use('/api/messages', require('./routes/messages'));

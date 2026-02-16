@@ -1,7 +1,7 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { Music, Play, Pause, Heart, ChevronRight, Mic2, Baby, BookOpen, Guitar, Upload, Plus, X } from 'lucide-react';
+import { Music, Play, Pause, Heart, Mic2, Baby, BookOpen, Guitar, Upload, X } from 'lucide-react';
 
 const CLOUD_NAME = 'degxiuf43';
 const UPLOAD_PRESET = 'sigo_com_fe';
@@ -17,44 +17,44 @@ const CATEGORIES = [
 
 const PLAYLISTS = {
   worship: [
-    { id: 'hMrJLbPsTjA', title: 'Eu Navegarei â€” NÃ­vea Soares', artist: 'NÃ­vea Soares' },
-    { id: 'rgzRZQ1mOEo', title: 'QuÃ£o Grande Ã‰ o Meu Deus', artist: 'Soraya Moraes' },
-    { id: 'HcYTm8QBjHk', title: 'Deus Ã© Deus â€” Delino MarÃ§al', artist: 'Delino MarÃ§al' },
-    { id: 'tKr-mfTfgCQ', title: 'NinguÃ©m Explica Deus', artist: 'Preto no Branco' },
-    { id: 'oMKGHOoByMQ', title: 'Raridade â€” Anderson Freire', artist: 'Anderson Freire' },
-    { id: 'DL7YkJFpkHo', title: 'Oceanos (PortuguÃªs)', artist: 'Hillsong' },
-    { id: 'KVQnWr4YUZA', title: 'Sou Feliz â€” Fernandinho', artist: 'Fernandinho' },
+    { id: 'hMrJLbPsTjA', title: 'Eu Navegarei', artist: 'Nivea Soares' },
+    { id: 'rgzRZQ1mOEo', title: 'Quao Grande E o Meu Deus', artist: 'Soraya Moraes' },
+    { id: 'HcYTm8QBjHk', title: 'Deus e Deus', artist: 'Delino Marcal' },
+    { id: 'tKr-mfTfgCQ', title: 'Ninguem Explica Deus', artist: 'Preto no Branco' },
+    { id: 'oMKGHOoByMQ', title: 'Raridade', artist: 'Anderson Freire' },
+    { id: 'DL7YkJFpkHo', title: 'Oceanos (Portugues)', artist: 'Hillsong' },
+    { id: 'KVQnWr4YUZA', title: 'Sou Feliz', artist: 'Fernandinho' },
     { id: 'OJfRVL3Rs_A', title: 'Lugar Secreto', artist: 'Gabriela Rocha' },
-    { id: '3F1kR6PBEsg', title: 'Bondade de Deus', artist: 'IsaÃ­as Saad' },
+    { id: '3F1kR6PBEsg', title: 'Bondade de Deus', artist: 'Isaias Saad' },
   ],
   hymns: [
-    { id: 'kkPGZfJjlyY', title: 'Amazing Grace', artist: 'Hino ClÃ¡ssico' },
+    { id: 'kkPGZfJjlyY', title: 'Amazing Grace', artist: 'Hino Classico' },
     { id: 'H3x6x3GCDsE', title: 'Castelo Forte', artist: 'Martinho Lutero' },
-    { id: 'sb3C9kZMqKE', title: 'Grandioso Ã‰s Tu', artist: 'Hino ClÃ¡ssico' },
-    { id: 'gHdB2TKQOZE', title: 'Rude Cruz', artist: 'Hino ClÃ¡ssico' },
-    { id: 'ZqBdyAhRCEU', title: 'QuÃ£o Bondoso Amigo', artist: 'Hino ClÃ¡ssico' },
+    { id: 'sb3C9kZMqKE', title: 'Grandioso Es Tu', artist: 'Hino Classico' },
+    { id: 'gHdB2TKQOZE', title: 'Rude Cruz', artist: 'Hino Classico' },
+    { id: 'ZqBdyAhRCEU', title: 'Quao Bondoso Amigo', artist: 'Hino Classico' },
   ],
   instrumental: [
     { id: 'fnCGsPaGbzM', title: '3 Horas de Piano Instrumental', artist: 'Worship Piano' },
-    { id: 'JjPF0h6t458', title: 'MÃºsica para OraÃ§Ã£o â€” Piano', artist: 'Instrumental' },
+    { id: 'JjPF0h6t458', title: 'Musica para Oracao - Piano', artist: 'Instrumental' },
     { id: 'XQu8TTBmGhA', title: 'Louvor Instrumental Relaxante', artist: 'Instrumental' },
   ],
   kids: [
-    { id: '9sX6P7kPJvQ', title: 'Deus Ã© Bom pra Mim', artist: 'Kids' },
+    { id: '9sX6P7kPJvQ', title: 'Deus e Bom pra Mim', artist: 'Kids' },
     { id: 'FNNl-EE_czk', title: '3 Palavrinhas', artist: 'DT Kids' },
     { id: 'zD81qe5MNMY', title: 'Meu Barquinho', artist: 'Aline Barros Kids' },
   ],
   prayer: [
-    { id: 'Dp3jda7JKZY', title: 'Fundo Musical para OraÃ§Ã£o â€” 1h', artist: 'Prayer Music' },
-    { id: 'PBz_JkwM880', title: 'MÃºsica Calma para Orar', artist: 'Prayer Music' },
-    { id: 'B1pHcaMRBk0', title: 'Atmosfera de AdoraÃ§Ã£o', artist: 'Worship' },
+    { id: 'Dp3jda7JKZY', title: 'Fundo Musical para Oracao - 1h', artist: 'Prayer Music' },
+    { id: 'PBz_JkwM880', title: 'Musica Calma para Orar', artist: 'Prayer Music' },
+    { id: 'B1pHcaMRBk0', title: 'Atmosfera de Adoracao', artist: 'Worship' },
   ],
 };
 
 export default function MusicLibrary() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
-  const [activeCategory, setActiveCategory] = useState('worship');
+  const [activeCategory, setActiveCategory] = useState('uploaded');
   const [playingId, setPlayingId] = useState(null);
   const [favorites, setFavorites] = useState(() => {
     try { return JSON.parse(localStorage.getItem('music_favs') || '[]'); } catch { return []; }
@@ -65,19 +65,30 @@ export default function MusicLibrary() {
   const [uploadTitle, setUploadTitle] = useState('');
   const [uploadArtist, setUploadArtist] = useState('');
   const [uploading, setUploading] = useState(false);
-  const [uploadedSongs, setUploadedSongs] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('uploaded_songs') || '[]'); } catch { return []; }
-  });
+  const [uploadedSongs, setUploadedSongs] = useState([]);
+  const [loadingSongs, setLoadingSongs] = useState(false);
   const [playingAudio, setPlayingAudio] = useState(null);
   const audioRef = useRef(null);
 
+  useEffect(() => { fetchUploadedSongs(); }, []);
+
+  async function fetchUploadedSongs() {
+    setLoadingSongs(true);
+    try {
+      const res = await fetch(`${API}/music`);
+      const data = await res.json();
+      setUploadedSongs(data.songs || []);
+    } catch {}
+    finally { setLoadingSongs(false); }
+  }
+
   const categoryLabels = {
-    worship: t('music.worship', 'Louvor & AdoraÃ§Ã£o'),
-    hymns: t('music.hymns', 'Hinos ClÃ¡ssicos'),
+    worship: t('music.worship', 'Louvor e Adoracao'),
+    hymns: t('music.hymns', 'Hinos Classicos'),
     instrumental: t('music.instrumental', 'Instrumental'),
     kids: t('music.kids', 'Kids Gospel'),
-    prayer: t('music.prayer', 'MÃºsica para OraÃ§Ã£o'),
-    uploaded: 'Minhas MÃºsicas',
+    prayer: t('music.prayer', 'Musica para Oracao'),
+    uploaded: 'Comunidade',
   };
 
   function toggleFav(videoId) {
@@ -118,10 +129,13 @@ export default function MusicLibrary() {
       const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, { method: 'POST', body: fd });
       const data = await res.json();
       if (data.secure_url) {
-        const newSong = { url: data.secure_url, title: uploadTitle.trim(), artist: uploadArtist.trim() || user?.full_name || 'Desconhecido', id: Date.now().toString() };
-        const updated = [...uploadedSongs, newSong];
-        setUploadedSongs(updated);
-        localStorage.setItem('uploaded_songs', JSON.stringify(updated));
+        const saveRes = await fetch(`${API}/music`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ title: uploadTitle.trim(), artist: uploadArtist.trim() || '', url: data.secure_url }),
+        });
+        const saveData = await saveRes.json();
+        if (saveData.song) setUploadedSongs(prev => [saveData.song, ...prev]);
         setUploadFile(null);
         setUploadTitle('');
         setUploadArtist('');
@@ -151,12 +165,8 @@ export default function MusicLibrary() {
               <Music size={26} color="#fff" />
             </div>
             <div>
-              <h1 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>
-                {t('music.title', 'MÃºsica Gospel')}
-              </h1>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)' }}>
-                OuÃ§a e suba suas mÃºsicas ðŸŽµ
-              </p>
+              <h1 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>Musica Gospel</h1>
+              <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)' }}>Ouca e suba suas musicas</p>
             </div>
           </div>
         </div>
@@ -172,7 +182,7 @@ export default function MusicLibrary() {
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
           }}>
             {showUpload ? <X size={18} /> : <Upload size={18} />}
-            {showUpload ? 'Fechar' : 'ðŸŽµ Subir MÃºsica (MP3)'}
+            {showUpload ? 'Fechar' : 'Subir Musica (MP3)'}
           </button>
         </div>
       )}
@@ -190,16 +200,16 @@ export default function MusicLibrary() {
                 textAlign: 'center', cursor: 'pointer',
               }}>
                 {uploadFile ? (
-                  <p style={{ margin: 0, color: '#4caf50', fontWeight: 600, fontSize: '0.85rem' }}>âœ… {uploadFile.name}</p>
+                  <p style={{ margin: 0, color: '#4caf50', fontWeight: 600, fontSize: '0.85rem' }}>{uploadFile.name}</p>
                 ) : (
                   <>
                     <Music size={32} color="#667eea" style={{ marginBottom: 6 }} />
-                    <p style={{ margin: 0, color: '#aaa', fontSize: '0.85rem' }}>ðŸ“‚ Toque aqui para escolher MP3</p>
+                    <p style={{ margin: 0, color: '#aaa', fontSize: '0.85rem' }}>Toque aqui para escolher MP3</p>
                   </>
                 )}
               </div>
             </div>
-            <input value={uploadTitle} onChange={e => setUploadTitle(e.target.value)} placeholder="Nome da mÃºsica *" style={{
+            <input value={uploadTitle} onChange={e => setUploadTitle(e.target.value)} placeholder="Nome da musica *" style={{
               width: '100%', padding: '0.6rem 0.85rem', borderRadius: 10, border: '1px solid rgba(255,255,255,0.12)',
               background: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '0.85rem', marginBottom: '0.5rem', outline: 'none', boxSizing: 'border-box',
             }} />
@@ -212,7 +222,7 @@ export default function MusicLibrary() {
               background: uploadFile && uploadTitle.trim() ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'rgba(255,255,255,0.1)',
               color: '#fff', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer',
             }}>
-              {uploading ? 'â³ Subindo...' : 'ðŸš€ Subir MÃºsica'}
+              {uploading ? 'Subindo...' : 'Subir Musica'}
             </button>
           </div>
         </div>
@@ -220,7 +230,16 @@ export default function MusicLibrary() {
 
       {/* Category tabs */}
       <div style={{ display: 'flex', gap: 8, padding: '0 1rem', overflowX: 'auto', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', marginBottom: '1rem' }}>
-        <button onClick={() => { setShowFavs(!showFavs); }} style={{
+        <button onClick={() => { setActiveCategory('uploaded'); setShowFavs(false); fetchUploadedSongs(); }} style={{
+          flexShrink: 0, padding: '8px 14px', borderRadius: 12, border: 'none', cursor: 'pointer',
+          background: !showFavs && activeCategory === 'uploaded' ? 'linear-gradient(135deg, #4caf50, #66bb6a)' : 'rgba(255,255,255,0.08)',
+          color: !showFavs && activeCategory === 'uploaded' ? '#fff' : '#aaa', fontWeight: 600, fontSize: '0.8rem',
+          display: 'flex', alignItems: 'center', gap: 5,
+        }}>
+          <Upload size={14} /> Comunidade ({uploadedSongs.length})
+        </button>
+
+        <button onClick={() => setShowFavs(!showFavs)} style={{
           flexShrink: 0, padding: '8px 14px', borderRadius: 12, border: 'none', cursor: 'pointer',
           background: showFavs ? 'linear-gradient(135deg, #ef4444, #f97316)' : 'rgba(255,255,255,0.08)',
           color: showFavs ? '#fff' : '#aaa', fontWeight: 600, fontSize: '0.8rem',
@@ -228,17 +247,6 @@ export default function MusicLibrary() {
         }}>
           <Heart size={14} fill={showFavs ? '#fff' : 'none'} /> Favoritos
         </button>
-
-        {uploadedSongs.length > 0 && (
-          <button onClick={() => { setActiveCategory('uploaded'); setShowFavs(false); }} style={{
-            flexShrink: 0, padding: '8px 14px', borderRadius: 12, border: 'none', cursor: 'pointer',
-            background: !showFavs && activeCategory === 'uploaded' ? 'linear-gradient(135deg, #4caf50, #66bb6a)' : 'rgba(255,255,255,0.08)',
-            color: !showFavs && activeCategory === 'uploaded' ? '#fff' : '#aaa', fontWeight: 600, fontSize: '0.8rem',
-            display: 'flex', alignItems: 'center', gap: 5,
-          }}>
-            <Upload size={14} /> Minhas ({uploadedSongs.length})
-          </button>
-        )}
 
         {CATEGORIES.map(cat => (
           <button key={cat.id} onClick={() => { setActiveCategory(cat.id); setShowFavs(false); }} style={{
@@ -252,13 +260,15 @@ export default function MusicLibrary() {
         ))}
       </div>
 
-      {/* Uploaded songs */}
+      {/* Uploaded songs from community */}
       {activeCategory === 'uploaded' && !showFavs && (
         <div style={{ padding: '0 1rem' }}>
-          {uploadedSongs.length === 0 ? (
+          {loadingSongs ? (
+            <div style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>Carregando...</div>
+          ) : uploadedSongs.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
               <Upload size={40} style={{ opacity: 0.3, marginBottom: 8 }} />
-              <p>Nenhuma mÃºsica subida ainda</p>
+              <p>Nenhuma musica subida ainda. Seja o primeiro!</p>
             </div>
           ) : uploadedSongs.map(song => (
             <div key={song.id} onClick={() => playUploadedSong(song)} style={{
@@ -277,6 +287,7 @@ export default function MusicLibrary() {
                   {song.title}
                 </div>
                 <div style={{ color: '#888', fontSize: '0.78rem' }}>{song.artist}</div>
+                {song.user_name && <div style={{ color: '#555', fontSize: '0.68rem', marginTop: 2 }}>Por {song.user_name}</div>}
               </div>
             </div>
           ))}
