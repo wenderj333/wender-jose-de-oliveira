@@ -6,12 +6,11 @@ const { authenticate } = require('../middleware/auth');
 // GET all music (public)
 router.get('/', async (req, res) => {
   try {
-    const result = db.prepare('SELECT * FROM music ORDER BY created_at DESC').all();
-    const songs = Array.isArray(result) ? result : result?.rows || [];
-    res.json({ songs });
+    const songs = await db.prepare('SELECT * FROM music ORDER BY created_at DESC').all();
+    res.json({ songs: songs || [] });
   } catch (err) {
     console.error('Error fetching music:', err);
-    res.status(500).json({ error: 'Erro ao buscar músicas' });
+    res.status(500).json({ error: 'Erro ao buscar musicas' });
   }
 });
 
@@ -19,33 +18,32 @@ router.get('/', async (req, res) => {
 router.post('/', authenticate, async (req, res) => {
   try {
     const { title, artist, url } = req.body;
-    if (!title || !url) return res.status(400).json({ error: 'Título e URL são obrigatórios' });
+    if (!title || !url) return res.status(400).json({ error: 'Titulo e URL obrigatorios' });
 
-    const result = db.prepare(
+    const song = await db.prepare(
       'INSERT INTO music (user_id, title, artist, url, user_name) VALUES (?, ?, ?, ?, ?) RETURNING *'
     ).get(req.user.id, title, artist || 'Desconhecido', url, req.user.full_name || 'Anonimo');
 
-    const song = result?.rows ? result.rows[0] : result;
     res.json({ song });
   } catch (err) {
     console.error('Error adding music:', err);
-    res.status(500).json({ error: 'Erro ao adicionar música' });
+    res.status(500).json({ error: 'Erro ao adicionar musica' });
   }
 });
 
 // DELETE music (own only)
 router.delete('/:id', authenticate, async (req, res) => {
   try {
-    const song = db.prepare('SELECT * FROM music WHERE id = ?').get(req.params.id);
-    if (!song) return res.status(404).json({ error: 'Música não encontrada' });
+    const song = await db.prepare('SELECT * FROM music WHERE id = ?').get(req.params.id);
+    if (!song) return res.status(404).json({ error: 'Musica nao encontrada' });
     if (song.user_id !== req.user.id && req.user.role !== 'pastor' && req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Sem permissão' });
+      return res.status(403).json({ error: 'Sem permissao' });
     }
-    db.prepare('DELETE FROM music WHERE id = ?').run(req.params.id);
+    await db.prepare('DELETE FROM music WHERE id = ?').run(req.params.id);
     res.json({ success: true });
   } catch (err) {
     console.error('Error deleting music:', err);
-    res.status(500).json({ error: 'Erro ao deletar música' });
+    res.status(500).json({ error: 'Erro ao deletar musica' });
   }
 });
 
