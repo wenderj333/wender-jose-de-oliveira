@@ -3,9 +3,9 @@
    ============================================= */
 
 :root {
-  --primary-dark: #1b3a5c;
-  --primary: #3b5998;
-  --primary-light: #5b7ec2;
+  --primary-dark: #3a6bc5;
+  --primary: #5b8def;
+  --primary-light: #7aabf5;
   --primary-pale: #e7edf5;
   --green-dark: #1a5c2a;
   --green: #2d8a4e;
@@ -281,7 +281,7 @@ body {
 .hero {
   text-align: center;
   padding: 4rem 1.5rem 3rem;
-  background: linear-gradient(135deg, #0f2744, #1b3a5c, #3b5998, #2d6a3e);
+  background: linear-gradient(135deg, #5b8def, #6fa3ef 45%, #c9a84c 85%, #daa520);
   background-size: 300% 300%;
   animation: heroGradient 12s ease infinite;
   color: var(--white);
@@ -411,9 +411,9 @@ body {
 .feature-card {
   text-align: center;
   padding: 2rem;
-  background: linear-gradient(135deg, #cddcf2, #fef9e7);
+  background: linear-gradient(135deg, #dce8fc, #e8f0ff 40%, #fef5d4 80%, #fef9e7);
   border: 2px solid;
-  border-image: linear-gradient(135deg, var(--primary-light), var(--gold)) 1;
+  border-image: linear-gradient(135deg, #7aabf5, #daa520) 1;
 }
 .feature-card__icon {
   font-size: 3rem;
@@ -478,7 +478,7 @@ body {
 .feature-card--help {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #0a1628, #0d1f3c, #0a2a1a) !important;
+  background: linear-gradient(135deg, #3a6bc5, #4a80d4, #8a7530) !important;
   border: none !important;
   border-image: none !important;
   border-radius: 16px !important;
@@ -828,7 +828,7 @@ body {
 
 /* ===== FOOTER ===== */
 .footer {
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  background: linear-gradient(135deg, var(--primary), var(--primary-light) 50%, var(--gold));
   color: var(--gold-light);
   text-align: center;
   padding: 1.25rem;
