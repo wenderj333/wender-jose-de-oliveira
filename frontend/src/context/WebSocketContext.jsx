@@ -1,16 +1,30 @@
 import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { useAuth } from './AuthContext';
+import { playNotificationSound } from '../utils/notification-sound';
 
 const WebSocketContext = createContext(null);
 
 export function WebSocketProvider({ children }) {
   const { user } = useAuth();
   const wsRef = useRef(null);
+  const reconnectTimer = useRef(null);
+  const lastSoundTime = useRef(0);
   const [liveSessions, setLiveSessions] = useState([]);
   const [totalChurchesPraying, setTotalChurchesPraying] = useState(0);
   const [lastEvent, setLastEvent] = useState(null);
 
-  useEffect(() => {
+  function playSoundThrottled() {
+    const now = Date.now();
+    // Only play sound once every 30 seconds minimum
+    if (now - lastSoundTime.current > 30000) {
+      lastSoundTime.current = now;
+      playNotificationSound();
+    }
+  }
+
+  function connect() {
+    if (wsRef.current?.readyState === WebSocket.OPEN) return;
+
     const apiBase = import.meta.env.VITE_API_URL || '';
     let wsUrl;
     if (apiBase) {
@@ -21,52 +35,81 @@ export function WebSocketProvider({ children }) {
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       wsUrl = `${protocol}//${window.location.host}/ws`;
     }
-    const ws = new WebSocket(wsUrl);
-    wsRef.current = ws;
 
-    ws.onopen = () => {
-      if (user) {
-        ws.send(JSON.stringify({ type: 'identify', userId: user.id, churchId: user.churchId }));
-      }
-    };
+    try {
+      const ws = new WebSocket(wsUrl);
+      wsRef.current = ws;
 
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+      ws.onopen = () => {
+        console.log('WebSocket conectado');
+        if (user) {
+          ws.send(JSON.stringify({ type: 'identify', userId: user.id, churchId: user.churchId }));
+        }
+      };
 
-      switch (data.type) {
-        case 'live_sessions':
-          setLiveSessions(data.sessions);
-          setTotalChurchesPraying(data.totalChurchesPraying);
-          break;
-        case 'pastor_praying':
-          if (data.action === 'started') {
-            setLiveSessions((prev) => [...prev, data.session]);
-          } else if (data.action === 'stopped') {
-            setLiveSessions((prev) => prev.filter((s) => s.id !== data.sessionId));
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          switch (data.type) {
+            case 'live_sessions':
+              setLiveSessions(data.sessions || []);
+              setTotalChurchesPraying(data.totalChurchesPraying || 0);
+              break;
+            case 'pastor_praying':
+              if (data.action === 'started') {
+                setLiveSessions((prev) => [...prev, data.session]);
+              } else if (data.action === 'stopped') {
+                setLiveSessions((prev) => prev.filter((s) => s.id !== data.sessionId));
+              }
+              setTotalChurchesPraying(data.totalChurchesPraying || 0);
+              break;
+            case 'direct_message':
+              setLastEvent(data);
+              if (data.senderId !== user?.id) {
+                playSoundThrottled();
+              }
+              break;
+            case 'chat_new_message':
+            case 'new_help_request':
+            case 'new_prayer_response':
+              setLastEvent(data);
+              playSoundThrottled();
+              break;
+            case 'amem':
+            case 'help_request_update':
+            case 'chat_user_joined':
+            case 'chat_user_left':
+            case 'chat_typing':
+              setLastEvent(data);
+              break;
           }
-          setTotalChurchesPraying(data.totalChurchesPraying);
-          break;
-        case 'new_prayer_response':
-        case 'amem':
-        case 'new_help_request':
-        case 'help_request_update':
-        case 'chat_new_message':
-        case 'chat_user_joined':
-        case 'chat_user_left':
-        case 'chat_typing':
-          setLastEvent(data);
-          break;
-      }
-    };
+        } catch (e) { /* ignore parse errors */ }
+      };
 
-    ws.onclose = () => {
-      console.log('WebSocket desconectado, reconectando em 3s...');
-      setTimeout(() => {
-        setLiveSessions([]);
-      }, 3000);
-    };
+      ws.onclose = () => {
+        console.log('WebSocket desconectado');
+        wsRef.current = null;
+        // Reconnect after 30 seconds (not 3!)
+        if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
+        reconnectTimer.current = setTimeout(connect, 30000);
+      };
 
-    return () => ws.close();
+      ws.onerror = () => {
+        ws.close();
+      };
+    } catch (e) {
+      // If WebSocket fails, retry in 60 seconds
+      if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
+      reconnectTimer.current = setTimeout(connect, 60000);
+    }
+  }
+
+  useEffect(() => {
+    connect();
+    return () => {
+      if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
+      if (wsRef.current) wsRef.current.close();
+    };
   }, [user]);
 
   const send = useCallback((data) => {

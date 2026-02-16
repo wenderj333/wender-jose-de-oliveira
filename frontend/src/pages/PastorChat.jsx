@@ -19,6 +19,17 @@ const languages = [
   { code: 'en', label: 'English' },
   { code: 'es', label: 'Español' },
   { code: 'de', label: 'Deutsch' },
+  { code: 'fr', label: 'Français' },
+  { code: 'it', label: 'Italiano' },
+  { code: 'ko', label: '한국어' },
+  { code: 'zh', label: '中文' },
+  { code: 'ja', label: '日本語' },
+  { code: 'ru', label: 'Русский' },
+  { code: 'ar', label: 'العربية' },
+  { code: 'hi', label: 'हिन्दी' },
+  { code: 'tl', label: 'Filipino' },
+  { code: 'yo', label: 'Yorùbá' },
+  { code: 'sw', label: 'Kiswahili' },
 ];
 
 const styles = {

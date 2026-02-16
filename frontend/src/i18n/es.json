@@ -13,9 +13,20 @@
     "logout": "Salir",
     "login": "Entrar",
     "register": "Registrarse",
-    "chatPastoral": "Chat Pastoral"
+    "chatPastoral": "Chat Pastoral",
+    "pastoralAI": "IA Pastoral",
+    "friends": "Amigos",
+    "bibleAI": "IA Bíblica",
+    "messages": "Mensajes",
+    "groups": "Grupos",
+    "consecration": "Consagración",
+    "members": "Miembros",
+    "offerings": "Ofrendas",
+    "notifications": "Notificaciones",
+    "myProfile": "Mi Perfil",
+    "music": "Música"
   },
-  "footer": "© 2026 Sigo com Fé — Tecnología al servicio del Reino",
+  "footer": "© 2026 Sigo com Fé - Tecnología al servicio del Reino",
   "home": {
     "subtitle": "Ora, conéctate y fortalece tu fe con miles de hermanos alrededor del mundo.",
     "startNow": "Empieza Ahora",
@@ -53,13 +64,34 @@
     "helpSend": "Pedir Ayuda",
     "helpBtn": "Pedir Ayuda",
     "verses": [
-      { "text": "Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos.", "ref": "Mateo 18:20" },
-      { "text": "Todo lo puedo en Cristo que me fortalece.", "ref": "Filipenses 4:13" },
-      { "text": "El Señor es mi pastor; nada me faltará.", "ref": "Salmos 23:1" },
-      { "text": "Confía en el Señor con todo tu corazón, y no te apoyes en tu propia prudencia.", "ref": "Proverbios 3:5" },
-      { "text": "Porque yo sé los planes que tengo para ustedes, planes de bienestar y no de calamidad, para darles un futuro y una esperanza.", "ref": "Jeremías 29:11" },
-      { "text": "Sean fuertes y valientes. No teman, porque el Señor estará con ustedes.", "ref": "Deuteronomio 31:6" },
-      { "text": "La oración de un justo es poderosa y eficaz.", "ref": "Santiago 5:16" }
+      {
+        "text": "Porque donde estén dos o tres congregados en mi nombre, allí estoy yo en medio de ellos.",
+        "ref": "Mateo 18:20"
+      },
+      {
+        "text": "Todo lo puedo en Cristo que me fortalece.",
+        "ref": "Filipenses 4:13"
+      },
+      {
+        "text": "El Señor es mi pastor; nada me faltará.",
+        "ref": "Salmos 23:1"
+      },
+      {
+        "text": "Confía en el Señor con todo tu corazón, y no te apoyes en tu propia prudencia.",
+        "ref": "Proverbios 3:5"
+      },
+      {
+        "text": "Porque yo sé los planes que tengo para ustedes, planes de bienestar y no de calamidad, para darles un futuro y una esperanza.",
+        "ref": "Jeremías 29:11"
+      },
+      {
+        "text": "Sean fuertes y valientes. No teman, porque el Señor estará con ustedes.",
+        "ref": "Deuteronomio 31:6"
+      },
+      {
+        "text": "La oración de un justo es poderosa y eficaz.",
+        "ref": "Santiago 5:16"
+      }
     ]
   },
   "login": {
@@ -71,6 +103,13 @@
     "submit": "Entrar",
     "or": "o",
     "google": "Entrar con Google",
+    "facebook": "Entrar con Facebook",
+    "phone": "Entrar con Teléfono",
+    "phoneNumber": "Número de teléfono",
+    "sendCode": "Enviar código",
+    "verifyCode": "Verificar código",
+    "codeSent": "¡Código enviado!",
+    "codePlaceholder": "Código de 6 dígitos",
     "noAccount": "¿No tienes cuenta?",
     "signUp": "Regístrate"
   },
@@ -89,8 +128,11 @@
     "submit": "Registrarse",
     "or": "o",
     "google": "Registrarse con Google",
+    "facebook": "Registrarse con Facebook",
+    "phone": "Registrarse con Teléfono",
     "hasAccount": "¿Ya tienes cuenta?",
-    "signIn": "Entrar"
+    "signIn": "Entrar",
+    "addPhoto": "Agregar foto"
   },
   "prayerFeed": {
     "victoryWall": "Mural de Victorias",
@@ -227,30 +269,102 @@
     "playAgain": "Jugar de Nuevo",
     "weekVerse": "Versículo de la Semana",
     "weekVerseText": "Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree no se pierda, sino que tenga vida eterna.",
-    "weekVerseRef": "— Juan 3:16",
+    "weekVerseRef": "- Juan 3:16",
     "memorized": "¡Memorizado!",
     "memorize": "¡Ya lo memoricé!",
     "activities": "Actividades",
     "comingSoon": "¡Próximamente!",
     "stories": [
-      { "title": "David y Goliat", "desc": "Un niño valiente que venció a un gigante con una piedra y mucha fe en Dios", "age": "6-8" },
-      { "title": "El Arca de Noé", "desc": "Noé construyó un barco enorme y salvó a todos los animales del gran diluvio", "age": "3-5" },
-      { "title": "Jonás y la Ballena", "desc": "Jonás huyó de Dios pero aprendió que Él está en todas partes", "age": "6-8" },
-      { "title": "Daniel en el Foso de los Leones", "desc": "Daniel oró con fe y Dios cerró la boca de los leones", "age": "9-12" },
-      { "title": "Moisés y el Mar Rojo", "desc": "Dios abrió el mar para que Su pueblo pasara con seguridad", "age": "6-8" }
+      {
+        "title": "David y Goliat",
+        "desc": "Un niño valiente que venció a un gigante con una piedra y mucha fe en Dios",
+        "age": "6-8"
+      },
+      {
+        "title": "El Arca de Noé",
+        "desc": "Noé construyó un barco enorme y salvó a todos los animales del gran diluvio",
+        "age": "3-5"
+      },
+      {
+        "title": "Jonás y la Ballena",
+        "desc": "Jonás huyó de Dios pero aprendió que Él está en todas partes",
+        "age": "6-8"
+      },
+      {
+        "title": "Daniel en el Foso de los Leones",
+        "desc": "Daniel oró con fe y Dios cerró la boca de los leones",
+        "age": "9-12"
+      },
+      {
+        "title": "Moisés y el Mar Rojo",
+        "desc": "Dios abrió el mar para que Su pueblo pasara con seguridad",
+        "age": "6-8"
+      }
     ],
     "quiz": [
-      { "q": "¿Quién derrotó al gigante Goliat?", "opts": ["Saúl", "David", "Moisés", "Josué"] },
-      { "q": "¿Cuántos días duró el diluvio?", "opts": ["10 días", "20 días", "40 días", "100 días"] },
-      { "q": "¿Quién fue arrojado al foso de los leones?", "opts": ["Jonás", "Daniel", "Pablo", "Pedro"] },
-      { "q": "¿Cuál es el primer libro de la Biblia?", "opts": ["Éxodo", "Salmos", "Génesis", "Mateo"] },
-      { "q": "¿En qué ciudad nació Jesús?", "opts": ["Jerusalén", "Nazaret", "Belén", "Capernaúm"] }
+      {
+        "q": "¿Quién derrotó al gigante Goliat?",
+        "opts": [
+          "Saúl",
+          "David",
+          "Moisés",
+          "Josué"
+        ]
+      },
+      {
+        "q": "¿Cuántos días duró el diluvio?",
+        "opts": [
+          "10 días",
+          "20 días",
+          "40 días",
+          "100 días"
+        ]
+      },
+      {
+        "q": "¿Quién fue arrojado al foso de los leones?",
+        "opts": [
+          "Jonás",
+          "Daniel",
+          "Pablo",
+          "Pedro"
+        ]
+      },
+      {
+        "q": "¿Cuál es el primer libro de la Biblia?",
+        "opts": [
+          "Éxodo",
+          "Salmos",
+          "Génesis",
+          "Mateo"
+        ]
+      },
+      {
+        "q": "¿En qué ciudad nació Jesús?",
+        "opts": [
+          "Jerusalén",
+          "Nazaret",
+          "Belén",
+          "Capernaúm"
+        ]
+      }
     ],
     "activityList": [
-      { "title": "Colorear", "desc": "Pinta personajes bíblicos con colores hermosos" },
-      { "title": "Sopa de Letras", "desc": "Encuentra palabras de la Biblia escondidas" },
-      { "title": "Juego de Memoria", "desc": "Encuentra los pares de los 12 apóstoles" },
-      { "title": "Rompecabezas", "desc": "Arma escenas bíblicas increíbles" }
+      {
+        "title": "Colorear",
+        "desc": "Pinta personajes bíblicos con colores hermosos"
+      },
+      {
+        "title": "Sopa de Letras",
+        "desc": "Encuentra palabras de la Biblia escondidas"
+      },
+      {
+        "title": "Juego de Memoria",
+        "desc": "Encuentra los pares de los 12 apóstoles"
+      },
+      {
+        "title": "Rompecabezas",
+        "desc": "Arma escenas bíblicas increíbles"
+      }
     ]
   },
   "feedPost": {
@@ -326,11 +440,28 @@
     "translated": "Traducción",
     "joinedChat": "se unió a la conversación",
     "leftChat": "salió de la conversación",
-    "langPt": "Português",
+    "langPt": "Portugués",
     "langEn": "English",
     "langEs": "Español",
     "langDe": "Deutsch",
     "autoTranslate": "🌍 Traducción automática activada"
+  },
+  "friends": {
+    "title": "Amigos",
+    "search": "Buscar",
+    "myFriends": "Mis Amigos",
+    "requests": "Solicitudes",
+    "addFriend": "Agregar",
+    "pending": "Pendiente",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "removeFriend": "Eliminar",
+    "noFriends": "Aún no tienes amigos. ¡Busca personas para conectarte!",
+    "noRequests": "No hay solicitudes de amistad pendientes.",
+    "searchPlaceholder": "Buscar por nombre...",
+    "requestSent": "¡Solicitud de amistad enviada!",
+    "friendAdded": "¡Amistad aceptada!",
+    "friendRemoved": "Amigo eliminado."
   },
   "helpRequests": {
     "title": "Pedidos de Ayuda",
@@ -345,5 +476,131 @@
     "markInProgress": "Estoy atendiendo",
     "markResolved": "Resuelto",
     "resolved": "Atendido"
+  },
+  "profile": {
+    "title": "Perfil",
+    "memberSince": "Miembro desde",
+    "editProfile": "Editar Perfil",
+    "prayers": "Oraciones",
+    "posts": "Publicaciones",
+    "friends": "Amigos",
+    "bio": "Acerca de",
+    "noBio": "Sin bio aún",
+    "save": "Guardar",
+    "cancel": "Cancelar"
+  },
+  "messages": {
+    "title": "Mensajes",
+    "noConversations": "Ninguna conversación aún",
+    "whenSomeone": "Cuando alguien te envíe un mensaje, aparecerá aquí!",
+    "noMessages": "Ningún mensaje aún",
+    "writePlaceholder": "Escribe tu mensaje...",
+    "loading": "Cargando...",
+    "back": "Volver"
+  },
+  "groups": {
+    "title": "Grupos",
+    "createGroup": "Crear Grupo",
+    "newGroup": "Crear Nuevo Grupo",
+    "groupName": "Nombre del grupo",
+    "description": "Descripción (opcional)",
+    "public": "Público",
+    "private": "Privado",
+    "creating": "Creando...",
+    "cancel": "Cancelar",
+    "noGroups": "Ningún grupo aún",
+    "createFirst": "¡Crea el primer grupo de la comunidad!",
+    "members": "miembros",
+    "join": "Unirse al Grupo",
+    "leave": "Salir del Grupo",
+    "noPosts": "Ninguna publicación aún",
+    "writePlaceholder": "Escribe en el grupo...",
+    "back": "Volver"
+  },
+  "consecration": {
+    "title": "Consagración",
+    "subtitle": "Ayuno y oración — fortalece tu fe",
+    "totalConsecrations": "Total consagraciones",
+    "fastingToday": "Ayunando hoy",
+    "imConsecrating": "Estoy Consagrando",
+    "consecrating": "Consagrando...",
+    "benefits": "Beneficios del Ayuno",
+    "consecratingNow": "Consagrando ahora",
+    "noOneYet": "Nadie consagrando aún. ¡Sé el primero!",
+    "loginRequired": "¡Inicia sesión para consagrar!",
+    "conclusion": "El ayuno: No es dieta. No es sacrificio vacío. Es obediencia, alineación y dependencia de Dios."
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todas como leídas",
+    "noNotifications": "Ninguna notificación por ahora.",
+    "flaggedPost": "Post Denunciado"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "send": "Enviar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "loginToLike": "¡Inicia sesión para dar me gusta!",
+    "loginToComment": "¡Inicia sesión para comentar!",
+    "linkCopied": "¡Enlace copiado!",
+    "share": "Compartir",
+    "comment": "Comentar",
+    "report": "Denunciar",
+    "reportConfirm": "¿Denunciar este post como inadecuado?",
+    "reported": "¡Post denunciado! Los moderadores lo evaluarán.",
+    "writeComment": "Escribe un comentario...",
+    "publish": "Publicar",
+    "publishing": "Enviando...",
+    "shareCommunity": "Comparte algo con la comunidad...",
+    "noPostsYet": "Aún no hay publicaciones.",
+    "beFirst": "¡Sé el primero en publicar!",
+    "translate": "Traducir",
+    "translation": "Traducción",
+    "hideTranslation": "Ocultar traducción"
+  },
+  "offerings": {
+    "title": "Ofrendas y Diezmos",
+    "notPastor": "Para contribuir, contacte al pastor de su iglesia.",
+    "configure": "Configurar",
+    "records": "Registros",
+    "pixKey": "Clave PIX (CPF, Email, Teléfono o Aleatoria)",
+    "pixKeyPlaceholder": "Su clave PIX",
+    "pixName": "Nombre del Titular",
+    "pixNamePlaceholder": "Nombre que aparece en PIX",
+    "paypalEmail": "Email de PayPal",
+    "bank": "Banco",
+    "agency": "Agencia",
+    "account": "Cuenta",
+    "holder": "Titular",
+    "holderPlaceholder": "Nombre del titular",
+    "bankTransfer": "Transferencia Bancaria",
+    "messageToMembers": "Mensaje para los Miembros",
+    "messagePlaceholder": "¡Dios bendiga su ofrenda!",
+    "save": "Guardar Configuración",
+    "saving": "Guardando...",
+    "saved": "¡Guardado!",
+    "thisMonth": "Este mes",
+    "totalGeneral": "Total general",
+    "contributions": "Contribuciones",
+    "noContributions": "Ninguna contribución registrada aún",
+    "tithe": "Diezmo",
+    "offering": "Ofrenda"
+  },
+  "music": {
+    "title": "Biblioteca Musical",
+    "subtitle": "Alabanza y adoración 100% gratis",
+    "worship": "Alabanza & Adoración",
+    "hymns": "Himnos Clásicos",
+    "instrumental": "Instrumental",
+    "kids": "Kids Gospel",
+    "prayer": "Música para Oración",
+    "favorites": "Favoritos",
+    "noFavorites": "Ningún favorito aún",
+    "tapHeart": "Toca el ❤️ para guardar canciones",
+    "freeSources": "Más música gratis"
   }
 }

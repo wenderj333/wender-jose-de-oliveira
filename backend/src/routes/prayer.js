@@ -1,18 +1,37 @@
 const express = require('express');
 const router = express.Router();
 const Prayer = require('../models/Prayer');
+const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
 
-// GET /api/prayers - Feed de pedidos de oração
-router.get('/', async (req, res) => {
+// Optional auth — extracts user if token present, but doesn't block
+function optionalAuth(req, res, next) {
+  const auth = req.headers.authorization;
+  if (auth && auth.startsWith('Bearer ')) {
+    const jwt = require('jsonwebtoken');
+    try {
+      const decoded = jwt.verify(auth.split(' ')[1], process.env.JWT_SECRET || 'dev-secret');
+      req.user = decoded;
+    } catch (e) { /* ignore invalid token */ }
+  }
+  next();
+}
+
+// GET /api/prayers - Feed de pedidos de oração (privado: só vê os seus)
+router.get('/', optionalAuth, async (req, res) => {
   try {
-    const { church_id, limit, offset } = req.query;
-    const prayers = await Prayer.getFeed({
-      church_id,
-      limit: parseInt(limit) || 20,
-      offset: parseInt(offset) || 0,
-    });
-    res.json({ prayers });
+    if (req.user) {
+      // Logado: só vê os seus próprios pedidos
+      const prayers = await db.prepare(
+        `SELECT p.*, u.full_name AS author_name FROM prayers p
+         JOIN users u ON u.id = p.author_id
+         WHERE p.author_id = ?
+         ORDER BY p.created_at DESC LIMIT ?`
+      ).all(req.user.id, parseInt(req.query.limit) || 20);
+      return res.json({ prayers });
+    }
+    // Não logado: não vê nenhum pedido (são privados)
+    res.json({ prayers: [], message: 'Faça login para ver seus pedidos de oração' });
   } catch (err) {
     console.error('Erro ao buscar orações:', err);
     res.status(500).json({ error: 'Erro interno' });

@@ -1,6 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="64" fill="#1a3a5c"/>
-  <text x="256" y="200" text-anchor="middle" font-size="120" fill="#f4d03f" font-family="serif">✝</text>
-  <text x="256" y="340" text-anchor="middle" font-size="64" fill="#ffffff" font-weight="bold" font-family="sans-serif">Sigo</text>
-  <text x="256" y="410" text-anchor="middle" font-size="48" fill="#f4d03f" font-family="sans-serif">com Fé</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <!-- Open Bible - Left Page -->
+  <path d="M20 65 C20 55 28 48 38 48 L118 42 C124 41 128 45 128 50 L128 195 C128 195 122 192 118 192 L38 186 C28 185 20 178 20 168Z" fill="#ffffff" stroke="#daa520" stroke-width="3"/>
+
+  <!-- Open Bible - Right Page -->
+  <path d="M236 65 C236 55 228 48 218 48 L138 42 C132 41 128 45 128 50 L128 195 C128 195 134 192 138 192 L218 186 C228 185 236 178 236 168Z" fill="#ffffff" stroke="#daa520" stroke-width="3"/>
+
+  <!-- Center spine -->
+  <line x1="128" y1="42" x2="128" y2="195" stroke="#daa520" stroke-width="3"/>
+
+  <!-- Left page text lines -->
+  <line x1="44" y1="78" x2="108" y2="73" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="44" y1="98" x2="108" y2="93" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="44" y1="118" x2="108" y2="113" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="44" y1="138" x2="108" y2="133" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="44" y1="158" x2="108" y2="153" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+
+  <!-- Right page text lines -->
+  <line x1="148" y1="73" x2="212" y2="78" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="148" y1="93" x2="212" y2="98" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="148" y1="113" x2="212" y2="118" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="148" y1="133" x2="212" y2="138" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+  <line x1="148" y1="153" x2="212" y2="158" stroke="#daa520" stroke-width="2.5" opacity="0.4"/>
+
+  <!-- Golden Cross - centered and bold -->
+  <rect x="120" y="52" width="16" height="50" rx="3" fill="#daa520"/>
+  <rect x="108" y="64" width="40" height="14" rx="3" fill="#daa520"/>
+  <!-- Cross highlight -->
+  <rect x="122" y="54" width="12" height="46" rx="2" fill="#f0c040" opacity="0.5"/>
+  <rect x="110" y="66" width="36" height="10" rx="2" fill="#f0c040" opacity="0.5"/>
+
+  <!-- Light rays from cross -->
+  <line x1="128" y1="44" x2="128" y2="32" stroke="#daa520" stroke-width="2.5" opacity="0.5" stroke-linecap="round"/>
+  <line x1="100" y1="71" x2="90" y2="64" stroke="#daa520" stroke-width="2.5" opacity="0.35" stroke-linecap="round"/>
+  <line x1="156" y1="71" x2="166" y2="64" stroke="#daa520" stroke-width="2.5" opacity="0.35" stroke-linecap="round"/>
+  <line x1="104" y1="56" x2="96" y2="48" stroke="#daa520" stroke-width="2" opacity="0.25" stroke-linecap="round"/>
+  <line x1="152" y1="56" x2="160" y2="48" stroke="#daa520" stroke-width="2" opacity="0.25" stroke-linecap="round"/>
 </svg>

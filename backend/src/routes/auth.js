@@ -6,7 +6,7 @@ const { generateToken, authenticate } = require('../middleware/auth');
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, full_name, role } = req.body;
+    const { email, password, full_name, role, avatar_url } = req.body;
     if (!email || !password || !full_name) {
       return res.status(400).json({ error: 'Email, senha e nome completo são obrigatórios' });
     }
@@ -15,6 +15,14 @@ router.post('/register', async (req, res) => {
     if (existing) return res.status(409).json({ error: 'Email já cadastrado' });
 
     const user = await User.create({ email, password, full_name, role });
+
+    // Salvar avatar se fornecido
+    if (avatar_url) {
+      const db = require('../db/connection');
+      await db.prepare('UPDATE users SET avatar_url = ? WHERE id = ?').run(avatar_url, user.id);
+      user.avatar_url = avatar_url;
+    }
+
     const token = generateToken(user);
     res.status(201).json({ user, token });
   } catch (err) {
@@ -49,8 +57,12 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// POST /api/auth/google — sync Firebase Google user to local DB
-router.post('/google', async (req, res) => {
+// POST /api/auth/social — sync Firebase social user (Google/Facebook) to local DB
+// Also keep /google as alias for backward compatibility
+router.post('/social', socialLoginHandler);
+router.post('/google', socialLoginHandler);
+
+async function socialLoginHandler(req, res) {
   try {
     const { uid, email, full_name, photo } = req.body;
     if (!uid || !email) {
@@ -72,7 +84,7 @@ router.post('/google', async (req, res) => {
       // Update avatar if provided
       if (photo) {
         const db = require('../db/connection');
-        db.prepare('UPDATE users SET avatar_url = ? WHERE id = ?').run(photo, user.id);
+        await db.prepare('UPDATE users SET avatar_url = ? WHERE id = ?').run(photo, user.id);
         user.avatar_url = photo;
       }
     }
@@ -86,7 +98,51 @@ router.post('/google', async (req, res) => {
       token,
     });
   } catch (err) {
-    console.error('Erro no login Google:', err);
+    console.error('Erro no login social:', err);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+}
+
+// POST /api/auth/phone — sync Firebase phone user to local DB
+router.post('/phone', async (req, res) => {
+  try {
+    const { uid, phone, full_name } = req.body;
+    if (!uid || !phone) {
+      return res.status(400).json({ error: 'uid e telefone são obrigatórios' });
+    }
+
+    const db = require('../db/connection');
+
+    // Try to find user by uid (stored in email field as phone:uid pattern) or phone
+    let user = await db.prepare('SELECT * FROM users WHERE email = ?').get(`phone:${uid}`);
+    if (!user) {
+      // Create local user for phone auth
+      const crypto = require('crypto');
+      const randomPass = crypto.randomBytes(32).toString('hex');
+      user = await User.create({
+        email: `phone:${uid}`,
+        password: randomPass,
+        full_name: full_name || phone,
+        role: 'member'
+      });
+      // Store phone number (column added via migration, safe to ignore if missing)
+      try {
+        await db.prepare('UPDATE users SET phone = ? WHERE id = ?').run(phone, user.id);
+      } catch (e) {
+        console.warn('Could not set phone:', e.message);
+      }
+      user.phone = phone;
+    }
+
+    const token = generateToken(user);
+    await User.updateLastSeen(user.id);
+
+    res.json({
+      user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, avatar_url: user.avatar_url, phone: user.phone || phone },
+      token,
+    });
+  } catch (err) {
+    console.error('Erro no login por telefone:', err);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });

@@ -3,7 +3,7 @@ const { Pool } = require('pg');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL?.includes('neon.tech') ? { rejectUnauthorized: false } : false,
+  ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false },
 });
 
 async function migrate() {
@@ -304,7 +304,77 @@ async function migrate() {
     CREATE INDEX IF NOT EXISTS idx_chat_messages_room ON chat_messages(room_id, created_at);
   `);
 
-  console.log('✅ Migração PostgreSQL concluída com sucesso! (15+ tabelas criadas)');
+  // Add new columns
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_private BOOLEAN DEFAULT false`);
+  await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS media_type VARCHAR(10)`);
+  await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS is_flagged BOOLEAN DEFAULT false`);
+  await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS flag_reason TEXT`);
+
+  // ============ GRUPOS (tipo Facebook) ============
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS groups (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      name VARCHAR(255) NOT NULL,
+      description TEXT,
+      cover_url TEXT,
+      creator_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      privacy VARCHAR(20) DEFAULT 'public' CHECK (privacy IN ('public', 'private')),
+      member_count INT DEFAULT 1,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS group_members (
+      group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+      user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      role VARCHAR(20) DEFAULT 'member' CHECK (role IN ('admin', 'moderator', 'member')),
+      joined_at TIMESTAMPTZ DEFAULT NOW(),
+      PRIMARY KEY (group_id, user_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS group_posts (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+      author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      content TEXT NOT NULL,
+      media_url TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_group_posts_group ON group_posts(group_id, created_at DESC);
+  `);
+
+  // ============ CONSAGRAÇÃO / JEJUM ============
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS consecrations (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      type VARCHAR(50) DEFAULT 'fasting' CHECK (type IN ('fasting', 'prayer', 'meditation', 'other')),
+      start_date TIMESTAMPTZ DEFAULT NOW(),
+      end_date TIMESTAMPTZ,
+      purpose TEXT,
+      count INT DEFAULT 1, -- Quantas vezes o usuário 'consagrou' nesse período ou tipo
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_consecrations_user ON consecrations(user_id, created_at DESC);
+  `);
+
+  // ============ RELATÓRIOS DE PROBLEMAS TÉCNICOS ============
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS technical_issues (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      reporter_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      issue_type VARCHAR(50) DEFAULT 'bug' CHECK (issue_type IN ('bug', 'feature_request', 'other')),
+      description TEXT NOT NULL,
+      severity VARCHAR(20) DEFAULT 'medium' CHECK (severity IN ('low', 'medium', 'high', 'critical')),
+      status VARCHAR(20) DEFAULT 'open' CHECK (status IN ('open', 'in_progress', 'resolved', 'closed')),
+      assigned_to UUID REFERENCES users(id),
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_technical_issues_status ON technical_issues(status);
+  `);
+
+  console.log('✅ Migração PostgreSQL concluída com sucesso! (20+ tabelas criadas)');
   await pool.end();
 }
 
