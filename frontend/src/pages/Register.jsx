@@ -14,7 +14,7 @@ export default function Register() {
   const [error, setError] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
 
-  // 3 mandatory photos
+  // Photos (minimum 1, unlimited)
   const [photos, setPhotos] = useState([null, null, null]);
   const [photoPreviews, setPhotoPreviews] = useState([null, null, null]);
   const [step, setStep] = useState(1); // 1 = register form, 2 = upload 3 photos
@@ -69,11 +69,19 @@ export default function Register() {
     if (!file || !file.type.startsWith('image/')) return;
     const newPhotos = [...photos];
     newPhotos[index] = file;
+    // Add more slots if all filled
+    if (newPhotos.every(p => p !== null)) {
+      newPhotos.push(null);
+      const np = [...photoPreviews];
+      np.push(null);
+      setPhotoPreviews(np);
+    }
     setPhotos(newPhotos);
     const reader = new FileReader();
     reader.onload = () => {
       const newPreviews = [...photoPreviews];
       newPreviews[index] = reader.result;
+      if (newPhotos.every(p => p !== null) && newPreviews.length < newPhotos.length) newPreviews.push(null);
       setPhotoPreviews(newPreviews);
     };
     reader.readAsDataURL(file);
@@ -136,7 +144,7 @@ export default function Register() {
           {error && <p className="form-error" style={{ textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: '1.5rem' }}>
-            {[0, 1, 2].map(i => (
+            {photos.map((_, i) => (
               <label key={i} style={{ cursor: 'pointer' }}>
                 <div style={{
                   aspectRatio: '1', borderRadius: 14, overflow: 'hidden',
@@ -166,8 +174,8 @@ export default function Register() {
 
           {/* Progress */}
           <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-            <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginBottom: 8 }}>
-              {[0, 1, 2].map(i => (
+            <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginBottom: 8, flexWrap: 'wrap' }}>
+              {photos.map((_, i) => (
                 <div key={i} style={{
                   width: 10, height: 10, borderRadius: '50%',
                   background: photos[i] ? '#4caf50' : '#ddd',

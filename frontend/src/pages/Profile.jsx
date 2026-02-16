@@ -32,6 +32,8 @@ export default function Profile() {
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef(null);
+  const [updatingPrivacy, setUpdatingPrivacy] = useState(false);
+  const [privacyError, setPrivacyError] = useState('');
 
   const [activeTab, setActiveTab] = useState('posts');
   const [posts, setPosts] = useState([]);
@@ -187,15 +189,27 @@ export default function Profile() {
 
   async function handleTogglePrivacy() {
     const newVal = !profile.is_private;
+    // Optimistic update - change immediately
+    setProfile(prev => ({ ...prev, is_private: newVal }));
+    setUpdatingPrivacy(true);
+    setPrivacyError('');
     try {
       const res = await fetch(`${API}/profile`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ ...form, is_private: newVal }),
       });
+      if (!res.ok) throw new Error('Erro ao atualizar');
       const data = await res.json();
       if (data.user) setProfile(prev => ({ ...prev, ...data.user }));
-    } catch (err) { console.error(err); }
+    } catch (err) {
+      // Revert on error
+      setProfile(prev => ({ ...prev, is_private: !newVal }));
+      setPrivacyError('Erro ao mudar privacidade. Tente novamente.');
+      setTimeout(() => setPrivacyError(''), 3000);
+    } finally {
+      setUpdatingPrivacy(false);
+    }
   }
 
   async function handleSave() {
