@@ -195,7 +195,11 @@
     "prayers": "Prayers", "posts": "Posts", "friends": "Friends",
     "bio": "About", "noBio": "No bio yet", "save": "Save", "cancel": "Cancel",
     "addPhotoPrompt": "Add a photo to your profile!",
-    "addPhotoDesc": "Tap here to personalize your profile with a photo."
+    "addPhotoDesc": "Tap here to personalize your profile with a photo.",
+    "addFriend": "Add Friend",
+    "pendingFriend": "Pending",
+    "acceptFriend": "Accept",
+    "rejectFriend": "Reject"
   },
   "messages": {
     "title": "Messages", "noConversations": "No conversations yet",

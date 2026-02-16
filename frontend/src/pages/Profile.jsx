@@ -61,7 +61,8 @@ export default function Profile() {
   const commentInputRef = useRef(null);
 
   // Friend status
-  const [friendStatus, setFriendStatus] = useState(null);
+  const [friendStatus, setFriendStatus] = useState(null); // null | 'pending' | 'received' | 'accepted'
+  const [friendshipId, setFriendshipId] = useState(null);
 
   // Messages (chat inside profile)
   const [dmMessages, setDmMessages] = useState([]);
@@ -149,13 +150,34 @@ export default function Profile() {
 
   async function checkFriendship() {
     try {
-      const res = await fetch(`${API}/friends/list`, {
+      // Check accepted friends
+      const res = await fetch(`${API}/friends`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
       const friends = data.friends || [];
       const match = friends.find(f => f.id === userId || f.friend_id === userId);
-      if (match) setFriendStatus('accepted');
+      if (match) { setFriendStatus('accepted'); setFriendshipId(match.friendship_id); return; }
+
+      // Check pending requests (sent or received)
+      const res2 = await fetch(`${API}/friends/requests`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data2 = await res2.json();
+      const reqs = data2.requests || [];
+      const pendingMatch = reqs.find(r => r.id === userId);
+      if (pendingMatch) { setFriendStatus('received'); setFriendshipId(pendingMatch.friendship_id); return; }
+
+      // Check if I sent a request (search the user)
+      const res3 = await fetch(`${API}/friends/search?q=${encodeURIComponent(userId)}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data3 = await res3.json();
+      const users3 = data3.users || [];
+      const me = users3.find(u => u.id === userId);
+      if (me && me.friendship_status === 'pending' && me.direction === 'sent') {
+        setFriendStatus('pending');
+      }
     } catch {}
   }
 
@@ -449,12 +471,35 @@ export default function Profile() {
 
   async function handleAddFriend() {
     try {
-      await fetch(`${API}/friends/request`, {
+      const res = await fetch(`${API}/friends/request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ addressee_id: userId }),
       });
-      setFriendStatus('pending');
+      if (res.ok) setFriendStatus('pending');
+    } catch (err) { console.error(err); }
+  }
+
+  async function handleAcceptFriend() {
+    if (!friendshipId) return;
+    try {
+      await fetch(`${API}/friends/accept/${friendshipId}`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setFriendStatus('accepted');
+    } catch (err) { console.error(err); }
+  }
+
+  async function handleRejectFriend() {
+    if (!friendshipId) return;
+    try {
+      await fetch(`${API}/friends/reject/${friendshipId}`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setFriendStatus(null);
+      setFriendshipId(null);
     } catch (err) { console.error(err); }
   }
 
@@ -613,15 +658,34 @@ export default function Profile() {
               </>
             ) : currentUser ? (
               <>
-                <button onClick={handleAddFriend} disabled={friendStatus === 'pending' || friendStatus === 'accepted'} style={{
-                  flex: 1, padding: '0.55rem', borderRadius: 10, border: 'none',
-                  background: friendStatus === 'accepted' ? 'rgba(34,197,94,0.3)' : friendStatus === 'pending' ? 'rgba(255,255,255,0.15)' : '#3b82f6',
-                  color: '#fff', fontWeight: 700, fontSize: '0.9rem', cursor: friendStatus ? 'default' : 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                }}>
-                  <Users size={16} />
-                  {friendStatus === 'accepted' ? '✓ Amigos' : friendStatus === 'pending' ? 'Pendente' : 'Adicionar'}
-                </button>
+                {friendStatus === 'received' ? (
+                  <>
+                    <button onClick={handleAcceptFriend} style={{
+                      flex: 1, padding: '0.55rem', borderRadius: 10, border: 'none',
+                      background: '#22c55e', color: '#fff', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    }}>
+                      <Users size={16} /> {t('profile.acceptFriend', 'Aceitar')}
+                    </button>
+                    <button onClick={handleRejectFriend} style={{
+                      padding: '0.55rem 1rem', borderRadius: 10, border: 'none',
+                      background: 'rgba(239,68,68,0.4)', color: '#fff', cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', gap: 5,
+                    }}>
+                      <X size={16} />
+                    </button>
+                  </>
+                ) : (
+                  <button onClick={handleAddFriend} disabled={friendStatus === 'pending' || friendStatus === 'accepted'} style={{
+                    flex: 1, padding: '0.55rem', borderRadius: 10, border: 'none',
+                    background: friendStatus === 'accepted' ? 'rgba(34,197,94,0.3)' : friendStatus === 'pending' ? 'rgba(255,255,255,0.15)' : '#3b82f6',
+                    color: '#fff', fontWeight: 700, fontSize: '0.9rem', cursor: friendStatus ? 'default' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  }}>
+                    <Users size={16} />
+                    {friendStatus === 'accepted' ? t('profile.friends', 'Amigos') : friendStatus === 'pending' ? t('profile.pendingFriend', 'Pendente') : t('profile.addFriend', 'Adicionar')}
+                  </button>
+                )}
                 <button onClick={() => setActiveTab('messages')} style={{
                   padding: '0.55rem 1rem', borderRadius: 10, border: 'none',
                   background: 'rgba(255,255,255,0.2)', color: '#fff', cursor: 'pointer',

@@ -45,7 +45,7 @@ body {
 
 /* ===== NAVBAR ===== */
 .navbar {
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  background: linear-gradient(135deg, #5b8def, #6fa3ef 45%, #c9a84c 85%, #daa520);
   padding: 0.75rem 2rem;
   display: flex;
   align-items: center;

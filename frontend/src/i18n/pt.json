@@ -396,7 +396,11 @@
     "save": "Salvar",
     "cancel": "Cancelar",
     "addPhotoPrompt": "Adicione uma foto ao seu perfil!",
-    "addPhotoDesc": "Toque aqui para personalizar seu perfil com uma foto."
+    "addPhotoDesc": "Toque aqui para personalizar seu perfil com uma foto.",
+    "addFriend": "Adicionar",
+    "pendingFriend": "Pendente",
+    "acceptFriend": "Aceitar",
+    "rejectFriend": "Recusar"
   },
   "messages": {
     "title": "Mensagens",

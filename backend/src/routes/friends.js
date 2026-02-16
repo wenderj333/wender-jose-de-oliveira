@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
+const { createNotification } = require('./notifications');
 
 // All routes require authentication
 router.use(authenticate);
@@ -88,10 +89,12 @@ router.post('/request', async (req, res) => {
       if (existing.status === 'pending') return res.status(400).json({ error: 'Pedido já enviado' });
       // If rejected, allow re-request by updating
       await db.prepare(`UPDATE friendships SET status = 'pending', requester_id = ?, addressee_id = ?, updated_at = NOW() WHERE id = ?`).run(userId, addressee_id, existing.id);
+      try { await createNotification(addressee_id, 'friend_request', 'Pedido de amizade', `${req.user.full_name || 'Alguem'} quer ser seu amigo!`, { from: userId }); } catch(e) {}
       return res.json({ message: 'Pedido enviado' });
     }
 
     await db.prepare(`INSERT INTO friendships (requester_id, addressee_id) VALUES (?, ?)`).run(userId, addressee_id);
+    try { await createNotification(addressee_id, 'friend_request', 'Pedido de amizade', `${req.user.full_name || 'Alguem'} quer ser seu amigo!`, { from: userId }); } catch(e) {}
     res.json({ message: 'Pedido enviado' });
   } catch (err) {
     console.error('Erro ao enviar pedido:', err);
@@ -108,7 +111,12 @@ router.put('/accept/:friendshipId', async (req, res) => {
       UPDATE friendships SET status = 'accepted', updated_at = NOW()
       WHERE id = ? AND addressee_id = ? AND status = 'pending'
     `).run(friendshipId, userId);
-    if (result.changes === 0) return res.status(404).json({ error: 'Pedido não encontrado' });
+    if (result.changes === 0) return res.status(404).json({ error: 'Pedido nao encontrado' });
+    // Notify the requester that their request was accepted
+    const friendship = await db.prepare('SELECT requester_id FROM friendships WHERE id = ?').get(friendshipId);
+    if (friendship) {
+      try { await createNotification(friendship.requester_id, 'friend_accepted', 'Amizade aceita!', `${req.user.full_name || 'Alguem'} aceitou seu pedido de amizade!`, { from: userId }); } catch(e) {}
+    }
     res.json({ message: 'Amizade aceita' });
   } catch (err) {
     console.error('Erro ao aceitar:', err);

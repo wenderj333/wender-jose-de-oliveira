@@ -195,7 +195,11 @@
     "prayers": "Gebete", "posts": "Beiträge", "friends": "Freunde",
     "bio": "Über mich", "noBio": "Noch keine Bio", "save": "Speichern", "cancel": "Abbrechen",
     "addPhotoPrompt": "Füge ein Foto zu deinem Profil hinzu!",
-    "addPhotoDesc": "Tippe hier, um dein Profil mit einem Foto zu personalisieren."
+    "addPhotoDesc": "Tippe hier, um dein Profil mit einem Foto zu personalisieren.",
+    "addFriend": "Hinzufügen",
+    "pendingFriend": "Ausstehend",
+    "acceptFriend": "Annehmen",
+    "rejectFriend": "Ablehnen"
   },
   "messages": {
     "title": "Nachrichten", "noConversations": "Noch keine Gespräche",

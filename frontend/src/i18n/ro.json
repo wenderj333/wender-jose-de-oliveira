@@ -461,7 +461,11 @@
     "cancel": "Anulează",
     "prayers": "Rugăciuni",
     "addPhotoPrompt": "Adaugă o fotografie la profilul tău!",
-    "addPhotoDesc": "Atinge aici pentru a-ți personaliza profilul cu o fotografie."
+    "addPhotoDesc": "Atinge aici pentru a-ți personaliza profilul cu o fotografie.",
+    "addFriend": "Adaugă",
+    "pendingFriend": "În așteptare",
+    "acceptFriend": "Acceptă",
+    "rejectFriend": "Refuză"
   },
   "messages": {
     "writePlaceholder": "Scrie mesajul tău...",
