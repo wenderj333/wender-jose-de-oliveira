@@ -211,12 +211,12 @@ export default function MusicLibrary() {
               </div>
             </div>
             <input value={uploadTitle} onChange={e => setUploadTitle(e.target.value)} placeholder="Nome da musica *" style={{
-              width: '100%', padding: '0.6rem 0.85rem', borderRadius: 10, border: '1px solid rgba(255,255,255,0.12)',
-              background: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '0.85rem', marginBottom: '0.5rem', outline: 'none', boxSizing: 'border-box',
+              width: '100%', padding: '0.6rem 0.85rem', borderRadius: 10, border: '1px solid #ccc',
+              background: '#fff', color: '#333', fontSize: '0.85rem', marginBottom: '0.5rem', outline: 'none', boxSizing: 'border-box',
             }} />
             <input value={uploadArtist} onChange={e => setUploadArtist(e.target.value)} placeholder="Artista (opcional)" style={{
-              width: '100%', padding: '0.6rem 0.85rem', borderRadius: 10, border: '1px solid rgba(255,255,255,0.12)',
-              background: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '0.85rem', marginBottom: '0.75rem', outline: 'none', boxSizing: 'border-box',
+              width: '100%', padding: '0.6rem 0.85rem', borderRadius: 10, border: '1px solid #ccc',
+              background: '#fff', color: '#333', fontSize: '0.85rem', marginBottom: '0.75rem', outline: 'none', boxSizing: 'border-box',
             }} />
             <button onClick={handleUpload} disabled={!uploadFile || !uploadTitle.trim() || uploading} style={{
               width: '100%', padding: '0.7rem', borderRadius: 12, border: 'none',
