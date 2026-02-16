@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { Plus, Filter, X, Send, Heart, MessageCircle, Image, Video, Play, User, Share2, ChevronDown, Trash2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
@@ -407,18 +408,22 @@ export default function Mural() {
               background: '#fff', borderRadius: 16, overflow: 'hidden',
               border: '1px solid #eee', boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
             }}>
-              {/* Author header */}
+              {/* Author header — clickable to profile */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0.75rem 1rem 0.5rem' }}>
-                <div style={{
-                  width: 38, height: 38, borderRadius: '50%', background: '#daa520',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0,
-                }}>
-                  {post.author_avatar ? (
-                    <img src={getAvatarUrl(post.author_avatar)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  ) : (<User size={20} color="#fff" />)}
-                </div>
+                <Link to={`/perfil/${post.author_id}`} style={{ textDecoration: 'none', flexShrink: 0 }}>
+                  <div style={{
+                    width: 38, height: 38, borderRadius: '50%', background: '#daa520',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+                  }}>
+                    {post.author_avatar ? (
+                      <img src={getAvatarUrl(post.author_avatar)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (<User size={20} color="#fff" />)}
+                  </div>
+                </Link>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1a1a2e' }}>{post.author_name}</div>
+                  <Link to={`/perfil/${post.author_id}`} style={{ textDecoration: 'none' }}>
+                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1a1a2e' }}>{post.author_name}</div>
+                  </Link>
                   <div style={{ fontSize: '0.75rem', color: '#999' }}>{timeAgo(post.created_at)}</div>
                 </div>
                 <span style={{

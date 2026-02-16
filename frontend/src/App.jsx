@@ -24,9 +24,10 @@ import Groups from './pages/Groups';
 import Consecration from './pages/Consecration';
 import MessagesPage from './pages/Messages';
 import Offerings from './pages/Offerings';
-import MusicLibrary from './pages/MusicLibrary';
-import { MusicProvider } from './context/MusicContext';
-import MusicPlayer from './components/MusicPlayer';
+// Music temporarily disabled for redesign
+// import MusicLibrary from './pages/MusicLibrary';
+// import { MusicProvider } from './context/MusicContext';
+// import MusicPlayer from './components/MusicPlayer';
 import LanguageSwitcher from './components/LanguageSwitcher';
 
 function ProtectedRoute({ children }) {
@@ -111,7 +112,6 @@ export default function App() {
   const isActive = (path) => location.pathname === path ? 'nav-link--active' : '';
 
   return (
-    <MusicProvider>
     <div className="app">
       <nav className="navbar">
         <div className="navbar__top">
@@ -158,7 +158,6 @@ export default function App() {
           {user?.role === 'pastor' && <Link to="/ia-pastoral" className={isActive('/ia-pastoral')} onClick={() => setMenuOpen(false)}><Bot size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.pastoralAI', 'IA Pastoral')}</Link>}
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/membros" className={isActive('/membros')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4caf50' }} />{t('nav.members', 'Membros')}</Link>}
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/ofertas" className={isActive('/ofertas')} onClick={() => setMenuOpen(false)}>❤️ {t('nav.offerings', 'Ofertas')}</Link>}
-          <Link to="/musica" className={isActive('/musica')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🎵</span>{t('nav.music', 'Música')}</Link>
           <Link to="/consagracao" className={isActive('/consagracao')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔥</span>{t('nav.consecration', 'Consagração')}</Link>
           <Link to="/grupos" className={isActive('/grupos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4a1a8e' }} />{t('nav.groups', 'Grupos')}</Link>
           {user && <Link to="/mensagens" className={isActive('/mensagens')} onClick={() => setMenuOpen(false)}><MessageCircle size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4caf50' }} />{t('nav.messages', 'Mensagens')}</Link>}
@@ -198,7 +197,7 @@ export default function App() {
           <Route path="/cadastrar-igreja" element={<ChurchRegister />} />
           <Route path="/amigos" element={<Friends />} />
           <Route path="/perfil/:userId" element={<Profile />} />
-          <Route path="/musica" element={<MusicLibrary />} />
+          {/* <Route path="/musica" element={<MusicLibrary />} /> */}
           <Route path="/consagracao" element={<Consecration />} />
           <Route path="/grupos" element={<Groups />} />
           <Route path="/mensagens" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
@@ -209,10 +208,9 @@ export default function App() {
         </ErrorBoundary>
       </main>
 
-      {/* Global Music Player - persists across pages */}
-      <MusicPlayer />
+      {/* Music player temporarily disabled */}
 
-      <footer className="footer" style={{ paddingBottom: '70px' }}>
+      <footer className="footer">
         {showInstallBtn && (
           <button onClick={handleInstall} style={{
             display: 'flex', alignItems: 'center', gap: 8, margin: '0 auto 0.75rem',
@@ -227,6 +225,5 @@ export default function App() {
         <p>{t('footer')} <BookOpen size={16} style={{ verticalAlign: 'middle' }} /></p>
       </footer>
     </div>
-    </MusicProvider>
   );
 }
