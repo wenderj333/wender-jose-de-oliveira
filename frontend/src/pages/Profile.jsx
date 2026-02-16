@@ -5,9 +5,8 @@ import { useAuth } from '../context/AuthContext';
 import {
   User, Calendar, Edit, Heart, Users, Church, Save, X, Camera, Lock, Globe,
   Plus, Image, BookOpen, Info, Grid3x3, MessageCircle, Play, Send, Trash2,
-  ChevronLeft, MoreHorizontal, Share2, Bookmark, Video, Smile
+  ChevronLeft, MoreHorizontal, Share2, Bookmark, Video, Smile, Mail, ArrowLeft, Inbox
 } from 'lucide-react';
-
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
 const CLOUD_NAME = 'degxiuf43';
@@ -60,7 +59,16 @@ export default function Profile() {
   const commentInputRef = useRef(null);
 
   // Friend status
-  const [friendStatus, setFriendStatus] = useState(null); // null, 'pending', 'accepted'
+  const [friendStatus, setFriendStatus] = useState(null);
+
+  // Messages (chat inside profile)
+  const [dmMessages, setDmMessages] = useState([]);
+  const [dmText, setDmText] = useState('');
+  const [sendingDm, setSendingDm] = useState(false);
+  const [conversations, setConversations] = useState([]);
+  const [loadingDm, setLoadingDm] = useState(false);
+  const [selectedConv, setSelectedConv] = useState(null);
+  const chatEndRef = useRef(null);
 
   const isOwnProfile = currentUser?.id === userId;
 
@@ -362,6 +370,72 @@ export default function Profile() {
     }
   }
 
+  // ===== MESSAGES =====
+  useEffect(() => {
+    if (activeTab === 'messages') {
+      if (isOwnProfile) fetchConversations();
+      else if (token) fetchDmWith(userId);
+    }
+  }, [activeTab, userId]);
+
+  useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [dmMessages]);
+
+  // Poll messages every 5s when chat is open
+  useEffect(() => {
+    if (activeTab !== 'messages') return;
+    const targetId = isOwnProfile ? selectedConv?.id : userId;
+    if (!targetId || !token) return;
+    const interval = setInterval(() => fetchDmWith(targetId, true), 5000);
+    return () => clearInterval(interval);
+  }, [activeTab, selectedConv, userId]);
+
+  async function fetchConversations() {
+    setLoadingDm(true);
+    try {
+      const res = await fetch(`${API}/messages/conversations`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setConversations(data.conversations || []);
+    } catch {}
+    finally { setLoadingDm(false); }
+  }
+
+  async function fetchDmWith(otherId, silent = false) {
+    if (!silent) setLoadingDm(true);
+    try {
+      const res = await fetch(`${API}/messages/${otherId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setDmMessages(data.messages || []);
+    } catch {}
+    finally { if (!silent) setLoadingDm(false); }
+  }
+
+  async function handleSendDm(receiverId) {
+    if (!dmText.trim() || !token) return;
+    setSendingDm(true);
+    try {
+      const res = await fetch(`${API}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ receiverId, content: dmText.trim() }),
+      });
+      const data = await res.json();
+      if (data.message) {
+        setDmMessages(prev => [...prev, data.message]);
+        setDmText('');
+      }
+    } catch {}
+    finally { setSendingDm(false); }
+  }
+
+  function openConversation(conv) {
+    setSelectedConv({ id: conv.other_id, name: conv.other_name, avatar: conv.other_avatar });
+    fetchDmWith(conv.other_id);
+  }
+
   async function handleAddFriend() {
     try {
       await fetch(`${API}/friends/request`, {
@@ -524,14 +598,14 @@ export default function Profile() {
                   <Users size={16} />
                   {friendStatus === 'accepted' ? '✓ Amigos' : friendStatus === 'pending' ? 'Pendente' : 'Adicionar'}
                 </button>
-                <Link to="/mensagens" style={{
+                <button onClick={() => setActiveTab('messages')} style={{
                   padding: '0.55rem 1rem', borderRadius: 10, border: 'none',
                   background: 'rgba(255,255,255,0.2)', color: '#fff', cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', gap: 5, textDecoration: 'none',
+                  display: 'flex', alignItems: 'center', gap: 5,
                   backdropFilter: 'blur(10px)',
                 }}>
                   <MessageCircle size={16} />
-                </Link>
+                </button>
               </>
             ) : null}
           </div>
@@ -558,6 +632,7 @@ export default function Profile() {
             {[
               { key: 'posts', icon: <Grid3x3 size={22} /> },
               { key: 'prayers', icon: <Heart size={22} /> },
+              ...(token ? [{ key: 'messages', icon: <Mail size={22} /> }] : []),
               { key: 'info', icon: <Info size={22} /> },
             ].map(tab => (
               <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
@@ -671,6 +746,144 @@ export default function Profile() {
                       </div>
                     </div>
                   ))
+                )}
+              </div>
+            )}
+
+            {/* MESSAGES tab */}
+            {activeTab === 'messages' && token && (
+              <div style={{ padding: '0' }}>
+                {isOwnProfile ? (
+                  // Own profile: show conversations list or selected chat
+                  selectedConv ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 400px)', minHeight: 300 }}>
+                      {/* Chat header */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0.75rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                        <button onClick={() => { setSelectedConv(null); fetchConversations(); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#667eea' }}>
+                          <ArrowLeft size={20} />
+                        </button>
+                        <Link to={`/perfil/${selectedConv.id}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#2d1b69', overflow: 'hidden' }}>
+                            {selectedConv.avatar ? <img src={selectedConv.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User size={16} color="#667eea" style={{ margin: 8 }} />}
+                          </div>
+                          <span style={{ color: '#fff', fontWeight: 600, fontSize: '0.9rem' }}>{selectedConv.name}</span>
+                        </Link>
+                      </div>
+                      {/* Messages */}
+                      <div style={{ flex: 1, overflowY: 'auto', padding: '0.5rem 1rem', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {dmMessages.length === 0 ? (
+                          <p style={{ textAlign: 'center', color: '#666', padding: '2rem 0', fontSize: '0.85rem' }}>💬 Envie a primeira mensagem!</p>
+                        ) : dmMessages.map(msg => (
+                          <div key={msg.id} style={{
+                            alignSelf: msg.sender_id === currentUser?.id ? 'flex-end' : 'flex-start',
+                            maxWidth: '75%', padding: '0.5rem 0.85rem', borderRadius: 16,
+                            background: msg.sender_id === currentUser?.id ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'rgba(255,255,255,0.08)',
+                            color: '#fff', fontSize: '0.85rem', lineHeight: 1.4,
+                          }}>
+                            {msg.content}
+                            <div style={{ fontSize: '0.6rem', opacity: 0.6, marginTop: 3, textAlign: 'right' }}>
+                              {new Date(msg.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                          </div>
+                        ))}
+                        <div ref={chatEndRef} />
+                      </div>
+                      {/* Input */}
+                      <div style={{ display: 'flex', gap: 8, padding: '0.5rem 1rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                        <input value={dmText} onChange={e => setDmText(e.target.value)}
+                          onKeyDown={e => { if (e.key === 'Enter') handleSendDm(selectedConv.id); }}
+                          placeholder="Escreva uma mensagem..." style={{
+                            flex: 1, padding: '0.55rem 0.85rem', borderRadius: 20,
+                            border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)',
+                            color: '#fff', fontSize: '0.85rem', outline: 'none',
+                          }} />
+                        <button onClick={() => handleSendDm(selectedConv.id)} disabled={!dmText.trim() || sendingDm} style={{
+                          width: 38, height: 38, borderRadius: '50%', border: 'none',
+                          background: dmText.trim() ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'rgba(255,255,255,0.1)',
+                          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}><Send size={16} color="#fff" /></button>
+                      </div>
+                    </div>
+                  ) : (
+                    // Conversations list
+                    <div style={{ padding: '0.75rem' }}>
+                      {loadingDm ? (
+                        <div style={{ textAlign: 'center', padding: '2rem' }}><div className="loading-spinner" style={{ width: 20, height: 20 }} /></div>
+                      ) : conversations.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                          <Inbox size={40} style={{ opacity: 0.3, marginBottom: '0.5rem' }} />
+                          <p style={{ margin: 0, fontSize: '0.9rem' }}>Nenhuma conversa ainda</p>
+                        </div>
+                      ) : conversations.map(conv => (
+                        <div key={conv.other_id} onClick={() => openConversation(conv)} style={{
+                          display: 'flex', alignItems: 'center', gap: 10, padding: '0.65rem 0.5rem',
+                          borderBottom: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer',
+                          borderRadius: 10,
+                        }}>
+                          <Link to={`/perfil/${conv.other_id}`} onClick={e => e.stopPropagation()} style={{ textDecoration: 'none', flexShrink: 0 }}>
+                            <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#2d1b69', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              {conv.other_avatar ? <img src={conv.other_avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User size={20} color="#667eea" />}
+                            </div>
+                          </Link>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                              <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.88rem' }}>{conv.other_name}</span>
+                              <span style={{ fontSize: '0.68rem', color: '#888' }}>{timeAgo(conv.last_at)}</span>
+                            </div>
+                            <div style={{ fontSize: '0.8rem', color: '#888', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {conv.last_content}
+                            </div>
+                          </div>
+                          {conv.unread > 0 && (
+                            <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#667eea', color: '#fff', fontSize: '0.65rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              {conv.unread}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )
+                ) : (
+                  // Other person's profile: direct chat
+                  <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 400px)', minHeight: 300 }}>
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {loadingDm ? (
+                        <div style={{ textAlign: 'center', padding: '2rem' }}><div className="loading-spinner" style={{ width: 20, height: 20 }} /></div>
+                      ) : dmMessages.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                          <MessageCircle size={40} style={{ opacity: 0.3, marginBottom: '0.5rem' }} />
+                          <p style={{ margin: 0, fontSize: '0.9rem' }}>Envie uma mensagem para {profile.full_name?.split(' ')[0]}!</p>
+                        </div>
+                      ) : dmMessages.map(msg => (
+                        <div key={msg.id} style={{
+                          alignSelf: msg.sender_id === currentUser?.id ? 'flex-end' : 'flex-start',
+                          maxWidth: '75%', padding: '0.5rem 0.85rem', borderRadius: 16,
+                          background: msg.sender_id === currentUser?.id ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'rgba(255,255,255,0.08)',
+                          color: '#fff', fontSize: '0.85rem', lineHeight: 1.4,
+                        }}>
+                          {msg.content}
+                          <div style={{ fontSize: '0.6rem', opacity: 0.6, marginTop: 3, textAlign: 'right' }}>
+                            {new Date(msg.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                          </div>
+                        </div>
+                      ))}
+                      <div ref={chatEndRef} />
+                    </div>
+                    <div style={{ display: 'flex', gap: 8, padding: '0.5rem 1rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                      <input value={dmText} onChange={e => setDmText(e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter') handleSendDm(userId); }}
+                        placeholder={`Mensagem para ${profile.full_name?.split(' ')[0]}...`} style={{
+                          flex: 1, padding: '0.55rem 0.85rem', borderRadius: 20,
+                          border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)',
+                          color: '#fff', fontSize: '0.85rem', outline: 'none',
+                        }} />
+                      <button onClick={() => handleSendDm(userId)} disabled={!dmText.trim() || sendingDm} style={{
+                        width: 38, height: 38, borderRadius: '50%', border: 'none',
+                        background: dmText.trim() ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'rgba(255,255,255,0.1)',
+                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}><Send size={16} color="#fff" /></button>
+                    </div>
+                  </div>
                 )}
               </div>
             )}
