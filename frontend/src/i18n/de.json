@@ -193,7 +193,9 @@
   "profile": {
     "title": "Profil", "memberSince": "Mitglied seit", "editProfile": "Profil bearbeiten",
     "prayers": "Gebete", "posts": "Beiträge", "friends": "Freunde",
-    "bio": "Über mich", "noBio": "Noch keine Bio", "save": "Speichern", "cancel": "Abbrechen"
+    "bio": "Über mich", "noBio": "Noch keine Bio", "save": "Speichern", "cancel": "Abbrechen",
+    "addPhotoPrompt": "Füge ein Foto zu deinem Profil hinzu!",
+    "addPhotoDesc": "Tippe hier, um dein Profil mit einem Foto zu personalisieren."
   },
   "messages": {
     "title": "Nachrichten", "noConversations": "Noch keine Gespräche",

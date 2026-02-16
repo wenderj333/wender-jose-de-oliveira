@@ -487,7 +487,9 @@
     "bio": "Acerca de",
     "noBio": "Sin bio aún",
     "save": "Guardar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "addPhotoPrompt": "¡Añade una foto a tu perfil!",
+    "addPhotoDesc": "Toca aquí para personalizar tu perfil con una foto."
   },
   "messages": {
     "title": "Mensajes",

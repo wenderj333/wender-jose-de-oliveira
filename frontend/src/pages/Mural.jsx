@@ -299,6 +299,26 @@ export default function Mural() {
 
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem' }}>
+      {/* Photo prompt for users without avatar */}
+      {user && !user.avatar_url && (
+        <Link to={`/perfil/${user.id}`} style={{ textDecoration: 'none' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 16, padding: '1rem',
+            marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 12, color: '#fff',
+            boxShadow: '0 4px 15px rgba(102,126,234,0.3)', cursor: 'pointer',
+          }}>
+            <div style={{
+              width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,0.2)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', flexShrink: 0,
+            }}>📷</div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{t('profile.addPhotoPrompt', 'Adicione uma foto ao seu perfil!')}</div>
+              <div style={{ fontSize: '0.8rem', opacity: 0.85, marginTop: 2 }}>{t('profile.addPhotoDesc', 'Toque aqui para personalizar seu perfil com uma foto.')}</div>
+            </div>
+          </div>
+        </Link>
+      )}
+
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#1a0a3e' }}>📰 {t('mural.title', 'Mural')}</h1>

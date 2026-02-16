@@ -459,7 +459,9 @@
     "save": "Salvează",
     "title": "Profil",
     "cancel": "Anulează",
-    "prayers": "Rugăciuni"
+    "prayers": "Rugăciuni",
+    "addPhotoPrompt": "Adaugă o fotografie la profilul tău!",
+    "addPhotoDesc": "Atinge aici pentru a-ți personaliza profilul cu o fotografie."
   },
   "messages": {
     "writePlaceholder": "Scrie mesajul tău...",
