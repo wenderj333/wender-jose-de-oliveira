@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
-const { authenticateToken } = require('../middleware/auth');
+const { authenticate } = require('../middleware/auth');
 
 // GET all music (public)
 router.get('/', async (req, res) => {
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST new music (auth required)
-router.post('/', authenticateToken, async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   try {
     const { title, artist, url } = req.body;
     if (!title || !url) return res.status(400).json({ error: 'Título e URL são obrigatórios' });
@@ -32,7 +32,7 @@ router.post('/', authenticateToken, async (req, res) => {
 });
 
 // DELETE music (own only)
-router.delete('/:id', authenticateToken, async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
   try {
     const song = db.prepare('SELECT * FROM music WHERE id = ?').get(req.params.id);
     if (!song) return res.status(404).json({ error: 'Música não encontrada' });
