@@ -126,23 +126,31 @@ export default function MusicLibrary() {
       fd.append('file', uploadFile);
       fd.append('upload_preset', UPLOAD_PRESET);
       fd.append('folder', 'sigo-com-fe/music');
-      fd.append('resource_type', 'auto');
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, { method: 'POST', body: fd });
+      fd.append('resource_type', 'video');
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`, { method: 'POST', body: fd });
       const data = await res.json();
-      if (data.secure_url) {
-        const saveRes = await fetch(`${API}/music`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ title: uploadTitle.trim(), artist: uploadArtist.trim() || '', url: data.secure_url }),
-        });
-        const saveData = await saveRes.json();
-        if (saveData.song) setUploadedSongs(prev => [saveData.song, ...prev]);
+      if (!data.secure_url) {
+        alert('Erro ao subir arquivo. Tente novamente.');
+        setUploading(false);
+        return;
+      }
+      const saveRes = await fetch(`${API}/music`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ title: uploadTitle.trim(), artist: uploadArtist.trim() || '', url: data.secure_url }),
+      });
+      const saveData = await saveRes.json();
+      if (saveData.song) {
+        setUploadedSongs(prev => [saveData.song, ...prev]);
         setUploadFile(null);
         setUploadTitle('');
         setUploadArtist('');
         setShowUpload(false);
+        alert('Musica subida com sucesso!');
+      } else {
+        alert('Erro ao salvar musica no banco.');
       }
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error(err); alert('Erro: ' + err.message); }
     finally { setUploading(false); }
   }
 
