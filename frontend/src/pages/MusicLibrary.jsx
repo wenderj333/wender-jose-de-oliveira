@@ -77,7 +77,8 @@ export default function MusicLibrary() {
     try {
       const res = await fetch(`${API}/music`);
       const data = await res.json();
-      setUploadedSongs(data.songs || []);
+      const songs = data.songs;
+      setUploadedSongs(Array.isArray(songs) ? songs : songs?.rows || Object.values(songs || {}) || []);
     } catch {}
     finally { setLoadingSongs(false); }
   }

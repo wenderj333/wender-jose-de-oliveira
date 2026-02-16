@@ -7,7 +7,8 @@ const { authenticate } = require('../middleware/auth');
 router.get('/', async (req, res) => {
   try {
     const result = db.prepare('SELECT * FROM music ORDER BY created_at DESC').all();
-    res.json({ songs: result });
+    const songs = Array.isArray(result) ? result : result?.rows || [];
+    res.json({ songs });
   } catch (err) {
     console.error('Error fetching music:', err);
     res.status(500).json({ error: 'Erro ao buscar músicas' });
@@ -22,9 +23,10 @@ router.post('/', authenticate, async (req, res) => {
 
     const result = db.prepare(
       'INSERT INTO music (user_id, title, artist, url, user_name) VALUES (?, ?, ?, ?, ?) RETURNING *'
-    ).get(req.user.id, title, artist || 'Desconhecido', url, req.user.full_name || 'Anônimo');
+    ).get(req.user.id, title, artist || 'Desconhecido', url, req.user.full_name || 'Anonimo');
 
-    res.json({ song: result });
+    const song = result?.rows ? result.rows[0] : result;
+    res.json({ song });
   } catch (err) {
     console.error('Error adding music:', err);
     res.status(500).json({ error: 'Erro ao adicionar música' });
