@@ -96,6 +96,7 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState('posts');
   const [posts, setPosts] = useState([]);
   const [prayers, setPrayers] = useState([]);
+  const [expandedPrayer, setExpandedPrayer] = useState(null);
   const [loadingContent, setLoadingContent] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
 
@@ -887,22 +888,46 @@ export default function Profile() {
                     {isOwnProfile && <p style={{ fontSize: '0.8rem', color: '#888' }}>Use o botão acima para criar seu primeiro pedido!</p>}
                   </div>
                 ) : (
-                  prayers.map(prayer => (
-                    <div key={prayer.id} style={{
-                      background: 'rgba(255,255,255,0.04)', borderRadius: 16, padding: '1rem',
-                      marginBottom: '0.75rem', border: '1px solid rgba(255,255,255,0.08)',
-                    }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                        <span style={{ fontSize: '0.72rem', color: '#667eea', fontWeight: 700, textTransform: 'uppercase' }}>{prayer.category}</span>
-                        {prayer.is_urgent && <span style={{ fontSize: '0.7rem', color: '#ef4444', fontWeight: 600 }}>🔴 Urgente</span>}
+                  prayers.map(prayer => {
+                    const isExpanded = expandedPrayer === prayer.id;
+                    const firstLine = prayer.content ? prayer.content.split('\n')[0].substring(0, 100) : '';
+                    return (
+                      <div key={prayer.id} style={{
+                        background: 'rgba(255,255,255,0.04)', borderRadius: 16, padding: '1rem',
+                        marginBottom: '0.75rem', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer',
+                        transition: 'background 0.2s',
+                      }} onClick={() => setExpandedPrayer(isExpanded ? null : prayer.id)}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                          <span style={{ fontSize: '0.72rem', color: '#667eea', fontWeight: 700, textTransform: 'uppercase' }}>{prayer.category}</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            {prayer.is_urgent && <span style={{ fontSize: '0.7rem', color: '#ef4444', fontWeight: 600 }}>🔴 Urgente</span>}
+                            <span style={{ fontSize: '0.7rem', color: '#888', transition: 'transform 0.2s', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)' }}>▼</span>
+                          </div>
+                        </div>
+                        {prayer.title && <h4 style={{ margin: '0 0 0.4rem', color: '#fff', fontSize: '0.95rem' }}>{prayer.title}</h4>}
+                        {isExpanded ? (
+                          <p style={{ margin: 0, color: '#ccc', fontSize: '0.85rem', lineHeight: 1.5 }}>{prayer.content}</p>
+                        ) : (
+                          <p style={{ margin: 0, color: '#999', fontSize: '0.82rem', lineHeight: 1.4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{firstLine}{prayer.content && prayer.content.length > 100 ? '…' : ''}</p>
+                        )}
+                        <div style={{ marginTop: 8, fontSize: '0.75rem', color: '#888', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span>🙏 {prayer.prayer_count || 0} orando · {timeAgo(prayer.created_at)}</span>
+                          {isExpanded && isOwnProfile && (
+                            <button onClick={async (e) => {
+                              e.stopPropagation();
+                              if (!window.confirm('Deletar este pedido de oração?')) return;
+                              try {
+                                const res = await fetch(`${API_BASE}/api/prayers/${prayer.id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+                                if (res.ok) setPrayers(prev => prev.filter(p => p.id !== prayer.id));
+                              } catch {}
+                            }} style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 8, color: '#ef4444', cursor: 'pointer', padding: '4px 10px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: 4 }}>
+                              🗑️ Deletar
+                            </button>
+                          )}
+                        </div>
                       </div>
-                      {prayer.title && <h4 style={{ margin: '0 0 0.4rem', color: '#fff', fontSize: '0.95rem' }}>{prayer.title}</h4>}
-                      <p style={{ margin: 0, color: '#ccc', fontSize: '0.85rem', lineHeight: 1.5 }}>{prayer.content}</p>
-                      <div style={{ marginTop: 8, fontSize: '0.75rem', color: '#888' }}>
-                        🙏 {prayer.prayer_count || 0} orando · {timeAgo(prayer.created_at)}
-                      </div>
-                    </div>
-                  ))
+                    );
+                  })
                 )}
               </div>
             )}

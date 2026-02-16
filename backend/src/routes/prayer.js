@@ -103,4 +103,20 @@ router.patch('/:id/answered', authenticate, async (req, res) => {
   }
 });
 
+// DELETE /api/prayers/:id - Deletar pedido (só o autor)
+router.delete('/:id', authenticate, async (req, res) => {
+  try {
+    const prayer = await db.prepare('SELECT * FROM prayers WHERE id = ?').get(req.params.id);
+    if (!prayer) return res.status(404).json({ error: 'Pedido não encontrado' });
+    if (prayer.author_id !== req.user.id && req.user.role !== 'pastor' && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Sem permissão' });
+    }
+    await db.prepare('DELETE FROM prayers WHERE id = ?').run(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Erro ao deletar pedido:', err);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
 module.exports = router;

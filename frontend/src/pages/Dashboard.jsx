@@ -85,9 +85,9 @@ export default function Dashboard() {
               <Star size={20} style={{ color: 'var(--gold)' }} /> {t('dashboard.quickActions')}
             </h3>
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              <Link to="/oracoes" className="btn btn-green"><Plus size={16} /> {t('dashboard.newPrayerRequest')}</Link>
-              <Link to="/cadastrar-igreja" className="btn btn-green"><Church size={16} /> {t('dashboard.registerChurch')}</Link>
-              <Link to="/kids" className="btn btn-primary"><BookOpen size={16} /> {t('dashboard.kidsCorner')}</Link>
+              <Link to="/oracoes" style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', borderRadius: 20, border: 'none', padding: '0.5rem 1rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}><Plus size={16} /> {t('dashboard.newPrayerRequest')}</Link>
+              <Link to="/cadastrar-igreja" style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', borderRadius: 20, border: 'none', padding: '0.5rem 1rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}><Church size={16} /> {t('dashboard.registerChurch')}</Link>
+              <Link to="/kids" style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', borderRadius: 20, border: 'none', padding: '0.5rem 1rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}><BookOpen size={16} /> {t('dashboard.kidsCorner')}</Link>
             </div>
           </div>
 
@@ -123,24 +123,24 @@ export default function Dashboard() {
 
       {showUsersModal && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }} onClick={(e) => { if (e.target === e.currentTarget) setShowUsersModal(false); }}>
-          <div style={{ background: 'var(--bg-card, #1e1e3f)', borderRadius: 16, padding: '1.5rem', width: '100%', maxWidth: 400, maxHeight: '70vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h3 style={{ margin: 0, color: 'var(--primary)' }}><Users size={20} /> Usuários</h3>
-              <button onClick={() => setShowUsersModal(false)} style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer' }}><X size={20} /></button>
+          <div style={{ background: 'linear-gradient(135deg, #1a0a3e 0%, #2d1b69 100%)', borderRadius: 16, padding: '1.5rem', width: '100%', maxWidth: 380, maxHeight: '60vh', overflowY: 'auto', border: '1px solid rgba(218,165,32,0.15)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid rgba(218,165,32,0.15)', paddingBottom: '0.75rem' }}>
+              <h3 style={{ margin: 0, color: '#daa520', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Users size={20} /> Usuários</h3>
+              <button onClick={() => setShowUsersModal(false)} style={{ background: 'none', border: 'none', color: '#daa520', cursor: 'pointer' }}><X size={20} /></button>
             </div>
             {loadingUsers ? (
-              <p style={{ textAlign: 'center', color: 'var(--gray-500)' }}>Carregando...</p>
+              <p style={{ textAlign: 'center', color: '#999' }}>Carregando...</p>
             ) : usersList.length === 0 ? (
-              <p style={{ color: 'var(--gray-500)' }}>Nenhum usuário encontrado.</p>
+              <p style={{ color: '#999' }}>Nenhum usuário encontrado.</p>
             ) : (
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {usersList.map(u => (
-                  <li key={u.id} style={{ padding: '0.5rem 0', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                    <Link to={`/perfil/${u.id}`} onClick={() => setShowUsersModal(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', color: 'inherit' }}>
-                      <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#2d1b69', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        {u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Users size={16} style={{ color: 'var(--primary)' }} />}
+                  <li key={u.id} style={{ padding: '0.5rem 0', borderBottom: '1px solid rgba(218,165,32,0.15)' }}>
+                    <Link to={`/perfil/${u.id}`} onClick={() => setShowUsersModal(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', color: '#fff' }}>
+                      <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(102,126,234,0.2)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Users size={16} style={{ color: '#daa520' }} />}
                       </div>
-                      <span style={{ fontWeight: 600 }}>{u.full_name}</span>
+                      <span style={{ fontWeight: 600, color: '#fff' }}>{u.full_name}</span>
                     </Link>
                   </li>
                 ))}
