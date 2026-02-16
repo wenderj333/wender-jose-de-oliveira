@@ -120,44 +120,7 @@ export default function Login() {
         </button>
         */}
 
-        <div className="auth-divider" style={{ margin: '1rem 0' }}>
-          <span>{t('login.phone')}</span>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {!codeSent ? (
-            <>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <select value={countryCode} onChange={(e) => setCountryCode(e.target.value)} style={{ width: '90px', padding: '0.6rem', borderRadius: '8px', border: '1px solid var(--gray-300)', fontSize: '0.95rem' }}>
-                  <option value="+352">🇱🇺 +352</option>
-                  <option value="+55">🇧🇷 +55</option>
-                  <option value="+49">🇩🇪 +49</option>
-                  <option value="+34">🇪🇸 +34</option>
-                  <option value="+351">🇵🇹 +351</option>
-                  <option value="+1">🇺🇸 +1</option>
-                  <option value="+33">🇫🇷 +33</option>
-                  <option value="+39">🇮🇹 +39</option>
-                  <option value="+44">🇬🇧 +44</option>
-                  <option value="+31">🇳🇱 +31</option>
-                  <option value="+32">🇧🇪 +32</option>
-                </select>
-                <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder={t('login.phoneNumber')} style={{ flex: 1, padding: '0.6rem', borderRadius: '8px', border: '1px solid var(--gray-300)', fontSize: '0.95rem' }} />
-              </div>
-              <button type="button" className="btn btn-primary" onClick={handleSendCode} disabled={phoneLoading || !phoneNumber} style={{ width: '100%' }}>
-                <Phone size={16} /> {phoneLoading ? '...' : t('login.sendCode')}
-              </button>
-            </>
-          ) : (
-            <>
-              <p style={{ color: 'var(--green)', textAlign: 'center', fontWeight: 600 }}>{t('login.codeSent')}</p>
-              <input type="text" value={verificationCode} onChange={(e) => setVerificationCode(e.target.value)} placeholder={t('login.codePlaceholder')} maxLength={6} style={{ padding: '0.6rem', borderRadius: '8px', border: '1px solid var(--gray-300)', fontSize: '1.1rem', textAlign: 'center', letterSpacing: '0.3em' }} />
-              <button type="button" className="btn btn-green" onClick={handleVerifyCode} disabled={phoneLoading || verificationCode.length < 6} style={{ width: '100%' }}>
-                {phoneLoading ? '...' : t('login.verifyCode')}
-              </button>
-            </>
-          )}
-          <div id="recaptcha-container-login"></div>
-        </div>
+        {/* Phone auth removed - requires Firebase Blaze (paid) plan */}
 
         <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--gray-500)' }}>
           {t('login.noAccount')} <Link to="/cadastro" style={{ color: 'var(--green)', fontWeight: 600 }}>{t('login.signUp')}</Link>

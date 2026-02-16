@@ -244,68 +244,6 @@ export default function Register() {
         </button>
         */}
 
-        <div className="auth-divider" style={{ margin: '0.75rem 0' }}>
-          <span>{t('register.phone')}</span>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' }}>
-          {!codeSent ? (
-            <>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <select value={countryCode} onChange={(e) => setCountryCode(e.target.value)} style={{ width: '90px', padding: '0.6rem', borderRadius: '8px', border: '1px solid var(--gray-300)', fontSize: '0.95rem' }}>
-                  <option value="+352">🇱🇺 +352</option>
-                  <option value="+55">🇧🇷 +55</option>
-                  <option value="+49">🇩🇪 +49</option>
-                  <option value="+34">🇪🇸 +34</option>
-                  <option value="+351">🇵🇹 +351</option>
-                  <option value="+1">🇺🇸 +1</option>
-                  <option value="+33">🇫🇷 +33</option>
-                  <option value="+39">🇮🇹 +39</option>
-                  <option value="+44">🇬🇧 +44</option>
-                  <option value="+31">🇳🇱 +31</option>
-                  <option value="+32">🇧🇪 +32</option>
-                </select>
-                <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder={t('login.phoneNumber')} style={{ flex: 1, padding: '0.6rem', borderRadius: '8px', border: '1px solid var(--gray-300)', fontSize: '0.95rem' }} />
-              </div>
-              <button type="button" className="btn btn-primary" onClick={async () => {
-                setError('');
-                setPhoneLoading(true);
-                try {
-                  const result = await sendPhoneCode(`${countryCode}${phoneNumber}`, 'recaptcha-container-register');
-                  setConfirmationResult(result);
-                  setCodeSent(true);
-                } catch (err) {
-                  setError(err.message);
-                } finally {
-                  setPhoneLoading(false);
-                }
-              }} disabled={phoneLoading || !phoneNumber} style={{ width: '100%' }}>
-                <Phone size={16} /> {phoneLoading ? '...' : t('login.sendCode')}
-              </button>
-            </>
-          ) : (
-            <>
-              <p style={{ color: 'var(--green)', textAlign: 'center', fontWeight: 600 }}>{t('login.codeSent')}</p>
-              <input type="text" value={verificationCode} onChange={(e) => setVerificationCode(e.target.value)} placeholder={t('login.codePlaceholder')} maxLength={6} style={{ padding: '0.6rem', borderRadius: '8px', border: '1px solid var(--gray-300)', fontSize: '1.1rem', textAlign: 'center', letterSpacing: '0.3em' }} />
-              <button type="button" className="btn btn-green" onClick={async () => {
-                setError('');
-                setPhoneLoading(true);
-                try {
-                  await verifyPhoneCode(confirmationResult, verificationCode);
-                  navigate('/');
-                } catch (err) {
-                  setError(err.message);
-                } finally {
-                  setPhoneLoading(false);
-                }
-              }} disabled={phoneLoading || verificationCode.length < 6} style={{ width: '100%' }}>
-                {phoneLoading ? '...' : t('login.verifyCode')}
-              </button>
-            </>
-          )}
-          <div id="recaptcha-container-register"></div>
-        </div>
-
         <div className="auth-divider">
           <span>{t('register.or')}</span>
         </div>
