@@ -555,14 +555,14 @@ export default function Mural() {
 
                 {/* Share */}
                 <button onClick={() => {
-                  const shareText = `${post.content}\n\n🙏 Sigo com Fé\nhttps://sigo-com-fe.vercel.app`;
+                  const shareText = `${post.content?.slice(0, 200)}\n\n🙏 Sigo com Fé - Rede Social Cristã\nhttps://sigo-com-fe.vercel.app`;
                   if (navigator.share) navigator.share({ title: 'Sigo com Fé', text: shareText }).catch(() => {});
-                  else { navigator.clipboard?.writeText(shareText); alert(t('common.linkCopied')); }
+                  else { navigator.clipboard?.writeText(shareText); alert('Link copiado! ✅'); }
                 }} style={{
                   background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
                   color: '#999', fontSize: '0.82rem', marginLeft: 'auto',
                 }}>
-                  <Share2 size={16} />
+                  <Share2 size={16} /> <span>Compartilhar</span>
                 </button>
 
                 {/* Report */}

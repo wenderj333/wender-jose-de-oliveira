@@ -217,6 +217,31 @@ export default function App() {
 
       {/* Music player temporarily disabled */}
 
+      {/* Floating Share Button */}
+      <button onClick={() => {
+        const shareData = {
+          title: 'Sigo com Fé - Rede Social Cristã',
+          text: '🙏 Conheça o Sigo com Fé! Uma rede social cristã onde você encontra oração, acolhimento e comunidade.\n\n✨ Crie sua conta grátis:',
+          url: 'https://sigo-com-fe.vercel.app',
+        };
+        if (navigator.share) {
+          navigator.share(shareData).catch(() => {});
+        } else {
+          navigator.clipboard?.writeText(`${shareData.text}\n${shareData.url}`);
+          alert('Link copiado! ✅');
+        }
+      }} style={{
+        position: 'fixed', bottom: 80, right: 16, zIndex: 999,
+        width: 52, height: 52, borderRadius: '50%', border: 'none',
+        background: 'linear-gradient(135deg, #daa520, #f4c542)',
+        color: '#1a0a3e', cursor: 'pointer',
+        boxShadow: '0 4px 15px rgba(218,165,32,0.4)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '1.4rem',
+      }} title="Compartilhar Sigo com Fé">
+        📤
+      </button>
+
       <footer className="footer">
         {showInstallBtn && (
           <button onClick={handleInstall} style={{
