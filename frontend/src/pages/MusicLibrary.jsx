@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { Music, Play, Pause, Heart, Mic2, Baby, BookOpen, Guitar, Upload, X } from 'lucide-react';
+import { Music, Play, Pause, Heart, Mic2, Baby, BookOpen, Guitar, Upload, X, User } from 'lucide-react';
 
 const CLOUD_NAME = 'degxiuf43';
 const UPLOAD_PRESET = 'sigo_com_fe';
@@ -68,6 +68,7 @@ export default function MusicLibrary() {
   const [uploadedSongs, setUploadedSongs] = useState([]);
   const [loadingSongs, setLoadingSongs] = useState(false);
   const [playingAudio, setPlayingAudio] = useState(null);
+  const [autoplay, setAutoplay] = useState(true);
   const audioRef = useRef(null);
 
   useEffect(() => { fetchUploadedSongs(); }, []);
@@ -114,7 +115,19 @@ export default function MusicLibrary() {
       audio.play();
       audioRef.current = audio;
       setPlayingAudio(song.url);
-      audio.onended = () => setPlayingAudio(null);
+      audio.onended = () => {
+        if (autoplay) {
+          // Find next song in uploadedSongs
+          const idx = uploadedSongs.findIndex(s => s.url === song.url);
+          if (idx >= 0 && idx < uploadedSongs.length - 1) {
+            playUploadedSong(uploadedSongs[idx + 1]);
+          } else {
+            setPlayingAudio(null);
+          }
+        } else {
+          setPlayingAudio(null);
+        }
+      };
     }
   }
 
@@ -302,9 +315,25 @@ export default function MusicLibrary() {
         ))}
       </div>
 
-      {/* Uploaded songs from community */}
+      {/* Uploaded songs from community — grouped by user */}
       {activeCategory === 'uploaded' && !showFavs && (
         <div style={{ padding: '0 1rem' }}>
+          {/* Autoplay toggle */}
+          {uploadedSongs.length > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8, marginBottom: '0.75rem' }}>
+              <span style={{ fontSize: '0.75rem', color: '#888' }}>Tocar seguinte</span>
+              <button onClick={() => setAutoplay(!autoplay)} style={{
+                width: 40, height: 22, borderRadius: 11, border: 'none', cursor: 'pointer',
+                background: autoplay ? '#4caf50' : '#555', position: 'relative', transition: 'background 0.3s',
+              }}>
+                <span style={{
+                  position: 'absolute', top: 2, left: autoplay ? 20 : 2,
+                  width: 18, height: 18, borderRadius: '50%', background: '#fff',
+                  transition: 'left 0.3s', boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                }} />
+              </button>
+            </div>
+          )}
           {loadingSongs ? (
             <div style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>Carregando...</div>
           ) : uploadedSongs.length === 0 ? (
@@ -312,27 +341,42 @@ export default function MusicLibrary() {
               <Upload size={40} style={{ opacity: 0.3, marginBottom: 8 }} />
               <p>Nenhuma musica subida ainda. Seja o primeiro!</p>
             </div>
-          ) : uploadedSongs.map(song => (
-            <div key={song.id} onClick={() => playUploadedSong(song)} style={{
-              display: 'flex', alignItems: 'center', gap: 12, padding: '0.75rem 0.5rem',
-              borderBottom: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer',
-              background: playingAudio === song.url ? 'rgba(102,126,234,0.1)' : 'transparent', borderRadius: 12,
-            }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: 12, background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-              }}>
-                {playingAudio === song.url ? <Pause size={20} color="#fff" /> : <Play size={20} color="#fff" fill="#fff" />}
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ color: playingAudio === song.url ? '#667eea' : '#fff', fontWeight: 600, fontSize: '0.88rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {song.title}
+          ) : (() => {
+            // Group songs by user_name
+            const grouped = {};
+            uploadedSongs.forEach(song => {
+              const name = song.user_name || 'Anônimo';
+              if (!grouped[name]) grouped[name] = [];
+              grouped[name].push(song);
+            });
+            return Object.entries(grouped).map(([userName, songs]) => (
+              <div key={userName} style={{ marginBottom: '1rem' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#667eea', padding: '0.4rem 0', borderBottom: '1px solid rgba(102,126,234,0.2)', marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <User size={14} /> {userName} ({songs.length})
                 </div>
-                <div style={{ color: '#888', fontSize: '0.78rem' }}>{song.artist}</div>
-                {song.user_name && <div style={{ color: '#555', fontSize: '0.68rem', marginTop: 2 }}>Por {song.user_name}</div>}
+                {songs.map(song => (
+                  <div key={song.id} onClick={() => playUploadedSong(song)} style={{
+                    display: 'flex', alignItems: 'center', gap: 12, padding: '0.6rem 0.5rem',
+                    borderBottom: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer',
+                    background: playingAudio === song.url ? 'rgba(102,126,234,0.1)' : 'transparent', borderRadius: 12,
+                  }}>
+                    <div style={{
+                      width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    }}>
+                      {playingAudio === song.url ? <Pause size={18} color="#fff" /> : <Play size={18} color="#fff" fill="#fff" />}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ color: playingAudio === song.url ? '#667eea' : '#fff', fontWeight: 600, fontSize: '0.85rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {song.title}
+                      </div>
+                      <div style={{ color: '#888', fontSize: '0.75rem' }}>{song.artist}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
+            ));
+          })()}
         </div>
       )}
 
