@@ -109,16 +109,16 @@ export default function Consecration() {
             position: 'absolute',
             bottom: '-20px',
             left: `${5 + (i * 97 / bubbleCount) % 90}%`,
-            width: `${6 + (i % 4) * 4}px`,
-            height: `${6 + (i % 4) * 4}px`,
-            borderRadius: '50%',
-            background: i % 3 === 0 ? 'radial-gradient(circle, #ff6600, #ff330088)' 
-              : i % 3 === 1 ? 'radial-gradient(circle, #ffcc00, #daa52088)'
-              : 'radial-gradient(circle, #ff3300, #ff660088)',
-            opacity: 0.6,
-            animation: `fireBubbleRise ${4 + (i % 5) * 2}s ease-in-out infinite`,
+            width: `${8 + (i % 4) * 4}px`,
+            height: `${12 + (i % 4) * 5}px`,
+            borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
+            background: i % 3 === 0 ? 'radial-gradient(circle, #ff8800, #ff4400)' 
+              : i % 3 === 1 ? 'radial-gradient(circle, #ffdd00, #daa520)'
+              : 'radial-gradient(circle, #ff5500, #ff2200)',
+            opacity: 0.85,
+            animation: `fireBubbleRise ${10 + (i % 5) * 2}s ease-in-out infinite`,
             animationDelay: `${(i * 0.5) % 8}s`,
-            boxShadow: `0 0 ${4 + (i % 3) * 3}px ${i % 3 === 1 ? '#ffcc00' : '#ff6600'}`,
+            boxShadow: `0 0 ${8 + (i % 3) * 5}px ${i % 3 === 1 ? '#ffdd00' : '#ff6600'}`,
           }} />
         ))}
       </div>

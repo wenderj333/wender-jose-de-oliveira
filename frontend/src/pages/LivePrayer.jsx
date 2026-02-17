@@ -43,6 +43,31 @@ export default function LivePrayer() {
         <Radio size={24} style={{ color: 'var(--primary)' }} /> {t('livePrayer.title')}
       </h2>
 
+      {/* Explanatory card */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.95), rgba(250,245,255,0.95))',
+        border: '2px solid transparent',
+        borderImage: 'linear-gradient(135deg, #9b59b6, #daa520) 1',
+        borderRadius: 16,
+        padding: '1.25rem',
+        marginBottom: '1.5rem',
+        maxWidth: 550,
+        margin: '0 auto 1.5rem',
+        boxShadow: '0 4px 15px rgba(155,89,182,0.15)',
+      }}>
+        <h3 style={{ fontSize: '1.05rem', color: '#6a1b9a', margin: '0 0 0.6rem', textAlign: 'center' }}>
+          🙏 O que é a Oração ao Vivo?
+        </h3>
+        <p style={{ fontSize: '0.88rem', color: '#444', lineHeight: 1.7, margin: '0 0 0.6rem' }}>
+          Aqui você pode participar de momentos de oração em tempo real com pastores de diversas igrejas. 
+          Quando um pastor inicia uma sessão de oração, você pode acompanhar, orar junto e sentir a presença 
+          de Deus com irmãos de todo o mundo.
+        </p>
+        <p style={{ fontSize: '0.85rem', color: '#6a1b9a', fontStyle: 'italic', margin: 0, textAlign: 'center', fontWeight: 500 }}>
+          "Porque onde estiverem dois ou três reunidos em meu nome, aí estou eu no meio deles." — Mateus 18:20
+        </p>
+      </div>
+
       <div className="live-counter" style={{ color: 'var(--primary-dark)', WebkitTextFillColor: 'var(--primary-dark)', background: 'none' }}>
         <span style={{ color: 'var(--primary-dark)', WebkitTextFillColor: 'var(--primary-dark)' }}>{churchCount}</span>
         <br />
@@ -87,7 +112,6 @@ export default function LivePrayer() {
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
                 cursor: 'pointer', padding: '1rem', minWidth: 120,
               }}>
-                {/* Green pulsing ball */}
                 <div style={{
                   position: 'relative', width: 70, height: 70, borderRadius: '50%',
                   background: 'radial-gradient(circle, #4caf50, #2e7d32)',
@@ -96,7 +120,6 @@ export default function LivePrayer() {
                   animation: 'greenPulse 2s ease-in-out infinite',
                 }}>
                   <HandHeart size={28} color="#fff" />
-                  {/* Online dot */}
                   <div style={{
                     position: 'absolute', bottom: 2, right: 2,
                     width: 16, height: 16, borderRadius: '50%',

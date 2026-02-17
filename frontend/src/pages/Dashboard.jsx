@@ -123,10 +123,10 @@ export default function Dashboard() {
 
       {showUsersModal && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }} onClick={(e) => { if (e.target === e.currentTarget) setShowUsersModal(false); }}>
-          <div style={{ background: 'linear-gradient(135deg, #1a0a3e 0%, #2d1b69 100%)', borderRadius: 16, padding: '1.5rem', width: '100%', maxWidth: 380, maxHeight: '60vh', overflowY: 'auto', border: '1px solid rgba(218,165,32,0.15)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}>
+          <div style={{ background: 'linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%)', borderRadius: 16, padding: '1.5rem', width: '100%', maxWidth: 380, maxHeight: '60vh', overflowY: 'auto', border: '2px solid #daa520', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid rgba(218,165,32,0.15)', paddingBottom: '0.75rem' }}>
-              <h3 style={{ margin: 0, color: '#daa520', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Users size={20} /> Usuários</h3>
-              <button onClick={() => setShowUsersModal(false)} style={{ background: 'none', border: 'none', color: '#daa520', cursor: 'pointer' }}><X size={20} /></button>
+              <h3 style={{ margin: 0, color: '#1a0a3e', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Users size={20} style={{ color: '#daa520' }} /> Usuários</h3>
+              <button onClick={() => setShowUsersModal(false)} style={{ background: 'none', border: 'none', color: '#1a0a3e', cursor: 'pointer' }}><X size={20} /></button>
             </div>
             {loadingUsers ? (
               <p style={{ textAlign: 'center', color: '#999' }}>Carregando...</p>
@@ -135,12 +135,12 @@ export default function Dashboard() {
             ) : (
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {usersList.map(u => (
-                  <li key={u.id} style={{ padding: '0.5rem 0', borderBottom: '1px solid rgba(218,165,32,0.15)' }}>
-                    <Link to={`/perfil/${u.id}`} onClick={() => setShowUsersModal(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', color: '#fff' }}>
-                      <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(102,126,234,0.2)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <li key={u.id} style={{ padding: '0.5rem 0', borderBottom: '1px solid rgba(218,165,32,0.2)' }}>
+                    <Link to={`/perfil/${u.id}`} onClick={() => setShowUsersModal(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', color: '#1a0a3e' }}>
+                      <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(218,165,32,0.15)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         {u.avatar_url ? <img src={u.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Users size={16} style={{ color: '#daa520' }} />}
                       </div>
-                      <span style={{ fontWeight: 600, color: '#fff' }}>{u.full_name}</span>
+                      <span style={{ fontWeight: 600, color: '#1a0a3e' }}>{u.full_name}</span>
                     </Link>
                   </li>
                 ))}

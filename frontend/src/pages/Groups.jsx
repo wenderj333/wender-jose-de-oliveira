@@ -206,6 +206,25 @@ export default function Groups() {
         )}
       </div>
 
+      {/* Mensagem explicativa */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(26,10,62,0.05), rgba(218,165,32,0.10))',
+        borderRadius: 16, padding: '1.2rem', marginBottom: '1rem',
+        border: '1px solid rgba(218,165,32,0.2)',
+      }}>
+        <p style={{ fontSize: '0.9rem', color: '#1a0a3e', fontWeight: 600, margin: '0 0 0.5rem', textAlign: 'center' }}>
+          👥 Caminhe na Fé em Comunidade
+        </p>
+        <p style={{ fontSize: '0.82rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
+          Os grupos são espaços para compartilhar, aprender e crescer juntos na fé. 
+          Crie ou participe de grupos de estudo bíblico, oração, louvor ou qualquer tema 
+          que una irmãos em Cristo.
+        </p>
+        <p style={{ fontSize: '0.8rem', color: '#666', fontStyle: 'italic', margin: 0, textAlign: 'center' }}>
+          📖 "Não deixemos de congregar-nos, como é costume de alguns; antes, façamos admoestações." — Hebreus 10:25
+        </p>
+      </div>
+
       {/* Create group modal */}
       {showCreate && (
         <div style={{ background: '#fff', borderRadius: 16, padding: '1.5rem', marginBottom: '1rem', border: '2px solid #daa520' }}>

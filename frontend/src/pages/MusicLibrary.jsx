@@ -188,10 +188,27 @@ export default function MusicLibrary() {
             </div>
             <div>
               <h1 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>Musica Gospel</h1>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)' }}>Ouca e suba suas musicas</p>
+              <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)' }}>Ouça e suba suas músicas</p>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Mensagem explicativa */}
+      <div style={{
+        margin: '0 1rem 1rem', padding: '1rem', borderRadius: 14,
+        background: 'linear-gradient(135deg, rgba(102,126,234,0.08), rgba(218,165,32,0.10))',
+        border: '1px solid rgba(102,126,234,0.2)',
+      }}>
+        <p style={{ fontSize: '0.85rem', color: '#1a0a3e', fontWeight: 600, margin: '0 0 0.4rem' }}>
+          🎵 Projeto Música Gospel
+        </p>
+        <p style={{ fontSize: '0.8rem', color: '#444', lineHeight: 1.5, margin: 0 }}>
+          Aqui você encontra músicas gospel para louvar a Deus! Na aba <strong>Comunidade</strong>, 
+          veja músicas enviadas por outros irmãos — organizadas por quem enviou. 
+          Você também pode subir suas próprias músicas em MP3 para compartilhar com todos. 
+          Nas outras abas, ouça playlists de adoração, hinos e muito mais! 🙌
+        </p>
       </div>
 
       {/* Upload button */}
@@ -367,10 +384,10 @@ export default function MusicLibrary() {
                       {playingAudio === song.url ? <Pause size={18} color="#fff" /> : <Play size={18} color="#fff" fill="#fff" />}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ color: playingAudio === song.url ? '#667eea' : '#fff', fontWeight: 600, fontSize: '0.85rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <div style={{ color: playingAudio === song.url ? '#667eea' : '#1a0a3e', fontWeight: 600, fontSize: '0.85rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {song.title}
                       </div>
-                      <div style={{ color: '#888', fontSize: '0.75rem' }}>{song.artist}</div>
+                      <div style={{ color: '#666', fontSize: '0.75rem' }}>{song.artist}</div>
                     </div>
                   </div>
                 ))}
@@ -416,10 +433,10 @@ export default function MusicLibrary() {
                 </div>
               </div>
               <div onClick={() => playYoutube(song)} style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ color: playingId === song.id ? '#667eea' : '#fff', fontWeight: 600, fontSize: '0.88rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <div style={{ color: playingId === song.id ? '#667eea' : '#1a0a3e', fontWeight: 600, fontSize: '0.88rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {song.title}
                 </div>
-                <div style={{ color: '#888', fontSize: '0.78rem', marginTop: 2 }}>{song.artist}</div>
+                <div style={{ color: '#666', fontSize: '0.78rem', marginTop: 2 }}>{song.artist}</div>
               </div>
               <button onClick={e => { e.stopPropagation(); toggleFav(song.id); }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, flexShrink: 0 }}>
                 <Heart size={18} color={favorites.includes(song.id) ? '#ef4444' : '#555'} fill={favorites.includes(song.id) ? '#ef4444' : 'none'} />

@@ -27,7 +27,6 @@ export default function HelpRequests() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
-  // Load existing requests
   useEffect(() => {
     fetch(`${API_BASE}/api/help-requests`)
       .then(r => r.json())
@@ -36,7 +35,6 @@ export default function HelpRequests() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Listen for real-time new requests via WebSocket
   useEffect(() => {
     if (!lastEvent) return;
     if (lastEvent.type === 'new_help_request') {
@@ -78,6 +76,34 @@ export default function HelpRequests() {
         <ShieldAlert size={24} style={{ color: '#e74c3c' }} /> {t('helpRequests.title')}
       </h2>
       <p style={{ color: 'var(--gray-500)', marginBottom: '1.5rem' }}>{t('helpRequests.subtitle')}</p>
+
+      {/* Explanatory card */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.97), rgba(252,228,236,0.9))',
+        border: '2px solid transparent',
+        borderImage: 'linear-gradient(135deg, #e74c3c, #f39c12, #daa520) 1',
+        borderRadius: 16,
+        padding: '1.25rem',
+        marginBottom: '1.5rem',
+        boxShadow: '0 4px 15px rgba(231,76,60,0.1)',
+      }}>
+        <h3 style={{ fontSize: '1.05rem', color: '#c0392b', margin: '0 0 0.6rem', textAlign: 'center' }}>
+          🆘 Como Funcionam os Pedidos de Ajuda?
+        </h3>
+        <p style={{ fontSize: '0.88rem', color: '#444', lineHeight: 1.7, margin: '0 0 0.6rem' }}>
+          Este é um espaço seguro para pessoas que estão passando por momentos difíceis e precisam de apoio. 
+          Quando alguém envia um pedido de ajuda, pastores e voluntários são notificados imediatamente para 
+          oferecer acolhimento, oração e orientação.
+        </p>
+        <p style={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.7, margin: '0 0 0.5rem' }}>
+          🔴 <strong>Pendente</strong> — Aguardando um pastor atender<br />
+          🟡 <strong>Em andamento</strong> — Um pastor já está cuidando<br />
+          🟢 <strong>Resolvido</strong> — A pessoa recebeu o apoio necessário
+        </p>
+        <p style={{ fontSize: '0.85rem', color: '#6a1b9a', fontStyle: 'italic', margin: 0, textAlign: 'center', fontWeight: 500 }}>
+          "Levai as cargas uns dos outros e assim cumprireis a lei de Cristo." — Gálatas 6:2
+        </p>
+      </div>
 
       {/* Filter buttons */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>

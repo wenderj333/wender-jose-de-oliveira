@@ -261,6 +261,8 @@ export default function PastorChat() {
     }
   }, [lastEvent]);
 
+  const [showChatForm, setShowChatForm] = useState(false);
+
   // FORM VIEW
   if (view === 'form') {
     return (
@@ -271,6 +273,42 @@ export default function PastorChat() {
           <p style={styles.subtitle}>{t('pastorChat.subtitle')}</p>
         </div>
 
+        {/* Mensagem explicativa bíblica */}
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(142,68,173,0.08), rgba(218,165,32,0.10))',
+          borderRadius: 16, padding: '1.2rem', marginBottom: '1.5rem',
+          border: '1px solid rgba(142,68,173,0.2)',
+        }}>
+          <p style={{ fontSize: '0.95rem', color: '#1a0a3e', fontWeight: 700, margin: '0 0 0.5rem', textAlign: 'center' }}>
+            💬 Um Espaço de Acolhimento
+          </p>
+          <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
+            Conversar com um pastor pode transformar sua vida. Aqui você encontra um ouvido atento, 
+            uma palavra de sabedoria e a orientação que vem de Deus.
+          </p>
+          <p style={{ fontSize: '0.83rem', color: '#555', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
+            Não importa o que você está passando — ansiedade, medo, solidão, dúvidas sobre a fé — 
+            um pastor está pronto para te ouvir e orar com você. A conversa é privada, traduzida 
+            automaticamente e cheia de amor.
+          </p>
+          <p style={{ fontSize: '0.8rem', color: '#666', fontStyle: 'italic', margin: 0, textAlign: 'center' }}>
+            📖 "Obedecei a vossos pastores e sujeitai-vos a eles; porque velam por vossa alma." — Hebreus 13:17
+          </p>
+        </div>
+
+        {!showChatForm ? (
+          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+            <button onClick={() => setShowChatForm(true)} style={{
+              padding: '0.8rem 2rem', borderRadius: 25, border: 'none',
+              background: '#8e44ad', color: '#fff', fontWeight: 700, fontSize: '1rem',
+              cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
+              boxShadow: '0 4px 15px rgba(142,68,173,0.3)',
+            }}>
+              <MessageCircle size={20} /> Iniciar Conversa
+            </button>
+          </div>
+        ) : (
+        <>
         <div style={styles.toggleBar}>
           <button style={styles.toggleBtn(!isPastor)} onClick={() => setIsPastor(false)}>{t('pastorChat.imPerson')}</button>
           <button style={styles.toggleBtn(isPastor)} onClick={() => setIsPastor(true)}>{t('pastorChat.imPastor')}</button>
@@ -335,6 +373,9 @@ export default function PastorChat() {
               ))
             )}
           </div>
+        )}
+
+        </>
         )}
 
         <style>{`@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.15); opacity: 1; } }`}</style>

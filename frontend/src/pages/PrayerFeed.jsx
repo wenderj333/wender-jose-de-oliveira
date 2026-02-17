@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import PrayerCard from '../components/PrayerCard';
 import { useAuth } from '../context/AuthContext';
-import { HandHeart, Trophy, Sparkles, AlertTriangle, Plus } from 'lucide-react';
+import { HandHeart, Trophy, Sparkles, AlertTriangle, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -100,7 +100,6 @@ export default function PrayerFeed() {
       const res = await fetch(endpoint, { headers });
       const data = await res.json();
       let result = data.prayers || [];
-      // Non-pastors only see their own prayers
       if (user && !isPastor) {
         result = result.filter(p => p.author_id === user.id);
       }
@@ -146,8 +145,8 @@ export default function PrayerFeed() {
           {tab === 'answered' ? <><Trophy size={24} /> {t('prayerFeed.victoryWall')}</> : <><HandHeart size={24} /> {t('prayerFeed.prayerRequests')}</>}
         </h2>
         {user && (
-          <button className="btn btn-green" onClick={() => setShowForm(!showForm)}>
-            <Plus size={18} /> {t('prayerFeed.newRequest')}
+          <button className="btn btn-green" onClick={() => setShowForm(!showForm)} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            {showForm ? <ChevronUp size={18} /> : <Plus size={18} />} {t('prayerFeed.newRequest')}
           </button>
         )}
       </div>
@@ -187,6 +186,37 @@ export default function PrayerFeed() {
           <button type="submit" className="btn btn-green"><HandHeart size={18} /> {t('prayerFeed.submitRequest')}</button>
         </form>
       )}
+
+      {/* Explanatory card about the power of prayer */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.97), rgba(232,245,233,0.95))',
+        border: '2px solid transparent',
+        borderImage: 'linear-gradient(135deg, #4caf50, #81c784, #daa520) 1',
+        borderRadius: 16,
+        padding: '1.25rem',
+        marginBottom: '1.5rem',
+        boxShadow: '0 4px 15px rgba(76,175,80,0.12)',
+      }}>
+        <h3 style={{ fontSize: '1.05rem', color: '#2e7d32', margin: '0 0 0.6rem', textAlign: 'center' }}>
+          ✨ O Poder da Oração
+        </h3>
+        <p style={{ fontSize: '0.88rem', color: '#444', lineHeight: 1.7, margin: '0 0 0.6rem' }}>
+          A oração é a nossa comunicação direta com Deus. Quando você compartilha seu pedido aqui, 
+          irmãos de todo o mundo se unem em oração por você.
+        </p>
+        <p style={{ fontSize: '0.85rem', color: '#2e7d32', fontStyle: 'italic', margin: '0 0 0.8rem', textAlign: 'center', fontWeight: 500 }}>
+          "Confessai as vossas culpas uns aos outros e orai uns pelos outros, para que sareis. 
+          A oração feita por um justo pode muito em seus efeitos." — Tiago 5:16
+        </p>
+        <div style={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.7 }}>
+          <strong style={{ color: '#2e7d32' }}>Como funciona:</strong>
+          <div style={{ marginTop: 4 }}>
+            1️⃣ Escreva seu pedido com fé<br />
+            2️⃣ Irmãos orarão por você<br />
+            3️⃣ Quando Deus responder, compartilhe seu testemunho no Mural de Vitórias!
+          </div>
+        </div>
+      </div>
 
       {user && !isPastor && (
         <div className="card" style={{ marginBottom: '1rem', padding: '0.75rem 1rem', background: 'rgba(102,126,234,0.1)', borderLeft: '3px solid var(--primary)' }}>
