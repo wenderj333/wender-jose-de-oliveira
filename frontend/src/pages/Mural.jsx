@@ -675,10 +675,10 @@ export default function Mural() {
                       padding: '1rem', textAlign: 'center',
                     }}>
                       <span style={{ fontSize: '2rem' }}>🎵</span>
-                      <audio src={getMediaUrl(post.media_url)} controls style={{ width: '100%', marginTop: 8 }} />
+                      <audio src={getMediaUrl(post.media_url)} controls autoPlay loop style={{ width: '100%', marginTop: 8 }} />
                     </div>
                   ) : (post.media_type === 'video' || isVideo(post.media_url)) ? (
-                    <video src={getMediaUrl(post.media_url)} controls playsInline preload="metadata"
+                    <video src={getMediaUrl(post.media_url)} controls playsInline autoPlay muted preload="metadata"
                       style={{ width: '100%', maxHeight: 500, background: '#000' }} />
                   ) : (
                     <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', maxHeight: 500, objectFit: 'cover' }} />
@@ -692,7 +692,7 @@ export default function Mural() {
                   padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', gap: 8,
                 }}>
                   <span style={{ fontSize: '1.3rem' }}>🎵</span>
-                  <audio src={getMediaUrl(post.audio_url)} controls style={{ flex: 1, height: 32 }} />
+                  <audio src={getMediaUrl(post.audio_url)} controls autoPlay style={{ flex: 1, height: 32 }} />
                 </div>
               )}
 
