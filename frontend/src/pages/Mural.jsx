@@ -47,6 +47,10 @@ export default function Mural() {
   const [newMediaIsVideo, setNewMediaIsVideo] = useState(false);
   const [newMediaIsAudio, setNewMediaIsAudio] = useState(false);
   const [posting, setPosting] = useState(false);
+  const [showMusicPicker, setShowMusicPicker] = useState(false);
+  const [librarySongs, setLibrarySongs] = useState([]);
+  const [selectedSongUrl, setSelectedSongUrl] = useState(null);
+  const [selectedSongName, setSelectedSongName] = useState('');
   const fileRef = useRef(null);
   const photoRef = useRef(null);
   const videoRef = useRef(null);
@@ -182,6 +186,27 @@ export default function Mural() {
   }
 
   // ===== MEDIA UPLOAD =====
+  async function openMusicPicker() {
+    setShowMusicPicker(true);
+    if (librarySongs.length === 0) {
+      try {
+        const res = await fetch(`${API}/music`);
+        const data = await res.json();
+        setLibrarySongs(data.songs || []);
+      } catch (err) { console.error(err); }
+    }
+  }
+
+  function selectLibrarySong(song) {
+    setSelectedSongUrl(song.url);
+    setSelectedSongName(song.title + (song.artist ? ` - ${song.artist}` : ''));
+    setNewMediaPreview(song.url);
+    setNewMediaIsAudio(true);
+    setNewMediaIsVideo(false);
+    setNewMedia(null); // no file, using URL directly
+    setShowMusicPicker(false);
+  }
+
   function handleMediaSelect(e) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -241,7 +266,11 @@ export default function Mural() {
       const formData = new FormData();
       formData.append('content', newText.trim() || (newMediaIsAudio ? '🎵' : newMediaIsVideo ? '🎬' : '📸'));
       formData.append('category', newCategory);
-      if (newMedia) {
+      if (selectedSongUrl) {
+        // Music from library - already uploaded, use URL directly
+        formData.append('media_url', selectedSongUrl);
+        formData.append('media_type', 'video'); // Cloudinary stores audio as 'video'
+      } else if (newMedia) {
         try {
           const result = await uploadDirectToCloudinary(newMedia);
           formData.append('media_url', result.url);
@@ -264,7 +293,7 @@ export default function Mural() {
         data.post.like_count = 0;
         data.post.comment_count = 0;
         setPosts(prev => [data.post, ...prev]);
-        setNewText(''); setNewMedia(null); setNewMediaPreview(null); setNewMediaIsVideo(false); setNewMediaIsAudio(false); setShowForm(false);
+        setNewText(''); setNewMedia(null); setNewMediaPreview(null); setNewMediaIsVideo(false); setNewMediaIsAudio(false); setSelectedSongUrl(null); setSelectedSongName(''); setShowMusicPicker(false); setShowForm(false);
       }
     } catch (err) {
       console.error(err);
@@ -398,7 +427,7 @@ export default function Mural() {
               {newMediaIsAudio ? (
                 <div style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 10, padding: '1rem', textAlign: 'center' }}>
                   <span style={{ fontSize: '2rem' }}>🎵</span>
-                  <p style={{ color: '#fff', fontSize: '0.85rem', margin: '0.5rem 0' }}>{newMedia?.name || 'Música'}</p>
+                  <p style={{ color: '#fff', fontSize: '0.85rem', margin: '0.5rem 0' }}>{selectedSongName || newMedia?.name || 'Música'}</p>
                   <audio src={newMediaPreview} controls style={{ width: '100%' }} />
                 </div>
               ) : newMediaIsVideo ? (
@@ -406,7 +435,7 @@ export default function Mural() {
               ) : (
                 <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 300, objectFit: 'cover', borderRadius: 10 }} />
               )}
-              <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaIsAudio(false); }} style={{
+              <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaIsAudio(false); setSelectedSongUrl(null); setSelectedSongName(''); }} style={{
                 position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.6)', border: 'none',
                 borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
               }}><X size={16} color="#fff" /></button>
@@ -433,7 +462,7 @@ export default function Mural() {
               padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #ddd',
               background: '#f9f9f9', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#666',
             }}><Video size={16} /> Vídeo</button>
-            <button type="button" onClick={() => audioRef.current?.click()} style={{
+            <button type="button" onClick={openMusicPicker} style={{
               padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #9b59b6',
               background: 'rgba(155,89,182,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#9b59b6', fontWeight: 600,
             }}>🎵 Música</button>
@@ -444,6 +473,41 @@ export default function Mural() {
               fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
             }}><Send size={16} /> {posting ? 'Enviando...' : 'Publicar'}</button>
           </div>
+          {/* Music Picker from Library */}
+          {showMusicPicker && (
+            <div style={{
+              background: '#fff', border: '2px solid #9b59b6', borderRadius: 14, padding: '1rem',
+              marginTop: '0.5rem', maxHeight: 250, overflowY: 'auto',
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                <h4 style={{ margin: 0, fontSize: '0.95rem', color: '#9b59b6' }}>🎵 Escolha uma música</h4>
+                <button type="button" onClick={() => setShowMusicPicker(false)} style={{
+                  background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: '#999',
+                }}>✕</button>
+              </div>
+              {librarySongs.length === 0 ? (
+                <p style={{ color: '#999', fontSize: '0.85rem', textAlign: 'center' }}>Carregando músicas...</p>
+              ) : librarySongs.map(song => (
+                <button type="button" key={song.id} onClick={() => selectLibrarySong(song)} style={{
+                  width: '100%', padding: '0.6rem 0.75rem', borderRadius: 10, border: '1px solid #eee',
+                  background: selectedSongUrl === song.url ? 'rgba(155,89,182,0.1)' : '#fafafa',
+                  cursor: 'pointer', marginBottom: 6, textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
+                }}>
+                  <span style={{ fontSize: '1.2rem' }}>🎵</span>
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1a0a3e' }}>{song.title}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#888' }}>{song.artist || song.user_name}</div>
+                  </div>
+                </button>
+              ))}
+              <div style={{ borderTop: '1px solid #eee', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
+                <button type="button" onClick={() => { setShowMusicPicker(false); audioRef.current?.click(); }} style={{
+                  width: '100%', padding: '0.5rem', borderRadius: 10, border: '1px dashed #9b59b6',
+                  background: 'transparent', cursor: 'pointer', fontSize: '0.82rem', color: '#9b59b6',
+                }}>📁 Ou escolha do seu celular</button>
+              </div>
+            </div>
+          )}
           <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
           <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={handleMediaSelect} />
           <input ref={audioRef} type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg,audio/m4a,audio/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
