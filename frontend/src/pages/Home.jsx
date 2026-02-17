@@ -193,6 +193,59 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== DEPOIMENTOS ===== */}
+      <section style={{ padding: '2rem 1.5rem', textAlign: 'center', background: 'rgba(218,165,32,0.04)' }}>
+        <h2 style={{ fontSize: '1.3rem', marginBottom: '1.5rem', color: '#2c3e50' }}>💬 O que dizem nossos membros</h2>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', maxWidth: 700, margin: '0 auto' }}>
+          {[
+            { name: 'Maria S.', city: 'São Paulo', text: 'Encontrei uma comunidade de oração incrível. Todos os dias alguém ora por mim!' },
+            { name: 'Carlos E.', city: 'Lisboa', text: 'O Chat Pastoral me ajudou num momento muito difícil. Deus usou essa plataforma.' },
+            { name: 'Ana R.', city: 'Madrid', text: 'Mesmo longe do Brasil, me sinto conectada com irmãos na fé. Amei!' },
+          ].map((dep, i) => (
+            <div key={i} style={{
+              flex: '1 1 200px', maxWidth: 220, padding: '1rem', borderRadius: 14,
+              background: '#fff', boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+              textAlign: 'left',
+            }}>
+              <p style={{ fontSize: '0.82rem', color: '#444', fontStyle: 'italic', margin: '0 0 0.5rem', lineHeight: 1.5 }}>
+                "{dep.text}"
+              </p>
+              <div style={{ fontSize: '0.75rem', color: '#3b5998', fontWeight: 600 }}>
+                — {dep.name}, {dep.city}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== O QUE VOCÊ PODE FAZER ===== */}
+      <section style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
+        <h2 style={{ fontSize: '1.3rem', marginBottom: '0.5rem', color: '#2c3e50' }}>🌟 Tudo o que você encontra aqui</h2>
+        <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Uma plataforma completa para sua vida espiritual</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10, maxWidth: 500, margin: '0 auto' }}>
+          {[
+            { emoji: '🙏', label: 'Pedidos de Oração', to: '/oracoes' },
+            { emoji: '📻', label: 'Oração ao Vivo', to: '/ao-vivo' },
+            { emoji: '💬', label: 'Chat com Pastor', to: '/chat-pastoral' },
+            { emoji: '📖', label: 'IA Bíblica', to: '/ia-biblica' },
+            { emoji: '🎵', label: 'Música Gospel', to: '/musica' },
+            { emoji: '🔥', label: 'Consagração', to: '/consagracao' },
+            { emoji: '👥', label: 'Grupos', to: '/grupos' },
+            { emoji: '📰', label: 'Mural', to: '/mural' },
+          ].map((item, i) => (
+            <Link key={i} to={item.to} style={{
+              padding: '0.8rem 0.5rem', borderRadius: 12, background: '#fff',
+              boxShadow: '0 1px 6px rgba(0,0,0,0.06)', textDecoration: 'none',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+              transition: 'transform 0.2s',
+            }}>
+              <span style={{ fontSize: '1.5rem' }}>{item.emoji}</span>
+              <span style={{ fontSize: '0.75rem', color: '#333', fontWeight: 600 }}>{item.label}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* ===== FEATURES (4 principais) ===== */}
       <section className="features">
         <div className="card feature-card">
