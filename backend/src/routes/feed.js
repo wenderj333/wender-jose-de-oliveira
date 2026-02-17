@@ -109,6 +109,7 @@ router.get('/user/:userId', async (req, res) => {
 router.post('/', authenticate, upload.single('image'), async (req, res) => {
   try {
     const { category, verse_reference, visibility } = req.body;
+    console.log('Feed POST body:', JSON.stringify(req.body));
     let content = req.body.content || '';
     
     // Allow posts with just media (no text required)
