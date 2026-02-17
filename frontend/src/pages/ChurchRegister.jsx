@@ -133,9 +133,10 @@ export default function ChurchRegister() {
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
             <span style={{ fontSize: '1.3rem', flexShrink: 0 }}>💜</span>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1a0a3e' }}>100% Gratuito</div>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1a0a3e' }}>Comece Agora, Sem Custo</div>
               <div style={{ fontSize: '0.8rem', color: '#666', lineHeight: 1.5 }}>
-                Todas as ferramentas são gratuitas. Nossa missão é servir o Reino de Deus, não lucrar.
+                Cadastre sua igreja e comece a usar as ferramentas essenciais sem nenhum custo. 
+                Nossa missão é servir o Reino de Deus!
               </div>
             </div>
           </div>
@@ -187,7 +188,7 @@ export default function ChurchRegister() {
                 não por força, mas voluntariamente." — 1 Pedro 5:2
               </p>
               <p style={{ fontSize: '0.75rem', opacity: 0.8, margin: 0 }}>
-                🔑 Tudo isso está disponível gratuitamente na Sala de Gestão do Pastor
+                🔑 Tudo isso está disponível na Sala de Gestão do Pastor
               </p>
             </div>
           </div>
@@ -238,7 +239,7 @@ export default function ChurchRegister() {
         </button>
         {!showForm && (
           <p style={{ fontSize: '0.75rem', color: '#999', marginTop: 8 }}>
-            ⚡ Rápido e gratuito — leva menos de 2 minutos
+            ⚡ Rápido e fácil — leva menos de 2 minutos
           </p>
         )}
       </div>
