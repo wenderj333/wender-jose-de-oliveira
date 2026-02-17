@@ -7,7 +7,7 @@ import { LayoutDashboard, Users, HandHeart, Sparkles, Heart, Church, BookOpen, P
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export default function Dashboard() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const { t } = useTranslation();
   const [stats, setStats] = useState(null);
   const [recentActivity, setRecentActivity] = useState([]);
@@ -79,6 +79,24 @@ export default function Dashboard() {
               <div className="stat-card__label">{t('dashboard.answeredPrayers')}</div>
             </Link>
           </div>
+
+          {(user?.role === 'pastor' || user?.role === 'admin') && (
+            <Link to="/pastor" style={{
+              display: 'flex', alignItems: 'center', gap: 12, padding: '1rem 1.25rem',
+              background: 'linear-gradient(135deg, #1a0a3e, #4a1a8e)', borderRadius: 16,
+              color: '#fff', textDecoration: 'none', marginBottom: '1rem',
+              boxShadow: '0 4px 15px rgba(26,10,62,0.3)',
+            }}>
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(218,165,32,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                🏛️
+              </div>
+              <div>
+                <div style={{ fontWeight: 800, fontSize: '1rem' }}>Sala de Gestão do Pastor</div>
+                <div style={{ fontSize: '0.75rem', opacity: 0.7 }}>Gerencie membros, dízimos, comunicados e mais</div>
+              </div>
+              <ArrowRight size={20} style={{ marginLeft: 'auto', opacity: 0.6 }} />
+            </Link>
+          )}
 
           <div className="card" style={{ marginBottom: '1rem' }}>
             <h3 style={{ color: 'var(--primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

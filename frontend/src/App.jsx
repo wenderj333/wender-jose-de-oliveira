@@ -26,6 +26,7 @@ import MessagesPage from './pages/Messages';
 import Offerings from './pages/Offerings';
 // Music temporarily disabled for redesign
 import MusicLibrary from './pages/MusicLibrary';
+import PastorDashboard from './pages/PastorDashboard';
 // import { MusicProvider } from './context/MusicContext';
 // import MusicPlayer from './components/MusicPlayer';
 import LanguageSwitcher from './components/LanguageSwitcher';
@@ -163,6 +164,9 @@ export default function App() {
           {user && (
             <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setMenuOpen(false)}><LayoutDashboard size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Dashboard</Link>
           )}
+          {(user?.role === 'pastor' || user?.role === 'admin') && (
+            <Link to="/pastor" className={isActive('/pastor')} onClick={() => setMenuOpen(false)} style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', color: '#fff', borderRadius: 12, padding: '0.4rem 0.8rem', fontWeight: 700 }}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />🏛️ Sala do Pastor</Link>
+          )}
           {/* Ofertas temporarily hidden */}
           {/* {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/ofertas" className={isActive('/ofertas')} onClick={() => setMenuOpen(false)}>❤️ Ofertas</Link>} */}
           {/* Igrejas (map) hidden — using Igreja (register) instead */}
@@ -206,6 +210,7 @@ export default function App() {
           <Route path="/membros" element={<ProtectedRoute><Members /></ProtectedRoute>} />
           <Route path="/ofertas" element={<ProtectedRoute><Offerings /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/pastor" element={<ProtectedRoute><PastorDashboard /></ProtectedRoute>} />
         </Routes>
         </ErrorBoundary>
       </main>
