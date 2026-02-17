@@ -15,8 +15,14 @@ const CATEGORIES = [
   { value: 'reflexao', label: '💭 Reflexão', color: '#e67e22' },
 ];
 
+function isAudio(url) {
+  if (!url) return false;
+  return /\.(mp3|wav|ogg|m4a|aac|flac)/i.test(url);
+}
+
 function isVideo(url) {
   if (!url) return false;
+  if (isAudio(url)) return false; // audio is NOT video
   return /\.(mp4|webm|mov)/i.test(url) || url.includes('/video/') || url.includes('resource_type=video');
 }
 
@@ -200,29 +206,36 @@ export default function Mural() {
   function selectLibrarySong(song) {
     setSelectedSongUrl(song.url);
     setSelectedSongName(song.title + (song.artist ? ` - ${song.artist}` : ''));
-    setNewMediaPreview(song.url);
-    setNewMediaIsAudio(true);
-    setNewMediaIsVideo(false);
-    setNewMedia(null); // no file, using URL directly
     setShowMusicPicker(false);
+    // Don't clear photo if one is already selected
   }
 
   function handleMediaSelect(e) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setNewMedia(file);
     const isVid = file.type.startsWith('video/');
     const isAud = file.type.startsWith('audio/');
-    setNewMediaIsVideo(isVid);
-    setNewMediaIsAudio(isAud);
+    
     if (isAud) {
-      setNewMediaPreview(URL.createObjectURL(file));
-    } else if (isVid) {
+      // Audio from phone - treat like library song
+      setSelectedSongUrl(null);
+      setSelectedSongName(file.name);
+      setNewMedia(file);
+      setNewMediaIsAudio(true);
+      setNewMediaIsVideo(false);
       setNewMediaPreview(URL.createObjectURL(file));
     } else {
-      const reader = new FileReader();
-      reader.onload = () => setNewMediaPreview(reader.result);
-      reader.readAsDataURL(file);
+      // Photo or Video - keep music selection if any
+      setNewMedia(file);
+      setNewMediaIsVideo(isVid);
+      setNewMediaIsAudio(false);
+      if (isVid) {
+        setNewMediaPreview(URL.createObjectURL(file));
+      } else {
+        const reader = new FileReader();
+        reader.onload = () => setNewMediaPreview(reader.result);
+        reader.readAsDataURL(file);
+      }
     }
   }
 
@@ -260,16 +273,27 @@ export default function Mural() {
 
   async function handlePost(e) {
     e.preventDefault();
-    if ((!newText.trim() && !newMedia) || !token) return;
+    if ((!newText.trim() && !newMedia && !selectedSongUrl) || !token) return;
     setPosting(true);
     try {
       const formData = new FormData();
       formData.append('content', newText.trim() || (newMediaIsAudio ? '🎵' : newMediaIsVideo ? '🎬' : '📸'));
       formData.append('category', newCategory);
-      if (selectedSongUrl) {
-        // Music from library - already uploaded, use URL directly
+      // If we have a library song AND a photo, upload photo as media_url and add audio_url
+      if (selectedSongUrl && newMedia && !newMediaIsAudio) {
+        // Photo + Music combo
+        try {
+          const result = await uploadDirectToCloudinary(newMedia);
+          formData.append('media_url', result.url);
+          formData.append('media_type', 'image');
+        } catch (uploadErr) {
+          formData.append('image', newMedia);
+        }
+        formData.append('audio_url', selectedSongUrl);
+      } else if (selectedSongUrl) {
+        // Music only from library
         formData.append('media_url', selectedSongUrl);
-        formData.append('media_type', 'video'); // Cloudinary stores audio as 'video'
+        formData.append('media_type', 'video');
       } else if (newMedia) {
         try {
           const result = await uploadDirectToCloudinary(newMedia);
@@ -422,6 +446,20 @@ export default function Mural() {
               width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd',
               fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box', marginBottom: '0.5rem',
             }} />
+          {/* Selected music indicator */}
+          {selectedSongUrl && !newMediaIsAudio && (
+            <div style={{
+              background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 10,
+              padding: '0.6rem 1rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: 8,
+            }}>
+              <span style={{ fontSize: '1.3rem' }}>🎵</span>
+              <span style={{ color: '#fff', fontSize: '0.82rem', flex: 1 }}>{selectedSongName}</span>
+              <button type="button" onClick={() => { setSelectedSongUrl(null); setSelectedSongName(''); }} style={{
+                background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '50%', width: 24, height: 24,
+                color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>✕</button>
+            </div>
+          )}
           {newMediaPreview && (
             <div style={{ position: 'relative', marginBottom: '0.5rem', borderRadius: 10, overflow: 'hidden' }}>
               {newMediaIsAudio ? (
@@ -435,7 +473,7 @@ export default function Mural() {
               ) : (
                 <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 300, objectFit: 'cover', borderRadius: 10 }} />
               )}
-              <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaIsAudio(false); setSelectedSongUrl(null); setSelectedSongName(''); }} style={{
+              <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaIsAudio(false); setNewMediaIsVideo(false); }} style={{
                 position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.6)', border: 'none',
                 borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
               }}><X size={16} color="#fff" /></button>
@@ -467,9 +505,9 @@ export default function Mural() {
               background: 'rgba(155,89,182,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#9b59b6', fontWeight: 600,
             }}>🎵 Música</button>
             <div style={{ flex: 1 }} />
-            <button type="submit" disabled={posting || (!newText.trim() && !newMedia)} style={{
+            <button type="submit" disabled={posting || (!newText.trim() && !newMedia && !selectedSongUrl)} style={{
               padding: '0.5rem 1.2rem', borderRadius: 20, border: 'none',
-              background: (newText.trim() || newMedia) ? '#daa520' : '#ccc', color: '#fff',
+              background: (newText.trim() || newMedia || selectedSongUrl) ? '#daa520' : '#ccc', color: '#fff',
               fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
             }}><Send size={16} /> {posting ? 'Enviando...' : 'Publicar'}</button>
           </div>
@@ -606,12 +644,30 @@ export default function Mural() {
               {/* Media */}
               {post.media_url && (
                 <div style={{ width: '100%' }}>
-                  {(post.media_type === 'video' || isVideo(post.media_url)) ? (
+                  {isAudio(post.media_url) ? (
+                    <div style={{
+                      background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12,
+                      padding: '1rem', textAlign: 'center',
+                    }}>
+                      <span style={{ fontSize: '2rem' }}>🎵</span>
+                      <audio src={getMediaUrl(post.media_url)} controls style={{ width: '100%', marginTop: 8 }} />
+                    </div>
+                  ) : (post.media_type === 'video' || isVideo(post.media_url)) ? (
                     <video src={getMediaUrl(post.media_url)} controls playsInline preload="metadata"
                       style={{ width: '100%', maxHeight: 500, background: '#000' }} />
                   ) : (
                     <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', maxHeight: 500, objectFit: 'cover' }} />
                   )}
+                </div>
+              )}
+              {/* Audio attached to photo post */}
+              {post.audio_url && (
+                <div style={{
+                  background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12,
+                  padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', gap: 8,
+                }}>
+                  <span style={{ fontSize: '1.3rem' }}>🎵</span>
+                  <audio src={getMediaUrl(post.audio_url)} controls style={{ flex: 1, height: 32 }} />
                 </div>
               )}
 

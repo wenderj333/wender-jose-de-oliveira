@@ -309,6 +309,7 @@ async function migrate() {
   await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS media_type VARCHAR(10)`);
   await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS is_flagged BOOLEAN DEFAULT false`);
   await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS flag_reason TEXT`);
+  await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS audio_url TEXT`);
 
   // ============ GRUPOS (tipo Facebook) ============
   await pool.query(`

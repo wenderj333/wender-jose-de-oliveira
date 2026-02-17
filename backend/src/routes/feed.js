@@ -115,6 +115,7 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
 
     let mediaUrl = req.body.media_url || null;
     let mediaType = req.body.media_type || null;
+    let audioUrl = req.body.audio_url || null;
 
     // Se veio arquivo via multer (upload pequeno pelo backend)
     if (req.file) {
@@ -132,9 +133,9 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
 
     // Insert and get the created post
     const result = await db.prepare(
-      `INSERT INTO feed_posts (author_id, content, category, media_url, media_type, verse_reference, visibility)
-       VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *`
-    ).get(req.user.id, content, cat, mediaUrl, mediaType, verse_reference || null, vis);
+      `INSERT INTO feed_posts (author_id, content, category, media_url, media_type, verse_reference, visibility, audio_url)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
+    ).get(req.user.id, content, cat, mediaUrl, mediaType, verse_reference || null, vis, audioUrl);
 
     res.status(201).json({ post: result });
   } catch (err) {
