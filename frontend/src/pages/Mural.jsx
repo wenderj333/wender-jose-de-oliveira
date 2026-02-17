@@ -174,6 +174,21 @@ export default function Mural() {
     finally { setSendingComment(prev => ({ ...prev, [postId]: false })); }
   }
 
+  async function handleDeletePost(postId) {
+    if (!confirm('Tem certeza que deseja excluir esta publicação?')) return;
+    try {
+      const res = await fetch(`${API}/feed/${postId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setPosts(prev => prev.filter(p => p.id !== postId));
+      } else {
+        alert('Erro ao excluir publicação');
+      }
+    } catch (err) { console.error(err); alert('Erro ao excluir'); }
+  }
+
   async function handleDeleteComment(commentId, postId) {
     try {
       await fetch(`${API}/feed/comments/${commentId}`, {
@@ -706,6 +721,16 @@ export default function Mural() {
                 }}>
                   <Share2 size={16} /> <span>Compartilhar</span>
                 </button>
+
+                {/* Delete own post */}
+                {user && (post.author_id === user?.id || user?.role === 'admin') && (
+                  <button onClick={() => handleDeletePost(post.id)} style={{
+                    background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3,
+                    color: '#e74c3c', fontSize: '0.78rem',
+                  }}>
+                    <Trash2 size={14} /> Excluir
+                  </button>
+                )}
 
                 {/* Report */}
                 {user && post.author_id !== user?.id && (
