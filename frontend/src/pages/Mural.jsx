@@ -45,8 +45,12 @@ export default function Mural() {
   const [newMedia, setNewMedia] = useState(null);
   const [newMediaPreview, setNewMediaPreview] = useState(null);
   const [newMediaIsVideo, setNewMediaIsVideo] = useState(false);
+  const [newMediaIsAudio, setNewMediaIsAudio] = useState(false);
   const [posting, setPosting] = useState(false);
   const fileRef = useRef(null);
+  const photoRef = useRef(null);
+  const videoRef = useRef(null);
+  const audioRef = useRef(null);
 
   // Likes & comments state (from DB)
   const [likedPosts, setLikedPosts] = useState({});
@@ -183,8 +187,12 @@ export default function Mural() {
     if (!file) return;
     setNewMedia(file);
     const isVid = file.type.startsWith('video/');
+    const isAud = file.type.startsWith('audio/');
     setNewMediaIsVideo(isVid);
-    if (isVid) {
+    setNewMediaIsAudio(isAud);
+    if (isAud) {
+      setNewMediaPreview(URL.createObjectURL(file));
+    } else if (isVid) {
       setNewMediaPreview(URL.createObjectURL(file));
     } else {
       const reader = new FileReader();
@@ -195,7 +203,8 @@ export default function Mural() {
 
   async function uploadDirectToCloudinary(file) {
     const isVid = file.type.startsWith('video/');
-    const resourceType = isVid ? 'video' : 'image';
+    const isAud = file.type.startsWith('audio/');
+    const resourceType = (isVid || isAud) ? 'video' : 'image'; // Cloudinary uses 'video' for audio too
     try {
       const sigRes = await fetch(`${API}/feed/cloudinary-signature`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -226,11 +235,11 @@ export default function Mural() {
 
   async function handlePost(e) {
     e.preventDefault();
-    if (!newText.trim() || !token) return;
+    if ((!newText.trim() && !newMedia) || !token) return;
     setPosting(true);
     try {
       const formData = new FormData();
-      formData.append('content', newText);
+      formData.append('content', newText.trim() || (newMediaIsAudio ? '🎵' : newMediaIsVideo ? '🎬' : '📸'));
       formData.append('category', newCategory);
       if (newMedia) {
         try {
@@ -255,7 +264,7 @@ export default function Mural() {
         data.post.like_count = 0;
         data.post.comment_count = 0;
         setPosts(prev => [data.post, ...prev]);
-        setNewText(''); setNewMedia(null); setNewMediaPreview(null); setNewMediaIsVideo(false); setShowForm(false);
+        setNewText(''); setNewMedia(null); setNewMediaPreview(null); setNewMediaIsVideo(false); setNewMediaIsAudio(false); setShowForm(false);
       }
     } catch (err) {
       console.error(err);
@@ -386,12 +395,18 @@ export default function Mural() {
             }} />
           {newMediaPreview && (
             <div style={{ position: 'relative', marginBottom: '0.5rem', borderRadius: 10, overflow: 'hidden' }}>
-              {newMediaIsVideo ? (
+              {newMediaIsAudio ? (
+                <div style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 10, padding: '1rem', textAlign: 'center' }}>
+                  <span style={{ fontSize: '2rem' }}>🎵</span>
+                  <p style={{ color: '#fff', fontSize: '0.85rem', margin: '0.5rem 0' }}>{newMedia?.name || 'Música'}</p>
+                  <audio src={newMediaPreview} controls style={{ width: '100%' }} />
+                </div>
+              ) : newMediaIsVideo ? (
                 <video src={newMediaPreview} controls style={{ width: '100%', maxHeight: 300, borderRadius: 10 }} />
               ) : (
                 <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 300, objectFit: 'cover', borderRadius: 10 }} />
               )}
-              <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); }} style={{
+              <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaIsAudio(false); }} style={{
                 position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.6)', border: 'none',
                 borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
               }}><X size={16} color="#fff" /></button>
@@ -409,22 +424,29 @@ export default function Mural() {
               </div>
             </div>
           )}
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <button type="button" onClick={() => fileRef.current?.click()} style={{
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+            <button type="button" onClick={() => photoRef.current?.click()} style={{
               padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #ddd',
               background: '#f9f9f9', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#666',
-            }}><Image size={16} /> {t('feedPost.photo', 'Foto')}</button>
-            <button type="button" onClick={() => fileRef.current?.click()} style={{
+            }}><Image size={16} /> Foto</button>
+            <button type="button" onClick={() => videoRef.current?.click()} style={{
               padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #ddd',
               background: '#f9f9f9', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#666',
             }}><Video size={16} /> Vídeo</button>
+            <button type="button" onClick={() => audioRef.current?.click()} style={{
+              padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #9b59b6',
+              background: 'rgba(155,89,182,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#9b59b6', fontWeight: 600,
+            }}>🎵 Música</button>
             <div style={{ flex: 1 }} />
-            <button type="submit" disabled={posting || !newText.trim()} style={{
+            <button type="submit" disabled={posting || (!newText.trim() && !newMedia)} style={{
               padding: '0.5rem 1.2rem', borderRadius: 20, border: 'none',
-              background: newText.trim() ? '#daa520' : '#ccc', color: '#fff',
+              background: (newText.trim() || newMedia) ? '#daa520' : '#ccc', color: '#fff',
               fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
-            }}><Send size={16} /> {posting ? t('common.publishing', 'Enviando...') : t('common.publish', 'Publicar')}</button>
+            }}><Send size={16} /> {posting ? 'Enviando...' : 'Publicar'}</button>
           </div>
+          <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
+          <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={handleMediaSelect} />
+          <input ref={audioRef} type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg,audio/m4a,audio/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
           <input ref={fileRef} type="file" accept="image/*,video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={handleMediaSelect} />
         </form>
       )}
