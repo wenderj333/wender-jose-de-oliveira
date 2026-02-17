@@ -157,7 +157,7 @@ export default function MusicLibrary() {
   const allYoutube = Object.values(PLAYLISTS).flat();
   const displaySongs = showFavs
     ? allYoutube.filter(s => favorites.includes(s.id))
-    : activeCategory === 'uploaded' ? [] : (PLAYLISTS[activeCategory] || []);
+    : activeCategory === 'uploaded' ? uploadedSongs : (PLAYLISTS[activeCategory] || []);
 
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '0 0 2rem' }}>
