@@ -445,6 +445,8 @@ export default function Mural() {
           background: '#fff', borderRadius: 16, padding: '1rem', marginBottom: '1rem',
           border: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
         }}>
+          {/* Step 1: Category */}
+          <p style={{ fontSize: '0.75rem', color: '#999', margin: '0 0 4px', fontWeight: 600 }}>1️⃣ Escolha o tipo da publicação:</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '0.75rem' }}>
             {CATEGORIES.map(cat => (
               <button type="button" key={cat.value} onClick={() => setNewCategory(cat.value)} style={{
@@ -455,6 +457,8 @@ export default function Mural() {
               }}>{cat.label}</button>
             ))}
           </div>
+          {/* Step 2: Text */}
+          <p style={{ fontSize: '0.75rem', color: '#999', margin: '0 0 4px', fontWeight: 600 }}>2️⃣ Escreva algo (opcional se tiver foto ou música):</p>
           <textarea value={newText} onChange={e => setNewText(e.target.value)}
             placeholder={t('common.shareCommunity', 'Compartilhe algo com a comunidade...')}
             rows={3} style={{
@@ -506,6 +510,8 @@ export default function Mural() {
               </div>
             </div>
           )}
+          {/* Step 3: Attach media */}
+          <p style={{ fontSize: '0.75rem', color: '#999', margin: '0.5rem 0 4px', fontWeight: 600 }}>3️⃣ Anexe foto, vídeo ou música da biblioteca:</p>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
             <button type="button" onClick={() => photoRef.current?.click()} style={{
               padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #ddd',
@@ -517,8 +523,8 @@ export default function Mural() {
             }}><Video size={16} /> Vídeo</button>
             <button type="button" onClick={openMusicPicker} style={{
               padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #9b59b6',
-              background: 'rgba(155,89,182,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#9b59b6', fontWeight: 600,
-            }}>🎵 Música</button>
+              background: selectedSongUrl ? 'rgba(155,89,182,0.2)' : 'rgba(155,89,182,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#9b59b6', fontWeight: 600,
+            }}>🎵 {selectedSongUrl ? '✅ Música' : 'Adicionar Música'}</button>
             <div style={{ flex: 1 }} />
             <button type="submit" disabled={posting || (!newText.trim() && !newMedia && !selectedSongUrl)} style={{
               padding: '0.5rem 1.2rem', borderRadius: 20, border: 'none',
@@ -532,12 +538,16 @@ export default function Mural() {
               background: '#fff', border: '2px solid #9b59b6', borderRadius: 14, padding: '1rem',
               marginTop: '0.5rem', maxHeight: 250, overflowY: 'auto',
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                 <h4 style={{ margin: 0, fontSize: '0.95rem', color: '#9b59b6' }}>🎵 Escolha uma música</h4>
                 <button type="button" onClick={() => setShowMusicPicker(false)} style={{
                   background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: '#999',
                 }}>✕</button>
               </div>
+              <p style={{ fontSize: '0.72rem', color: '#888', margin: '0 0 0.5rem', lineHeight: 1.4 }}>
+                Estas são as músicas que já foram enviadas na página <strong>Música</strong>. Escolha uma para adicionar à sua publicação! 
+                Você também pode enviar uma foto junto.
+              </p>
               {librarySongs.length === 0 ? (
                 <p style={{ color: '#999', fontSize: '0.85rem', textAlign: 'center' }}>Carregando músicas...</p>
               ) : librarySongs.map(song => (
