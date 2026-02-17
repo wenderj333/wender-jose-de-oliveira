@@ -1,66 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { Flame, ChevronDown, ChevronUp, User } from 'lucide-react';
+import { Flame, ChevronDown, ChevronUp } from 'lucide-react';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
-
-// Fire particle animation
-function FireParticles({ active }) {
-  const canvasRef = useRef(null);
-  const animRef = useRef(null);
-  const particlesRef = useRef([]);
-
-  useEffect(() => {
-    if (!active || !canvasRef.current) return;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-
-    // Spawn 30 fire particles
-    for (let i = 0; i < 30; i++) {
-      particlesRef.current.push({
-        x: canvas.width / 2 + (Math.random() - 0.5) * 100,
-        y: canvas.height,
-        vx: (Math.random() - 0.5) * 2,
-        vy: -(Math.random() * 4 + 2),
-        size: Math.random() * 8 + 4,
-        life: 1,
-        decay: Math.random() * 0.015 + 0.005,
-        color: Math.random() > 0.5 ? '#ff6600' : Math.random() > 0.5 ? '#ffcc00' : '#ff3300',
-      });
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particlesRef.current = particlesRef.current.filter(p => p.life > 0);
-      particlesRef.current.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life -= p.decay;
-        p.size *= 0.99;
-        ctx.globalAlpha = p.life;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = p.color;
-        ctx.fill();
-      });
-      ctx.globalAlpha = 1;
-      ctx.shadowBlur = 0;
-      if (particlesRef.current.length > 0) {
-        animRef.current = requestAnimationFrame(animate);
-      }
-    }
-    animate();
-    return () => { if (animRef.current) cancelAnimationFrame(animRef.current); };
-  }, [active]);
-
-  if (!active) return null;
-  return <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 10 }} />;
-}
 
 const BENEFITS = [
   {
@@ -97,28 +40,20 @@ const BENEFITS = [
   },
 ];
 
-function timeAgo(d) {
-  if (!d) return '';
-  const diff = Date.now() - new Date(d).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'Agora';
-  if (mins < 60) return `${mins}min`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h`;
-  return `${Math.floor(hrs / 24)}d`;
-}
-
 export default function Consecration() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
-  const [stats, setStats] = useState({ totalConsecrations: 0, todayFasting: 0, recent: [] });
+  const [stats, setStats] = useState({ totalConsecrations: 0, activeFasting: 0 });
+  const [isActive, setIsActive] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [showFire, setShowFire] = useState(false);
-  const [showBenefits, setShowBenefits] = useState(true); // Começa aberto
-  const [consecrating, setConsecrating] = useState(false);
+  const [toggling, setToggling] = useState(false);
+  const [showBenefits, setShowBenefits] = useState(true);
   const [expandedSection, setExpandedSection] = useState(null);
 
-  useEffect(() => { fetchStats(); }, []);
+  useEffect(() => {
+    fetchStats();
+    if (token) fetchStatus();
+  }, [token]);
 
   async function fetchStats() {
     try {
@@ -131,176 +66,201 @@ export default function Consecration() {
     finally { setLoading(false); }
   }
 
-  async function handleConsecrate() {
-    if (!user) { alert(t('consecration.loginRequired')); return; }
-    if (consecrating) return;
-    setConsecrating(true);
-    setShowFire(true);
+  async function fetchStatus() {
     try {
-      await fetch(`${API}/consecration`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ purpose: 'Consagração e jejum' }),
+      const res = await fetch(`${API}/consecration/status`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      fetchStats();
+      if (res.ok) {
+        const data = await res.json();
+        setIsActive(data.active);
+      }
     } catch (err) { console.error(err); }
-    finally {
-      setTimeout(() => { setConsecrating(false); setShowFire(false); }, 3000);
-    }
   }
 
-  const getAvatar = (url) => url ? (url.startsWith('http') ? url : `${import.meta.env.VITE_API_URL || ''}${url}`) : null;
+  async function handleToggle() {
+    if (!user) { alert(t('consecration.loginRequired')); return; }
+    if (toggling) return;
+    setToggling(true);
+    try {
+      const res = await fetch(`${API}/consecration/toggle`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setIsActive(data.active);
+        fetchStats();
+      }
+    } catch (err) { console.error(err); }
+    finally { setTimeout(() => setToggling(false), 500); }
+  }
+
+  // Generate fire bubbles based on active fasting count
+  const bubbleCount = Math.min(Math.max(stats.activeFasting * 3, 6), 30);
 
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem', minHeight: '80vh' }}>
-      {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.6rem', color: '#1a0a3e', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <Flame size={28} color="#ff6600" /> {t('consecration.title')}
-        </h1>
-        <p style={{ color: '#666', fontSize: '0.85rem', margin: '0.5rem 0 0' }}>
-          {t('consecration.subtitle')}
-        </p>
-      </div>
+    <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem', minHeight: '80vh', position: 'relative', overflow: 'hidden' }}>
 
-      {/* Stats */}
-      <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginBottom: '1.5rem' }}>
-        <div style={{ background: 'linear-gradient(135deg, #ff6600, #ff3300)', borderRadius: 16, padding: '1rem 1.5rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 160 }}>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800 }}>🔥 {stats.totalConsecrations}</div>
-          <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>{t('consecration.totalConsecrations')}</div>
-        </div>
-        <div style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', borderRadius: 16, padding: '1rem 1.5rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 160 }}>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800 }}>🙏 {stats.todayFasting}</div>
-          <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>{t('consecration.fastingToday')}</div>
-        </div>
-      </div>
-
-      {/* Big Consecrate Button */}
-      <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
-        <FireParticles active={showFire} />
-        <button onClick={handleConsecrate} disabled={consecrating} style={{
-          width: 180, height: 180, borderRadius: '50%', border: 'none', cursor: 'pointer',
-          background: consecrating
-            ? 'radial-gradient(circle, #ff3300, #ff6600, #ffcc00)'
-            : 'radial-gradient(circle, #1a0a3e, #4a1a8e)',
-          color: '#fff', fontSize: '1rem', fontWeight: 700,
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8,
-          boxShadow: consecrating
-            ? '0 0 40px rgba(255, 102, 0, 0.6), 0 0 80px rgba(255, 51, 0, 0.3)'
-            : '0 4px 20px rgba(26, 10, 62, 0.3)',
-          transition: 'all 0.5s ease',
-          animation: consecrating ? 'pulse 0.5s ease-in-out infinite' : 'none',
-          zIndex: 5,
-        }}>
-          <Flame size={40} />
-          {consecrating ? `🔥 ${t('consecration.consecrating')}` : t('consecration.imConsecrating')}
-        </button>
+      {/* Animated fire bubbles background */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none', zIndex: 0 }}>
+        {[...Array(bubbleCount)].map((_, i) => (
+          <span key={i} style={{
+            position: 'absolute',
+            bottom: '-20px',
+            left: `${5 + (i * 97 / bubbleCount) % 90}%`,
+            width: `${6 + (i % 4) * 4}px`,
+            height: `${6 + (i % 4) * 4}px`,
+            borderRadius: '50%',
+            background: i % 3 === 0 ? 'radial-gradient(circle, #ff6600, #ff330088)' 
+              : i % 3 === 1 ? 'radial-gradient(circle, #ffcc00, #daa52088)'
+              : 'radial-gradient(circle, #ff3300, #ff660088)',
+            opacity: 0.6,
+            animation: `fireBubbleRise ${4 + (i % 5) * 2}s ease-in-out infinite`,
+            animationDelay: `${(i * 0.5) % 8}s`,
+            boxShadow: `0 0 ${4 + (i % 3) * 3}px ${i % 3 === 1 ? '#ffcc00' : '#ff6600'}`,
+          }} />
+        ))}
       </div>
 
       <style>{`
-        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes fireBubbleRise {
+          0% { transform: translateY(0) scale(1); opacity: 0; }
+          10% { opacity: 0.7; }
+          50% { opacity: 0.5; transform: translateY(-40vh) scale(0.8); }
+          100% { transform: translateY(-90vh) scale(0.3); opacity: 0; }
+        }
+        @keyframes pulseBtn { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
       `}</style>
 
-      {/* Benefits button */}
-      <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-        <button onClick={() => setShowBenefits(!showBenefits)} style={{
-          padding: '0.7rem 1.5rem', borderRadius: 25, border: '2px solid #daa520',
-          background: showBenefits ? '#daa520' : 'transparent',
-          color: showBenefits ? '#fff' : '#daa520',
-          fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem',
-          display: 'inline-flex', alignItems: 'center', gap: 6,
+      {/* Content (above bubbles) */}
+      <div style={{ position: 'relative', zIndex: 1 }}>
+
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
+          <h1 style={{ fontSize: '1.4rem', color: '#1a0a3e', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+            <Flame size={24} color="#ff6600" /> {t('consecration.title')}
+          </h1>
+          <p style={{ color: '#666', fontSize: '0.8rem', margin: '0.4rem 0 0' }}>
+            {t('consecration.subtitle')}
+          </p>
+        </div>
+
+        {/* Texto explicativo sobre o jejum */}
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(26,10,62,0.04), rgba(218,165,32,0.08))',
+          borderRadius: 16, padding: '1.2rem', marginBottom: '1.5rem',
+          border: '1px solid rgba(218,165,32,0.2)',
         }}>
-          📖 Benefícios do Jejum {showBenefits ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
-      </div>
+          <h3 style={{ fontSize: '1rem', color: '#1a0a3e', margin: '0 0 0.5rem', textAlign: 'center' }}>
+            🔥 O Poder do Jejum
+          </h3>
+          <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
+            O jejum é uma das armas espirituais mais poderosas que Deus nos deu. Não é apenas abster-se de comida 
+            — é render-se inteiramente a Deus, buscando Sua presença e Sua vontade acima de tudo.
+          </p>
+          <p style={{ fontSize: '0.82rem', color: '#555', fontStyle: 'italic', margin: '0 0 0.4rem', textAlign: 'center' }}>
+            📖 "Quando jejuares, unge a tua cabeça e lava o teu rosto, para não pareceres aos homens que jejuas... 
+            e teu Pai, que vê em secreto, te recompensará." — Mateus 6:17-18
+          </p>
+          <p style={{ fontSize: '0.82rem', color: '#555', fontStyle: 'italic', margin: 0, textAlign: 'center' }}>
+            📖 "Convertei-vos a mim de todo o vosso coração; e isso com jejuns, com choro e com pranto." — Joel 2:12
+          </p>
+        </div>
 
-      {/* Benefits accordion */}
-      {showBenefits && (
-        <div style={{ marginBottom: '2rem' }}>
-          {BENEFITS.map((section, si) => (
-            <div key={si} style={{ marginBottom: 8 }}>
-              <button onClick={() => setExpandedSection(expandedSection === si ? null : si)} style={{
-                width: '100%', padding: '0.75rem 1rem', borderRadius: 12, border: '1px solid #eee',
-                background: expandedSection === si ? '#1a0a3e' : '#fff',
-                color: expandedSection === si ? '#fff' : '#1a0a3e',
-                fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', textAlign: 'left',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              }}>
-                {section.title}
-                {expandedSection === si ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-              </button>
-              {expandedSection === si && (
-                <div style={{ padding: '0.5rem 1rem', background: '#fafafa', borderRadius: '0 0 12px 12px' }}>
-                  {section.items.map((item, ii) => (
-                    <div key={ii} style={{ padding: '0.6rem 0', borderBottom: ii < section.items.length - 1 ? '1px solid #eee' : 'none' }}>
-                      <div style={{ fontWeight: 600, fontSize: '0.85rem', marginBottom: 4 }}>
-                        {item.icon} {item.text}
-                      </div>
-                      <div style={{ fontSize: '0.8rem', color: '#666', fontStyle: 'italic' }}>
-                        📖 {item.verse}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+        {/* Toggle Button - smaller */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.25rem' }}>
+          <button onClick={handleToggle} disabled={toggling} style={{
+            width: 140, height: 140, borderRadius: '50%', border: 'none', cursor: 'pointer',
+            background: isActive
+              ? 'radial-gradient(circle, #ff3300, #ff6600, #ffcc00)'
+              : 'radial-gradient(circle, #1a0a3e, #4a1a8e)',
+            color: '#fff', fontSize: '0.85rem', fontWeight: 700,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6,
+            boxShadow: isActive
+              ? '0 0 30px rgba(255, 102, 0, 0.6), 0 0 60px rgba(255, 51, 0, 0.3)'
+              : '0 4px 15px rgba(26, 10, 62, 0.3)',
+            transition: 'all 0.5s ease',
+            animation: isActive ? 'pulseBtn 2s ease-in-out infinite' : 'none',
+          }}>
+            <Flame size={32} />
+            {isActive ? '🔥 Consagrando' : 'Consagrar'}
+          </button>
+        </div>
+        <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#888', marginBottom: '1.5rem' }}>
+          {isActive ? 'Toque para desativar' : 'Toque para ativar sua consagração'}
+        </p>
 
-          {/* Conclusão */}
-          <div style={{ background: 'linear-gradient(135deg, #1a0a3e, #4a1a8e)', borderRadius: 16, padding: '1.2rem', color: '#fff', marginTop: 12, textAlign: 'center' }}>
-            <p style={{ fontStyle: 'italic', fontSize: '0.9rem', margin: '0 0 8px' }}>
-              "Nem só de pão viverá o homem, mas de toda Palavra que sai da boca de Deus." — Mateus 4:4
-            </p>
-            <p style={{ fontSize: '0.8rem', opacity: 0.8, margin: 0 }}>
-              🔑 O jejum: Não é dieta. Não é sacrifício vazio. É obediência, alinhamento e dependência de Deus.
-            </p>
+        {/* Stats - smaller, below text */}
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: '1.5rem' }}>
+          <div style={{ background: 'linear-gradient(135deg, #ff6600, #ff3300)', borderRadius: 14, padding: '0.7rem 1rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 120 }}>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800 }}>🔥 {stats.totalConsecrations}</div>
+            <div style={{ fontSize: '0.65rem', opacity: 0.9 }}>Total</div>
+          </div>
+          <div style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', borderRadius: 14, padding: '0.7rem 1rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 120 }}>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800 }}>🙏 {stats.activeFasting}</div>
+            <div style={{ fontSize: '0.65rem', opacity: 0.9 }}>Jejuando agora</div>
           </div>
         </div>
-      )}
 
-      {/* Recent consecrations — fire balls */}
-      <h3 style={{ color: '#1a0a3e', fontSize: '1rem', marginBottom: '0.75rem' }}>
-        🔥 Consagrando agora
-      </h3>
-      {loading ? (
-        <div style={{ textAlign: 'center', color: '#999', padding: '1rem' }}>Carregando...</div>
-      ) : stats.recent?.length === 0 ? (
-        <div style={{ textAlign: 'center', color: '#999', padding: '2rem' }}>
-          {t('consecration.noOneYet')} 🔥
+        {/* Benefits button */}
+        <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
+          <button onClick={() => setShowBenefits(!showBenefits)} style={{
+            padding: '0.6rem 1.2rem', borderRadius: 25, border: '2px solid #daa520',
+            background: showBenefits ? '#daa520' : 'transparent',
+            color: showBenefits ? '#fff' : '#daa520',
+            fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem',
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+          }}>
+            📖 Benefícios do Jejum {showBenefits ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
         </div>
-      ) : (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'center' }}>
-          {stats.recent.map((c, i) => (
-            <div key={c.id || i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-              <div style={{
-                width: 56, height: 56, borderRadius: '50%', overflow: 'hidden',
-                background: 'radial-gradient(circle, #ff6600, #ff3300)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 0 15px rgba(255, 102, 0, 0.5)',
-                animation: 'firePulse 1.5s ease-in-out infinite',
-                animationDelay: `${i * 0.2}s`,
-              }}>
-                {c.avatar_url ? (
-                  <img src={getAvatar(c.avatar_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <User size={24} color="#fff" />
+
+        {/* Benefits accordion */}
+        {showBenefits && (
+          <div style={{ marginBottom: '1.5rem' }}>
+            {BENEFITS.map((section, si) => (
+              <div key={si} style={{ marginBottom: 6 }}>
+                <button onClick={() => setExpandedSection(expandedSection === si ? null : si)} style={{
+                  width: '100%', padding: '0.65rem 0.85rem', borderRadius: 10, border: '1px solid #eee',
+                  background: expandedSection === si ? '#1a0a3e' : '#fff',
+                  color: expandedSection === si ? '#fff' : '#1a0a3e',
+                  fontWeight: 700, fontSize: '0.82rem', cursor: 'pointer', textAlign: 'left',
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                }}>
+                  {section.title}
+                  {expandedSection === si ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </button>
+                {expandedSection === si && (
+                  <div style={{ padding: '0.4rem 0.85rem', background: '#fafafa', borderRadius: '0 0 10px 10px' }}>
+                    {section.items.map((item, ii) => (
+                      <div key={ii} style={{ padding: '0.5rem 0', borderBottom: ii < section.items.length - 1 ? '1px solid #eee' : 'none' }}>
+                        <div style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: 3 }}>
+                          {item.icon} {item.text}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: '#666', fontStyle: 'italic' }}>
+                          📖 {item.verse}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
-              <span style={{ fontSize: '0.65rem', color: '#666', textAlign: 'center', maxWidth: 70, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {c.full_name?.split(' ')[0]}
-              </span>
-              <span style={{ fontSize: '0.55rem', color: '#999' }}>{timeAgo(c.created_at)}</span>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
 
-      <style>{`
-        @keyframes firePulse {
-          0%, 100% { box-shadow: 0 0 10px rgba(255,102,0,0.4); transform: scale(1); }
-          50% { box-shadow: 0 0 25px rgba(255,51,0,0.7), 0 0 50px rgba(255,204,0,0.3); transform: scale(1.08); }
-        }
-      `}</style>
+            {/* Conclusão */}
+            <div style={{ background: 'linear-gradient(135deg, #1a0a3e, #4a1a8e)', borderRadius: 14, padding: '1rem', color: '#fff', marginTop: 10, textAlign: 'center' }}>
+              <p style={{ fontStyle: 'italic', fontSize: '0.85rem', margin: '0 0 6px' }}>
+                "Nem só de pão viverá o homem, mas de toda Palavra que sai da boca de Deus." — Mateus 4:4
+              </p>
+              <p style={{ fontSize: '0.75rem', opacity: 0.8, margin: 0 }}>
+                🔑 O jejum: Não é dieta. Não é sacrifício vazio. É obediência, alinhamento e dependência de Deus.
+              </p>
+            </div>
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }
