@@ -147,6 +147,28 @@ router.post('/phone', async (req, res) => {
   }
 });
 
+// POST /api/auth/promote — promote user to pastor/admin with secret key
+router.post('/promote', authenticate, async (req, res) => {
+  try {
+    const { role, secretKey } = req.body;
+    const PROMOTE_SECRET = process.env.PROMOTE_SECRET || 'sigocomfe-pastor-2026';
+    if (secretKey !== PROMOTE_SECRET) {
+      return res.status(403).json({ error: 'Chave secreta inválida' });
+    }
+    if (!['pastor', 'admin'].includes(role)) {
+      return res.status(400).json({ error: 'Role inválido. Use: pastor ou admin' });
+    }
+    const db = require('../db/connection');
+    await db.prepare('UPDATE users SET role = ? WHERE id = ?').run(role, req.user.id);
+    const updated = await db.prepare('SELECT id, email, full_name, role, avatar_url FROM users WHERE id = ?').get(req.user.id);
+    const token = generateToken(updated);
+    res.json({ user: updated, token, message: `Promovido para ${role} com sucesso!` });
+  } catch (err) {
+    console.error('Erro ao promover:', err);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
 // GET /api/auth/me
 router.get('/me', authenticate, (req, res) => {
   res.json({ user: req.user });
