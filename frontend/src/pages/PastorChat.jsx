@@ -46,13 +46,10 @@ const styles = {
   input: { padding: '0.7rem', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem' },
   select: { padding: '0.7rem', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', background: '#fff' },
   submitBtn: { padding: '0.8rem', borderRadius: 25, border: 'none', background: '#8e44ad', color: '#fff', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' },
-  // Waiting
   waitingBox: { textAlign: 'center', padding: '3rem 1rem' },
   pulse: { width: 80, height: 80, borderRadius: '50%', background: '#8e44ad', margin: '0 auto 1.5rem', animation: 'pulse 2s infinite' },
-  // Rooms list
   roomCard: { background: '#fff', borderRadius: 12, padding: '1rem', marginBottom: 10, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
   joinBtn: { padding: '0.5rem 1rem', borderRadius: 20, border: 'none', background: '#27ae60', color: '#fff', fontWeight: 600, cursor: 'pointer' },
-  // Chat
   chatContainer: { display: 'flex', flexDirection: 'column', height: 'calc(100vh - 200px)', maxHeight: 600 },
   chatHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.7rem 1rem', background: '#8e44ad', color: '#fff', borderRadius: '12px 12px 0 0' },
   messagesArea: { flex: 1, overflowY: 'auto', padding: '1rem', background: '#f5f0ff', display: 'flex', flexDirection: 'column', gap: 8 },
@@ -77,7 +74,7 @@ export default function PastorChat() {
   const { t } = useTranslation();
   const { send, lastEvent } = useWebSocket();
   const [isPastor, setIsPastor] = useState(false);
-  const [view, setView] = useState('form'); // form | waiting | chat | ended
+  const [view, setView] = useState('intro'); // intro | form | waiting | chat | ended
   const [name, setName] = useState('');
   const [helpType, setHelpType] = useState('need_prayer');
   const [language, setLanguage] = useState('pt');
@@ -117,7 +114,6 @@ export default function PastorChat() {
 
   useEffect(() => { scrollToBottom(); }, [messages]);
 
-  // Handle WS events
   useEffect(() => {
     if (!lastEvent || !roomId) return;
     if (lastEvent.roomId !== roomId) return;
@@ -166,7 +162,6 @@ export default function PastorChat() {
     return () => clearInterval(interval);
   }, [isPastor]);
 
-  // Fetch churches for selection
   useEffect(() => {
     fetch(`${API}/api/chat/churches-online`)
       .then(r => r.json())
@@ -213,13 +208,6 @@ export default function PastorChat() {
   const handleSend = () => {
     if (!inputText.trim()) return;
     const myLang = role === 'requester' ? language : pastorLang;
-    const targetLang = role === 'requester' ? otherLang : otherLang;
-    // Determine target language
-    let tLang = myLang; // fallback
-    if (role === 'requester') {
-      // We don't know pastor's lang from requester side until they join
-      // The server will broadcast and we show what we get
-    }
     send({
       type: 'chat_message',
       roomId,
@@ -229,7 +217,6 @@ export default function PastorChat() {
       sourceLang: myLang,
       targetLang: otherLang || myLang,
     });
-    // Add own message immediately
     setMessages((prev) => [...prev, {
       role,
       name: role === 'requester' ? (name || 'Anônimo') : pastorName,
@@ -254,14 +241,69 @@ export default function PastorChat() {
     } catch (e) { console.error(e); }
   };
 
-  // When a pastor joins our waiting room via WS
   useEffect(() => {
     if (lastEvent?.type === 'chat_user_joined' && lastEvent.roomId === roomId && lastEvent.role === 'pastor') {
       setOtherLang(lastEvent.language || 'pt');
     }
   }, [lastEvent]);
 
-  const [showChatForm, setShowChatForm] = useState(false);
+  // INTRO VIEW - biblical message + start button
+  if (view === 'intro') {
+    return (
+      <div style={styles.container}>
+        <div style={styles.header}>
+          <MessageCircle size={40} color="#8e44ad" />
+          <h1 style={styles.title}>{t('pastorChat.title')}</h1>
+        </div>
+
+        {/* Biblical message card */}
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.97), rgba(245,240,255,0.95))',
+          border: '2px solid transparent',
+          borderImage: 'linear-gradient(135deg, #8e44ad, #daa520) 1',
+          borderRadius: 16,
+          padding: '1.5rem',
+          marginBottom: '2rem',
+          textAlign: 'center',
+          boxShadow: '0 4px 20px rgba(142,68,173,0.12)',
+        }}>
+          <h3 style={{ fontSize: '1.1rem', color: '#6a1b9a', margin: '0 0 0.8rem' }}>
+            🕊️ Um Pastor Está Pronto Para Ouvir Você
+          </h3>
+          <p style={{ fontSize: '0.9rem', color: '#444', lineHeight: 1.7, margin: '0 0 0.8rem' }}>
+            Às vezes a vida nos traz fardos pesados demais para carregar sozinhos. 
+            Aqui você pode conversar de forma confidencial com um pastor que vai te ouvir, 
+            aconselhar com sabedoria bíblica e orar por você.
+          </p>
+          <p style={{ fontSize: '0.88rem', color: '#6a1b9a', fontStyle: 'italic', margin: '0 0 0.8rem', fontWeight: 500 }}>
+            "Vinde a mim, todos os que estais cansados e oprimidos, e eu vos aliviarei." — Mateus 11:28
+          </p>
+          <p style={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
+            💜 Conversa confidencial e segura<br />
+            🌍 Tradução automática em 15 idiomas<br />
+            🙏 Pastores voluntários de todo o mundo
+          </p>
+          <p style={{ fontSize: '0.82rem', color: '#8e44ad', fontStyle: 'italic', margin: 0, fontWeight: 500 }}>
+            "Onde não há conselho, os projetos saem vãos; mas com a multidão de conselheiros se confirmarão." — Provérbios 15:22
+          </p>
+        </div>
+
+        <div style={{ textAlign: 'center' }}>
+          <button onClick={() => setView('form')} style={{
+            padding: '0.9rem 2.5rem', borderRadius: 30, border: 'none',
+            background: 'linear-gradient(135deg, #8e44ad, #6a1b9a)',
+            color: '#fff', fontWeight: 700, fontSize: '1.1rem', cursor: 'pointer',
+            boxShadow: '0 4px 15px rgba(142,68,173,0.4)',
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+          }}>
+            <MessageCircle size={20} /> Iniciar Conversa
+          </button>
+        </div>
+
+        <style>{`@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.15); opacity: 1; } }`}</style>
+      </div>
+    );
+  }
 
   // FORM VIEW
   if (view === 'form') {
@@ -273,42 +315,6 @@ export default function PastorChat() {
           <p style={styles.subtitle}>{t('pastorChat.subtitle')}</p>
         </div>
 
-        {/* Mensagem explicativa bíblica */}
-        <div style={{
-          background: 'linear-gradient(135deg, rgba(142,68,173,0.08), rgba(218,165,32,0.10))',
-          borderRadius: 16, padding: '1.2rem', marginBottom: '1.5rem',
-          border: '1px solid rgba(142,68,173,0.2)',
-        }}>
-          <p style={{ fontSize: '0.95rem', color: '#1a0a3e', fontWeight: 700, margin: '0 0 0.5rem', textAlign: 'center' }}>
-            💬 Um Espaço de Acolhimento
-          </p>
-          <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-            Conversar com um pastor pode transformar sua vida. Aqui você encontra um ouvido atento, 
-            uma palavra de sabedoria e a orientação que vem de Deus.
-          </p>
-          <p style={{ fontSize: '0.83rem', color: '#555', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-            Não importa o que você está passando — ansiedade, medo, solidão, dúvidas sobre a fé — 
-            um pastor está pronto para te ouvir e orar com você. A conversa é privada, traduzida 
-            automaticamente e cheia de amor.
-          </p>
-          <p style={{ fontSize: '0.8rem', color: '#666', fontStyle: 'italic', margin: 0, textAlign: 'center' }}>
-            📖 "Obedecei a vossos pastores e sujeitai-vos a eles; porque velam por vossa alma." — Hebreus 13:17
-          </p>
-        </div>
-
-        {!showChatForm ? (
-          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-            <button onClick={() => setShowChatForm(true)} style={{
-              padding: '0.8rem 2rem', borderRadius: 25, border: 'none',
-              background: '#8e44ad', color: '#fff', fontWeight: 700, fontSize: '1rem',
-              cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
-              boxShadow: '0 4px 15px rgba(142,68,173,0.3)',
-            }}>
-              <MessageCircle size={20} /> Iniciar Conversa
-            </button>
-          </div>
-        ) : (
-        <>
         <div style={styles.toggleBar}>
           <button style={styles.toggleBtn(!isPastor)} onClick={() => setIsPastor(false)}>{t('pastorChat.imPerson')}</button>
           <button style={styles.toggleBtn(isPastor)} onClick={() => setIsPastor(true)}>{t('pastorChat.imPastor')}</button>
@@ -375,9 +381,6 @@ export default function PastorChat() {
           </div>
         )}
 
-        </>
-        )}
-
         <style>{`@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.15); opacity: 1; } }`}</style>
       </div>
     );
@@ -404,7 +407,7 @@ export default function PastorChat() {
         <div style={styles.chatEnded}>
           <p style={{ fontSize: '3rem' }}>🙏</p>
           <h2>{t('pastorChat.chatEnded')}</h2>
-          <button style={{ ...styles.submitBtn, marginTop: '1rem' }} onClick={() => { setView('form'); setMessages([]); setRoomId(null); }}>
+          <button style={{ ...styles.submitBtn, marginTop: '1rem' }} onClick={() => { setView('intro'); setMessages([]); setRoomId(null); }}>
             {t('pastorChat.startChat')}
           </button>
         </div>

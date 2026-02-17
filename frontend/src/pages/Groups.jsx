@@ -262,6 +262,29 @@ export default function Groups() {
         </div>
       )}
 
+      {/* Explanatory message */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.97), rgba(245,240,255,0.95))',
+        border: '2px solid transparent',
+        borderImage: 'linear-gradient(135deg, #1a0a3e, #daa520) 1',
+        borderRadius: 16,
+        padding: '1.2rem',
+        marginBottom: '1rem',
+        boxShadow: '0 4px 12px rgba(26,10,62,0.08)',
+      }}>
+        <h3 style={{ fontSize: '1rem', color: '#1a0a3e', margin: '0 0 0.5rem', textAlign: 'center' }}>
+          👥 Grupos de Comunhão
+        </h3>
+        <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
+          Participe de grupos com irmãos que compartilham a mesma fé! Aqui você pode criar ou entrar em 
+          grupos de estudo bíblico, oração, louvor, jovens, casais e muito mais. Fortaleça seus laços 
+          com a comunidade cristã e cresça espiritualmente junto com outros.
+        </p>
+        <p style={{ fontSize: '0.82rem', color: '#6a1b9a', fontStyle: 'italic', margin: 0, textAlign: 'center', fontWeight: 500 }}>
+          "E não deixemos de congregar-nos, como é costume de alguns; antes, façamos admoestações e tanto mais quanto vedes que o Dia se aproxima." — Hebreus 10:25
+        </p>
+      </div>
+
       {loading ? (
         <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>Carregando...</div>
       ) : groups.length === 0 ? (

@@ -104,23 +104,28 @@ export default function Consecration() {
 
       {/* Animated fire bubbles background */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none', zIndex: 0 }}>
-        {[...Array(bubbleCount)].map((_, i) => (
-          <span key={i} style={{
-            position: 'absolute',
-            bottom: '-20px',
-            left: `${5 + (i * 97 / bubbleCount) % 90}%`,
-            width: `${8 + (i % 4) * 4}px`,
-            height: `${12 + (i % 4) * 5}px`,
-            borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
-            background: i % 3 === 0 ? 'radial-gradient(circle, #ff8800, #ff4400)' 
-              : i % 3 === 1 ? 'radial-gradient(circle, #ffdd00, #daa520)'
-              : 'radial-gradient(circle, #ff5500, #ff2200)',
-            opacity: 0.85,
-            animation: `fireBubbleRise ${10 + (i % 5) * 2}s ease-in-out infinite`,
-            animationDelay: `${(i * 0.5) % 8}s`,
-            boxShadow: `0 0 ${8 + (i % 3) * 5}px ${i % 3 === 1 ? '#ffdd00' : '#ff6600'}`,
-          }} />
-        ))}
+        {[...Array(bubbleCount)].map((_, i) => {
+          const w = 10 + (i % 5) * 5;
+          return (
+            <span key={i} style={{
+              position: 'absolute',
+              bottom: '-20px',
+              left: `${5 + (i * 97 / bubbleCount) % 90}%`,
+              width: `${w}px`,
+              height: `${w * 1.5}px`,
+              borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
+              background: i % 4 === 0 ? 'radial-gradient(ellipse at bottom, #fff700 0%, #ff9500 30%, #ff4500 60%, #cc000088 100%)' 
+                : i % 4 === 1 ? 'radial-gradient(ellipse at bottom, #ffe066 0%, #ffaa00 30%, #ff6600 60%, #dd330088 100%)'
+                : i % 4 === 2 ? 'radial-gradient(ellipse at bottom, #ffcc33 0%, #ff7700 30%, #ff3300 60%, #aa000088 100%)'
+                : 'radial-gradient(ellipse at bottom, #ffdd44 0%, #ffbb00 30%, #ff5500 60%, #cc220088 100%)',
+              opacity: 0.9,
+              animation: `fireBubbleRise ${12 + (i % 4) * 1.5}s ease-in-out infinite`,
+              animationDelay: `${(i * 0.8) % 12}s`,
+              boxShadow: `0 0 ${8 + (i % 4) * 5}px ${i % 2 === 0 ? '#ffaa00' : '#ff6600'}, 0 0 ${12 + (i % 3) * 6}px ${i % 2 === 0 ? '#ff660066' : '#ffcc0066'}`,
+              filter: 'brightness(1.3)',
+            }} />
+          );
+        })}
       </div>
 
       <style>{`

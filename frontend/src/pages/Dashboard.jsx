@@ -73,11 +73,11 @@ export default function Dashboard() {
               <div className="stat-card__value">{stats?.totalPrayers || 0}</div>
               <div className="stat-card__label">{t('dashboard.prayerRequests')}</div>
             </div>
-            <div className="stat-card stat-card--gold">
+            <Link to="/oracoes?tab=answered" className="stat-card stat-card--gold" style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}>
               <Sparkles size={28} style={{ color: 'var(--gold)', marginBottom: '0.5rem' }} />
               <div className="stat-card__value">{stats?.answeredPrayers || 0}</div>
               <div className="stat-card__label">{t('dashboard.answeredPrayers')}</div>
-            </div>
+            </Link>
           </div>
 
           <div className="card" style={{ marginBottom: '1rem' }}>

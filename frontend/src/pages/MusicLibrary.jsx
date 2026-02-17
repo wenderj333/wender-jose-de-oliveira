@@ -187,7 +187,7 @@ export default function MusicLibrary() {
               <Music size={26} color="#fff" />
             </div>
             <div>
-              <h1 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>Musica Gospel</h1>
+              <h1 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>Música Gospel</h1>
               <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)' }}>Ouça e suba suas músicas</p>
             </div>
           </div>
@@ -196,18 +196,23 @@ export default function MusicLibrary() {
 
       {/* Mensagem explicativa */}
       <div style={{
-        margin: '0 1rem 1rem', padding: '1rem', borderRadius: 14,
-        background: 'linear-gradient(135deg, rgba(102,126,234,0.08), rgba(218,165,32,0.10))',
-        border: '1px solid rgba(102,126,234,0.2)',
+        margin: '0 1rem 1rem', padding: '1.2rem', borderRadius: 16,
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.97), rgba(245,240,255,0.95))',
+        border: '2px solid transparent',
+        borderImage: 'linear-gradient(135deg, #667eea, #764ba2, #daa520) 1',
+        boxShadow: '0 4px 12px rgba(102,126,234,0.1)',
       }}>
-        <p style={{ fontSize: '0.85rem', color: '#1a0a3e', fontWeight: 600, margin: '0 0 0.4rem' }}>
-          🎵 Projeto Música Gospel
+        <h3 style={{ fontSize: '1rem', color: '#4a1a8e', margin: '0 0 0.5rem', textAlign: 'center' }}>
+          🎵 Projeto Música Gospel da Comunidade
+        </h3>
+        <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
+          Aqui você encontra músicas gospel para adorar a Deus a qualquer momento! Na aba <strong>Comunidade</strong>, 
+          ouça músicas enviadas por irmãos de todo o mundo — organizadas por quem enviou. 
+          Você também pode subir suas próprias músicas em MP3 para abençoar outros. 
+          Nas outras abas, ouça playlists de adoração, hinos clássicos, instrumentais e muito mais! 🙌
         </p>
-        <p style={{ fontSize: '0.8rem', color: '#444', lineHeight: 1.5, margin: 0 }}>
-          Aqui você encontra músicas gospel para louvar a Deus! Na aba <strong>Comunidade</strong>, 
-          veja músicas enviadas por outros irmãos — organizadas por quem enviou. 
-          Você também pode subir suas próprias músicas em MP3 para compartilhar com todos. 
-          Nas outras abas, ouça playlists de adoração, hinos e muito mais! 🙌
+        <p style={{ fontSize: '0.82rem', color: '#6a1b9a', fontStyle: 'italic', margin: 0, textAlign: 'center', fontWeight: 500 }}>
+          "Cantai ao Senhor um cântico novo; cantai ao Senhor, todas as terras." — Salmos 96:1
         </p>
       </div>
 
