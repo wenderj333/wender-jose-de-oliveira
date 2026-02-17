@@ -39,6 +39,7 @@ export default function Home() {
 
   const [helpForm, setHelpForm] = useState({ name: '', contact: '', message: '' });
   const [helpSent, setHelpSent] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
   const { t } = useTranslation();
   const verses = t('home.verses', { returnObjects: true });
   const versiculo = getVersiculoDoDia(verses);
@@ -98,6 +99,21 @@ export default function Home() {
         <div className="hero__verse">
           <span className="hero__verse-text">"{versiculo.text}"</span>
           <span className="hero__verse-ref">— {versiculo.ref}</span>
+          <button onClick={async () => {
+            const shareText = `✝️ ${versiculo.text} — ${versiculo.ref}\n\nSigo com Fé - sigocomfe.vercel.app`;
+            if (navigator.share) {
+              try { await navigator.share({ title: 'Versículo do Dia', text: shareText }); } catch (e) {}
+            } else {
+              try { await navigator.clipboard.writeText(shareText); setShareCopied(true); setTimeout(() => setShareCopied(false), 2500); } catch (e) {}
+            }
+          }} style={{
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+            background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)',
+            color: '#f4d03f', borderRadius: 20, padding: '4px 12px', fontSize: '0.75rem',
+            cursor: 'pointer', marginTop: 6, backdropFilter: 'blur(4px)',
+          }}>
+            {shareCopied ? '✅ Copiado!' : '📤 Compartilhar'}
+          </button>
         </div>
 
         {/* CTA Principal */}

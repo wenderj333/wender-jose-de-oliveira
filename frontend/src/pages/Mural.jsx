@@ -299,6 +299,22 @@ export default function Mural() {
 
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem' }}>
+      {/* Visitor banner */}
+      {!user && (
+        <Link to="/cadastro" style={{ textDecoration: 'none' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #daa520, #f4c542)', borderRadius: 16, padding: '1rem',
+            marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 12, color: '#1a0a3e',
+            boxShadow: '0 4px 15px rgba(218,165,32,0.3)', cursor: 'pointer',
+          }}>
+            <span style={{ fontSize: '1.8rem' }}>✨</span>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>Crie sua conta para participar!</div>
+              <div style={{ fontSize: '0.8rem', opacity: 0.85, marginTop: 2 }}>Publique, comente e conecte-se com irmãos na fé. É rápido!</div>
+            </div>
+          </div>
+        </Link>
+      )}
       {/* Photo prompt for users without avatar */}
       {user && !user.avatar_url && (
         <Link to={`/perfil/${user.id}`} style={{ textDecoration: 'none' }}>
@@ -315,6 +331,18 @@ export default function Mural() {
               <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{t('profile.addPhotoPrompt', 'Adicione uma foto ao seu perfil!')}</div>
               <div style={{ fontSize: '0.8rem', opacity: 0.85, marginTop: 2 }}>{t('profile.addPhotoDesc', 'Toque aqui para personalizar seu perfil com uma foto.')}</div>
             </div>
+          </div>
+        </Link>
+      )}
+
+      {/* Banner for non-logged users */}
+      {!user && (
+        <Link to="/cadastro" style={{ textDecoration: 'none' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #daa520, #f4d03f)', borderRadius: 12, padding: '0.75rem 1rem',
+            marginBottom: '1rem', textAlign: 'center', color: '#1a0a3e', fontWeight: 600, fontSize: '0.9rem',
+          }}>
+            ✨ Crie sua conta para participar! <span style={{ textDecoration: 'underline' }}>Cadastre-se</span>
           </div>
         </Link>
       )}

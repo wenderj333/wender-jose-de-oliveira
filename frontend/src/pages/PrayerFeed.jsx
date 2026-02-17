@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import PrayerCard from '../components/PrayerCard';
 import { useAuth } from '../context/AuthContext';
 import { HandHeart, Trophy, Sparkles, AlertTriangle, Plus, ChevronDown, ChevronUp } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -140,6 +141,16 @@ export default function PrayerFeed() {
 
   return (
     <div>
+      {!user && (
+        <Link to="/cadastro" style={{ textDecoration: 'none' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #daa520, #f4d03f)', borderRadius: 12, padding: '0.75rem 1rem',
+            marginBottom: '1rem', textAlign: 'center', color: '#1a0a3e', fontWeight: 600, fontSize: '0.9rem',
+          }}>
+            ✨ Crie sua conta para participar! <span style={{ textDecoration: 'underline' }}>Cadastre-se</span>
+          </div>
+        </Link>
+      )}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
         <h2 style={{ color: 'var(--green-dark)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           {tab === 'answered' ? <><Trophy size={24} /> {t('prayerFeed.victoryWall')}</> : <><HandHeart size={24} /> {t('prayerFeed.prayerRequests')}</>}

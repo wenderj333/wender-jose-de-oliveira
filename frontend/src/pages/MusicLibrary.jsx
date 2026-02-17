@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 import { Music, Play, Pause, Heart, Mic2, Baby, BookOpen, Guitar, Upload, X, User } from 'lucide-react';
 
 const CLOUD_NAME = 'degxiuf43';
@@ -215,6 +216,18 @@ export default function MusicLibrary() {
           "Cantai ao Senhor um cântico novo; cantai ao Senhor, todas as terras." — Salmos 96:1
         </p>
       </div>
+
+      {/* Banner for non-logged users */}
+      {!user && (
+        <Link to="/cadastro" style={{ textDecoration: 'none' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #daa520, #f4d03f)', borderRadius: 12, padding: '0.75rem 1rem',
+            margin: '0 1rem 0.75rem', textAlign: 'center', color: '#1a0a3e', fontWeight: 600, fontSize: '0.9rem',
+          }}>
+            ✨ Crie sua conta para participar! <span style={{ textDecoration: 'underline' }}>Cadastre-se</span>
+          </div>
+        </Link>
+      )}
 
       {/* Upload button */}
       {token && (

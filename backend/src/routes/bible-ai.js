@@ -4,6 +4,23 @@ const router = express.Router();
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
+// ===== CACHE & RATE LIMITING =====
+const responseCache = new Map(); // key -> { reply, timestamp }
+const CACHE_TTL = 60 * 60 * 1000; // 1 hour
+const userRequests = new Map(); // ip -> [timestamps]
+const USER_LIMIT = 10; // per hour per user
+const GLOBAL_LIMIT = 30; // per hour total
+let globalRequests = [];
+
+function cleanOldEntries(arr, windowMs = 60 * 60 * 1000) {
+  const cutoff = Date.now() - windowMs;
+  return arr.filter(t => t > cutoff);
+}
+
+function getCacheKey(message, language, context) {
+  return `${(message || '').trim().toLowerCase().slice(0, 200)}|${language || ''}|${context || ''}`;
+}
+
 const SYSTEM_PROMPT = `You are a warm, welcoming, and non-judgmental Bible AI assistant called "IA Bíblica" from the app "Sigo com Fé".
 You help anyone who wants to learn about the Bible and the Christian faith:
 - Answering questions about the Bible, its books, characters, and teachings
@@ -41,6 +58,39 @@ router.post('/chat', async (req, res) => {
       return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
     }
 
+    // Check cache first
+    const cacheKey = getCacheKey(message, language, context);
+    const cached = responseCache.get(cacheKey);
+    if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
+      console.log('Bible AI: returning cached response');
+      return res.json({ reply: cached.reply, cached: true });
+    }
+
+    // Rate limiting - per user (by IP)
+    const userIp = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+    let userReqs = userRequests.get(userIp) || [];
+    userReqs = cleanOldEntries(userReqs);
+    if (userReqs.length >= USER_LIMIT) {
+      return res.status(429).json({
+        error: 'A IA Bíblica está descansando um pouquinho. Tente novamente em alguns minutos! 🙏',
+        retryAfter: 60
+      });
+    }
+
+    // Rate limiting - global
+    globalRequests = cleanOldEntries(globalRequests);
+    if (globalRequests.length >= GLOBAL_LIMIT) {
+      return res.status(429).json({
+        error: 'A IA Bíblica está descansando um pouquinho. Tente novamente em alguns minutos! 🙏',
+        retryAfter: 60
+      });
+    }
+
+    // Record request
+    userReqs.push(Date.now());
+    userRequests.set(userIp, userReqs);
+    globalRequests.push(Date.now());
+
     const contextHint = CONTEXT_PROMPTS[context] || '';
     const langHint = language ? `Respond in ${language}.` : '';
 
@@ -57,7 +107,7 @@ router.post('/chat', async (req, res) => {
       },
     });
 
-    // Retry up to 3 times on 429 (rate limit)
+    // Retry with exponential backoff on 429
     let response;
     for (let attempt = 0; attempt < 3; attempt++) {
       response = await fetch(GEMINI_URL, {
@@ -67,20 +117,34 @@ router.post('/chat', async (req, res) => {
       });
       if (response.status !== 429) break;
       console.log(`Gemini 429 rate limit, retry ${attempt + 1}/3...`);
-      await new Promise(r => setTimeout(r, (attempt + 1) * 2000)); // wait 2s, 4s, 6s
+      await new Promise(r => setTimeout(r, (attempt + 1) * 2000));
     }
 
     if (!response.ok) {
       const errBody = await response.text();
       console.error('Gemini API error:', response.status, errBody);
       if (response.status === 429) {
-        return res.status(429).json({ error: 'La IA está ocupada. Intenta de nuevo en unos segundos.' });
+        return res.status(429).json({
+          error: 'A IA Bíblica está descansando um pouquinho. Tente novamente em alguns minutos! 🙏',
+          retryAfter: 120
+        });
       }
       return res.status(502).json({ error: 'Failed to get AI response' });
     }
 
     const data = await response.json();
     const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não consegui gerar uma resposta.';
+
+    // Store in cache
+    responseCache.set(cacheKey, { reply, timestamp: Date.now() });
+
+    // Cleanup old cache entries periodically
+    if (responseCache.size > 200) {
+      const cutoff = Date.now() - CACHE_TTL;
+      for (const [k, v] of responseCache) {
+        if (v.timestamp < cutoff) responseCache.delete(k);
+      }
+    }
 
     res.json({ reply });
   } catch (err) {
