@@ -108,10 +108,16 @@ router.get('/user/:userId', async (req, res) => {
 // POST /api/feed — create post (auth required)
 router.post('/', authenticate, upload.single('image'), async (req, res) => {
   try {
-    const { content, category, verse_reference, visibility } = req.body;
-    if (!content) {
+    const { category, verse_reference, visibility } = req.body;
+    let content = req.body.content || '';
+    
+    // Allow posts with just media (no text required)
+    const hasMedia = req.body.media_url || req.file || req.body.audio_url;
+    if (!content.trim() && !hasMedia) {
       return res.status(400).json({ error: 'Conteúdo é obrigatório' });
     }
+    // Default content if only media
+    if (!content.trim()) content = '📸';
 
     let mediaUrl = req.body.media_url || null;
     let mediaType = req.body.media_type || null;
@@ -132,10 +138,23 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
     const vis = visibility || 'public';
 
     // Insert and get the created post
-    const result = await db.prepare(
-      `INSERT INTO feed_posts (author_id, content, category, media_url, media_type, verse_reference, visibility, audio_url)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
-    ).get(req.user.id, content, cat, mediaUrl, mediaType, verse_reference || null, vis, audioUrl);
+    let result;
+    try {
+      result = await db.prepare(
+        `INSERT INTO feed_posts (author_id, content, category, media_url, media_type, verse_reference, visibility, audio_url)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
+      ).get(req.user.id, content, cat, mediaUrl, mediaType, verse_reference || null, vis, audioUrl);
+    } catch (insertErr) {
+      // Fallback if audio_url column doesn't exist yet
+      if (insertErr.message && insertErr.message.includes('audio_url')) {
+        result = await db.prepare(
+          `INSERT INTO feed_posts (author_id, content, category, media_url, media_type, verse_reference, visibility)
+           VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *`
+        ).get(req.user.id, content, cat, mediaUrl, mediaType, verse_reference || null, vis);
+      } else {
+        throw insertErr;
+      }
+    }
 
     res.status(201).json({ post: result });
   } catch (err) {
