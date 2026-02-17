@@ -383,6 +383,7 @@ app.use('/api/groups', require('./routes/groups'));
 app.use('/api/consecration', require('./routes/consecration'));
 app.use('/api/notifications', require('./routes/notifications').router);
 app.use('/api/offerings', require('./routes/offerings'));
+app.use('/api/pastor', require('./routes/pastor-dashboard'));
 
 // Root route
 app.get('/', (req, res) => {
