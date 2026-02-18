@@ -96,8 +96,8 @@ export default function Consecration() {
     finally { setTimeout(() => setToggling(false), 500); }
   }
 
-  // Generate fire bubbles based on active fasting count
-  const bubbleCount = Math.min(Math.max(stats.activeFasting * 3, 6), 30);
+  // Each person consecrating = 1 flame! More people = more fire!
+  const bubbleCount = Math.min(Math.max(stats.activeFasting * 5, 8), 60);
 
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem', minHeight: '80vh', position: 'relative', overflow: 'hidden' }}>
@@ -105,24 +105,29 @@ export default function Consecration() {
       {/* Animated fire bubbles background */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none', zIndex: 0 }}>
         {[...Array(bubbleCount)].map((_, i) => {
-          const w = 10 + (i % 5) * 5;
+          const w = 12 + (i % 6) * 6;
+          const speed = 8 + (i % 5) * 1.5; // faster flames
+          const colors = [
+            'radial-gradient(ellipse at bottom, #fff700 0%, #ff9500 25%, #ff4500 55%, #cc0000aa 100%)',
+            'radial-gradient(ellipse at bottom, #ffe066 0%, #ffaa00 25%, #ff6600 55%, #dd3300aa 100%)',
+            'radial-gradient(ellipse at bottom, #ffcc33 0%, #ff7700 25%, #ff3300 55%, #aa0000aa 100%)',
+            'radial-gradient(ellipse at bottom, #ffdd44 0%, #ffbb00 25%, #ff5500 55%, #cc2200aa 100%)',
+            'radial-gradient(ellipse at bottom, #ffffff 0%, #ffee00 20%, #ff8800 50%, #ff3300aa 100%)',
+          ];
           return (
             <span key={i} style={{
               position: 'absolute',
               bottom: '-20px',
-              left: `${5 + (i * 97 / bubbleCount) % 90}%`,
+              left: `${3 + (i * 94 / bubbleCount) % 94}%`,
               width: `${w}px`,
-              height: `${w * 1.5}px`,
+              height: `${w * 1.6}px`,
               borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
-              background: i % 4 === 0 ? 'radial-gradient(ellipse at bottom, #fff700 0%, #ff9500 30%, #ff4500 60%, #cc000088 100%)' 
-                : i % 4 === 1 ? 'radial-gradient(ellipse at bottom, #ffe066 0%, #ffaa00 30%, #ff6600 60%, #dd330088 100%)'
-                : i % 4 === 2 ? 'radial-gradient(ellipse at bottom, #ffcc33 0%, #ff7700 30%, #ff3300 60%, #aa000088 100%)'
-                : 'radial-gradient(ellipse at bottom, #ffdd44 0%, #ffbb00 30%, #ff5500 60%, #cc220088 100%)',
-              opacity: 0.9,
-              animation: `fireBubbleRise ${12 + (i % 4) * 1.5}s ease-in-out infinite`,
-              animationDelay: `${(i * 0.8) % 12}s`,
-              boxShadow: `0 0 ${8 + (i % 4) * 5}px ${i % 2 === 0 ? '#ffaa00' : '#ff6600'}, 0 0 ${12 + (i % 3) * 6}px ${i % 2 === 0 ? '#ff660066' : '#ffcc0066'}`,
-              filter: 'brightness(1.3)',
+              background: colors[i % colors.length],
+              opacity: 0.95,
+              animation: `fireBubbleRise ${speed}s ease-in-out infinite, flicker ${1.5 + (i % 3) * 0.5}s ease-in-out infinite`,
+              animationDelay: `${(i * 0.5) % speed}s`,
+              boxShadow: `0 0 ${10 + (i % 5) * 6}px ${i % 2 === 0 ? '#ffaa00' : '#ff6600'}, 0 0 ${15 + (i % 4) * 8}px ${i % 2 === 0 ? '#ff660088' : '#ffcc0088'}`,
+              filter: 'brightness(1.4)',
             }} />
           );
         })}
@@ -130,12 +135,15 @@ export default function Consecration() {
 
       <style>{`
         @keyframes fireBubbleRise {
-          0% { transform: translateY(0) scale(1); opacity: 0; }
-          10% { opacity: 0.7; }
-          50% { opacity: 0.5; transform: translateY(-40vh) scale(0.8); }
-          100% { transform: translateY(-90vh) scale(0.3); opacity: 0; }
+          0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0; }
+          5% { opacity: 0.9; }
+          25% { opacity: 0.8; transform: translateY(-20vh) scale(0.95) rotate(5deg); }
+          50% { opacity: 0.6; transform: translateY(-45vh) scale(0.7) rotate(-3deg); }
+          75% { opacity: 0.3; transform: translateY(-70vh) scale(0.5) rotate(4deg); }
+          100% { transform: translateY(-95vh) scale(0.2) rotate(0deg); opacity: 0; }
         }
-        @keyframes pulseBtn { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+        @keyframes pulseBtn { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+        @keyframes flicker { 0%,100% { opacity: 0.85; } 50% { opacity: 1; } }
       `}</style>
 
       {/* Content (above bubbles) */}
@@ -173,38 +181,101 @@ export default function Consecration() {
           </p>
         </div>
 
-        {/* Toggle Button - smaller */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.25rem' }}>
+        {/* ===== COMO FUNCIONA — Explicação clara ===== */}
+        <div style={{
+          background: '#fff', borderRadius: 16, padding: '1rem', marginBottom: '1.25rem',
+          border: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+        }}>
+          <h3 style={{ fontSize: '0.95rem', color: '#1a0a3e', margin: '0 0 0.6rem', textAlign: 'center' }}>
+            📋 Como funciona?
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+              <span style={{
+                width: 28, height: 28, borderRadius: '50%', background: '#4caf50', color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0,
+              }}>1</span>
+              <p style={{ margin: 0, fontSize: '0.82rem', color: '#444', lineHeight: 1.5 }}>
+                <strong>Comece seu jejum:</strong> Toque no botão de fogo abaixo para indicar que você está <strong>iniciando</strong> sua consagração (jejum e oração).
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+              <span style={{
+                width: 28, height: 28, borderRadius: '50%', background: '#ff6600', color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0,
+              }}>2</span>
+              <p style={{ margin: 0, fontSize: '0.82rem', color: '#444', lineHeight: 1.5 }}>
+                <strong>Sua chama sobe:</strong> Enquanto você está consagrando, uma <strong>chama de fogo</strong> sobe na tela representando você. Cada pessoa é uma chama!
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+              <span style={{
+                width: 28, height: 28, borderRadius: '50%', background: '#e74c3c', color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0,
+              }}>3</span>
+              <p style={{ margin: 0, fontSize: '0.82rem', color: '#444', lineHeight: 1.5 }}>
+                <strong>Termine seu jejum:</strong> Quando terminar, toque no botão novamente para <strong>encerrar</strong>. Sua chama se apaga, mas sua oração permanece!
+              </p>
+            </div>
+          </div>
+          <div style={{
+            marginTop: '0.8rem', padding: '0.6rem', borderRadius: 10,
+            background: 'rgba(255,102,0,0.08)', border: '1px solid rgba(255,102,0,0.2)', textAlign: 'center',
+          }}>
+            <span style={{ fontSize: '0.78rem', color: '#cc5500' }}>
+              🔥 Quanto mais pessoas consagrando, <strong>mais chamas de fogo sobem!</strong> Cada chama é uma pessoa em oração.
+            </span>
+          </div>
+        </div>
+
+        {/* ===== TOGGLE BUTTON — grande e claro ===== */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1.25rem' }}>
           <button onClick={handleToggle} disabled={toggling} style={{
-            width: 140, height: 140, borderRadius: '50%', border: 'none', cursor: 'pointer',
+            width: 160, height: 160, borderRadius: '50%', border: 'none', cursor: 'pointer',
             background: isActive
               ? 'radial-gradient(circle, #ff3300, #ff6600, #ffcc00)'
               : 'radial-gradient(circle, #1a0a3e, #4a1a8e)',
-            color: '#fff', fontSize: '0.85rem', fontWeight: 700,
+            color: '#fff', fontSize: '0.9rem', fontWeight: 700,
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6,
             boxShadow: isActive
-              ? '0 0 30px rgba(255, 102, 0, 0.6), 0 0 60px rgba(255, 51, 0, 0.3)'
-              : '0 4px 15px rgba(26, 10, 62, 0.3)',
+              ? '0 0 40px rgba(255, 102, 0, 0.7), 0 0 80px rgba(255, 51, 0, 0.4)'
+              : '0 4px 20px rgba(26, 10, 62, 0.3)',
             transition: 'all 0.5s ease',
             animation: isActive ? 'pulseBtn 2s ease-in-out infinite' : 'none',
           }}>
-            <Flame size={32} />
-            {isActive ? '🔥 Consagrando' : 'Consagrar'}
+            <Flame size={40} />
+            {isActive ? '🔥 Consagrando...' : '🔥 Consagrar'}
           </button>
-        </div>
-        <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#888', marginBottom: '1.5rem' }}>
-          {isActive ? 'Toque para desativar' : 'Toque para ativar sua consagração'}
-        </p>
-
-        {/* Stats - smaller, below text */}
-        <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: '1.5rem' }}>
-          <div style={{ background: 'linear-gradient(135deg, #ff6600, #ff3300)', borderRadius: 14, padding: '0.7rem 1rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 120 }}>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800 }}>🔥 {stats.totalConsecrations}</div>
-            <div style={{ fontSize: '0.65rem', opacity: 0.9 }}>Total</div>
+          <div style={{
+            marginTop: 10, padding: '0.5rem 1rem', borderRadius: 20,
+            background: isActive ? 'rgba(255,102,0,0.1)' : 'rgba(26,10,62,0.05)',
+            border: isActive ? '1px solid rgba(255,102,0,0.3)' : '1px solid rgba(26,10,62,0.1)',
+          }}>
+            <p style={{ margin: 0, textAlign: 'center', fontSize: '0.82rem', fontWeight: 600, color: isActive ? '#cc5500' : '#666' }}>
+              {isActive
+                ? '✅ Você está consagrando agora! Toque no botão quando terminar.'
+                : '👆 Toque no botão acima para INICIAR sua consagração'}
+            </p>
           </div>
-          <div style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', borderRadius: 14, padding: '0.7rem 1rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 120 }}>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800 }}>🙏 {stats.activeFasting}</div>
-            <div style={{ fontSize: '0.65rem', opacity: 0.9 }}>Jejuando agora</div>
+        </div>
+
+        {/* ===== STATS — explicativos ===== */}
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: '1.5rem' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #ff6600, #ff3300)', borderRadius: 14,
+            padding: '0.8rem 1rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 160,
+          }}>
+            <div style={{ fontSize: '1.8rem', fontWeight: 800 }}>🔥 {stats.totalConsecrations}</div>
+            <div style={{ fontSize: '0.72rem', opacity: 0.95, fontWeight: 600 }}>Consagrações já realizadas</div>
+            <div style={{ fontSize: '0.65rem', opacity: 0.7, marginTop: 2 }}>desde o início da plataforma</div>
+          </div>
+          <div style={{
+            background: 'linear-gradient(135deg, #daa520, #b8860b)', borderRadius: 14,
+            padding: '0.8rem 1rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 160,
+          }}>
+            <div style={{ fontSize: '1.8rem', fontWeight: 800 }}>🙏 {stats.activeFasting}</div>
+            <div style={{ fontSize: '0.72rem', opacity: 0.95, fontWeight: 600 }}>Pessoas jejuando AGORA</div>
+            <div style={{ fontSize: '0.65rem', opacity: 0.7, marginTop: 2 }}>cada pessoa = uma chama de fogo 🔥</div>
           </div>
         </div>
 
