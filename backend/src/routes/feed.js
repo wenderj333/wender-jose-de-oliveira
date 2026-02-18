@@ -19,8 +19,8 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    if (/^(image\/(jpeg|png|gif|webp)|video\/(mp4|webm|quicktime))$/.test(file.mimetype)) cb(null, true);
-    else cb(new Error('Apenas imagens e vídeos são permitidos'));
+    if (/^(image\/(jpeg|png|gif|webp|heic|heif)|video\/(mp4|webm|quicktime|3gpp|x-m4v|mpeg|ogg|avi)|audio\/(mpeg|mp3|wav|ogg|m4a|aac|mp4))$/.test(file.mimetype)) cb(null, true);
+    else cb(new Error(`Tipo de arquivo não suportado: ${file.mimetype}`));
   },
 });
 

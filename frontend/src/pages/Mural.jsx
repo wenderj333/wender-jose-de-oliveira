@@ -104,6 +104,7 @@ export default function Mural() {
   const [newMediaIsVideo, setNewMediaIsVideo] = useState(false);
   const [newMediaIsAudio, setNewMediaIsAudio] = useState(false);
   const [posting, setPosting] = useState(false);
+  const [postingText, setPostingText] = useState('');
   const [showMusicPicker, setShowMusicPicker] = useState(false);
   const [librarySongs, setLibrarySongs] = useState([]);
   const [selectedSongUrl, setSelectedSongUrl] = useState(null);
@@ -348,7 +349,19 @@ export default function Mural() {
   async function uploadDirectToCloudinary(file) {
     const isVid = file.type.startsWith('video/');
     const isAud = file.type.startsWith('audio/');
-    const resourceType = (isVid || isAud) ? 'video' : 'image'; // Cloudinary uses 'video' for audio too
+    const resourceType = (isVid || isAud) ? 'video' : 'image';
+
+    // Check file size (100MB limit for free Cloudinary)
+    if (file.size > 100 * 1024 * 1024) {
+      throw new Error('File size too large! Máximo 100MB.');
+    }
+
+    // Show upload progress for large files
+    if (isVid && file.size > 5 * 1024 * 1024) {
+      setPostingText('📤 Enviando vídeo... pode demorar');
+    }
+
+    // Try signed upload first
     try {
       const sigRes = await fetch(`${API}/feed/cloudinary-signature`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -364,9 +377,11 @@ export default function Mural() {
         const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`, { method: 'POST', body: fd });
         const result = await uploadRes.json();
         if (result.secure_url) return { url: result.secure_url, type: resourceType };
+        if (result.error) console.warn('Signed upload error:', result.error.message);
       }
     } catch (e) { console.error('Signed upload failed:', e); }
-    // Fallback unsigned
+
+    // Fallback: unsigned upload
     const fd = new FormData();
     fd.append('file', file);
     fd.append('upload_preset', 'sigo_com_fe');
@@ -374,6 +389,7 @@ export default function Mural() {
     const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/${resourceType}/upload`, { method: 'POST', body: fd });
     const result = await uploadRes.json();
     if (result.error) throw new Error(result.error.message);
+    if (!result.secure_url) throw new Error('Upload falhou. Tente um arquivo menor.');
     return { url: result.secure_url, type: resourceType };
   }
 
@@ -440,9 +456,16 @@ export default function Mural() {
         setNewText(''); setNewMedia(null); setNewMediaPreview(null); setNewMediaIsVideo(false); setNewMediaIsAudio(false); setSelectedSongUrl(null); setSelectedSongName(''); setShowMusicPicker(false); setShowForm(false);
       }
     } catch (err) {
-      console.error(err);
-      alert('Erro ao publicar. Tente novamente.');
-    } finally { setPosting(false); }
+      console.error('Post error:', err);
+      const msg = err.message || '';
+      if (msg.includes('File size') || msg.includes('too large') || msg.includes('413')) {
+        alert('❌ Arquivo muito grande! O limite é 100MB para vídeos. Tente um vídeo menor ou use o CapCut para reduzir.');
+      } else if (msg.includes('network') || msg.includes('fetch') || msg.includes('Failed')) {
+        alert('❌ Erro de conexão. Verifique sua internet e tente novamente.');
+      } else {
+        alert('❌ Erro ao publicar: ' + (msg || 'Tente novamente em alguns segundos.'));
+      }
+    } finally { setPosting(false); setPostingText(''); }
   }
 
   // ===== TRANSLATE =====
@@ -763,7 +786,7 @@ export default function Mural() {
             color: (newText.trim() || newMedia || selectedSongUrl) ? '#1a0a3e' : '#999',
             fontWeight: 700, fontSize: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             boxShadow: (newText.trim() || newMedia || selectedSongUrl) ? '0 4px 15px rgba(218,165,32,0.3)' : 'none',
-          }}><Send size={18} /> {posting ? 'Publicando...' : 'Publicar'}</button>
+          }}><Send size={18} /> {posting ? (postingText || 'Publicando...') : 'Publicar'}</button>
           <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
           <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={handleMediaSelect} />
           <input ref={audioRef} type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg,audio/m4a,audio/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
