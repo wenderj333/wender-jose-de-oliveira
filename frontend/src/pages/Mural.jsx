@@ -235,9 +235,28 @@ export default function Mural() {
     { id: 'yt13', title: 'A Casa É Sua', artist: 'Casa Worship', url: 'https://www.youtube.com/watch?v=JFKl8NPxUfc', type: 'youtube' },
     { id: 'yt14', title: 'Aquieta Minh\'alma', artist: 'Ministério Zoe', url: 'https://www.youtube.com/watch?v=1ZYc0OHQSAE', type: 'youtube' },
     { id: 'yt15', title: 'Yeshua', artist: 'Heloisa Rosa', url: 'https://www.youtube.com/watch?v=eWCFjB3zuCY', type: 'youtube' },
+    // 🇪🇸 Español
+    { id: 'es1', title: 'Rojo - Tu Amor No Se Rinde', artist: 'Rojo', url: 'https://www.youtube.com/watch?v=7w3nKPEKOno', type: 'youtube', lang: 'es' },
+    { id: 'es2', title: 'Nadie Como Tú', artist: 'Miel San Marcos', url: 'https://www.youtube.com/watch?v=cJvJz0MXTMY', type: 'youtube', lang: 'es' },
+    { id: 'es3', title: 'Poderoso Para Salvar', artist: 'Hillsong en Español', url: 'https://www.youtube.com/watch?v=O0AvYmGGXbA', type: 'youtube', lang: 'es' },
+    { id: 'es4', title: 'Gracia Sublime Es', artist: 'Marco Barrientos', url: 'https://www.youtube.com/watch?v=XC8dJ7-JIaA', type: 'youtube', lang: 'es' },
+    { id: 'es5', title: 'Al Que Está Sentado en el Trono', artist: 'Miel San Marcos', url: 'https://www.youtube.com/watch?v=eFEKU8aVv4Y', type: 'youtube', lang: 'es' },
+    // 🇺🇸 English
+    { id: 'en1', title: 'Oceans (Where Feet May Fail)', artist: 'Hillsong UNITED', url: 'https://www.youtube.com/watch?v=dy9nwe_KxtE', type: 'youtube', lang: 'en' },
+    { id: 'en2', title: 'What A Beautiful Name', artist: 'Hillsong Worship', url: 'https://www.youtube.com/watch?v=nQWFzMvCfLE', type: 'youtube', lang: 'en' },
+    { id: 'en3', title: 'Goodness of God', artist: 'Bethel Music', url: 'https://www.youtube.com/watch?v=ENjjnOKbpMk', type: 'youtube', lang: 'en' },
+    { id: 'en4', title: 'Way Maker', artist: 'Sinach', url: 'https://www.youtube.com/watch?v=n4FMkqb2gAo', type: 'youtube', lang: 'en' },
+    { id: 'en5', title: 'How Great Is Our God', artist: 'Chris Tomlin', url: 'https://www.youtube.com/watch?v=KBD18rsVJHk', type: 'youtube', lang: 'en' },
+    { id: 'en6', title: 'Amazing Grace', artist: 'Chris Tomlin', url: 'https://www.youtube.com/watch?v=Tvt1lEY6wMQ', type: 'youtube', lang: 'en' },
+    { id: 'en7', title: '10,000 Reasons', artist: 'Matt Redman', url: 'https://www.youtube.com/watch?v=XtwIT8JjddM', type: 'youtube', lang: 'en' },
+    // 🇩🇪 Deutsch
+    { id: 'de1', title: 'Gut Zu Mir', artist: 'Outbreakband', url: 'https://www.youtube.com/watch?v=A7VDCxcVpXQ', type: 'youtube', lang: 'de' },
+    { id: 'de2', title: 'Sei Stille und Erkenne', artist: 'Hillsong Germany', url: 'https://www.youtube.com/watch?v=a7J4AHIkAPo', type: 'youtube', lang: 'de' },
+    { id: 'de3', title: 'Großer Gott Wir Loben Dich', artist: 'ICF Worship', url: 'https://www.youtube.com/watch?v=bTQqVcSLHQY', type: 'youtube', lang: 'de' },
   ];
 
-  const [musicTab, setMusicTab] = useState('popular'); // 'popular' | 'library' | 'upload'
+  const [musicTab, setMusicTab] = useState('popular');
+  const [musicLang, setMusicLang] = useState('all'); // 'all' | 'pt' | 'es' | 'en' | 'de'
 
   async function openMusicPicker() {
     setShowMusicPicker(true);
@@ -620,11 +639,24 @@ export default function Mural() {
 
               {/* Popular Gospel Songs */}
               {musicTab === 'popular' && (
-                <div style={{ maxHeight: 250, overflowY: 'auto' }}>
-                  <p style={{ fontSize: '0.7rem', color: '#888', margin: '0 0 0.5rem' }}>
-                    Músicas gospel mais tocadas do Brasil 🇧🇷
-                  </p>
-                  {popularGospel.map(song => (
+                <div style={{ maxHeight: 300, overflowY: 'auto' }}>
+                  {/* Language filter */}
+                  <div style={{ display: 'flex', gap: 4, marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+                    {[
+                      { key: 'all', label: '🌍 Todos' },
+                      { key: 'pt', label: '🇧🇷 PT' },
+                      { key: 'es', label: '🇪🇸 ES' },
+                      { key: 'en', label: '🇺🇸 EN' },
+                      { key: 'de', label: '🇩🇪 DE' },
+                    ].map(l => (
+                      <button type="button" key={l.key} onClick={() => setMusicLang(l.key)} style={{
+                        padding: '3px 10px', borderRadius: 12, border: 'none', cursor: 'pointer', fontSize: '0.72rem',
+                        background: musicLang === l.key ? '#9b59b6' : '#f0f0f0',
+                        color: musicLang === l.key ? '#fff' : '#666', fontWeight: 600,
+                      }}>{l.label}</button>
+                    ))}
+                  </div>
+                  {popularGospel.filter(s => musicLang === 'all' || (s.lang || 'pt') === musicLang).map(song => (
                     <button type="button" key={song.id} onClick={() => { setSelectedSongUrl(song.url); setSelectedSongName(`${song.title} - ${song.artist}`); setShowMusicPicker(false); }} style={{
                       width: '100%', padding: '0.5rem 0.6rem', borderRadius: 10,
                       border: selectedSongUrl === song.url ? '2px solid #9b59b6' : '1px solid #eee',
