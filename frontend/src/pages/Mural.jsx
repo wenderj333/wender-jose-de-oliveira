@@ -20,6 +20,17 @@ function isAudio(url) {
   return /\.(mp3|wav|ogg|m4a|aac|flac)/i.test(url);
 }
 
+function isYouTube(url) {
+  if (!url) return false;
+  return url.includes('youtube.com/watch') || url.includes('youtu.be/');
+}
+
+function getYouTubeId(url) {
+  if (!url) return null;
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+  return m ? m[1] : null;
+}
+
 function isVideo(url) {
   if (!url) return false;
   if (isAudio(url)) return false; // audio is NOT video
@@ -207,6 +218,27 @@ export default function Mural() {
   }
 
   // ===== MEDIA UPLOAD =====
+  // Popular gospel songs (YouTube)
+  const popularGospel = [
+    { id: 'yt1', title: 'Lugar Secreto', artist: 'Gabriela Rocha', url: 'https://www.youtube.com/watch?v=ePGMkFPp-zI', type: 'youtube' },
+    { id: 'yt2', title: 'Ninguém Explica Deus', artist: 'Preto no Branco', url: 'https://www.youtube.com/watch?v=GM5qMxKn3bk', type: 'youtube' },
+    { id: 'yt3', title: 'Deus é Deus', artist: 'Delino Marçal', url: 'https://www.youtube.com/watch?v=jRZxbM3xNKU', type: 'youtube' },
+    { id: 'yt4', title: 'Raridade', artist: 'Anderson Freire', url: 'https://www.youtube.com/watch?v=zB3sv1BSDWE', type: 'youtube' },
+    { id: 'yt5', title: 'Primeiro Amor', artist: 'Preto no Branco', url: 'https://www.youtube.com/watch?v=3j3okb3kuts', type: 'youtube' },
+    { id: 'yt6', title: 'Ousado Amor', artist: 'Isaías Saad', url: 'https://www.youtube.com/watch?v=pFRr3IJxVJo', type: 'youtube' },
+    { id: 'yt7', title: 'Bondade de Deus', artist: 'Isaías Saad', url: 'https://www.youtube.com/watch?v=X1dGL0k6B5c', type: 'youtube' },
+    { id: 'yt8', title: 'Eu Cuido de Ti', artist: 'Canção e Louvor', url: 'https://www.youtube.com/watch?v=9bDVpDEz2qs', type: 'youtube' },
+    { id: 'yt9', title: 'Oceanos', artist: 'Ana Nóbrega', url: 'https://www.youtube.com/watch?v=dy9nwe_KxtE', type: 'youtube' },
+    { id: 'yt10', title: 'Grande é o Senhor', artist: 'Soraya Moraes', url: 'https://www.youtube.com/watch?v=GhE3bDCr0QM', type: 'youtube' },
+    { id: 'yt11', title: 'Tua Graça Me Basta', artist: 'Toque no Altar', url: 'https://www.youtube.com/watch?v=6UoVGm7Iy5E', type: 'youtube' },
+    { id: 'yt12', title: 'Todavia Me Alegrarei', artist: 'Fernandinho', url: 'https://www.youtube.com/watch?v=ISwFnRD_vXI', type: 'youtube' },
+    { id: 'yt13', title: 'A Casa É Sua', artist: 'Casa Worship', url: 'https://www.youtube.com/watch?v=JFKl8NPxUfc', type: 'youtube' },
+    { id: 'yt14', title: 'Aquieta Minh\'alma', artist: 'Ministério Zoe', url: 'https://www.youtube.com/watch?v=1ZYc0OHQSAE', type: 'youtube' },
+    { id: 'yt15', title: 'Yeshua', artist: 'Heloisa Rosa', url: 'https://www.youtube.com/watch?v=eWCFjB3zuCY', type: 'youtube' },
+  ];
+
+  const [musicTab, setMusicTab] = useState('popular'); // 'popular' | 'library' | 'upload'
+
   async function openMusicPicker() {
     setShowMusicPicker(true);
     if (librarySongs.length === 0) {
@@ -559,49 +591,96 @@ export default function Mural() {
             </div>
           )}
 
-          {/* Music Picker */}
+          {/* Music Picker — with tabs */}
           {showMusicPicker && (
             <div style={{
               background: '#fff', border: '2px solid #9b59b6', borderRadius: 14, padding: '1rem',
-              marginBottom: '0.5rem', maxHeight: 280, overflowY: 'auto',
+              marginBottom: '0.5rem',
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                 <h4 style={{ margin: 0, fontSize: '0.95rem', color: '#9b59b6' }}>🎵 Escolha uma música</h4>
                 <button type="button" onClick={() => setShowMusicPicker(false)} style={{
                   background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: '#999',
                 }}>✕</button>
               </div>
-              <p style={{ fontSize: '0.72rem', color: '#888', margin: '0 0 0.5rem', lineHeight: 1.4 }}>
-                Músicas da biblioteca do app. Selecione uma para acompanhar sua foto ou vídeo!
-              </p>
-              {librarySongs.length === 0 ? (
-                <p style={{ color: '#999', fontSize: '0.85rem', textAlign: 'center', padding: '1rem' }}>Carregando músicas...</p>
-              ) : librarySongs.map(song => (
-                <button type="button" key={song.id} onClick={() => selectLibrarySong(song)} style={{
-                  width: '100%', padding: '0.6rem 0.75rem', borderRadius: 10,
-                  border: selectedSongUrl === song.url ? '2px solid #9b59b6' : '1px solid #eee',
-                  background: selectedSongUrl === song.url ? 'rgba(155,89,182,0.1)' : '#fafafa',
-                  cursor: 'pointer', marginBottom: 6, textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
-                }}>
-                  <div style={{
-                    width: 36, height: 36, borderRadius: 8, background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                  }}>
-                    <Music size={18} color="#fff" />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1a0a3e' }}>{song.title}</div>
-                    <div style={{ fontSize: '0.72rem', color: '#888' }}>{song.artist || song.user_name}</div>
-                  </div>
-                  {selectedSongUrl === song.url && <span style={{ color: '#9b59b6', fontWeight: 700 }}>✅</span>}
-                </button>
-              ))}
-              <div style={{ borderTop: '1px solid #eee', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
-                <button type="button" onClick={() => { setShowMusicPicker(false); audioRef.current?.click(); }} style={{
-                  width: '100%', padding: '0.5rem', borderRadius: 10, border: '1px dashed #9b59b6',
-                  background: 'transparent', cursor: 'pointer', fontSize: '0.82rem', color: '#9b59b6',
-                }}>📁 Enviar música do celular</button>
+
+              {/* Tabs */}
+              <div style={{ display: 'flex', gap: 0, marginBottom: '0.75rem', borderRadius: 10, overflow: 'hidden', border: '1px solid #e0e0e0' }}>
+                {[
+                  { key: 'popular', label: '🔥 Gospel Popular' },
+                  { key: 'library', label: '📚 Minha Biblioteca' },
+                ].map(tab => (
+                  <button type="button" key={tab.key} onClick={() => setMusicTab(tab.key)} style={{
+                    flex: 1, padding: '0.5rem', border: 'none', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600,
+                    background: musicTab === tab.key ? '#9b59b6' : '#fafafa',
+                    color: musicTab === tab.key ? '#fff' : '#666',
+                  }}>{tab.label}</button>
+                ))}
               </div>
+
+              {/* Popular Gospel Songs */}
+              {musicTab === 'popular' && (
+                <div style={{ maxHeight: 250, overflowY: 'auto' }}>
+                  <p style={{ fontSize: '0.7rem', color: '#888', margin: '0 0 0.5rem' }}>
+                    Músicas gospel mais tocadas do Brasil 🇧🇷
+                  </p>
+                  {popularGospel.map(song => (
+                    <button type="button" key={song.id} onClick={() => { setSelectedSongUrl(song.url); setSelectedSongName(`${song.title} - ${song.artist}`); setShowMusicPicker(false); }} style={{
+                      width: '100%', padding: '0.5rem 0.6rem', borderRadius: 10,
+                      border: selectedSongUrl === song.url ? '2px solid #9b59b6' : '1px solid #eee',
+                      background: selectedSongUrl === song.url ? 'rgba(155,89,182,0.1)' : '#fafafa',
+                      cursor: 'pointer', marginBottom: 5, textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
+                    }}>
+                      <div style={{
+                        width: 34, height: 34, borderRadius: 8, background: 'linear-gradient(135deg, #ff0000, #cc0000)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '0.9rem',
+                      }}>▶️</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 600, fontSize: '0.82rem', color: '#1a0a3e' }}>{song.title}</div>
+                        <div style={{ fontSize: '0.7rem', color: '#888' }}>{song.artist}</div>
+                      </div>
+                      {selectedSongUrl === song.url && <span style={{ color: '#9b59b6', fontWeight: 700 }}>✅</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Library Songs (user uploaded) */}
+              {musicTab === 'library' && (
+                <div style={{ maxHeight: 250, overflowY: 'auto' }}>
+                  <p style={{ fontSize: '0.7rem', color: '#888', margin: '0 0 0.5rem' }}>
+                    Músicas enviadas pela comunidade na página Música
+                  </p>
+                  {librarySongs.length === 0 ? (
+                    <p style={{ color: '#999', fontSize: '0.85rem', textAlign: 'center', padding: '1rem' }}>Nenhuma música ainda. Vá em Música e envie!</p>
+                  ) : librarySongs.map(song => (
+                    <button type="button" key={song.id} onClick={() => selectLibrarySong(song)} style={{
+                      width: '100%', padding: '0.5rem 0.6rem', borderRadius: 10,
+                      border: selectedSongUrl === song.url ? '2px solid #9b59b6' : '1px solid #eee',
+                      background: selectedSongUrl === song.url ? 'rgba(155,89,182,0.1)' : '#fafafa',
+                      cursor: 'pointer', marginBottom: 5, textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
+                    }}>
+                      <div style={{
+                        width: 34, height: 34, borderRadius: 8, background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                      }}>
+                        <Music size={16} color="#fff" />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 600, fontSize: '0.82rem', color: '#1a0a3e' }}>{song.title}</div>
+                        <div style={{ fontSize: '0.7rem', color: '#888' }}>{song.artist || song.user_name}</div>
+                      </div>
+                      {selectedSongUrl === song.url && <span style={{ color: '#9b59b6', fontWeight: 700 }}>✅</span>}
+                    </button>
+                  ))}
+                  <div style={{ borderTop: '1px solid #eee', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
+                    <button type="button" onClick={() => { setShowMusicPicker(false); audioRef.current?.click(); }} style={{
+                      width: '100%', padding: '0.5rem', borderRadius: 10, border: '1px dashed #9b59b6',
+                      background: 'transparent', cursor: 'pointer', fontSize: '0.82rem', color: '#9b59b6',
+                    }}>📁 Enviar música do celular</button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -711,7 +790,16 @@ export default function Mural() {
               {/* Media */}
               {post.media_url && (
                 <div style={{ width: '100%' }}>
-                  {isAudio(post.media_url) ? (
+                  {isYouTube(post.media_url) ? (
+                    <div style={{ borderRadius: 12, overflow: 'hidden', background: '#000' }}>
+                      <iframe
+                        src={`https://www.youtube.com/embed/${getYouTubeId(post.media_url)}?rel=0`}
+                        style={{ width: '100%', height: 200, border: 'none' }}
+                        allow="autoplay; encrypted-media"
+                        allowFullScreen
+                      />
+                    </div>
+                  ) : isAudio(post.media_url) ? (
                     <div style={{
                       background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12,
                       padding: '1rem', textAlign: 'center',
@@ -729,13 +817,24 @@ export default function Mural() {
               )}
               {/* Audio attached to photo post */}
               {post.audio_url && (
-                <div style={{
-                  background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12,
-                  padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', gap: 8,
-                }}>
-                  <span style={{ fontSize: '1.3rem' }}>🎵</span>
-                  <audio src={getMediaUrl(post.audio_url)} controls autoPlay style={{ flex: 1, height: 32 }} />
-                </div>
+                isYouTube(post.audio_url) ? (
+                  <div style={{ borderRadius: 12, overflow: 'hidden', background: '#000' }}>
+                    <iframe
+                      src={`https://www.youtube.com/embed/${getYouTubeId(post.audio_url)}?autoplay=0&rel=0`}
+                      style={{ width: '100%', height: 60, border: 'none' }}
+                      allow="autoplay; encrypted-media"
+                      allowFullScreen
+                    />
+                  </div>
+                ) : (
+                  <div style={{
+                    background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12,
+                    padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', gap: 8,
+                  }}>
+                    <span style={{ fontSize: '1.3rem' }}>🎵</span>
+                    <audio src={getMediaUrl(post.audio_url)} controls autoPlay style={{ flex: 1, height: 32 }} />
+                  </div>
+                )
               )}
 
               {/* ===== ACTIONS (LIKES & COMMENTS from DB) ===== */}
