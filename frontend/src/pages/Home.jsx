@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useWebSocket } from '../context/WebSocketContext';
+import { useAuth } from '../context/AuthContext'; // NEW IMPORT
 import { HandHeart, Radio, Newspaper, Users, CheckCircle, ShieldAlert, MessageCircle, Music, UserPlus, Heart, ArrowRight, ThumbsUp, MessageSquare } from 'lucide-react';
+
+const API_BASE = import.meta.env.VITE_API_URL || ''; // NEW CONSTANT
+const API = `${API_BASE}/api`; // NEW CONSTANT
 
 function getVersiculoDoDia(verses) {
   const hoje = new Date();
@@ -12,10 +16,15 @@ function getVersiculoDoDia(verses) {
 
 export default function Home() {
   const { totalChurchesPraying } = useWebSocket();
+  const { user, token } = useAuth(); // NEW DESTRUCTURING
   const [loaded, setLoaded] = useState(false);
   const [helpSelected, setHelpSelected] = useState(null);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstall, setShowInstall] = useState(false);
+
+  // New state for posts
+  const [recentPosts, setRecentPosts] = useState([]);
+  const [loadingPosts, setLoadingPosts] = useState(true);
 
   useEffect(() => {
     const handler = (e) => {
@@ -44,10 +53,67 @@ export default function Home() {
   const verses = t('home.verses', { returnObjects: true });
   const versiculo = getVersiculoDoDia(verses);
 
+  // Helper: get Cloudinary media URL with transformations
+  const getMediaUrl = (url) => {
+    if (!url) return '';
+    if (url.includes('youtube.com') || url.includes('youtu.be')) return url;
+    if (!url.includes('res.cloudinary.com')) return url; // Already processed or external
+
+    const parts = url.split('/upload/');
+    if (parts.length === 2) {
+      // Add transformations for quality and format
+      // For images, optimize, for videos, keep original to avoid re-encoding issues
+      const transformations = url.startsWith('https://res.cloudinary.com/degxiuf43/image') ? 'f_auto,q_auto/' : '';
+      return `${parts[0]}/upload/${transformations}${parts[1]}`;
+    }
+    return url;
+  };
+
+  // Helper: format date for display
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString()) {
+      return 'Hoje';
+    } else if (date.toDateString() === yesterday.toDateString()) {
+      return 'Ontem';
+    } else {
+      return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+  };
+
   useEffect(() => {
     const ti = setTimeout(() => setLoaded(true), 100);
     return () => clearTimeout(ti);
   }, []);
+
+  // Fetch recent testimony posts
+  useEffect(() => {
+    async function fetchRecentTestimonies() {
+      setLoadingPosts(true);
+      try {
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const res = await fetch(`${API}/feed?category=testemunho&limit=3`, { headers });
+        if (res.ok) {
+          const data = await res.json();
+          setRecentPosts(data.posts || []);
+        } else {
+          console.error('Failed to fetch recent testimonies:', res.status);
+          setRecentPosts([]);
+        }
+      } catch (error) {
+        console.error('Error fetching recent testimonies:', error);
+        setRecentPosts([]);
+      } finally {
+        setLoadingPosts(false);
+      }
+    }
+    fetchRecentTestimonies();
+  }, [token]);
+
 
   const helpOptions = [
     { key: 'seeThings', label: t('home.helpSeeThings') },
@@ -231,6 +297,214 @@ export default function Home() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ===== HISTÓRIAS INSPIRADORAS (Últimos Testemunhos do Mural) ===== */}
+      <section style={{ padding: '2rem 1.5rem', background: 'rgba(218,165,32,0.04)' }}>
+        <h2 style={{ fontSize: '1.6rem', marginBottom: '0.5rem', color: '#2c3e50', textAlign: 'center' }}>
+          ✨ Histórias Inspiradoras
+        </h2>
+        <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+          Veja os últimos testemunhos de fé da nossa comunidade
+        </p>
+        {loadingPosts ? (
+          <p style={{ textAlign: 'center', color: '#999' }}>Carregando histórias...</p>
+        ) : recentPosts.length === 0 ? (
+          <p style={{ textAlign: 'center', color: '#999' }}>Nenhuma história inspiradora ainda. Compartilhe a sua no <Link to="/mural" style={{ color: '#9b59b6', fontWeight: 600 }}>Mural</Link>!</p>
+        ) : (
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', maxWidth: 900, margin: '0 auto' }}>
+            {recentPosts.map((post) => (
+              <div key={post.id} style={{
+                flex: '1 1 280px', maxWidth: 300, padding: '1.2rem', borderRadius: 14,
+                background: '#fff', boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+                textAlign: 'left', display: 'flex', flexDirection: 'column',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.8rem' }}>
+                  <img src={post.author_avatar || '/default-avatar.png'} alt="Avatar" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+                  <div>
+                    <div style={{ fontWeight: 600, color: '#1a0a3e', fontSize: '0.9rem' }}>{post.author_display_name || post.author_name || 'Anônimo'}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#888' }}>{formatDate(post.created_at)}</div>
+                  </div>
+                </div>
+                {post.media_url && !post.audio_url && (
+                  <div style={{ marginBottom: '0.8rem', borderRadius: 10, overflow: 'hidden' }}>
+                    <img src={getMediaUrl(post.media_url)} alt="Post media" style={{ width: '100%', height: 180, objectFit: 'cover' }} />
+                  </div>
+                )}
+                {post.audio_url && (
+                  <div style={{
+                    background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 10,
+                    padding: '0.5rem 0.8rem', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: 8,
+                  }}>
+                    <span style={{ fontSize: '1.2rem', color: '#fff' }}>🎵</span>
+                    <span style={{ fontSize: '0.75rem', color: '#fff' }}>Música anexa</span>
+                  </div>
+                )}
+                <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.5, flex: 1 }}>
+                  {post.content.length > 150 ? post.content.substring(0, 150) + '...' : post.content}
+                </p>
+                <Link to={`/mural#post-${post.id}`} style={{
+                  marginTop: '1rem', display: 'inline-flex', alignItems: 'center', gap: 4,
+                  color: '#daa520', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem',
+                }}>
+                  Ver mais <ArrowRight size={14} />
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+          <Link to="/mural" className="btn btn-primary" style={{ padding: '0.8rem 2rem', fontSize: '1rem' }}>
+            Ver todos os testemunhos <ArrowRight size={16} />
+          </Link>
+        </div>
+      </section>
+
+      {/* ===== O QUE VOCÊ PODE FAZER ===== */}
+      <section style={{ padding: '2rem 1.5rem', textAlign: 'center', background: 'rgba(218,165,32,0.04)' }}>
+        <h2 style={{ fontSize: '1.3rem', marginBottom: '1.5rem', color: '#2c3e50' }}>💬 O que dizem nossos membros</h2>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', maxWidth: 700, margin: '0 auto' }}>
+          {[
+            { name: 'Maria S.', city: 'São Paulo', text: 'Encontrei uma comunidade de oração incrível. Todos os dias alguém ora por mim!' },
+            { name: 'Carlos E.', city: 'Lisboa', text: 'O Chat Pastoral me ajudou num momento muito difícil. Deus usou essa plataforma.' },
+            { name: 'Ana R.', city: 'Madrid', text: 'Mesmo longe do Brasil, me sinto conectada com irmãos na fé. Amei!' },
+          ].map((dep, i) => (
+            <div key={i} style={{
+              flex: '1 1 200px', maxWidth: 220, padding: '1rem', borderRadius: 14,
+              background: '#fff', boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+              textAlign: 'left',
+            }}>
+              <p style={{ fontSize: '0.82rem', color: '#444', fontStyle: 'italic', margin: '0 0 0.5rem', lineHeight: 1.5 }}>
+                "{dep.text}"
+              </p>
+              <div style={{ fontSize: '0.75rem', color: '#3b5998', fontWeight: 600 }}>
+                — {dep.name}, {dep.city}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== HISTÓRIAS INSPIRADORAS (Últimos Testemunhos do Mural) ===== */}
+      <section style={{ padding: '2rem 1.5rem', background: 'rgba(218,165,32,0.04)' }}>
+        <h2 style={{ fontSize: '1.6rem', marginBottom: '0.5rem', color: '#2c3e50', textAlign: 'center' }}>
+          ✨ Histórias Inspiradoras
+        </h2>
+        <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+          Veja os últimos testemunhos de fé da nossa comunidade
+        </p>
+        {loadingPosts ? (
+          <p style={{ textAlign: 'center', color: '#999' }}>Carregando histórias...</p>
+        ) : recentPosts.length === 0 ? (
+          <p style={{ textAlign: 'center', color: '#999' }}>Nenhuma história inspiradora ainda. Compartilhe a sua no <Link to="/mural" style={{ color: '#9b59b6', fontWeight: 600 }}>Mural</Link>!</p>
+        ) : (
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', maxWidth: 900, margin: '0 auto' }}>
+            {recentPosts.map((post) => (
+              <div key={post.id} style={{
+                flex: '1 1 280px', maxWidth: 300, padding: '1.2rem', borderRadius: 14,
+                background: '#fff', boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+                textAlign: 'left', display: 'flex', flexDirection: 'column',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.8rem' }}>
+                  <img src={post.author_avatar || '/default-avatar.png'} alt="Avatar" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+                  <div>
+                    <div style={{ fontWeight: 600, color: '#1a0a3e', fontSize: '0.9rem' }}>{post.author_display_name || post.author_name || 'Anônimo'}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#888' }}>{formatDate(post.created_at)}</div>
+                  </div>
+                </div>
+                {post.media_url && !post.audio_url && (
+                  <div style={{ marginBottom: '0.8rem', borderRadius: 10, overflow: 'hidden' }}>
+                    <img src={getMediaUrl(post.media_url)} alt="Post media" style={{ width: '100%', height: 180, objectFit: 'cover' }} />
+                  </div>
+                )}
+                {post.audio_url && (
+                  <div style={{
+                    background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 10,
+                    padding: '0.5rem 0.8rem', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: 8,
+                  }}>
+                    <span style={{ fontSize: '1.2rem', color: '#fff' }}>🎵</span>
+                    <span style={{ fontSize: '0.75rem', color: '#fff' }}>Música anexa</span>
+                  </div>
+                )}
+                <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.5, flex: 1 }}>
+                  {post.content.length > 150 ? post.content.substring(0, 150) + '...' : post.content}
+                </p>
+                <Link to={`/mural#post-${post.id}`} style={{
+                  marginTop: '1rem', display: 'inline-flex', alignItems: 'center', gap: 4,
+                  color: '#daa520', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem',
+                }}>
+                  Ver mais <ArrowRight size={14} />
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+          <Link to="/mural" className="btn btn-primary" style={{ padding: '0.8rem 2rem', fontSize: '1rem' }}>
+            Ver todos os testemunhos <ArrowRight size={16} />
+          </Link>
+        </div>
+      </section>
+
+      {/* ===== HISTÓRIAS INSPIRADORAS (Últimos Testemunhos do Mural) ===== */}
+      <section style={{ padding: '2rem 1.5rem', background: 'rgba(218,165,32,0.04)' }}>
+        <h2 style={{ fontSize: '1.6rem', marginBottom: '0.5rem', color: '#2c3e50', textAlign: 'center' }}>
+          ✨ Histórias Inspiradoras
+        </h2>
+        <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+          Veja os últimos testemunhos de fé da nossa comunidade
+        </p>
+        {loadingPosts ? (
+          <p style={{ textAlign: 'center', color: '#999' }}>Carregando histórias...</p>
+        ) : recentPosts.length === 0 ? (
+          <p style={{ textAlign: 'center', color: '#999' }}>Nenhuma história inspiradora ainda. Compartilhe a sua no <Link to="/mural" style={{ color: '#9b59b6', fontWeight: 600 }}>Mural</Link>!</p>
+        ) : (
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', maxWidth: 900, margin: '0 auto' }}>
+            {recentPosts.map((post) => (
+              <div key={post.id} style={{
+                flex: '1 1 280px', maxWidth: 300, padding: '1.2rem', borderRadius: 14,
+                background: '#fff', boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
+                textAlign: 'left', display: 'flex', flexDirection: 'column',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.8rem' }}>
+                  <img src={post.author_avatar || '/default-avatar.png'} alt="Avatar" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+                  <div>
+                    <div style={{ fontWeight: 600, color: '#1a0a3e', fontSize: '0.9rem' }}>{post.author_display_name || post.author_name || 'Anônimo'}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#888' }}>{formatDate(post.created_at)}</div>
+                  </div>
+                </div>
+                {post.media_url && !post.audio_url && (
+                  <div style={{ marginBottom: '0.8rem', borderRadius: 10, overflow: 'hidden' }}>
+                    <img src={getMediaUrl(post.media_url)} alt="Post media" style={{ width: '100%', height: 180, objectFit: 'cover' }} />
+                  </div>
+                )}
+                {post.audio_url && (
+                  <div style={{
+                    background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 10,
+                    padding: '0.5rem 0.8rem', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: 8,
+                  }}>
+                    <span style={{ fontSize: '1.2rem', color: '#fff' }}>🎵</span>
+                    <span style={{ fontSize: '0.75rem', color: '#fff' }}>Música anexa</span>
+                  </div>
+                )}
+                <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.5, flex: 1 }}>
+                  {post.content.length > 150 ? post.content.substring(0, 150) + '...' : post.content}
+                </p>
+                <Link to={`/mural#post-${post.id}`} style={{
+                  marginTop: '1rem', display: 'inline-flex', alignItems: 'center', gap: 4,
+                  color: '#daa520', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem',
+                }}>
+                  Ver mais <ArrowRight size={14} />
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+          <Link to="/mural" className="btn btn-primary" style={{ padding: '0.8rem 2rem', fontSize: '1rem' }}>
+            Ver todos os testemunhos <ArrowRight size={16} />
+          </Link>
         </div>
       </section>
 
