@@ -12,11 +12,11 @@ router.get('/', async (req, res) => {
   try {
     const userId = req.user.id;
     const friends = await db.prepare(`
-      SELECT f.id as friendship_id, u.id, u.full_name, u.display_name, u.avatar_url, f.created_at
+      SELECT f.id as friendship_id, u.id, u.full_name, u.display_name, u.avatar_url, u.last_seen_at, f.created_at
       FROM friendships f
       JOIN users u ON (u.id = CASE WHEN f.requester_id = ? THEN f.addressee_id ELSE f.requester_id END)
       WHERE (f.requester_id = ? OR f.addressee_id = ?) AND f.status = 'accepted'
-      ORDER BY u.full_name
+      ORDER BY u.last_seen_at DESC NULLS LAST, u.full_name
     `).all(userId, userId, userId);
     res.json({ friends });
   } catch (err) {

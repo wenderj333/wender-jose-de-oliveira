@@ -20,11 +20,23 @@ const upload = multer({
   },
 });
 
+// POST /api/profile/heartbeat — update last_seen_at (call every 60s from frontend)
+router.post('/heartbeat', authenticate, async (req, res) => {
+  try {
+    await db.prepare('UPDATE users SET last_seen_at = NOW() WHERE id = ?').run(req.user.id);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Heartbeat error:', err);
+    res.status(500).json({ error: 'Erro' });
+  }
+});
+
 // GET /api/profile/:userId — public profile
 router.get('/:userId', async (req, res) => {
   try {
     const user = await db.prepare(
       `SELECT u.id, u.full_name, u.display_name, u.avatar_url, u.bio, u.role, u.is_private, u.created_at,
+              u.last_seen_at,
               cr.role_name AS church_role, c.name AS church_name, c.id AS church_id
        FROM users u
        LEFT JOIN church_roles cr ON cr.user_id = u.id

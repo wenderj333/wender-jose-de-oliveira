@@ -96,10 +96,37 @@ export default function Friends() {
 
   const getInitials = (name) => (name || '?').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
 
+  const timeAgo = (dateStr) => {
+    if (!dateStr) return '';
+    const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+    if (diff < 60) return 'agora';
+    if (diff < 3600) return `há ${Math.floor(diff / 60)} min`;
+    if (diff < 86400) return `há ${Math.floor(diff / 3600)}h`;
+    return `há ${Math.floor(diff / 86400)}d`;
+  };
+
+  // Check if user is online (last_seen_at within 2 minutes)
+  const isOnline = (user) => {
+    if (!user.last_seen_at) return false;
+    const diff = Date.now() - new Date(user.last_seen_at).getTime();
+    return diff < 2 * 60 * 1000; // 2 minutes
+  };
+
   const Avatar = ({ user }) => (
-    user.avatar_url
-      ? <img src={user.avatar_url} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
-      : <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 'bold', fontSize: 14 }}>{getInitials(user.full_name || user.display_name)}</div>
+    <div style={{ position: 'relative', width: 40, height: 40, flexShrink: 0 }}>
+      {user.avatar_url
+        ? <img src={user.avatar_url} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
+        : <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 'bold', fontSize: 14 }}>{getInitials(user.full_name || user.display_name)}</div>
+      }
+      {isOnline(user) && (
+        <span style={{
+          position: 'absolute', bottom: 0, right: 0,
+          width: 12, height: 12, borderRadius: '50%',
+          background: '#2ecc71', border: '2px solid #fff',
+          boxShadow: '0 0 4px rgba(46,204,113,0.5)',
+        }} title="Online agora" />
+      )}
+    </div>
   );
 
   return (
@@ -166,7 +193,12 @@ export default function Friends() {
           ) : friends.map(f => (
             <div key={f.friendship_id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: '1px solid #eee' }}>
               <Avatar user={f} />
-              <span style={{ flex: 1, fontWeight: 500 }}>{f.full_name || f.display_name}</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 500 }}>{f.full_name || f.display_name}</div>
+                <div style={{ fontSize: '0.72rem', color: isOnline(f) ? '#2ecc71' : '#aaa' }}>
+                  {isOnline(f) ? '🟢 Online agora' : f.last_seen_at ? `Visto ${timeAgo(f.last_seen_at)}` : 'Offline'}
+                </div>
+              </div>
               <button className="btn btn-outline btn-sm" onClick={() => removeFriend(f.friendship_id)} style={{ color: '#e74c3c', borderColor: '#e74c3c', fontSize: 12 }}>
                 {t('friends.removeFriend')}
               </button>

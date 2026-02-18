@@ -113,8 +113,18 @@ export default function App() {
       Notification.requestPermission();
     }
     checkUnread();
-    const interval = setInterval(checkUnread, 30000); // Check every 30s instead of 60s
-    return () => clearInterval(interval);
+    const interval = setInterval(checkUnread, 30000);
+
+    // Heartbeat — update online status every 60s
+    function sendHeartbeat() {
+      fetch(`${API}/profile/heartbeat`, {
+        method: 'POST', headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => {});
+    }
+    sendHeartbeat();
+    const hbInterval = setInterval(sendHeartbeat, 60000);
+
+    return () => { clearInterval(interval); clearInterval(hbInterval); };
   }, [user]);
 
   useEffect(() => {
