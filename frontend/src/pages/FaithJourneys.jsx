@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CheckCircle, ArrowRight } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { CheckCircle, ArrowRight, Globe, Lock, Send } from 'lucide-react';
 
 const journeysData = {
   'gratidao-e-oracao': {
@@ -238,11 +239,64 @@ const journeysData = {
   },
 };
 
+const API = (import.meta.env.VITE_API_URL || '') + '/api';
+
 export default function FaithJourneys() {
   const { t, i18n } = useTranslation();
+  const { user, token } = useAuth();
   const [currentDay, setCurrentDay] = useState(1);
-  const [completedDays, setCompletedDays] = useState({}); // { 'journeyId': { 'day1': true, 'day2': false } }
-  const journeyId = 'gratidao-e-oracao'; // Our first journey
+  const [completedDays, setCompletedDays] = useState({});
+  const [responseText, setResponseText] = useState('');
+  const [isPublic, setIsPublic] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [myResponses, setMyResponses] = useState({});
+  const [publicResponses, setPublicResponses] = useState([]);
+  const journeyId = 'gratidao-e-oracao';
+
+  // Load my responses
+  useEffect(() => {
+    if (!token) return;
+    fetch(`${API}/journeys/my?journeyId=${journeyId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(r => r.json()).then(data => {
+      if (Array.isArray(data)) {
+        const map = {};
+        data.forEach(r => { map[r.day_index] = r; });
+        setMyResponses(map);
+      }
+    }).catch(() => {});
+  }, [token]);
+
+  // Load public responses for current day
+  useEffect(() => {
+    fetch(`${API}/journeys/public?journeyId=${journeyId}&dayIndex=${currentDay}`)
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setPublicResponses(data); })
+      .catch(() => setPublicResponses([]));
+  }, [currentDay]);
+
+  const handleSaveResponse = async () => {
+    if (!token) return alert('Faça login para responder!');
+    if (!responseText.trim()) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/journeys/respond`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ journeyId, dayIndex: currentDay, responseText: responseText.trim(), isPublic }),
+      });
+      if (res.ok) {
+        setMyResponses(prev => ({ ...prev, [currentDay]: { response_text: responseText.trim(), is_public: isPublic } }));
+        setResponseText('');
+        // Refresh public
+        if (isPublic) {
+          fetch(`${API}/journeys/public?journeyId=${journeyId}&dayIndex=${currentDay}`)
+            .then(r => r.json()).then(data => { if (Array.isArray(data)) setPublicResponses(data); });
+        }
+      }
+    } catch (e) { console.error(e); }
+    finally { setSaving(false); }
+  };
 
   const journey = journeysData[journeyId];
   if (!journey) {
@@ -349,6 +403,103 @@ export default function FaithJourneys() {
               {getTranslatedText(currentDayData.challenge)}
             </p>
           </div>
+
+          {/* ===== RESPONSE AREA ===== */}
+          <div style={{
+            background: '#fff', border: '1px solid #e0e0e0', borderRadius: 14,
+            padding: '1rem', marginBottom: '1.5rem',
+          }}>
+            <h3 style={{ fontSize: '0.95rem', color: '#1a0a3e', margin: '0 0 0.6rem', display: 'flex', alignItems: 'center', gap: 6 }}>
+              ✍️ Sua Resposta ao Desafio:
+            </h3>
+
+            {myResponses[currentDay] ? (
+              <div style={{
+                background: 'rgba(46,204,113,0.08)', border: '1px solid rgba(46,204,113,0.3)',
+                borderRadius: 10, padding: '0.8rem',
+              }}>
+                <p style={{ margin: 0, fontSize: '0.9rem', color: '#333', whiteSpace: 'pre-wrap' }}>
+                  {myResponses[currentDay].response_text}
+                </p>
+                <div style={{ marginTop: 6, fontSize: '0.75rem', color: '#888', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {myResponses[currentDay].is_public ? <><Globe size={12} /> Público</> : <><Lock size={12} /> Privado</>}
+                  {' — '}✅ Resposta salva!
+                </div>
+              </div>
+            ) : (
+              <>
+                <textarea
+                  value={responseText}
+                  onChange={e => setResponseText(e.target.value)}
+                  placeholder="Escreva aqui sua resposta ao desafio do dia..."
+                  rows={3}
+                  style={{
+                    width: '100%', padding: '0.7rem', borderRadius: 10,
+                    border: '1px solid #ddd', fontSize: '0.88rem', resize: 'vertical',
+                    boxSizing: 'border-box', marginBottom: '0.5rem',
+                  }}
+                />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+                  {/* Public/Private toggle */}
+                  <button
+                    type="button"
+                    onClick={() => setIsPublic(!isPublic)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      padding: '0.5rem 0.8rem', borderRadius: 20,
+                      border: isPublic ? '2px solid #27ae60' : '2px solid #999',
+                      background: isPublic ? 'rgba(46,204,113,0.1)' : '#f5f5f5',
+                      color: isPublic ? '#27ae60' : '#666',
+                      fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer',
+                    }}
+                  >
+                    {isPublic ? <><Globe size={14} /> Público — todos veem</> : <><Lock size={14} /> Privado — só você vê</>}
+                  </button>
+                  {/* Save button */}
+                  <button
+                    onClick={handleSaveResponse}
+                    disabled={saving || !responseText.trim()}
+                    style={{
+                      padding: '0.5rem 1rem', borderRadius: 20, border: 'none',
+                      background: 'linear-gradient(135deg, #daa520, #f4c542)',
+                      color: '#fff', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                      opacity: saving || !responseText.trim() ? 0.5 : 1,
+                      display: 'flex', alignItems: 'center', gap: 5,
+                    }}
+                  >
+                    <Send size={14} /> {saving ? 'Salvando...' : 'Enviar'}
+                  </button>
+                </div>
+                <p style={{ margin: '0.4rem 0 0', fontSize: '0.72rem', color: '#999' }}>
+                  💡 Escolha "Público" para inspirar outros na comunidade, ou "Privado" para manter só para você.
+                </p>
+              </>
+            )}
+          </div>
+
+          {/* ===== PUBLIC RESPONSES ===== */}
+          {publicResponses.length > 0 && (
+            <div style={{ marginBottom: '1.5rem' }}>
+              <h3 style={{ fontSize: '0.9rem', color: '#1a0a3e', margin: '0 0 0.6rem', display: 'flex', alignItems: 'center', gap: 6 }}>
+                🌍 Respostas da Comunidade ({publicResponses.length}):
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {publicResponses.map((r, idx) => (
+                  <div key={idx} style={{
+                    background: '#fafafa', borderRadius: 10, padding: '0.7rem',
+                    border: '1px solid #eee',
+                  }}>
+                    <p style={{ margin: 0, fontSize: '0.85rem', color: '#333', whiteSpace: 'pre-wrap' }}>
+                      {r.response_text}
+                    </p>
+                    <div style={{ marginTop: 4, fontSize: '0.7rem', color: '#aaa' }}>
+                      — {r.user_name || 'Anônimo'}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem' }}>
             <button

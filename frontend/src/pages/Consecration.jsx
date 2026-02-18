@@ -144,6 +144,12 @@ export default function Consecration() {
         }
         @keyframes pulseBtn { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
         @keyframes flicker { 0%,100% { opacity: 0.85; } 50% { opacity: 1; } }
+        @keyframes innerFlame {
+          0% { transform: translateX(-50%) scaleX(1) scaleY(1); opacity: 0.4; }
+          30% { transform: translateX(-48%) scaleX(1.1) scaleY(1.05); opacity: 0.6; }
+          60% { transform: translateX(-52%) scaleX(0.9) scaleY(1.1); opacity: 0.5; }
+          100% { transform: translateX(-50%) scaleX(1.05) scaleY(0.95); opacity: 0.55; }
+        }
       `}</style>
 
       {/* Content (above bubbles) */}
@@ -228,23 +234,58 @@ export default function Consecration() {
           </div>
         </div>
 
-        {/* ===== TOGGLE BUTTON — grande e claro ===== */}
+        {/* ===== TOGGLE BUTTON — com chama de fogo interna ===== */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1.25rem' }}>
           <button onClick={handleToggle} disabled={toggling} style={{
-            width: 160, height: 160, borderRadius: '50%', border: 'none', cursor: 'pointer',
+            width: 170, height: 170, borderRadius: '50%', border: 'none', cursor: 'pointer',
             background: isActive
-              ? 'radial-gradient(circle, #ff3300, #ff6600, #ffcc00)'
+              ? 'radial-gradient(circle at 50% 70%, #fff700 0%, #ff9500 20%, #ff4500 45%, #cc0000 70%, #880000 100%)'
               : 'radial-gradient(circle, #1a0a3e, #4a1a8e)',
             color: '#fff', fontSize: '0.9rem', fontWeight: 700,
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4,
             boxShadow: isActive
-              ? '0 0 40px rgba(255, 102, 0, 0.7), 0 0 80px rgba(255, 51, 0, 0.4)'
+              ? '0 0 50px rgba(255, 102, 0, 0.8), 0 0 100px rgba(255, 51, 0, 0.5), inset 0 0 40px rgba(255,200,0,0.3)'
               : '0 4px 20px rgba(26, 10, 62, 0.3)',
             transition: 'all 0.5s ease',
             animation: isActive ? 'pulseBtn 2s ease-in-out infinite' : 'none',
+            position: 'relative',
+            overflow: 'hidden',
           }}>
-            <Flame size={40} />
-            {isActive ? '🔥 Consagrando...' : '🔥 Consagrar'}
+            {/* Inner flame effect */}
+            {isActive && (
+              <>
+                <span style={{
+                  position: 'absolute', bottom: '10%', left: '50%', transform: 'translateX(-50%)',
+                  width: 60, height: 90,
+                  borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
+                  background: 'radial-gradient(ellipse at bottom, #fff700 0%, #ffaa00 30%, #ff4500 60%, transparent 100%)',
+                  animation: 'innerFlame 1.5s ease-in-out infinite alternate',
+                  opacity: 0.6, filter: 'blur(3px)',
+                }} />
+                <span style={{
+                  position: 'absolute', bottom: '15%', left: '45%', transform: 'translateX(-50%)',
+                  width: 35, height: 55,
+                  borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
+                  background: 'radial-gradient(ellipse at bottom, #ffffff 0%, #ffe066 30%, #ff6600 70%, transparent 100%)',
+                  animation: 'innerFlame 1.2s ease-in-out infinite alternate-reverse',
+                  opacity: 0.5, filter: 'blur(2px)',
+                }} />
+                <span style={{
+                  position: 'absolute', bottom: '12%', left: '55%', transform: 'translateX(-50%)',
+                  width: 28, height: 45,
+                  borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
+                  background: 'radial-gradient(ellipse at bottom, #fff 0%, #ffcc00 40%, #ff3300 80%, transparent 100%)',
+                  animation: 'innerFlame 1s ease-in-out infinite alternate',
+                  opacity: 0.4, filter: 'blur(2px)',
+                }} />
+              </>
+            )}
+            <span style={{ position: 'relative', zIndex: 2, textShadow: isActive ? '0 0 10px rgba(255,200,0,0.8)' : 'none' }}>
+              <Flame size={44} />
+            </span>
+            <span style={{ position: 'relative', zIndex: 2, textShadow: isActive ? '0 0 10px rgba(255,200,0,0.8)' : 'none', fontSize: '0.95rem' }}>
+              {isActive ? 'Consagrando...' : 'Consagrar'}
+            </span>
           </button>
           <div style={{
             marginTop: 10, padding: '0.5rem 1rem', borderRadius: 20,
