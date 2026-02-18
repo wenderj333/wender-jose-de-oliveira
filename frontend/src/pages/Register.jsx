@@ -40,6 +40,7 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (!avatar) return setError('📷 Foto de perfil é obrigatória! Toque no ícone da câmera acima para adicionar.');
     if (form.password.length < 6) return setError(t('register.passwordError'));
     try {
       // Upload avatar ao Cloudinary se selecionado
@@ -250,24 +251,48 @@ export default function Register() {
 
         <form onSubmit={handleSubmit}>
           {/* Avatar */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1rem' }}>
             <label style={{ cursor: 'pointer', position: 'relative' }}>
               <div style={{
-                width: 80, height: 80, borderRadius: '50%', background: avatarPreview ? 'none' : '#f0f0f0',
-                border: '2px dashed #daa520', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: 100, height: 100, borderRadius: '50%',
+                background: avatarPreview ? 'none' : 'linear-gradient(135deg, #fff8e1, #fff3e0)',
+                border: avatarPreview ? '3px solid #4caf50' : '3px dashed #daa520',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
                 overflow: 'hidden',
+                boxShadow: avatarPreview ? '0 4px 15px rgba(76,175,80,0.3)' : '0 4px 15px rgba(218,165,32,0.3)',
+                animation: !avatarPreview ? 'pulse 2s infinite' : 'none',
               }}>
                 {avatarPreview ? (
-                  <img src={avatarPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <>
+                    <img src={avatarPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <div style={{
+                      position: 'absolute', bottom: 0, right: 0,
+                      background: '#4caf50', borderRadius: '50%', width: 28, height: 28,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      border: '2px solid #fff',
+                    }}>
+                      <span style={{ color: '#fff', fontSize: '0.85rem' }}>✓</span>
+                    </div>
+                  </>
                 ) : (
-                  <Camera size={28} color="#daa520" />
+                  <div style={{ textAlign: 'center' }}>
+                    <Camera size={36} color="#daa520" />
+                  </div>
                 )}
-              </div>
-              <div style={{ textAlign: 'center', fontSize: '0.75rem', color: '#daa520', marginTop: 4, fontWeight: 600 }}>
-                📷 {t('register.addPhoto', 'Adicionar foto')}
               </div>
               <input type="file" accept="image/*" onChange={handleAvatarSelect} style={{ display: 'none' }} />
             </label>
+            <div style={{
+              textAlign: 'center', fontSize: '0.85rem', marginTop: 6, fontWeight: 700,
+              color: avatarPreview ? '#4caf50' : '#daa520',
+            }}>
+              {avatarPreview ? '✅ Foto adicionada!' : '📷 Toque aqui para adicionar sua foto *'}
+            </div>
+            {!avatarPreview && (
+              <div style={{ fontSize: '0.72rem', color: '#e74c3c', marginTop: 2, fontWeight: 600 }}>
+                ⚠️ Obrigatório — sua foto aparece para outros membros
+              </div>
+            )}
           </div>
 
           <div className="form-group">
