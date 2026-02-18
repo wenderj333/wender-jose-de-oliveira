@@ -72,6 +72,7 @@ export default function App() {
   const [unreadCount, setUnreadCount] = useState(0);
 
   // Poll unread notifications every 60 seconds
+  const prevUnreadRef = useRef(0);
   useEffect(() => {
     if (!user) return;
     const API = (import.meta.env.VITE_API_URL || '') + '/api';
@@ -82,11 +83,36 @@ export default function App() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
-        setUnreadCount(data.count || 0);
+        const newCount = data.count || 0;
+        // Show browser notification if count increased
+        if (newCount > prevUnreadRef.current && prevUnreadRef.current >= 0) {
+          if ('Notification' in window && Notification.permission === 'granted') {
+            try {
+              const notifRes = await fetch(`${API}/notifications?limit=1`, {
+                headers: { Authorization: `Bearer ${token}` },
+              });
+              const notifData = await notifRes.json();
+              const latest = notifData.notifications?.[0];
+              if (latest && !latest.is_read) {
+                new Notification(latest.title || '🔔 Sigo com Fé', {
+                  body: latest.body || 'Você tem uma nova notificação!',
+                  icon: '/logo.jpg',
+                  tag: 'sigo-notif-' + latest.id,
+                });
+              }
+            } catch (e) {}
+          }
+        }
+        prevUnreadRef.current = newCount;
+        setUnreadCount(newCount);
       } catch (e) {}
     }
+    // Request notification permission on first load
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
     checkUnread();
-    const interval = setInterval(checkUnread, 60000);
+    const interval = setInterval(checkUnread, 30000); // Check every 30s instead of 60s
     return () => clearInterval(interval);
   }, [user]);
 

@@ -294,18 +294,32 @@ export default function Mural() {
       const formData = new FormData();
       formData.append('content', newText.trim() || (newMediaIsAudio ? '🎵' : newMediaIsVideo ? '🎬' : '📸'));
       formData.append('category', newCategory);
-      // If we have a library song AND a photo, upload photo as media_url and add audio_url
+      // If we have a library song AND a photo, upload photo first then add audio_url
       if (selectedSongUrl && newMedia && !newMediaIsAudio) {
-        // Photo + Music combo
+        // Photo + Music combo - MUST upload photo to Cloudinary first
         try {
           const result = await uploadDirectToCloudinary(newMedia);
           formData.append('media_url', result.url);
           formData.append('media_type', 'image');
         } catch (uploadErr) {
-          formData.append('image', newMedia);
+          // Fallback: unsigned upload directly
+          try {
+            const fd2 = new FormData();
+            fd2.append('file', newMedia);
+            fd2.append('upload_preset', 'sigo_com_fe');
+            fd2.append('folder', 'sigo-com-fe/posts');
+            const upRes = await fetch('https://api.cloudinary.com/v1_1/degxiuf43/image/upload', { method: 'POST', body: fd2 });
+            const upData = await upRes.json();
+            if (upData.secure_url) {
+              formData.append('media_url', upData.secure_url);
+              formData.append('media_type', 'image');
+            }
+          } catch (e2) {
+            console.error('Photo upload failed completely:', e2);
+          }
         }
         formData.append('audio_url', selectedSongUrl);
-      } else if (selectedSongUrl) {
+      } else if (selectedSongUrl && !newMedia) {
         // Music only from library
         formData.append('media_url', selectedSongUrl);
         formData.append('media_type', 'video');

@@ -68,6 +68,21 @@ router.post('/', authenticate, async (req, res) => {
       `INSERT INTO direct_messages (sender_id, receiver_id, content)
        VALUES (?, ?, ?) RETURNING *`
     ).get(req.user.id, receiverId, content.trim());
+
+    // Create notification for receiver
+    try {
+      const sender = await db.prepare(`SELECT full_name, display_name FROM users WHERE id = ?`).get(req.user.id);
+      const senderName = sender?.display_name || sender?.full_name || 'Alguém';
+      const preview = content.trim().length > 50 ? content.trim().substring(0, 50) + '...' : content.trim();
+      await db.prepare(
+        `INSERT INTO notifications (user_id, type, title, body)
+         VALUES (?, 'message', ?, ?)`
+      ).run(receiverId, `💬 Nova mensagem de ${senderName}`, preview);
+    } catch (notifErr) {
+      console.error('Error creating notification:', notifErr);
+      // Don't fail the message send if notification fails
+    }
+
     res.status(201).json({ message: msg });
   } catch (err) {
     console.error('Error sending message:', err);

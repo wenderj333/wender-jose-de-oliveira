@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useWebSocket } from '../context/WebSocketContext';
-import { HandHeart, Radio, Newspaper, Users, CheckCircle, ShieldAlert, MessageCircle, Music, UserPlus, Heart, ArrowRight } from 'lucide-react';
+import { HandHeart, Radio, Newspaper, Users, CheckCircle, ShieldAlert, MessageCircle, Music, UserPlus, Heart, ArrowRight, ThumbsUp, MessageSquare } from 'lucide-react';
 
 function getVersiculoDoDia(verses) {
   const hoje = new Date();
