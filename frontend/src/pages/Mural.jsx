@@ -453,14 +453,13 @@ export default function Mural() {
         )}
       </div>
 
-      {/* New Post Form */}
+      {/* New Post Form — TikTok/Instagram style flow */}
       {showForm && user && (
         <form onSubmit={handlePost} style={{
           background: '#fff', borderRadius: 16, padding: '1rem', marginBottom: '1rem',
           border: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
         }}>
-          {/* Step 1: Category */}
-          <p style={{ fontSize: '0.75rem', color: '#999', margin: '0 0 4px', fontWeight: 600 }}>1️⃣ Escolha o tipo da publicação:</p>
+          {/* Categories */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '0.75rem' }}>
             {CATEGORIES.map(cat => (
               <button type="button" key={cat.value} onClick={() => setNewCategory(cat.value)} style={{
@@ -471,40 +470,60 @@ export default function Mural() {
               }}>{cat.label}</button>
             ))}
           </div>
-          {/* Step 2: Text */}
-          <p style={{ fontSize: '0.75rem', color: '#999', margin: '0 0 4px', fontWeight: 600 }}>2️⃣ Escreva algo (opcional se tiver foto ou música):</p>
+
+          {/* Text */}
           <textarea value={newText} onChange={e => setNewText(e.target.value)}
-            placeholder={t('common.shareCommunity', 'Compartilhe algo com a comunidade...')}
-            rows={3} style={{
+            placeholder="Compartilhe algo com a comunidade..."
+            rows={2} style={{
               width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd',
               fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box', marginBottom: '0.5rem',
             }} />
-          {/* Selected music indicator */}
-          {selectedSongUrl && !newMediaIsAudio && (
-            <div style={{
-              background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 10,
-              padding: '0.6rem 1rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: 8,
+
+          {/* Media + Music buttons — Instagram style */}
+          <div style={{ display: 'flex', gap: 6, marginBottom: '0.5rem' }}>
+            <button type="button" onClick={() => photoRef.current?.click()} style={{
+              flex: 1, padding: '0.7rem', borderRadius: 12, border: '2px dashed #ddd',
+              background: newMedia && !newMediaIsVideo && !newMediaIsAudio ? '#e8f5e9' : '#fafafa',
+              cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+              fontSize: '0.78rem', color: '#666',
             }}>
-              <span style={{ fontSize: '1.3rem' }}>🎵</span>
-              <span style={{ color: '#fff', fontSize: '0.82rem', flex: 1 }}>{selectedSongName}</span>
-              <button type="button" onClick={() => { setSelectedSongUrl(null); setSelectedSongName(''); }} style={{
-                background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '50%', width: 24, height: 24,
-                color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>✕</button>
-            </div>
-          )}
+              <Image size={24} color={newMedia && !newMediaIsVideo ? '#4caf50' : '#999'} />
+              {newMedia && !newMediaIsVideo && !newMediaIsAudio ? '✅ Foto' : '📸 Foto'}
+            </button>
+            <button type="button" onClick={() => videoRef.current?.click()} style={{
+              flex: 1, padding: '0.7rem', borderRadius: 12, border: '2px dashed #ddd',
+              background: newMediaIsVideo ? '#e8f5e9' : '#fafafa',
+              cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+              fontSize: '0.78rem', color: '#666',
+            }}>
+              <Video size={24} color={newMediaIsVideo ? '#4caf50' : '#999'} />
+              {newMediaIsVideo ? '✅ Vídeo' : '🎬 Vídeo'}
+            </button>
+            <button type="button" onClick={openMusicPicker} style={{
+              flex: 1, padding: '0.7rem', borderRadius: 12,
+              border: selectedSongUrl ? '2px solid #9b59b6' : '2px dashed #ddd',
+              background: selectedSongUrl ? 'rgba(155,89,182,0.1)' : '#fafafa',
+              cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+              fontSize: '0.78rem', color: selectedSongUrl ? '#9b59b6' : '#666', fontWeight: selectedSongUrl ? 700 : 400,
+            }}>
+              <Music size={24} color={selectedSongUrl ? '#9b59b6' : '#999'} />
+              {selectedSongUrl ? '✅ Música' : '🎵 Música'}
+            </button>
+          </div>
+
+          {/* Preview: Selected media */}
           {newMediaPreview && (
-            <div style={{ position: 'relative', marginBottom: '0.5rem', borderRadius: 10, overflow: 'hidden' }}>
+            <div style={{ position: 'relative', marginBottom: '0.5rem', borderRadius: 12, overflow: 'hidden' }}>
               {newMediaIsAudio ? (
-                <div style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 10, padding: '1rem', textAlign: 'center' }}>
+                <div style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12, padding: '1rem', textAlign: 'center' }}>
                   <span style={{ fontSize: '2rem' }}>🎵</span>
                   <p style={{ color: '#fff', fontSize: '0.85rem', margin: '0.5rem 0' }}>{selectedSongName || newMedia?.name || 'Música'}</p>
                   <audio src={newMediaPreview} controls style={{ width: '100%' }} />
                 </div>
               ) : newMediaIsVideo ? (
-                <video src={newMediaPreview} controls style={{ width: '100%', maxHeight: 300, borderRadius: 10 }} />
+                <video src={newMediaPreview} controls style={{ width: '100%', maxHeight: 280, borderRadius: 12 }} />
               ) : (
-                <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 300, objectFit: 'cover', borderRadius: 10 }} />
+                <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 280, objectFit: 'cover', borderRadius: 12 }} />
               )}
               <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaIsAudio(false); setNewMediaIsVideo(false); }} style={{
                 position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.6)', border: 'none',
@@ -512,45 +531,39 @@ export default function Mural() {
               }}><X size={16} color="#fff" /></button>
             </div>
           )}
-          {newMediaIsVideo && (
-            <div style={{
-              background: '#fff8e1', border: '1px solid #ffe082', borderRadius: 10,
-              padding: '0.7rem', marginBottom: '0.5rem', fontSize: '0.8rem', color: '#6d4c00',
+
+          {/* Auto-prompt: "Adicionar música?" after selecting photo/video */}
+          {(newMedia && !newMediaIsAudio && !selectedSongUrl && !showMusicPicker) && (
+            <button type="button" onClick={openMusicPicker} style={{
+              width: '100%', padding: '0.7rem', borderRadius: 12, marginBottom: '0.5rem',
+              border: '2px dashed #9b59b6', background: 'linear-gradient(135deg, rgba(155,89,182,0.05), rgba(102,126,234,0.05))',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              fontSize: '0.88rem', color: '#9b59b6', fontWeight: 600,
             }}>
-              <strong>💡 Dica:</strong> Edite seu vídeo antes de postar!
-              <div style={{ marginTop: 6, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                <a href="https://www.capcut.com" target="_blank" rel="noopener" style={{ background: '#fff', padding: '3px 10px', borderRadius: 12, border: '1px solid #ddd', textDecoration: 'none', color: '#333', fontSize: '0.75rem' }}>🎬 CapCut</a>
-                <a href="https://inshot.com" target="_blank" rel="noopener" style={{ background: '#fff', padding: '3px 10px', borderRadius: 12, border: '1px solid #ddd', textDecoration: 'none', color: '#333', fontSize: '0.75rem' }}>✂️ InShot</a>
-              </div>
+              🎵 Quer adicionar uma música? Toque aqui!
+            </button>
+          )}
+
+          {/* Selected music indicator */}
+          {selectedSongUrl && (
+            <div style={{
+              background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12,
+              padding: '0.6rem 1rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: 8,
+            }}>
+              <span style={{ fontSize: '1.3rem' }}>🎵</span>
+              <span style={{ color: '#fff', fontSize: '0.82rem', flex: 1 }}>{selectedSongName}</span>
+              <button type="button" onClick={() => { setSelectedSongUrl(null); setSelectedSongName(''); }} style={{
+                background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '50%', width: 24, height: 24,
+                color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem',
+              }}>✕</button>
             </div>
           )}
-          {/* Step 3: Attach media */}
-          <p style={{ fontSize: '0.75rem', color: '#999', margin: '0.5rem 0 4px', fontWeight: 600 }}>3️⃣ Anexe foto, vídeo ou música da biblioteca:</p>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-            <button type="button" onClick={() => photoRef.current?.click()} style={{
-              padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #ddd',
-              background: '#f9f9f9', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#666',
-            }}><Image size={16} /> Foto</button>
-            <button type="button" onClick={() => videoRef.current?.click()} style={{
-              padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #ddd',
-              background: '#f9f9f9', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#666',
-            }}><Video size={16} /> Vídeo</button>
-            <button type="button" onClick={openMusicPicker} style={{
-              padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid #9b59b6',
-              background: selectedSongUrl ? 'rgba(155,89,182,0.2)' : 'rgba(155,89,182,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', color: '#9b59b6', fontWeight: 600,
-            }}>🎵 {selectedSongUrl ? '✅ Música' : 'Adicionar Música'}</button>
-            <div style={{ flex: 1 }} />
-            <button type="submit" disabled={posting || (!newText.trim() && !newMedia && !selectedSongUrl)} style={{
-              padding: '0.5rem 1.2rem', borderRadius: 20, border: 'none',
-              background: (newText.trim() || newMedia || selectedSongUrl) ? '#daa520' : '#ccc', color: '#fff',
-              fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
-            }}><Send size={16} /> {posting ? 'Enviando...' : 'Publicar'}</button>
-          </div>
-          {/* Music Picker from Library */}
+
+          {/* Music Picker */}
           {showMusicPicker && (
             <div style={{
               background: '#fff', border: '2px solid #9b59b6', borderRadius: 14, padding: '1rem',
-              marginTop: '0.5rem', maxHeight: 250, overflowY: 'auto',
+              marginBottom: '0.5rem', maxHeight: 280, overflowY: 'auto',
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                 <h4 style={{ margin: 0, fontSize: '0.95rem', color: '#9b59b6' }}>🎵 Escolha uma música</h4>
@@ -559,32 +572,47 @@ export default function Mural() {
                 }}>✕</button>
               </div>
               <p style={{ fontSize: '0.72rem', color: '#888', margin: '0 0 0.5rem', lineHeight: 1.4 }}>
-                Estas são as músicas que já foram enviadas na página <strong>Música</strong>. Escolha uma para adicionar à sua publicação! 
-                Você também pode enviar uma foto junto.
+                Músicas da biblioteca do app. Selecione uma para acompanhar sua foto ou vídeo!
               </p>
               {librarySongs.length === 0 ? (
-                <p style={{ color: '#999', fontSize: '0.85rem', textAlign: 'center' }}>Carregando músicas...</p>
+                <p style={{ color: '#999', fontSize: '0.85rem', textAlign: 'center', padding: '1rem' }}>Carregando músicas...</p>
               ) : librarySongs.map(song => (
                 <button type="button" key={song.id} onClick={() => selectLibrarySong(song)} style={{
-                  width: '100%', padding: '0.6rem 0.75rem', borderRadius: 10, border: '1px solid #eee',
+                  width: '100%', padding: '0.6rem 0.75rem', borderRadius: 10,
+                  border: selectedSongUrl === song.url ? '2px solid #9b59b6' : '1px solid #eee',
                   background: selectedSongUrl === song.url ? 'rgba(155,89,182,0.1)' : '#fafafa',
                   cursor: 'pointer', marginBottom: 6, textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
                 }}>
-                  <span style={{ fontSize: '1.2rem' }}>🎵</span>
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1a0a3e' }}>{song.title}</div>
-                    <div style={{ fontSize: '0.75rem', color: '#888' }}>{song.artist || song.user_name}</div>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: 8, background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  }}>
+                    <Music size={18} color="#fff" />
                   </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1a0a3e' }}>{song.title}</div>
+                    <div style={{ fontSize: '0.72rem', color: '#888' }}>{song.artist || song.user_name}</div>
+                  </div>
+                  {selectedSongUrl === song.url && <span style={{ color: '#9b59b6', fontWeight: 700 }}>✅</span>}
                 </button>
               ))}
               <div style={{ borderTop: '1px solid #eee', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
                 <button type="button" onClick={() => { setShowMusicPicker(false); audioRef.current?.click(); }} style={{
                   width: '100%', padding: '0.5rem', borderRadius: 10, border: '1px dashed #9b59b6',
                   background: 'transparent', cursor: 'pointer', fontSize: '0.82rem', color: '#9b59b6',
-                }}>📁 Ou escolha do seu celular</button>
+                }}>📁 Enviar música do celular</button>
               </div>
             </div>
           )}
+
+          {/* Publish button */}
+          <button type="submit" disabled={posting || (!newText.trim() && !newMedia && !selectedSongUrl)} style={{
+            width: '100%', padding: '0.75rem', borderRadius: 14, border: 'none', marginTop: '0.25rem',
+            background: (newText.trim() || newMedia || selectedSongUrl) ? 'linear-gradient(135deg, #daa520, #f4c542)' : '#ddd',
+            color: (newText.trim() || newMedia || selectedSongUrl) ? '#1a0a3e' : '#999',
+            fontWeight: 700, fontSize: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            boxShadow: (newText.trim() || newMedia || selectedSongUrl) ? '0 4px 15px rgba(218,165,32,0.3)' : 'none',
+          }}><Send size={18} /> {posting ? 'Publicando...' : 'Publicar'}</button>
           <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
           <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={handleMediaSelect} />
           <input ref={audioRef} type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg,audio/m4a,audio/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
