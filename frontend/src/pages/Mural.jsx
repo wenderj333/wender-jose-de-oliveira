@@ -1,7 +1,46 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { Plus, Filter, X, Send, Heart, MessageCircle, Image, Video, Play, User, Share2, ChevronDown, Trash2 } from 'lucide-react';
+
+// Hook: auto-play/pause media based on visibility (TikTok-style)
+function useMediaAutoplay() {
+  const observerRef = useRef(null);
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const el = entry.target;
+        if (el.tagName === 'VIDEO' || el.tagName === 'AUDIO') {
+          if (entry.isIntersecting) {
+            // Only autoplay if no other media is currently playing in viewport
+            el.play().catch(() => {});
+          } else {
+            el.pause();
+          }
+        }
+        // Handle YouTube iframes
+        if (el.tagName === 'IFRAME' && el.src.includes('youtube')) {
+          if (!entry.isIntersecting) {
+            // Pause YouTube by posting message
+            el.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+          }
+        }
+      });
+    }, { threshold: 0.5 }); // 50% visible to trigger
+
+    return () => observerRef.current?.disconnect();
+  }, []);
+
+  // Ref callback to observe media elements
+  const observeMedia = useCallback((node) => {
+    if (node && observerRef.current) {
+      observerRef.current.observe(node);
+    }
+  }, []);
+
+  return observeMedia;
+}
 import { Link } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
@@ -51,6 +90,7 @@ function timeAgo(dateStr) {
 export default function Mural() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
+  const observeMedia = useMediaAutoplay();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('todas');
@@ -819,13 +859,14 @@ export default function Mural() {
                 </div>
               )}
 
-              {/* Media */}
+              {/* Media — TikTok-style: only visible media plays */}
               {post.media_url && (
                 <div style={{ width: '100%' }}>
                   {isYouTube(post.media_url) ? (
                     <div style={{ borderRadius: 12, overflow: 'hidden', background: '#000' }}>
                       <iframe
-                        src={`https://www.youtube.com/embed/${getYouTubeId(post.media_url)}?rel=0`}
+                        ref={observeMedia}
+                        src={`https://www.youtube.com/embed/${getYouTubeId(post.media_url)}?rel=0&enablejsapi=1`}
                         style={{ width: '100%', height: 200, border: 'none' }}
                         allow="autoplay; encrypted-media"
                         allowFullScreen
@@ -837,10 +878,10 @@ export default function Mural() {
                       padding: '1rem', textAlign: 'center',
                     }}>
                       <span style={{ fontSize: '2rem' }}>🎵</span>
-                      <audio src={getMediaUrl(post.media_url)} controls autoPlay loop style={{ width: '100%', marginTop: 8 }} />
+                      <audio ref={observeMedia} src={getMediaUrl(post.media_url)} controls style={{ width: '100%', marginTop: 8 }} />
                     </div>
                   ) : (post.media_type === 'video' || isVideo(post.media_url)) ? (
-                    <video src={getMediaUrl(post.media_url)} controls playsInline autoPlay muted preload="metadata"
+                    <video ref={observeMedia} src={getMediaUrl(post.media_url)} controls playsInline muted preload="metadata"
                       style={{ width: '100%', maxHeight: 500, background: '#000' }} />
                   ) : (
                     <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', maxHeight: 500, objectFit: 'cover' }} />
@@ -852,7 +893,8 @@ export default function Mural() {
                 isYouTube(post.audio_url) ? (
                   <div style={{ borderRadius: 12, overflow: 'hidden', background: '#000' }}>
                     <iframe
-                      src={`https://www.youtube.com/embed/${getYouTubeId(post.audio_url)}?autoplay=0&rel=0`}
+                      ref={observeMedia}
+                      src={`https://www.youtube.com/embed/${getYouTubeId(post.audio_url)}?rel=0&enablejsapi=1`}
                       style={{ width: '100%', height: 60, border: 'none' }}
                       allow="autoplay; encrypted-media"
                       allowFullScreen
@@ -864,7 +906,7 @@ export default function Mural() {
                     padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', gap: 8,
                   }}>
                     <span style={{ fontSize: '1.3rem' }}>🎵</span>
-                    <audio src={getMediaUrl(post.audio_url)} controls autoPlay style={{ flex: 1, height: 32 }} />
+                    <audio ref={observeMedia} src={getMediaUrl(post.audio_url)} controls style={{ flex: 1, height: 32 }} />
                   </div>
                 )
               )}
