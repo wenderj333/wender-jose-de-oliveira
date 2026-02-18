@@ -294,6 +294,14 @@ export default function Mural() {
     { id: 'de1', title: 'Gut Zu Mir', artist: 'Outbreakband', url: 'https://www.youtube.com/watch?v=A7VDCxcVpXQ', type: 'youtube', lang: 'de' },
     { id: 'de2', title: 'Sei Stille und Erkenne', artist: 'Hillsong Germany', url: 'https://www.youtube.com/watch?v=a7J4AHIkAPo', type: 'youtube', lang: 'de' },
     { id: 'de3', title: 'Großer Gott Wir Loben Dich', artist: 'ICF Worship', url: 'https://www.youtube.com/watch?v=bTQqVcSLHQY', type: 'youtube', lang: 'de' },
+    // 🇫🇷 Français
+    { id: 'fr1', title: 'Ouvre Les Yeux de Mon Cœur', artist: 'Hillsong France', url: 'https://www.youtube.com/watch?v=a3mokaP3rmc', type: 'youtube', lang: 'fr' },
+    { id: 'fr2', title: 'Quel Ami Fidèle et Tendre', artist: 'Hymne Classique', url: 'https://www.youtube.com/watch?v=Fa2JsKLudEY', type: 'youtube', lang: 'fr' },
+    { id: 'fr3', title: 'À Toi la Gloire', artist: 'Hymne Protestant', url: 'https://www.youtube.com/watch?v=y4bSAJnwTOc', type: 'youtube', lang: 'fr' },
+    // 🇷🇴 Română
+    { id: 'ro1', title: 'Isus, Prietenul Meu', artist: 'Grupul Emanuel', url: 'https://www.youtube.com/watch?v=4Z3OGmTNMEQ', type: 'youtube', lang: 'ro' },
+    { id: 'ro2', title: 'Mare Ești Doamne', artist: 'Bethel Romania', url: 'https://www.youtube.com/watch?v=kvLCbNGCR0E', type: 'youtube', lang: 'ro' },
+    { id: 'ro3', title: 'Doar Tu Ești Sfânt', artist: 'Worship Romania', url: 'https://www.youtube.com/watch?v=9pJGq_hVvkE', type: 'youtube', lang: 'ro' },
   ];
 
   const [musicTab, setMusicTab] = useState('popular');
@@ -711,6 +719,8 @@ export default function Mural() {
                       { key: 'es', label: '🇪🇸 ES' },
                       { key: 'en', label: '🇺🇸 EN' },
                       { key: 'de', label: '🇩🇪 DE' },
+                      { key: 'fr', label: '🇫🇷 FR' },
+                      { key: 'ro', label: '🇷🇴 RO' },
                     ].map(l => (
                       <button type="button" key={l.key} onClick={() => setMusicLang(l.key)} style={{
                         padding: '3px 10px', borderRadius: 12, border: 'none', cursor: 'pointer', fontSize: '0.72rem',
