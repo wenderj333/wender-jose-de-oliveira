@@ -52,6 +52,7 @@ const CATEGORIES = [
   { value: 'foto', label: '📸 Foto/Vídeo', color: '#3498db' },
   { value: 'versiculo', label: '📖 Versículo', color: '#27ae60' },
   { value: 'reflexao', label: '💭 Reflexão', color: '#e67e22' },
+  { value: 'campanha', label: '💝 Campanha / Causa', color: '#e74c3c' },
 ];
 
 function isAudio(url) {
@@ -116,6 +117,8 @@ export default function Mural() {
 
   // Likes & comments state (from DB)
   const [likedPosts, setLikedPosts] = useState({});
+  const [linkUrl, setLinkUrl] = useState(''); // For campanha category
+  const [linkPreview, setLinkPreview] = useState(null); // { title, description, image }
   const [openComments, setOpenComments] = useState({}); // postId -> true
   const [commentsData, setCommentsData] = useState({}); // postId -> [comments]
   const [commentText, setCommentText] = useState({});
@@ -407,7 +410,12 @@ export default function Mural() {
     setPosting(true);
     try {
       const formData = new FormData();
-      formData.append('content', newText.trim() || (newMediaIsAudio ? '🎵' : newMediaIsVideo ? '🎬' : '📸'));
+      // For campanha posts, append link to content
+      let postContent = newText.trim() || (newMediaIsAudio ? '🎵' : newMediaIsVideo ? '🎬' : newCategory === 'campanha' ? '💝' : '📸');
+      if (newCategory === 'campanha' && linkUrl.trim()) {
+        postContent = postContent + (postContent ? '\n\n' : '') + '🔗 ' + linkUrl.trim();
+      }
+      formData.append('content', postContent);
       formData.append('category', newCategory);
       // If we have a library song AND a photo, upload photo first then add audio_url
       if (selectedSongUrl && newMedia && !newMediaIsAudio) {
@@ -461,7 +469,7 @@ export default function Mural() {
         data.post.like_count = 0;
         data.post.comment_count = 0;
         setPosts(prev => [data.post, ...prev]);
-        setNewText(''); setNewMedia(null); setNewMediaPreview(null); setNewMediaIsVideo(false); setNewMediaIsAudio(false); setSelectedSongUrl(null); setSelectedSongName(''); setShowMusicPicker(false); setShowForm(false);
+        setNewText(''); setNewMedia(null); setNewMediaPreview(null); setNewMediaIsVideo(false); setNewMediaIsAudio(false); setSelectedSongUrl(null); setSelectedSongName(''); setShowMusicPicker(false); setShowForm(false); setLinkUrl(''); setLinkPreview(null);
       }
     } catch (err) {
       console.error('Post error:', err);
@@ -508,6 +516,7 @@ export default function Mural() {
     { key: 'testemunho', label: '🙏 ' + t('mural.filters.testimonies', 'Testemunhos') },
     { key: 'louvor', label: '🎵 ' + t('mural.filters.worship', 'Louvor') },
     { key: 'versiculo', label: '📖 ' + t('mural.filters.verses', 'Versículos') },
+    { key: 'campanha', label: '💝 Campanhas' },
   ];
 
   return (
@@ -600,6 +609,42 @@ export default function Mural() {
               width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd',
               fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box', marginBottom: '0.5rem',
             }} />
+
+          {/* Link field for Campanha / Causa */}
+          {newCategory === 'campanha' && (
+            <div style={{ marginBottom: '0.5rem' }}>
+              <input
+                type="url"
+                value={linkUrl}
+                onChange={e => setLinkUrl(e.target.value)}
+                placeholder="🔗 Cole o link da campanha (ex: https://voaa.me/campanha)"
+                style={{
+                  width: '100%', padding: '0.7rem', borderRadius: 10,
+                  border: '2px solid #e74c3c', fontSize: '0.85rem', boxSizing: 'border-box',
+                  background: '#fff5f5',
+                }}
+              />
+              {linkUrl && (
+                <div style={{
+                  marginTop: 6, background: '#fff', border: '1px solid #eee', borderRadius: 10,
+                  padding: '0.7rem', display: 'flex', alignItems: 'center', gap: 10,
+                }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: 8, background: 'linear-gradient(135deg, #e74c3c, #c0392b)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  }}>
+                    <span style={{ fontSize: '1.2rem' }}>💝</span>
+                  </div>
+                  <div style={{ flex: 1, overflow: 'hidden' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#333', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {linkUrl}
+                    </div>
+                    <div style={{ fontSize: '0.7rem', color: '#e74c3c' }}>Link da campanha será incluído no post</div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Media + Music buttons — Instagram style */}
           <div style={{ display: 'flex', gap: 6, marginBottom: '0.5rem' }}>
@@ -858,10 +903,55 @@ export default function Mural() {
                 </span>
               </div>
 
-              {/* Content */}
+              {/* Content — with clickable links for campanha */}
               <div style={{ padding: '0 1rem 0.5rem', fontSize: '0.9rem', lineHeight: 1.5, color: '#333' }}>
-                {post.content}
+                {post.content?.split('\n').map((line, li) => {
+                  const urlMatch = line.match(/(https?:\/\/[^\s]+)/);
+                  if (urlMatch) {
+                    const url = urlMatch[1];
+                    const before = line.substring(0, urlMatch.index);
+                    const after = line.substring(urlMatch.index + url.length);
+                    return (
+                      <div key={li}>
+                        {before}
+                        <a href={url} target="_blank" rel="noopener noreferrer" style={{
+                          color: '#3498db', textDecoration: 'underline', wordBreak: 'break-all',
+                        }}>{url}</a>
+                        {after}
+                      </div>
+                    );
+                  }
+                  return <div key={li}>{line}</div>;
+                })}
               </div>
+
+              {/* Link preview card for campanha posts */}
+              {post.category === 'campanha' && post.content?.match(/(https?:\/\/[^\s]+)/) && (
+                <a href={post.content.match(/(https?:\/\/[^\s]+)/)[1]} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                  <div style={{
+                    margin: '0 1rem 0.5rem', padding: '0.8rem', borderRadius: 12,
+                    background: 'linear-gradient(135deg, #fff5f5, #ffe8e8)', border: '1px solid #ffcdd2',
+                    display: 'flex', alignItems: 'center', gap: 10,
+                  }}>
+                    <div style={{
+                      width: 44, height: 44, borderRadius: 10,
+                      background: 'linear-gradient(135deg, #e74c3c, #c0392b)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    }}>
+                      <span style={{ fontSize: '1.4rem' }}>💝</span>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#c0392b' }}>Campanha / Causa</div>
+                      <div style={{ fontSize: '0.72rem', color: '#666', wordBreak: 'break-all' }}>
+                        {post.content.match(/(https?:\/\/[^\s]+)/)[1].substring(0, 60)}...
+                      </div>
+                      <div style={{ fontSize: '0.7rem', color: '#e74c3c', fontWeight: 600, marginTop: 2 }}>
+                        Clique para ver e ajudar →
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              )}
 
               {/* Translation */}
               {post.showTranslation && post.translatedContent && (
