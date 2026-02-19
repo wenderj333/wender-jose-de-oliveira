@@ -671,6 +671,16 @@ export default function Profile() {
           {profile.display_name && (
             <p style={{ margin: '0.1rem 0 0', color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem' }}>@{profile.display_name}</p>
           )}
+          {!isOwnProfile && profile.last_seen_at && (() => {
+            const diff = Date.now() - new Date(profile.last_seen_at).getTime();
+            const online = diff < 2 * 60 * 1000;
+            const ago = diff < 60000 ? 'agora' : diff < 3600000 ? `há ${Math.floor(diff/60000)} min` : diff < 86400000 ? `há ${Math.floor(diff/3600000)}h` : `há ${Math.floor(diff/86400000)}d`;
+            return (
+              <p style={{ margin: '0.2rem 0 0', fontSize: '0.75rem', color: online ? '#2ecc71' : 'rgba(255,255,255,0.5)' }}>
+                {online ? '🟢 Online agora' : `Visto ${ago}`}
+              </p>
+            );
+          })()}
           {profile.bio && (
             <p style={{ margin: '0.4rem 0 0', fontSize: '0.85rem', color: 'rgba(255,255,255,0.85)', lineHeight: 1.4 }}>{profile.bio}</p>
           )}
