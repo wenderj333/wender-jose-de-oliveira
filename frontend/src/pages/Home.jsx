@@ -279,34 +279,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== PROVA SOCIAL (only for logged-in users) ===== */}
-      {user ? (
-        <section style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.75rem',
-            background: 'linear-gradient(135deg, rgba(59,89,152,0.08), rgba(91,141,239,0.08))',
-            padding: '1rem 2rem', borderRadius: 16
-          }}>
-            <Users size={28} style={iconStyle} />
-            <span style={{ fontSize: '1.1rem', color: '#2c3e50' }}>
-              <strong style={{ fontSize: '1.5rem', color: '#3b5998' }}>{memberCount}+</strong> pessoas já fazem parte da rede
-            </span>
-          </div>
-        </section>
-      ) : (
-        <section style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.75rem',
-            background: 'linear-gradient(135deg, rgba(59,89,152,0.08), rgba(91,141,239,0.08))',
-            padding: '1rem 2rem', borderRadius: 16
-          }}>
-            <Users size={28} style={iconStyle} />
-            <span style={{ fontSize: '1.1rem', color: '#2c3e50' }}>
-              Cristãos do mundo todo já estão conectados aqui
-            </span>
-          </div>
-        </section>
-      )}
+      {/* ===== PROVA SOCIAL ===== */}
+      <section style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '0.75rem',
+          background: 'linear-gradient(135deg, rgba(59,89,152,0.08), rgba(91,141,239,0.08))',
+          padding: '1rem 2rem', borderRadius: 16
+        }}>
+          <Users size={28} style={iconStyle} />
+          <span style={{ fontSize: '1.1rem', color: '#2c3e50' }}>
+            Cristãos do mundo todo já estão conectados aqui
+          </span>
+        </div>
+      </section>
 
       {/* ===== DEPOIMENTOS ===== */}
       <section style={{ padding: '2rem 1.5rem', textAlign: 'center', background: 'rgba(218,165,32,0.04)' }}>
