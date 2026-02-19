@@ -386,6 +386,7 @@ app.use('/api/notifications', require('./routes/notifications').router);
 app.use('/api/offerings', require('./routes/offerings'));
 app.use('/api/pastor', require('./routes/pastor-dashboard'));
 app.use('/api/journeys', require('./routes/journeys'));
+app.use('/api/course', require('./routes/course'));
 
 // Root route
 app.get('/', (req, res) => {

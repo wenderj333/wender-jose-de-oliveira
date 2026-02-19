@@ -27,7 +27,8 @@ import Offerings from './pages/Offerings';
 // Music temporarily disabled for redesign
 import MusicLibrary from './pages/MusicLibrary';
 import PastorDashboard from './pages/PastorDashboard';
-import FaithJourneys from './pages/FaithJourneys'; // NEW IMPORT
+import FaithJourneys from './pages/FaithJourneys';
+import BiblicalCourse from './pages/BiblicalCourse';
 // import { MusicProvider } from './context/MusicContext';
 // import MusicPlayer from './components/MusicPlayer';
 import LanguageSwitcher from './components/LanguageSwitcher';
@@ -197,6 +198,7 @@ export default function App() {
           <Link to="/kids" className={isActive('/kids')} onClick={() => setMenuOpen(false)}><Baby size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Kids</Link>
           <Link to="/consagracao" className={isActive('/consagracao')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔥</span>Consagração</Link>
           <Link to="/jornadas" className={isActive('/jornadas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>✨</span>Jornadas de Fé</Link>
+          <Link to="/curso-biblico" className={isActive('/curso-biblico')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>📖</span>Curso Bíblico 10 Dias</Link>
           <Link to="/grupos" className={isActive('/grupos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4a1a8e' }} />Grupos</Link>
           {user && <Link to="/amigos" className={isActive('/amigos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#667eea' }} />Amigos</Link>}
           {user && (
@@ -250,6 +252,7 @@ export default function App() {
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/pastor" element={<ProtectedRoute><PastorDashboard /></ProtectedRoute>} />
           <Route path="/jornadas" element={<FaithJourneys />} />
+          <Route path="/curso-biblico" element={<BiblicalCourse />} />
         </Routes>
         </ErrorBoundary>
       </main>
