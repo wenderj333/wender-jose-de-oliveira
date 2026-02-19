@@ -127,7 +127,8 @@ router.get('/total', async (req, res) => {
 
 // =================== STRIPE PAYMENT ===================
 const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
-const COURSE_PRICE = 1999; // €19.99 in cents
+const COURSE_PRICE_FULL = 999; // €9.99 in cents
+const COURSE_PRICE_DISCOUNT = 499; // €4.99 in cents (50% off with 5 referrals)
 const SITE_URL = process.env.FRONTEND_URL || 'https://sigo-com-fe.vercel.app';
 
 // POST /api/course/create-checkout — create Stripe checkout session
@@ -137,8 +138,20 @@ router.post('/create-checkout', async (req, res) => {
       return res.status(500).json({ error: 'Stripe not configured' });
     }
     const stripe = require('stripe')(STRIPE_SECRET);
-    const { email } = req.body;
+    const { email, hasDiscount } = req.body;
     if (!email) return res.status(400).json({ error: 'Email obrigat\u00f3rio' });
+
+    // Check if user has 5+ referrals for discount
+    let price = COURSE_PRICE_FULL;
+    if (hasDiscount) {
+      const enrollment = await db.prepare('SELECT referral_code FROM course_enrollments WHERE email = ?').get(email.trim().toLowerCase());
+      if (enrollment) {
+        const refs = await db.prepare('SELECT COUNT(*) AS count FROM course_enrollments WHERE referred_by = ?').get(enrollment.referral_code);
+        if (parseInt(refs?.count || 0) >= 5) {
+          price = COURSE_PRICE_DISCOUNT;
+        }
+      }
+    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -147,10 +160,12 @@ router.post('/create-checkout', async (req, res) => {
         price_data: {
           currency: 'eur',
           product_data: {
-            name: 'Curso B\u00edblico Avan\u00e7ado - Sigo com F\u00e9',
+            name: price === COURSE_PRICE_DISCOUNT
+              ? 'Curso B\u00edblico Avan\u00e7ado (50% OFF) - Sigo com F\u00e9'
+              : 'Curso B\u00edblico Avan\u00e7ado - Sigo com F\u00e9',
             description: 'Acesso completo ao Curso B\u00edblico Avan\u00e7ado com 20+ li\u00e7\u00f5es exclusivas.',
           },
-          unit_amount: COURSE_PRICE,
+          unit_amount: price,
         },
         quantity: 1,
       }],

@@ -163,13 +163,15 @@ export default function BiblicalCourse() {
 
   const [buying, setBuying] = useState(false);
 
+  const hasDiscount = referralCount >= 5;
+
   const handleBuy = async () => {
     setBuying(true);
     try {
       const res = await fetch(`${API}/course/create-checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, hasDiscount }),
       });
       const data = await res.json();
       if (data.url) {
@@ -504,17 +506,47 @@ export default function BiblicalCourse() {
             Aprofunde sua jornada com <strong>20+ lições exclusivas</strong> sobre oração,
             jejum, propósito, liderança e muito mais.
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 300, margin: '0 auto' }}>
-            <div style={{ fontSize: '0.8rem', opacity: 0.7, marginBottom: 4 }}>
-              Duas formas de desbloquear:
-            </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 320, margin: '0 auto' }}>
+            {/* Referral bonus info */}
             <div style={{
-              background: 'rgba(255,255,255,0.1)', borderRadius: 10, padding: '0.6rem',
+              background: 'rgba(255,255,255,0.1)', borderRadius: 10, padding: '0.7rem',
               fontSize: '0.85rem',
             }}>
-              🤝 <strong>Grátis:</strong> Convide 5 amigos ({referralCount}/5)
+              🤝 <strong>B{'\u00f4'}nus de indica{'\u00e7\u00e3'}o:</strong> Convide 5 amigos e ganhe <strong>50% de desconto!</strong>
+              <div style={{ marginTop: 4, fontSize: '0.78rem', opacity: 0.8 }}>
+                Progresso: {referralCount}/5 amigos convidados
+              </div>
+              <div style={{
+                background: 'rgba(255,255,255,0.2)', borderRadius: 6, height: 6, marginTop: 6, overflow: 'hidden',
+              }}>
+                <div style={{
+                  width: `${Math.min((referralCount / 5) * 100, 100)}%`, height: '100%',
+                  background: '#f4d03f', borderRadius: 6, transition: 'width 0.5s',
+                }} />
+              </div>
             </div>
-            <div style={{ fontSize: '0.75rem', opacity: 0.6 }}>ou</div>
+
+            {/* Price display */}
+            <div style={{ textAlign: 'center', padding: '0.5rem 0' }}>
+              {hasDiscount ? (
+                <>
+                  <div style={{ fontSize: '0.8rem', textDecoration: 'line-through', opacity: 0.5 }}>
+                    Pre{'\u00e7'}o normal: {'\u20ac'}9,99
+                  </div>
+                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f4d03f' }}>
+                    {'\u20ac'}4,99 <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>(50% OFF!)</span>
+                  </div>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.7 }}>
+                    {'\u{1F389}'} Desconto desbloqueado por suas indica{'\u00e7\u00f5'}es!
+                  </div>
+                </>
+              ) : (
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f4d03f' }}>
+                  {'\u20ac'}9,99
+                </div>
+              )}
+            </div>
+
             <button onClick={handleBuy} disabled={buying} style={{
               padding: '0.9rem', borderRadius: 12, border: 'none',
               background: 'linear-gradient(135deg, #f4d03f, #daa520)',
@@ -522,10 +554,10 @@ export default function BiblicalCourse() {
               boxShadow: '0 4px 15px rgba(218,165,32,0.4)',
               opacity: buying ? 0.6 : 1,
             }}>
-              {buying ? 'Abrindo pagamento...' : '💳 Comprar por €19,99'}
+              {buying ? 'Abrindo pagamento...' : hasDiscount ? '💳 Comprar por €4,99' : '💳 Comprar por €9,99'}
             </button>
             <div style={{ fontSize: '0.72rem', opacity: 0.6 }}>
-              Pagamento seguro via Stripe • Acesso imediato
+              Pagamento seguro via Stripe {'\u2022'} Acesso imediato
             </div>
           </div>
         </div>
