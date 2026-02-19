@@ -455,6 +455,35 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== CONVITE PARA PASTORES ===== */}
+      <section style={{ padding: '2.5rem 1.5rem', textAlign: 'center', background: 'linear-gradient(135deg, rgba(108,63,160,0.06), rgba(212,168,67,0.08))' }}>
+        <div style={{ maxWidth: 550, margin: '0 auto' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>⛪</div>
+          <h2 style={{ fontSize: '1.4rem', color: '#4A2270', marginBottom: '0.5rem' }}>
+            Pastores, Evangelistas e Pregadores
+          </h2>
+          <p style={{ fontSize: '0.95rem', color: '#555', lineHeight: 1.7, marginBottom: '1rem' }}>
+            H{'á'} pessoas nos quatro cantos do mundo precisando de ajuda espiritual.
+            Esta rede social est{'á'} sendo vista globalmente — {'é'} o momento de
+            <strong> ganhar almas para o Reino do Senhor</strong>.
+          </p>
+          <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+            Cadastre-se como membro e entre em contato conosco para receber acesso de Pastor.
+            Com o <strong>Painel do Pastor</strong> voc{'ê'} pode gerenciar sua igreja,
+            acompanhar membros, registrar d{'í'}zimos, criar estudos b{'í'}blicos e muito mais.
+          </p>
+          <Link to="/cadastro" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            background: 'linear-gradient(135deg, #6C3FA0, #4A2270)',
+            color: '#fff', padding: '0.9rem 2rem', borderRadius: 12,
+            fontWeight: 700, fontSize: '1rem', textDecoration: 'none',
+            boxShadow: '0 4px 15px rgba(108,63,160,0.3)',
+          }}>
+            <HandHeart size={20} /> Quero ajudar como Pastor
+          </Link>
+        </div>
+      </section>
+
       {/* ===== CTA FINAL ===== */}
       <section style={{
         padding: '3rem 1.5rem', textAlign: 'center',

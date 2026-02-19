@@ -135,6 +135,25 @@ function PastorDashboard() {
                 <div style={styles.statCard}><div style={styles.statNum}>{stats.activeChats ?? 0}</div><div style={styles.statLabel}>Chats Ativos</div></div>
               </div>
             )}
+            
+            {/* Pastor Dashboard Welcome */}
+            <div style={{ background: 'linear-gradient(135deg, rgba(108,63,160,0.08), rgba(212,168,67,0.1))', border: '1px solid rgba(108,63,160,0.2)', borderRadius: 16, padding: '1rem', marginBottom: '1rem' }}>
+              <h3 style={{ fontSize: '1rem', color: '#4A2270', margin: '0 0 0.5rem' }}>👋 Bem-vindo ao Painel do Pastor!</h3>
+              <p style={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.5, margin: '0 0 0.5rem' }}>
+                Aqui você gerencia toda a sua igreja. Toque em qualquer botão abaixo para acessar:
+              </p>
+              <div style={{ fontSize: '0.78rem', color: '#666', lineHeight: 1.6 }}>
+                👥 <strong>Membros</strong> — veja e gerencie quem faz parte da sua igreja<br/>
+                💰 <strong>Dízimos</strong> — registre dízimos e ofertas recebidas<br/>
+                🙏 <strong>Orações</strong> — acompanhe pedidos de ora\u00e7ão da comunidade<br/>
+                💬 <strong>Chat</strong> — converse com membros que precisam de apoio<br/>
+                💳 <strong>Despesas</strong> — controle os gastos da igreja<br/>
+                📖 <strong>Estudos</strong> — crie e compartilhe estudos bíblicos<br/>
+                📢 <strong>Comunicados</strong> — envie avisos para toda a igreja<br/>
+                📅 <strong>Agenda</strong> — organize eventos e cultos<br/>
+                📊 <strong>Relat\u00f3rios</strong> — veja resumos financeiros e de atividades
+              </div>
+            </div>
             <div style={styles.grid}>
               {sections.map(s => (
                 <div key={s.id} style={styles.card(false)} onClick={() => handleSection(s.id)}>
@@ -163,6 +182,30 @@ function PastorDashboard() {
   );
 }
 
+
+/* =================== SECTION HELP =================== */
+function SectionHelp({ title, steps }) {
+  const [open, setOpen] = React.useState(true);
+  return (
+    <div style={{ background: 'linear-gradient(135deg, rgba(108,63,160,0.06), rgba(212,168,67,0.08))', border: '1px solid rgba(108,63,160,0.15)', borderRadius: 14, padding: '0.8rem 1rem', marginBottom: '1rem' }}>
+      <div onClick={() => setOpen(!open)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+        <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#4A2270' }}>{title}</span>
+        <span style={{ fontSize: '0.8rem', color: '#888' }}>{open ? '▲' : '▼'}</span>
+      </div>
+      {open && (
+        <div style={{ marginTop: 8 }}>
+          {steps.map((s, i) => (
+            <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 6 }}>
+              <span style={{ width: 22, height: 22, borderRadius: '50%', background: '#6C3FA0', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 11, flexShrink: 0 }}>{i + 1}</span>
+              <span style={{ fontSize: '0.82rem', color: '#444', lineHeight: 1.4 }}>{s}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* =================== MEMBROS =================== */
 function MembrosSection({ apiFetch }) {
   const [members, setMembers] = useState([]);
@@ -186,6 +229,12 @@ function MembrosSection({ apiFetch }) {
   return (
     <div>
       <div style={styles.sectionTitle}>👥 Membros ({members.length})</div>
+      <SectionHelp title="❓ Como funciona a se\u00e7ão Membros?" steps={[
+        'Aqui você vê todos os membros cadastrados na sua igreja.',
+        'Cada membro mostra nome, email e papel (Pastor/Líder/Membro).',
+        'Para adicionar membros: eles precisam se registrar no Sigo com Fé e buscar sua igreja.',
+        'Você pode acompanhar quando cada membro esteve ativo pela última vez.',
+      ]} />
       {members.map(m => (
         <div key={m.id} style={{ ...styles.listItem, display: 'flex', alignItems: 'center', gap: 12 }}>
           {m.avatar_url ? (
@@ -243,6 +292,13 @@ function DizimosSection({ apiFetch, headers }) {
   return (
     <div>
       <div style={styles.sectionTitle}>💰 Dízimos e Ofertas</div>
+      <SectionHelp title="❓ Como funciona Dízimos e Ofertas?" steps={[
+        'Selecione o mês no seletor para ver os lançamentos.',
+        'Clique em "+ Novo Lançamento" para registrar um dízimo ou oferta.',
+        'Preencha o valor, tipo (dízimo ou oferta) e uma descrição opcional.',
+        'O resumo do mês mostra o total de dízimos, ofertas e o valor geral.',
+        'Use os relatórios para acompanhar a evolução mensal.',
+      ]} />
       <div style={{ marginBottom: 12 }}>
         <select style={{ ...styles.select, width: 'auto' }} value={month} onChange={e => setMonth(e.target.value)}>
           {monthOptions().map(o => <option key={o.val} value={o.val}>{o.label}</option>)}
@@ -333,6 +389,12 @@ function DespesasSection({ apiFetch, headers }) {
   return (
     <div>
       <div style={styles.sectionTitle}>⚙️ Gestão de Despesas</div>
+      <SectionHelp title={'❓ Como funciona Despesas?'} steps={[
+        'Registre todas as despesas da igreja (aluguel, água, luz, materiais, etc.).',
+        'Clique em "+ Nova Despesa" para adicionar.',
+        'Preencha o valor, categoria e descri\u00e7ão.',
+        'Compare despesas com entradas nos Relat\u00f3rios para manter as finanças saudáveis.',
+      ]} />
       <select style={{ ...styles.select, width: 'auto', marginBottom: 12 }} value={month} onChange={e => setMonth(e.target.value)}>
         {monthOptions().map(o => <option key={o.val} value={o.val}>{o.label}</option>)}
       </select>
@@ -418,6 +480,12 @@ function EstudosSection({ apiFetch, headers }) {
   return (
     <div>
       <div style={styles.sectionTitle}>📖 Estudos Bíblicos</div>
+      <SectionHelp title="❓ Como funciona Estúdos Bíblicos?" steps={[
+        'Crie estudos bíblicos para compartilhar com seus membros.',
+        'Clique em "+ Novo Estudo" e preencha título e conteúdo.',
+        'Os estudos ficam disponíveis para todos os membros da sua igreja.',
+        'Use para preparar cultos, células e momentos de ensino.',
+      ]} />
       <button style={styles.btn(PURPLE)} onClick={() => setShowForm(!showForm)}><Plus size={16} /> {showForm ? 'Fechar' : 'Novo Estudo'}</button>
 
       {showForm && (
@@ -477,6 +545,12 @@ function ComunicadosSection({ apiFetch, headers }) {
   return (
     <div>
       <div style={styles.sectionTitle}>📢 Comunicados</div>
+      <SectionHelp title="❓ Como funciona Comunicados?" steps={[
+        'Envie avisos e comunicados para todos os membros da igreja.',
+        'Clique em "+ Novo Comunicado" para criar.',
+        'Escreva o título e a mensagem do comunicado.',
+        'Todos os membros verão o comunicado ao acessar a plataforma.',
+      ]} />
       <button style={styles.btn(GOLD)} onClick={() => setShowForm(!showForm)}><Plus size={16} /> {showForm ? 'Fechar' : 'Novo Comunicado'}</button>
 
       {showForm && (
@@ -545,6 +619,12 @@ function AgendaSection({ apiFetch, headers }) {
   return (
     <div>
       <div style={styles.sectionTitle}>📅 Agenda</div>
+      <SectionHelp title="❓ Como funciona a Agenda?" steps={[
+        'Organize todos os eventos da igreja: cultos, reuni\u00f5es, retiros, etc.',
+        'Clique em "+ Novo Evento" para adicionar.',
+        'Preencha título, data, horário e descri\u00e7ão.',
+        'Os membros poderão ver os pr\u00f3ximos eventos da igreja.',
+      ]} />
       <button style={styles.btn(PURPLE)} onClick={() => setShowForm(!showForm)}><Plus size={16} /> {showForm ? 'Fechar' : 'Novo Evento'}</button>
 
       {showForm && (
@@ -603,6 +683,12 @@ function RelatoriosSection({ apiFetch }) {
   return (
     <div>
       <div style={styles.sectionTitle}>📊 Relatórios</div>
+      <SectionHelp title="❓ Como funciona Relat\u00f3rios?" steps={[
+        'Veja um resumo completo das finanças e atividades da igreja.',
+        'Acompanhe entradas (dízimos + ofertas) vs despesas mês a mês.',
+        'Visualize o crescimento de membros e orações.',
+        'Use os dados para planejar e prestar contas à congrega\u00e7ão.',
+      ]} />
       <div style={styles.statGrid}>
         <div style={styles.statCard}><div style={styles.statNum}>{report.members_count ?? 0}</div><div style={styles.statLabel}>Membros</div></div>
         <div style={styles.statCard}><div style={styles.statNum}>{report.prayers_total ?? 0}</div><div style={styles.statLabel}>Orações</div></div>
