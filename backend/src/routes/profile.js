@@ -20,6 +20,16 @@ const upload = multer({
   },
 });
 
+// GET /api/profile/member-count — public member count
+router.get('/member-count', async (req, res) => {
+  try {
+    const result = await db.prepare('SELECT COUNT(*) AS count FROM users WHERE is_active = true').get();
+    res.json({ count: parseInt(result?.count || 0) });
+  } catch (err) {
+    res.json({ count: 68 }); // fallback
+  }
+});
+
 // POST /api/profile/heartbeat — update last_seen_at (call every 60s from frontend)
 router.post('/heartbeat', authenticate, async (req, res) => {
   try {
