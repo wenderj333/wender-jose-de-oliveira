@@ -21,6 +21,8 @@ app.use(cors({
   },
   credentials: true,
 }));
+// Stripe webhook needs raw body BEFORE express.json()
+app.use('/api/stripe/webhook', express.raw({type: 'application/json'}));
 app.use(express.json());
 app.use(require('helmet')());
 
@@ -325,6 +327,21 @@ const { Pool: MigratePool } = require('pg');
     await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS like_count INT DEFAULT 0`);
     await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS audio_url TEXT`);
 
+    // Stripe payments table
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS stripe_payments (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        pastor_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        stripe_session_id VARCHAR(255) NOT NULL UNIQUE,
+        amount DECIMAL(10,2) NOT NULL,
+        currency VARCHAR(3) DEFAULT 'eur',
+        status VARCHAR(20) DEFAULT 'pending',
+        description TEXT,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+
     // Technical issues
     await mp.query(`
       CREATE TABLE IF NOT EXISTS technical_issues (
@@ -387,6 +404,7 @@ app.use('/api/offerings', require('./routes/offerings'));
 app.use('/api/pastor', require('./routes/pastor-dashboard'));
 app.use('/api/journeys', require('./routes/journeys'));
 app.use('/api/course', require('./routes/course'));
+app.use('/api/stripe', require('./routes/stripe'));
 
 // Root route
 app.get('/', (req, res) => {

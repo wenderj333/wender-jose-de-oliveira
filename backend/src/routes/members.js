@@ -25,6 +25,23 @@ router.get('/', authenticate, pastorOnly, async (req, res) => {
   }
 });
 
+// GET /api/members/pastors — list all pastors for donations (authenticated users only)
+router.get('/pastors', authenticate, async (req, res) => {
+  try {
+    const pastors = await db.prepare(
+      `SELECT u.id, u.full_name, c.name AS church_name
+       FROM users u
+       LEFT JOIN churches c ON c.pastor_id = u.id
+       WHERE u.role = 'pastor' AND u.is_active = true
+       ORDER BY u.full_name ASC`
+    ).all();
+    res.json({ pastors });
+  } catch (err) {
+    console.error('Error listing pastors:', err);
+    res.status(500).json({ error: 'Erro ao listar pastores' });
+  }
+});
+
 // GET /api/members/messages/:userId — get direct messages with a user
 router.get('/messages/:userId', authenticate, pastorOnly, async (req, res) => {
   try {

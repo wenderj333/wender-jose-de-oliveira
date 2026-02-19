@@ -29,6 +29,7 @@ import MusicLibrary from './pages/MusicLibrary';
 import PastorDashboard from './pages/PastorDashboard';
 import FaithJourneys from './pages/FaithJourneys';
 import BiblicalCourse from './pages/BiblicalCourse';
+import Donation from './pages/Donation';
 // import { MusicProvider } from './context/MusicContext';
 // import MusicPlayer from './components/MusicPlayer';
 import LanguageSwitcher from './components/LanguageSwitcher';
@@ -253,6 +254,7 @@ export default function App() {
           <Route path="/pastor" element={<ProtectedRoute><PastorDashboard /></ProtectedRoute>} />
           <Route path="/jornadas" element={<FaithJourneys />} />
           <Route path="/curso-biblico" element={<BiblicalCourse />} />
+          <Route path="/doar" element={<ProtectedRoute><Donation /></ProtectedRoute>} />
         </Routes>
         </ErrorBoundary>
       </main>
