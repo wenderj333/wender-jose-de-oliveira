@@ -64,13 +64,34 @@
     "helpSend": "Pedir Ajuda",
     "helpBtn": "Pedir Ajuda",
     "verses": [
-      { "text": "Porque onde estiverem dois ou três reunidos em meu nome, ali estou no meio deles.", "ref": "Mateus 18:20" },
-      { "text": "Tudo posso naquele que me fortalece.", "ref": "Filipenses 4:13" },
-      { "text": "O Senhor é o meu pastor; nada me faltará.", "ref": "Salmos 23:1" },
-      { "text": "Confie no Senhor de todo o seu coração e não se apoie no seu próprio entendimento.", "ref": "Provérbios 3:5" },
-      { "text": "Pois eu sei os planos que tenho para vocês, planos de dar a vocês esperança e um futuro.", "ref": "Jeremias 29:11" },
-      { "text": "Sejam fortes e corajosos. Não tenham medo, pois o Senhor estará com vocês.", "ref": "Deuteronômio 31:6" },
-      { "text": "A oração de um justo é poderosa e eficaz.", "ref": "Tiago 5:16" }
+      {
+        "text": "Porque onde estiverem dois ou três reunidos em meu nome, ali estou no meio deles.",
+        "ref": "Mateus 18:20"
+      },
+      {
+        "text": "Tudo posso naquele que me fortalece.",
+        "ref": "Filipenses 4:13"
+      },
+      {
+        "text": "O Senhor é o meu pastor; nada me faltará.",
+        "ref": "Salmos 23:1"
+      },
+      {
+        "text": "Confie no Senhor de todo o seu coração e não se apoie no seu próprio entendimento.",
+        "ref": "Provérbios 3:5"
+      },
+      {
+        "text": "Pois eu sei os planos que tenho para vocês, planos de dar a vocês esperança e um futuro.",
+        "ref": "Jeremias 29:11"
+      },
+      {
+        "text": "Sejam fortes e corajosos. Não tenham medo, pois o Senhor estará com vocês.",
+        "ref": "Deuteronômio 31:6"
+      },
+      {
+        "text": "A oração de um justo é poderosa e eficaz.",
+        "ref": "Tiago 5:16"
+      }
     ]
   },
   "login": {
@@ -93,7 +114,7 @@
     "signUp": "Cadastre-se"
   },
   "register": {
-    "joinCommunity": "Junte-se à comunidade!",
+    "joinCommunity": "Entre na Rede Social Cristã!",
     "fullName": "Nome Completo",
     "fullNamePlaceholder": "Seu nome completo",
     "email": "Email",
@@ -254,24 +275,96 @@
     "activities": "Atividades",
     "comingSoon": "Em breve!",
     "stories": [
-      { "title": "Davi e Golias", "desc": "Um menino corajoso que venceu um gigante com uma pedra e muita fé em Deus", "age": "6-8" },
-      { "title": "A Arca de Noé", "desc": "Noé construiu um barco enorme e salvou todos os animais do grande dilúvio", "age": "3-5" },
-      { "title": "Jonas e a Baleia", "desc": "Jonas fugiu de Deus mas aprendeu que Ele está em todo lugar", "age": "6-8" },
-      { "title": "Daniel na Cova dos Leões", "desc": "Daniel orou com fé e Deus fechou a boca dos leões", "age": "9-12" },
-      { "title": "Moisés e o Mar Vermelho", "desc": "Deus abriu o mar para Seu povo passar em segurança", "age": "6-8" }
+      {
+        "title": "Davi e Golias",
+        "desc": "Um menino corajoso que venceu um gigante com uma pedra e muita fé em Deus",
+        "age": "6-8"
+      },
+      {
+        "title": "A Arca de Noé",
+        "desc": "Noé construiu um barco enorme e salvou todos os animais do grande dilúvio",
+        "age": "3-5"
+      },
+      {
+        "title": "Jonas e a Baleia",
+        "desc": "Jonas fugiu de Deus mas aprendeu que Ele está em todo lugar",
+        "age": "6-8"
+      },
+      {
+        "title": "Daniel na Cova dos Leões",
+        "desc": "Daniel orou com fé e Deus fechou a boca dos leões",
+        "age": "9-12"
+      },
+      {
+        "title": "Moisés e o Mar Vermelho",
+        "desc": "Deus abriu o mar para Seu povo passar em segurança",
+        "age": "6-8"
+      }
     ],
     "quiz": [
-      { "q": "Quem derrotou o gigante Golias?", "opts": ["Saul", "Davi", "Moisés", "Josué"] },
-      { "q": "Quantos dias durou o dilúvio?", "opts": ["10 dias", "20 dias", "40 dias", "100 dias"] },
-      { "q": "Quem foi jogado na cova dos leões?", "opts": ["Jonas", "Daniel", "Paulo", "Pedro"] },
-      { "q": "Qual o primeiro livro da Bíblia?", "opts": ["Êxodo", "Salmos", "Gênesis", "Mateus"] },
-      { "q": "Jesus nasceu em qual cidade?", "opts": ["Jerusalém", "Nazaré", "Belém", "Cafarnaum"] }
+      {
+        "q": "Quem derrotou o gigante Golias?",
+        "opts": [
+          "Saul",
+          "Davi",
+          "Moisés",
+          "Josué"
+        ]
+      },
+      {
+        "q": "Quantos dias durou o dilúvio?",
+        "opts": [
+          "10 dias",
+          "20 dias",
+          "40 dias",
+          "100 dias"
+        ]
+      },
+      {
+        "q": "Quem foi jogado na cova dos leões?",
+        "opts": [
+          "Jonas",
+          "Daniel",
+          "Paulo",
+          "Pedro"
+        ]
+      },
+      {
+        "q": "Qual o primeiro livro da Bíblia?",
+        "opts": [
+          "Êxodo",
+          "Salmos",
+          "Gênesis",
+          "Mateus"
+        ]
+      },
+      {
+        "q": "Jesus nasceu em qual cidade?",
+        "opts": [
+          "Jerusalém",
+          "Nazaré",
+          "Belém",
+          "Cafarnaum"
+        ]
+      }
     ],
     "activityList": [
-      { "title": "Colorir", "desc": "Pinte personagens bíblicos com cores lindas" },
-      { "title": "Caça-Palavras", "desc": "Encontre palavras da Bíblia escondidas" },
-      { "title": "Jogo da Memória", "desc": "Encontre os pares dos 12 apóstolos" },
-      { "title": "Quebra-Cabeça", "desc": "Monte cenas bíblicas incríveis" }
+      {
+        "title": "Colorir",
+        "desc": "Pinte personagens bíblicos com cores lindas"
+      },
+      {
+        "title": "Caça-Palavras",
+        "desc": "Encontre palavras da Bíblia escondidas"
+      },
+      {
+        "title": "Jogo da Memória",
+        "desc": "Encontre os pares dos 12 apóstolos"
+      },
+      {
+        "title": "Quebra-Cabeça",
+        "desc": "Monte cenas bíblicas incríveis"
+      }
     ]
   },
   "feedPost": {

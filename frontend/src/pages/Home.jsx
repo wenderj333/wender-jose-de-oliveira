@@ -173,9 +173,9 @@ export default function Home() {
           <img src="/logo.jpg" alt="Sigo com Fé" style={{ width: 120, height: 120, borderRadius: '50%', objectFit: 'cover' }} />
         </div>
 
-        <h1 className="hero__title">Caminhe na fé com quem entende você</h1>
+        <h1 className="hero__title">A Rede Social Cristã feita para você</h1>
         <p className="hero__subtitle" style={{ fontSize: '1.15rem', maxWidth: 520, margin: '0 auto', opacity: 0.9 }}>
-          Uma comunidade cristã onde você encontra oração, acolhimento e propósito. Juntos somos mais fortes.
+          Conecte-se com cristãos do mundo todo. Oração, louvor, amizades e propósito — tudo em um só lugar.
         </p>
 
         {/* Versículo do dia */}
@@ -287,7 +287,7 @@ export default function Home() {
         }}>
           <Users size={28} style={iconStyle} />
           <span style={{ fontSize: '1.1rem', color: '#2c3e50' }}>
-            <strong style={{ fontSize: '1.5rem', color: '#3b5998' }}>{memberCount}+</strong> membros já caminham na fé conosco
+            <strong style={{ fontSize: '1.5rem', color: '#3b5998' }}>{memberCount}+</strong> pessoas já fazem parte da rede
           </span>
         </div>
       </section>
@@ -461,9 +461,9 @@ export default function Home() {
         borderRadius: '24px 24px 0 0',
         margin: '0 -1rem'
       }}>
-        <h2 style={{ color: '#fff', fontSize: '1.6rem', marginBottom: '0.5rem' }}>Junte-se a nós</h2>
+        <h2 style={{ color: '#fff', fontSize: '1.6rem', marginBottom: '0.5rem' }}>Entre na Rede Social Cristã</h2>
         <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '1rem', marginBottom: '1.5rem', maxWidth: 450, margin: '0 auto 1.5rem' }}>
-          Sua jornada de fé não precisa ser solitária. Venha fazer parte dessa família.
+          Sua jornada de fé não precisa ser solitária. Conecte-se, ore, louve e cresça com outros cristãos.
         </p>
         <Link to="/cadastro" className="btn btn-lg" style={{
           background: '#fff', color: '#3b5998', fontWeight: 700,
@@ -532,11 +532,11 @@ export default function Home() {
           }} onClick={e => e.stopPropagation()}>
             <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>{'\u{1F64F}'}</div>
             <h2 style={{ fontSize: '1.4rem', color: '#1a0a3e', margin: '0 0 0.5rem' }}>
-              Bem-vindo ao Sigo com F{'é'}!
+              Bem-vindo {'à'} Rede Social Crist{'ã'}!
             </h2>
             <p style={{ fontSize: '0.95rem', color: '#555', lineHeight: 1.6, margin: '0 0 1rem' }}>
-              Junte-se a <strong>{memberCount}+ crist{'ã'}os</strong> que j{'á'} encontraram ora{'çã'}o, acolhimento e prop{'ó'}sito.
-              <br />Cadastre-se gr{'á'}tis em 30 segundos!
+              <strong>{memberCount}+ crist{'ã'}os</strong> j{'á'} fazem parte do Sigo com F{'é'}. Ora{'çã'}o, louvor, amizades e muito mais.
+              <br />Crie sua conta gr{'á'}tis em 30 segundos!
             </p>
             <Link to="/cadastro" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
