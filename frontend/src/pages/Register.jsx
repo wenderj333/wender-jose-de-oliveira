@@ -307,13 +307,6 @@ export default function Register() {
             <label><Lock size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.password')}</label>
             <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder={t('register.passwordPlaceholder')} required />
           </div>
-          <div className="form-group">
-            <label>{t('register.iAm')}</label>
-            <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
-              <option value="member">{t('register.member')}</option>
-              <option value="pastor">{t('register.pastor')}</option>
-            </select>
-          </div>
           <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
             <UserPlus size={18} /> {t('register.submit')}
           </button>
