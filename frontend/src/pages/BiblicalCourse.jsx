@@ -93,6 +93,7 @@ export default function BiblicalCourse() {
   const [copied, setCopied] = useState(false);
   const [totalEnrolled, setTotalEnrolled] = useState(0);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [showLearnSection, setShowLearnSection] = useState(false); // New state for accordion
 
   // Check stored email
   useEffect(() => {
@@ -113,6 +114,20 @@ export default function BiblicalCourse() {
         }).catch(() => {});
     }
     fetch(`${API}/course/total`).then(r => r.json()).then(d => setTotalEnrolled(d.total || 0)).catch(() => {});
+
+    // Check if returned from payment
+    const paid = searchParams.get('paid');
+    const paidEmail = searchParams.get('email');
+    if (paid === 'success' && paidEmail) {
+      fetch(`${API}/course/confirm-payment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: paidEmail }),
+      }).then(() => {
+        setIsPremium(true);
+        localStorage.setItem('course_email', paidEmail.toLowerCase());
+      }).catch(() => {});
+    }
   }, []);
 
   const handleEnroll = async () => {
@@ -146,6 +161,26 @@ export default function BiblicalCourse() {
     } catch (e) { console.error(e); }
   };
 
+  const [buying, setBuying] = useState(false);
+
+  const handleBuy = async () => {
+    setBuying(true);
+    try {
+      const res = await fetch(`${API}/course/create-checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('Erro ao iniciar pagamento. Tente novamente.');
+      }
+    } catch (e) { console.error(e); alert('Erro de conexão.'); }
+    finally { setBuying(false); }
+  };
+
   const referralLink = `${SITE_URL}/curso-biblico?ref=${referralCode}`;
 
   const copyLink = async () => {
@@ -169,10 +204,11 @@ export default function BiblicalCourse() {
   if (!enrolled) {
     return (
       <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem' }}>
-        {/* Hero */}
-        <div style={{
+        {/* Hero — clicável para expandir */}
+        <div onClick={() => setShowLearnSection(!showLearnSection)} style={{
           background: 'linear-gradient(135deg, #1a0a3e, #3b5998)', borderRadius: 20,
           padding: '2rem 1.5rem', textAlign: 'center', color: '#fff', marginBottom: '1.5rem',
+          cursor: 'pointer', transition: 'transform 0.2s',
         }}>
           <BookOpen size={48} style={{ color: '#f4d03f', marginBottom: '0.5rem' }} />
           <h1 style={{ fontSize: '1.6rem', margin: '0 0 0.5rem' }}>
@@ -180,31 +216,66 @@ export default function BiblicalCourse() {
           </h1>
           <p style={{ fontSize: '1rem', opacity: 0.9, lineHeight: 1.6 }}>
             Explore a fé, o amor ao próximo e o propósito de Deus para sua vida.
-            <strong> 100% gratuíto!</strong>
+            <strong> 100% gratuito!</strong>
           </p>
           {totalEnrolled > 5 && (
             <div style={{ marginTop: '0.8rem', fontSize: '0.85rem', opacity: 0.8 }}>
               🔥 {totalEnrolled} pessoas já estão participando!
             </div>
           )}
-        </div>
-
-        {/* What you'll learn */}
-        <div style={{ background: '#fff', borderRadius: 16, padding: '1.2rem', marginBottom: '1rem', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
-          <h2 style={{ fontSize: '1.1rem', color: '#1a0a3e', margin: '0 0 0.8rem' }}>
-            📚 O que você vai aprender:
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-            {COURSE_DAYS.map(d => (
-              <div key={d.day} style={{
-                padding: '0.5rem', borderRadius: 10, background: '#f8f6ff',
-                border: '1px solid #eee', fontSize: '0.8rem',
-              }}>
-                <strong style={{ color: '#3b5998' }}>Dia {d.day}:</strong> {d.title}
-              </div>
-            ))}
+          <div style={{ marginTop: '0.8rem', fontSize: '0.85rem', opacity: 0.7 }}>
+            {showLearnSection ? '▲ Fechar detalhes' : '▼ Toque para ver como funciona e o que vai aprender'}
           </div>
         </div>
+
+        {/* Como funciona + O que vai aprender (expandível) */}
+        {showLearnSection && (
+          <div style={{ marginBottom: '1rem' }}>
+            {/* Passo a passo */}
+            <div style={{ background: '#fff', borderRadius: 16, padding: '1.2rem', marginBottom: '0.8rem', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
+              <h2 style={{ fontSize: '1.1rem', color: '#1a0a3e', margin: '0 0 0.8rem' }}>
+                📋 Como funciona o curso?
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {[
+                  { step: 1, icon: '✍️', title: 'Inscreva-se grátis', desc: 'Coloque seu nome e email abaixo. Não precisa pagar nada!' },
+                  { step: 2, icon: '📖', title: 'Estude 1 dia por vez', desc: 'A cada dia, leia o versículo, a reflexão e complete o desafio. Avance no seu ritmo!' },
+                  { step: 3, icon: '✅', title: 'Conclua o dia', desc: 'Ao terminar a leitura e o desafio, clique em "Concluir Dia" para avançar.' },
+                  { step: 4, icon: '🤝', title: 'Convide 5 amigos', desc: 'Compartilhe seu link de convite. Quando 5 amigos se inscreverem, você desbloqueia o Curso Avançado GRÁTIS!' },
+                  { step: 5, icon: '🎓', title: 'Curso Avançado', desc: 'Desbloqueie conteúdo exclusivo e aprofundado sobre fé, oração e propósito. Também disponível por compra.' },
+                ].map(s => (
+                  <div key={s.step} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                    <span style={{
+                      width: 32, height: 32, borderRadius: '50%', background: '#3b5998', color: '#fff',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0,
+                    }}>{s.step}</span>
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#1a0a3e' }}>{s.icon} {s.title}</div>
+                      <div style={{ fontSize: '0.82rem', color: '#555', lineHeight: 1.4 }}>{s.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* O que vai aprender */}
+            <div style={{ background: '#fff', borderRadius: 16, padding: '1.2rem', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
+              <h2 style={{ fontSize: '1.1rem', color: '#1a0a3e', margin: '0 0 0.8rem' }}>
+                📚 O que você vai aprender:
+              </h2>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                {COURSE_DAYS.map(d => (
+                  <div key={d.day} style={{
+                    padding: '0.5rem', borderRadius: 10, background: '#f8f6ff',
+                    border: '1px solid #eee', fontSize: '0.8rem',
+                  }}>
+                    <strong style={{ color: '#3b5998' }}>Dia {d.day}:</strong> {d.title}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Referral benefit */}
         <div style={{
@@ -416,6 +487,62 @@ export default function BiblicalCourse() {
               );
             })}
           </div>
+        </div>
+      )}
+
+      {/* ===== CURSO AVANÇADO PAGO ===== */}
+      {!isPremium && (
+        <div style={{
+          background: 'linear-gradient(135deg, #1a0a3e, #4A2270)', borderRadius: 16,
+          padding: '1.5rem', marginTop: '1.5rem', color: '#fff', textAlign: 'center',
+        }}>
+          <Star size={32} style={{ color: '#f4d03f', marginBottom: '0.3rem' }} />
+          <h2 style={{ fontSize: '1.2rem', margin: '0 0 0.5rem' }}>
+            🎓 Curso Bíblico Avançado
+          </h2>
+          <p style={{ fontSize: '0.9rem', opacity: 0.9, lineHeight: 1.6, margin: '0 0 0.8rem' }}>
+            Aprofunde sua jornada com <strong>20+ lições exclusivas</strong> sobre oração,
+            jejum, propósito, liderança e muito mais.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 300, margin: '0 auto' }}>
+            <div style={{ fontSize: '0.8rem', opacity: 0.7, marginBottom: 4 }}>
+              Duas formas de desbloquear:
+            </div>
+            <div style={{
+              background: 'rgba(255,255,255,0.1)', borderRadius: 10, padding: '0.6rem',
+              fontSize: '0.85rem',
+            }}>
+              🤝 <strong>Grátis:</strong> Convide 5 amigos ({referralCount}/5)
+            </div>
+            <div style={{ fontSize: '0.75rem', opacity: 0.6 }}>ou</div>
+            <button onClick={handleBuy} disabled={buying} style={{
+              padding: '0.9rem', borderRadius: 12, border: 'none',
+              background: 'linear-gradient(135deg, #f4d03f, #daa520)',
+              color: '#1a0a3e', fontWeight: 800, fontSize: '1.05rem', cursor: 'pointer',
+              boxShadow: '0 4px 15px rgba(218,165,32,0.4)',
+              opacity: buying ? 0.6 : 1,
+            }}>
+              {buying ? 'Abrindo pagamento...' : '💳 Comprar por €19,99'}
+            </button>
+            <div style={{ fontSize: '0.72rem', opacity: 0.6 }}>
+              Pagamento seguro via Stripe • Acesso imediato
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isPremium && (
+        <div style={{
+          background: 'linear-gradient(135deg, #27ae60, #2ecc71)', borderRadius: 16,
+          padding: '1.5rem', marginTop: '1.5rem', color: '#fff', textAlign: 'center',
+        }}>
+          <Star size={32} style={{ color: '#fff', marginBottom: '0.3rem' }} />
+          <h2 style={{ fontSize: '1.2rem', margin: '0 0 0.3rem' }}>
+            🎓 Curso Avançado Desbloqueado!
+          </h2>
+          <p style={{ fontSize: '0.9rem', opacity: 0.9 }}>
+            Parabéns! Você tem acesso ao conteúdo avançado. Em breve novas lições serão adicionadas!
+          </p>
         </div>
       )}
 
