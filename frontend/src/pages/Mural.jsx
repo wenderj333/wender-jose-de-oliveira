@@ -120,6 +120,7 @@ export default function Mural() {
   const [linkUrl, setLinkUrl] = useState(''); // For campanha category
   const [linkPreview, setLinkPreview] = useState(null); // { title, description, image }
   const [openComments, setOpenComments] = useState({}); // postId -> true
+  const [showLoginPopup, setShowLoginPopup] = useState(false); // Beautiful login prompt
   const [commentsData, setCommentsData] = useState({}); // postId -> [comments]
   const [commentText, setCommentText] = useState({});
   const [sendingComment, setSendingComment] = useState({});
@@ -160,7 +161,7 @@ export default function Mural() {
 
   // ===== LIKES (saved to DB) =====
   async function handleLike(postId) {
-    if (!token) { alert(t('common.loginToLike')); return; }
+    if (!token) { setShowLoginPopup(true); return; }
     const wasLiked = likedPosts[postId];
     // Optimistic update
     setLikedPosts(prev => ({ ...prev, [postId]: !wasLiked }));
@@ -195,7 +196,7 @@ export default function Mural() {
   }
 
   function toggleComments(postId) {
-    if (!token) { alert(t('common.loginToComment')); return; }
+    if (!token) { setShowLoginPopup(true); return; }
     const isOpen = openComments[postId];
     setOpenComments(prev => ({ ...prev, [postId]: !isOpen }));
     if (!isOpen && !commentsData[postId]) {
@@ -1175,6 +1176,49 @@ export default function Mural() {
           <p style={{ margin: '0 0 0.5rem', color: '#666', fontSize: '0.9rem' }}>
             {t('common.loginToComment', 'Faça login para publicar e interagir!')}
           </p>
+        </div>
+      )}
+      {/* ===== LOGIN POPUP (replaces ugly alert) ===== */}
+      {showLoginPopup && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.6)', zIndex: 9999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
+        }} onClick={() => setShowLoginPopup(false)}>
+          <div style={{
+            background: '#fff', borderRadius: 20, padding: '2rem 1.5rem',
+            maxWidth: 360, width: '100%', textAlign: 'center',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          }} onClick={e => e.stopPropagation()}>
+            <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🙏</div>
+            <h2 style={{ fontSize: '1.3rem', color: '#1a0a3e', margin: '0 0 0.5rem' }}>
+              Entre na Rede Social Cristã
+            </h2>
+            <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: 1.6, margin: '0 0 1rem' }}>
+              Crie sua conta grátis para curtir, comentar e interagir com a comunidade!
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <Link to="/cadastro" style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                background: 'linear-gradient(135deg, #3b5998, #5b8def)',
+                color: '#fff', padding: '0.8rem', borderRadius: 12,
+                fontWeight: 700, fontSize: '1rem', textDecoration: 'none',
+              }} onClick={() => setShowLoginPopup(false)}>
+                Criar conta grátis
+              </Link>
+              <Link to="/login" style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                background: '#f0f0f0', color: '#333', padding: '0.7rem', borderRadius: 12,
+                fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none',
+              }} onClick={() => setShowLoginPopup(false)}>
+                Já tenho conta — Entrar
+              </Link>
+            </div>
+            <p style={{ fontSize: '0.78rem', color: '#aaa', marginTop: '0.8rem', cursor: 'pointer' }}
+              onClick={() => setShowLoginPopup(false)}>
+              Agora não, quero só ver
+            </p>
+          </div>
         </div>
       )}
     </div>
