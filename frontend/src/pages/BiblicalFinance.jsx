@@ -3,6 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { DollarSign, BookOpen, CheckCircle, TrendingUp, Shield, Heart, ArrowRight, Star, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getPrice, getPriceForBackend } from '../utils/regionPricing';
+import LessonReader from '../components/LessonReader';
+import FINANCE_CONTENT from '../data/financeContent';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
@@ -30,6 +32,7 @@ export default function BiblicalFinance() {
   const [buying, setBuying] = useState(false);
   const [paid, setPaid] = useState(false);
   const [currentLesson, setCurrentLesson] = useState(0);
+  const [readingLesson, setReadingLesson] = useState(null);
   const price = getPrice('finance');
 
   useEffect(() => {
@@ -62,6 +65,21 @@ export default function BiblicalFinance() {
     background: 'linear-gradient(135deg, #1a472a 0%, #2d5016 30%, #4a7c28 60%, #d4af37 100%)',
     padding: '3rem 1.5rem', textAlign: 'center', color: '#fff', position: 'relative', overflow: 'hidden',
   };
+
+  if (readingLesson !== null && paid) {
+    return (
+      <LessonReader
+        lessons={FINANCE_LESSONS}
+        lessonContents={FINANCE_CONTENT}
+        currentIndex={readingLesson}
+        totalLessons={FINANCE_LESSONS.length}
+        courseType="finance"
+        accentColor="#d4af37"
+        onClose={() => setReadingLesson(null)}
+        onNavigate={(i) => setReadingLesson(i)}
+      />
+    );
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0f0a' }}>
@@ -115,7 +133,7 @@ export default function BiblicalFinance() {
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
           {FINANCE_LESSONS.map((lesson, i) => (
-            <div key={lesson.id} onClick={() => paid && setCurrentLesson(i)}
+            <div key={lesson.id} onClick={() => paid && setReadingLesson(i)}
               style={{
                 background: paid ? 'linear-gradient(135deg, #1a2f1a, #2d4a1a)' : 'rgba(255,255,255,0.05)',
                 borderRadius: 12, padding: '1rem', cursor: paid ? 'pointer' : 'default',

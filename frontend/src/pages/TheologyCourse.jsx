@@ -3,6 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { BookOpen, CheckCircle, Award, Compass, Star, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getPrice, getPriceForBackend } from '../utils/regionPricing';
+import LessonReader from '../components/LessonReader';
+import THEOLOGY_CONTENT from '../data/theologyContent';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
@@ -35,6 +37,7 @@ export default function TheologyCourse() {
   const [buying, setBuying] = useState(false);
   const [paid, setPaid] = useState(false);
   const [currentLesson, setCurrentLesson] = useState(0);
+  const [readingLesson, setReadingLesson] = useState(null);
   const price = getPrice('theology');
 
   useEffect(() => {
@@ -62,6 +65,21 @@ export default function TheologyCourse() {
     } catch (e) { console.error(e); alert('Erro de conexão.'); }
     finally { setBuying(false); }
   };
+
+  if (readingLesson !== null && paid) {
+    return (
+      <LessonReader
+        lessons={THEOLOGY_LESSONS}
+        lessonContents={THEOLOGY_CONTENT}
+        currentIndex={readingLesson}
+        totalLessons={THEOLOGY_LESSONS.length}
+        courseType="theology"
+        accentColor="#8b9dc3"
+        onClose={() => setReadingLesson(null)}
+        onNavigate={(i) => setReadingLesson(i)}
+      />
+    );
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: '#080c18' }}>
@@ -117,7 +135,7 @@ export default function TheologyCourse() {
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
           {THEOLOGY_LESSONS.map((lesson, i) => (
-            <div key={lesson.id} onClick={() => paid && setCurrentLesson(i)}
+            <div key={lesson.id} onClick={() => paid && setReadingLesson(i)}
               style={{
                 background: paid ? 'linear-gradient(135deg, #0d1b3e, #1a2a5e)' : 'rgba(255,255,255,0.05)',
                 borderRadius: 12, padding: '1rem', cursor: paid ? 'pointer' : 'default',
