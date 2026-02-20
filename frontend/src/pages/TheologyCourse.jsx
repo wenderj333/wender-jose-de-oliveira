@@ -71,7 +71,7 @@ export default function TheologyCourse() {
     finally { setBuying(false); }
   };
 
-  if (readingLesson !== null && paid) {
+  if (readingLesson !== null) {
     return (
       <LessonReader
         lessons={THEOLOGY_LESSONS}
@@ -140,12 +140,12 @@ export default function TheologyCourse() {
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
           {THEOLOGY_LESSONS.map((lesson, i) => (
-            <div key={lesson.id} onClick={() => paid && setReadingLesson(i)}
+            <div key={lesson.id} onClick={() => setReadingLesson(i)}
               style={{
-                background: paid ? 'linear-gradient(135deg, #0d1b3e, #1a2a5e)' : 'rgba(255,255,255,0.05)',
-                borderRadius: 12, padding: '1rem', cursor: paid ? 'pointer' : 'default',
-                border: currentLesson === i && paid ? '2px solid #d4af37' : '1px solid rgba(100,130,200,0.15)',
-                transition: 'all 0.3s', opacity: paid ? 1 : 0.7,
+                background: 'linear-gradient(135deg, #0d1b3e, #1a2a5e)',
+                borderRadius: 12, padding: '1rem', cursor: 'pointer',
+                border: currentLesson === i ? '2px solid #d4af37' : '1px solid rgba(100,130,200,0.15)',
+                transition: 'all 0.3s', opacity: 1,
               }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                 <span style={{ fontSize: '1.5rem' }}>{lesson.icon}</span>
@@ -153,7 +153,7 @@ export default function TheologyCourse() {
                   <div style={{ color: '#8b9dc3', fontWeight: 700, fontSize: '0.95rem' }}>Lição {lesson.id}</div>
                   <div style={{ color: '#e0e0e0', fontWeight: 600 }}>{lesson.title}</div>
                 </div>
-                {!paid && <Lock size={16} color="#666" style={{ marginLeft: 'auto' }} />}
+{/* lock removed */}
               </div>
               <p style={{ color: '#aaa', fontSize: '0.85rem', margin: 0 }}>{lesson.desc}</p>
             </div>
