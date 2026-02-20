@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Users, Send, ArrowLeft, User, Mail, Calendar, Shield, MessageCircle, Search } from 'lucide-react';
 
@@ -23,6 +24,7 @@ const ADMIN_ID = 'c7c930da-5fe8-4b4e-887d-ba547804b7e1';
 
 export default function Members() {
   const { token, user } = useAuth();
+  const navigate = useNavigate();
   const isAdmin = user?.id === ADMIN_ID;
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -201,10 +203,10 @@ export default function Members() {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {filtered.map(member => (
-            <div key={member.id} style={{
+            <div key={member.id} onClick={() => navigate(`/perfil/${member.id}`)} style={{
               display: 'flex', alignItems: 'center', gap: 12, padding: '0.75rem 1rem',
               background: '#fff', borderRadius: 12, border: '1px solid #eee',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)', cursor: 'pointer',
             }}>
               {/* Avatar */}
               <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#daa520', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
