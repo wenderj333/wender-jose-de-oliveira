@@ -491,12 +491,14 @@ export default function Mural() {
   async function translatePost(postId, text) {
     const lang = localStorage.getItem('i18nextLng') || 'pt';
     const targetLang = lang.substring(0, 2);
+    // Detect source: if target is pt, source is probably es/en; otherwise source is pt
+    const sourceLang = targetLang === 'pt' ? 'es' : 'pt';
     setPosts(prev => prev.map(p => p.id === postId ? { ...p, translating: true } : p));
     try {
       const parts = [];
       for (let i = 0; i < text.length; i += 500) {
         const part = text.substring(i, i + 500);
-        const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(part)}&langpair=auto|${targetLang}`);
+        const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(part)}&langpair=${sourceLang}|${targetLang}`);
         const d = await r.json();
         parts.push(d?.responseData?.translatedText || part);
       }
