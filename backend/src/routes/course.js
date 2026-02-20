@@ -125,6 +125,24 @@ router.get('/total', async (req, res) => {
   }
 });
 
+// =================== COURSE PURCHASES TABLE ===================
+(async () => {
+  try {
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS course_purchases (
+        id SERIAL PRIMARY KEY,
+        email TEXT NOT NULL,
+        course_type TEXT NOT NULL,
+        currency TEXT NOT NULL,
+        amount_cents INTEGER NOT NULL,
+        stripe_session_id TEXT,
+        created_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
+    console.log('[course] course_purchases table ready');
+  } catch (e) { console.error('[course] purchases migration error:', e.message); }
+})();
+
 // =================== STRIPE PAYMENT ===================
 const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
 const COURSE_PRICE_FULL = 999; // €9.99 in cents
@@ -226,6 +244,168 @@ router.post('/confirm-payment', async (req, res) => {
   } catch (e) {
     console.error('[course] confirm error:', e);
     res.status(500).json({ error: 'Erro' });
+  }
+});
+
+// =================== NEW PAID COURSES ===================
+
+// Regional pricing config
+const COURSE_PRICES = {
+  finance: {
+    EUR: { amount: 1999, name: 'Finan\u00e7as B\u00edblicas - Sigo com F\u00e9' },
+    USD: { amount: 1999, name: 'Biblical Finance - Sigo com F\u00e9' },
+    BRL: { amount: 4990, name: 'Finan\u00e7as B\u00edblicas - Sigo com F\u00e9' },
+  },
+  theology: {
+    EUR: { amount: 2999, name: 'Curso de Teologia - Sigo com F\u00e9' },
+    USD: { amount: 2999, name: 'Theology Course - Sigo com F\u00e9' },
+    BRL: { amount: 7990, name: 'Curso de Teologia - Sigo com F\u00e9' },
+  },
+};
+
+function createCourseCheckout(courseType) {
+  return async (req, res) => {
+    try {
+      if (!STRIPE_SECRET) return res.status(500).json({ error: 'Stripe not configured' });
+      const stripe = require('stripe')(STRIPE_SECRET);
+      const { email, currency, amount } = req.body;
+      if (!email) return res.status(400).json({ error: 'Email obrigat\u00f3rio' });
+
+      const cur = (currency || 'EUR').toUpperCase();
+      const config = COURSE_PRICES[courseType]?.[cur] || COURSE_PRICES[courseType]?.EUR;
+      const finalAmount = amount || config.amount;
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        customer_email: email.trim().toLowerCase(),
+        line_items: [{
+          price_data: {
+            currency: cur.toLowerCase(),
+            product_data: {
+              name: config.name,
+              description: courseType === 'finance'
+                ? 'Acesso completo ao curso de Finan\u00e7as B\u00edblicas com 16+ li\u00e7\u00f5es.'
+                : 'Acesso completo ao curso de Teologia com 21+ li\u00e7\u00f5es.',
+            },
+            unit_amount: finalAmount,
+          },
+          quantity: 1,
+        }],
+        mode: 'payment',
+        success_url: `${SITE_URL}/curso-${courseType === 'finance' ? 'financas' : 'teologia'}?paid=success&email=${encodeURIComponent(email)}`,
+        cancel_url: `${SITE_URL}/curso-${courseType === 'finance' ? 'financas' : 'teologia'}?paid=cancel`,
+        metadata: { email: email.trim().toLowerCase(), courseType },
+      });
+
+      // Record purchase attempt
+      try {
+        await db.prepare(
+          'INSERT INTO course_purchases (email, course_type, currency, amount_cents, stripe_session_id) VALUES (?, ?, ?, ?, ?)'
+        ).run(email.trim().toLowerCase(), courseType, cur, finalAmount, session.id);
+      } catch (e) { console.error('[course] record purchase error:', e.message); }
+
+      res.json({ url: session.url });
+    } catch (e) {
+      console.error(`[course] ${courseType} checkout error:`, e);
+      res.status(500).json({ error: 'Erro ao criar pagamento' });
+    }
+  };
+}
+
+router.post('/create-checkout-finance', createCourseCheckout('finance'));
+router.post('/create-checkout-theology', createCourseCheckout('theology'));
+
+// =================== AUTO-MIGRATE: course_purchases ===================
+(async () => {
+  try {
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS course_purchases (
+        id SERIAL PRIMARY KEY,
+        email TEXT NOT NULL,
+        course_type TEXT NOT NULL,
+        amount INTEGER NOT NULL,
+        currency TEXT NOT NULL DEFAULT 'eur',
+        stripe_session_id TEXT,
+        status TEXT DEFAULT 'completed',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+  } catch (e) { console.log('[course] course_purchases table ready'); }
+})();
+
+// POST /api/course/create-checkout-finance — Stripe checkout for Biblical Finance course
+router.post('/create-checkout-finance', async (req, res) => {
+  try {
+    if (!STRIPE_SECRET) return res.status(500).json({ error: 'Stripe not configured' });
+    const stripe = require('stripe')(STRIPE_SECRET);
+    const { email, amount, currency } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email obrigat\u00f3rio' });
+
+    const unitAmount = amount || 1999;
+    const cur = currency || 'eur';
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      customer_email: email.trim().toLowerCase(),
+      line_items: [{
+        price_data: {
+          currency: cur,
+          product_data: {
+            name: 'Finan\u00e7as B\u00edblicas - Sigo com F\u00e9',
+            description: 'Curso completo de Finan\u00e7as B\u00edblicas com 15 li\u00e7\u00f5es.',
+          },
+          unit_amount: unitAmount,
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      success_url: `${SITE_URL}/curso-financas?paid=success&email=${encodeURIComponent(email)}`,
+      cancel_url: `${SITE_URL}/curso-financas?paid=cancel`,
+      metadata: { email: email.trim().toLowerCase(), course_type: 'finance' },
+    });
+
+    res.json({ url: session.url });
+  } catch (e) {
+    console.error('[course] finance checkout error:', e);
+    res.status(500).json({ error: 'Erro ao criar pagamento' });
+  }
+});
+
+// POST /api/course/create-checkout-theology — Stripe checkout for Theology course
+router.post('/create-checkout-theology', async (req, res) => {
+  try {
+    if (!STRIPE_SECRET) return res.status(500).json({ error: 'Stripe not configured' });
+    const stripe = require('stripe')(STRIPE_SECRET);
+    const { email, amount, currency } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email obrigat\u00f3rio' });
+
+    const unitAmount = amount || 2999;
+    const cur = currency || 'eur';
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      customer_email: email.trim().toLowerCase(),
+      line_items: [{
+        price_data: {
+          currency: cur,
+          product_data: {
+            name: 'Teologia Crist\u00e3 - Sigo com F\u00e9',
+            description: 'Curso completo de Teologia com 20 li\u00e7\u00f5es aprofundadas.',
+          },
+          unit_amount: unitAmount,
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      success_url: `${SITE_URL}/curso-teologia?paid=success&email=${encodeURIComponent(email)}`,
+      cancel_url: `${SITE_URL}/curso-teologia?paid=cancel`,
+      metadata: { email: email.trim().toLowerCase(), course_type: 'theology' },
+    });
+
+    res.json({ url: session.url });
+  } catch (e) {
+    console.error('[course] theology checkout error:', e);
+    res.status(500).json({ error: 'Erro ao criar pagamento' });
   }
 });
 

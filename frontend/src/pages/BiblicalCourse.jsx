@@ -208,21 +208,28 @@ export default function BiblicalCourse() {
       <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem' }}>
         {/* Hero — clicável para expandir */}
         <div onClick={() => setShowLearnSection(!showLearnSection)} style={{
-          background: 'linear-gradient(135deg, #1a0a3e, #3b5998)', borderRadius: 20,
-          padding: '2rem 1.5rem', textAlign: 'center', color: '#fff', marginBottom: '1.5rem',
-          cursor: 'pointer', transition: 'transform 0.2s',
+          background: 'linear-gradient(135deg, #1a0a3e, #3b5998, #667eea)', borderRadius: 24,
+          padding: '2.5rem 1.5rem', textAlign: 'center', color: '#fff', marginBottom: '1.5rem',
+          cursor: 'pointer', transition: 'transform 0.2s', position: 'relative', overflow: 'hidden',
         }}>
-          <BookOpen size={48} style={{ color: '#f4d03f', marginBottom: '0.5rem' }} />
-          <h1 style={{ fontSize: '1.6rem', margin: '0 0 0.5rem' }}>
-            Curso Bíblico de 10 Dias
+          <div style={{ position: 'absolute', top: -20, right: -20, fontSize: '7rem', opacity: 0.07 }}>📖</div>
+          <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>📖✨🕊️</div>
+          <h1 style={{ fontSize: '1.8rem', margin: '0 0 0.5rem', fontWeight: 800 }}>
+            Curso B{'\u00ed'}blico de 10 Dias
           </h1>
-          <p style={{ fontSize: '1rem', opacity: 0.9, lineHeight: 1.6 }}>
-            Explore a fé, o amor ao próximo e o propósito de Deus para sua vida.
-            <strong> 100% gratuito!</strong>
+          <p style={{ fontSize: '1.05rem', opacity: 0.95, lineHeight: 1.7, maxWidth: 480, margin: '0 auto' }}>
+            Explore a f{'\u00e9'}, o amor ao pr{'\u00f3'}ximo e o prop{'\u00f3'}sito de Deus para sua vida.
           </p>
+          <div style={{
+            display: 'inline-block', background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+            borderRadius: 30, padding: '0.5rem 1.5rem', fontSize: '1rem', fontWeight: 800,
+            marginTop: '0.8rem', boxShadow: '0 4px 12px rgba(34,197,94,0.3)',
+          }}>
+            🎁 100% GRATUITO
+          </div>
           {totalEnrolled > 5 && (
             <div style={{ marginTop: '0.8rem', fontSize: '0.85rem', opacity: 0.8 }}>
-              🔥 {totalEnrolled} pessoas já estão participando!
+              🔥 {totalEnrolled} pessoas j{'\u00e1'} est{'\u00e3'}o participando!
             </div>
           )}
           <div style={{ marginTop: '0.8rem', fontSize: '0.85rem', opacity: 0.7 }}>

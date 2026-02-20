@@ -1,546 +1,559 @@
-{
-  "brand": "Sigo com FÃ©",
-  "nav": {
-    "prayers": "RugÄƒciuni",
-    "mural": "Panou comunitar",
-    "live": "Live",
-    "churches": "Biserici",
-    "registerChurch": "ÃŽnregistreazÄƒ Biserica",
-    "kids": "Kids",
-    "dashboard": "Dashboard",
-    "hello": "Salut, {{name}}",
-    "logout": "IeÈ™ire",
-    "login": "Autentificare",
-    "register": "ÃŽnregistrare",
-    "notifications": "Notificări",
-    "members": "Membri",
-    "groups": "Grupuri",
-    "pastoralAI": "IA Pastorală",
-    "bibleAI": "IA Biblică",
-    "chatPastoral": "Chat Pastoral",
-    "friends": "Prieteni",
-    "messages": "Mesaje",
-    "consecration": "Consacrare",
-    "myProfile": "Profilul Meu",
-    "offerings": "Ofrandă",
-    "music": "Muzică"
-  },
-  "footer": "Â© 2026 Sigo com FÃ© â€” Tehnologie Ã®n slujba ÃŽmpÄƒrÄƒÈ›iei",
-  "home": {
-    "subtitle": "RoagÄƒ-te, conecteazÄƒ-te È™i Ã®ntÄƒreÈ™te-È›i credinÈ›a alÄƒturi de mii de fraÈ›i din Ã®ntreaga lume.",
-    "startNow": "ÃŽncepe Acum",
-    "seePrayerRequests": "Vezi Cereri de RugÄƒciune",
-    "churchPraying_one": "{{count}} bisericÄƒ se roagÄƒ acum!",
-    "churchPraying_other": "{{count}} biserici se roagÄƒ acum!",
-    "featurePrayers": "Cereri de RugÄƒciune",
-    "featurePrayersDesc": "ÃŽmpÄƒrtÄƒÈ™eÈ™te cererile tale È™i roagÄƒ-te pentru alÈ›ii. DescoperÄƒ puterea rugÄƒciunii colective È™i celebreazÄƒ victoriile!",
-    "featureLive": "Pastorul se roagÄƒ Live",
-    "featureLiveDesc": "AflÄƒ cÃ¢nd pastorul tÄƒu se roagÄƒ Ã®n timp real. Bulele de rugÄƒciune se ridicÄƒ precum tÄƒmÃ¢ia spre cer.",
-    "featureMap": "Harta Bisericilor",
-    "featureMapDesc": "GÄƒseÈ™te biserici Ã®n orice oraÈ™. Perfect pentru cÄƒlÄƒtori È™i familii care se mutÄƒ.",
-    "featureDashboard": "Dashboard Pastoral",
-    "featureDashboardDesc": "Instrumente complete de gestionare pentru pastori: membri, finanÈ›e, campanii È™i multe altele.",
-    "featureMural": "Panoul ComunitÄƒÈ›ii",
-    "featureMuralDesc": "ÃŽmpÄƒrtÄƒÈ™eÈ™te mÄƒrturii, laudÄƒ È™i versete cu comunitatea creÈ™tinÄƒ.",
-    "featureKids": "ColÈ›ul Copiilor",
-    "featureKidsDesc": "PoveÈ™ti biblice, quiz interactiv È™i activitÄƒÈ›i pentru copii ca sÄƒ Ã®nveÈ›e despre Biblie!",
-    "featureChurch": "ÃŽnregistreazÄƒ-È›i Biserica",
-    "featureChurchDesc": "ÃŽnregistreazÄƒ-È›i biserica pe platformÄƒ È™i conecteazÄƒ-te cu credincioÈ™i din Ã®ntreaga lume.",
-    "explore": "ExploreazÄƒ",
-    "registerBtn": "ÃŽnregistreazÄƒ",
-    "verses": [
-      {
-        "text": "CÄƒci unde sunt doi sau trei adunaÈ›i Ã®n Numele Meu, acolo sunt È™i Eu Ã®n mijlocul lor.",
-        "ref": "Matei 18:20"
-      },
-      {
-        "text": "Pot totul Ã®n Hristos care mÄƒ Ã®ntÄƒreÈ™te.",
-        "ref": "Filipeni 4:13"
-      },
-      {
-        "text": "Domnul este PÄƒstorul meu; nu voi duce lipsÄƒ de nimic.",
-        "ref": "Psalmul 23:1"
-      },
-      {
-        "text": "ÃŽncrede-te Ã®n Domnul din toatÄƒ inima ta È™i nu te bizui pe Ã®nÈ›elepciunea ta.",
-        "ref": "Proverbe 3:5"
-      },
-      {
-        "text": "CÄƒci Eu È™tiu gÃ¢ndurile pe care le am cu privire la voi, gÃ¢nduri de pace È™i nu de nenorocire, ca sÄƒ vÄƒ dau un viitor È™i o nÄƒdejde.",
-        "ref": "Ieremia 29:11"
-      },
-      {
-        "text": "FiÈ›i tari È™i curajoÈ™i. Nu vÄƒ temeÈ›i, cÄƒci Domnul va fi cu voi.",
-        "ref": "Deuteronom 31:6"
-      },
-      {
-        "text": "RugÄƒciunea celui drept este puternicÄƒ È™i eficace.",
-        "ref": "Iacov 5:16"
-      }
-    ]
-  },
-  "login": {
-    "welcomeBack": "Bine ai revenit!",
-    "email": "Email",
-    "emailPlaceholder": "email@exemplu.com",
-    "password": "ParolÄƒ",
-    "passwordPlaceholder": "Parola ta",
-    "submit": "Autentificare",
-    "or": "sau",
-    "google": "Autentificare cu Google",
-    "noAccount": "Nu ai cont?",
-    "signUp": "ÃŽnregistreazÄƒ-te"
-  },
-  "register": {
-    "joinCommunity": "Alătură-te Rețelei Sociale Creștine!",
-    "fullName": "Nume Complet",
-    "fullNamePlaceholder": "Numele tÄƒu complet",
-    "email": "Email",
-    "emailPlaceholder": "email@exemplu.com",
-    "password": "ParolÄƒ",
-    "passwordPlaceholder": "Minim 6 caractere",
-    "passwordError": "Parola trebuie sÄƒ aibÄƒ cel puÈ›in 6 caractere",
-    "iAm": "Eu sunt:",
-    "member": "Membru / Credincios",
-    "pastor": "Pastor / Lider",
-    "submit": "ÃŽnregistrare",
-    "or": "sau",
-    "google": "ÃŽnregistrare cu Google",
-    "hasAccount": "Ai deja cont?",
-    "signIn": "Autentificare"
-  },
-  "prayerFeed": {
-    "victoryWall": "Zidul Victoriei",
-    "prayerRequests": "Cereri de RugÄƒciune",
-    "newRequest": "Cerere NouÄƒ",
-    "allRequests": "Toate Cererile",
-    "answeredPrayers": "RugÄƒciuni Ascultate",
-    "newPrayerRequest": "Cerere NouÄƒ de RugÄƒciune",
-    "titleOptional": "Titlu (opÈ›ional)",
-    "titlePlaceholder": "Ex: RugÄƒciune pentru familia mea",
-    "yourRequest": "Cererea ta *",
-    "requestPlaceholder": "ÃŽmpÄƒrtÄƒÈ™eÈ™te cererea ta de rugÄƒciune...",
-    "category": "Categorie",
-    "urgentRequest": "Cerere urgentÄƒ",
-    "submitRequest": "Trimite Cererea",
-    "loading": "Se Ã®ncarcÄƒ rugÄƒciunile...",
-    "noRequests": "Nicio cerere de rugÄƒciune Ã®ncÄƒ. Fii primul!",
-    "categories": {
-      "all": "Toate",
-      "health": "SÄƒnÄƒtate",
-      "work_finance": "MuncÄƒ/FinanÈ›e",
-      "family": "Familie",
-      "studies": "Studii",
-      "housing": "LocuinÈ›Äƒ",
-      "emotional": "EmoÈ›ional",
-      "decisions": "Decizii",
-      "other": "Altele"
-    }
-  },
-  "livePrayer": {
-    "title": "RugÄƒciune Live",
-    "churchPraying_one": "bisericÄƒ se roagÄƒ",
-    "churchPraying_other": "biserici se roagÄƒ",
-    "rightNow": "chiar acum",
-    "closeOverlay": "ÃŽnchide Overlay",
-    "immersiveView": "RugÄƒciune ImersivÄƒ",
-    "pastorPanel": "Panoul Pastorului",
-    "focusOptional": "Focusul rugÄƒciunii (opÈ›ional)",
-    "focusPlaceholder": "Ex: RugÄƒciune pentru familii",
-    "startLive": "ÃŽncepe RugÄƒciunea Live",
-    "prayingLive": "Te rogi live...",
-    "endPrayer": "ÃŽncheie RugÄƒciunea",
-    "pastorsPraying": "Pastori care se roagÄƒ acum:",
-    "noPastors": "Niciun pastor nu se roagÄƒ live Ã®n acest moment.",
-    "comeBack": "Revino curÃ¢nd!"
-  },
-  "churchMap": {
-    "title": "Harta Bisericilor",
-    "searchPlaceholder": "CautÄƒ dupÄƒ oraÈ™, È›arÄƒ sau nume...",
-    "search": "CautÄƒ",
-    "searching": "Se cautÄƒ biserici...",
-    "noResults": "Nicio bisericÄƒ gÄƒsitÄƒ pentru \"{{query}}\". ÃŽnregistreaz-o pe a ta!"
-  },
-  "churchRegister": {
-    "title": "ÃŽnregistreazÄƒ Biserica",
-    "subtitle": "ÃŽnregistreazÄƒ-È›i biserica pe platforma Sigo com FÃ©",
-    "churchName": "Numele Bisericii *",
-    "churchNamePlaceholder": "Ex: Biserica BaptistÄƒ CentralÄƒ",
-    "denomination": "DenominaÈ›iune",
-    "denominationPlaceholder": "Ex: BaptistÄƒ, PenticostalÄƒ, etc.",
-    "address": "AdresÄƒ",
-    "addressPlaceholder": "StradÄƒ, numÄƒr, cartier",
-    "city": "OraÈ™",
-    "cityPlaceholder": "OraÈ™ul tÄƒu",
-    "country": "ÈšarÄƒ",
-    "countryPlaceholder": "ÈšarÄƒ",
-    "phone": "Telefon",
-    "phonePlaceholder": "+40 21 234 5678",
-    "pastorName": "Numele Pastorului",
-    "pastorNamePlaceholder": "Numele pastorului responsabil",
-    "submit": "ÃŽnregistreazÄƒ Biserica",
-    "submitting": "Se Ã®nregistreazÄƒ...",
-    "success": "BisericÄƒ ÃŽnregistratÄƒ!",
-    "redirecting": "RedirecÈ›ionare spre harta bisericilor...",
-    "nameRequired": "Numele bisericii este obligatoriu",
-    "loginRequired": "Trebuie sÄƒ fii autentificat pentru a Ã®nregistra o bisericÄƒ.",
-    "error": "Eroare la Ã®nregistrare"
-  },
-  "dashboard": {
-    "title": "Dashboard",
-    "loading": "Se Ã®ncarcÄƒ datele...",
-    "users": "Utilizatori",
-    "churches": "Biserici",
-    "prayerRequests": "Cereri de RugÄƒciune",
-    "answeredPrayers": "RugÄƒciuni Ascultate",
-    "quickActions": "AcÈ›iuni Rapide",
-    "newPrayerRequest": "Cerere NouÄƒ de RugÄƒciune",
-    "registerChurch": "ÃŽnregistreazÄƒ Biserica",
-    "kidsCorner": "ColÈ›ul Copiilor",
-    "recentActivity": "Activitate RecentÄƒ",
-    "requestedPrayer": "a cerut rugÄƒciune:",
-    "noActivity": "Nicio activitate recentÄƒ. ÃŽncepe prin a crea o cerere de rugÄƒciune!",
-    "viewAll": "Vezi toate cererile"
-  },
-  "mural": {
-    "title": "Panoul ComunitÄƒÈ›ii",
-    "subtitle": "ÃŽmpÄƒrtÄƒÈ™eÈ™te mÄƒrturii, laudÄƒ È™i versete cu comunitatea creÈ™tinÄƒ",
-    "newPost": "Postare NouÄƒ",
-    "cancel": "AnuleazÄƒ",
-    "shareWithCommunity": "ÃŽmpÄƒrtÄƒÈ™eÈ™te cu Comunitatea",
-    "categoryLabel": "Categorie",
-    "message": "Mesaj",
-    "messagePlaceholder": "Scrie mÄƒrturia, reflecÈ›ia sau versetul tÄƒu...",
-    "publish": "PublicÄƒ",
-    "noPostsFound": "Nicio postare gÄƒsitÄƒ Ã®n aceastÄƒ categorie.",
-    "filters": {
-      "all": "Toate",
-      "myChurch": "Biserica Mea",
-      "testimonies": "MÄƒrturii",
-      "worship": "LaudÄƒ",
-      "verses": "Versete"
-    },
-    "categories": {
-      "testemunho": "MÄƒrturie",
-      "louvor": "LaudÄƒ / Video",
-      "reflexao": "ReflecÈ›ie BiblicÄƒ",
-      "versiculo": "Verset",
-      "foto": "Foto"
-    }
-  },
-  "kids": {
-    "title": "È˜coala DuminicalÄƒ DigitalÄƒ",
-    "subtitle": "ÃŽnvaÈ›Äƒ despre Biblie Ã®ntr-un mod distractiv!",
-    "bibleStories": "PoveÈ™ti Biblice",
-    "readStory": "CiteÈ™te Povestea",
-    "years": "ani",
-    "bibleQuiz": "Quiz Biblic",
-    "question": "ÃŽntrebarea {{current}} din {{total}}",
-    "congrats": "FelicitÄƒri!",
-    "scoreResult": "Ai ghicit <strong>{{score}}</strong> din <strong>{{total}}</strong>!",
-    "perfect": "Perfect! EÈ™ti un campion al Bibliei!",
-    "good": "Foarte bine! ContinuÄƒ sÄƒ studiezi!",
-    "tryAgain": "Nu renunÈ›a! ÃŽncearcÄƒ din nou!",
-    "playAgain": "JoacÄƒ Din Nou",
-    "weekVerse": "Versetul SÄƒptÄƒmÃ¢nii",
-    "weekVerseText": "FiindcÄƒ atÃ¢t de mult a iubit Dumnezeu lumea, cÄƒ a dat pe singurul Lui Fiu, pentru ca oricine crede Ã®n El sÄƒ nu piarÄƒ, ci sÄƒ aibÄƒ viaÈ›Äƒ veÈ™nicÄƒ.",
-    "weekVerseRef": "â€” Ioan 3:16",
-    "memorized": "Memorat!",
-    "memorize": "L-am memorat!",
-    "activities": "ActivitÄƒÈ›i",
-    "comingSoon": "ÃŽn curÃ¢nd!",
-    "stories": [
-      {
-        "title": "David È™i Goliat",
-        "desc": "Un bÄƒiat curajos care a Ã®nvins un uriaÈ™ cu o piatrÄƒ È™i multÄƒ credinÈ›Äƒ Ã®n Dumnezeu",
-        "age": "6-8"
-      },
-      {
-        "title": "Arca lui Noe",
-        "desc": "Noe a construit o barcÄƒ uriaÈ™Äƒ È™i a salvat toate animalele de la marele potop",
-        "age": "3-5"
-      },
-      {
-        "title": "Iona È™i Balena",
-        "desc": "Iona a fugit de Dumnezeu dar a Ã®nvÄƒÈ›at cÄƒ El este pretutindeni",
-        "age": "6-8"
-      },
-      {
-        "title": "Daniel Ã®n Groapa cu Lei",
-        "desc": "Daniel s-a rugat cu credinÈ›Äƒ È™i Dumnezeu a Ã®nchis gurile leilor",
-        "age": "9-12"
-      },
-      {
-        "title": "Moise È™i Marea RoÈ™ie",
-        "desc": "Dumnezeu a despÄƒrÈ›it marea pentru ca poporul SÄƒu sÄƒ treacÄƒ Ã®n siguranÈ›Äƒ",
-        "age": "6-8"
-      }
-    ],
-    "quiz": [
-      {
-        "q": "Cine l-a Ã®nvins pe uriaÈ™ul Goliat?",
-        "opts": [
-          "Saul",
-          "David",
-          "Moise",
-          "Iosua"
-        ]
-      },
-      {
-        "q": "CÃ¢te zile a durat potopul?",
-        "opts": [
-          "10 zile",
-          "20 zile",
-          "40 zile",
-          "100 zile"
-        ]
-      },
-      {
-        "q": "Cine a fost aruncat Ã®n groapa cu lei?",
-        "opts": [
-          "Iona",
-          "Daniel",
-          "Pavel",
-          "Petru"
-        ]
-      },
-      {
-        "q": "Care este prima carte a Bibliei?",
-        "opts": [
-          "Exodul",
-          "Psalmii",
-          "Geneza",
-          "Matei"
-        ]
-      },
-      {
-        "q": "ÃŽn ce oraÈ™ s-a nÄƒscut Isus?",
-        "opts": [
-          "Ierusalim",
-          "Nazaret",
-          "Betleem",
-          "Capernaum"
-        ]
-      }
-    ],
-    "activityList": [
-      {
-        "title": "Colorat",
-        "desc": "ColoreazÄƒ personaje biblice cu culori frumoase"
-      },
-      {
-        "title": "CautÄƒ Cuvintele",
-        "desc": "GÄƒseÈ™te cuvinte din Biblie ascunse"
-      },
-      {
-        "title": "Joc de Memorie",
-        "desc": "GÄƒseÈ™te perechile celor 12 apostoli"
-      },
-      {
-        "title": "Puzzle",
-        "desc": "AsambleazÄƒ scene biblice uimitoare"
-      }
-    ]
-  },
-  "feedPost": {
-    "tapToWatch": "Atinge pentru a viziona",
-    "photo": "Foto",
-    "amem": "Amin",
-    "share": "Distribuie"
-  },
-  "prayerCard": {
-    "urgent": "URGENT",
-    "testimony": "MÄƒrturie:",
-    "personPraying_one": "{{count}} persoanÄƒ se roagÄƒ",
-    "personPraying_other": "{{count}} persoane se roagÄƒ",
-    "timeAgo": {
-      "min": "acum {{count}}min",
-      "hour": "acum {{count}}h",
-      "day": "acum {{count}}z"
-    },
-    "categories": {
-      "health": "SÄƒnÄƒtate",
-      "work_finance": "MuncÄƒ/FinanÈ›e",
-      "family": "Familie",
-      "studies": "Studii",
-      "housing": "LocuinÈ›Äƒ",
-      "emotional": "EmoÈ›ional",
-      "decisions": "Decizii",
-      "other": "Altele"
-    }
-  },
-  "amemButton": {
-    "praying": "MÄƒ rog!",
-    "prayForYou": "MÄƒ rog pentru tine"
-  },
-  "pastorOverlay": {
-    "title": "Pastori care se roagÄƒ Live",
-    "churchesInPrayer_one": "{{count}} bisericÄƒ Ã®n rugÄƒciune chiar acum",
-    "churchesInPrayer_other": "{{count}} biserici Ã®n rugÄƒciune chiar acum",
-    "close": "ÃŽnchide"
-  },
-  "churchPin": {
-    "pastor": "Pastor {{name}}",
-    "members": "{{count}} membri",
-    "following": "UrmÄƒresc",
-    "follow": "UrmÄƒreÈ™te",
-    "directions": "Cum Ajung",
-    "share": "Distribuie",
-    "shareText": "DescoperÄƒ {{name}} pe Sigo com FÃ©!"
-  },
-  "langSwitcher": {
-    "label": "LimbÄƒ"
-  },
-  "notifications": {
-    "title": "Notificări",
-    "markAllRead": "Marchează toate ca citite",
-    "noNotifications": "Nicio notificare deocamdată."
-  },
-  "offerings": {
-    "notPastor": "Contactează pastorul bisericii.",
-    "records": "Înregistrări",
-    "paypalEmail": "Email PayPal",
-    "offering": "Ofrandă",
-    "tithe": "Zeciuială",
-    "bank": "Bancă",
-    "holder": "Titular",
-    "saving": "Se salvează...",
-    "pixNamePlaceholder": "Numele titularului",
-    "noContributions": "Nicio contribuție încă",
-    "contributions": "Contribuții",
-    "holderPlaceholder": "Numele titularului",
-    "save": "Salvează",
-    "title": "Ofrandă și Zeciuială",
-    "messagePlaceholder": "Dumnezeu să binecuvânteze!",
-    "pixKey": "Cheie PIX",
-    "account": "Cont",
-    "bankTransfer": "Transfer Bancar",
-    "pixKeyPlaceholder": "Cheia ta PIX",
-    "configure": "Configurează",
-    "agency": "Agenție",
-    "saved": "Salvat!",
-    "thisMonth": "Luna aceasta",
-    "pixName": "Titular",
-    "totalGeneral": "Total",
-    "messageToMembers": "Mesaj pentru Membri"
-  },
-  "groups": {
-    "newGroup": "Grup Nou",
-    "noPosts": "Nicio postare",
-    "public": "Public",
-    "groupName": "Numele grupului",
-    "back": "Înapoi",
-    "cancel": "Anulează",
-    "creating": "Se creează...",
-    "leave": "Părăsește",
-    "private": "Privat",
-    "description": "Descriere (opțional)",
-    "createGroup": "Creează Grup",
-    "writePlaceholder": "Scrie în grup...",
-    "title": "Grupuri",
-    "join": "Alătură-te",
-    "noGroups": "Niciun grup încă",
-    "members": "membri",
-    "createFirst": "Creează primul grup!"
-  },
-  "helpRequests": {
-    "loading": "Se încarcă...",
-    "title": "Cereri de Ajutor",
-    "subtitle": "Persoane care au nevoie de sprijin.",
-    "empty": "Nicio cerere de ajutor."
-  },
-  "profile": {
-    "noBio": "Nicio biografie",
-    "posts": "Postări",
-    "bio": "Despre",
-    "friends": "Prieteni",
-    "editProfile": "Editează Profil",
-    "memberSince": "Membru din",
-    "save": "Salvează",
-    "title": "Profil",
-    "cancel": "Anulează",
-    "prayers": "Rugăciuni",
-    "addPhotoPrompt": "Adaugă o fotografie la profilul tău!",
-    "addPhotoDesc": "Atinge aici pentru a-ți personaliza profilul cu o fotografie.",
-    "addFriend": "Adaugă",
-    "pendingFriend": "În așteptare",
-    "acceptFriend": "Acceptă",
-    "rejectFriend": "Refuză"
-  },
-  "messages": {
-    "writePlaceholder": "Scrie mesajul tău...",
-    "whenSomeone": "Când cineva îți trimite un mesaj, va apărea aici!",
-    "noConversations": "Nicio conversație încă",
-    "back": "Înapoi",
-    "noMessages": "Niciun mesaj încă",
-    "title": "Mesaje",
-    "loading": "Se încarcă..."
-  },
-  "consecration": {
-    "subtitle": "Post și rugăciune — întărește-ți credința",
-    "fastingToday": "Postesc azi",
-    "benefits": "Beneficiile Postului",
-    "consecrating": "Consacrare...",
-    "noOneYet": "Nimeni nu se consacră încă. Fii primul!",
-    "totalConsecrations": "Total consacrări",
-    "title": "Consacrare",
-    "imConsecrating": "Mă consacru",
-    "loginRequired": "Autentifică-te pentru a te consacra!"
-  },
-  "friends": {
-    "reject": "Respinge",
-    "myFriends": "Prietenii Mei",
-    "noRequests": "Nicio cerere.",
-    "accept": "Acceptă",
-    "search": "Caută",
-    "requests": "Cereri",
-    "pending": "În așteptare",
-    "addFriend": "Adaugă",
-    "title": "Prieteni",
-    "noFriends": "Niciun prieten încă.",
-    "removeFriend": "Elimină"
-  },
-  "common": {
-    "edit": "Editează",
-    "report": "Raportează",
-    "save": "Salvează",
-    "writeComment": "Scrie un comentariu...",
-    "share": "Distribuie",
-    "send": "Trimite",
-    "reportConfirm": "Raportezi această postare?",
-    "loading": "Se încarcă...",
-    "translation": "Traducere",
-    "hideTranslation": "Ascunde traducerea",
-    "reported": "Postare raportată!",
-    "publish": "Publică",
-    "comment": "Comentează",
-    "confirm": "Confirmă",
-    "publishing": "Se trimite...",
-    "loginToLike": "Autentifică-te!",
-    "loginToComment": "Autentifică-te!",
-    "linkCopied": "Link copiat!",
-    "close": "Închide",
-    "translate": "Traduce",
-    "delete": "Șterge"
-  },
-  "pastorChat": {
-    "yourName": "Numele tău",
-    "title": "Chat Pastoral",
-    "send": "Trimite",
-    "startChat": "Începe",
-    "subtitle": "Vorbește cu un pastor."
-  },
-  "music": {
-    "title": "Biblioteca Muzicală",
-    "subtitle": "Laudă și adorație 100% gratuite",
-    "worship": "Laudă & Adorație",
-    "hymns": "Imnuri Clasice",
-    "instrumental": "Instrumental",
-    "kids": "Kids Gospel",
-    "prayer": "Muzică de Rugăciune",
-    "favorites": "Favorite",
-    "noFavorites": "Niciun favorit încă",
-    "tapHeart": "Apasă ❤️ pentru a salva cântece",
-    "freeSources": "Mai multă muzică gratuită"
-  }
+﻿{
+    "brand":  "Sigo com FÃƒÂ©",
+    "nav":  {
+                "prayers":  "RugÃ„Æ’ciuni",
+                "mural":  "Panou comunitar",
+                "live":  "Live",
+                "churches":  "Biserici",
+                "registerChurch":  "ÃƒÅ½nregistreazÃ„Æ’ Biserica",
+                "kids":  "Kids",
+                "dashboard":  "Dashboard",
+                "hello":  "Salut, {{name}}",
+                "logout":  "IeÃˆâ„¢ire",
+                "login":  "Autentificare",
+                "register":  "ÃƒÅ½nregistrare",
+                "notifications":  "NotificÄƒri",
+                "members":  "Membri",
+                "groups":  "Grupuri",
+                "pastoralAI":  "IA PastoralÄƒ",
+                "bibleAI":  "IA BiblicÄƒ",
+                "chatPastoral":  "Chat Pastoral",
+                "friends":  "Prieteni",
+                "messages":  "Mesaje",
+                "consecration":  "Consacrare",
+                "myProfile":  "Profilul Meu",
+                "offerings":  "OfrandÄƒ",
+                "music":  "MuzicÄƒ",
+                "courseFinance":  "Finanțe Biblice",
+                "courseTheology":  "Teologie",
+                "courseFree":  "Curs Biblic Gratuit"
+            },
+    "footer":  "Ã‚Â© 2026 Sigo com FÃƒÂ© Ã¢â‚¬â€ Tehnologie ÃƒÂ®n slujba ÃƒÅ½mpÃ„Æ’rÃ„Æ’Ãˆâ€ºiei",
+    "home":  {
+                 "subtitle":  "RoagÃ„Æ’-te, conecteazÃ„Æ’-te Ãˆâ„¢i ÃƒÂ®ntÃ„Æ’reÃˆâ„¢te-Ãˆâ€ºi credinÃˆâ€ºa alÃ„Æ’turi de mii de fraÃˆâ€ºi din ÃƒÂ®ntreaga lume.",
+                 "startNow":  "ÃƒÅ½ncepe Acum",
+                 "seePrayerRequests":  "Vezi Cereri de RugÃ„Æ’ciune",
+                 "churchPraying_one":  "{{count}} bisericÃ„Æ’ se roagÃ„Æ’ acum!",
+                 "churchPraying_other":  "{{count}} biserici se roagÃ„Æ’ acum!",
+                 "featurePrayers":  "Cereri de RugÃ„Æ’ciune",
+                 "featurePrayersDesc":  "ÃƒÅ½mpÃ„Æ’rtÃ„Æ’Ãˆâ„¢eÃˆâ„¢te cererile tale Ãˆâ„¢i roagÃ„Æ’-te pentru alÃˆâ€ºii. DescoperÃ„Æ’ puterea rugÃ„Æ’ciunii colective Ãˆâ„¢i celebreazÃ„Æ’ victoriile!",
+                 "featureLive":  "Pastorul se roagÃ„Æ’ Live",
+                 "featureLiveDesc":  "AflÃ„Æ’ cÃƒÂ¢nd pastorul tÃ„Æ’u se roagÃ„Æ’ ÃƒÂ®n timp real. Bulele de rugÃ„Æ’ciune se ridicÃ„Æ’ precum tÃ„Æ’mÃƒÂ¢ia spre cer.",
+                 "featureMap":  "Harta Bisericilor",
+                 "featureMapDesc":  "GÃ„Æ’seÃˆâ„¢te biserici ÃƒÂ®n orice oraÃˆâ„¢. Perfect pentru cÃ„Æ’lÃ„Æ’tori Ãˆâ„¢i familii care se mutÃ„Æ’.",
+                 "featureDashboard":  "Dashboard Pastoral",
+                 "featureDashboardDesc":  "Instrumente complete de gestionare pentru pastori: membri, finanÃˆâ€ºe, campanii Ãˆâ„¢i multe altele.",
+                 "featureMural":  "Panoul ComunitÃ„Æ’Ãˆâ€ºii",
+                 "featureMuralDesc":  "ÃƒÅ½mpÃ„Æ’rtÃ„Æ’Ãˆâ„¢eÃˆâ„¢te mÃ„Æ’rturii, laudÃ„Æ’ Ãˆâ„¢i versete cu comunitatea creÃˆâ„¢tinÃ„Æ’.",
+                 "featureKids":  "ColÃˆâ€ºul Copiilor",
+                 "featureKidsDesc":  "PoveÃˆâ„¢ti biblice, quiz interactiv Ãˆâ„¢i activitÃ„Æ’Ãˆâ€ºi pentru copii ca sÃ„Æ’ ÃƒÂ®nveÃˆâ€ºe despre Biblie!",
+                 "featureChurch":  "ÃƒÅ½nregistreazÃ„Æ’-Ãˆâ€ºi Biserica",
+                 "featureChurchDesc":  "ÃƒÅ½nregistreazÃ„Æ’-Ãˆâ€ºi biserica pe platformÃ„Æ’ Ãˆâ„¢i conecteazÃ„Æ’-te cu credincioÃˆâ„¢i din ÃƒÂ®ntreaga lume.",
+                 "explore":  "ExploreazÃ„Æ’",
+                 "registerBtn":  "ÃƒÅ½nregistreazÃ„Æ’",
+                 "verses":  [
+                                {
+                                    "text":  "CÃ„Æ’ci unde sunt doi sau trei adunaÃˆâ€ºi ÃƒÂ®n Numele Meu, acolo sunt Ãˆâ„¢i Eu ÃƒÂ®n mijlocul lor.",
+                                    "ref":  "Matei 18:20"
+                                },
+                                {
+                                    "text":  "Pot totul ÃƒÂ®n Hristos care mÃ„Æ’ ÃƒÂ®ntÃ„Æ’reÃˆâ„¢te.",
+                                    "ref":  "Filipeni 4:13"
+                                },
+                                {
+                                    "text":  "Domnul este PÃ„Æ’storul meu; nu voi duce lipsÃ„Æ’ de nimic.",
+                                    "ref":  "Psalmul 23:1"
+                                },
+                                {
+                                    "text":  "ÃƒÅ½ncrede-te ÃƒÂ®n Domnul din toatÃ„Æ’ inima ta Ãˆâ„¢i nu te bizui pe ÃƒÂ®nÃˆâ€ºelepciunea ta.",
+                                    "ref":  "Proverbe 3:5"
+                                },
+                                {
+                                    "text":  "CÃ„Æ’ci Eu Ãˆâ„¢tiu gÃƒÂ¢ndurile pe care le am cu privire la voi, gÃƒÂ¢nduri de pace Ãˆâ„¢i nu de nenorocire, ca sÃ„Æ’ vÃ„Æ’ dau un viitor Ãˆâ„¢i o nÃ„Æ’dejde.",
+                                    "ref":  "Ieremia 29:11"
+                                },
+                                {
+                                    "text":  "FiÃˆâ€ºi tari Ãˆâ„¢i curajoÃˆâ„¢i. Nu vÃ„Æ’ temeÃˆâ€ºi, cÃ„Æ’ci Domnul va fi cu voi.",
+                                    "ref":  "Deuteronom 31:6"
+                                },
+                                {
+                                    "text":  "RugÃ„Æ’ciunea celui drept este puternicÃ„Æ’ Ãˆâ„¢i eficace.",
+                                    "ref":  "Iacov 5:16"
+                                }
+                            ]
+             },
+    "login":  {
+                  "welcomeBack":  "Bine ai revenit!",
+                  "email":  "Email",
+                  "emailPlaceholder":  "email@exemplu.com",
+                  "password":  "ParolÃ„Æ’",
+                  "passwordPlaceholder":  "Parola ta",
+                  "submit":  "Autentificare",
+                  "or":  "sau",
+                  "google":  "Autentificare cu Google",
+                  "noAccount":  "Nu ai cont?",
+                  "signUp":  "ÃƒÅ½nregistreazÃ„Æ’-te"
+              },
+    "register":  {
+                     "joinCommunity":  "AlÄƒturÄƒ-te ReÈ›elei Sociale CreÈ™tine!",
+                     "fullName":  "Nume Complet",
+                     "fullNamePlaceholder":  "Numele tÃ„Æ’u complet",
+                     "email":  "Email",
+                     "emailPlaceholder":  "email@exemplu.com",
+                     "password":  "ParolÃ„Æ’",
+                     "passwordPlaceholder":  "Minim 6 caractere",
+                     "passwordError":  "Parola trebuie sÃ„Æ’ aibÃ„Æ’ cel puÃˆâ€ºin 6 caractere",
+                     "iAm":  "Eu sunt:",
+                     "member":  "Membru / Credincios",
+                     "pastor":  "Pastor / Lider",
+                     "submit":  "ÃƒÅ½nregistrare",
+                     "or":  "sau",
+                     "google":  "ÃƒÅ½nregistrare cu Google",
+                     "hasAccount":  "Ai deja cont?",
+                     "signIn":  "Autentificare"
+                 },
+    "prayerFeed":  {
+                       "victoryWall":  "Zidul Victoriei",
+                       "prayerRequests":  "Cereri de RugÃ„Æ’ciune",
+                       "newRequest":  "Cerere NouÃ„Æ’",
+                       "allRequests":  "Toate Cererile",
+                       "answeredPrayers":  "RugÃ„Æ’ciuni Ascultate",
+                       "newPrayerRequest":  "Cerere NouÃ„Æ’ de RugÃ„Æ’ciune",
+                       "titleOptional":  "Titlu (opÃˆâ€ºional)",
+                       "titlePlaceholder":  "Ex: RugÃ„Æ’ciune pentru familia mea",
+                       "yourRequest":  "Cererea ta *",
+                       "requestPlaceholder":  "ÃƒÅ½mpÃ„Æ’rtÃ„Æ’Ãˆâ„¢eÃˆâ„¢te cererea ta de rugÃ„Æ’ciune...",
+                       "category":  "Categorie",
+                       "urgentRequest":  "Cerere urgentÃ„Æ’",
+                       "submitRequest":  "Trimite Cererea",
+                       "loading":  "Se ÃƒÂ®ncarcÃ„Æ’ rugÃ„Æ’ciunile...",
+                       "noRequests":  "Nicio cerere de rugÃ„Æ’ciune ÃƒÂ®ncÃ„Æ’. Fii primul!",
+                       "categories":  {
+                                          "all":  "Toate",
+                                          "health":  "SÃ„Æ’nÃ„Æ’tate",
+                                          "work_finance":  "MuncÃ„Æ’/FinanÃˆâ€ºe",
+                                          "family":  "Familie",
+                                          "studies":  "Studii",
+                                          "housing":  "LocuinÃˆâ€ºÃ„Æ’",
+                                          "emotional":  "EmoÃˆâ€ºional",
+                                          "decisions":  "Decizii",
+                                          "other":  "Altele"
+                                      }
+                   },
+    "livePrayer":  {
+                       "title":  "RugÃ„Æ’ciune Live",
+                       "churchPraying_one":  "bisericÃ„Æ’ se roagÃ„Æ’",
+                       "churchPraying_other":  "biserici se roagÃ„Æ’",
+                       "rightNow":  "chiar acum",
+                       "closeOverlay":  "ÃƒÅ½nchide Overlay",
+                       "immersiveView":  "RugÃ„Æ’ciune ImersivÃ„Æ’",
+                       "pastorPanel":  "Panoul Pastorului",
+                       "focusOptional":  "Focusul rugÃ„Æ’ciunii (opÃˆâ€ºional)",
+                       "focusPlaceholder":  "Ex: RugÃ„Æ’ciune pentru familii",
+                       "startLive":  "ÃƒÅ½ncepe RugÃ„Æ’ciunea Live",
+                       "prayingLive":  "Te rogi live...",
+                       "endPrayer":  "ÃƒÅ½ncheie RugÃ„Æ’ciunea",
+                       "pastorsPraying":  "Pastori care se roagÃ„Æ’ acum:",
+                       "noPastors":  "Niciun pastor nu se roagÃ„Æ’ live ÃƒÂ®n acest moment.",
+                       "comeBack":  "Revino curÃƒÂ¢nd!"
+                   },
+    "churchMap":  {
+                      "title":  "Harta Bisericilor",
+                      "searchPlaceholder":  "CautÃ„Æ’ dupÃ„Æ’ oraÃˆâ„¢, Ãˆâ€ºarÃ„Æ’ sau nume...",
+                      "search":  "CautÃ„Æ’",
+                      "searching":  "Se cautÃ„Æ’ biserici...",
+                      "noResults":  "Nicio bisericÃ„Æ’ gÃ„Æ’sitÃ„Æ’ pentru \"{{query}}\". ÃƒÅ½nregistreaz-o pe a ta!"
+                  },
+    "churchRegister":  {
+                           "title":  "ÃƒÅ½nregistreazÃ„Æ’ Biserica",
+                           "subtitle":  "ÃƒÅ½nregistreazÃ„Æ’-Ãˆâ€ºi biserica pe platforma Sigo com FÃƒÂ©",
+                           "churchName":  "Numele Bisericii *",
+                           "churchNamePlaceholder":  "Ex: Biserica BaptistÃ„Æ’ CentralÃ„Æ’",
+                           "denomination":  "DenominaÃˆâ€ºiune",
+                           "denominationPlaceholder":  "Ex: BaptistÃ„Æ’, PenticostalÃ„Æ’, etc.",
+                           "address":  "AdresÃ„Æ’",
+                           "addressPlaceholder":  "StradÃ„Æ’, numÃ„Æ’r, cartier",
+                           "city":  "OraÃˆâ„¢",
+                           "cityPlaceholder":  "OraÃˆâ„¢ul tÃ„Æ’u",
+                           "country":  "ÃˆÅ¡arÃ„Æ’",
+                           "countryPlaceholder":  "ÃˆÅ¡arÃ„Æ’",
+                           "phone":  "Telefon",
+                           "phonePlaceholder":  "+40 21 234 5678",
+                           "pastorName":  "Numele Pastorului",
+                           "pastorNamePlaceholder":  "Numele pastorului responsabil",
+                           "submit":  "ÃƒÅ½nregistreazÃ„Æ’ Biserica",
+                           "submitting":  "Se ÃƒÂ®nregistreazÃ„Æ’...",
+                           "success":  "BisericÃ„Æ’ ÃƒÅ½nregistratÃ„Æ’!",
+                           "redirecting":  "RedirecÃˆâ€ºionare spre harta bisericilor...",
+                           "nameRequired":  "Numele bisericii este obligatoriu",
+                           "loginRequired":  "Trebuie sÃ„Æ’ fii autentificat pentru a ÃƒÂ®nregistra o bisericÃ„Æ’.",
+                           "error":  "Eroare la ÃƒÂ®nregistrare"
+                       },
+    "dashboard":  {
+                      "title":  "Dashboard",
+                      "loading":  "Se ÃƒÂ®ncarcÃ„Æ’ datele...",
+                      "users":  "Utilizatori",
+                      "churches":  "Biserici",
+                      "prayerRequests":  "Cereri de RugÃ„Æ’ciune",
+                      "answeredPrayers":  "RugÃ„Æ’ciuni Ascultate",
+                      "quickActions":  "AcÃˆâ€ºiuni Rapide",
+                      "newPrayerRequest":  "Cerere NouÃ„Æ’ de RugÃ„Æ’ciune",
+                      "registerChurch":  "ÃƒÅ½nregistreazÃ„Æ’ Biserica",
+                      "kidsCorner":  "ColÃˆâ€ºul Copiilor",
+                      "recentActivity":  "Activitate RecentÃ„Æ’",
+                      "requestedPrayer":  "a cerut rugÃ„Æ’ciune:",
+                      "noActivity":  "Nicio activitate recentÃ„Æ’. ÃƒÅ½ncepe prin a crea o cerere de rugÃ„Æ’ciune!",
+                      "viewAll":  "Vezi toate cererile"
+                  },
+    "mural":  {
+                  "title":  "Panoul ComunitÃ„Æ’Ãˆâ€ºii",
+                  "subtitle":  "ÃƒÅ½mpÃ„Æ’rtÃ„Æ’Ãˆâ„¢eÃˆâ„¢te mÃ„Æ’rturii, laudÃ„Æ’ Ãˆâ„¢i versete cu comunitatea creÃˆâ„¢tinÃ„Æ’",
+                  "newPost":  "Postare NouÃ„Æ’",
+                  "cancel":  "AnuleazÃ„Æ’",
+                  "shareWithCommunity":  "ÃƒÅ½mpÃ„Æ’rtÃ„Æ’Ãˆâ„¢eÃˆâ„¢te cu Comunitatea",
+                  "categoryLabel":  "Categorie",
+                  "message":  "Mesaj",
+                  "messagePlaceholder":  "Scrie mÃ„Æ’rturia, reflecÃˆâ€ºia sau versetul tÃ„Æ’u...",
+                  "publish":  "PublicÃ„Æ’",
+                  "noPostsFound":  "Nicio postare gÃ„Æ’sitÃ„Æ’ ÃƒÂ®n aceastÃ„Æ’ categorie.",
+                  "filters":  {
+                                  "all":  "Toate",
+                                  "myChurch":  "Biserica Mea",
+                                  "testimonies":  "MÃ„Æ’rturii",
+                                  "worship":  "LaudÃ„Æ’",
+                                  "verses":  "Versete"
+                              },
+                  "categories":  {
+                                     "testemunho":  "MÃ„Æ’rturie",
+                                     "louvor":  "LaudÃ„Æ’ / Video",
+                                     "reflexao":  "ReflecÃˆâ€ºie BiblicÃ„Æ’",
+                                     "versiculo":  "Verset",
+                                     "foto":  "Foto"
+                                 }
+              },
+    "kids":  {
+                 "title":  "ÃˆËœcoala DuminicalÃ„Æ’ DigitalÃ„Æ’",
+                 "subtitle":  "ÃƒÅ½nvaÃˆâ€ºÃ„Æ’ despre Biblie ÃƒÂ®ntr-un mod distractiv!",
+                 "bibleStories":  "PoveÃˆâ„¢ti Biblice",
+                 "readStory":  "CiteÃˆâ„¢te Povestea",
+                 "years":  "ani",
+                 "bibleQuiz":  "Quiz Biblic",
+                 "question":  "ÃƒÅ½ntrebarea {{current}} din {{total}}",
+                 "congrats":  "FelicitÃ„Æ’ri!",
+                 "scoreResult":  "Ai ghicit \u003cstrong\u003e{{score}}\u003c/strong\u003e din \u003cstrong\u003e{{total}}\u003c/strong\u003e!",
+                 "perfect":  "Perfect! EÃˆâ„¢ti un campion al Bibliei!",
+                 "good":  "Foarte bine! ContinuÃ„Æ’ sÃ„Æ’ studiezi!",
+                 "tryAgain":  "Nu renunÃˆâ€ºa! ÃƒÅ½ncearcÃ„Æ’ din nou!",
+                 "playAgain":  "JoacÃ„Æ’ Din Nou",
+                 "weekVerse":  "Versetul SÃ„Æ’ptÃ„Æ’mÃƒÂ¢nii",
+                 "weekVerseText":  "FiindcÃ„Æ’ atÃƒÂ¢t de mult a iubit Dumnezeu lumea, cÃ„Æ’ a dat pe singurul Lui Fiu, pentru ca oricine crede ÃƒÂ®n El sÃ„Æ’ nu piarÃ„Æ’, ci sÃ„Æ’ aibÃ„Æ’ viaÃˆâ€ºÃ„Æ’ veÃˆâ„¢nicÃ„Æ’.",
+                 "weekVerseRef":  "Ã¢â‚¬â€ Ioan 3:16",
+                 "memorized":  "Memorat!",
+                 "memorize":  "L-am memorat!",
+                 "activities":  "ActivitÃ„Æ’Ãˆâ€ºi",
+                 "comingSoon":  "ÃƒÅ½n curÃƒÂ¢nd!",
+                 "stories":  [
+                                 {
+                                     "title":  "David Ãˆâ„¢i Goliat",
+                                     "desc":  "Un bÃ„Æ’iat curajos care a ÃƒÂ®nvins un uriaÃˆâ„¢ cu o piatrÃ„Æ’ Ãˆâ„¢i multÃ„Æ’ credinÃˆâ€ºÃ„Æ’ ÃƒÂ®n Dumnezeu",
+                                     "age":  "6-8"
+                                 },
+                                 {
+                                     "title":  "Arca lui Noe",
+                                     "desc":  "Noe a construit o barcÃ„Æ’ uriaÃˆâ„¢Ã„Æ’ Ãˆâ„¢i a salvat toate animalele de la marele potop",
+                                     "age":  "3-5"
+                                 },
+                                 {
+                                     "title":  "Iona Ãˆâ„¢i Balena",
+                                     "desc":  "Iona a fugit de Dumnezeu dar a ÃƒÂ®nvÃ„Æ’Ãˆâ€ºat cÃ„Æ’ El este pretutindeni",
+                                     "age":  "6-8"
+                                 },
+                                 {
+                                     "title":  "Daniel ÃƒÂ®n Groapa cu Lei",
+                                     "desc":  "Daniel s-a rugat cu credinÃˆâ€ºÃ„Æ’ Ãˆâ„¢i Dumnezeu a ÃƒÂ®nchis gurile leilor",
+                                     "age":  "9-12"
+                                 },
+                                 {
+                                     "title":  "Moise Ãˆâ„¢i Marea RoÃˆâ„¢ie",
+                                     "desc":  "Dumnezeu a despÃ„Æ’rÃˆâ€ºit marea pentru ca poporul SÃ„Æ’u sÃ„Æ’ treacÃ„Æ’ ÃƒÂ®n siguranÃˆâ€ºÃ„Æ’",
+                                     "age":  "6-8"
+                                 }
+                             ],
+                 "quiz":  [
+                              {
+                                  "q":  "Cine l-a ÃƒÂ®nvins pe uriaÃˆâ„¢ul Goliat?",
+                                  "opts":  [
+                                               "Saul",
+                                               "David",
+                                               "Moise",
+                                               "Iosua"
+                                           ]
+                              },
+                              {
+                                  "q":  "CÃƒÂ¢te zile a durat potopul?",
+                                  "opts":  [
+                                               "10 zile",
+                                               "20 zile",
+                                               "40 zile",
+                                               "100 zile"
+                                           ]
+                              },
+                              {
+                                  "q":  "Cine a fost aruncat ÃƒÂ®n groapa cu lei?",
+                                  "opts":  [
+                                               "Iona",
+                                               "Daniel",
+                                               "Pavel",
+                                               "Petru"
+                                           ]
+                              },
+                              {
+                                  "q":  "Care este prima carte a Bibliei?",
+                                  "opts":  [
+                                               "Exodul",
+                                               "Psalmii",
+                                               "Geneza",
+                                               "Matei"
+                                           ]
+                              },
+                              {
+                                  "q":  "ÃƒÅ½n ce oraÃˆâ„¢ s-a nÃ„Æ’scut Isus?",
+                                  "opts":  [
+                                               "Ierusalim",
+                                               "Nazaret",
+                                               "Betleem",
+                                               "Capernaum"
+                                           ]
+                              }
+                          ],
+                 "activityList":  [
+                                      {
+                                          "title":  "Colorat",
+                                          "desc":  "ColoreazÃ„Æ’ personaje biblice cu culori frumoase"
+                                      },
+                                      {
+                                          "title":  "CautÃ„Æ’ Cuvintele",
+                                          "desc":  "GÃ„Æ’seÃˆâ„¢te cuvinte din Biblie ascunse"
+                                      },
+                                      {
+                                          "title":  "Joc de Memorie",
+                                          "desc":  "GÃ„Æ’seÃˆâ„¢te perechile celor 12 apostoli"
+                                      },
+                                      {
+                                          "title":  "Puzzle",
+                                          "desc":  "AsambleazÃ„Æ’ scene biblice uimitoare"
+                                      }
+                                  ]
+             },
+    "feedPost":  {
+                     "tapToWatch":  "Atinge pentru a viziona",
+                     "photo":  "Foto",
+                     "amem":  "Amin",
+                     "share":  "Distribuie"
+                 },
+    "prayerCard":  {
+                       "urgent":  "URGENT",
+                       "testimony":  "MÃ„Æ’rturie:",
+                       "personPraying_one":  "{{count}} persoanÃ„Æ’ se roagÃ„Æ’",
+                       "personPraying_other":  "{{count}} persoane se roagÃ„Æ’",
+                       "timeAgo":  {
+                                       "min":  "acum {{count}}min",
+                                       "hour":  "acum {{count}}h",
+                                       "day":  "acum {{count}}z"
+                                   },
+                       "categories":  {
+                                          "health":  "SÃ„Æ’nÃ„Æ’tate",
+                                          "work_finance":  "MuncÃ„Æ’/FinanÃˆâ€ºe",
+                                          "family":  "Familie",
+                                          "studies":  "Studii",
+                                          "housing":  "LocuinÃˆâ€ºÃ„Æ’",
+                                          "emotional":  "EmoÃˆâ€ºional",
+                                          "decisions":  "Decizii",
+                                          "other":  "Altele"
+                                      }
+                   },
+    "amemButton":  {
+                       "praying":  "MÃ„Æ’ rog!",
+                       "prayForYou":  "MÃ„Æ’ rog pentru tine"
+                   },
+    "pastorOverlay":  {
+                          "title":  "Pastori care se roagÃ„Æ’ Live",
+                          "churchesInPrayer_one":  "{{count}} bisericÃ„Æ’ ÃƒÂ®n rugÃ„Æ’ciune chiar acum",
+                          "churchesInPrayer_other":  "{{count}} biserici ÃƒÂ®n rugÃ„Æ’ciune chiar acum",
+                          "close":  "ÃƒÅ½nchide"
+                      },
+    "churchPin":  {
+                      "pastor":  "Pastor {{name}}",
+                      "members":  "{{count}} membri",
+                      "following":  "UrmÃ„Æ’resc",
+                      "follow":  "UrmÃ„Æ’reÃˆâ„¢te",
+                      "directions":  "Cum Ajung",
+                      "share":  "Distribuie",
+                      "shareText":  "DescoperÃ„Æ’ {{name}} pe Sigo com FÃƒÂ©!"
+                  },
+    "langSwitcher":  {
+                         "label":  "LimbÃ„Æ’"
+                     },
+    "notifications":  {
+                          "title":  "NotificÄƒri",
+                          "markAllRead":  "MarcheazÄƒ toate ca citite",
+                          "noNotifications":  "Nicio notificare deocamdatÄƒ."
+                      },
+    "offerings":  {
+                      "notPastor":  "ContacteazÄƒ pastorul bisericii.",
+                      "records":  "ÃŽnregistrÄƒri",
+                      "paypalEmail":  "Email PayPal",
+                      "offering":  "OfrandÄƒ",
+                      "tithe":  "ZeciuialÄƒ",
+                      "bank":  "BancÄƒ",
+                      "holder":  "Titular",
+                      "saving":  "Se salveazÄƒ...",
+                      "pixNamePlaceholder":  "Numele titularului",
+                      "noContributions":  "Nicio contribuÈ›ie Ã®ncÄƒ",
+                      "contributions":  "ContribuÈ›ii",
+                      "holderPlaceholder":  "Numele titularului",
+                      "save":  "SalveazÄƒ",
+                      "title":  "OfrandÄƒ È™i ZeciuialÄƒ",
+                      "messagePlaceholder":  "Dumnezeu sÄƒ binecuvÃ¢nteze!",
+                      "pixKey":  "Cheie PIX",
+                      "account":  "Cont",
+                      "bankTransfer":  "Transfer Bancar",
+                      "pixKeyPlaceholder":  "Cheia ta PIX",
+                      "configure":  "ConfigureazÄƒ",
+                      "agency":  "AgenÈ›ie",
+                      "saved":  "Salvat!",
+                      "thisMonth":  "Luna aceasta",
+                      "pixName":  "Titular",
+                      "totalGeneral":  "Total",
+                      "messageToMembers":  "Mesaj pentru Membri"
+                  },
+    "groups":  {
+                   "newGroup":  "Grup Nou",
+                   "noPosts":  "Nicio postare",
+                   "public":  "Public",
+                   "groupName":  "Numele grupului",
+                   "back":  "ÃŽnapoi",
+                   "cancel":  "AnuleazÄƒ",
+                   "creating":  "Se creeazÄƒ...",
+                   "leave":  "PÄƒrÄƒseÈ™te",
+                   "private":  "Privat",
+                   "description":  "Descriere (opÈ›ional)",
+                   "createGroup":  "CreeazÄƒ Grup",
+                   "writePlaceholder":  "Scrie Ã®n grup...",
+                   "title":  "Grupuri",
+                   "join":  "AlÄƒturÄƒ-te",
+                   "noGroups":  "Niciun grup Ã®ncÄƒ",
+                   "members":  "membri",
+                   "createFirst":  "CreeazÄƒ primul grup!"
+               },
+    "helpRequests":  {
+                         "loading":  "Se Ã®ncarcÄƒ...",
+                         "title":  "Cereri de Ajutor",
+                         "subtitle":  "Persoane care au nevoie de sprijin.",
+                         "empty":  "Nicio cerere de ajutor."
+                     },
+    "profile":  {
+                    "noBio":  "Nicio biografie",
+                    "posts":  "PostÄƒri",
+                    "bio":  "Despre",
+                    "friends":  "Prieteni",
+                    "editProfile":  "EditeazÄƒ Profil",
+                    "memberSince":  "Membru din",
+                    "save":  "SalveazÄƒ",
+                    "title":  "Profil",
+                    "cancel":  "AnuleazÄƒ",
+                    "prayers":  "RugÄƒciuni",
+                    "addPhotoPrompt":  "AdaugÄƒ o fotografie la profilul tÄƒu!",
+                    "addPhotoDesc":  "Atinge aici pentru a-È›i personaliza profilul cu o fotografie.",
+                    "addFriend":  "AdaugÄƒ",
+                    "pendingFriend":  "ÃŽn aÈ™teptare",
+                    "acceptFriend":  "AcceptÄƒ",
+                    "rejectFriend":  "RefuzÄƒ"
+                },
+    "messages":  {
+                     "writePlaceholder":  "Scrie mesajul tÄƒu...",
+                     "whenSomeone":  "CÃ¢nd cineva Ã®È›i trimite un mesaj, va apÄƒrea aici!",
+                     "noConversations":  "Nicio conversaÈ›ie Ã®ncÄƒ",
+                     "back":  "ÃŽnapoi",
+                     "noMessages":  "Niciun mesaj Ã®ncÄƒ",
+                     "title":  "Mesaje",
+                     "loading":  "Se Ã®ncarcÄƒ..."
+                 },
+    "consecration":  {
+                         "subtitle":  "Post È™i rugÄƒciune â€” Ã®ntÄƒreÈ™te-È›i credinÈ›a",
+                         "fastingToday":  "Postesc azi",
+                         "benefits":  "Beneficiile Postului",
+                         "consecrating":  "Consacrare...",
+                         "noOneYet":  "Nimeni nu se consacrÄƒ Ã®ncÄƒ. Fii primul!",
+                         "totalConsecrations":  "Total consacrÄƒri",
+                         "title":  "Consacrare",
+                         "imConsecrating":  "MÄƒ consacru",
+                         "loginRequired":  "AutentificÄƒ-te pentru a te consacra!"
+                     },
+    "friends":  {
+                    "reject":  "Respinge",
+                    "myFriends":  "Prietenii Mei",
+                    "noRequests":  "Nicio cerere.",
+                    "accept":  "AcceptÄƒ",
+                    "search":  "CautÄƒ",
+                    "requests":  "Cereri",
+                    "pending":  "ÃŽn aÈ™teptare",
+                    "addFriend":  "AdaugÄƒ",
+                    "title":  "Prieteni",
+                    "noFriends":  "Niciun prieten Ã®ncÄƒ.",
+                    "removeFriend":  "EliminÄƒ"
+                },
+    "common":  {
+                   "edit":  "EditeazÄƒ",
+                   "report":  "RaporteazÄƒ",
+                   "save":  "SalveazÄƒ",
+                   "writeComment":  "Scrie un comentariu...",
+                   "share":  "Distribuie",
+                   "send":  "Trimite",
+                   "reportConfirm":  "Raportezi aceastÄƒ postare?",
+                   "loading":  "Se Ã®ncarcÄƒ...",
+                   "translation":  "Traducere",
+                   "hideTranslation":  "Ascunde traducerea",
+                   "reported":  "Postare raportatÄƒ!",
+                   "publish":  "PublicÄƒ",
+                   "comment":  "ComenteazÄƒ",
+                   "confirm":  "ConfirmÄƒ",
+                   "publishing":  "Se trimite...",
+                   "loginToLike":  "AutentificÄƒ-te!",
+                   "loginToComment":  "AutentificÄƒ-te!",
+                   "linkCopied":  "Link copiat!",
+                   "close":  "ÃŽnchide",
+                   "translate":  "Traduce",
+                   "delete":  "È˜terge"
+               },
+    "pastorChat":  {
+                       "yourName":  "Numele tÄƒu",
+                       "title":  "Chat Pastoral",
+                       "send":  "Trimite",
+                       "startChat":  "ÃŽncepe",
+                       "subtitle":  "VorbeÈ™te cu un pastor."
+                   },
+    "music":  {
+                  "title":  "Biblioteca MuzicalÄƒ",
+                  "subtitle":  "LaudÄƒ È™i adoraÈ›ie 100% gratuite",
+                  "worship":  "LaudÄƒ \u0026 AdoraÈ›ie",
+                  "hymns":  "Imnuri Clasice",
+                  "instrumental":  "Instrumental",
+                  "kids":  "Kids Gospel",
+                  "prayer":  "MuzicÄƒ de RugÄƒciune",
+                  "favorites":  "Favorite",
+                  "noFavorites":  "Niciun favorit Ã®ncÄƒ",
+                  "tapHeart":  "ApasÄƒ â¤ï¸ pentru a salva cÃ¢ntece",
+                  "freeSources":  "Mai multÄƒ muzicÄƒ gratuitÄƒ"
+              },
+    "courseFinance":  {
+                          "title":  "Finanțe Biblice",
+                          "description":  "Învață să-ți administrezi finanțele conform principiilor biblice",
+                          "topics":  "Zeciuială, Ofrande, Economii, Investiții, Datorii, Prosperitate"
+                      },
+    "courseTheology":  {
+                           "title":  "Curs de Teologie",
+                           "description":  "Aprofundează cunoștințele tale teologice",
+                           "topics":  "Cristologie, Soteriologie, Eclesiologie, Escatologie, Pneumatologie, Hermeneutică"
+                       }
 }

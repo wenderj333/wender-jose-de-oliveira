@@ -29,6 +29,8 @@ import MusicLibrary from './pages/MusicLibrary';
 import PastorDashboard from './pages/PastorDashboard';
 import FaithJourneys from './pages/FaithJourneys';
 import BiblicalCourse from './pages/BiblicalCourse';
+import BiblicalFinance from './pages/BiblicalFinance';
+import TheologyCourse from './pages/TheologyCourse';
 import Donation from './pages/Donation';
 // import { MusicProvider } from './context/MusicContext';
 // import MusicPlayer from './components/MusicPlayer';
@@ -199,7 +201,9 @@ export default function App() {
           <Link to="/kids" className={isActive('/kids')} onClick={() => setMenuOpen(false)}><Baby size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Kids</Link>
           <Link to="/consagracao" className={isActive('/consagracao')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔥</span>Consagração</Link>
           <Link to="/jornadas" className={isActive('/jornadas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>✨</span>Jornadas de Fé</Link>
-          <Link to="/curso-biblico" className={isActive('/curso-biblico')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>📖</span>Curso Bíblico 10 Dias</Link>
+          <Link to="/curso-biblico" className={isActive('/curso-biblico')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>📖</span>Curso Bíblico Grátis</Link>
+          <Link to="/curso-financas" className={isActive('/curso-financas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>💰</span>Finanças Bíblicas</Link>
+          <Link to="/curso-teologia" className={isActive('/curso-teologia')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🎓</span>Teologia</Link>
           <Link to="/grupos" className={isActive('/grupos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4a1a8e' }} />Grupos</Link>
           {user && <Link to="/amigos" className={isActive('/amigos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#667eea' }} />Amigos</Link>}
           {user && (
@@ -254,6 +258,8 @@ export default function App() {
           <Route path="/pastor" element={<ProtectedRoute><PastorDashboard /></ProtectedRoute>} />
           <Route path="/jornadas" element={<FaithJourneys />} />
           <Route path="/curso-biblico" element={<BiblicalCourse />} />
+          <Route path="/curso-financas" element={<BiblicalFinance />} />
+          <Route path="/curso-teologia" element={<TheologyCourse />} />
           <Route path="/doar" element={<ProtectedRoute><Donation /></ProtectedRoute>} />
         </Routes>
         </ErrorBoundary>
