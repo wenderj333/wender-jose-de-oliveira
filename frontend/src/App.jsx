@@ -175,8 +175,7 @@ export default function App() {
                 )}
               </Link>
             )}
-            <LanguageSwitcher />
-            <div id="google_translate_element" style={{ display: 'inline-block' }} />
+{/* Idioma detectado automaticamente */}
             <button className="nav-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
