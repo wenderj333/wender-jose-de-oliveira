@@ -71,7 +71,7 @@ export default function BiblicalFinance() {
     padding: '3rem 1.5rem', textAlign: 'center', color: '#fff', position: 'relative', overflow: 'hidden',
   };
 
-  if (readingLesson !== null && paid) {
+  if (readingLesson !== null) {
     return (
       <LessonReader
         lessons={FINANCE_LESSONS}
@@ -138,12 +138,12 @@ export default function BiblicalFinance() {
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
           {FINANCE_LESSONS.map((lesson, i) => (
-            <div key={lesson.id} onClick={() => paid && setReadingLesson(i)}
+            <div key={lesson.id} onClick={() => setReadingLesson(i)}
               style={{
-                background: paid ? 'linear-gradient(135deg, #1a2f1a, #2d4a1a)' : 'rgba(255,255,255,0.05)',
-                borderRadius: 12, padding: '1rem', cursor: paid ? 'pointer' : 'default',
-                border: currentLesson === i && paid ? '2px solid #d4af37' : '1px solid rgba(212,175,55,0.15)',
-                transition: 'all 0.3s', opacity: paid ? 1 : 0.7,
+                background: 'linear-gradient(135deg, #1a2f1a, #2d4a1a)',
+                borderRadius: 12, padding: '1rem', cursor: 'pointer',
+                border: currentLesson === i ? '2px solid #d4af37' : '1px solid rgba(212,175,55,0.15)',
+                transition: 'all 0.3s', opacity: 1,
               }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                 <span style={{ fontSize: '1.5rem' }}>{lesson.icon}</span>
@@ -151,7 +151,7 @@ export default function BiblicalFinance() {
                   <div style={{ color: '#d4af37', fontWeight: 700, fontSize: '0.95rem' }}>Lição {lesson.id}</div>
                   <div style={{ color: '#e0e0e0', fontWeight: 600 }}>{lesson.title}</div>
                 </div>
-                {!paid && <Lock size={16} color="#666" style={{ marginLeft: 'auto' }} />}
+{/* lock removed */}
               </div>
               <p style={{ color: '#aaa', fontSize: '0.85rem', margin: 0 }}>{lesson.desc}</p>
             </div>
