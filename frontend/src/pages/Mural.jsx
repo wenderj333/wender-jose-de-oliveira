@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { Plus, Filter, X, Send, Heart, MessageCircle, Image, Video, Play, User, Share2, ChevronDown, Trash2, Music } from 'lucide-react';
+import { Plus, Filter, X, Send, Heart, MessageCircle, Image, Video, Play, User, Share2, ChevronDown, Trash2, Music, Radio } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Hook: auto-play/pause media based on visibility (TikTok-style)
 function useMediaAutoplay() {
@@ -91,6 +92,7 @@ function timeAgo(dateStr) {
 export default function Mural() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
+  const navigate = useNavigate();
   const observeMedia = useMediaAutoplay();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -514,13 +516,18 @@ export default function Mural() {
 
   const FILTERS = [
     { key: 'todas', label: t('mural.filters.all', 'Todas'), icon: '🌟', color: '#daa520' },
-    { key: 'testemunho', label: t('mural.filters.testimonies', 'Testemunhos'), icon: '🙏', color: '#daa520' },
-    { key: 'louvor', label: t('mural.filters.worship', 'Louvor'), icon: '🎵', color: '#9b59b6' },
-    { key: 'foto', label: 'Fotos', icon: '📸', color: '#3498db' },
-    { key: 'video', label: 'Vídeos', icon: '🎬', color: '#e74c3c' },
-    { key: 'versiculo', label: t('mural.filters.verses', 'Versículos'), icon: '📖', color: '#27ae60' },
-    { key: 'reflexao', label: 'Reflexões', icon: '💭', color: '#e67e22' },
-    { key: 'campanha', label: 'Campanhas', icon: '💝', color: '#e74c3c' },
+  ];
+
+  // Action buttons for the Mural grid
+  const ACTION_BUTTONS = [
+    { key: 'testemunho', label: 'Testemunho', icon: '🙏', color: '#daa520', action: () => { setNewCategory('testemunho'); setShowForm(true); } },
+    { key: 'musica', label: 'Música', icon: '🎵', color: '#9b59b6', action: () => navigate('/musica') },
+    { key: 'foto', label: 'Foto', icon: '📸', color: '#3498db', action: () => { setNewCategory('foto'); setShowForm(true); setTimeout(() => photoRef.current?.click(), 300); } },
+    { key: 'video', label: 'Vídeo', icon: '🎬', color: '#e91e63', action: () => { setNewCategory('foto'); setShowForm(true); setTimeout(() => videoRef.current?.click(), 300); } },
+    { key: 'versiculo', label: 'Versículo', icon: '📖', color: '#27ae60', action: () => { setNewCategory('versiculo'); setShowForm(true); } },
+    { key: 'reflexao', label: 'Reflexão', icon: '💭', color: '#e67e22', action: () => { setNewCategory('reflexao'); setShowForm(true); } },
+    { key: 'campanha', label: 'Campanha', icon: '💝', color: '#e74c3c', action: () => { setNewCategory('campanha'); setShowForm(true); } },
+    { key: 'directo', label: 'Directo', icon: '🔴', color: '#ff0000', action: () => navigate('/ao-vivo') },
   ];
 
   return (
@@ -853,25 +860,43 @@ export default function Mural() {
         </form>
       )}
 
-      {/* Filters — grid style */}
+      {/* Action buttons — grid style */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: '1rem' }}>
-        {FILTERS.map(f => {
-          const active = activeFilter === f.key;
-          return (
-            <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{
-              padding: '10px 4px', borderRadius: 14, border: 'none', cursor: 'pointer',
-              background: active ? (f.color || '#1a0a3e') : '#f8f8f8',
-              color: active ? '#fff' : '#444',
-              fontWeight: active ? 700 : 500,
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
-              boxShadow: active ? `0 4px 12px ${(f.color || '#1a0a3e')}44` : '0 1px 3px rgba(0,0,0,0.06)',
-              transition: 'all 0.2s',
-            }}>
-              <span style={{ fontSize: '1.3rem' }}>{f.icon}</span>
-              <span style={{ fontSize: '0.7rem', lineHeight: 1.2 }}>{f.label}</span>
-            </button>
-          );
-        })}
+        {ACTION_BUTTONS.map(btn => (
+          <button key={btn.key} onClick={btn.action} style={{
+            padding: '12px 4px', borderRadius: 14, border: 'none', cursor: 'pointer',
+            background: `linear-gradient(135deg, ${btn.color}18, ${btn.color}30)`,
+            color: btn.color,
+            fontWeight: 600,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+            transition: 'all 0.2s',
+          }}>
+            <span style={{ fontSize: '1.5rem' }}>{btn.icon}</span>
+            <span style={{ fontSize: '0.7rem', lineHeight: 1.2 }}>{btn.label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Quick filters */}
+      <div style={{ display: 'flex', gap: 6, marginBottom: '1rem', overflowX: 'auto', paddingBottom: 4 }}>
+        {[
+          { key: 'todas', label: '🌟 Todas' },
+          { key: 'testemunho', label: '🙏 Testemunhos' },
+          { key: 'louvor', label: '🎵 Louvor' },
+          { key: 'foto', label: '📸 Fotos' },
+          { key: 'video', label: '🎬 Vídeos' },
+          { key: 'versiculo', label: '📖 Versículos' },
+          { key: 'campanha', label: '💝 Campanhas' },
+        ].map(f => (
+          <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{
+            padding: '5px 12px', borderRadius: 20, border: 'none', cursor: 'pointer',
+            fontSize: '0.75rem', whiteSpace: 'nowrap',
+            background: activeFilter === f.key ? '#1a0a3e' : '#f0f0f0',
+            color: activeFilter === f.key ? '#fff' : '#666',
+            fontWeight: activeFilter === f.key ? 600 : 400,
+          }}>{f.label}</button>
+        ))}
       </div>
 
       {/* Feed */}
