@@ -12,6 +12,7 @@ export function WebSocketProvider({ children }) {
   const [liveSessions, setLiveSessions] = useState([]);
   const [totalChurchesPraying, setTotalChurchesPraying] = useState(0);
   const [lastEvent, setLastEvent] = useState(null);
+  const [liveStreams, setLiveStreams] = useState([]);
 
   function playSoundThrottled() {
     const now = Date.now();
@@ -45,6 +46,7 @@ export function WebSocketProvider({ children }) {
         if (user) {
           ws.send(JSON.stringify({ type: 'identify', userId: user.id, churchId: user.churchId }));
         }
+        ws.send(JSON.stringify({ type: 'live_list' }));
       };
 
       ws.onmessage = (event) => {
@@ -81,8 +83,19 @@ export function WebSocketProvider({ children }) {
             case 'chat_user_left':
             case 'chat_typing':
             case 'live_streams_list':
+              setLiveStreams(data.streams || []);
+              setLastEvent(data);
+              break;
             case 'live_started':
+              setLiveStreams(prev => [...prev.filter(s => s.streamId !== data.streamId), data]);
+              // Browser notification
+              if (Notification.permission === 'granted' && data.userName) {
+                new Notification('🔴 Directo ao Vivo!', { body: `${data.userName} está transmitindo ao vivo!`, icon: data.userAvatar || '/logo.jpg' });
+              }
+              setLastEvent(data);
+              break;
             case 'live_stopped':
+              setLiveStreams(prev => prev.filter(s => s.streamId !== data.streamId));
             case 'live_viewer_count':
             case 'live_chat_message':
             case 'live_reaction':
@@ -130,7 +143,7 @@ export function WebSocketProvider({ children }) {
   }, []);
 
   return (
-    <WebSocketContext.Provider value={{ liveSessions, totalChurchesPraying, lastEvent, send }}>
+    <WebSocketContext.Provider value={{ liveSessions, totalChurchesPraying, lastEvent, send, liveStreams }}>
       {children}
     </WebSocketContext.Provider>
   );

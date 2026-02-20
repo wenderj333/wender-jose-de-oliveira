@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
+import { useWebSocket } from '../context/WebSocketContext';
 import { Plus, Filter, X, Send, Heart, MessageCircle, Image, Video, Play, User, Share2, ChevronDown, Trash2, Music, Radio } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -93,6 +94,7 @@ export default function Mural() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
   const navigate = useNavigate();
+  const { liveStreams } = useWebSocket();
   const observeMedia = useMediaAutoplay();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -860,6 +862,36 @@ export default function Mural() {
           <input ref={audioRef} type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg,audio/m4a,audio/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
           <input ref={fileRef} type="file" accept="image/*,video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={handleMediaSelect} />
         </form>
+      )}
+
+      {/* Live Streams Banner */}
+      {liveStreams && liveStreams.length > 0 && (
+        <div style={{ marginBottom: '1rem' }}>
+          <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e74c3c', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#e74c3c', animation: 'pulse 1.5s infinite', display: 'inline-block' }} />
+            🔴 Ao Vivo Agora
+          </div>
+          <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 4 }}>
+            {liveStreams.map(stream => (
+              <div key={stream.streamId} onClick={() => navigate(`/directo?watch=${stream.streamId}`)}
+                style={{
+                  minWidth: 140, background: 'linear-gradient(135deg, #1a0a3e, #e74c3c)', borderRadius: 14,
+                  padding: '0.8rem', color: '#fff', cursor: 'pointer', textAlign: 'center',
+                  boxShadow: '0 4px 15px rgba(231,76,60,0.3)', transition: 'transform 0.2s',
+                }}>
+                <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#daa520', margin: '0 auto 6px', overflow: 'hidden', border: '3px solid #e74c3c' }}>
+                  {stream.userAvatar ? <img src={stream.userAvatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> :
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>👤</div>}
+                </div>
+                <div style={{ fontWeight: 700, fontSize: '0.8rem', marginBottom: 4 }}>{stream.userName || 'Ao Vivo'}</div>
+                <div style={{ background: '#e74c3c', borderRadius: 10, padding: '2px 8px', fontSize: '0.65rem', fontWeight: 700, display: 'inline-block', animation: 'pulse 1.5s infinite' }}>
+                  🔴 AO VIVO
+                </div>
+                <div style={{ fontSize: '0.7rem', opacity: 0.8, marginTop: 4 }}>👁 {stream.viewerCount || 0}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
 
       {/* Action buttons — grid style */}

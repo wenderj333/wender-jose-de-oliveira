@@ -80,7 +80,7 @@ function setupWebSocket(server) {
           case 'live_list': {
             const streamsList = [];
             for (const [id, s] of liveStreams) {
-              streamsList.push({ id, broadcasterId: s.broadcasterId, broadcasterName: s.broadcasterName, viewers: s.viewers.size });
+              streamsList.push({ streamId: id, userName: s.broadcasterName, userAvatar: s.broadcasterAvatar || null, viewerCount: s.viewers.size });
             }
             ws.send(JSON.stringify({ type: 'live_streams_list', streams: streamsList }));
             break;
@@ -91,6 +91,7 @@ function setupWebSocket(server) {
               id: msg.streamId,
               broadcasterId: msg.broadcasterId,
               broadcasterName: msg.broadcasterName,
+              broadcasterAvatar: msg.broadcasterAvatar || null,
               broadcasterWs: ws,
               viewers: new Map(),
             };
@@ -101,6 +102,10 @@ function setupWebSocket(server) {
             clients.set(ws, clientInfo);
             broadcast(wss, {
               type: 'live_started',
+              streamId: msg.streamId,
+              userName: msg.broadcasterName,
+              userAvatar: msg.broadcasterAvatar || null,
+              viewerCount: 0,
               stream: { id: msg.streamId, broadcasterId: msg.broadcasterId, broadcasterName: msg.broadcasterName, viewers: 0 },
             });
             break;
