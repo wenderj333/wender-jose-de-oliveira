@@ -10,6 +10,9 @@ router.post('/register', async (req, res) => {
     if (!email || !password || !full_name) {
       return res.status(400).json({ error: 'Email, senha e nome completo são obrigatórios' });
     }
+    if (!avatar_url) {
+      return res.status(400).json({ error: 'Foto de perfil é obrigatória para se registrar' });
+    }
 
     const existing = await User.findByEmail(email);
     if (existing) return res.status(409).json({ error: 'Email já cadastrado' });
