@@ -1,5 +1,5 @@
-﻿{
-    "brand":  "Sigo com FÃ©",
+{
+    "brand":  "Sigo com Fé",
     "nav":  {
                 "prayers":  "Prayers",
                 "mural":  "Mural",
@@ -29,7 +29,7 @@
                 "courseTheology":  "Theology",
                 "courseFree":  "Free Bible Course"
             },
-    "footer":  "Â© 2026 Sigo com FÃ© - Technology serving the Kingdom",
+    "footer":  "Â© 2026 Sigo com Fé - Technology serving the Kingdom",
     "home":  {
                  "subtitle":  "Pray, connect and strengthen your faith with thousands of brothers and sisters worldwide.",
                  "startNow":  "Start Now",
@@ -191,7 +191,7 @@
                   },
     "churchRegister":  {
                            "title":  "Register Church",
-                           "subtitle":  "Register your church on Sigo com FÃ©",
+                           "subtitle":  "Register your church on Sigo com Fé",
                            "churchName":  "Church Name *",
                            "churchNamePlaceholder":  "e.g. Central Baptist Church",
                            "denomination":  "Denomination",
@@ -414,7 +414,7 @@
                       "follow":  "Follow",
                       "directions":  "Directions",
                       "share":  "Share",
-                      "shareText":  "Check out {{name}} on Sigo com FÃ©!"
+                      "shareText":  "Check out {{name}} on Sigo com Fé!"
                   },
     "langSwitcher":  {
                          "label":  "Language"
@@ -445,7 +445,7 @@
                        "leftChat":  "left the conversation",
                        "langPt":  "Portuguese",
                        "langEn":  "English",
-                       "langEs":  "EspaÃ±ol",
+                       "langEs":  "Español",
                        "langDe":  "Deutsch",
                        "autoTranslate":  "ðŸŒ Auto-translation enabled"
                    },
