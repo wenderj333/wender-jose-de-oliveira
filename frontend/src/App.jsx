@@ -32,6 +32,7 @@ import BiblicalCourse from './pages/BiblicalCourse';
 import BiblicalFinance from './pages/BiblicalFinance';
 import TheologyCourse from './pages/TheologyCourse';
 import Donation from './pages/Donation';
+import LiveStream from './pages/LiveStream';
 // import { MusicProvider } from './context/MusicContext';
 // import MusicPlayer from './components/MusicPlayer';
 import LanguageSwitcher from './components/LanguageSwitcher';
@@ -185,6 +186,7 @@ export default function App() {
         <div className={`nav-links ${menuOpen ? 'nav-links--open' : ''}`}>
           <Link to="/mural" className={isActive('/mural')} onClick={() => setMenuOpen(false)}><Newspaper size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Mural</Link>
           <Link to="/ao-vivo" className={isActive('/ao-vivo')} onClick={() => setMenuOpen(false)}><Radio size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Ao Vivo</Link>
+          <Link to="/directo" className={isActive('/directo')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔴</span>Directo</Link>
           <Link to="/cadastrar-igreja" className={isActive('/cadastrar-igreja')} onClick={() => setMenuOpen(false)}><Church size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Igreja</Link>
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')} onClick={() => setMenuOpen(false)}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#e74c3c' }} />Pedidos</Link>}
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/oracoes" className={isActive('/oracoes')} onClick={() => setMenuOpen(false)}><HandHeart size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Orações</Link>}
@@ -261,6 +263,7 @@ export default function App() {
           <Route path="/curso-financas" element={<BiblicalFinance />} />
           <Route path="/curso-teologia" element={<TheologyCourse />} />
           <Route path="/doar" element={<ProtectedRoute><Donation /></ProtectedRoute>} />
+          <Route path="/directo" element={<ProtectedRoute><LiveStream /></ProtectedRoute>} />
         </Routes>
         </ErrorBoundary>
       </main>

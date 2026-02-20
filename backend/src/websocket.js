@@ -2,6 +2,7 @@ const { WebSocketServer } = require('ws');
 const PastorSession = require('./models/PastorSession');
 
 const clients = new Map(); // ws -> { userId, churchId }
+const liveStreams = new Map(); // streamId -> { id, broadcasterId, broadcasterName, broadcasterWs, viewers: Map<viewerId, ws> }
 
 function setupWebSocket(server) {
   const wss = new WebSocketServer({ server, path: '/ws' });
@@ -74,6 +75,127 @@ function setupWebSocket(server) {
               userName: msg.userName,
             });
             break;
+
+          // ===== LIVE STREAMING (WebRTC signaling) =====
+          case 'live_list': {
+            const streamsList = [];
+            for (const [id, s] of liveStreams) {
+              streamsList.push({ id, broadcasterId: s.broadcasterId, broadcasterName: s.broadcasterName, viewers: s.viewers.size });
+            }
+            ws.send(JSON.stringify({ type: 'live_streams_list', streams: streamsList }));
+            break;
+          }
+
+          case 'live_start': {
+            const stream = {
+              id: msg.streamId,
+              broadcasterId: msg.broadcasterId,
+              broadcasterName: msg.broadcasterName,
+              broadcasterWs: ws,
+              viewers: new Map(),
+            };
+            liveStreams.set(msg.streamId, stream);
+            const clientInfo = clients.get(ws) || {};
+            clientInfo.liveStreamId = msg.streamId;
+            clientInfo.liveRole = 'broadcaster';
+            clients.set(ws, clientInfo);
+            broadcast(wss, {
+              type: 'live_started',
+              stream: { id: msg.streamId, broadcasterId: msg.broadcasterId, broadcasterName: msg.broadcasterName, viewers: 0 },
+            });
+            break;
+          }
+
+          case 'live_stop': {
+            const stream = liveStreams.get(msg.streamId);
+            if (stream) {
+              // Notify all viewers
+              for (const [vid, vws] of stream.viewers) {
+                try { vws.send(JSON.stringify({ type: 'live_stopped', streamId: msg.streamId })); } catch(e) {}
+              }
+              liveStreams.delete(msg.streamId);
+            }
+            broadcast(wss, { type: 'live_stopped', streamId: msg.streamId });
+            break;
+          }
+
+          case 'live_join': {
+            const stream = liveStreams.get(msg.streamId);
+            if (!stream) { ws.send(JSON.stringify({ type: 'live_stopped', streamId: msg.streamId })); break; }
+            if (stream.viewers.size >= 10) { ws.send(JSON.stringify({ type: 'live_error', error: 'Stream cheio (máx. 10 espectadores)' })); break; }
+            stream.viewers.set(msg.viewerId, ws);
+            const ci2 = clients.get(ws) || {};
+            ci2.liveStreamId = msg.streamId;
+            ci2.liveRole = 'viewer';
+            ci2.liveViewerId = msg.viewerId;
+            clients.set(ws, ci2);
+            // Broadcast updated viewer count
+            broadcastToStream(wss, msg.streamId, { type: 'live_viewer_count', streamId: msg.streamId, count: stream.viewers.size });
+            break;
+          }
+
+          case 'live_leave': {
+            const stream = liveStreams.get(msg.streamId);
+            if (stream) {
+              stream.viewers.delete(msg.viewerId);
+              // Notify broadcaster
+              if (stream.broadcasterWs?.readyState === 1) {
+                stream.broadcasterWs.send(JSON.stringify({ type: 'live_viewer_left', viewerId: msg.viewerId, streamId: msg.streamId }));
+              }
+              broadcastToStream(wss, msg.streamId, { type: 'live_viewer_count', streamId: msg.streamId, count: stream.viewers.size });
+            }
+            break;
+          }
+
+          case 'live_offer': {
+            // Viewer sends offer -> forward to broadcaster
+            const stream = liveStreams.get(msg.streamId);
+            if (stream?.broadcasterWs?.readyState === 1) {
+              stream.broadcasterWs.send(JSON.stringify({ type: 'live_offer', streamId: msg.streamId, viewerId: msg.viewerId, offer: msg.offer }));
+            }
+            break;
+          }
+
+          case 'live_answer': {
+            // Broadcaster sends answer -> forward to viewer
+            const stream = liveStreams.get(msg.streamId);
+            if (stream) {
+              const viewerWs = stream.viewers.get(msg.targetId);
+              if (viewerWs?.readyState === 1) {
+                viewerWs.send(JSON.stringify({ type: 'live_answer', streamId: msg.streamId, answer: msg.answer }));
+              }
+            }
+            break;
+          }
+
+          case 'live_ice_candidate': {
+            const stream = liveStreams.get(msg.streamId);
+            if (stream) {
+              // Forward ICE candidate to target
+              let targetWs;
+              if (msg.targetId === stream.broadcasterId) {
+                targetWs = stream.broadcasterWs;
+              } else {
+                targetWs = stream.viewers.get(msg.targetId);
+              }
+              if (targetWs?.readyState === 1) {
+                const fromInfo = clients.get(ws) || {};
+                targetWs.send(JSON.stringify({ type: 'live_ice_candidate', streamId: msg.streamId, candidate: msg.candidate, fromId: fromInfo.liveViewerId || stream.broadcasterId }));
+              }
+            }
+            break;
+          }
+
+          case 'live_chat': {
+            const chatData = { type: 'live_chat_message', streamId: msg.streamId, name: msg.name, text: msg.text, time: new Date().toISOString() };
+            broadcastToStream(wss, msg.streamId, chatData, ws);
+            break;
+          }
+
+          case 'live_reaction': {
+            broadcastToStream(wss, msg.streamId, { type: 'live_reaction', streamId: msg.streamId, emoji: msg.emoji, name: msg.name }, ws);
+            break;
+          }
 
           case 'chat_join_room': {
             const clientInfo = clients.get(ws) || {};
@@ -148,6 +270,27 @@ function setupWebSocket(server) {
     });
 
     ws.on('close', () => {
+      // Cleanup live streams
+      const info = clients.get(ws);
+      if (info?.liveStreamId) {
+        const stream = liveStreams.get(info.liveStreamId);
+        if (stream) {
+          if (info.liveRole === 'broadcaster') {
+            // End stream
+            for (const [vid, vws] of stream.viewers) {
+              try { vws.send(JSON.stringify({ type: 'live_stopped', streamId: info.liveStreamId })); } catch(e) {}
+            }
+            liveStreams.delete(info.liveStreamId);
+            broadcast(wss, { type: 'live_stopped', streamId: info.liveStreamId });
+          } else if (info.liveRole === 'viewer') {
+            stream.viewers.delete(info.liveViewerId);
+            if (stream.broadcasterWs?.readyState === 1) {
+              stream.broadcasterWs.send(JSON.stringify({ type: 'live_viewer_left', viewerId: info.liveViewerId, streamId: info.liveStreamId }));
+            }
+            broadcastToStream(wss, info.liveStreamId, { type: 'live_viewer_count', streamId: info.liveStreamId, count: stream.viewers.size });
+          }
+        }
+      }
       clients.delete(ws);
     });
   });
@@ -174,6 +317,22 @@ function broadcastToRoom(wss, clients, roomId, data, excludeWs) {
       }
     }
   });
+}
+
+function broadcastToStream(wss, streamId, data, excludeWs) {
+  const stream = liveStreams.get(streamId);
+  if (!stream) return;
+  const message = JSON.stringify(data);
+  // Send to broadcaster
+  if (stream.broadcasterWs?.readyState === 1 && stream.broadcasterWs !== excludeWs) {
+    stream.broadcasterWs.send(message);
+  }
+  // Send to all viewers
+  for (const [vid, vws] of stream.viewers) {
+    if (vws.readyState === 1 && vws !== excludeWs) {
+      vws.send(message);
+    }
+  }
 }
 
 module.exports = { setupWebSocket };

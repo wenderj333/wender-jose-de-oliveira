@@ -527,7 +527,7 @@ export default function Mural() {
     { key: 'versiculo', label: 'Versículo', icon: '📖', color: '#27ae60', action: () => { setNewCategory('versiculo'); setShowForm(true); } },
     { key: 'reflexao', label: 'Reflexão', icon: '💭', color: '#e67e22', action: () => { setNewCategory('reflexao'); setShowForm(true); } },
     { key: 'campanha', label: 'Campanha', icon: '💝', color: '#e74c3c', action: () => { setNewCategory('campanha'); setShowForm(true); } },
-    { key: 'directo', label: 'Directo', icon: '🔴', color: '#ff0000', action: () => navigate('/ao-vivo') },
+    { key: 'directo', label: 'Directo', icon: '🔴', color: '#ff0000', action: () => navigate('/directo') },
   ];
 
   return (

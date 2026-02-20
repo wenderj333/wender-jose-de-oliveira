@@ -80,6 +80,17 @@ export function WebSocketProvider({ children }) {
             case 'chat_user_joined':
             case 'chat_user_left':
             case 'chat_typing':
+            case 'live_streams_list':
+            case 'live_started':
+            case 'live_stopped':
+            case 'live_viewer_count':
+            case 'live_chat_message':
+            case 'live_reaction':
+            case 'live_offer':
+            case 'live_answer':
+            case 'live_ice_candidate':
+            case 'live_viewer_left':
+            case 'live_error':
               setLastEvent(data);
               break;
           }
