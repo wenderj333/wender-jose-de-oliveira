@@ -19,8 +19,11 @@ function timeAgo(d) {
 const ROLE_LABELS = { member: '👤 Membro', leader: '⭐ Líder', pastor: '🙏 Pastor', admin: '👑 Admin' };
 const ROLE_COLORS = { member: '#666', leader: '#e67e22', pastor: '#4caf50', admin: '#e74c3c' };
 
+const ADMIN_ID = 'c7c930da-5fe8-4b4e-887d-ba547804b7e1';
+
 export default function Members() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
+  const isAdmin = user?.id === ADMIN_ID;
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -215,9 +218,11 @@ export default function Members() {
               {/* Info */}
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1a0a3e' }}>{member.full_name}</div>
+                {isAdmin && (
                 <div style={{ fontSize: '0.75rem', color: '#999', display: 'flex', alignItems: 'center', gap: 4 }}>
                   <Mail size={12} /> {member.email}
                 </div>
+                )}
                 <div style={{ display: 'flex', gap: 8, marginTop: 3 }}>
                   <span style={{ fontSize: '0.7rem', color: ROLE_COLORS[member.role], fontWeight: 600 }}>
                     {ROLE_LABELS[member.role]}
