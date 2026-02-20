@@ -46,6 +46,11 @@ export default function TheologyCourse() {
       localStorage.setItem('theology_paid', 'true');
     }
     if (localStorage.getItem('theology_paid') === 'true') setPaid(true);
+    // Admin auto-unlock
+    try {
+      const u = JSON.parse(localStorage.getItem('user') || '{}');
+      if (u.id === 'c7c930da-5fe8-4b4e-887d-ba547804b7e1' || u.role === 'admin') setPaid(true);
+    } catch {}
   }, [searchParams]);
 
   const handleBuy = async () => {
