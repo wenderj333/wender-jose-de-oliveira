@@ -166,8 +166,9 @@ Formato de resposta:
     });
 
     if (!geminiRes.ok) {
-      console.error('Gemini error:', geminiRes.status);
-      return res.status(500).json({ error: 'Erro ao gerar música. Tente novamente.' });
+      const errText = await geminiRes.text();
+      console.error('Gemini error:', geminiRes.status, errText);
+      return res.status(500).json({ error: `Erro da IA (${geminiRes.status}). Tente novamente em alguns segundos.` });
     }
 
     const geminiData = await geminiRes.json();

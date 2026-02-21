@@ -50,13 +50,7 @@ const BIBLE_BOOKS = [
   'Colossenses', 'Hebreus', 'Tiago', 'Apocalipse',
 ];
 
-const LANGUAGES = [
-  { value: 'pt', label: '🇧🇷 Português' },
-  { value: 'es', label: '🇪🇸 Español' },
-  { value: 'en', label: '🇺🇸 English' },
-  { value: 'de', label: '🇩🇪 Deutsch' },
-  { value: 'fr', label: '🇫🇷 Français' },
-];
+// Language auto-detected from i18n settings
 
 export default function CriadorLouvor() {
   const { t } = useTranslation();
@@ -75,7 +69,8 @@ export default function CriadorLouvor() {
   const [emotion, setEmotion] = useState('alegre');
   const [bibleBook, setBibleBook] = useState('');
   const [verse, setVerse] = useState('');
-  const [language, setLanguage] = useState('pt');
+  // Auto-detect language from i18n
+  const detectedLang = (localStorage.getItem('i18nextLng') || 'pt').substring(0, 2);
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
@@ -117,7 +112,7 @@ export default function CriadorLouvor() {
       const res = await fetch(`${API}/ai-louvor/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ theme, style, emotion, bibleBook, verse, language }),
+        body: JSON.stringify({ theme, style, emotion, bibleBook, verse, language: detectedLang }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -131,7 +126,8 @@ export default function CriadorLouvor() {
       setTotalGenerated(prev => prev + 1);
       fetchMySongs();
     } catch (err) {
-      setError('Erro de conexão. Tente novamente.');
+      console.error('Network error:', err);
+      setError(`Erro de conexão: ${err.message || 'Verifique sua internet.'}`);
     } finally {
       setGenerating(false);
     }
@@ -316,20 +312,7 @@ export default function CriadorLouvor() {
               fontSize: '0.85rem', marginBottom: '0.75rem', boxSizing: 'border-box',
             }} />
 
-          {/* Language */}
-          <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>
-            🌍 Idioma da Letra
-          </label>
-          <div style={{ display: 'flex', gap: 6, marginBottom: '1rem' }}>
-            {LANGUAGES.map(l => (
-              <button key={l.value} onClick={() => setLanguage(l.value)} style={{
-                padding: '5px 12px', borderRadius: 16, border: 'none', cursor: 'pointer', fontSize: '0.78rem',
-                background: language === l.value ? '#daa52025' : '#f5f5f5',
-                color: language === l.value ? '#daa520' : '#666',
-                fontWeight: language === l.value ? 700 : 400,
-              }}>{l.label}</button>
-            ))}
-          </div>
+          {/* Language auto-detected from i18n */}
 
           {/* Error */}
           {error && error !== 'no_credits' && (
