@@ -49,12 +49,7 @@ async function ensureTables() {
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 // Use 1.5-flash for higher rate limits on free tier
-const GEMINI_MODELS = [
-  'gemini-2.0-flash',
-];
-function getGeminiUrl(model) {
-  return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
-}
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 const FREE_CREDITS = 4;
 const PACK_CREDITS = 250;
@@ -165,34 +160,33 @@ Formato de resposta:
     // Try each model with retry and exponential backoff
     let lyrics = null;
     let lastError = '';
-    const delays = [0, 5000, 10000]; // 0s, 5s, 10s
-    for (const model of GEMINI_MODELS) {
-      for (let attempt = 0; attempt < 3; attempt++) {
-        try {
-          if (delays[attempt] > 0) await new Promise(r => setTimeout(r, delays[attempt]));
-          const geminiRes = await fetch(getGeminiUrl(model), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ role: 'user', parts: [{ text: prompt }] }],
-              generationConfig: { temperature: 0.9, maxOutputTokens: 2048 },
-            }),
-          });
-          if (geminiRes.ok) {
-            const geminiData = await geminiRes.json();
-            lyrics = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (lyrics) break;
-          } else {
-            lastError = `${model}: ${geminiRes.status}`;
-            console.warn(`Gemini ${model} attempt ${attempt}: ${geminiRes.status}`);
-            if (geminiRes.status === 429) continue; // retry or try next model
-          }
-        } catch (e) {
-          lastError = e.message;
-          console.error(`Gemini ${model} error:`, e.message);
-        }
+    // Retry with exponential backoff on 429
+    let response;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        if (attempt > 0) await new Promise(r => setTimeout(r, attempt * 2000)); // Exponential backoff
+        response = await fetch(GEMINI_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.9, maxOutputTokens: 2048 },
+          }),
+        });
+        if (response.status !== 429) break;
+        console.log(`Gemini 429 rate limit, retry ${attempt + 1}/3...`);
+      } catch (e) {
+        lastError = e.message;
+        console.error('Gemini API error:', e.message);
+        break; // Stop retrying on other errors
       }
-      if (lyrics) break;
+    }
+
+    if (response && response.ok) {
+      const data = await response.json();
+      lyrics = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    } else if (response) {
+      lastError = `gemini-2.0-flash: ${response.status}`;
     }
 
     if (!lyrics) {
