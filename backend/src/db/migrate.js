@@ -375,6 +375,34 @@ async function migrate() {
     CREATE INDEX IF NOT EXISTS idx_technical_issues_status ON technical_issues(status);
   `);
 
+  // ============ CRIADOR DE LOUVOR COM IA ============
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS ai_songs (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      title VARCHAR(255),
+      lyrics TEXT NOT NULL,
+      theme VARCHAR(100),
+      style VARCHAR(50),
+      emotion VARCHAR(50),
+      bible_book VARCHAR(100),
+      verse_reference TEXT,
+      language VARCHAR(5) DEFAULT 'pt',
+      is_public BOOLEAN DEFAULT false,
+      like_count INT DEFAULT 0,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_ai_songs_author ON ai_songs(author_id, created_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_ai_songs_public ON ai_songs(is_public, like_count DESC);
+
+    CREATE TABLE IF NOT EXISTS song_credits (
+      user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+      credits_remaining INT DEFAULT 4,
+      total_generated INT DEFAULT 0,
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+
   console.log('✅ Migração PostgreSQL concluída com sucesso! (20+ tabelas criadas)');
   await pool.end();
 }

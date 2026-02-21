@@ -405,6 +405,7 @@ app.use('/api/pastor', require('./routes/pastor-dashboard'));
 app.use('/api/journeys', require('./routes/journeys'));
 app.use('/api/course', require('./routes/course'));
 app.use('/api/stripe', require('./routes/stripe'));
+app.use('/api/ai-louvor', require('./routes/ai-louvor'));
 
 // Root route
 app.get('/', (req, res) => {

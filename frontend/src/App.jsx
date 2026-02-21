@@ -30,6 +30,7 @@ import PastorDashboard from './pages/PastorDashboard';
 import FaithJourneys from './pages/FaithJourneys';
 import BiblicalCourse from './pages/BiblicalCourse';
 import BiblicalFinance from './pages/BiblicalFinance';
+import CriadorLouvor from './pages/CriadorLouvor';
 import TheologyCourse from './pages/TheologyCourse';
 import Donation from './pages/Donation';
 import LiveStream from './pages/LiveStream';
@@ -200,6 +201,7 @@ export default function App() {
           <Link to="/ia-biblica" className={isActive('/ia-biblica')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>📖</span>IA 📖</Link>
           {user?.role === 'pastor' && <Link to="/ia-pastoral" className={isActive('/ia-pastoral')} onClick={() => setMenuOpen(false)}><Bot size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />IA Pastoral</Link>}
           <Link to="/musica" className={isActive('/musica')} onClick={() => setMenuOpen(false)}><Music size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: 'var(--purple)' }} />Música</Link>
+          <Link to="/criador-louvor" className={isActive('/criador-louvor')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>✨</span>Criar Louvor IA</Link>
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/membros" className={isActive('/membros')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4caf50' }} />Membros</Link>}
           <Link to="/kids" className={isActive('/kids')} onClick={() => setMenuOpen(false)}><Baby size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Kids</Link>
           <Link to="/consagracao" className={isActive('/consagracao')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔥</span>Consagração</Link>
@@ -265,6 +267,7 @@ export default function App() {
           <Route path="/curso-teologia" element={<TheologyCourse />} />
           <Route path="/doar" element={<ProtectedRoute><Donation /></ProtectedRoute>} />
           <Route path="/directo" element={<ProtectedRoute><LiveStream /></ProtectedRoute>} />
+          <Route path="/criador-louvor" element={<CriadorLouvor />} />
         </Routes>
         </ErrorBoundary>
       </main>
