@@ -165,34 +165,7 @@ export default function App() {
           <Link to="/" className="nav-brand" onClick={() => setMenuOpen(false)}>
             <img src="/logo.jpg" alt="Sigo com Fé" style={{ width: 36, height: 36, verticalAlign: 'middle', marginRight: '8px', borderRadius: '50%', objectFit: 'cover', background: '#b3d4fc' }} />{t('brand')}
           </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            {/* Criar Louvor button */}
-            <button onClick={() => navigate('/criador-louvor')} style={{
-              padding: '0.35rem 0.7rem', borderRadius: 20, border: 'none',
-              background: 'linear-gradient(135deg, #9b59b6, #667eea)',
-              color: '#fff', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 700,
-              display: 'flex', alignItems: 'center', gap: 4,
-              boxShadow: '0 2px 8px rgba(155,89,182,0.4)',
-              animation: 'louvorPulse 2.5s ease-in-out infinite',
-              whiteSpace: 'nowrap',
-            }} title="Cria teu próprio louvor com IA!">
-              🎵 Cria teu Louvor!
-            </button>
-            <style>{`@keyframes louvorPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }`}</style>
-
-            {/* Share button */}
-            <button onClick={() => {
-              const shareData = { title: 'Sigo com Fé', text: '🙏 Conheça o Sigo com Fé! Rede social cristã.\n\n✨ Crie sua conta grátis:', url: 'https://sigo-com-fe.vercel.app' };
-              if (navigator.share) navigator.share(shareData).catch(() => {});
-              else { navigator.clipboard?.writeText(`${shareData.text}\n${shareData.url}`); alert('Link copiado! ✅'); }
-            }} style={{
-              width: 34, height: 34, borderRadius: '50%', border: 'none',
-              background: 'linear-gradient(135deg, #daa520, #f4c542)',
-              color: '#1a0a3e', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '1rem', boxShadow: '0 2px 8px rgba(218,165,32,0.3)',
-            }} title="Compartilhar">📤</button>
-
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {user && (
               <Link to="/mensagens" style={{ position: 'relative', color: '#fff', textDecoration: 'none' }}>
                 <Bell size={22} />
@@ -262,6 +235,38 @@ export default function App() {
           )}
         </div>
       </nav>
+
+      {/* Action bar below navbar */}
+      <div style={{
+        display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10,
+        padding: '0.5rem 1rem', background: '#f0f2f5',
+        borderBottom: '1px solid #e0e0e0',
+      }}>
+        <button onClick={() => navigate('/criador-louvor')} style={{
+          padding: '0.45rem 1rem', borderRadius: 25, border: 'none',
+          background: 'linear-gradient(135deg, #9b59b6, #667eea)',
+          color: '#fff', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700,
+          display: 'flex', alignItems: 'center', gap: 6,
+          boxShadow: '0 2px 10px rgba(155,89,182,0.35)',
+          animation: 'louvorPulse 2.5s ease-in-out infinite',
+        }}>
+          🎵 Cria teu Louvor com IA!
+        </button>
+        <style>{`@keyframes louvorPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }`}</style>
+        <button onClick={() => {
+          const shareData = { title: 'Sigo com Fé', text: '🙏 Conheça o Sigo com Fé! Rede social cristã.\n\n✨ Crie sua conta grátis:', url: 'https://sigo-com-fe.vercel.app' };
+          if (navigator.share) navigator.share(shareData).catch(() => {});
+          else { navigator.clipboard?.writeText(`${shareData.text}\n${shareData.url}`); alert('Link copiado! ✅'); }
+        }} style={{
+          padding: '0.45rem 1rem', borderRadius: 25, border: 'none',
+          background: 'linear-gradient(135deg, #daa520, #f4c542)',
+          color: '#1a0a3e', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700,
+          display: 'flex', alignItems: 'center', gap: 6,
+          boxShadow: '0 2px 10px rgba(218,165,32,0.3)',
+        }}>
+          📤 Compartilhar
+        </button>
+      </div>
 
       <main className="main-content">
         <ErrorBoundary>

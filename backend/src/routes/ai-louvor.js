@@ -2,6 +2,50 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
+const { Pool } = require('pg');
+
+// Direct pool for table creation (bypass wrapper)
+let tablesReady = false;
+async function ensureTables() {
+  if (tablesReady) return;
+  if (!process.env.DATABASE_URL) return;
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false },
+  });
+  try {
+    await pool.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS ai_songs (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        title VARCHAR(255),
+        lyrics TEXT NOT NULL,
+        theme VARCHAR(100),
+        style VARCHAR(50),
+        emotion VARCHAR(50),
+        bible_book VARCHAR(100),
+        verse_reference TEXT,
+        language VARCHAR(5) DEFAULT 'pt',
+        is_public BOOLEAN DEFAULT false,
+        like_count INT DEFAULT 0,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+      CREATE TABLE IF NOT EXISTS song_credits (
+        user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+        credits_remaining INT DEFAULT 4,
+        total_generated INT DEFAULT 0,
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+    tablesReady = true;
+    console.log('✅ AI Louvor tables ready');
+  } catch (err) {
+    console.error('AI Louvor table creation error:', err.message);
+  } finally {
+    await pool.end();
+  }
+}
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
@@ -24,6 +68,7 @@ function checkRateLimit(userId) {
 // GET /api/ai-louvor/credits — check user credits
 router.get('/credits', authenticate, async (req, res) => {
   try {
+    await ensureTables();
     const row = await db.prepare(
       'SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?'
     ).get(req.user.id);
@@ -44,46 +89,12 @@ router.get('/credits', authenticate, async (req, res) => {
 // POST /api/ai-louvor/generate — generate worship lyrics
 router.post('/generate', authenticate, async (req, res) => {
   try {
-    if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA não configurada' });
+    await ensureTables();
+    if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA não configurada. Contacte o administrador.' });
     if (!checkRateLimit(req.user.id)) return res.status(429).json({ error: 'Muitas requisições. Aguarde um pouco.' });
 
-    // Check credits — auto-create table if missing
-    let creditRow;
-    try {
-      creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
-    } catch (tableErr) {
-      // Table might not exist yet — try to create it
-      console.warn('song_credits table missing, creating...', tableErr.message);
-      try {
-        await db.exec(`
-          CREATE TABLE IF NOT EXISTS song_credits (
-            user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
-            credits_remaining INT DEFAULT 4,
-            total_generated INT DEFAULT 0,
-            updated_at TIMESTAMPTZ DEFAULT NOW()
-          );
-          CREATE TABLE IF NOT EXISTS ai_songs (
-            id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-            author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-            title VARCHAR(255),
-            lyrics TEXT NOT NULL,
-            theme VARCHAR(100),
-            style VARCHAR(50),
-            emotion VARCHAR(50),
-            bible_book VARCHAR(100),
-            verse_reference TEXT,
-            language VARCHAR(5) DEFAULT 'pt',
-            is_public BOOLEAN DEFAULT false,
-            like_count INT DEFAULT 0,
-            created_at TIMESTAMPTZ DEFAULT NOW()
-          );
-        `);
-        creditRow = null;
-      } catch (createErr) {
-        console.error('Failed to create tables:', createErr.message);
-        return res.status(500).json({ error: 'Erro ao preparar banco de dados. Tente novamente.' });
-      }
-    }
+    // Check credits
+    let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
     if (!creditRow) {
       await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, FREE_CREDITS);
       creditRow = { credits_remaining: FREE_CREDITS };
