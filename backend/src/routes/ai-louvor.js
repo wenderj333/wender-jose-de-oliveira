@@ -47,8 +47,43 @@ router.post('/generate', authenticate, async (req, res) => {
     if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA não configurada' });
     if (!checkRateLimit(req.user.id)) return res.status(429).json({ error: 'Muitas requisições. Aguarde um pouco.' });
 
-    // Check credits
-    let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
+    // Check credits — auto-create table if missing
+    let creditRow;
+    try {
+      creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
+    } catch (tableErr) {
+      // Table might not exist yet — try to create it
+      console.warn('song_credits table missing, creating...', tableErr.message);
+      try {
+        await db.exec(`
+          CREATE TABLE IF NOT EXISTS song_credits (
+            user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+            credits_remaining INT DEFAULT 4,
+            total_generated INT DEFAULT 0,
+            updated_at TIMESTAMPTZ DEFAULT NOW()
+          );
+          CREATE TABLE IF NOT EXISTS ai_songs (
+            id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+            author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            title VARCHAR(255),
+            lyrics TEXT NOT NULL,
+            theme VARCHAR(100),
+            style VARCHAR(50),
+            emotion VARCHAR(50),
+            bible_book VARCHAR(100),
+            verse_reference TEXT,
+            language VARCHAR(5) DEFAULT 'pt',
+            is_public BOOLEAN DEFAULT false,
+            like_count INT DEFAULT 0,
+            created_at TIMESTAMPTZ DEFAULT NOW()
+          );
+        `);
+        creditRow = null;
+      } catch (createErr) {
+        console.error('Failed to create tables:', createErr.message);
+        return res.status(500).json({ error: 'Erro ao preparar banco de dados. Tente novamente.' });
+      }
+    }
     if (!creditRow) {
       await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, FREE_CREDITS);
       creditRow = { credits_remaining: FREE_CREDITS };

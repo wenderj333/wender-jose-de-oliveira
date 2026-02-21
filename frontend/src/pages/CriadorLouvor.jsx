@@ -122,7 +122,8 @@ export default function CriadorLouvor() {
       const data = await res.json();
       if (!res.ok) {
         if (data.error === 'no_credits') setError('no_credits');
-        else setError(data.error || data.message || 'Erro ao gerar');
+        else setError(data.error || data.message || `Erro ${res.status}: Tente novamente em alguns segundos.`);
+        console.error('AI Louvor error:', res.status, data);
         return;
       }
       setResult(data);
@@ -230,6 +231,22 @@ export default function CriadorLouvor() {
       {/* CREATE TAB */}
       {tab === 'create' && (
         <div style={{ background: '#fff', borderRadius: 16, padding: '1rem', border: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+          {/* Step by step tutorial */}
+          <div style={{
+            background: 'linear-gradient(135deg, #f0e8ff, #e8f0ff)', borderRadius: 14,
+            padding: '0.8rem 1rem', marginBottom: '1rem', border: '1px solid #d0c0ff',
+          }}>
+            <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#4a1a8e', marginBottom: 6 }}>
+              📋 Como criar teu louvor em 4 passos:
+            </div>
+            <div style={{ fontSize: '0.8rem', color: '#555', lineHeight: 1.7 }}>
+              <div><strong>1️⃣</strong> Escolha um <strong>tema</strong> (ex: Esperança, Fé, Adoração)</div>
+              <div><strong>2️⃣</strong> Selecione o <strong>estilo musical</strong> e a <strong>emoção</strong></div>
+              <div><strong>3️⃣</strong> Opcional: escolha um <strong>livro da Bíblia</strong> e/ou <strong>versículo</strong></div>
+              <div><strong>4️⃣</strong> Toque em <strong>"Gerar Louvor"</strong> e a IA cria a letra para você! 🎵</div>
+            </div>
+          </div>
+
           {/* Theme */}
           <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>
             🎯 Tema do Louvor
