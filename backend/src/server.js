@@ -370,6 +370,31 @@ const { Pool: MigratePool } = require('pg');
       );
     `);
 
+    // ============ CRIADOR DE LOUVOR COM IA ============
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS ai_songs (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        title VARCHAR(255),
+        lyrics TEXT NOT NULL,
+        theme VARCHAR(100),
+        style VARCHAR(50),
+        emotion VARCHAR(50),
+        bible_book VARCHAR(100),
+        verse_reference TEXT,
+        language VARCHAR(5) DEFAULT 'pt',
+        is_public BOOLEAN DEFAULT false,
+        like_count INT DEFAULT 0,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+      CREATE TABLE IF NOT EXISTS song_credits (
+        user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+        credits_remaining INT DEFAULT 4,
+        total_generated INT DEFAULT 0,
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+
     console.log('✅ Auto-migração concluída!');
   } catch (err) {
     console.error('⚠️  Erro na auto-migração (continuando):', err.message);

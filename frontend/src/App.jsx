@@ -165,7 +165,34 @@ export default function App() {
           <Link to="/" className="nav-brand" onClick={() => setMenuOpen(false)}>
             <img src="/logo.jpg" alt="Sigo com Fé" style={{ width: 36, height: 36, verticalAlign: 'middle', marginRight: '8px', borderRadius: '50%', objectFit: 'cover', background: '#b3d4fc' }} />{t('brand')}
           </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            {/* Criar Louvor button */}
+            <button onClick={() => navigate('/criador-louvor')} style={{
+              padding: '0.35rem 0.7rem', borderRadius: 20, border: 'none',
+              background: 'linear-gradient(135deg, #9b59b6, #667eea)',
+              color: '#fff', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 700,
+              display: 'flex', alignItems: 'center', gap: 4,
+              boxShadow: '0 2px 8px rgba(155,89,182,0.4)',
+              animation: 'louvorPulse 2.5s ease-in-out infinite',
+              whiteSpace: 'nowrap',
+            }} title="Cria teu próprio louvor com IA!">
+              🎵 Cria teu Louvor!
+            </button>
+            <style>{`@keyframes louvorPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }`}</style>
+
+            {/* Share button */}
+            <button onClick={() => {
+              const shareData = { title: 'Sigo com Fé', text: '🙏 Conheça o Sigo com Fé! Rede social cristã.\n\n✨ Crie sua conta grátis:', url: 'https://sigo-com-fe.vercel.app' };
+              if (navigator.share) navigator.share(shareData).catch(() => {});
+              else { navigator.clipboard?.writeText(`${shareData.text}\n${shareData.url}`); alert('Link copiado! ✅'); }
+            }} style={{
+              width: 34, height: 34, borderRadius: '50%', border: 'none',
+              background: 'linear-gradient(135deg, #daa520, #f4c542)',
+              color: '#1a0a3e', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '1rem', boxShadow: '0 2px 8px rgba(218,165,32,0.3)',
+            }} title="Compartilhar">📤</button>
+
             {user && (
               <Link to="/mensagens" style={{ position: 'relative', color: '#fff', textDecoration: 'none' }}>
                 <Bell size={22} />
@@ -275,45 +302,7 @@ export default function App() {
 
       {/* Music player temporarily disabled */}
 
-      {/* Floating "Cria teu Louvor" Button */}
-      <button onClick={() => navigate('/criador-louvor')} style={{
-        position: 'fixed', bottom: 140, right: 16, zIndex: 999,
-        padding: '0.6rem 1rem', borderRadius: 25, border: 'none',
-        background: 'linear-gradient(135deg, #9b59b6, #667eea)',
-        color: '#fff', cursor: 'pointer',
-        boxShadow: '0 4px 15px rgba(155,89,182,0.4)',
-        display: 'flex', alignItems: 'center', gap: 6,
-        fontSize: '0.78rem', fontWeight: 700,
-        animation: 'louvorPulse 2s ease-in-out infinite',
-      }} title="Cria teu próprio louvor com IA!">
-        🎵 Cria teu Louvor!
-      </button>
-      <style>{`@keyframes louvorPulse { 0%,100% { transform: scale(1); box-shadow: 0 4px 15px rgba(155,89,182,0.4); } 50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(155,89,182,0.6); } }`}</style>
-
-      {/* Floating Share Button */}
-      <button onClick={() => {
-        const shareData = {
-          title: 'Sigo com Fé - Rede Social Cristã',
-          text: '🙏 Conheça o Sigo com Fé! Uma rede social cristã onde você encontra oração, acolhimento e comunidade.\n\n✨ Crie sua conta grátis:',
-          url: 'https://sigo-com-fe.vercel.app',
-        };
-        if (navigator.share) {
-          navigator.share(shareData).catch(() => {});
-        } else {
-          navigator.clipboard?.writeText(`${shareData.text}\n${shareData.url}`);
-          alert('Link copiado! ✅');
-        }
-      }} style={{
-        position: 'fixed', bottom: 80, right: 16, zIndex: 999,
-        width: 52, height: 52, borderRadius: '50%', border: 'none',
-        background: 'linear-gradient(135deg, #daa520, #f4c542)',
-        color: '#1a0a3e', cursor: 'pointer',
-        boxShadow: '0 4px 15px rgba(218,165,32,0.4)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: '1.4rem',
-      }} title="Compartilhar Sigo com Fé">
-        📤
-      </button>
+      {/* NO floating buttons — moved to navbar area */}
 
       <footer className="footer">
         {showInstallBtn && (
