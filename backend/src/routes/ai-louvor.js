@@ -48,7 +48,14 @@ async function ensureTables() {
 }
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+// Use 1.5-flash for higher rate limits on free tier
+const GEMINI_MODELS = [
+  'gemini-1.5-flash',
+  'gemini-2.0-flash',
+];
+function getGeminiUrl(model) {
+  return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+}
 
 const FREE_CREDITS = 4;
 const PACK_CREDITS = 250;
@@ -156,23 +163,41 @@ Formato de resposta:
 🎹 Instrumentos: [lista]
 💡 Dica de interpretação: [dica]`;
 
-    const geminiRes = await fetch(GEMINI_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.9, maxOutputTokens: 2048 },
-      }),
-    });
-
-    if (!geminiRes.ok) {
-      const errText = await geminiRes.text();
-      console.error('Gemini error:', geminiRes.status, errText);
-      return res.status(500).json({ error: `Erro da IA (${geminiRes.status}). Tente novamente em alguns segundos.` });
+    // Try each model with retry
+    let lyrics = null;
+    let lastError = '';
+    for (const model of GEMINI_MODELS) {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          if (attempt > 0) await new Promise(r => setTimeout(r, 2000)); // wait 2s before retry
+          const geminiRes = await fetch(getGeminiUrl(model), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { temperature: 0.9, maxOutputTokens: 2048 },
+            }),
+          });
+          if (geminiRes.ok) {
+            const geminiData = await geminiRes.json();
+            lyrics = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (lyrics) break;
+          } else {
+            lastError = `${model}: ${geminiRes.status}`;
+            console.warn(`Gemini ${model} attempt ${attempt}: ${geminiRes.status}`);
+            if (geminiRes.status === 429) continue; // retry or try next model
+          }
+        } catch (e) {
+          lastError = e.message;
+          console.error(`Gemini ${model} error:`, e.message);
+        }
+      }
+      if (lyrics) break;
     }
 
-    const geminiData = await geminiRes.json();
-    const lyrics = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!lyrics) {
+      return res.status(500).json({ error: `A IA está ocupada agora (${lastError}). Espere 30 segundos e tente de novo.` });
+    }
     if (!lyrics) return res.status(500).json({ error: 'A IA não gerou uma resposta válida. Tente novamente.' });
 
     // Extract title from lyrics
