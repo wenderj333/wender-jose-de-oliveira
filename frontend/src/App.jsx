@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Component } from 'react';
-import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './context/AuthContext';
 import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users, User, Download, Bell, Music } from 'lucide-react';
@@ -75,6 +75,7 @@ export default function App() {
   const { user, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [installPrompt, setInstallPrompt] = useState(null);
   const [showInstallBtn, setShowInstallBtn] = useState(false);
@@ -273,6 +274,21 @@ export default function App() {
       </main>
 
       {/* Music player temporarily disabled */}
+
+      {/* Floating "Cria teu Louvor" Button */}
+      <button onClick={() => navigate('/criador-louvor')} style={{
+        position: 'fixed', bottom: 140, right: 16, zIndex: 999,
+        padding: '0.6rem 1rem', borderRadius: 25, border: 'none',
+        background: 'linear-gradient(135deg, #9b59b6, #667eea)',
+        color: '#fff', cursor: 'pointer',
+        boxShadow: '0 4px 15px rgba(155,89,182,0.4)',
+        display: 'flex', alignItems: 'center', gap: 6,
+        fontSize: '0.78rem', fontWeight: 700,
+        animation: 'louvorPulse 2s ease-in-out infinite',
+      }} title="Cria teu próprio louvor com IA!">
+        🎵 Cria teu Louvor!
+      </button>
+      <style>{`@keyframes louvorPulse { 0%,100% { transform: scale(1); box-shadow: 0 4px 15px rgba(155,89,182,0.4); } 50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(155,89,182,0.6); } }`}</style>
 
       {/* Floating Share Button */}
       <button onClick={() => {
