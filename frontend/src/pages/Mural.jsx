@@ -142,19 +142,17 @@ export default function Mural() {
       const data = await res.json();
       const p = data.posts || [];
       setPosts(p);
-      // Check which posts user has liked
+      // Check which posts user has liked — ONE request instead of 50!
       if (token) {
-        const liked = {};
-        for (const post of p.slice(0, 50)) {
-          try {
-            const r = await fetch(`${API}/feed/${post.id}/liked`, {
-              headers: { Authorization: `Bearer ${token}` }
-            });
-            const d = await r.json();
-            if (d.liked) liked[post.id] = true;
-          } catch {}
-        }
-        setLikedPosts(liked);
+        try {
+          const r = await fetch(`${API}/feed/liked-posts`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const d = await r.json();
+          const liked = {};
+          (d.likedIds || []).forEach(id => { liked[id] = true; });
+          setLikedPosts(liked);
+        } catch {}
       }
     } catch (err) {
       console.error('Error fetching feed:', err);

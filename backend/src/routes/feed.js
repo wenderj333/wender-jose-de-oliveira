@@ -210,6 +210,20 @@ router.delete('/:id', authenticate, async (req, res) => {
 
 // ===== LIKES =====
 
+// GET /api/feed/liked-posts — get all post IDs liked by current user (batch)
+router.get('/liked-posts', authenticate, async (req, res) => {
+  try {
+    const rows = await db.prepare(
+      'SELECT post_id FROM post_likes WHERE user_id = ?'
+    ).all(req.user.id);
+    const likedIds = rows.map(r => r.post_id);
+    res.json({ likedIds });
+  } catch (err) {
+    console.error('Erro ao buscar likes:', err);
+    res.json({ likedIds: [] });
+  }
+});
+
 // POST /api/feed/:id/like — toggle like
 router.post('/:id/like', authenticate, async (req, res) => {
   try {
