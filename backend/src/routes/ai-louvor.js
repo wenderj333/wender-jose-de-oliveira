@@ -163,13 +163,14 @@ Formato de resposta:
 🎹 Instrumentos: [lista]
 💡 Dica de interpretação: [dica]`;
 
-    // Try each model with retry
+    // Try each model with retry and exponential backoff
     let lyrics = null;
     let lastError = '';
+    const delays = [0, 5000, 10000]; // 0s, 5s, 10s
     for (const model of GEMINI_MODELS) {
-      for (let attempt = 0; attempt < 2; attempt++) {
+      for (let attempt = 0; attempt < 3; attempt++) {
         try {
-          if (attempt > 0) await new Promise(r => setTimeout(r, 2000)); // wait 2s before retry
+          if (delays[attempt] > 0) await new Promise(r => setTimeout(r, delays[attempt]));
           const geminiRes = await fetch(getGeminiUrl(model), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

@@ -348,7 +348,7 @@ export default function CriadorLouvor() {
             {generating ? (
               <>
                 <div style={{ width: 20, height: 20, border: '3px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                Criando louvor com IA...
+                Criando louvor... pode demorar até 30s
               </>
             ) : (
               <><Sparkles size={20} /> Gerar Louvor</>
