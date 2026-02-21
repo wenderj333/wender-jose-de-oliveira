@@ -170,7 +170,7 @@ Formato de resposta:
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.9, maxOutputTokens: 2048 },
+            generationConfig: { temperature: 0.9, maxOutputTokens: 1000 },
           }),
         });
         if (response.status !== 429) break;
