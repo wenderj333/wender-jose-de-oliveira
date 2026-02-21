@@ -50,7 +50,7 @@ async function ensureTables() {
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 // Use 1.5-flash for higher rate limits on free tier
 const GEMINI_MODELS = [
-  'gemini-pro-flash',
+  'gemini-pro',
 ];
 function getGeminiUrl(model) {
   return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
@@ -210,11 +210,12 @@ Formato de resposta:
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
     ).get(req.user.id, title, lyrics, theme || null, style || null, emotion || null, bibleBook || null, verse || null, lang);
 
-    // Deduct credit
-    await db.prepare(
-      'UPDATE song_credits SET credits_remaining = credits_remaining - 1, total_generated = total_generated + 1 WHERE user_id = ?'
-    ).run(req.user.id);
-
+    // Deduct credit ONLY IF song was successfully saved
+    if (song) {
+      await db.prepare(
+        'UPDATE song_credits SET credits_remaining = credits_remaining - 1, total_generated = total_generated + 1 WHERE user_id = ?'
+      ).run(req.user.id);
+    }
     const updatedCredits = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
 
     res.json({
