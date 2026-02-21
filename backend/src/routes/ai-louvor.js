@@ -51,7 +51,6 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 // Use 1.5-flash for higher rate limits on free tier
 const GEMINI_MODELS = [
   'gemini-1.5-flash',
-  'gemini-2.0-flash',
 ];
 function getGeminiUrl(model) {
   return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
