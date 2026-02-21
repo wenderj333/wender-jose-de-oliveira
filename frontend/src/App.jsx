@@ -38,13 +38,15 @@ import LiveStream from './pages/LiveStream';
 import LanguageSwitcher from './components/LanguageSwitcher';
 
 function ProtectedRoute({ children }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  if (loading) return <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="loading-spinner" /></div>;
   if (!user) return <Navigate to="/login" />;
   return children;
 }
 
 function RedirectIfLoggedIn({ children }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  if (loading) return <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="loading-spinner" /></div>;
   if (user) return <Navigate to="/mural" />;
   return children;
 }
