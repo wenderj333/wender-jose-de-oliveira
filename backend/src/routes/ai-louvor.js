@@ -41,7 +41,7 @@ async function ensureTables() {
       );
     `);
     tablesReady = true;
-    console.log('✅ AI Louvor tables ready');
+    console.log('AI Louvor tables ready');
   } catch (err) {
     console.error('AI Louvor table creation error:', err.message);
   } finally {
@@ -51,7 +51,6 @@ async function ensureTables() {
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-
 const FREE_CREDITS = 4;
 const PACK_CREDITS = 250;
 
@@ -82,47 +81,22 @@ router.get('/credits', authenticate, async (req, res) => {
 router.post('/generate', authenticate, async (req, res) => {
   try {
     await ensureTables();
-    if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA não configurada.' });
-    if (!checkRateLimit(req.user.id)) return res.status(429).json({ error: 'Muitas requisições. Aguarde um pouco.' });
-
+    if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA nao configurada.' });
+    if (!checkRateLimit(req.user.id)) return res.status(429).json({ error: 'Muitas requisicoes. Aguarde.' });
     let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
     if (!creditRow) {
       await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, FREE_CREDITS);
       creditRow = { credits_remaining: FREE_CREDITS };
     }
     if (creditRow.credits_remaining <= 0) {
-      return res.status(403).json({ error: 'no_credits', message: 'Seus créditos acabaram!' });
+      return res.status(403).json({ error: 'no_credits' });
     }
-
     const { theme, style, emotion, bibleBook, verse, language } = req.body;
     if (!theme && !verse) return res.status(400).json({ error: 'Escolha um tema ou versículo' });
-
     const lang = language || 'pt';
-    const langNames = { pt: 'Português', es: 'Español', en: 'English', de: 'Deutsch', fr: 'Français' };
-    const langName = langNames[lang] || 'Português';
-
-    const prompt = `Você é um compositor cristão profissional especializado em música gospel e louvor.
-Crie uma letra de louvor completa em ${langName}.
-Tema: ${theme || ''}, Estilo: ${style || 'worship'}, Emoção: ${emotion || 'inspiradora'}.
-${bibleBook ? 'Livro: ' + bibleBook : ''}
-${verse ? 'Versículo: ' + verse : ''}
-
-Formato:
-TÍTULO: [título]
-
-[Verso 1]
-...
-[Coro]
-...
-[Verso 2]
-...
-[Ponte]
-...
-[Coro Final]
-...
-
-Tom: [tom] | BPM: [bpm]`;
-
+    const langNames = { pt: 'Portugues', es: 'Espanol', en: 'English', de: 'Deutsch', fr: 'Francais' };
+    const langName = langNames[lang] || 'Portugues';
+    const prompt = `Voce e um compositor cristao profissional. Crie uma letra de louvor completa em ${langName}. Tema: ${theme || ''}. Estilo: ${style || 'worship'}. Emocao: ${emotion || 'inspiradora'}. ${bibleBook ? 'Livro: ' + bibleBook : ''} ${verse ? 'Versiculo: ' + verse : ''}\n\nFormato:\nTITULO: [titulo]\n\n[Verso 1]\n...\n[Coro]\n...\n[Verso 2]\n...\n[Ponte]\n...\n[Coro Final]\n...`;
     let lastError = '';
     let response;
     for (let attempt = 0; attempt < 3; attempt++) {
@@ -137,46 +111,92 @@ Tom: [tom] | BPM: [bpm]`;
           }),
         });
         if (response.status !== 429) break;
-      } catch (e) {
-        lastError = e.message;
-        break;
-      }
+      } catch (e) { lastError = e.message; break; }
     }
-
     let lyrics = null;
     if (response && response.ok) {
       const data = await response.json();
-      lyrics = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      lyrics = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
     } else if (response) {
-      lastError = `gemini-2.5-flash: ${response.status}`;
+      lastError = 'gemini: ' + response.status;
     }
-
-    if (!lyrics) {
-      return res.status(500).json({ error: `A IA está ocupada agora (${lastError}). Espere 30 segundos e tente de novo.` });
-    }
-
-    const titleMatch = lyrics.match(/TÍTULO:\s*(.+)/i);
-    const title = titleMatch ? titleMatch[1].trim() : `Louvor - ${theme || verse || 'Novo'}`;
-
-    const song = await db.prepare(
-      `INSERT INTO ai_songs (author_id, title, lyrics, theme, style, emotion, bible_book, verse_reference, language, is_ai)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
-    ).get(req.user.id, title, lyrics, theme || null, style || null, emotion || null, bibleBook || null, verse || null, lang, true);
-
+    if (!lyrics) return res.status(500).json({ error: 'A IA esta ocupada. Espere 30 segundos e tente de novo. (' + lastError + ')' });
+    const titleMatch = lyrics.match(/TITULO:\s*(.+)/i);
+    const title = titleMatch ? titleMatch[1].trim() : 'Louvor - ' + (theme || verse || 'Novo');
+    const song = await db.prepare('INSERT INTO ai_songs (author_id, title, lyrics, theme, style, emotion, bible_book, verse_reference, language, is_ai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *').get(req.user.id, title, lyrics, theme || null, style || null, emotion || null, bibleBook || null, verse || null, lang, true);
     if (song) {
       await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining - 1, total_generated = total_generated + 1 WHERE user_id = ?').run(req.user.id);
     }
     const updatedCredits = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
-
-    res.json({ song, lyrics, title, creditsRemaining: updatedCredits?.credits_remaining || 0 });
+    res.json({ song, lyrics, title, creditsRemaining: updatedCredits ? updatedCredits.credits_remaining : 0 });
   } catch (err) {
     console.error('Generate error:', err);
-    res.status(500).json({ error: 'Erro interno ao gerar música' });
+    res.status(500).json({ error: 'Erro interno ao gerar musica' });
   }
 });
 
 router.post('/generate-audio', authenticate, async (req, res) => {
   try {
     const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN;
-    if (!REPLICATE_API_TOKEN) {
-      return res.status(500).json({ erro
+    if (!REPLICATE_API_TOKEN) return res.status(500).json({ error: 'API da Replicate nao configurada.' });
+    const { lyrics, songId, title, style } = req.body;
+    if (!lyrics) return res.status(400).json({ error: 'A letra e necessaria.' });
+    const replicate = new Replicate({ auth: REPLICATE_API_TOKEN });
+    const prompt = (style || 'worship, uplifting, gospel') + ', christian music, inspirational';
+    const output = await replicate.run(
+      'meta/musicgen:671ac645ce5e552cc0f9b6dc90d7ce29b2b1cc9e9ae58d3ae7c7e944d6d89d57',
+      { input: { prompt: prompt, model_version: 'stereo-large', duration: 30, output_format: 'mp3' } }
+    );
+    let audioUrl = Array.isArray(output) ? output[0] : output;
+    if (!audioUrl) return res.status(500).json({ error: 'A IA nao conseguiu gerar a musica.' });
+    if (songId) {
+      await db.prepare('UPDATE ai_songs SET audio_url = ? WHERE id = ? AND author_id = ?').run(audioUrl, songId, req.user.id);
+    }
+    res.json({ audioUrl: audioUrl });
+  } catch (err) {
+    console.error('Erro ao gerar audio:', err);
+    res.status(500).json({ error: 'Erro interno ao gerar a musica.' });
+  }
+});
+
+router.post('/save-custom', authenticate, async (req, res) => {
+  try {
+    await ensureTables();
+    const { title, lyrics, theme, style, emotion, bibleBook, verse, language } = req.body;
+    if (!title || !lyrics) return res.status(400).json({ error: 'Titulo e letra sao obrigatorios.' });
+    const lang = language || 'pt';
+    const song = await db.prepare('INSERT INTO ai_songs (author_id, title, lyrics, theme, style, emotion, bible_book, verse_reference, language, is_ai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *').get(req.user.id, title, lyrics, theme || null, style || null, emotion || null, bibleBook || null, verse || null, lang, false);
+    res.json({ success: true, song: song });
+  } catch (err) {
+    console.error('Erro ao salvar letra:', err);
+    res.status(500).json({ error: 'Erro interno ao salvar sua letra.' });
+  }
+});
+
+router.get('/my-songs', authenticate, async (req, res) => {
+  try {
+    const songs = await db.prepare('SELECT * FROM ai_songs WHERE author_id = ? ORDER BY created_at DESC LIMIT 50').all(req.user.id);
+    res.json({ songs: songs });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+router.get('/song/:id', authenticate, async (req, res) => {
+  try {
+    const song = await db.prepare('SELECT * FROM ai_songs WHERE id = ? AND author_id = ?').get(req.params.id, req.user.id);
+    if (!song) return res.status(404).json({ error: 'Musica nao encontrada' });
+    res.json({ song: song });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+router.delete('/song/:id', authenticate, async (req, res) => {
+  try {
+    await db.prepare('DELETE FROM ai_songs WHERE id = ? AND author_id = ?').run(req.params.id, req.user.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
