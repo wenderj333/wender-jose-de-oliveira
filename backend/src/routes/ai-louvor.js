@@ -249,7 +249,6 @@ router.post('/buy-credits', authenticate, async (req, res) => {
   }
 });
 
-});
 
 module.exports = router;
 
