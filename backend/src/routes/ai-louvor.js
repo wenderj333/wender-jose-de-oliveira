@@ -200,3 +200,58 @@ router.delete('/song/:id', authenticate, async (req, res) => {
     res.status(500).json({ error: 'Erro interno' });
   }
 });
+router.post('/buy-credits', authenticate, async (req, res) => {
+  try {
+    const { paymentConfirmed } = req.body;
+    if (!paymentConfirmed) return res.status(400).json({ error: 'Pagamento nao confirmado' });
+    let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
+    if (!creditRow) {
+      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, PACK_CREDITS);
+    } else {
+      await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining + ? WHERE user_id = ?').run(PACK_CREDITS, req.user.id);
+    }
+    const updated = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
+    res.json({ success: true, credits: updated.credits_remaining, totalGenerated: updated.total_generated });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+router.post('/buy-credits', authenticate, async (req, res) => {
+  try {
+    const { paymentConfirmed } = req.body;
+    if (!paymentConfirmed) return res.status(400).json({ error: 'Pagamento nao confirmado' });
+    let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
+    if (!creditRow) {
+      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, PACK_CREDITS);
+    } else {
+      await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining + ? WHERE user_id = ?').run(PACK_CREDITS, req.user.id);
+    }
+    const updated = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
+    res.json({ success: true, credits: updated.credits_remaining, totalGenerated: updated.total_generated });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+router.post('/buy-credits', authenticate, async (req, res) => {
+  try {
+    const { paymentConfirmed } = req.body;
+    if (!paymentConfirmed) return res.status(400).json({ error: 'Pagamento nao confirmado' });
+    let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
+    if (!creditRow) {
+      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, PACK_CREDITS);
+    } else {
+      await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining + ? WHERE user_id = ?').run(PACK_CREDITS, req.user.id);
+    }
+    const updated = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
+    res.json({ success: true, credits: updated.credits_remaining, totalGenerated: updated.total_generated });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+});
+
+module.exports = router;
+
+
+
