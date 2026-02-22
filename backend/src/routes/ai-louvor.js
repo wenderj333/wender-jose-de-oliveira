@@ -68,7 +68,4 @@ router.get('/credits', authenticate, async (req, res) => {
     await ensureTables();
     const row = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
     if (!row) {
-      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, FREE_CREDITS);
-      return res.json({ credits: FREE_CREDITS, totalGenerated: 0, isFree: true });
-    }
-    res.js
+      await db.
