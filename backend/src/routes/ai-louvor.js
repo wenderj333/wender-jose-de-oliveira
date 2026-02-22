@@ -68,4 +68,158 @@ router.get('/credits', authenticate, async (req, res) => {
     await ensureTables();
     const row = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
     if (!row) {
-      await db.
+     
+await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, FREE_CREDITS);
+      return res.json({ credits: FREE_CREDITS, totalGenerated: 0, isFree: true });
+    }
+    res.json({ credits: row.credits_remaining, totalGenerated: row.total_generated, isFree: row.credits_remaining <= FREE_CREDITS });
+  } catch (err) {
+    console.error('Credits error:', err);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+router.post('/generate', authenticate, async (req, res) => {
+  try {
+    await ensureTables();
+    if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA não configurada. Contacte o administrador.' });
+    if (!checkRateLimit(req.user.id)) return res.status(429).json({ error: 'Muitas requisições. Aguarde um pouco.' });
+
+    let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
+    if (!creditRow) {
+      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, FREE_CREDITS);
+      creditRow = { credits_remaining: FREE_CREDITS };
+    }
+    if (creditRow.credits_remaining <= 0) {
+      return res.status(403).json({ error: 'no_credits', message: 'Seus créditos acabaram! Adquira o pacote de 250 músicas por €5.' });
+    }
+
+    const { theme, style, emotion, bibleBook, verse, language } = req.body;
+    if (!theme && !verse) return res.status(400).json({ error: 'Escolha um tema ou versículo' });
+
+    const lang = language || 'pt';
+    const langNames = { pt: 'Português', es: 'Español', en: 'English', de: 'Deutsch', fr: 'Français' };
+    const langName = langNames[lang] || 'Português';
+
+    const prompt = `Você é um compositor cristão profissional especializado em música gospel e louvor.
+Crie uma letra de louvor completa em ${langName}.
+Tema: ${theme || ''}, Estilo: ${style || 'worship'}, Emoção: ${emotion || 'inspiradora'}.
+${bibleBook ? 'Livro: ' + bibleBook : ''}
+${verse ? 'Versículo: ' + verse : ''}
+
+Formato:
+TÍTULO: [título]
+
+[Verso 1]
+...
+[Coro]
+...
+[Verso 2]
+...
+[Ponte]
+...
+[Coro Final]
+...
+
+Tom: [tom] | BPM: [bpm]`;
+
+    let lastError = '';
+    let response;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        if (attempt > 0) await new Promise(r => setTimeout(r, attempt * 2000));
+        response = await fetch(GEMINI_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.9, maxOutputTokens: 1000 },
+          }),
+        });
+        if (response.status !== 429) break;
+      } catch (e) {
+        lastError = e.message;
+        break;
+      }
+    }
+
+    let lyrics = null;
+    if (response && response.ok) {
+      const data = await response.json();
+      lyrics = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    } else if (response) {
+      lastError = `gemini-2.5-flash: ${response.status}`;
+    }
+
+    if (!lyrics) {
+      return res.status(500).json({ error: `A IA está ocupada agora (${lastError}). Espere 30 segundos e tente de novo.` });
+    }
+
+    const titleMatch = lyrics.match(/TÍTULO:\s*(.+)/i);
+    const title = titleMatch ? titleMatch[1].trim() : `Louvor - ${theme || verse || 'Novo'}`;
+
+    const song = await db.prepare(
+      `INSERT INTO ai_songs (author_id, title, lyrics, theme, style, emotion, bible_book, verse_reference, language)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
+    ).get(req.user.id, title, lyrics, theme || null, style || null, emotion || null, bibleBook || null, verse || null, lang);
+
+    if (song) {
+      await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining - 1, total_generated = total_generated + 1 WHERE user_id = ?').run(req.user.id);
+    }
+    const updatedCredits = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
+
+    res.json({ song, lyrics, title, creditsRemaining: updatedCredits?.credits_remaining || 0 });
+  } catch (err) {
+    console.error('Generate error:', err);
+    res.status(500).json({ error: 'Erro interno ao gerar música' });
+  }
+});
+
+router.get('/my-songs', authenticate, async (req, res) => {
+  try {
+    const songs = await db.prepare('SELECT * FROM ai_songs WHERE author_id = ? ORDER BY created_at DESC LIMIT 50').all(req.user.id);
+    res.json({ songs });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+router.get('/song/:id', authenticate, async (req, res) => {
+  try {
+    const song = await db.prepare('SELECT * FROM ai_songs WHERE id = ? AND author_id = ?').get(req.params.id, req.user.id);
+    if (!song) return res.status(404).json({ error: 'Música não encontrada' });
+    res.json({ song });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+router.delete('/song/:id', authenticate, async (req, res) => {
+  try {
+    await db.prepare('DELETE FROM ai_songs WHERE id = ? AND author_id = ?').run(req.params.id, req.user.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+router.post('/buy-credits', authenticate, async (req, res) => {
+  try {
+    const { paymentConfirmed } = req.body;
+    if (!paymentConfirmed) return res.status(400).json({ error: 'Pagamento não confirmado' });
+
+    let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
+    if (!creditRow) {
+      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, PACK_CREDITS);
+    } else {
+      await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining + ? WHERE user_id = ?').run(PACK_CREDITS, req.user.id);
+    }
+
+    const updated = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
+    res.json({ success: true, credits: updated.credits_remaining, totalGenerated: updated.total_generated });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+module.exports = router;
