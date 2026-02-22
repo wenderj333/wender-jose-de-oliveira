@@ -47,8 +47,8 @@ async function ensureTables() {
   }
 }
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-// Use 1.5-flash for higher rate limits on free tier
+// Use 2.5-flash - modelo mais recente e disponível
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 const FREE_CREDITS = 4;
