@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
 const { Pool } = require('pg');
+const Replicate = require('replicate');
 
 let tablesReady = false;
 async function ensureTables() {
@@ -20,6 +21,7 @@ async function ensureTables() {
         author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         title VARCHAR(255),
         lyrics TEXT NOT NULL,
+        audio_url TEXT,
         theme VARCHAR(100),
         style VARCHAR(50),
         emotion VARCHAR(50),
@@ -68,8 +70,7 @@ router.get('/credits', authenticate, async (req, res) => {
     await ensureTables();
     const row = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
     if (!row) {
-     
-await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, FREE_CREDITS);
+      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, FREE_CREDITS);
       return res.json({ credits: FREE_CREDITS, totalGenerated: 0, isFree: true });
     }
     res.json({ credits: row.credits_remaining, totalGenerated: row.total_generated, isFree: row.credits_remaining <= FREE_CREDITS });
@@ -172,6 +173,42 @@ Tom: [tom] | BPM: [bpm]`;
   } catch (err) {
     console.error('Generate error:', err);
     res.status(500).json({ error: 'Erro interno ao gerar música' });
+  }
+});
+
+router.post('/generate-audio', authenticate, async (req, res) => {
+  try {
+    const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN;
+    if (!REPLICATE_API_TOKEN) {
+      return res.status(500).json({ error: 'API da Replicate não configurada.' });
+    }
+
+    const { lyrics, songId, title, style } = req.body;
+    if (!lyrics) {
+      return res.status(400).json({ error: 'A letra é necessária para gerar a música.' });
+    }
+
+    const replicate = new Replicate({ auth: REPLICATE_API_TOKEN });
+    const prompt = `${title ? title + ' - ' : ''}${style || 'worship, uplifting, gospel'}`;
+
+    const output = await replicate.run(
+      'meta/musicgen:b05b1dff1d8c6dc0e6537bf26f01fa4e6c6f675a8a0c647b0a37637de283ba9a',
+      { input: { prompt, model_version: 'large', duration: 30 } }
+    );
+
+    let audioUrl = Array.isArray(output) ? output[0] : output;
+    if (!audioUrl) {
+      return res.status(500).json({ error: 'A IA não conseguiu gerar a música. Tente novamente.' });
+    }
+
+    if (songId) {
+      await db.prepare('UPDATE ai_songs SET audio_url = ? WHERE id = ? AND author_id = ?').run(audioUrl, songId, req.user.id);
+    }
+
+    res.json({ audioUrl });
+  } catch (err) {
+    console.error('Erro ao gerar áudio:', err);
+    res.status(500).json({ error: 'Erro interno ao gerar a música.' });
   }
 });
 
