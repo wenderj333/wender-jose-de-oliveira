@@ -54,7 +54,6 @@ const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemi
 
 const FREE_CREDITS = 4;
 const PACK_CREDITS = 250;
-const PACK_PRICE_EUR = 5;
 
 const userRequests = new Map();
 function checkRateLimit(userId) {
@@ -76,7 +75,6 @@ router.get('/credits', authenticate, async (req, res) => {
     }
     res.json({ credits: row.credits_remaining, totalGenerated: row.total_generated, isFree: row.credits_remaining <= FREE_CREDITS });
   } catch (err) {
-    console.error('Credits error:', err);
     res.status(500).json({ error: 'Erro interno' });
   }
 });
@@ -84,7 +82,7 @@ router.get('/credits', authenticate, async (req, res) => {
 router.post('/generate', authenticate, async (req, res) => {
   try {
     await ensureTables();
-    if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA não configurada. Contacte o administrador.' });
+    if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA não configurada.' });
     if (!checkRateLimit(req.user.id)) return res.status(429).json({ error: 'Muitas requisições. Aguarde um pouco.' });
 
     let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
@@ -93,7 +91,7 @@ router.post('/generate', authenticate, async (req, res) => {
       creditRow = { credits_remaining: FREE_CREDITS };
     }
     if (creditRow.credits_remaining <= 0) {
-      return res.status(403).json({ error: 'no_credits', message: 'Seus créditos acabaram! Adquira o pacote de 250 músicas por €5.' });
+      return res.status(403).json({ error: 'no_credits', message: 'Seus créditos acabaram!' });
     }
 
     const { theme, style, emotion, bibleBook, verse, language } = req.body;
@@ -181,26 +179,4 @@ router.post('/generate-audio', authenticate, async (req, res) => {
   try {
     const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN;
     if (!REPLICATE_API_TOKEN) {
-      return res.status(500).json({ error: 'API da Replicate não configurada.' });
-    }
-
-    const { lyrics, songId, title, style } = req.body;
-    if (!lyrics) {
-      return res.status(400).json({ error: 'A letra é necessária para gerar a música.' });
-    }
-
-    const replicate = new Replicate({ auth: REPLICATE_API_TOKEN });
-    const prompt = `${style || 'worship, uplifting, gospel'}, christian music, inspirational`;
-
-    const output = await replicate.run(
-      'meta/musicgen:671ac645ce5e552cc0f9b6dc90d7ce29b2b1cc9e9ae58d3ae7c7e944d6d89d57',
-      { input: { prompt, model_version: 'stereo-large', duration: 30, output_format: 'mp3' } }
-    );
-
-    let audioUrl = Array.isArray(output) ? output[0] : output;
-    if (!audioUrl) {
-      return res.status(500).json({ error: 'A IA não conseguiu gerar a música. Tente novamente.' });
-    }
-
-    if (songId) {
-      await db.prepare('
+      return res.status(500).json({ erro
