@@ -189,11 +189,11 @@ router.post('/generate-audio', authenticate, async (req, res) => {
     }
 
     const replicate = new Replicate({ auth: REPLICATE_API_TOKEN });
-    const prompt = `${title ? title + ' - ' : ''}${style || 'worship, uplifting, gospel'}`;
+    const prompt = `${style || 'worship, uplifting, gospel'}, christian music, inspirational`;
 
     const output = await replicate.run(
-      'meta/musicgen:b05b1dff1d8c6dc0e6537bf26f01fa4e6c6f675a8a0c647b0a37637de283ba9a',
-      { input: { prompt, model_version: 'large', duration: 30 } }
+      'meta/musicgen:671ac645ce5e552cc0f9b6dc90d7ce29b2b1cc9e9ae58d3ae7c7e944d6d89d57',
+      { input: { prompt, model_version: 'stereo-large', duration: 30, output_format: 'mp3' } }
     );
 
     let audioUrl = Array.isArray(output) ? output[0] : output;
