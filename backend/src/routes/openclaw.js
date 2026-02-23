@@ -6,7 +6,7 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejec
 
 const auth = (req, res, next) => {
   const token = (req.headers["authorization"] || "").split(" ")[1];
-  if (!token || token !== "sigocomfe2026") return res.status(403).json({ error: "Token invalido" });
+  if (!token || token !== process.env.OPENCLAW_API_TOKEN) return res.status(403).json({ error: "Token invalido" });
   next();
 };
 
