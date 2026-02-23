@@ -476,4 +476,4 @@ server.listen(PORT, () => {
   console.log(`🙏 Sigo com Fé API rodando na porta ${PORT}`);
   console.log(`📡 WebSocket disponível em ws://localhost:${PORT}/ws`);
 });
-app.use('/api', require('./routes/openclaw'));
+app.use('/api/openclaw', require('./routes/openclaw'));
