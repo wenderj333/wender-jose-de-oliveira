@@ -76,9 +76,7 @@ router.get('/credits', authenticate, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' });
   }
-});
-
-router.post('/generate', authenticate, async (req, res) => {
+});router.post('/generate', authenticate, async (req, res) => {
   try {
     await ensureTables();
     if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA nao configurada.' });
@@ -116,7 +114,7 @@ router.post('/generate', authenticate, async (req, res) => {
     let lyrics = null;
     if (response && response.ok) {
       const data = await response.json();
-      lyrics = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+      lyrics = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     } else if (response) {
       lastError = 'gemini: ' + response.status;
     }
@@ -139,7 +137,7 @@ router.post('/generate-audio', authenticate, async (req, res) => {
   try {
     const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN;
     if (!REPLICATE_API_TOKEN) return res.status(500).json({ error: 'API da Replicate nao configurada.' });
-    const { lyrics, songId, title, style } = req.body;
+    const { lyrics, songId, style } = req.body;
     if (!lyrics) return res.status(400).json({ error: 'A letra e necessaria.' });
     const replicate = new Replicate({ auth: REPLICATE_API_TOKEN });
     const prompt = (style || 'worship, uplifting, gospel') + ', christian music, inspirational';
@@ -152,7 +150,7 @@ router.post('/generate-audio', authenticate, async (req, res) => {
     if (songId) {
       await db.prepare('UPDATE ai_songs SET audio_url = ? WHERE id = ? AND author_id = ?').run(audioUrl, songId, req.user.id);
     }
-    res.json({ audioUrl: audioUrl });
+    res.json({ audioUrl });
   } catch (err) {
     console.error('Erro ao gerar audio:', err);
     res.status(500).json({ error: 'Erro interno ao gerar a musica.' });
@@ -166,9 +164,8 @@ router.post('/save-custom', authenticate, async (req, res) => {
     if (!title || !lyrics) return res.status(400).json({ error: 'Titulo e letra sao obrigatorios.' });
     const lang = language || 'pt';
     const song = await db.prepare('INSERT INTO ai_songs (author_id, title, lyrics, theme, style, emotion, bible_book, verse_reference, language, is_ai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *').get(req.user.id, title, lyrics, theme || null, style || null, emotion || null, bibleBook || null, verse || null, lang, false);
-    res.json({ success: true, song: song });
+    res.json({ success: true, song });
   } catch (err) {
-    console.error('Erro ao salvar letra:', err);
     res.status(500).json({ error: 'Erro interno ao salvar sua letra.' });
   }
 });
@@ -176,7 +173,7 @@ router.post('/save-custom', authenticate, async (req, res) => {
 router.get('/my-songs', authenticate, async (req, res) => {
   try {
     const songs = await db.prepare('SELECT * FROM ai_songs WHERE author_id = ? ORDER BY created_at DESC LIMIT 50').all(req.user.id);
-    res.json({ songs: songs });
+    res.json({ songs });
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' });
   }
@@ -186,7 +183,7 @@ router.get('/song/:id', authenticate, async (req, res) => {
   try {
     const song = await db.prepare('SELECT * FROM ai_songs WHERE id = ? AND author_id = ?').get(req.params.id, req.user.id);
     if (!song) return res.status(404).json({ error: 'Musica nao encontrada' });
-    res.json({ song: song });
+    res.json({ song });
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' });
   }
@@ -200,57 +197,22 @@ router.delete('/song/:id', authenticate, async (req, res) => {
     res.status(500).json({ error: 'Erro interno' });
   }
 });
-router.post('/buy-credits', authenticate, async (req, res) => {
-  try {
-    const { paymentConfirmed } = req.body;
-    if (!paymentConfirmed) return res.status(400).json({ error: 'Pagamento nao confirmado' });
-    let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
-    if (!creditRow) {
-      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, PACK_CREDITS);
-    } else {
-      await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining + ? WHERE user_id = ?').run(PACK_CREDITS, req.user.id);
-    }
-    const updated = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
-    res.json({ success: true, credits: updated.credits_remaining, totalGenerated: updated.total_generated });
-  } catch (err) {
-    res.status(500).json({ error: 'Erro interno' });
-  }
-});
-router.post('/buy-credits', authenticate, async (req, res) => {
-  try {
-    const { paymentConfirmed } = req.body;
-    if (!paymentConfirmed) return res.status(400).json({ error: 'Pagamento nao confirmado' });
-    let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
-    if (!creditRow) {
-      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, PACK_CREDITS);
-    } else {
-      await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining + ? WHERE user_id = ?').run(PACK_CREDITS, req.user.id);
-    }
-    const updated = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
-    res.json({ success: true, credits: updated.credits_remaining, totalGenerated: updated.total_generated });
-  } catch (err) {
-    res.status(500).json({ error: 'Erro interno' });
-  }
-});
-router.post('/buy-credits', authenticate, async (req, res) => {
-  try {
-    const { paymentConfirmed } = req.body;
-    if (!paymentConfirmed) return res.status(400).json({ error: 'Pagamento nao confirmado' });
-    let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
-    if (!creditRow) {
-      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, PACK_CREDITS);
-    } else {
-      await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining + ? WHERE user_id = ?').run(PACK_CREDITS, req.user.id);
-    }
-    const updated = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
-    res.json({ success: true, credits: updated.credits_remaining, totalGenerated: updated.total_generated });
-  } catch (err) {
-    res.status(500).json({ error: 'Erro interno' });
-  }
-});
 
+router.post('/buy-credits', authenticate, async (req, res) => {
+  try {
+    const { paymentConfirmed } = req.body;
+    if (!paymentConfirmed) return res.status(400).json({ error: 'Pagamento nao confirmado' });
+    let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
+    if (!creditRow) {
+      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, PACK_CREDITS);
+    } else {
+      await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining + ? WHERE user_id = ?').run(PACK_CREDITS, req.user.id);
+    }
+    const updated = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
+    res.json({ success: true, credits: updated.credits_remaining, totalGenerated: updated.total_generated });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
 
 module.exports = router;
-
-
-
