@@ -4,6 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, UserPlus, Mail, Lock, User, LogIn, Phone, Camera } from 'lucide-react';
 
+// Google Analytics conversion events
+function trackSignUpEvent() {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', 'sign_up', { method: 'email' });
+    window.gtag('event', 'login', { method: 'email' });
+    console.log('✅ Google Analytics: sign_up & login events tracked');
+  }
+}
+
 export default function Register() {
   const { register, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
   const navigate = useNavigate();
@@ -57,6 +66,8 @@ export default function Register() {
         } catch (uploadErr) { console.error('Avatar upload error:', uploadErr); }
       }
       const result = await register(form.email, form.password, form.full_name, form.role, avatarUrl);
+      // Track Google Analytics conversion event
+      trackSignUpEvent();
       // Go to step 2: upload 3 photos
       setRegisteredToken(localStorage.getItem('token'));
       setStep(2);
@@ -120,6 +131,8 @@ export default function Register() {
           });
         }
       }
+      // Track Google Analytics conversion event on profile completion
+      trackSignUpEvent();
       navigate('/');
     } catch (err) {
       console.error(err);
@@ -220,6 +233,8 @@ export default function Register() {
           setError('');
           try {
             const result = await loginWithGoogle();
+            // Track Google Analytics conversion event
+            trackSignUpEvent();
             // Only navigate if popup was used (returns data). Redirect navigates automatically.
             if (result) navigate('/');
           } catch (err) {

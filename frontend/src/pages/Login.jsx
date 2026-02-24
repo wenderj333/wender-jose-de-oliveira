@@ -4,6 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, LogIn, Mail, Lock, Phone } from 'lucide-react';
 
+// Google Analytics conversion events
+function trackLoginEvent() {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', 'login', { method: 'email' });
+    console.log('✅ Google Analytics: login event tracked');
+  }
+}
+
 export default function Login() {
   const { login, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
   const navigate = useNavigate();
@@ -24,6 +32,8 @@ export default function Login() {
     setError('');
     try {
       await login(email, password);
+      // Track Google Analytics conversion event
+      trackLoginEvent();
       navigate('/');
     } catch (err) {
       setError(err.message);
@@ -34,6 +44,8 @@ export default function Login() {
     setError('');
     try {
       const result = await loginWithGoogle();
+      // Track Google Analytics conversion event
+      trackLoginEvent();
       if (result) navigate('/');
     } catch (err) {
       if (err.code !== 'auth/popup-closed-by-user') {
@@ -73,6 +85,8 @@ export default function Login() {
     setPhoneLoading(true);
     try {
       await verifyPhoneCode(confirmationResult, verificationCode);
+      // Track Google Analytics conversion event
+      trackLoginEvent();
       navigate('/');
     } catch (err) {
       setError(err.message);
