@@ -37,6 +37,7 @@ import LiveStream from './pages/LiveStream';
 // import { MusicProvider } from './context/MusicContext';
 // import MusicPlayer from './components/MusicPlayer';
 import LanguageSwitcher from './components/LanguageSwitcher';
+import RegistrationPromptPopup from './components/RegistrationPromptPopup';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -73,6 +74,7 @@ class ErrorBoundary extends Component {
 
 export default function App() {
   const { user, logout } = useAuth();
+  const [showRegPopup, setShowRegPopup] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -324,5 +326,6 @@ export default function App() {
         <p>{t('footer')} <BookOpen size={16} style={{ verticalAlign: 'middle' }} /></p>
       </footer>
     </div>
+    {showRegPopup && <RegistrationPromptPopup onClose={() => setShowRegPopup(false)} />}
   );
 }
