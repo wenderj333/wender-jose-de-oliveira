@@ -5,7 +5,6 @@ const { authenticate } = require('../middleware/auth');
 const { Pool } = require('pg');
 const Replicate = require('replicate');
 
-// Direct pool for table creation (bypass wrapper)
 let tablesReady = false;
 async function ensureTables() {
   if (tablesReady) return;
@@ -42,7 +41,7 @@ async function ensureTables() {
       );
     `);
     tablesReady = true;
-    console.log('✅ AI Louvor tables ready');
+    console.log('AI Louvor tables ready');
   } catch (err) {
     console.error('AI Louvor table creation error:', err.message);
   } finally {
@@ -51,124 +50,63 @@ async function ensureTables() {
 }
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+<<<<<<< HEAD
 const SUNO_API_KEY = process.env.SUNO_API_KEY;
 // Use 1.5-flash for higher rate limits on free tier
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/google/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
+=======
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+>>>>>>> ae3430498bffb3fe64c298d720b8491f5b3961ff
 const FREE_CREDITS = 4;
 const PACK_CREDITS = 250;
-const PACK_PRICE_EUR = 5;
 
-// Rate limiting per user
 const userRequests = new Map();
 function checkRateLimit(userId) {
   const now = Date.now();
   const reqs = (userRequests.get(userId) || []).filter(t => t > now - 3600000);
-  if (reqs.length >= 10) return false; // max 10/hour
+  if (reqs.length >= 10) return false;
   reqs.push(now);
   userRequests.set(userId, reqs);
   return true;
 }
 
-// GET /api/ai-louvor/credits — check user credits
 router.get('/credits', authenticate, async (req, res) => {
   try {
     await ensureTables();
-    const row = await db.prepare(
-      'SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?'
-    ).get(req.user.id);
+    const row = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
     if (!row) {
-      // First time — give free credits
-      await db.prepare(
-        'INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)'
-      ).run(req.user.id, FREE_CREDITS);
+      await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, FREE_CREDITS);
       return res.json({ credits: FREE_CREDITS, totalGenerated: 0, isFree: true });
     }
     res.json({ credits: row.credits_remaining, totalGenerated: row.total_generated, isFree: row.credits_remaining <= FREE_CREDITS });
   } catch (err) {
-    console.error('Credits error:', err);
     res.status(500).json({ error: 'Erro interno' });
   }
-});
-
-// POST /api/ai-louvor/generate — generate worship lyrics
-router.post('/generate', authenticate, async (req, res) => {
+});router.post('/generate', authenticate, async (req, res) => {
   try {
     await ensureTables();
-    if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA não configurada. Contacte o administrador.' });
-    if (!checkRateLimit(req.user.id)) return res.status(429).json({ error: 'Muitas requisições. Aguarde um pouco.' });
-
-    // Check credits
+    if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA nao configurada.' });
+    if (!checkRateLimit(req.user.id)) return res.status(429).json({ error: 'Muitas requisicoes. Aguarde.' });
     let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
     if (!creditRow) {
       await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, FREE_CREDITS);
       creditRow = { credits_remaining: FREE_CREDITS };
     }
     if (creditRow.credits_remaining <= 0) {
-      return res.status(403).json({ error: 'no_credits', message: 'Seus créditos acabaram! Adquira o pacote de 250 músicas por €5.' });
+      return res.status(403).json({ error: 'no_credits' });
     }
-
     const { theme, style, emotion, bibleBook, verse, language } = req.body;
     if (!theme && !verse) return res.status(400).json({ error: 'Escolha um tema ou versículo' });
-
     const lang = language || 'pt';
-    const langNames = { pt: 'Português', es: 'Español', en: 'English', de: 'Deutsch', fr: 'Français' };
-    const langName = langNames[lang] || 'Português';
-
-    const prompt = `Você é um compositor cristão profissional especializado em música gospel e louvor.
-Crie uma letra de louvor/música cristã completa em ${langName} com as seguintes características:
-
-${theme ? `🎯 Tema: ${theme}` : ''}
-${style ? `🎵 Estilo musical: ${style}` : '🎵 Estilo: worship contemporâneo'}
-${emotion ? `💫 Emoção/tom: ${emotion}` : '💫 Emoção: inspiradora'}
-${bibleBook ? `📖 Baseado no livro: ${bibleBook}` : ''}
-${verse ? `📜 Versículo base: ${verse}` : ''}
-
-REGRAS IMPORTANTES:
-1. A letra DEVE ter: Intro (opcional), 2-3 Versos, Pré-Coro, Coro (refrão forte e memorável), Ponte, Final
-2. Marque cada seção claramente: [Verso 1], [Pré-Coro], [Coro], [Verso 2], [Ponte], etc.
-3. Use linguagem poética mas acessível
-4. Inclua referências bíblicas naturalmente na letra
-5. O coro deve ser repetível e fácil de cantar em congregação
-6. Sugira um TÍTULO criativo para a música
-7. No final, sugira: Tom recomendado (ex: G, C, D), BPM aproximado, e instrumentos ideais
-
-Formato de resposta:
-🎵 TÍTULO: [título da música]
-📖 Inspiração: [versículo ou tema base]
-
-[Verso 1]
-...
-
-[Pré-Coro]
-...
-
-[Coro]
-...
-
-[Verso 2]
-...
-
-[Ponte]
-...
-
-[Coro Final]
-...
-
----
-🎸 Tom: [tom]
-🥁 BPM: [bpm]
-🎹 Instrumentos: [lista]
-💡 Dica de interpretação: [dica]`;
-
-    // Try each model with retry and exponential backoff
-    let lyrics = null;
+    const langNames = { pt: 'Portugues', es: 'Espanol', en: 'English', de: 'Deutsch', fr: 'Francais' };
+    const langName = langNames[lang] || 'Portugues';
+    const prompt = `Voce e um compositor cristao profissional. Crie uma letra de louvor completa em ${langName}. Tema: ${theme || ''}. Estilo: ${style || 'worship'}. Emocao: ${emotion || 'inspiradora'}. ${bibleBook ? 'Livro: ' + bibleBook : ''} ${verse ? 'Versiculo: ' + verse : ''}\n\nFormato:\nTITULO: [titulo]\n\n[Verso 1]\n...\n[Coro]\n...\n[Verso 2]\n...\n[Ponte]\n...\n[Coro Final]\n...`;
     let lastError = '';
-    // Retry with exponential backoff on 429
     let response;
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        if (attempt > 0) await new Promise(r => setTimeout(r, attempt * 2000)); // Exponential backoff
+        if (attempt > 0) await new Promise(r => setTimeout(r, attempt * 2000));
         response = await fetch(GEMINI_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -178,80 +116,86 @@ Formato de resposta:
           }),
         });
         if (response.status !== 429) break;
-        console.log(`Gemini 429 rate limit, retry ${attempt + 1}/3...`);
-      } catch (e) {
-        lastError = e.message;
-        console.error('Gemini API error:', e.message);
-        break; // Stop retrying on other errors
-      }
+      } catch (e) { lastError = e.message; break; }
     }
-
+    let lyrics = null;
     if (response && response.ok) {
       const data = await response.json();
       lyrics = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     } else if (response) {
-      lastError = `gemini-2.0-flash: ${response.status}`;
+      lastError = 'gemini: ' + response.status;
     }
-
-    if (!lyrics) {
-      return res.status(500).json({ error: `A IA está ocupada agora (${lastError}). Espere 30 segundos e tente de novo.` });
-    }
-    if (!lyrics) return res.status(500).json({ error: 'A IA não gerou uma resposta válida. Tente novamente.' });
-
-    // Extract title from lyrics
-    const titleMatch = lyrics.match(/TÍTULO:\s*(.+)/i);
-    const title = titleMatch ? titleMatch[1].trim() : `Louvor - ${theme || verse || 'Novo'}`;
-
-    // Save song to DB
-    const song = await db.prepare(
-      `INSERT INTO ai_songs (author_id, title, lyrics, theme, style, emotion, bible_book, verse_reference, language)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
-    ).get(req.user.id, title, lyrics, theme || null, style || null, emotion || null, bibleBook || null, verse || null, lang);
-
-    // Deduct credit ONLY IF song was successfully saved
+    if (!lyrics) return res.status(500).json({ error: 'A IA esta ocupada. Espere 30 segundos e tente de novo. (' + lastError + ')' });
+    const titleMatch = lyrics.match(/TITULO:\s*(.+)/i);
+    const title = titleMatch ? titleMatch[1].trim() : 'Louvor - ' + (theme || verse || 'Novo');
+    const song = await db.prepare('INSERT INTO ai_songs (author_id, title, lyrics, theme, style, emotion, bible_book, verse_reference, language, is_ai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *').get(req.user.id, title, lyrics, theme || null, style || null, emotion || null, bibleBook || null, verse || null, lang, true);
     if (song) {
-      await db.prepare(
-        'UPDATE song_credits SET credits_remaining = credits_remaining - 1, total_generated = total_generated + 1 WHERE user_id = ?'
-      ).run(req.user.id);
+      await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining - 1, total_generated = total_generated + 1 WHERE user_id = ?').run(req.user.id);
     }
     const updatedCredits = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
-
-    res.json({
-      song,
-      lyrics,
-      title,
-      creditsRemaining: updatedCredits?.credits_remaining || 0,
-    });
+    res.json({ song, lyrics, title, creditsRemaining: updatedCredits ? updatedCredits.credits_remaining : 0 });
   } catch (err) {
     console.error('Generate error:', err);
-    res.status(500).json({ error: 'Erro interno ao gerar música' });
+    res.status(500).json({ error: 'Erro interno ao gerar musica' });
   }
 });
 
-// GET /api/ai-louvor/my-songs — list user's generated songs
+router.post('/generate-audio', authenticate, async (req, res) => {
+  try {
+    const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN;
+    if (!REPLICATE_API_TOKEN) return res.status(500).json({ error: 'API da Replicate nao configurada.' });
+    const { lyrics, songId, style } = req.body;
+    if (!lyrics) return res.status(400).json({ error: 'A letra e necessaria.' });
+    const replicate = new Replicate({ auth: REPLICATE_API_TOKEN });
+    const prompt = (style || 'worship, uplifting, gospel') + ', christian music, inspirational';
+    const output = await replicate.run(
+      'meta/musicgen:671ac645ce5e552cc0f9b6dc90d7ce29b2b1cc9e9ae58d3ae7c7e944d6d89d57',
+      { input: { prompt: prompt, model_version: 'stereo-large', duration: 30, output_format: 'mp3' } }
+    );
+    let audioUrl = Array.isArray(output) ? output[0] : output;
+    if (!audioUrl) return res.status(500).json({ error: 'A IA nao conseguiu gerar a musica.' });
+    if (songId) {
+      await db.prepare('UPDATE ai_songs SET audio_url = ? WHERE id = ? AND author_id = ?').run(audioUrl, songId, req.user.id);
+    }
+    res.json({ audioUrl });
+  } catch (err) {
+    console.error('Erro ao gerar audio:', err);
+    res.status(500).json({ error: 'Erro interno ao gerar a musica.' });
+  }
+});
+
+router.post('/save-custom', authenticate, async (req, res) => {
+  try {
+    await ensureTables();
+    const { title, lyrics, theme, style, emotion, bibleBook, verse, language } = req.body;
+    if (!title || !lyrics) return res.status(400).json({ error: 'Titulo e letra sao obrigatorios.' });
+    const lang = language || 'pt';
+    const song = await db.prepare('INSERT INTO ai_songs (author_id, title, lyrics, theme, style, emotion, bible_book, verse_reference, language, is_ai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *').get(req.user.id, title, lyrics, theme || null, style || null, emotion || null, bibleBook || null, verse || null, lang, false);
+    res.json({ success: true, song });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno ao salvar sua letra.' });
+  }
+});
+
 router.get('/my-songs', authenticate, async (req, res) => {
   try {
-    const songs = await db.prepare(
-      'SELECT * FROM ai_songs WHERE author_id = ? ORDER BY created_at DESC LIMIT 50'
-    ).all(req.user.id);
+    const songs = await db.prepare('SELECT * FROM ai_songs WHERE author_id = ? ORDER BY created_at DESC LIMIT 50').all(req.user.id);
     res.json({ songs });
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' });
   }
 });
 
-// GET /api/ai-louvor/song/:id — get single song
 router.get('/song/:id', authenticate, async (req, res) => {
   try {
     const song = await db.prepare('SELECT * FROM ai_songs WHERE id = ? AND author_id = ?').get(req.params.id, req.user.id);
-    if (!song) return res.status(404).json({ error: 'Música não encontrada' });
+    if (!song) return res.status(404).json({ error: 'Musica nao encontrada' });
     res.json({ song });
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' });
   }
 });
 
-// DELETE /api/ai-louvor/song/:id — delete own song
 router.delete('/song/:id', authenticate, async (req, res) => {
   try {
     await db.prepare('DELETE FROM ai_songs WHERE id = ? AND author_id = ?').run(req.params.id, req.user.id);
@@ -261,21 +205,16 @@ router.delete('/song/:id', authenticate, async (req, res) => {
   }
 });
 
-// POST /api/ai-louvor/buy-credits — add premium credits (placeholder for Stripe)
 router.post('/buy-credits', authenticate, async (req, res) => {
   try {
-    // TODO: Integrate with Stripe payment verification
-    // For now, this is a placeholder that can be triggered after payment confirmation
     const { paymentConfirmed } = req.body;
-    if (!paymentConfirmed) return res.status(400).json({ error: 'Pagamento não confirmado' });
-
+    if (!paymentConfirmed) return res.status(400).json({ error: 'Pagamento nao confirmado' });
     let creditRow = await db.prepare('SELECT credits_remaining FROM song_credits WHERE user_id = ?').get(req.user.id);
     if (!creditRow) {
       await db.prepare('INSERT INTO song_credits (user_id, credits_remaining, total_generated) VALUES (?, ?, 0)').run(req.user.id, PACK_CREDITS);
     } else {
       await db.prepare('UPDATE song_credits SET credits_remaining = credits_remaining + ? WHERE user_id = ?').run(PACK_CREDITS, req.user.id);
     }
-
     const updated = await db.prepare('SELECT credits_remaining, total_generated FROM song_credits WHERE user_id = ?').get(req.user.id);
     res.json({ success: true, credits: updated.credits_remaining, totalGenerated: updated.total_generated });
   } catch (err) {
