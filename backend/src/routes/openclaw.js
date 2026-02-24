@@ -31,7 +31,7 @@ router.get("/users/all-ids", auth, async (req, res) => {
 
 router.post("/users/:userId/send-message", auth, async (req, res) => {
   try {
-    await pool.query("INSERT INTO notifications (user_id, content, created_at) VALUES ($1, $2, NOW())", [req.params.userId, req.body.message]);
+    await pool.query("INSERT INTO notifications (user_id, content, created_at) VALUES ($1, $2, NOW())", [req.params.userId, "openclaw", "Mensagem", req.body.message]);
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
