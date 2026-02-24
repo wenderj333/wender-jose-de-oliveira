@@ -432,7 +432,6 @@ app.use('/api/course', require('./routes/course'));
 app.use('/api/stripe', require('./routes/stripe'));
 app.use('/api/ai-louvor', require('./routes/ai-louvor'));
 
-app.use('/api/openclaw', require('./routes/openclaw'));
 // Root route
 app.get('/', (req, res) => {
   res.json({ name: 'Sigo com Fé API', status: 'online', version: '1.0.0' });
@@ -477,3 +476,4 @@ server.listen(PORT, () => {
   console.log(`🙏 Sigo com Fé API rodando na porta ${PORT}`);
   console.log(`📡 WebSocket disponível em ws://localhost:${PORT}/ws`);
 });
+
