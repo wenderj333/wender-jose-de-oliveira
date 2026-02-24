@@ -1,49 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useWebSocket } from '../context/WebSocketContext';
-import { Plus, Filter, X, Send, Heart, MessageCircle, Image, Video, Play, User, Share2, ChevronDown, Trash2, Music, Radio } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-
-// Hook: auto-play/pause media based on visibility (TikTok-style)
-function useMediaAutoplay() {
-  const observerRef = useRef(null);
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const el = entry.target;
-        if (el.tagName === 'VIDEO' || el.tagName === 'AUDIO') {
-          if (entry.isIntersecting) {
-            // Only autoplay if no other media is currently playing in viewport
-            el.play().catch(() => {});
-          } else {
-            el.pause();
-          }
-        }
-        // Handle YouTube iframes
-        if (el.tagName === 'IFRAME' && el.src.includes('youtube')) {
-          if (!entry.isIntersecting) {
-            // Pause YouTube by posting message
-            el.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-          }
-        }
-      });
-    }, { threshold: 0.5 }); // 50% visible to trigger
-
-    return () => observerRef.current?.disconnect();
-  }, []);
-
-  // Ref callback to observe media elements
-  const observeMedia = useCallback((node) => {
-    if (node && observerRef.current) {
-      observerRef.current.observe(node);
-    }
-  }, []);
-
-  return observeMedia;
-}
-import { Link } from 'react-router-dom';
+import { Plus, X, Send, Heart, MessageCircle, Image, Trash2, Grid, List } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
@@ -54,1286 +12,469 @@ const CATEGORIES = [
   { value: 'foto', label: '📸 Foto/Vídeo', color: '#3498db' },
   { value: 'versiculo', label: '📖 Versículo', color: '#27ae60' },
   { value: 'reflexao', label: '💭 Reflexão', color: '#e67e22' },
-  { value: 'campanha', label: '💝 Campanha / Causa', color: '#e74c3c' },
+  { value: 'campanha', label: '🤝 Campanha', color: '#e74c3c' },
 ];
 
-function isAudio(url) {
-  if (!url) return false;
-  return /\.(mp3|wav|ogg|m4a|aac|flac)/i.test(url);
-}
-
-function isYouTube(url) {
-  if (!url) return false;
-  return url.includes('youtube.com/watch') || url.includes('youtu.be/');
-}
-
-function getYouTubeId(url) {
-  if (!url) return null;
-  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
-  return m ? m[1] : null;
-}
-
-function isVideo(url) {
-  if (!url) return false;
-  if (isAudio(url)) return false; // audio is NOT video
-  return /\.(mp4|webm|mov)/i.test(url) || url.includes('/video/') || url.includes('resource_type=video');
-}
-
-function timeAgo(dateStr) {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'Agora';
-  if (mins < 60) return `Há ${mins}min`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `Há ${hrs}h`;
-  const days = Math.floor(hrs / 24);
-  return `Há ${days}d`;
-}
-
 export default function Mural() {
-  const { t } = useTranslation();
   const { user, token } = useAuth();
   const navigate = useNavigate();
-  const { liveStreams } = useWebSocket();
-  const observeMedia = useMediaAutoplay();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState('todas');
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'feed'
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [showNewPost, setShowNewPost] = useState(false);
+  const [newPost, setNewPost] = useState({ content: '', category: 'reflexao', mediaUrl: '' });
+  const [comment, setComment] = useState('');
+  const [filterCategory, setFilterCategory] = useState('all');
 
-  // New post
-  const [showForm, setShowForm] = useState(false);
-  const [newText, setNewText] = useState('');
-  const [newCategory, setNewCategory] = useState('testemunho');
-  const [newMedia, setNewMedia] = useState(null);
-  const [newMediaPreview, setNewMediaPreview] = useState(null);
-  const [newMediaIsVideo, setNewMediaIsVideo] = useState(false);
-  const [newMediaIsAudio, setNewMediaIsAudio] = useState(false);
-  const [posting, setPosting] = useState(false);
-  const [postingText, setPostingText] = useState('');
-  const [showMusicPicker, setShowMusicPicker] = useState(false);
-  const [librarySongs, setLibrarySongs] = useState([]);
-  const [selectedSongUrl, setSelectedSongUrl] = useState(null);
-  const [selectedSongName, setSelectedSongName] = useState('');
-  const fileRef = useRef(null);
-  const photoRef = useRef(null);
-  const videoRef = useRef(null);
-  const audioRef = useRef(null);
-
-  // Likes & comments state (from DB)
-  const [likedPosts, setLikedPosts] = useState({});
-  const [linkUrl, setLinkUrl] = useState(''); // For campanha category
-  const [linkPreview, setLinkPreview] = useState(null); // { title, description, image }
-  const [openComments, setOpenComments] = useState({}); // postId -> true
-  const [showLoginPopup, setShowLoginPopup] = useState(false); // Beautiful login prompt
-  const [commentsData, setCommentsData] = useState({}); // postId -> [comments]
-  const [commentText, setCommentText] = useState({});
-  const [playingState, setPlayingState] = useState({}); // { postId: true/false }
-  const [postVolumes, setPostVolumes] = useState({}); // { postId: { video: 1, music: 0.5 } }
-  const [sendingComment, setSendingComment] = useState({});
-  const mediaRefs = useRef({}); // Refs para o vídeo/áudio principal do post
-  const audioBackgroundRefs = useRef({}); // Refs para o áudio de fundo (se houver)
-
-  useEffect(() => {
-    fetchPosts();
-    if ('Notification' in window && Notification.permission === 'default') {
-      setTimeout(() => Notification.requestPermission(), 3000);
-    }
-  }, []);
-
-  async function fetchPosts() {
+  const fetchPosts = useCallback(async () => {
     try {
-      const res = await fetch(`${API}/feed?limit=50`);
+      const res = await fetch(`${API}/posts?limit=60`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
       const data = await res.json();
-      const p = data.posts || [];
-      setPosts(p);
-      // Check which posts user has liked — ONE request instead of 50!
-      if (token) {
-        try {
-          const r = await fetch(`${API}/feed/liked-posts`, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          const d = await r.json();
-          const liked = {};
-          (d.likedIds || []).forEach(id => { liked[id] = true; });
-          setLikedPosts(liked);
-        } catch {}
-      }
-    } catch (err) {
-      console.error('Error fetching feed:', err);
+      setPosts(data.posts || data || []);
+    } catch (e) {
+      console.error(e);
     } finally {
       setLoading(false);
     }
-  }
+  }, [token]);
 
-  // ===== LIKES (saved to DB) =====
-  async function handleLike(postId) {
-    if (!token) { setShowLoginPopup(true); return; }
-    const wasLiked = likedPosts[postId];
-    // Optimistic update
-    setLikedPosts(prev => ({ ...prev, [postId]: !wasLiked }));
-    setPosts(prev => prev.map(p => p.id === postId
-      ? { ...p, like_count: Math.max(0, (p.like_count || 0) + (wasLiked ? -1 : 1)) }
-      : p
-    ));
+  useEffect(() => { fetchPosts(); }, [fetchPosts]);
+
+  const handleLike = async (postId) => {
+    if (!user) { navigate('/login'); return; }
     try {
-      await fetch(`${API}/feed/${postId}/like`, {
+      await fetch(`${API}/posts/${postId}/like`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }
       });
-    } catch {
-      // Revert on error
-      setLikedPosts(prev => ({ ...prev, [postId]: wasLiked }));
-      setPosts(prev => prev.map(p => p.id === postId
-        ? { ...p, like_count: Math.max(0, (p.like_count || 0) + (wasLiked ? 1 : -1)) }
-        : p
-      ));
-    }
-  }
-
-  // ===== COMMENTS (saved to DB) =====
-  async function fetchComments(postId) {
-    try {
-      const res = await fetch(`${API}/feed/${postId}/comments`);
-      const data = await res.json();
-      setCommentsData(prev => ({ ...prev, [postId]: data.comments || [] }));
-    } catch {
-      setCommentsData(prev => ({ ...prev, [postId]: [] }));
-    }
-  }
-
-  function toggleComments(postId) {
-    if (!token) { setShowLoginPopup(true); return; }
-    const isOpen = openComments[postId];
-    setOpenComments(prev => ({ ...prev, [postId]: !isOpen }));
-    if (!isOpen && !commentsData[postId]) {
-      fetchComments(postId);
-    }
-  }
-
-  async function handleSendComment(postId) {
-    const text = (commentText[postId] || '').trim();
-    if (!text || !token) return;
-    setSendingComment(prev => ({ ...prev, [postId]: true }));
-    try {
-      const res = await fetch(`${API}/feed/${postId}/comments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ content: text }),
-      });
-      const data = await res.json();
-      if (data.comment) {
-        setCommentsData(prev => ({
+      fetchPosts();
+      if (selectedPost?.id === postId) {
+        setSelectedPost(prev => ({
           ...prev,
-          [postId]: [...(prev[postId] || []), data.comment]
+          liked: !prev.liked,
+          likes_count: prev.liked ? prev.likes_count - 1 : prev.likes_count + 1
         }));
-        setCommentText(prev => ({ ...prev, [postId]: '' }));
-        setPosts(prev => prev.map(p => p.id === postId
-          ? { ...p, comment_count: (p.comment_count || 0) + 1 }
-          : p
-        ));
       }
-    } catch (err) { console.error(err); }
-    finally { setSendingComment(prev => ({ ...prev, [postId]: false })); }
-  }
+    } catch (e) { console.error(e); }
+  };
 
-  async function handleDeletePost(postId) {
-    if (!confirm('Tem certeza que deseja excluir esta publicação?')) return;
+  const handleComment = async (postId) => {
+    if (!user) { navigate('/login'); return; }
+    if (!comment.trim()) return;
     try {
-      const res = await fetch(`${API}/feed/${postId}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        setPosts(prev => prev.filter(p => p.id !== postId));
-      } else {
-        alert('Erro ao excluir publicação');
-      }
-    } catch (err) { console.error(err); alert('Erro ao excluir'); }
-  }
-
-  async function handleDeleteComment(commentId, postId) {
-    try {
-      await fetch(`${API}/feed/comments/${commentId}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCommentsData(prev => ({
-        ...prev,
-        [postId]: (prev[postId] || []).filter(c => c.id !== commentId)
-      }));
-      setPosts(prev => prev.map(p => p.id === postId
-        ? { ...p, comment_count: Math.max(0, (p.comment_count || 0) - 1) }
-        : p
-      ));
-    } catch {}
-  }
-
-  // ===== CUSTOM MEDIA CONTROLS =====
-  const togglePlayPause = useCallback((postId) => {
-    setPlayingState(prev => {
-      const isCurrentlyPlaying = !!prev[postId];
-      const videoEl = mediaRefs.current[postId];
-      const audioEl = audioBackgroundRefs.current[postId];
-
-      if (isCurrentlyPlaying) {
-        videoEl?.pause();
-        audioEl?.pause();
-      } else {
-        videoEl?.play().catch(e => console.error('Error playing video:', e));
-        audioEl?.play().catch(e => console.error('Error playing background audio:', e));
-      }
-
-      return { ...prev, [postId]: !isCurrentlyPlaying };
-    });
-  }, []);
-
-  const handleVideoVolumeChange = useCallback((postId, volume) => {
-    const videoEl = mediaRefs.current[postId];
-    if (videoEl) {
-      videoEl.volume = volume;
-    }
-    setPostVolumes(prev => ({
-      ...prev,
-      [postId]: { ...prev[postId], video: volume }
-    }));
-  }, []);
-
-  const handleMusicVolumeChange = useCallback((postId, volume) => {
-    const audioEl = audioBackgroundRefs.current[postId];
-    if (audioEl) {
-      audioEl.volume = volume;
-    }
-    setPostVolumes(prev => ({
-      ...prev,
-      [postId]: { ...prev[postId], music: volume }
-    }));
-  }, []);
-
-  // ===== MEDIA UPLOAD =====
-  // Popular gospel songs (YouTube)
-  const popularGospel = [
-    { id: 'yt1', title: 'Lugar Secreto', artist: 'Gabriela Rocha', url: 'https://www.youtube.com/watch?v=ePGMkFPp-zI', type: 'youtube' },
-    { id: 'yt2', title: 'Ninguém Explica Deus', artist: 'Preto no Branco', url: 'https://www.youtube.com/watch?v=GM5qMxKn3bk', type: 'youtube' },
-    { id: 'yt3', title: 'Deus é Deus', artist: 'Delino Marçal', url: 'https://www.youtube.com/watch?v=jRZxbM3xNKU', type: 'youtube' },
-    { id: 'yt4', title: 'Raridade', artist: 'Anderson Freire', url: 'https://www.youtube.com/watch?v=zB3sv1BSDWE', type: 'youtube' },
-    { id: 'yt5', title: 'Primeiro Amor', artist: 'Preto no Branco', url: 'https://www.youtube.com/watch?v=3j3okb3kuts', type: 'youtube' },
-    { id: 'yt6', title: 'Ousado Amor', artist: 'Isaías Saad', url: 'https://www.youtube.com/watch?v=pFRr3IJxVJo', type: 'youtube' },
-    { id: 'yt7', title: 'Bondade de Deus', artist: 'Isaías Saad', url: 'https://www.youtube.com/watch?v=X1dGL0k6B5c', type: 'youtube' },
-    { id: 'yt8', title: 'Eu Cuido de Ti', artist: 'Canção e Louvor', url: 'https://www.youtube.com/watch?v=9bDVpDEz2qs', type: 'youtube' },
-    { id: 'yt9', title: 'Oceanos', artist: 'Ana Nóbrega', url: 'https://www.youtube.com/watch?v=dy9nwe_KxtE', type: 'youtube' },
-    { id: 'yt10', title: 'Grande é o Senhor', artist: 'Soraya Moraes', url: 'https://www.youtube.com/watch?v=GhE3bDCr0QM', type: 'youtube' },
-    { id: 'yt11', title: 'Tua Graça Me Basta', artist: 'Toque no Altar', url: 'https://www.youtube.com/watch?v=6UoVGm7Iy5E', type: 'youtube' },
-    { id: 'yt12', title: 'Todavia Me Alegrarei', artist: 'Fernandinho', url: 'https://www.youtube.com/watch?v=ISwFnRD_vXI', type: 'youtube' },
-    { id: 'yt13', title: 'A Casa É Sua', artist: 'Casa Worship', url: 'https://www.youtube.com/watch?v=JFKl8NPxUfc', type: 'youtube' },
-    { id: 'yt14', title: 'Aquieta Minh\'alma', artist: 'Ministério Zoe', url: 'https://www.youtube.com/watch?v=1ZYc0OHQSAE', type: 'youtube' },
-    { id: 'yt15', title: 'Yeshua', artist: 'Heloisa Rosa', url: 'https://www.youtube.com/watch?v=eWCFjB3zuCY', type: 'youtube' },
-    // 🇪🇸 Español
-    { id: 'es1', title: 'Rojo - Tu Amor No Se Rinde', artist: 'Rojo', url: 'https://www.youtube.com/watch?v=7w3nKPEKOno', type: 'youtube', lang: 'es' },
-    { id: 'es2', title: 'Nadie Como Tú', artist: 'Miel San Marcos', url: 'https://www.youtube.com/watch?v=cJvJz0MXTMY', type: 'youtube', lang: 'es' },
-    { id: 'es3', title: 'Poderoso Para Salvar', artist: 'Hillsong en Español', url: 'https://www.youtube.com/watch?v=O0AvYmGGXbA', type: 'youtube', lang: 'es' },
-    { id: 'es4', title: 'Gracia Sublime Es', artist: 'Marco Barrientos', url: 'https://www.youtube.com/watch?v=XC8dJ7-JIaA', type: 'youtube', lang: 'es' },
-    { id: 'es5', title: 'Al Que Está Sentado en el Trono', artist: 'Miel San Marcos', url: 'https://www.youtube.com/watch?v=eFEKU8aVv4Y', type: 'youtube', lang: 'es' },
-    // 🇺🇸 English
-    { id: 'en1', title: 'Oceans (Where Feet May Fail)', artist: 'Hillsong UNITED', url: 'https://www.youtube.com/watch?v=dy9nwe_KxtE', type: 'youtube', lang: 'en' },
-    { id: 'en2', title: 'What A Beautiful Name', artist: 'Hillsong Worship', url: 'https://www.youtube.com/watch?v=nQWFzMvCfLE', type: 'youtube', lang: 'en' },
-    { id: 'en3', title: 'Goodness of God', artist: 'Bethel Music', url: 'https://www.youtube.com/watch?v=ENjjnOKbpMk', type: 'youtube', lang: 'en' },
-    { id: 'en4', title: 'Way Maker', artist: 'Sinach', url: 'https://www.youtube.com/watch?v=n4FMkqb2gAo', type: 'youtube', lang: 'en' },
-    { id: 'en5', title: 'How Great Is Our God', artist: 'Chris Tomlin', url: 'https://www.youtube.com/watch?v=KBD18rsVJHk', type: 'youtube', lang: 'en' },
-    { id: 'en6', title: 'Amazing Grace', artist: 'Chris Tomlin', url: 'https://www.youtube.com/watch?v=Tvt1lEY6wMQ', type: 'youtube', lang: 'en' },
-    { id: 'en7', title: '10,000 Reasons', artist: 'Matt Redman', url: 'https://www.youtube.com/watch?v=XtwIT8JjddM', type: 'youtube', lang: 'en' },
-    // 🇩🇪 Deutsch
-    { id: 'de1', title: 'Gut Zu Mir', artist: 'Outbreakband', url: 'https://www.youtube.com/watch?v=A7VDCxcVpXQ', type: 'youtube', lang: 'de' },
-    { id: 'de2', title: 'Sei Stille und Erkenne', artist: 'Hillsong Germany', url: 'https://www.youtube.com/watch?v=a7J4AHIkAPo', type: 'youtube', lang: 'de' },
-    { id: 'de3', title: 'Großer Gott Wir Loben Dich', artist: 'ICF Worship', url: 'https://www.youtube.com/watch?v=bTQqVcSLHQY', type: 'youtube', lang: 'de' },
-    // 🇫🇷 Français
-    { id: 'fr1', title: 'Ouvre Les Yeux de Mon Cœur', artist: 'Hillsong France', url: 'https://www.youtube.com/watch?v=a3mokaP3rmc', type: 'youtube', lang: 'fr' },
-    { id: 'fr2', title: 'Quel Ami Fidèle et Tendre', artist: 'Hymne Classique', url: 'https://www.youtube.com/watch?v=Fa2JsKLudEY', type: 'youtube', lang: 'fr' },
-    { id: 'fr3', title: 'À Toi la Gloire', artist: 'Hymne Protestant', url: 'https://www.youtube.com/watch?v=y4bSAJnwTOc', type: 'youtube', lang: 'fr' },
-    // 🇷🇴 Română
-    { id: 'ro1', title: 'Isus, Prietenul Meu', artist: 'Grupul Emanuel', url: 'https://www.youtube.com/watch?v=4Z3OGmTNMEQ', type: 'youtube', lang: 'ro' },
-    { id: 'ro2', title: 'Mare Ești Doamne', artist: 'Bethel Romania', url: 'https://www.youtube.com/watch?v=kvLCbNGCR0E', type: 'youtube', lang: 'ro' },
-    { id: 'ro3', title: 'Doar Tu Ești Sfânt', artist: 'Worship Romania', url: 'https://www.youtube.com/watch?v=9pJGq_hVvkE', type: 'youtube', lang: 'ro' },
-  ];
-
-  const [musicTab, setMusicTab] = useState('popular');
-  const [musicLang, setMusicLang] = useState('all'); // 'all' | 'pt' | 'es' | 'en' | 'de'
-
-  async function openMusicPicker() {
-    setShowMusicPicker(true);
-    if (librarySongs.length === 0) {
-      try {
-        const res = await fetch(`${API}/music`);
-        const data = await res.json();
-        setLibrarySongs(data.songs || []);
-      } catch (err) { console.error(err); }
-    }
-  }
-
-  function selectLibrarySong(song) {
-    setSelectedSongUrl(song.url);
-    setSelectedSongName(song.title + (song.artist ? ` - ${song.artist}` : ''));
-    setShowMusicPicker(false);
-    // Don't clear photo if one is already selected
-  }
-
-  function handleMediaSelect(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const isVid = file.type.startsWith('video/');
-    const isAud = file.type.startsWith('audio/');
-    
-    if (isAud) {
-      // Audio from phone - treat like library song
-      setSelectedSongUrl(null);
-      setSelectedSongName(file.name);
-      setNewMedia(file);
-      setNewMediaIsAudio(true);
-      setNewMediaIsVideo(false);
-      setNewMediaPreview(URL.createObjectURL(file));
-    } else {
-      // Photo or Video - keep music selection if any
-      setNewMedia(file);
-      setNewMediaIsVideo(isVid);
-      setNewMediaIsAudio(false);
-      if (isVid) {
-        setNewMediaPreview(URL.createObjectURL(file));
-      } else {
-        const reader = new FileReader();
-        reader.onload = () => setNewMediaPreview(reader.result);
-        reader.readAsDataURL(file);
-      }
-    }
-  }
-
-  async function uploadDirectToCloudinary(file) {
-    const isVid = file.type.startsWith('video/');
-    const isAud = file.type.startsWith('audio/');
-    const resourceType = (isVid || isAud) ? 'video' : 'image';
-
-    // Check file size (100MB limit for free Cloudinary)
-    if (file.size > 100 * 1024 * 1024) {
-      throw new Error('File size too large! Máximo 100MB.');
-    }
-
-    // Show upload progress for large files
-    if (isVid && file.size > 5 * 1024 * 1024) {
-      setPostingText('📤 Enviando vídeo... pode demorar');
-    }
-
-    // Try signed upload first
-    try {
-      const sigRes = await fetch(`${API}/feed/cloudinary-signature`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (sigRes.ok) {
-        const { signature, timestamp, cloudName, apiKey, folder } = await sigRes.json();
-        const fd = new FormData();
-        fd.append('file', file);
-        fd.append('api_key', apiKey);
-        fd.append('timestamp', timestamp);
-        fd.append('signature', signature);
-        fd.append('folder', folder);
-        const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`, { method: 'POST', body: fd });
-        const result = await uploadRes.json();
-        if (result.secure_url) return { url: result.secure_url, type: resourceType };
-        if (result.error) console.warn('Signed upload error:', result.error.message);
-      }
-    } catch (e) { console.error('Signed upload failed:', e); }
-
-    // Fallback: unsigned upload
-    const fd = new FormData();
-    fd.append('file', file);
-    fd.append('upload_preset', 'sigo_com_fe');
-    fd.append('folder', 'sigo-com-fe/posts');
-    const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/${resourceType}/upload`, { method: 'POST', body: fd });
-    const result = await uploadRes.json();
-    if (result.error) throw new Error(result.error.message);
-    if (!result.secure_url) throw new Error('Upload falhou. Tente um arquivo menor.');
-    return { url: result.secure_url, type: resourceType };
-  }
-
-  async function handlePost(e) {
-    e.preventDefault();
-    if ((!newText.trim() && !newMedia && !selectedSongUrl) || !token) return;
-    setPosting(true);
-    try {
-      const formData = new FormData();
-      // For campanha posts, append link to content
-      let postContent = newText.trim() || (newMediaIsAudio ? '🎵' : newMediaIsVideo ? '🎬' : newCategory === 'campanha' ? '💝' : '📸');
-      if (newCategory === 'campanha' && linkUrl.trim()) {
-        postContent = postContent + (postContent ? '\n\n' : '') + '🔗 ' + linkUrl.trim();
-      }
-      formData.append('content', postContent);
-      formData.append('category', newCategory);
-      // If we have a library song AND a photo, upload photo first then add audio_url
-      if (selectedSongUrl && newMedia && !newMediaIsAudio) {
-        // Photo + Music combo - MUST upload photo to Cloudinary first
-        try {
-          const result = await uploadDirectToCloudinary(newMedia);
-          formData.append('media_url', result.url);
-          formData.append('media_type', 'image');
-        } catch (uploadErr) {
-          // Fallback: unsigned upload directly
-          try {
-            const fd2 = new FormData();
-            fd2.append('file', newMedia);
-            fd2.append('upload_preset', 'sigo_com_fe');
-            fd2.append('folder', 'sigo-com-fe/posts');
-            const upRes = await fetch('https://api.cloudinary.com/v1_1/degxiuf43/image/upload', { method: 'POST', body: fd2 });
-            const upData = await upRes.json();
-            if (upData.secure_url) {
-              formData.append('media_url', upData.secure_url);
-              formData.append('media_type', 'image');
-            }
-          } catch (e2) {
-            console.error('Photo upload failed completely:', e2);
-          }
-        }
-        formData.append('audio_url', selectedSongUrl);
-      } else if (selectedSongUrl && !newMedia) {
-        // Music only from library
-        formData.append('media_url', selectedSongUrl);
-        formData.append('media_type', 'video');
-      } else if (newMedia) {
-        try {
-          const result = await uploadDirectToCloudinary(newMedia);
-          formData.append('media_url', result.url);
-          formData.append('media_type', result.type);
-        } catch (uploadErr) {
-          console.warn('Direct upload failed:', uploadErr);
-          formData.append('image', newMedia);
-        }
-      }
-      const res = await fetch(`${API}/feed`, {
+      await fetch(`${API}/posts/${postId}/comments`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: comment })
       });
-      if (!res.ok) throw new Error(`Server error ${res.status}`);
-      const data = await res.json();
-      if (data.post) {
-        data.post.author_name = user.full_name;
-        data.post.author_avatar = user.avatar_url;
-        data.post.like_count = 0;
-        data.post.comment_count = 0;
-        setPosts(prev => [data.post, ...prev]);
-        setNewText(''); setNewMedia(null); setNewMediaPreview(null); setNewMediaIsVideo(false); setNewMediaIsAudio(false); setSelectedSongUrl(null); setSelectedSongName(''); setShowMusicPicker(false); setShowForm(false); setLinkUrl(''); setLinkPreview(null);
-      }
-    } catch (err) {
-      console.error('Post error:', err);
-      const msg = err.message || '';
-      if (msg.includes('File size') || msg.includes('too large') || msg.includes('413')) {
-        alert('❌ Arquivo muito grande! O limite é 100MB para vídeos. Tente um vídeo menor ou use o CapCut para reduzir.');
-      } else if (msg.includes('network') || msg.includes('fetch') || msg.includes('Failed')) {
-        alert('❌ Erro de conexão. Verifique sua internet e tente novamente.');
-      } else {
-        alert('❌ Erro ao publicar: ' + (msg || 'Tente novamente em alguns segundos.'));
-      }
-    } finally { setPosting(false); setPostingText(''); }
-  }
+      setComment('');
+      fetchPosts();
+    } catch (e) { console.error(e); }
+  };
 
-  // ===== TRANSLATE =====
-  async function translatePost(postId, text) {
-    const lang = localStorage.getItem('i18nextLng') || 'pt';
-    const targetLang = lang.substring(0, 2);
-    // Detect source: if target is pt, source is probably es/en; otherwise source is pt
-    const sourceLang = 
-  targetLang === 'pt' ? 'es' : // Se quer ver em PT, assume que a origem é ES
-  targetLang === 'es' ? 'pt' : // Se quer ver em ES, assume que a origem é PT
-  'en'; // Para DE, EN, FR, RO, etc., assume que a origem é EN (inglês é uma boa ponte)
-    setPosts(prev => prev.map(p => p.id === postId ? { ...p, translating: true } : p));
+  const handleDelete = async (postId) => {
+    if (!window.confirm('Eliminar post?')) return;
     try {
-      const parts = [];
-      for (let i = 0; i < text.length; i += 500) {
-        const part = text.substring(i, i + 500);
-        const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(part)}&langpair=${sourceLang}|${targetLang}`);
-        const d = await r.json();
-        parts.push(d?.responseData?.translatedText || part);
-      }
-      setPosts(prev => prev.map(p => p.id === postId ? { ...p, translatedContent: parts.join(''), showTranslation: true, translating: false } : p));
-    } catch {
-      setPosts(prev => prev.map(p => p.id === postId ? { ...p, translating: false } : p));
-    }
-  }
+      await fetch(`${API}/posts/${postId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSelectedPost(null);
+      fetchPosts();
+    } catch (e) { console.error(e); }
+  };
 
-  const getMediaUrl = (url) => url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
-  const getAvatarUrl = (url) => url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
+  const handleSubmitPost = async () => {
+    if (!newPost.content.trim()) return;
+    try {
+      await fetch(`${API}/posts`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(newPost)
+      });
+      setNewPost({ content: '', category: 'reflexao', mediaUrl: '' });
+      setShowNewPost(false);
+      fetchPosts();
+    } catch (e) { console.error(e); }
+  };
 
-  const filteredPosts = activeFilter === 'todas' ? posts
-    : activeFilter === 'video' ? posts.filter(p => p.media_url && (p.media_type === 'video' || isVideo(p.media_url)))
-    : activeFilter === 'foto' ? posts.filter(p => p.category === 'foto' || (p.media_url && p.media_type === 'image'))
-    : posts.filter(p => p.category === activeFilter);
+  const filteredPosts = filterCategory === 'all'
+    ? posts
+    : posts.filter(p => p.category === filterCategory);
 
-  const FILTERS = [
-    { key: 'todas', label: t('mural.filters.all', 'Todas'), icon: '🌟', color: '#daa520' },
-  ];
+  const getCategoryColor = (cat) => CATEGORIES.find(c => c.value === cat)?.color || '#daa520';
 
-  // Action buttons for the Mural grid
-  const ACTION_BUTTONS = [
-    { key: 'testemunho', label: 'Testemunho', icon: '🙏', color: '#daa520', action: () => { setNewCategory('testemunho'); setShowForm(true); } },
-    { key: 'musica', label: 'Música', icon: '🎵', color: '#9b59b6', action: () => navigate('/musica') },
-    { key: 'foto', label: 'Foto', icon: '📸', color: '#3498db', action: () => { setNewCategory('foto'); setShowForm(true); setTimeout(() => photoRef.current?.click(), 300); } },
-    { key: 'video', label: 'Vídeo', icon: '🎬', color: '#e91e63', action: () => { setNewCategory('foto'); setShowForm(true); setTimeout(() => videoRef.current?.click(), 300); } },
-    { key: 'versiculo', label: 'Versículo', icon: '📖', color: '#27ae60', action: () => { setNewCategory('versiculo'); setShowForm(true); } },
-    { key: 'reflexao', label: 'Reflexão', icon: '💭', color: '#e67e22', action: () => { setNewCategory('reflexao'); setShowForm(true); } },
-    { key: 'campanha', label: 'Campanha', icon: '💝', color: '#e74c3c', action: () => { setNewCategory('campanha'); setShowForm(true); } },
-    { key: 'directo', label: 'Directo', icon: '🔴', color: '#ff0000', action: () => navigate('/directo') },
-  ];
+  // ── MODAL POST DETAIL ──
+  const PostModal = ({ post, onClose }) => (
+    <div style={{
+      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
+      zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center'
+    }} onClick={onClose}>
+      <div style={{
+        background: '#1a1a2e', borderRadius: 12, maxWidth: 900, width: '95vw',
+        maxHeight: '90vh', display: 'flex', overflow: 'hidden',
+        flexDirection: window.innerWidth < 768 ? 'column' : 'row'
+      }} onClick={e => e.stopPropagation()}>
+
+        {/* Left: Media or Text */}
+        <div style={{
+          flex: post.media_url ? '1.2' : '1',
+          background: '#0f0f1a',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          minHeight: 300, position: 'relative'
+        }}>
+          {post.media_url ? (
+            <img src={post.media_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          ) : (
+            <div style={{ padding: 32, textAlign: 'center' }}>
+              <div style={{
+                fontSize: '3rem', marginBottom: 16,
+                background: `linear-gradient(135deg, ${getCategoryColor(post.category)}, #fff)`,
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+              }}>✝️</div>
+              <p style={{ color: '#fff', fontSize: '1.1rem', lineHeight: 1.6 }}>{post.content}</p>
+            </div>
+          )}
+          <button onClick={onClose} style={{
+            position: 'absolute', top: 12, right: 12,
+            background: 'rgba(0,0,0,0.5)', border: 'none', color: '#fff',
+            borderRadius: '50%', width: 32, height: 32, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}><X size={16} /></button>
+        </div>
+
+        {/* Right: Info + Comments */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}>
+          {/* Header */}
+          <div style={{ padding: '16px', borderBottom: '1px solid #333', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <Link to={`/perfil/${post.user_id}`} onClick={onClose}>
+              <img
+                src={post.avatar_url || `https://ui-avatars.com/api/?name=${post.full_name || 'U'}&background=daa520&color=fff`}
+                style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }}
+                alt=""
+              />
+            </Link>
+            <div style={{ flex: 1 }}>
+              <Link to={`/perfil/${post.user_id}`} onClick={onClose} style={{ color: '#daa520', fontWeight: 600, textDecoration: 'none' }}>
+                {post.full_name || 'Utilizador'}
+              </Link>
+              <div style={{ color: '#999', fontSize: '0.75rem' }}>
+                {new Date(post.created_at).toLocaleDateString('pt-BR')}
+              </div>
+            </div>
+            <span style={{
+              background: getCategoryColor(post.category) + '33',
+              color: getCategoryColor(post.category),
+              padding: '2px 8px', borderRadius: 12, fontSize: '0.7rem'
+            }}>
+              {CATEGORIES.find(c => c.value === post.category)?.label || post.category}
+            </span>
+            {user?.id === post.user_id && (
+              <button onClick={() => handleDelete(post.id)} style={{ background: 'none', border: 'none', color: '#e74c3c', cursor: 'pointer' }}>
+                <Trash2 size={16} />
+              </button>
+            )}
+          </div>
+
+          {/* Content if has media */}
+          {post.media_url && post.content && (
+            <div style={{ padding: '12px 16px', borderBottom: '1px solid #333', color: '#ccc', fontSize: '0.9rem' }}>
+              {post.content}
+            </div>
+          )}
+
+          {/* Comments */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: '12px 16px' }}>
+            {(post.comments || []).map((c, i) => (
+              <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+                <img
+                  src={c.avatar_url || `https://ui-avatars.com/api/?name=${c.full_name || 'U'}&background=555&color=fff`}
+                  style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+                  alt=""
+                />
+                <div>
+                  <span style={{ color: '#daa520', fontWeight: 600, fontSize: '0.82rem' }}>{c.full_name} </span>
+                  <span style={{ color: '#ccc', fontSize: '0.82rem' }}>{c.content}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div style={{ borderTop: '1px solid #333', padding: '12px 16px' }}>
+            <div style={{ display: 'flex', gap: 16, marginBottom: 8 }}>
+              <button onClick={() => handleLike(post.id)} style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                color: post.liked ? '#e74c3c' : '#aaa', display: 'flex', alignItems: 'center', gap: 4
+              }}>
+                <Heart size={20} fill={post.liked ? '#e74c3c' : 'none'} />
+                <span style={{ fontSize: '0.85rem' }}>{post.likes_count || 0}</span>
+              </button>
+              <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', display: 'flex', alignItems: 'center', gap: 4 }}>
+                <MessageCircle size={20} />
+                <span style={{ fontSize: '0.85rem' }}>{(post.comments || []).length}</span>
+              </button>
+            </div>
+            {user && (
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input
+                  value={comment}
+                  onChange={e => setComment(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleComment(post.id)}
+                  placeholder="Adicionar comentário..."
+                  style={{
+                    flex: 1, background: '#0f0f1a', border: '1px solid #333',
+                    borderRadius: 20, padding: '8px 14px', color: '#fff', fontSize: '0.85rem'
+                  }}
+                />
+                <button onClick={() => handleComment(post.id)} style={{
+                  background: '#daa520', border: 'none', borderRadius: '50%',
+                  width: 34, height: 34, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <Send size={14} color="#000" />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── GRID CARD ──
+  const GridCard = ({ post }) => (
+    <div
+      onClick={() => setSelectedPost(post)}
+      style={{
+        aspectRatio: '1/1', position: 'relative', cursor: 'pointer',
+        background: '#1a1a2e', overflow: 'hidden', borderRadius: 4
+      }}
+    >
+      {post.media_url ? (
+        <img src={post.media_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      ) : (
+        <div style={{
+          width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: `linear-gradient(135deg, ${getCategoryColor(post.category)}22, #1a1a2e)`,
+          padding: 12
+        }}>
+          <p style={{ color: '#fff', fontSize: '0.75rem', textAlign: 'center', lineHeight: 1.4, overflow: 'hidden',
+            display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical' }}>
+            {post.content}
+          </p>
+        </div>
+      )}
+      {/* Hover overlay */}
+      <div className="grid-overlay" style={{
+        position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16,
+        opacity: 0, transition: 'opacity 0.2s'
+      }}>
+        <span style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Heart size={16} fill="#fff" /> {post.likes_count || 0}
+        </span>
+        <span style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: 4 }}>
+          <MessageCircle size={16} /> {(post.comments || []).length}
+        </span>
+      </div>
+      {/* Category dot */}
+      <div style={{
+        position: 'absolute', top: 6, right: 6, width: 8, height: 8,
+        borderRadius: '50%', background: getCategoryColor(post.category)
+      }} />
+    </div>
+  );
+
+  // ── FEED CARD ──
+  const FeedCard = ({ post }) => (
+    <div style={{ background: '#1a1a2e', borderRadius: 12, marginBottom: 16, overflow: 'hidden', border: '1px solid #333' }}>
+      {/* Header */}
+      <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <Link to={`/perfil/${post.user_id}`}>
+          <img
+            src={post.avatar_url || `https://ui-avatars.com/api/?name=${post.full_name || 'U'}&background=daa520&color=fff`}
+            style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover' }}
+            alt=""
+          />
+        </Link>
+        <div style={{ flex: 1 }}>
+          <Link to={`/perfil/${post.user_id}`} style={{ color: '#daa520', fontWeight: 600, textDecoration: 'none', fontSize: '0.9rem' }}>
+            {post.full_name || 'Utilizador'}
+          </Link>
+          <div style={{ color: '#999', fontSize: '0.72rem' }}>{new Date(post.created_at).toLocaleDateString('pt-BR')}</div>
+        </div>
+        <span style={{
+          background: getCategoryColor(post.category) + '33',
+          color: getCategoryColor(post.category),
+          padding: '2px 8px', borderRadius: 12, fontSize: '0.7rem'
+        }}>
+          {CATEGORIES.find(c => c.value === post.category)?.label || post.category}
+        </span>
+      </div>
+
+      {/* Media */}
+      {post.media_url && (
+        <img src={post.media_url} alt="" style={{ width: '100%', maxHeight: 400, objectFit: 'cover' }} />
+      )}
+
+      {/* Content */}
+      <div style={{ padding: '12px 16px', color: '#ddd', fontSize: '0.9rem', lineHeight: 1.6 }}>
+        {post.content}
+      </div>
+
+      {/* Actions */}
+      <div style={{ padding: '8px 16px 12px', display: 'flex', gap: 16, borderTop: '1px solid #2a2a3e' }}>
+        <button onClick={() => handleLike(post.id)} style={{
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: post.liked ? '#e74c3c' : '#aaa', display: 'flex', alignItems: 'center', gap: 4
+        }}>
+          <Heart size={18} fill={post.liked ? '#e74c3c' : 'none'} />
+          <span style={{ fontSize: '0.82rem' }}>{post.likes_count || 0}</span>
+        </button>
+        <button onClick={() => setSelectedPost(post)} style={{
+          background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', display: 'flex', alignItems: 'center', gap: 4
+        }}>
+          <MessageCircle size={18} />
+          <span style={{ fontSize: '0.82rem' }}>{(post.comments || []).length}</span>
+        </button>
+      </div>
+    </div>
+  );
 
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem' }}>
-      {/* Visitor banner */}
-      {!user && (
-        <Link to="/cadastro" style={{ textDecoration: 'none' }}>
-          <div style={{
-            background: 'linear-gradient(135deg, #daa520, #f4c542)', borderRadius: 16, padding: '1rem',
-            marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 12, color: '#1a0a3e',
-            boxShadow: '0 4px 15px rgba(218,165,32,0.3)', cursor: 'pointer',
-          }}>
-            <span style={{ fontSize: '1.8rem' }}>✨</span>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>Crie sua conta para participar!</div>
-              <div style={{ fontSize: '0.8rem', opacity: 0.85, marginTop: 2 }}>Publique, comente e conecte-se com irmãos na fé. É rápido!</div>
-            </div>
-          </div>
-        </Link>
-      )}
-      {/* Photo prompt for users without avatar */}
-      {user && !user.avatar_url && (
-        <Link to={`/perfil/${user.id}`} style={{ textDecoration: 'none' }}>
-          <div style={{
-            background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 16, padding: '1rem',
-            marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 12, color: '#fff',
-            boxShadow: '0 4px 15px rgba(102,126,234,0.3)', cursor: 'pointer',
-          }}>
-            <div style={{
-              width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,0.2)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', flexShrink: 0,
-            }}>📷</div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{t('profile.addPhotoPrompt', 'Adicione uma foto ao seu perfil!')}</div>
-              <div style={{ fontSize: '0.8rem', opacity: 0.85, marginTop: 2 }}>{t('profile.addPhotoDesc', 'Toque aqui para personalizar seu perfil com uma foto.')}</div>
-            </div>
-          </div>
-        </Link>
-      )}
-
-      {/* Banner for non-logged users */}
-      {!user && (
-        <Link to="/cadastro" style={{ textDecoration: 'none' }}>
-          <div style={{
-            background: 'linear-gradient(135deg, #daa520, #f4d03f)', borderRadius: 12, padding: '0.75rem 1rem',
-            marginBottom: '1rem', textAlign: 'center', color: '#1a0a3e', fontWeight: 600, fontSize: '0.9rem',
-          }}>
-            ✨ Crie sua conta para participar! <span style={{ textDecoration: 'underline' }}>Cadastre-se</span>
-          </div>
-        </Link>
-      )}
+    <div style={{ maxWidth: 935, margin: '0 auto', padding: '0 16px 80px' }}>
+      <style>{`
+        .grid-card:hover .grid-overlay { opacity: 1 !important; }
+        @media (max-width: 600px) { .mural-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 2px !important; } }
+      `}</style>
 
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#1a0a3e' }}>📰 {t('mural.title', 'Mural')}</h1>
-        {user && (
-          <button onClick={() => setShowForm(!showForm)} style={{
-            padding: '0.5rem 1rem', borderRadius: 20, border: 'none',
-            background: showForm ? '#e74c3c' : '#daa520', color: '#fff',
-            fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
-          }}>
-            {showForm ? <X size={16} /> : <Plus size={16} />}
-            {showForm ? t('mural.cancel', 'Cancelar') : t('common.publish', 'Publicar')}
-          </button>
-        )}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 0 16px', borderBottom: '1px solid #333', marginBottom: 16 }}>
+        <h2 style={{ color: '#daa520', margin: 0, fontSize: '1.4rem' }}>✝️ Mural</h2>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button onClick={() => setViewMode('grid')} style={{
+            background: viewMode === 'grid' ? '#daa520' : 'transparent',
+            border: '1px solid #daa520', borderRadius: 6, padding: '6px 10px', cursor: 'pointer',
+            color: viewMode === 'grid' ? '#000' : '#daa520'
+          }}><Grid size={16} /></button>
+          <button onClick={() => setViewMode('feed')} style={{
+            background: viewMode === 'feed' ? '#daa520' : 'transparent',
+            border: '1px solid #daa520', borderRadius: 6, padding: '6px 10px', cursor: 'pointer',
+            color: viewMode === 'feed' ? '#000' : '#daa520'
+          }}><List size={16} /></button>
+          {user && (
+            <button onClick={() => setShowNewPost(true)} style={{
+              background: '#daa520', border: 'none', borderRadius: 6, padding: '6px 12px',
+              cursor: 'pointer', color: '#000', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4
+            }}>
+              <Plus size={16} /> Publicar
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* New Post Form — TikTok/Instagram style flow */}
-      {showForm && user && (
-        <form onSubmit={handlePost} style={{
-          background: '#fff', borderRadius: 16, padding: '1rem', marginBottom: '1rem',
-          border: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+      {/* Category Filter */}
+      <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 12, marginBottom: 16 }}>
+        <button onClick={() => setFilterCategory('all')} style={{
+          background: filterCategory === 'all' ? '#daa520' : '#1a1a2e',
+          border: '1px solid #333', borderRadius: 20, padding: '4px 14px',
+          color: filterCategory === 'all' ? '#000' : '#aaa', cursor: 'pointer', whiteSpace: 'nowrap', fontSize: '0.82rem'
+        }}>Todos</button>
+        {CATEGORIES.map(cat => (
+          <button key={cat.value} onClick={() => setFilterCategory(cat.value)} style={{
+            background: filterCategory === cat.value ? cat.color : '#1a1a2e',
+            border: `1px solid ${cat.color}`, borderRadius: 20, padding: '4px 14px',
+            color: filterCategory === cat.value ? '#000' : cat.color, cursor: 'pointer', whiteSpace: 'nowrap', fontSize: '0.82rem'
+          }}>{cat.label}</button>
+        ))}
+      </div>
+
+      {/* Loading */}
+      {loading && (
+        <div style={{ textAlign: 'center', padding: 40, color: '#daa520' }}>A carregar...</div>
+      )}
+
+      {/* Grid View */}
+      {!loading && viewMode === 'grid' && (
+        <div className="mural-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 3
         }}>
-          {/* Categories */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '0.75rem' }}>
-            {CATEGORIES.map(cat => (
-              <button type="button" key={cat.value} onClick={() => setNewCategory(cat.value)} style={{
-                padding: '4px 12px', borderRadius: 16, border: 'none', cursor: 'pointer', fontSize: '0.8rem',
-                background: newCategory === cat.value ? cat.color + '22' : '#f5f5f5',
-                color: newCategory === cat.value ? cat.color : '#666',
-                fontWeight: newCategory === cat.value ? 600 : 400,
-              }}>{cat.label}</button>
-            ))}
-          </div>
-
-          {/* Text */}
-          <textarea value={newText} onChange={e => setNewText(e.target.value)}
-            placeholder="Compartilhe algo com a comunidade..."
-            rows={2} style={{
-              width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd',
-              fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box', marginBottom: '0.5rem',
-            }} />
-
-          {/* Link field for Campanha / Causa */}
-          {newCategory === 'campanha' && (
-            <div style={{ marginBottom: '0.5rem' }}>
-              <input
-                type="url"
-                value={linkUrl}
-                onChange={e => setLinkUrl(e.target.value)}
-                placeholder="🔗 Cole o link da campanha (ex: https://voaa.me/campanha)"
-                style={{
-                  width: '100%', padding: '0.7rem', borderRadius: 10,
-                  border: '2px solid #e74c3c', fontSize: '0.85rem', boxSizing: 'border-box',
-                  background: '#fff5f5',
-                }}
-              />
-              {linkUrl && (
-                <div style={{
-                  marginTop: 6, background: '#fff', border: '1px solid #eee', borderRadius: 10,
-                  padding: '0.7rem', display: 'flex', alignItems: 'center', gap: 10,
-                }}>
-                  <div style={{
-                    width: 40, height: 40, borderRadius: 8, background: 'linear-gradient(135deg, #e74c3c, #c0392b)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                  }}>
-                    <span style={{ fontSize: '1.2rem' }}>💝</span>
-                  </div>
-                  <div style={{ flex: 1, overflow: 'hidden' }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#333', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {linkUrl}
-                    </div>
-                    <div style={{ fontSize: '0.7rem', color: '#e74c3c' }}>Link da campanha será incluído no post</div>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Media + Music buttons — Instagram style */}
-          <div style={{ display: 'flex', gap: 6, marginBottom: '0.5rem' }}>
-            <button type="button" onClick={() => photoRef.current?.click()} style={{
-              flex: 1, padding: '0.7rem', borderRadius: 12, border: '2px dashed #ddd',
-              background: newMedia && !newMediaIsVideo && !newMediaIsAudio ? '#e8f5e9' : '#fafafa',
-              cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-              fontSize: '0.78rem', color: '#666',
-            }}>
-              <Image size={24} color={newMedia && !newMediaIsVideo ? '#4caf50' : '#999'} />
-              {newMedia && !newMediaIsVideo && !newMediaIsAudio ? '✅ Foto' : '📸 Foto'}
-            </button>
-            <button type="button" onClick={() => videoRef.current?.click()} style={{
-              flex: 1, padding: '0.7rem', borderRadius: 12, border: '2px dashed #ddd',
-              background: newMediaIsVideo ? '#e8f5e9' : '#fafafa',
-              cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-              fontSize: '0.78rem', color: '#666',
-            }}>
-              <Video size={24} color={newMediaIsVideo ? '#4caf50' : '#999'} />
-              {newMediaIsVideo ? '✅ Vídeo' : '🎬 Vídeo'}
-            </button>
-            <button type="button" onClick={openMusicPicker} style={{
-              flex: 1, padding: '0.7rem', borderRadius: 12,
-              border: selectedSongUrl ? '2px solid #9b59b6' : '2px dashed #ddd',
-              background: selectedSongUrl ? 'rgba(155,89,182,0.1)' : '#fafafa',
-              cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-              fontSize: '0.78rem', color: selectedSongUrl ? '#9b59b6' : '#666', fontWeight: selectedSongUrl ? 700 : 400,
-            }}>
-              <Music size={24} color={selectedSongUrl ? '#9b59b6' : '#999'} />
-              {selectedSongUrl ? '✅ Música' : '🎵 Música'}
-            </button>
-          </div>
-
-          {/* Preview: Selected media */}
-          {newMediaPreview && (
-            <div style={{ position: 'relative', marginBottom: '0.5rem', borderRadius: 12, overflow: 'hidden' }}>
-              {newMediaIsAudio ? (
-                <div style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12, padding: '1rem', textAlign: 'center' }}>
-                  <span style={{ fontSize: '2rem' }}>🎵</span>
-                  <p style={{ color: '#fff', fontSize: '0.85rem', margin: '0.5rem 0' }}>{selectedSongName || newMedia?.name || 'Música'}</p>
-                  <audio src={newMediaPreview} controls style={{ width: '100%' }} />
-                </div>
-              ) : newMediaIsVideo ? (
-                <video src={newMediaPreview} controls style={{ width: '100%', maxHeight: 280, borderRadius: 12 }} />
-              ) : (
-                <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 280, objectFit: 'cover', borderRadius: 12 }} />
-              )}
-              <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaIsAudio(false); setNewMediaIsVideo(false); }} style={{
-                position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.6)', border: 'none',
-                borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-              }}><X size={16} color="#fff" /></button>
-            </div>
-          )}
-
-          {/* Auto-prompt: "Adicionar música?" after selecting photo/video */}
-          {(newMedia && !newMediaIsAudio && !selectedSongUrl && !showMusicPicker) && (
-            <button type="button" onClick={openMusicPicker} style={{
-              width: '100%', padding: '0.7rem', borderRadius: 12, marginBottom: '0.5rem',
-              border: '2px dashed #9b59b6', background: 'linear-gradient(135deg, rgba(155,89,182,0.05), rgba(102,126,234,0.05))',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              fontSize: '0.88rem', color: '#9b59b6', fontWeight: 600,
-            }}>
-              🎵 Quer adicionar uma música? Toque aqui!
-            </button>
-          )}
-
-          {/* Selected music indicator */}
-          {selectedSongUrl && (
-            <div style={{
-              background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12,
-              padding: '0.6rem 1rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: 8,
-            }}>
-              <span style={{ fontSize: '1.3rem' }}>🎵</span>
-              <span style={{ color: '#fff', fontSize: '0.82rem', flex: 1 }}>{selectedSongName}</span>
-              <button type="button" onClick={() => { setSelectedSongUrl(null); setSelectedSongName(''); }} style={{
-                background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '50%', width: 24, height: 24,
-                color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem',
-              }}>✕</button>
-            </div>
-          )}
-
-          {/* Music Picker — with tabs */}
-          {showMusicPicker && (
-            <div style={{
-              background: '#fff', border: '2px solid #9b59b6', borderRadius: 14, padding: '1rem',
-              marginBottom: '0.5rem',
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <h4 style={{ margin: 0, fontSize: '0.95rem', color: '#9b59b6' }}>🎵 Escolha uma música</h4>
-                <button type="button" onClick={() => setShowMusicPicker(false)} style={{
-                  background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: '#999',
-                }}>✕</button>
-              </div>
-
-              {/* Tabs */}
-              <div style={{ display: 'flex', gap: 0, marginBottom: '0.75rem', borderRadius: 10, overflow: 'hidden', border: '1px solid #e0e0e0' }}>
-                {[
-                  { key: 'popular', label: '🔥 Gospel Popular' },
-                  { key: 'library', label: '📚 Minha Biblioteca' },
-                ].map(tab => (
-                  <button type="button" key={tab.key} onClick={() => setMusicTab(tab.key)} style={{
-                    flex: 1, padding: '0.5rem', border: 'none', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600,
-                    background: musicTab === tab.key ? '#9b59b6' : '#fafafa',
-                    color: musicTab === tab.key ? '#fff' : '#666',
-                  }}>{tab.label}</button>
-                ))}
-              </div>
-
-              {/* Popular Gospel Songs */}
-              {musicTab === 'popular' && (
-                <div style={{ maxHeight: 300, overflowY: 'auto' }}>
-                  {/* Language filter */}
-                  <div style={{ display: 'flex', gap: 4, marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-                    {[
-                      { key: 'all', label: '🌍 Todos' },
-                      { key: 'pt', label: '🇧🇷 PT' },
-                      { key: 'es', label: '🇪🇸 ES' },
-                      { key: 'en', label: '🇺🇸 EN' },
-                      { key: 'de', label: '🇩🇪 DE' },
-                      { key: 'fr', label: '🇫🇷 FR' },
-                      { key: 'ro', label: '🇷🇴 RO' },
-                    ].map(l => (
-                      <button type="button" key={l.key} onClick={() => setMusicLang(l.key)} style={{
-                        padding: '3px 10px', borderRadius: 12, border: 'none', cursor: 'pointer', fontSize: '0.72rem',
-                        background: musicLang === l.key ? '#9b59b6' : '#f0f0f0',
-                        color: musicLang === l.key ? '#fff' : '#666', fontWeight: 600,
-                      }}>{l.label}</button>
-                    ))}
-                  </div>
-                  {popularGospel.filter(s => musicLang === 'all' || (s.lang || 'pt') === musicLang).map(song => (
-                    <button type="button" key={song.id} onClick={() => { setSelectedSongUrl(song.url); setSelectedSongName(`${song.title} - ${song.artist}`); setShowMusicPicker(false); }} style={{
-                      width: '100%', padding: '0.5rem 0.6rem', borderRadius: 10,
-                      border: selectedSongUrl === song.url ? '2px solid #9b59b6' : '1px solid #eee',
-                      background: selectedSongUrl === song.url ? 'rgba(155,89,182,0.1)' : '#fafafa',
-                      cursor: 'pointer', marginBottom: 5, textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
-                    }}>
-                      <div style={{
-                        width: 34, height: 34, borderRadius: 8, background: 'linear-gradient(135deg, #ff0000, #cc0000)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '0.9rem',
-                      }}>▶️</div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 600, fontSize: '0.82rem', color: '#1a0a3e' }}>{song.title}</div>
-                        <div style={{ fontSize: '0.7rem', color: '#888' }}>{song.artist}</div>
-                      </div>
-                      {selectedSongUrl === song.url && <span style={{ color: '#9b59b6', fontWeight: 700 }}>✅</span>}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Library Songs (user uploaded) */}
-              {musicTab === 'library' && (
-                <div style={{ maxHeight: 250, overflowY: 'auto' }}>
-                  <p style={{ fontSize: '0.7rem', color: '#888', margin: '0 0 0.5rem' }}>
-                    Músicas enviadas pela comunidade na página Música
-                  </p>
-                  {librarySongs.length === 0 ? (
-                    <p style={{ color: '#999', fontSize: '0.85rem', textAlign: 'center', padding: '1rem' }}>Nenhuma música ainda. Vá em Música e envie!</p>
-                  ) : librarySongs.map(song => (
-                    <button type="button" key={song.id} onClick={() => selectLibrarySong(song)} style={{
-                      width: '100%', padding: '0.5rem 0.6rem', borderRadius: 10,
-                      border: selectedSongUrl === song.url ? '2px solid #9b59b6' : '1px solid #eee',
-                      background: selectedSongUrl === song.url ? 'rgba(155,89,182,0.1)' : '#fafafa',
-                      cursor: 'pointer', marginBottom: 5, textAlign: 'left', display: 'flex', alignItems: 'center', gap: 10,
-                    }}>
-                      <div style={{
-                        width: 34, height: 34, borderRadius: 8, background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                      }}>
-                        <Music size={16} color="#fff" />
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 600, fontSize: '0.82rem', color: '#1a0a3e' }}>{song.title}</div>
-                        <div style={{ fontSize: '0.7rem', color: '#888' }}>{song.artist || song.user_name}</div>
-                      </div>
-                      {selectedSongUrl === song.url && <span style={{ color: '#9b59b6', fontWeight: 700 }}>✅</span>}
-                    </button>
-                  ))}
-                  <div style={{ borderTop: '1px solid #eee', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
-                    <button type="button" onClick={() => { setShowMusicPicker(false); audioRef.current?.click(); }} style={{
-                      width: '100%', padding: '0.5rem', borderRadius: 10, border: '1px dashed #9b59b6',
-                      background: 'transparent', cursor: 'pointer', fontSize: '0.82rem', color: '#9b59b6',
-                    }}>📁 Enviar música do celular</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Publish button */}
-          <button type="submit" disabled={posting || (!newText.trim() && !newMedia && !selectedSongUrl)} style={{
-            width: '100%', padding: '0.75rem', borderRadius: 14, border: 'none', marginTop: '0.25rem',
-            background: (newText.trim() || newMedia || selectedSongUrl) ? 'linear-gradient(135deg, #daa520, #f4c542)' : '#ddd',
-            color: (newText.trim() || newMedia || selectedSongUrl) ? '#1a0a3e' : '#999',
-            fontWeight: 700, fontSize: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            boxShadow: (newText.trim() || newMedia || selectedSongUrl) ? '0 4px 15px rgba(218,165,32,0.3)' : 'none',
-          }}><Send size={18} /> {posting ? (postingText || 'Publicando...') : 'Publicar'}</button>
-          <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
-          <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={handleMediaSelect} />
-          <input ref={audioRef} type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg,audio/m4a,audio/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
-          <input ref={fileRef} type="file" accept="image/*,video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={handleMediaSelect} />
-        </form>
-      )}
-
-      {/* Live Streams Banner */}
-      {liveStreams && liveStreams.length > 0 && (
-        <div style={{ marginBottom: '1rem' }}>
-          <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e74c3c', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#e74c3c', animation: 'pulse 1.5s infinite', display: 'inline-block' }} />
-            🔴 Ao Vivo Agora
-          </div>
-          <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 4 }}>
-            {liveStreams.map(stream => (
-              <div key={stream.streamId} onClick={() => navigate(`/directo?watch=${stream.streamId}`)}
-                style={{
-                  minWidth: 140, background: 'linear-gradient(135deg, #1a0a3e, #e74c3c)', borderRadius: 14,
-                  padding: '0.8rem', color: '#fff', cursor: 'pointer', textAlign: 'center',
-                  boxShadow: '0 4px 15px rgba(231,76,60,0.3)', transition: 'transform 0.2s',
-                }}>
-                <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#daa520', margin: '0 auto 6px', overflow: 'hidden', border: '3px solid #e74c3c' }}>
-                  {stream.userAvatar ? <img src={stream.userAvatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> :
-                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>👤</div>}
-                </div>
-                <div style={{ fontWeight: 700, fontSize: '0.8rem', marginBottom: 4 }}>{stream.userName || 'Ao Vivo'}</div>
-                <div style={{ background: '#e74c3c', borderRadius: 10, padding: '2px 8px', fontSize: '0.65rem', fontWeight: 700, display: 'inline-block', animation: 'pulse 1.5s infinite' }}>
-                  🔴 AO VIVO
-                </div>
-                <div style={{ fontSize: '0.7rem', opacity: 0.8, marginTop: 4 }}>👁 {stream.viewerCount || 0}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Action buttons — grid style */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: '1rem' }}>
-        {ACTION_BUTTONS.map(btn => (
-          <button key={btn.key} onClick={btn.action} style={{
-            padding: '12px 4px', borderRadius: 14, border: 'none', cursor: 'pointer',
-            background: `linear-gradient(135deg, ${btn.color}18, ${btn.color}30)`,
-            color: btn.color,
-            fontWeight: 600,
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-            transition: 'all 0.2s',
-          }}>
-            <span style={{ fontSize: '1.5rem' }}>{btn.icon}</span>
-            <span style={{ fontSize: '0.7rem', lineHeight: 1.2 }}>{btn.label}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Quick filters */}
-      <div style={{ display: 'flex', gap: 6, marginBottom: '1rem', overflowX: 'auto', paddingBottom: 4 }}>
-        {[
-          { key: 'todas', label: '🌟 Todas' },
-          { key: 'testemunho', label: '🙏 Testemunhos' },
-          { key: 'louvor', label: '🎵 Louvor' },
-          { key: 'foto', label: '📸 Fotos' },
-          { key: 'video', label: '🎬 Vídeos' },
-          { key: 'versiculo', label: '📖 Versículos' },
-          { key: 'campanha', label: '💝 Campanhas' },
-        ].map(f => (
-          <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{
-            padding: '5px 12px', borderRadius: 20, border: 'none', cursor: 'pointer',
-            fontSize: '0.75rem', whiteSpace: 'nowrap',
-            background: activeFilter === f.key ? '#1a0a3e' : '#f0f0f0',
-            color: activeFilter === f.key ? '#fff' : '#666',
-            fontWeight: activeFilter === f.key ? 600 : 400,
-          }}>{f.label}</button>
-        ))}
-      </div>
-
-      {/* Feed */}
-      {loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="loading-spinner" /></div>
-      ) : filteredPosts.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>
-          <p>{t('common.noPostsYet', 'Nenhuma publicação ainda.')} {user ? t('common.beFirst', 'Seja o primeiro!') : ''}</p>
-        </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {filteredPosts.map(post => (
-            <div key={post.id} style={{
-              background: '#fff', borderRadius: 16, overflow: 'hidden',
-              border: '1px solid #eee', boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-            }}>
-              {/* Author header — clickable to profile */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0.75rem 1rem 0.5rem' }}>
-                <Link to={`/perfil/${post.author_id}`} style={{ textDecoration: 'none', flexShrink: 0 }}>
-                  <div style={{
-                    width: 38, height: 38, borderRadius: '50%', background: '#daa520',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
-                  }}>
-                    {post.author_avatar ? (
-                      <img src={getAvatarUrl(post.author_avatar)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (<User size={20} color="#fff" />)}
-                  </div>
-                </Link>
-                <div style={{ flex: 1 }}>
-                  <Link to={`/perfil/${post.author_id}`} style={{ textDecoration: 'none' }}>
-                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1a1a2e' }}>{post.author_name}</div>
-                  </Link>
-                  <div style={{ fontSize: '0.75rem', color: '#999' }}>{timeAgo(post.created_at)}</div>
-                </div>
-                <span style={{
-                  fontSize: '0.7rem', padding: '2px 8px', borderRadius: 10,
-                  background: (CATEGORIES.find(c => c.value === post.category)?.color || '#999') + '15',
-                  color: CATEGORIES.find(c => c.value === post.category)?.color || '#999',
-                }}>
-                  {CATEGORIES.find(c => c.value === post.category)?.label?.split(' ')[0] || '📝'}
-                </span>
-              </div>
-
-              {/* Content — with clickable links for campanha */}
-              <div style={{ padding: '0 1rem 0.5rem', fontSize: '0.9rem', lineHeight: 1.5, color: '#333' }}>
-                {post.content?.split('\n').map((line, li) => {
-                  const urlMatch = line.match(/(https?:\/\/[^\s]+)/);
-                  if (urlMatch) {
-                    const url = urlMatch[1];
-                    const before = line.substring(0, urlMatch.index);
-                    const after = line.substring(urlMatch.index + url.length);
-                    return (
-                      <div key={li}>
-                        {before}
-                        <a href={url} target="_blank" rel="noopener noreferrer" style={{
-                          color: '#3498db', textDecoration: 'underline', wordBreak: 'break-all',
-                        }}>{url}</a>
-                        {after}
-                      </div>
-                    );
-                  }
-                  return <div key={li}>{line}</div>;
-                })}
-              </div>
-
-              {/* Link preview card for campanha posts */}
-              {post.category === 'campanha' && post.content?.match(/(https?:\/\/[^\s]+)/) && (
-                <a href={post.content.match(/(https?:\/\/[^\s]+)/)[1]} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                  <div style={{
-                    margin: '0 1rem 0.5rem', padding: '0.8rem', borderRadius: 12,
-                    background: 'linear-gradient(135deg, #fff5f5, #ffe8e8)', border: '1px solid #ffcdd2',
-                    display: 'flex', alignItems: 'center', gap: 10,
-                  }}>
-                    <div style={{
-                      width: 44, height: 44, borderRadius: 10,
-                      background: 'linear-gradient(135deg, #e74c3c, #c0392b)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                    }}>
-                      <span style={{ fontSize: '1.4rem' }}>💝</span>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#c0392b' }}>Campanha / Causa</div>
-                      <div style={{ fontSize: '0.72rem', color: '#666', wordBreak: 'break-all' }}>
-                        {post.content.match(/(https?:\/\/[^\s]+)/)[1].substring(0, 60)}...
-                      </div>
-                      <div style={{ fontSize: '0.7rem', color: '#e74c3c', fontWeight: 600, marginTop: 2 }}>
-                        Clique para ver e ajudar →
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              )}
-
-              {/* Translation */}
-              {post.showTranslation && post.translatedContent && (
-                <div style={{ margin: '0 0.5rem 0.5rem', padding: '0.5rem 0.75rem', fontSize: '0.85rem', lineHeight: 1.5, color: '#1a0a3e', background: '#f0f4ff', borderRadius: 8 }}>
-                  <div style={{ fontSize: '0.7rem', color: '#666', marginBottom: 4 }}>🌍 {t('common.translation', 'Tradução')}</div>
-                  {post.translatedContent}
-                </div>
-              )}
-
-              {/* Translate button */}
-              <div style={{ padding: '0 1rem 0.25rem' }}>
-                <button onClick={() => {
-                  if (post.showTranslation) setPosts(prev => prev.map(p => p.id === post.id ? { ...p, showTranslation: false } : p));
-                  else if (post.translatedContent) setPosts(prev => prev.map(p => p.id === post.id ? { ...p, showTranslation: true } : p));
-                  else translatePost(post.id, post.content);
-                }} disabled={post.translating} style={{
-                  background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem',
-                  color: post.showTranslation ? '#1a0a3e' : '#999', display: 'flex', alignItems: 'center', gap: 4,
-                }}>
-                  🌍 {post.translating ? '...' : post.showTranslation ? t('common.hideTranslation', 'Ocultar') : t('common.translate', 'Traduzir')}
-                </button>
-              </div>
-
-              {/* Verse */}
-              {post.verse_reference && (
-                <div style={{ padding: '0 1rem 0.5rem', fontSize: '0.85rem', color: '#daa520', fontStyle: 'italic' }}>
-                  📖 {post.verse_reference}
-                </div>
-              )}
-
-              {/* Media — TikTok-style: only visible media plays */}
-              {post.media_url && (
-                <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                  {isYouTube(post.media_url) ? (
-                    <div style={{ borderRadius: 12, overflow: 'hidden', background: '#000' }}>
-                      <iframe
-                        ref={observeMedia}
-                        src={`https://www.youtube.com/embed/${getYouTubeId(post.media_url)}?rel=0&enablejsapi=1`}
-                        style={{ width: '100%', height: 200, border: 'none' }}
-                        allow="autoplay; encrypted-media"
-                        allowFullScreen
-                      />
-                    </div>
-                  ) : isAudio(post.media_url) ? (
-                    <div style={{
-                      background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12,
-                      padding: '1rem', textAlign: 'center',
-                    }}>
-                      <span style={{ fontSize: '2rem' }}>🎵</span>
-                      <audio ref={observeMedia} src={getMediaUrl(post.media_url)} style={{ width: '100%', marginTop: 8 }} />
-                    </div>
-                  ) : (post.media_type === 'video' || isVideo(post.media_url)) ? (
-                    <video ref={observeMedia} src={getMediaUrl(post.media_url)} playsInline muted preload="metadata"
-                      style={{ width: '100%', maxHeight: 500, background: '#000' }} />
-                  ) : (
-                    <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', maxHeight: 500, objectFit: 'cover' }} />
-                  )}
-                </div>
-              )}
-              {/* Audio attached to photo post */}
-              {post.audio_url && (
-                isYouTube(post.audio_url) ? (
-                  <div style={{ borderRadius: 12, overflow: 'hidden', background: '#000', maxWidth: '100%', margin: '0 auto' }}>
-                    <iframe
-                      ref={observeMedia}
-                      src={`https://www.youtube.com/embed/${getYouTubeId(post.audio_url)}?rel=0&enablejsapi=1`}
-                      style={{ width: '100%', height: 60, border: 'none' }}
-                      allow="autoplay; encrypted-media"
-                      allowFullScreen
-                    />
-                  </div>
-                ) : (
-                  <div style={{
-                    background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12,
-                    padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', gap: 8,
-                  }}>
-                    <span style={{ fontSize: '1.3rem' }}>🎵</span>
-                    <audio ref={observeMedia} src={getMediaUrl(post.audio_url)} style={{ flex: 1, height: 32 }} />
-                  </div>
-                )
-              )}
-
-              {/* ===== ACTIONS (LIKES & COMMENTS from DB) ===== */}
-              <div style={{ display: 'flex', gap: 16, padding: '0.6rem 1rem 0.3rem', alignItems: 'center' }}>
-                {/* Like button — saves to database */}
-                <button onClick={() => handleLike(post.id)} style={{
-                  background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
-                  color: likedPosts[post.id] ? '#e74c3c' : '#999', fontSize: '0.82rem',
-                  transition: 'transform 0.2s',
-                  transform: likedPosts[post.id] ? 'scale(1.05)' : 'scale(1)',
-                }}>
-                  <Heart size={20} fill={likedPosts[post.id] ? '#e74c3c' : 'none'} />
-                  {(post.like_count || 0) > 0 && <span style={{ fontWeight: 600 }}>{post.like_count}</span>}
-                  <span>Amém</span>
-                </button>
-
-                {/* Comment button */}
-                <button onClick={() => toggleComments(post.id)} style={{
-                  background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
-                  color: openComments[post.id] ? '#667eea' : '#999', fontSize: '0.82rem',
-                }}>
-                  <MessageCircle size={18} />
-                  {(post.comment_count || 0) > 0 && <span style={{ fontWeight: 600 }}>{post.comment_count}</span>}
-                  <span>{t('common.comment', 'Comentar')}</span>
-                </button>
-
-                {/* Share */}
-                <button onClick={() => {
-                  const shareText = `${post.content?.slice(0, 200)}\n\n🙏 Sigo com Fé - Rede Social Cristã\nhttps://sigo-com-fe.vercel.app`;
-                  if (navigator.share) navigator.share({ title: 'Sigo com Fé', text: shareText }).catch(() => {});
-                  else { navigator.clipboard?.writeText(shareText); alert('Link copiado! ✅'); }
-                }} style={{
-                  background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
-                  color: '#999', fontSize: '0.82rem', marginLeft: 'auto',
-                }}>
-                  <Share2 size={16} /> <span>Compartilhar</span>
-                </button>
-
-                {/* Delete own post */}
-                {user && (post.author_id === user?.id || user?.role === 'admin') && (
-                  <button onClick={() => handleDeletePost(post.id)} style={{
-                    background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3,
-                    color: '#e74c3c', fontSize: '0.78rem',
-                  }}>
-                    <Trash2 size={14} /> Excluir
-                  </button>
-                )}
-
-                {/* Report */}
-                {user && post.author_id !== user?.id && (
-                  <button onClick={async () => {
-                    if (confirm(t('common.reportConfirm'))) {
-                      await fetch(`${API}/feed/${post.id}/report`, {
-                        method: 'POST',
-                        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ reason: 'Conteúdo inadequado' }),
-                      }).catch(() => {});
-                      alert(t('common.reported'));
-                    }
-                  }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', fontSize: '0.75rem' }}>
-                    ⚠️
-                  </button>
-                )}
-              </div>
-
-              {/* ===== COMMENTS SECTION (from DB) ===== */}
-              {openComments[post.id] && (
-                <div style={{ padding: '0.5rem 1rem 0.75rem', borderTop: '1px solid #f0f0f0' }}>
-                  {/* Comments list */}
-                  {(commentsData[post.id] || []).length === 0 ? (
-                    <p style={{ fontSize: '0.8rem', color: '#999', margin: '0.25rem 0 0.5rem', textAlign: 'center' }}>
-                      💬 Sem comentários ainda
-                    </p>
-                  ) : (
-                    (commentsData[post.id] || []).map(c => (
-                      <div key={c.id} style={{ display: 'flex', gap: 8, marginBottom: '0.6rem' }}>
-                        <div style={{
-                          width: 28, height: 28, borderRadius: '50%', background: '#667eea', flexShrink: 0,
-                          overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}>
-                          {c.author_avatar ? (
-                            <img src={c.author_avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          ) : (<User size={12} color="#fff" />)}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <span style={{ fontWeight: 700, fontSize: '0.8rem', color: '#1a1a2e', marginRight: 6 }}>{c.author_name}</span>
-                          <span style={{ fontSize: '0.8rem', color: '#444' }}>{c.content}</span>
-                          <div style={{ display: 'flex', gap: 10, marginTop: 2 }}>
-                            <span style={{ fontSize: '0.7rem', color: '#aaa' }}>{timeAgo(c.created_at)}</span>
-                            {c.author_id === user?.id && (
-                              <button onClick={() => handleDeleteComment(c.id, post.id)} style={{
-                                background: 'none', border: 'none', color: '#ccc', cursor: 'pointer', fontSize: '0.7rem', padding: 0,
-                              }}>Excluir</button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  )}
-
-                  {/* Comment input */}
-                  {token && (
-                    <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
-                      <input
-                        value={commentText[post.id] || ''}
-                        onChange={e => setCommentText(prev => ({ ...prev, [post.id]: e.target.value }))}
-                        onKeyDown={e => { if (e.key === 'Enter') handleSendComment(post.id); }}
-                        placeholder={t('common.writeComment', 'Escreva um comentário...')}
-                        style={{
-                          flex: 1, padding: '0.45rem 0.75rem', borderRadius: 20, border: '1px solid #ddd',
-                          fontSize: '0.82rem', outline: 'none',
-                        }}
-                      />
-                      <button
-                        onClick={() => handleSendComment(post.id)}
-                        disabled={!(commentText[post.id] || '').trim() || sendingComment[post.id]}
-                        style={{
-                          padding: '0.4rem 0.9rem', borderRadius: 20, border: 'none',
-                          background: (commentText[post.id] || '').trim() ? '#daa520' : '#eee',
-                          color: (commentText[post.id] || '').trim() ? '#fff' : '#aaa',
-                          fontSize: '0.8rem', cursor: 'pointer', fontWeight: 600,
-                        }}
-                      >
-                        <Send size={14} />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
+            <div key={post.id} className="grid-card" style={{ position: 'relative' }}>
+              <GridCard post={post} />
             </div>
           ))}
         </div>
       )}
 
-      {/* Login prompt */}
-      {!user && (
-        <div style={{
-          position: 'fixed', bottom: 0, left: 0, right: 0, padding: '1rem',
-          background: 'linear-gradient(transparent, #fff 30%)', textAlign: 'center',
-        }}>
-          <p style={{ margin: '0 0 0.5rem', color: '#666', fontSize: '0.9rem' }}>
-            {t('common.loginToComment', 'Faça login para publicar e interagir!')}
-          </p>
+      {/* Feed View */}
+      {!loading && viewMode === 'feed' && (
+        <div style={{ maxWidth: 614, margin: '0 auto' }}>
+          {filteredPosts.map(post => <FeedCard key={post.id} post={post} />)}
         </div>
       )}
-      {/* ===== LOGIN POPUP (replaces ugly alert) ===== */}
-      {showLoginPopup && (
+
+      {filteredPosts.length === 0 && !loading && (
+        <div style={{ textAlign: 'center', padding: 60, color: '#666' }}>
+          <p>Nenhum post encontrado.</p>
+        </div>
+      )}
+
+      {/* Post Modal */}
+      {selectedPost && <PostModal post={selectedPost} onClose={() => setSelectedPost(null)} />}
+
+      {/* New Post Modal */}
+      {showNewPost && (
         <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.6)', zIndex: 9999,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
-        }} onClick={() => setShowLoginPopup(false)}>
-          <div style={{
-            background: '#fff', borderRadius: 20, padding: '2rem 1.5rem',
-            maxWidth: 360, width: '100%', textAlign: 'center',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-          }} onClick={e => e.stopPropagation()}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🙏</div>
-            <h2 style={{ fontSize: '1.3rem', color: '#1a0a3e', margin: '0 0 0.5rem' }}>
-              Entre na Rede Social Cristã
-            </h2>
-            <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: 1.6, margin: '0 0 1rem' }}>
-              Crie sua conta grátis para curtir, comentar e interagir com a comunidade!
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <Link to="/cadastro" style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                background: 'linear-gradient(135deg, #3b5998, #5b8def)',
-                color: '#fff', padding: '0.8rem', borderRadius: 12,
-                fontWeight: 700, fontSize: '1rem', textDecoration: 'none',
-              }} onClick={() => setShowLoginPopup(false)}>
-                Criar conta grátis
-              </Link>
-              <Link to="/login" style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                background: '#f0f0f0', color: '#333', padding: '0.7rem', borderRadius: 12,
-                fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none',
-              }} onClick={() => setShowLoginPopup(false)}>
-                Já tenho conta — Entrar
-              </Link>
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)',
+          zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }}>
+          <div style={{ background: '#1a1a2e', borderRadius: 12, padding: 24, width: '90%', maxWidth: 500 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
+              <h3 style={{ color: '#daa520', margin: 0 }}>Nova Publicação</h3>
+              <button onClick={() => setShowNewPost(false)} style={{ background: 'none', border: 'none', color: '#aaa', cursor: 'pointer' }}>
+                <X size={20} />
+              </button>
             </div>
-            <p style={{ fontSize: '0.78rem', color: '#aaa', marginTop: '0.8rem', cursor: 'pointer' }}
-              onClick={() => setShowLoginPopup(false)}>
-              Agora não, quero só ver
-            </p>
+            <textarea
+              value={newPost.content}
+              onChange={e => setNewPost(p => ({ ...p, content: e.target.value }))}
+              placeholder="Partilha algo com a comunidade..."
+              rows={4}
+              style={{
+                width: '100%', background: '#0f0f1a', border: '1px solid #333',
+                borderRadius: 8, padding: 12, color: '#fff', fontSize: '0.9rem',
+                resize: 'none', boxSizing: 'border-box'
+              }}
+            />
+            <input
+              value={newPost.mediaUrl}
+              onChange={e => setNewPost(p => ({ ...p, mediaUrl: e.target.value }))}
+              placeholder="URL da imagem (opcional)"
+              style={{
+                width: '100%', background: '#0f0f1a', border: '1px solid #333',
+                borderRadius: 8, padding: 10, color: '#fff', fontSize: '0.85rem',
+                marginTop: 8, boxSizing: 'border-box'
+              }}
+            />
+            <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
+              {CATEGORIES.map(cat => (
+                <button key={cat.value} onClick={() => setNewPost(p => ({ ...p, category: cat.value }))} style={{
+                  background: newPost.category === cat.value ? cat.color : 'transparent',
+                  border: `1px solid ${cat.color}`, borderRadius: 20, padding: '3px 10px',
+                  color: newPost.category === cat.value ? '#000' : cat.color, cursor: 'pointer', fontSize: '0.75rem'
+                }}>{cat.label}</button>
+              ))}
+            </div>
+            <button onClick={handleSubmitPost} style={{
+              width: '100%', marginTop: 16, background: '#daa520', border: 'none',
+              borderRadius: 8, padding: 12, color: '#000', fontWeight: 700, cursor: 'pointer', fontSize: '1rem'
+            }}>Publicar</button>
           </div>
         </div>
       )}
