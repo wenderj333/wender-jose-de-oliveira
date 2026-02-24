@@ -431,6 +431,7 @@ app.use('/api/journeys', require('./routes/journeys'));
 app.use('/api/course', require('./routes/course'));
 app.use('/api/stripe', require('./routes/stripe'));
 app.use('/api/ai-louvor', require('./routes/ai-louvor'));
+app.use('/api/openclaw', require('./routes/openclaw'));
 
 // Root route
 app.get('/', (req, res) => {

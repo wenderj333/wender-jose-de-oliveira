@@ -5,8 +5,21 @@ const { Pool } = require("pg");
 const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 
 const auth = (req, res, next) => {
-  const token = (req.headers["authorization"] || "").split(" ")[1];
-  if (!token || token !== process.env.OPENCLAW_API_TOKEN) return res.status(403).json({ error: "Token invalido" });
+  const authHeader = req.headers["authorization"] || "";
+  const token = authHeader.split(" ")[1];
+  const expectedToken = process.env.OPENCLAW_API_TOKEN || "sigocomfe2026";
+  
+  if (!token) {
+    console.warn("❌ OpenClaw: Sem token de autenticação");
+    return res.status(401).json({ error: "Token de autenticação não fornecido" });
+  }
+  
+  if (token !== expectedToken) {
+    console.warn(`❌ OpenClaw: Token inválido. Recebido: ${token.substring(0, 10)}...`);
+    return res.status(403).json({ error: "Token inválido" });
+  }
+  
+  console.log("✅ OpenClaw: Autenticação bem-sucedida");
   next();
 };
 
@@ -18,6 +31,12 @@ const verses = [
   { text: "Sede fortes e corajosos. Nao temais.", reference: "Josue 1:9" }
 ];
 
+// Health check (public, sem autenticação)
+router.get("/health", (req, res) => {
+  res.json({ status: "ok", service: "openclaw", message: "OpenClaw API online" });
+});
+
+// Bible verse (com autenticação)
 router.get("/bible-verse/random", auth, (req, res) => {
   res.json(verses[Math.floor(Math.random() * verses.length)]);
 });
@@ -38,9 +57,34 @@ router.post("/users/:userId/send-message", auth, async (req, res) => {
 
 router.get("/users/new", auth, async (req, res) => {
   try {
-    const r = await pool.query("SELECT id, email, created_at FROM users WHERE created_at >= $1", [req.query.since || new Date(Date.now() - 86400000).toISOString()]);
-    res.json(r.rows);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+    const since = req.query.since;
+    
+    // Validar parâmetro 'since'
+    let sinceDate;
+    if (since) {
+      sinceDate = new Date(parseInt(since) * 1000); // Converter timestamp em segundos para ms
+      if (isNaN(sinceDate.getTime())) {
+        return res.status(400).json({ error: "Parâmetro 'since' inválido. Use timestamp em segundos (unix time)." });
+      }
+    } else {
+      sinceDate = new Date(Date.now() - 86400000); // Últimas 24h por padrão
+    }
+
+    const r = await pool.query(
+      "SELECT id, email, full_name, avatar_url, created_at, role FROM users WHERE created_at >= $1 ORDER BY created_at DESC",
+      [sinceDate]
+    );
+
+    res.json({
+      success: true,
+      count: r.rows.length,
+      users: r.rows,
+      timestamp: Math.floor(Date.now() / 1000)
+    });
+  } catch (err) { 
+    console.error("Error in /users/new:", err);
+    res.status(500).json({ error: err.message }); 
+  }
 });
 
 router.get("/users/inactive", auth, async (req, res) => {
