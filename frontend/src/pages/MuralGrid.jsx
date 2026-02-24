@@ -65,17 +65,19 @@ export default function MuralGrid() {
   const [newMedia, setNewMedia] = useState(null);
   const [newMediaPreview, setNewMediaPreview] = useState(null);
   const [newMediaIsVideo, setNewMediaIsVideo] = useState(false);
+  const [newMediaType, setNewMediaType] = useState(null); // 'photo' | 'video' | 'audio' | 'url'
+  const [newMediaUrl, setNewMediaUrl] = useState(''); // Para URLs (YouTube, etc)
   const [posting, setPosting] = useState(false);
+  const [postingText, setPostingText] = useState('');
   const [likedPosts, setLikedPosts] = useState({});
   const [commentsData, setCommentsData] = useState({});
   const [commentText, setCommentText] = useState({});
   const [sendingComment, setSendingComment] = useState({});
   const [showLoginPopup, setShowLoginPopup] = useState(false);
-  const [selectedSongUrl, setSelectedSongUrl] = useState(null);
-  const [showMusicPicker, setShowMusicPicker] = useState(false);
 
   const photoRef = useRef(null);
   const videoRef = useRef(null);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     fetchPosts();
@@ -194,16 +196,24 @@ export default function MuralGrid() {
     } catch {}
   }
 
-  function handleMediaSelect(e) {
+  function handleMediaSelect(e, type) {
     const file = e.target.files?.[0];
     if (!file) return;
+    
     const isVid = file.type.startsWith('video/');
+    const isAud = file.type.startsWith('audio/');
     
     setNewMedia(file);
+    setNewMediaType(type); // 'photo', 'video', 'audio'
     setNewMediaIsVideo(isVid);
-    if (isVid) {
+    
+    if (isAud) {
+      // Para áudio, mostrar nome do ficheiro em vez de preview
+      setNewMediaPreview(file.name);
+    } else if (isVid) {
       setNewMediaPreview(URL.createObjectURL(file));
     } else {
+      // Foto
       const reader = new FileReader();
       reader.onload = () => setNewMediaPreview(reader.result);
       reader.readAsDataURL(file);
@@ -212,33 +222,57 @@ export default function MuralGrid() {
 
   async function uploadDirectToCloudinary(file) {
     const isVid = file.type.startsWith('video/');
-    const resourceType = isVid ? 'video' : 'image';
+    const isAud = file.type.startsWith('audio/');
+    const resourceType = isAud ? 'video' : (isVid ? 'video' : 'image');
 
-    if (file.size > 100 * 1024 * 1024) {
-      throw new Error('File size too large! Máximo 100MB.');
+    // Check file size
+    const maxSize = isVid ? 500 * 1024 * 1024 : (isAud ? 100 * 1024 * 1024 : 50 * 1024 * 1024);
+    if (file.size > maxSize) {
+      throw new Error(`Arquivo muito grande! Máximo ${maxSize / (1024 * 1024)}MB.`);
+    }
+
+    // Show progress for large files
+    if (file.size > 5 * 1024 * 1024) {
+      setPostingText(`📤 Enviando ${file.name}... isso pode levar um tempo.`);
     }
 
     const fd = new FormData();
     fd.append('file', file);
     fd.append('upload_preset', 'sigo_com_fe');
     fd.append('folder', 'sigo-com-fe/posts');
-    const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/${resourceType}/upload`, { method: 'POST', body: fd });
+    
+    const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/${resourceType}/upload`, { 
+      method: 'POST', 
+      body: fd 
+    });
     const result = await uploadRes.json();
     if (result.error) throw new Error(result.error.message);
     if (!result.secure_url) throw new Error('Upload falhou. Tente um arquivo menor.');
+    
     return { url: result.secure_url, type: resourceType };
   }
 
   async function handlePost(e) {
     e.preventDefault();
-    if ((!newText.trim() && !newMedia) || !token) return;
+    if ((!newText.trim() && !newMedia && !newMediaUrl.trim()) || !token) return;
     setPosting(true);
+    setPostingText('');
     try {
       const formData = new FormData();
-      let postContent = newText.trim() || (newMediaIsVideo ? '🎬' : '📸');
+      let postContent = newText.trim();
+      
+      // Determine default content based on media type
+      if (!postContent) {
+        if (newMediaUrl) postContent = isYouTube(newMediaUrl) ? '🎬' : '🔗';
+        else if (newMediaIsVideo) postContent = '🎬';
+        else if (isAudio(newMedia?.type)) postContent = '🎵';
+        else postContent = '📸';
+      }
+      
       formData.append('content', postContent);
       formData.append('category', newCategory);
       
+      // Handle media upload
       if (newMedia) {
         try {
           const result = await uploadDirectToCloudinary(newMedia);
@@ -246,8 +280,11 @@ export default function MuralGrid() {
           formData.append('media_type', result.type);
         } catch (uploadErr) {
           console.warn('Direct upload failed:', uploadErr);
-          formData.append('image', newMedia);
+          throw uploadErr;
         }
+      } else if (newMediaUrl.trim()) {
+        formData.append('media_url', newMediaUrl.trim());
+        formData.append('media_type', 'video'); // YouTube e URLs tratadas como video
       }
 
       const res = await fetch(`${API}/feed`, {
@@ -263,16 +300,29 @@ export default function MuralGrid() {
         data.post.like_count = 0;
         data.post.comment_count = 0;
         setPosts(prev => [data.post, ...prev]);
+        
+        // Reset form
         setNewText('');
         setNewMedia(null);
         setNewMediaPreview(null);
         setNewMediaIsVideo(false);
+        setNewMediaType(null);
+        setNewMediaUrl('');
         setShowForm(false);
       }
     } catch (err) {
-      alert('❌ Erro ao publicar: ' + (err.message || 'Tente novamente em alguns segundos.'));
+      console.error('Post error:', err);
+      const msg = err.message || 'Tente novamente em alguns segundos.';
+      if (msg.includes('File size') || msg.includes('too large')) {
+        alert('❌ Arquivo muito grande! Tente um ficheiro menor.');
+      } else if (msg.includes('network') || msg.includes('fetch')) {
+        alert('❌ Erro de conexão. Verifique sua internet.');
+      } else {
+        alert('❌ Erro ao publicar: ' + msg);
+      }
     } finally {
       setPosting(false);
+      setPostingText('');
     }
   }
 
@@ -409,52 +459,112 @@ export default function MuralGrid() {
                 fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box', marginBottom: '0.5rem',
               }} />
 
-            {/* Media buttons */}
-            <div style={{ display: 'flex', gap: 6, marginBottom: '0.5rem' }}>
+            {/* Media buttons - Instagram style */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, marginBottom: '1rem' }}>
               <button type="button" onClick={() => photoRef.current?.click()} style={{
-                flex: 1, padding: '0.7rem', borderRadius: 12, border: '2px dashed #ddd',
-                background: newMedia && !newMediaIsVideo ? '#e8f5e9' : '#fafafa',
-                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-                fontSize: '0.78rem', color: '#666',
+                padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
+                background: newMediaType === 'photo' ? '#f0f0f0' : '#fff',
+                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'photo' ? 600 : 400,
+                transition: 'all 0.2s',
               }}>
-                <Image size={24} color={newMedia && !newMediaIsVideo ? '#4caf50' : '#999'} />
-                {newMedia && !newMediaIsVideo ? '✅ Foto' : '📸 Foto'}
+                <span style={{ fontSize: '1.5rem' }}>📸</span>
+                Foto
               </button>
               <button type="button" onClick={() => videoRef.current?.click()} style={{
-                flex: 1, padding: '0.7rem', borderRadius: 12, border: '2px dashed #ddd',
-                background: newMediaIsVideo ? '#e8f5e9' : '#fafafa',
-                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-                fontSize: '0.78rem', color: '#666',
+                padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
+                background: newMediaType === 'video' ? '#f0f0f0' : '#fff',
+                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'video' ? 600 : 400,
               }}>
-                <Video size={24} color={newMediaIsVideo ? '#4caf50' : '#999'} />
-                {newMediaIsVideo ? '✅ Vídeo' : '🎬 Vídeo'}
+                <span style={{ fontSize: '1.5rem' }}>🎬</span>
+                Vídeo
+              </button>
+              <button type="button" onClick={() => audioRef.current?.click()} style={{
+                padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
+                background: newMediaType === 'audio' ? '#f0f0f0' : '#fff',
+                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'audio' ? 600 : 400,
+              }}>
+                <span style={{ fontSize: '1.5rem' }}>🎵</span>
+                Áudio
+              </button>
+              <button type="button" onClick={() => {
+                const url = prompt('Cole a URL (YouTube, Vimeo, etc):');
+                if (url) { setNewMediaUrl(url); setNewMediaType('url'); }
+              }} style={{
+                padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
+                background: newMediaType === 'url' ? '#f0f0f0' : '#fff',
+                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'url' ? 600 : 400,
+              }}>
+                <span style={{ fontSize: '1.5rem' }}>🔗</span>
+                URL
               </button>
             </div>
 
+            {/* URL Input */}
+            {newMediaType === 'url' && (
+              <div style={{ marginBottom: '0.5rem' }}>
+                <input
+                  type="text"
+                  value={newMediaUrl}
+                  onChange={e => setNewMediaUrl(e.target.value)}
+                  placeholder="Cole a URL de YouTube ou outro vídeo..."
+                  style={{
+                    width: '100%', padding: '0.7rem', borderRadius: 10, border: '2px solid #daa520',
+                    fontSize: '0.9rem', boxSizing: 'border-box', marginBottom: '0.5rem',
+                    background: '#fffbf0',
+                  }}
+                />
+                <button type="button" onClick={() => { setNewMediaUrl(''); setNewMediaType(null); }} style={{
+                  fontSize: '0.75rem', color: '#e74c3c', background: 'none', border: 'none',
+                  cursor: 'pointer', padding: '0.25rem',
+                }}>Limpar URL</button>
+              </div>
+            )}
+
             {/* Preview */}
-            {newMediaPreview && (
+            {newMediaPreview && newMediaType !== 'audio' && (
               <div style={{ position: 'relative', marginBottom: '0.5rem', borderRadius: 12, overflow: 'hidden' }}>
-                {newMediaIsVideo ? (
+                {newMediaType === 'video' ? (
                   <video src={newMediaPreview} controls style={{ width: '100%', maxHeight: 280, borderRadius: 12 }} />
+                ) : newMediaType === 'url' && isYouTube(newMediaUrl) ? (
+                  <div style={{ background: '#000', borderRadius: 12, padding: '1rem', textAlign: 'center' }}>
+                    <span style={{ color: '#fff', fontSize: '0.9rem' }}>🎬 YouTube (preview indisponível)</span>
+                  </div>
                 ) : (
                   <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 280, objectFit: 'cover', borderRadius: 12 }} />
                 )}
-                <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaIsVideo(false); }} style={{
+                <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaType(null); }} style={{
                   position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.6)', border: 'none',
                   borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
                 }}><X size={16} color="#fff" /></button>
               </div>
             )}
 
-            <button type="submit" disabled={posting || (!newText.trim() && !newMedia)} style={{
+            {/* Audio preview */}
+            {newMediaPreview && newMediaType === 'audio' && (
+              <div style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12, padding: '1rem', marginBottom: '0.5rem', textAlign: 'center' }}>
+                <div style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '0.5rem' }}>🎵</div>
+                <div style={{ color: '#fff', fontSize: '0.85rem', marginBottom: '1rem', wordBreak: 'break-word' }}>{newMediaPreview}</div>
+                <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaType(null); }} style={{
+                  background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', borderRadius: 20, padding: '0.4rem 1rem',
+                  cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600,
+                }}>Remover</button>
+              </div>
+            )}
+
+            <button type="submit" disabled={posting || (!newText.trim() && !newMedia && !newMediaUrl.trim())} style={{
               width: '100%', padding: '0.75rem', borderRadius: 14, border: 'none',
-              background: (newText.trim() || newMedia) ? 'linear-gradient(135deg, #daa520, #f4c542)' : '#ddd',
-              color: (newText.trim() || newMedia) ? '#1a0a3e' : '#999',
+              background: (newText.trim() || newMedia || newMediaUrl.trim()) ? 'linear-gradient(135deg, #daa520, #f4c542)' : '#ddd',
+              color: (newText.trim() || newMedia || newMediaUrl.trim()) ? '#1a0a3e' : '#999',
               fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem',
-            }}>{posting ? 'Publicando...' : 'Publicar'}</button>
+            }}>{posting ? (postingText || 'Publicando...') : 'Publicar'}</button>
             
-            <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
-            <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={handleMediaSelect} />
+            <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleMediaSelect(e, 'photo')} />
+            <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={(e) => handleMediaSelect(e, 'video')} />
+            <input ref={audioRef} type="file" accept="audio/mp3,audio/mpeg,audio/wav,audio/ogg,audio/m4a,audio/*" style={{ display: 'none' }} onChange={(e) => handleMediaSelect(e, 'audio')} />
           </form>
         </div>
       )}
