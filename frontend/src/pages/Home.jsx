@@ -1,611 +1,446 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useWebSocket } from '../context/WebSocketContext';
-import { useAuth } from '../context/AuthContext'; // NEW IMPORT
-import { HandHeart, Radio, Newspaper, Users, CheckCircle, ShieldAlert, MessageCircle, Music, UserPlus, Heart, ArrowRight, ThumbsUp, MessageSquare } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { HandHeart, Radio, Users, ShieldAlert, MessageCircle, BookOpen, Music, Flame, ArrowRight, Check } from 'lucide-react';
 
-const API_BASE = import.meta.env.VITE_API_URL || ''; // NEW CONSTANT
-const API = `${API_BASE}/api`; // NEW CONSTANT
+const API_BASE = import.meta.env.VITE_API_URL || '';
+const API = `${API_BASE}/api`;
 
-function getVersiculoDoDia(verses) {
-  const hoje = new Date();
-  const idx = (hoje.getFullYear() * 366 + hoje.getMonth() * 31 + hoje.getDate()) % verses.length;
-  return verses[idx];
-}
+const FEATURES = [
+  { emoji: '🙏', label: 'Orações', path: '/oracoes', color: '#daa520' },
+  { emoji: '🔴', label: 'Ao Vivo', path: '/ao-vivo', color: '#e74c3c' },
+  { emoji: '💬', label: 'Chat Pastoral', path: '/chat-pastoral', color: '#8e44ad' },
+  { emoji: '📖', label: 'IA Bíblica', path: '/ia-biblica', color: '#3498db' },
+  { emoji: '🎵', label: 'Música', path: '/musica', color: '#9b59b6' },
+  { emoji: '🔥', label: 'Consagração', path: '/consagracao', color: '#e67e22' },
+  { emoji: '👥', label: 'Grupos', path: '/grupos', color: '#1abc9c' },
+  { emoji: '📸', label: 'Mural', path: '/mural', color: '#f39c12' },
+];
+
+const TESTIMONIES_DEMO = [
+  {
+    id: '1',
+    author_name: 'Maria Silva',
+    content: 'Encontrei paz e comunidade nesta plataforma. Minhas orações foram ouvidas e respondidas.',
+    avatar_url: 'https://i.pravatar.cc/100?u=maria',
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    id: '2',
+    author_name: 'João Santos',
+    content: 'A IA Bíblica me ajudou a entender melhor as escrituras e fortalecer minha fé diariamente.',
+    avatar_url: 'https://i.pravatar.cc/100?u=joao',
+    created_at: new Date(Date.now() - 172800000).toISOString(),
+  },
+  {
+    id: '3',
+    author_name: 'Ana Costa',
+    content: 'Encontrei minha igreja local e agora sou membro ativo da comunidade cristã online e presencial.',
+    avatar_url: 'https://i.pravatar.cc/100?u=ana',
+    created_at: new Date(Date.now() - 259200000).toISOString(),
+  },
+];
 
 export default function Home() {
-  const { totalChurchesPraying } = useWebSocket();
-  const { user, token } = useAuth(); // NEW DESTRUCTURING
-  const [loaded, setLoaded] = useState(false);
-  const [helpSelected, setHelpSelected] = useState(null);
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [showInstall, setShowInstall] = useState(false);
-
-  // New state for posts
-  const [recentPosts, setRecentPosts] = useState([]);
-  const [loadingPosts, setLoadingPosts] = useState(true);
-
-  useEffect(() => {
-    const handler = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShowInstall(true);
-    };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
-
-  const handleInstall = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      setShowInstall(false);
-    }
-    setDeferredPrompt(null);
-  };
-
-  const [helpForm, setHelpForm] = useState({ name: '', contact: '', message: '' });
-  const [helpSent, setHelpSent] = useState(false);
-  const [shareCopied, setShareCopied] = useState(false);
-  const [showWelcomePopup, setShowWelcomePopup] = useState(false);
-  const [memberCount, setMemberCount] = useState(68);
   const { t } = useTranslation();
-  const verses = t('home.verses', { returnObjects: true });
-  const versiculo = getVersiculoDoDia(verses);
-
-  // Helper: get Cloudinary media URL with transformations
-  const getMediaUrl = (url) => {
-    if (!url) return '';
-    if (url.includes('youtube.com') || url.includes('youtu.be')) return url;
-    if (!url.includes('res.cloudinary.com')) return url; // Already processed or external
-
-    const parts = url.split('/upload/');
-    if (parts.length === 2) {
-      // Add transformations for quality and format
-      // For images, optimize, for videos, keep original to avoid re-encoding issues
-      const transformations = url.startsWith('https://res.cloudinary.com/degxiuf43/image') ? 'f_auto,q_auto/' : '';
-      return `${parts[0]}/upload/${transformations}${parts[1]}`;
-    }
-    return url;
-  };
-
-  // Helper: format date for display
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-
-    if (date.toDateString() === today.toDateString()) {
-      return 'Hoje';
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      return 'Ontem';
-    } else {
-      return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    }
-  };
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { liveStreams } = useWebSocket();
+  const [dailyVerse, setDailyVerse] = useState(null);
+  const [recentTestimonies, setRecentTestimonies] = useState(TESTIMONIES_DEMO);
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [helpPhase, setHelpPhase] = useState('initial');
 
   useEffect(() => {
-    const ti = setTimeout(() => setLoaded(true), 100);
-    return () => clearTimeout(ti);
+    // Get verse of the day
+    const verses = [
+      { text: 'Onde dois ou três estiverem reunidos em meu nome, ali estou eu no meio deles.', ref: 'Mateus 18:20' },
+      { text: 'Tudo posso naquele que me fortalece.', ref: 'Filipenses 4:13' },
+      { text: 'O Senhor é meu pastor; nada me faltará.', ref: 'Salmos 23:1' },
+      { text: 'Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito.', ref: 'João 3:16' },
+      { text: 'Confie no Senhor de todo o seu coração e não se apoie no seu próprio entendimento.', ref: 'Provérbios 3:5' },
+    ];
+    const today = new Date().getDate();
+    setDailyVerse(verses[today % verses.length]);
+
+    // Fetch recent testimonies
+    fetchRecentTestimonies();
   }, []);
 
-  // Fetch recent testimony posts
-  useEffect(() => {
-    async function fetchRecentTestimonies() {
-      setLoadingPosts(true);
-      try {
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-        const res = await fetch(`${API}/feed?category=testemunho&limit=3`, { headers });
-        if (res.ok) {
-          const data = await res.json();
-          setRecentPosts(data.posts || []);
-        } else {
-          console.error('Failed to fetch recent testimonies:', res.status);
-          setRecentPosts([]);
-        }
-      } catch (error) {
-        console.error('Error fetching recent testimonies:', error);
-        setRecentPosts([]);
-      } finally {
-        setLoadingPosts(false);
-      }
-    }
-    fetchRecentTestimonies();
-  }, [token]);
-
-
-  // Welcome popup for non-logged visitors (after 5 seconds)
-  useEffect(() => {
-    if (user) return;
-    const timer = setTimeout(() => setShowWelcomePopup(true), 5000);
-    return () => clearTimeout(timer);
-  }, [user]);
-
-  // Fetch member count (only for logged-in users)
-  useEffect(() => {
-    if (!token) return;
-    fetch(`${API}/profile/member-count`)
-      .then(r => r.json())
-      .then(d => { if (d.count) setMemberCount(d.count); })
-      .catch(() => {});
-  }, [token]);
-
-  const helpOptions = [
-    { key: 'seeThings', label: t('home.helpSeeThings') },
-    { key: 'hearThings', label: t('home.helpHearThings') },
-    { key: 'feelAlone', label: t('home.helpFeelAlone') },
-    { key: 'needPrayer', label: t('home.helpNeedPrayer') },
-    { key: 'anxious', label: t('home.helpAnxious') },
-    { key: 'depressed', label: t('home.helpDepressed') },
-  ];
-
-  const submitHelp = async () => {
+  const fetchRecentTestimonies = async () => {
     try {
-      await fetch('/api/help-requests', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: helpSelected, ...helpForm }),
-      });
-    } catch (e) { /* ok */ }
-    setHelpSent(true);
-    setTimeout(() => { setHelpSent(false); setHelpSelected(null); setHelpForm({ name: '', contact: '', message: '' }); }, 5000);
+      const res = await fetch(`${API}/feed?limit=3&category=testemunho`);
+      const data = await res.json();
+      if (data.posts && data.posts.length > 0) {
+        setRecentTestimonies(data.posts);
+      }
+    } catch (err) {
+      console.error('Error fetching testimonies:', err);
+    }
   };
 
-  const iconStyle = { color: '#3b5998', strokeWidth: 1.5 };
+  const handleHelpRequest = (phase) => {
+    setHelpPhase(phase);
+  };
 
   return (
-    <div>
-      {/* ===== HERO SECTION ===== */}
-      <section className={`hero ${loaded ? 'hero--loaded' : ''}`}>
-        <div className="hero__particles">
-          {[...Array(12)].map((_, i) => (
-            <span key={i} className="hero__particle" style={{
-              left: `${8 + (i * 7.5) % 85}%`,
-              animationDelay: `${i * 0.7}s`,
-              animationDuration: `${4 + (i % 3) * 2}s`
-            }} />
-          ))}
-        </div>
-
-        <h1 className="hero__title" style={{ fontSize: '2.2rem', maxWidth: 600, margin: '0 auto 1.5rem' }}>
-          Bem-vindo à Rede Social Cristã! Aqui a fé conecta corações. Oração, louvor, amizade e comunhão em um só lugar. Cristãos do mundo inteiro já fazem parte dessa família. Agora é a sua vez! ✨ Crie sua conta gratuita em menos de 30 segundos e faça parte dessa missão!
+    <div style={{ background: 'linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%)', minHeight: '100vh', color: '#fff', paddingBottom: '2rem' }}>
+      {/* Hero Section */}
+      <section style={{
+        background: 'linear-gradient(135deg, #daa520 0%, #f4c542 50%, #c0981f 100%)',
+        padding: '3rem 1rem',
+        textAlign: 'center',
+        color: '#1a0a3e',
+      }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 700, margin: '0 0 1rem', textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+          🙏 Sigo com Fé
         </h1>
-
-        {/* Versículo do dia */}
-        <div className="hero__verse">
-          <span className="hero__verse-text">"{versiculo.text}"</span>
-          <span className="hero__verse-ref">— {versiculo.ref}</span>
-          <button onClick={async () => {
-            const shareText = `✝️ ${versiculo.text} — ${versiculo.ref}\n\nSigo com Fé - sigocomfe.vercel.app`;
-            if (navigator.share) {
-              try { await navigator.share({ title: 'Versículo do Dia', text: shareText }); } catch (e) {}
-            } else {
-              try { await navigator.clipboard.writeText(shareText); setShareCopied(true); setTimeout(() => setShareCopied(false), 2500); } catch (e) {}
-            }
-          }} style={{
-            display: 'inline-flex', alignItems: 'center', gap: 4,
-            background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)',
-            color: '#f4d03f', borderRadius: 20, padding: '4px 12px', fontSize: '0.75rem',
-            cursor: 'pointer', marginTop: 6, backdropFilter: 'blur(4px)',
-          }}>
-            {shareCopied ? '✅ Copiado!' : '📤 Compartilhar'}
-          </button>
-        </div>
-
-        {/* CTA Principal */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
-          <Link to="/cadastro" className="btn btn-primary btn-lg" style={{
-            fontSize: '1.2rem',
-            padding: '1rem 2.5rem',
-            fontWeight: 700,
-            letterSpacing: '0.3px',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem'
-          }}>
-            <UserPlus size={22} /> Criar minha conta grátis
-          </Link>
-          <span style={{ fontSize: '0.85rem', opacity: 0.7, color: '#f4d03f' }}>
-            ✨ É rápido, gratuito e sem compromisso
-          </span>
-        </div>
-
-        {showInstall && (
-          <div style={{ marginTop: '1rem', textAlign: 'center' }}>
-            <button onClick={handleInstall} className="btn btn-sm" style={{
-              background: 'rgba(218,165,32,0.15)',
-              color: '#f4d03f',
-              border: '1px solid rgba(218,165,32,0.4)',
-              borderRadius: 20,
-              padding: '6px 18px',
-              fontSize: 13,
-              cursor: 'pointer',
-              backdropFilter: 'blur(4px)'
-            }}>
-              📲 {t('home.installApp', { defaultValue: 'Instalar App' })}
-            </button>
-          </div>
-        )}
-
-        <div className="hero__stats">
-          {totalChurchesPraying > 0 && (
-            <div className="hero__stat">
-              <Radio size={18} style={{ color: '#ff4444' }} />
-              <strong>{t('home.churchPraying', { count: totalChurchesPraying })}</strong>
-            </div>
+        <p style={{ fontSize: '1.1rem', margin: '0 0 1.5rem', opacity: 0.95, maxWidth: '600px', margin: '0 auto 1.5rem' }}>
+          {t('home.subtitle', 'Ore, conecte-se e fortaleça sua fé com milhares de irmãos ao redor do mundo.')}
+        </p>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          {user ? (
+            <Link to="/mural" style={{ textDecoration: 'none' }}>
+              <button style={{
+                padding: '0.8rem 2rem',
+                borderRadius: 25,
+                border: 'none',
+                background: '#1a0a3e',
+                color: '#daa520',
+                fontWeight: 700,
+                fontSize: '1rem',
+                cursor: 'pointer',
+                transition: 'all 0.3s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#2d1240';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#1a0a3e';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}>
+                Explorar Comunidade <ArrowRight size={18} />
+              </button>
+            </Link>
+          ) : (
+            <>
+              <Link to="/cadastro" style={{ textDecoration: 'none' }}>
+                <button style={{
+                  padding: '0.8rem 2rem',
+                  borderRadius: 25,
+                  border: 'none',
+                  background: '#1a0a3e',
+                  color: '#daa520',
+                  fontWeight: 700,
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#2d1240';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#1a0a3e';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}>
+                  {t('nav.register', 'Cadastrar')} <ArrowRight size={18} />
+                </button>
+              </Link>
+              <Link to="/login" style={{ textDecoration: 'none' }}>
+                <button style={{
+                  padding: '0.8rem 2rem',
+                  borderRadius: 25,
+                  border: '2px solid #1a0a3e',
+                  background: 'transparent',
+                  color: '#1a0a3e',
+                  fontWeight: 700,
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(26,10,62,0.1)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}>
+                  {t('nav.login', 'Entrar')}
+                </button>
+              </Link>
+            </>
           )}
         </div>
       </section>
 
-      {/* ===== COMO FUNCIONA ===== */}
-      <section style={{ padding: '3rem 1.5rem', textAlign: 'center', background: 'rgba(59,89,152,0.03)' }}>
-        <h2 style={{ fontSize: '1.6rem', marginBottom: '0.5rem', color: '#2c3e50' }}>Como funciona?</h2>
-        <p style={{ color: '#666', marginBottom: '2rem', fontSize: '1rem' }}>Três passos simples para transformar sua caminhada</p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap', maxWidth: 800, margin: '0 auto' }}>
-          {[
-            { step: '1', icon: <UserPlus size={36} style={iconStyle} />, title: 'Crie sua conta', desc: 'Rápido e gratuito. Leva menos de 1 minuto.' },
-            { step: '2', icon: <Users size={36} style={iconStyle} />, title: 'Conecte-se', desc: 'Encontre irmãos na fé, ore junto e compartilhe.' },
-            { step: '3', icon: <Heart size={36} style={{ color: '#e74c3c', strokeWidth: 1.5 }} />, title: 'Cresça na fé', desc: 'Fortaleça sua vida espiritual em comunidade.' },
-          ].map((item) => (
-            <div key={item.step} style={{
-              flex: '1 1 200px',
-              maxWidth: 240,
-              padding: '1.5rem 1rem',
-              borderRadius: 16,
-              background: '#fff',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-              position: 'relative'
-            }}>
-              <div style={{
-                width: 32, height: 32, borderRadius: '50%',
-                background: 'linear-gradient(135deg, #3b5998, #5b8def)',
-                color: '#fff', fontWeight: 700, fontSize: '0.9rem',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                margin: '0 auto 0.75rem'
-              }}>{item.step}</div>
-              {item.icon}
-              <h3 style={{ fontSize: '1.1rem', margin: '0.75rem 0 0.5rem', color: '#2c3e50' }}>{item.title}</h3>
-              <p style={{ fontSize: '0.9rem', color: '#666', margin: 0 }}>{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Verse of the Day */}
+      {dailyVerse && (
+        <section style={{ maxWidth: '900px', margin: '-3rem auto 3rem', padding: '0 1rem', position: 'relative', zIndex: 10 }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            borderRadius: 16,
+            padding: '2rem',
+            boxShadow: '0 8px 32px rgba(102,126,234,0.3)',
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>✨</div>
+            <p style={{ fontSize: '1.3rem', fontStyle: 'italic', margin: '0 0 1rem', lineHeight: 1.6 }}>
+              "{dailyVerse.text}"
+            </p>
+            <div style={{ fontSize: '0.9rem', opacity: 0.9, fontWeight: 600 }}>— {dailyVerse.ref}</div>
+          </div>
+        </section>
+      )}
 
-      {/* ===== PROVA SOCIAL ===== */}
-      <section style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
-        <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: '0.75rem',
-          background: 'linear-gradient(135deg, rgba(59,89,152,0.08), rgba(91,141,239,0.08))',
-          padding: '1rem 2rem', borderRadius: 16
-        }}>
-          <Users size={28} style={iconStyle} />
-          <span style={{ fontSize: '1.1rem', color: '#2c3e50' }}>
-            Cristãos do mundo todo já estão conectados aqui
-          </span>
-        </div>
-      </section>
-
-      {/* ===== DEPOIMENTOS ===== */}
-      <section style={{ padding: '2rem 1.5rem', textAlign: 'center', background: 'rgba(218,165,32,0.04)' }}>
-        <h2 style={{ fontSize: '1.3rem', marginBottom: '1.5rem', color: '#2c3e50' }}>💬 O que dizem nossos membros</h2>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', maxWidth: 700, margin: '0 auto' }}>
-          {[
-            { name: 'Maria S.', city: 'São Paulo', text: 'Encontrei uma comunidade de oração incrível. Todos os dias alguém ora por mim!' },
-            { name: 'Carlos E.', city: 'Lisboa', text: 'O Chat Pastoral me ajudou num momento muito difícil. Deus usou essa plataforma.' },
-            { name: 'Ana R.', city: 'Madrid', text: 'Mesmo longe do Brasil, me sinto conectada com irmãos na fé. Amei!' },
-          ].map((dep, i) => (
-            <div key={i} style={{
-              flex: '1 1 200px', maxWidth: 220, padding: '1rem', borderRadius: 14,
-              background: '#fff', boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-              textAlign: 'left',
-            }}>
-              <p style={{ fontSize: '0.82rem', color: '#444', fontStyle: 'italic', margin: '0 0 0.5rem', lineHeight: 1.5 }}>
-                "{dep.text}"
-              </p>
-              <div style={{ fontSize: '0.75rem', color: '#3b5998', fontWeight: 600 }}>
-                — {dep.name}, {dep.city}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ===== HISTÓRIAS INSPIRADORAS (Últimos Testemunhos do Mural) ===== */}
-      <section style={{ padding: '2rem 1.5rem', background: 'rgba(218,165,32,0.04)' }}>
-        <h2 style={{ fontSize: '1.6rem', marginBottom: '0.5rem', color: '#2c3e50', textAlign: 'center' }}>
-          ✨ Histórias Inspiradoras
-        </h2>
-        <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem', textAlign: 'center' }}>
-          Veja os últimos testemunhos de fé da nossa comunidade
-        </p>
-        {loadingPosts ? (
-          <p style={{ textAlign: 'center', color: '#999' }}>Carregando histórias...</p>
-        ) : recentPosts.length === 0 ? (
-          <p style={{ textAlign: 'center', color: '#999' }}>Nenhuma história inspiradora ainda. Compartilhe a sua no <Link to="/mural" style={{ color: '#9b59b6', fontWeight: 600 }}>Mural</Link>!</p>
-        ) : (
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', maxWidth: 900, margin: '0 auto' }}>
-            {recentPosts.map((post) => (
-              <div key={post.id} style={{
-                flex: '1 1 280px', maxWidth: 300, padding: '1.2rem', borderRadius: 14,
-                background: '#fff', boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
-                textAlign: 'left', display: 'flex', flexDirection: 'column',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.8rem' }}>
-                  <img src={post.author_avatar || '/default-avatar.png'} alt="Avatar" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
-                  <div>
-                    <div style={{ fontWeight: 600, color: '#1a0a3e', fontSize: '0.9rem' }}>{post.author_display_name || post.author_name || 'Anônimo'}</div>
-                    <div style={{ fontSize: '0.75rem', color: '#888' }}>{formatDate(post.created_at)}</div>
-                  </div>
-                </div>
-                {post.media_url && !post.audio_url && (
-                  <div style={{ marginBottom: '0.8rem', borderRadius: 10, overflow: 'hidden' }}>
-                    <img src={getMediaUrl(post.media_url)} alt="Post media" style={{ width: '100%', height: 180, objectFit: 'cover' }} />
-                  </div>
-                )}
-                {post.audio_url && (
-                  <div style={{
-                    background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 10,
-                    padding: '0.5rem 0.8rem', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: 8,
-                  }}>
-                    <span style={{ fontSize: '1.2rem', color: '#fff' }}>🎵</span>
-                    <span style={{ fontSize: '0.75rem', color: '#fff' }}>Música anexa</span>
-                  </div>
-                )}
-                <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.5, flex: 1 }}>
-                  {post.content.length > 150 ? post.content.substring(0, 150) + '...' : post.content}
-                </p>
-                <Link to={`/mural#post-${post.id}`} style={{
-                  marginTop: '1rem', display: 'inline-flex', alignItems: 'center', gap: 4,
-                  color: '#daa520', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem',
+      {/* Live Streams Banner */}
+      {liveStreams && liveStreams.length > 0 && (
+        <section style={{ maxWidth: '1200px', margin: '0 auto 3rem', padding: '0 1rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#e74c3c', animation: 'pulse 1.5s infinite', display: 'inline-block' }} />
+            🔴 Ao Vivo Agora
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
+            {liveStreams.map(stream => (
+              <div
+                key={stream.streamId}
+                onClick={() => navigate(`/directo?watch=${stream.streamId}`)}
+                style={{
+                  background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
+                  borderRadius: 14,
+                  padding: '1rem',
+                  cursor: 'pointer',
+                  border: '2px solid #e74c3c',
+                  transition: 'all 0.3s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 8px 20px rgba(231,76,60,0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
                 }}>
-                  Ver mais <ArrowRight size={14} />
-                </Link>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ width: 60, height: 60, borderRadius: '50%', background: '#daa520', margin: '0 auto 0.75rem', overflow: 'hidden', border: '3px solid #e74c3c' }}>
+                    {stream.userAvatar ? <img src={stream.userAvatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> :
+                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>👤</div>}
+                  </div>
+                  <div style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{stream.userName || 'Ao Vivo'}</div>
+                  <div style={{ background: '#e74c3c', borderRadius: 8, padding: '4px 8px', fontSize: '0.7rem', fontWeight: 700, display: 'inline-block', animation: 'pulse 1.5s infinite' }}>
+                    🔴 DIRECTO
+                  </div>
+                  <div style={{ fontSize: '0.85rem', opacity: 0.7, marginTop: '0.5rem' }}>👁 {stream.viewerCount || 0}</div>
+                </div>
               </div>
             ))}
           </div>
-        )}
-        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-          <Link to="/mural" className="btn btn-primary" style={{ padding: '0.8rem 2rem', fontSize: '1rem' }}>
-            Ver todos os testemunhos <ArrowRight size={16} />
-          </Link>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* ===== O QUE VOCÊ PODE FAZER ===== */}
-      <section style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '1.3rem', marginBottom: '0.5rem', color: '#2c3e50' }}>🌟 Tudo o que você encontra aqui</h2>
-        <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Uma plataforma completa para sua vida espiritual</p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10, maxWidth: 500, margin: '0 auto' }}>
-          {[
-            { emoji: '🙏', label: 'Pedidos de Oração', to: '/oracoes' },
-            { emoji: '📻', label: 'Oração ao Vivo', to: '/ao-vivo' },
-            { emoji: '💬', label: 'Chat com Pastor', to: '/chat-pastoral' },
-            { emoji: '📖', label: 'IA Bíblica', to: '/ia-biblica' },
-            { emoji: '🎵', label: 'Música Gospel', to: '/musica' },
-            { emoji: '🔥', label: 'Consagração', to: '/consagracao' },
-            { emoji: '👥', label: 'Grupos', to: '/grupos' },
-            { emoji: '📰', label: 'Mural', to: '/mural' },
-          ].map((item, i) => (
-            <Link key={i} to={item.to} style={{
-              padding: '0.8rem 0.5rem', borderRadius: 12, background: '#fff',
-              boxShadow: '0 1px 6px rgba(0,0,0,0.06)', textDecoration: 'none',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-              transition: 'transform 0.2s',
-            }}>
-              <span style={{ fontSize: '1.5rem' }}>{item.emoji}</span>
-              <span style={{ fontSize: '0.75rem', color: '#333', fontWeight: 600 }}>{item.label}</span>
+      {/* Features Grid */}
+      <section style={{ maxWidth: '1200px', margin: '0 auto 3rem', padding: '0 1rem' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', textAlign: 'center' }}>Explore as Principais Funcionalidades</h2>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '1rem',
+        }}>
+          {FEATURES.map(feature => (
+            <Link key={feature.path} to={feature.path} style={{ textDecoration: 'none' }}>
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(218,165,32,0.1), rgba(218,165,32,0.05))',
+                borderRadius: 14,
+                padding: '1.5rem',
+                textAlign: 'center',
+                cursor: 'pointer',
+                border: '2px solid rgba(218,165,32,0.2)',
+                transition: 'all 0.3s',
+                color: '#fff',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = feature.color;
+                e.currentTarget.style.background = `linear-gradient(135deg, ${feature.color}22, ${feature.color}11)`;
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = `0 8px 20px ${feature.color}33`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(218,165,32,0.2)';
+                e.currentTarget.style.background = 'linear-gradient(135deg, rgba(218,165,32,0.1), rgba(218,165,32,0.05))';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}>
+                <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>{feature.emoji}</div>
+                <div style={{ fontWeight: 700, fontSize: '1rem' }}>{feature.label}</div>
+              </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* ===== FEATURES (4 principais) ===== */}
-      <section className="features">
-        <div className="card feature-card">
-          <div className="feature-card__icon"><HandHeart size={48} style={iconStyle} /></div>
-          <h3>{t('home.featurePrayers')}</h3>
-          <p>{t('home.featurePrayersDesc')}</p>
-          <Link to="/oracoes" className="btn btn-primary btn-sm" style={{ marginTop: '0.75rem' }}>
-            Ver orações <ArrowRight size={14} />
-          </Link>
-        </div>
-        <div className="card feature-card">
-          <div className="feature-card__icon"><Newspaper size={48} style={iconStyle} /></div>
-          <h3>{t('home.featureMural')}</h3>
-          <p>{t('home.featureMuralDesc')}</p>
-          <Link to="/mural" className="btn btn-primary btn-sm" style={{ marginTop: '0.75rem' }}>
-            {t('home.explore')} <ArrowRight size={14} />
-          </Link>
-        </div>
-        <div className="card feature-card">
-          <div className="feature-card__icon"><MessageCircle size={48} style={{ color: '#7c5cbf', strokeWidth: 1.5 }} /></div>
-          <h3>Chat Pastoral</h3>
-          <p>Converse com líderes e pastores. Acolhimento e orientação espiritual quando você precisar.</p>
-        </div>
-        <div className="card feature-card">
-          <div className="feature-card__icon"><Music size={48} style={{ color: '#e67e22', strokeWidth: 1.5 }} /></div>
-          <h3>Música & Louvor</h3>
-          <p>Louve e adore com a comunidade. Músicas que tocam o coração e elevam o espírito.</p>
+      {/* Recent Testimonies */}
+      {recentTestimonies.length > 0 && (
+        <section style={{ maxWidth: '1200px', margin: '0 auto 3rem', padding: '0 1rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', textAlign: 'center' }}>Testemunhos Recentes</h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '1.5rem',
+          }}>
+            {recentTestimonies.slice(0, 3).map(testimony => (
+              <div
+                key={testimony.id}
+                style={{
+                  background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+                  borderRadius: 14,
+                  padding: '1.5rem',
+                  borderLeft: '4px solid #daa520',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                  <img
+                    src={testimony.author_avatar || `https://i.pravatar.cc/100?u=${testimony.author_name}`}
+                    alt=""
+                    style={{ width: 40, height: 40, borderRadius: '50%', marginRight: '0.75rem', objectFit: 'cover', background: '#daa520' }}
+                  />
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{testimony.author_name}</div>
+                    <div style={{ fontSize: '0.75rem', opacity: 0.6 }}>Há alguns dias</div>
+                  </div>
+                </div>
+                <p style={{ margin: 0, fontSize: '0.95rem', lineHeight: 1.6, opacity: 0.9 }}>
+                  "{testimony.content}"
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Why Choose Us */}
+      <section style={{ maxWidth: '1200px', margin: '0 auto 3rem', padding: '0 1rem' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', textAlign: 'center' }}>Por Que Escolher Sigo com Fé?</h2>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '1.5rem',
+        }}>
+          {[
+            { icon: '🌍', title: 'Comunidade Global', desc: 'Conecte-se com cristãos de todo o mundo' },
+            { icon: '🔐', title: 'Seguro e Privado', desc: 'Seus dados estão sempre protegidos' },
+            { icon: '⚡', title: 'Totalmente Grátis', desc: 'Acesso completo sem custos ocultos' },
+            { icon: '📱', title: 'Mobile First', desc: 'Funciona perfeitamente em seu telemóvel' },
+          ].map((item, idx) => (
+            <div key={idx} style={{
+              background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+              borderRadius: 14,
+              padding: '2rem',
+              textAlign: 'center',
+              border: '1px solid rgba(218,165,32,0.2)',
+            }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{item.icon}</div>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem' }}>{item.title}</h3>
+              <p style={{ margin: 0, opacity: 0.8, fontSize: '0.9rem' }}>{item.desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ===== AJUDA (compacta) ===== */}
-      <section style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
-        <div style={{
-          maxWidth: 500, margin: '0 auto', padding: '1.5rem',
-          borderRadius: 16, background: 'linear-gradient(135deg, rgba(124,92,191,0.06), rgba(91,141,239,0.06))',
-          border: '1px solid rgba(124,92,191,0.15)'
-        }}>
-          <ShieldAlert size={32} style={{ color: '#7c5cbf', marginBottom: '0.5rem' }} />
-          <h3 style={{ fontSize: '1.1rem', color: '#5b3d99', marginBottom: '0.25rem' }}>{t('home.helpTitle')}</h3>
-          <p style={{ color: '#666', fontSize: '0.85rem', marginBottom: '0.75rem' }}>{t('home.helpSubtitle')}</p>
-          <button className="btn btn-primary btn-sm" onClick={() => setHelpSelected('open')} style={{
-            background: 'linear-gradient(135deg, #7c5cbf, #5b8def)', borderColor: '#7c5cbf'
+      {/* For Pastors */}
+      <section style={{
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+        margin: '3rem 0',
+        padding: '3rem 1rem',
+        textAlign: 'center',
+      }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem' }}>Para Pastores</h2>
+        <p style={{ fontSize: '1rem', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem', opacity: 0.9 }}>
+          Ferramentas completas para gerenciar sua congregação, finanças, campanhas e muito mais.
+        </p>
+        <Link to="/cadastro" style={{ textDecoration: 'none' }}>
+          <button style={{
+            padding: '0.8rem 2rem',
+            borderRadius: 25,
+            border: 'none',
+            background: 'linear-gradient(135deg, #daa520, #f4c542)',
+            color: '#1a0a3e',
+            fontWeight: 700,
+            fontSize: '1rem',
+            cursor: 'pointer',
+            transition: 'all 0.3s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 8px 20px rgba(218,165,32,0.3)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = 'none';
           }}>
-            {t('home.helpBtn')}
+            Cadastre Sua Igreja
+          </button>
+        </Link>
+      </section>
+
+      {/* Help CTA */}
+      <section style={{ maxWidth: '1200px', margin: '0 auto 3rem', padding: '0 1rem' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', textAlign: 'center' }}>Precisa de Ajuda?</h2>
+        <div style={{
+          background: 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)',
+          borderRadius: 16,
+          padding: '2rem',
+          textAlign: 'center',
+        }}>
+          <p style={{ margin: '0 0 1.5rem', fontSize: '1.1rem' }}>
+            Você não está sozinho. Nossa comunidade está aqui para ajudar você.
+          </p>
+          <button
+            onClick={() => setShowHelpModal(true)}
+            style={{
+              padding: '0.8rem 2rem',
+              borderRadius: 25,
+              border: 'none',
+              background: '#1a0a3e',
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: '1rem',
+              cursor: 'pointer',
+              transition: 'all 0.3s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}>
+            Pedir Ajuda
           </button>
         </div>
       </section>
 
-      {/* ===== CONVITE PARA PASTORES ===== */}
-      <section style={{ padding: '2.5rem 1.5rem', textAlign: 'center', background: 'linear-gradient(135deg, rgba(108,63,160,0.06), rgba(212,168,67,0.08))' }}>
-        <div style={{ maxWidth: 550, margin: '0 auto' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>⛪</div>
-          <h2 style={{ fontSize: '1.4rem', color: '#4A2270', marginBottom: '0.5rem' }}>
-            Pastores, Evangelistas e Pregadores
-          </h2>
-          <p style={{ fontSize: '0.95rem', color: '#555', lineHeight: 1.7, marginBottom: '1rem' }}>
-            H{'á'} pessoas nos quatro cantos do mundo precisando de ajuda espiritual.
-            Esta rede social est{'á'} sendo vista globalmente — {'é'} o momento de
-            <strong> ganhar almas para o Reino do Senhor</strong>.
-          </p>
-          <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-            Cadastre-se como membro e entre em contato conosco para receber acesso de Pastor.
-            Com o <strong>Painel do Pastor</strong> voc{'ê'} pode gerenciar sua igreja,
-            acompanhar membros, registrar d{'í'}zimos, criar estudos b{'í'}blicos e muito mais.
-          </p>
-          <Link to="/cadastro" style={{
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            background: 'linear-gradient(135deg, #6C3FA0, #4A2270)',
-            color: '#fff', padding: '0.9rem 2rem', borderRadius: 12,
-            fontWeight: 700, fontSize: '1rem', textDecoration: 'none',
-            boxShadow: '0 4px 15px rgba(108,63,160,0.3)',
-          }}>
-            <HandHeart size={20} /> Quero ajudar como Pastor
-          </Link>
-        </div>
-      </section>
-
-      {/* ===== CTA FINAL ===== */}
-      <section style={{
-        padding: '3rem 1.5rem', textAlign: 'center',
-        background: 'linear-gradient(135deg, #3b5998, #5b8def)',
-        borderRadius: '24px 24px 0 0',
-        margin: '0 -1rem'
-      }}>
-        <h2 style={{ color: '#fff', fontSize: '1.6rem', marginBottom: '0.5rem' }}>Entre na Rede Social Cristã</h2>
-        <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '1rem', marginBottom: '1.5rem', maxWidth: 450, margin: '0 auto 1.5rem' }}>
-          Sua jornada de fé não precisa ser solitária. Conecte-se, ore, louve e cresça com outros cristãos.
-        </p>
-        <Link to="/cadastro" className="btn btn-lg" style={{
-          background: '#fff', color: '#3b5998', fontWeight: 700,
-          fontSize: '1.15rem', padding: '1rem 2.5rem',
-          borderRadius: 12, display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-          textDecoration: 'none', boxShadow: '0 4px 15px rgba(0,0,0,0.15)'
-        }}>
-          <UserPlus size={20} /> Criar minha conta grátis
-        </Link>
-        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', marginTop: '0.75rem' }}>
-          Já tem conta? <Link to="/login" style={{ color: '#f4d03f', textDecoration: 'underline' }}>Entrar</Link>
+      {/* Footer CTA */}
+      <section style={{ textAlign: 'center', padding: '2rem 1rem', borderTop: '1px solid rgba(218,165,32,0.2)' }}>
+        <p style={{ fontSize: '0.9rem', opacity: 0.7 }}>
+          {t('footer', '© 2026 Sigo com Fé - Tecnologia a serviço do Reino')}
         </p>
       </section>
-
-      {/* ===== HELP MODAL ===== */}
-      {helpSelected && (
-        <div className="help-modal-overlay" onClick={() => { setHelpSelected(null); setHelpSent(false); }}>
-          <div className="help-modal" onClick={e => e.stopPropagation()}>
-            <button className="help-modal__close" onClick={() => { setHelpSelected(null); setHelpSent(false); }}>✕</button>
-            <ShieldAlert size={32} style={{ color: '#7c5cbf', marginBottom: '0.5rem' }} />
-            <h3 style={{ color: '#5b3d99', marginBottom: '0.25rem' }}>{t('home.helpTitle')}</h3>
-            <p style={{ color: '#666', fontSize: '0.85rem', marginBottom: '1rem' }}>{t('home.helpSubtitle')}</p>
-
-            {helpSent ? (
-              <div style={{ background: '#d4edda', color: '#155724', padding: '1rem', borderRadius: '10px', fontWeight: 500 }}>
-                {t('home.helpSent')}
-              </div>
-            ) : helpSelected === 'open' ? (
-              <div className="help-modal__options">
-                {helpOptions.map(opt => (
-                  <button key={opt.key} className="help-option-btn" onClick={() => setHelpSelected(opt.key)}>
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #7c5cbf, #5b8def)', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: '16px', fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.25rem' }}>
-                  {helpOptions.find(o => o.key === helpSelected)?.label}
-                </div>
-                <input type="text" placeholder={t('home.helpNamePlaceholder')} value={helpForm.name} onChange={e => setHelpForm(f => ({ ...f, name: e.target.value }))} className="help-input" />
-                <input type="text" placeholder={t('home.helpContactPlaceholder')} value={helpForm.contact} onChange={e => setHelpForm(f => ({ ...f, contact: e.target.value }))} className="help-input" />
-                <textarea placeholder={t('home.helpMessagePlaceholder')} value={helpForm.message} onChange={e => setHelpForm(f => ({ ...f, message: e.target.value }))} className="help-input" rows={3} />
-                <button className="btn btn-primary" onClick={submitHelp} disabled={!helpForm.contact} style={{ background: 'linear-gradient(135deg, #7c5cbf, #5b8def)', borderColor: '#7c5cbf' }}>
-                  {t('home.helpSend')}
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ===== WELCOME POPUP (non-logged visitors after 5s) ===== */}
-      {showWelcomePopup && !user && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.6)', zIndex: 9999,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: '1rem',
-        }} onClick={() => setShowWelcomePopup(false)}>
-          <div style={{
-            background: '#fff', borderRadius: 20, padding: '2rem 1.5rem',
-            maxWidth: 380, width: '100%', textAlign: 'center',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-            animation: 'popupSlideIn 0.4s ease-out',
-          }} onClick={e => e.stopPropagation()}>
-            <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>{'\u{1F64F}'}</div>
-            <h2 style={{ fontSize: '1.4rem', color: '#1a0a3e', margin: '0 0 0.5rem' }}>
-              Bem-vindo {'à'} Rede Social Crist{'ã'}!
-            </h2>
-            <p style={{ fontSize: '0.95rem', color: '#555', lineHeight: 1.6, margin: '0 0 1rem' }}>
-              Ora{'çã'}o, louvor, amizades e muito mais. Crist{'ã'}os do mundo todo j{'á'} est{'ã'}o conectados.
-              <br />Crie sua conta gr{'á'}tis em 30 segundos!
-            </p>
-            <Link to="/cadastro" style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: 'linear-gradient(135deg, #3b5998, #5b8def)',
-              color: '#fff', padding: '0.9rem 2rem', borderRadius: 12,
-              fontWeight: 700, fontSize: '1.05rem', textDecoration: 'none',
-              boxShadow: '0 4px 15px rgba(59,89,152,0.3)',
-            }} onClick={() => setShowWelcomePopup(false)}>
-              <UserPlus size={20} /> Criar conta gr{'á'}tis
-            </Link>
-            <p style={{ fontSize: '0.8rem', color: '#999', marginTop: '0.8rem', cursor: 'pointer' }}
-              onClick={() => setShowWelcomePopup(false)}>
-              Agora n{'ã'}o, quero explorar primeiro
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* ===== STICKY TOP BAR (non-logged visitors) ===== */}
-      {!user && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 999,
-          background: 'linear-gradient(135deg, #1a0a3e, #3b5998)',
-          color: '#fff', padding: '8px 16px',
-          display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12,
-          fontSize: '0.82rem', boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-        }}>
-          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {'\u2728'} {versiculo.text.length > 60 ? versiculo.text.substring(0, 60) + '...' : versiculo.text}
-          </span>
-          <Link to="/cadastro" style={{
-            background: '#f4d03f', color: '#1a0a3e', padding: '4px 14px',
-            borderRadius: 20, fontWeight: 700, fontSize: '0.78rem',
-            textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0,
-          }}>
-            Criar conta {'\u2192'}
-          </Link>
-        </div>
-      )}
 
       <style>{`
-        @keyframes popupSlideIn {
-          from { transform: translateY(30px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.7; }
         }
       `}</style>
     </div>
