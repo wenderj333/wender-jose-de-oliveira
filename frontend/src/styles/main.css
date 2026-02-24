@@ -1759,4 +1759,322 @@ body {
   50% { transform: scale(1.08); box-shadow: 0 0 35px rgba(76,175,80,0.9), 0 0 60px rgba(76,175,80,0.3); }
 }
 
+/* ===== INSTAGRAM-STYLE MURAL GRID ===== */
+.mural-grid-container {
+  background: #fafbfc;
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.mural-grid-header {
+  padding: 1rem;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 70px;
+  z-index: 100;
+}
+
+.mural-grid-header h1 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a0a3e;
+}
+
+.mural-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.mural-post-card {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mural-post-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.mural-post-card img,
+.mural-post-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mural-post-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-size: 1.2rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+.mural-post-card:hover .mural-post-overlay {
+  opacity: 1;
+}
+
+/* Modal */
+.mural-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.mural-modal {
+  background: #fff;
+  border-radius: 16px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 0;
+}
+
+.mural-modal-image {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mural-modal-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.mural-modal-sidebar {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  overflow-y: auto;
+}
+
+.mural-modal-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mural-modal-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.mural-modal-author img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #daa520;
+}
+
+.mural-modal-content {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.mural-modal-content p {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  color: #1a0a3e;
+  line-height: 1.5;
+}
+
+.mural-modal-actions {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0.5rem;
+}
+
+.mural-modal-action-btn {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 400;
+  transition: all 0.2s;
+}
+
+.mural-modal-action-btn:hover {
+  background: #f5f5f5;
+}
+
+.mural-modal-action-btn.liked {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.mural-comments-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.mural-comment-item {
+  padding: 0.6rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.mural-comment-text {
+  flex: 1;
+}
+
+.mural-comment-author {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #1a0a3e;
+}
+
+.mural-comment-content {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 2px;
+}
+
+.mural-comment-delete {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+}
+
+.mural-comment-input {
+  padding: 0.75rem;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  gap: 6px;
+}
+
+.mural-comment-input input {
+  flex: 1;
+  padding: 0.6rem;
+  border-radius: 20px;
+  border: 1px solid #e0e0e0;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.mural-comment-input input:focus {
+  border-color: #daa520;
+}
+
+.mural-comment-input button {
+  background: #daa520;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.mural-comment-input button:hover {
+  background: #c0981f;
+}
+
+.mural-comment-input button:disabled {
+  background: #ddd;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mural-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 4px;
+  }
+
+  .mural-modal {
+    grid-template-columns: 1fr;
+    max-width: 90vw;
+  }
+
+  .mural-modal-sidebar {
+    max-height: 50vh;
+  }
+
+  .mural-modal-image {
+    min-height: 300px;
+  }
+
+  .mural-post-card {
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mural-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .mural-modal {
+    grid-template-columns: 1fr;
+  }
+}
+
 

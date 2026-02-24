@@ -1,0 +1,661 @@
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from '../context/AuthContext';
+import { useWebSocket } from '../context/WebSocketContext';
+import { Plus, Filter, X, Send, Heart, MessageCircle, Image, Video, Play, User, Share2, ChevronDown, Trash2, Music, Radio } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+
+const API_BASE = import.meta.env.VITE_API_URL || '';
+const API = `${API_BASE}/api`;
+
+const CATEGORIES = [
+  { value: 'testemunho', label: '🙏 Testemunho', color: '#daa520' },
+  { value: 'louvor', label: '🎵 Louvor', color: '#9b59b6' },
+  { value: 'foto', label: '📸 Foto/Vídeo', color: '#3498db' },
+  { value: 'versiculo', label: '📖 Versículo', color: '#27ae60' },
+  { value: 'reflexao', label: '💭 Reflexão', color: '#e67e22' },
+  { value: 'campanha', label: '💝 Campanha / Causa', color: '#e74c3c' },
+];
+
+function isAudio(url) {
+  if (!url) return false;
+  return /\.(mp3|wav|ogg|m4a|aac|flac)/i.test(url);
+}
+
+function isVideo(url) {
+  if (!url) return false;
+  if (isAudio(url)) return false;
+  return /\.(mp4|webm|mov)/i.test(url) || url.includes('/video/') || url.includes('resource_type=video');
+}
+
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Agora';
+  if (mins < 60) return `Há ${mins}min`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `Há ${hrs}h`;
+  const days = Math.floor(hrs / 24);
+  return `Há ${days}d`;
+}
+
+export default function MuralGrid() {
+  const { t } = useTranslation();
+  const { user, token } = useAuth();
+  const navigate = useNavigate();
+  const { liveStreams } = useWebSocket();
+  
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [newText, setNewText] = useState('');
+  const [newCategory, setNewCategory] = useState('testemunho');
+  const [newMedia, setNewMedia] = useState(null);
+  const [newMediaPreview, setNewMediaPreview] = useState(null);
+  const [newMediaIsVideo, setNewMediaIsVideo] = useState(false);
+  const [posting, setPosting] = useState(false);
+  const [likedPosts, setLikedPosts] = useState({});
+  const [commentsData, setCommentsData] = useState({});
+  const [commentText, setCommentText] = useState({});
+  const [sendingComment, setSendingComment] = useState({});
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [selectedSongUrl, setSelectedSongUrl] = useState(null);
+  const [showMusicPicker, setShowMusicPicker] = useState(false);
+
+  const photoRef = useRef(null);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  async function fetchPosts() {
+    try {
+      const res = await fetch(`${API}/feed?limit=50`);
+      const data = await res.json();
+      const p = data.posts || [];
+      setPosts(p);
+      if (token) {
+        try {
+          const r = await fetch(`${API}/feed/liked-posts`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const d = await r.json();
+          const liked = {};
+          (d.likedIds || []).forEach(id => { liked[id] = true; });
+          setLikedPosts(liked);
+        } catch {}
+      }
+    } catch (err) {
+      console.error('Error fetching feed:', err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleLike(postId) {
+    if (!token) { setShowLoginPopup(true); return; }
+    const wasLiked = likedPosts[postId];
+    setLikedPosts(prev => ({ ...prev, [postId]: !wasLiked }));
+    setPosts(prev => prev.map(p => p.id === postId
+      ? { ...p, like_count: Math.max(0, (p.like_count || 0) + (wasLiked ? -1 : 1)) }
+      : p
+    ));
+    try {
+      await fetch(`${API}/feed/${postId}/like`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch {
+      setLikedPosts(prev => ({ ...prev, [postId]: wasLiked }));
+      setPosts(prev => prev.map(p => p.id === postId
+        ? { ...p, like_count: Math.max(0, (p.like_count || 0) + (wasLiked ? 1 : -1)) }
+        : p
+      ));
+    }
+  }
+
+  async function fetchComments(postId) {
+    try {
+      const res = await fetch(`${API}/feed/${postId}/comments`);
+      const data = await res.json();
+      setCommentsData(prev => ({ ...prev, [postId]: data.comments || [] }));
+    } catch {
+      setCommentsData(prev => ({ ...prev, [postId]: [] }));
+    }
+  }
+
+  async function handleSendComment(postId) {
+    const text = (commentText[postId] || '').trim();
+    if (!text || !token) return;
+    setSendingComment(prev => ({ ...prev, [postId]: true }));
+    try {
+      const res = await fetch(`${API}/feed/${postId}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ content: text }),
+      });
+      const data = await res.json();
+      if (data.comment) {
+        setCommentsData(prev => ({
+          ...prev,
+          [postId]: [...(prev[postId] || []), data.comment]
+        }));
+        setCommentText(prev => ({ ...prev, [postId]: '' }));
+        setPosts(prev => prev.map(p => p.id === postId
+          ? { ...p, comment_count: (p.comment_count || 0) + 1 }
+          : p
+        ));
+      }
+    } catch (err) { console.error(err); }
+    finally { setSendingComment(prev => ({ ...prev, [postId]: false })); }
+  }
+
+  async function handleDeletePost(postId) {
+    if (!confirm('Tem certeza que deseja excluir esta publicação?')) return;
+    try {
+      const res = await fetch(`${API}/feed/${postId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setPosts(prev => prev.filter(p => p.id !== postId));
+        setSelectedPost(null);
+      }
+    } catch (err) { console.error(err); }
+  }
+
+  async function handleDeleteComment(commentId, postId) {
+    try {
+      await fetch(`${API}/feed/comments/${commentId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCommentsData(prev => ({
+        ...prev,
+        [postId]: (prev[postId] || []).filter(c => c.id !== commentId)
+      }));
+      setPosts(prev => prev.map(p => p.id === postId
+        ? { ...p, comment_count: Math.max(0, (p.comment_count || 0) - 1) }
+        : p
+      ));
+    } catch {}
+  }
+
+  function handleMediaSelect(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const isVid = file.type.startsWith('video/');
+    
+    setNewMedia(file);
+    setNewMediaIsVideo(isVid);
+    if (isVid) {
+      setNewMediaPreview(URL.createObjectURL(file));
+    } else {
+      const reader = new FileReader();
+      reader.onload = () => setNewMediaPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async function uploadDirectToCloudinary(file) {
+    const isVid = file.type.startsWith('video/');
+    const resourceType = isVid ? 'video' : 'image';
+
+    if (file.size > 100 * 1024 * 1024) {
+      throw new Error('File size too large! Máximo 100MB.');
+    }
+
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', 'sigo_com_fe');
+    fd.append('folder', 'sigo-com-fe/posts');
+    const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/${resourceType}/upload`, { method: 'POST', body: fd });
+    const result = await uploadRes.json();
+    if (result.error) throw new Error(result.error.message);
+    if (!result.secure_url) throw new Error('Upload falhou. Tente um arquivo menor.');
+    return { url: result.secure_url, type: resourceType };
+  }
+
+  async function handlePost(e) {
+    e.preventDefault();
+    if ((!newText.trim() && !newMedia) || !token) return;
+    setPosting(true);
+    try {
+      const formData = new FormData();
+      let postContent = newText.trim() || (newMediaIsVideo ? '🎬' : '📸');
+      formData.append('content', postContent);
+      formData.append('category', newCategory);
+      
+      if (newMedia) {
+        try {
+          const result = await uploadDirectToCloudinary(newMedia);
+          formData.append('media_url', result.url);
+          formData.append('media_type', result.type);
+        } catch (uploadErr) {
+          console.warn('Direct upload failed:', uploadErr);
+          formData.append('image', newMedia);
+        }
+      }
+
+      const res = await fetch(`${API}/feed`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      if (!res.ok) throw new Error(`Server error ${res.status}`);
+      const data = await res.json();
+      if (data.post) {
+        data.post.author_name = user.full_name;
+        data.post.author_avatar = user.avatar_url;
+        data.post.like_count = 0;
+        data.post.comment_count = 0;
+        setPosts(prev => [data.post, ...prev]);
+        setNewText('');
+        setNewMedia(null);
+        setNewMediaPreview(null);
+        setNewMediaIsVideo(false);
+        setShowForm(false);
+      }
+    } catch (err) {
+      alert('❌ Erro ao publicar: ' + (err.message || 'Tente novamente em alguns segundos.'));
+    } finally {
+      setPosting(false);
+    }
+  }
+
+  const getMediaUrl = (url) => url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
+  const getAvatarUrl = (url) => url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
+
+  // Get thumb for grid (prioritize media_url, fallback to others)
+  const getThumbnail = (post) => {
+    if (post.media_url && post.media_type === 'image') return getMediaUrl(post.media_url);
+    if (post.media_url && post.media_type === 'video') {
+      // Try to get thumbnail from cloudinary
+      if (post.media_url.includes('cloudinary')) {
+        return post.media_url.replace('/upload/', '/upload/w_400,h_400,c_fill,q_auto/');
+      }
+    }
+    // Fallback: generate emoji thumbnail based on category
+    return null;
+  };
+
+  return (
+    <div style={{ background: '#fafbfc', minHeight: '100vh', paddingBottom: '2rem' }}>
+      {/* Header */}
+      <div style={{
+        padding: '1rem 1rem',
+        background: '#fff',
+        borderBottom: '1px solid #e0e0e0',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        position: 'sticky', top: 70, zIndex: 100,
+      }}>
+        <h1 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 700, color: '#1a0a3e' }}>📸 Mural</h1>
+        {user && (
+          <button onClick={() => setShowForm(!showForm)} style={{
+            padding: '0.5rem 1rem', borderRadius: 20, border: 'none',
+            background: showForm ? '#e74c3c' : '#daa520', color: '#fff',
+            fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+            fontSize: '0.9rem',
+          }}>
+            {showForm ? <X size={16} /> : <Plus size={16} />}
+            {showForm ? 'Cancelar' : 'Publicar'}
+          </button>
+        )}
+      </div>
+
+      {/* New Post Form */}
+      {showForm && user && (
+        <div style={{
+          background: '#fff',
+          borderBottom: '1px solid #e0e0e0',
+          padding: '1rem',
+          maxWidth: '600px',
+          margin: '0 auto',
+        }}>
+          <form onSubmit={handlePost}>
+            {/* Categories */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '0.75rem' }}>
+              {CATEGORIES.map(cat => (
+                <button type="button" key={cat.value} onClick={() => setNewCategory(cat.value)} style={{
+                  padding: '4px 12px', borderRadius: 16, border: 'none', cursor: 'pointer', fontSize: '0.8rem',
+                  background: newCategory === cat.value ? cat.color + '22' : '#f5f5f5',
+                  color: newCategory === cat.value ? cat.color : '#666',
+                  fontWeight: newCategory === cat.value ? 600 : 400,
+                }}>{cat.label}</button>
+              ))}
+            </div>
+
+            {/* Text */}
+            <textarea value={newText} onChange={e => setNewText(e.target.value)}
+              placeholder="Compartilhe algo com a comunidade..."
+              rows={2} style={{
+                width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd',
+                fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box', marginBottom: '0.5rem',
+              }} />
+
+            {/* Media buttons */}
+            <div style={{ display: 'flex', gap: 6, marginBottom: '0.5rem' }}>
+              <button type="button" onClick={() => photoRef.current?.click()} style={{
+                flex: 1, padding: '0.7rem', borderRadius: 12, border: '2px dashed #ddd',
+                background: newMedia && !newMediaIsVideo ? '#e8f5e9' : '#fafafa',
+                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                fontSize: '0.78rem', color: '#666',
+              }}>
+                <Image size={24} color={newMedia && !newMediaIsVideo ? '#4caf50' : '#999'} />
+                {newMedia && !newMediaIsVideo ? '✅ Foto' : '📸 Foto'}
+              </button>
+              <button type="button" onClick={() => videoRef.current?.click()} style={{
+                flex: 1, padding: '0.7rem', borderRadius: 12, border: '2px dashed #ddd',
+                background: newMediaIsVideo ? '#e8f5e9' : '#fafafa',
+                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                fontSize: '0.78rem', color: '#666',
+              }}>
+                <Video size={24} color={newMediaIsVideo ? '#4caf50' : '#999'} />
+                {newMediaIsVideo ? '✅ Vídeo' : '🎬 Vídeo'}
+              </button>
+            </div>
+
+            {/* Preview */}
+            {newMediaPreview && (
+              <div style={{ position: 'relative', marginBottom: '0.5rem', borderRadius: 12, overflow: 'hidden' }}>
+                {newMediaIsVideo ? (
+                  <video src={newMediaPreview} controls style={{ width: '100%', maxHeight: 280, borderRadius: 12 }} />
+                ) : (
+                  <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 280, objectFit: 'cover', borderRadius: 12 }} />
+                )}
+                <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaIsVideo(false); }} style={{
+                  position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.6)', border: 'none',
+                  borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                }}><X size={16} color="#fff" /></button>
+              </div>
+            )}
+
+            <button type="submit" disabled={posting || (!newText.trim() && !newMedia)} style={{
+              width: '100%', padding: '0.75rem', borderRadius: 14, border: 'none',
+              background: (newText.trim() || newMedia) ? 'linear-gradient(135deg, #daa520, #f4c542)' : '#ddd',
+              color: (newText.trim() || newMedia) ? '#1a0a3e' : '#999',
+              fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem',
+            }}>{posting ? 'Publicando...' : 'Publicar'}</button>
+            
+            <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleMediaSelect} />
+            <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={handleMediaSelect} />
+          </form>
+        </div>
+      )}
+
+      {/* Posts Grid - Instagram style */}
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 0.5rem',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+        gap: '0.5rem',
+        marginTop: '1rem',
+      }}>
+        {loading ? (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem' }}>
+            <div style={{ display: 'inline-block', width: 40, height: 40, borderRadius: '50%', border: '3px solid #ddd', borderTopColor: '#daa520', animation: 'spin 1s linear infinite' }} />
+          </div>
+        ) : posts.length === 0 ? (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem' }}>
+            <p style={{ color: '#999', fontSize: '0.95rem' }}>Nenhum post ainda. Seja o primeiro a publicar! 📸</p>
+          </div>
+        ) : (
+          posts.map(post => {
+            const thumbnail = getThumbnail(post);
+            const categoryInfo = CATEGORIES.find(c => c.value === post.category);
+
+            return (
+              <div
+                key={post.id}
+                onClick={() => {
+                  setSelectedPost(post);
+                  if (!commentsData[post.id]) fetchComments(post.id);
+                }}
+                style={{
+                  position: 'relative',
+                  aspectRatio: '1',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  background: '#f0f0f0',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+                }}
+              >
+                {/* Thumbnail */}
+                {thumbnail ? (
+                  <img src={thumbnail} alt="" style={{
+                    width: '100%', height: '100%', objectFit: 'cover',
+                  }} />
+                ) : (
+                  <div style={{
+                    width: '100%', height: '100%',
+                    background: `linear-gradient(135deg, ${categoryInfo?.color || '#ddd'}22, ${categoryInfo?.color || '#ddd'}44)`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '3rem',
+                  }}>
+                    {categoryInfo?.label?.split(' ')[0] || '📸'}
+                  </div>
+                )}
+
+                {/* Overlay with stats */}
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                  background: 'rgba(0,0,0,0)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  gap: '1.5rem',
+                  fontSize: '0.9rem',
+                  color: '#fff',
+                  fontWeight: 700,
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                  opacity: 0,
+                  transition: 'all 0.2s',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Heart size={18} fill="white" /> {post.like_count || 0}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <MessageCircle size={18} /> {post.comment_count || 0}
+                  </div>
+                </div>
+
+                {/* Hover state with darker overlay */}
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                  background: 'rgba(0,0,0,0.3)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  gap: '1.5rem',
+                  fontSize: '1.2rem',
+                  color: '#fff',
+                  fontWeight: 700,
+                  opacity: 0,
+                  transition: 'opacity 0.2s',
+                  pointerEvents: 'none',
+                }} className="instagram-grid-hover" />
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Modal - Post Detail */}
+      {selectedPost && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.5)', zIndex: 10000,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '1rem',
+        }} onClick={() => setSelectedPost(null)}>
+          <div style={{
+            background: '#fff', borderRadius: '16px',
+            maxWidth: '700px', width: '100%', maxHeight: '90vh', overflow: 'hidden',
+            display: 'grid', gridTemplateColumns: '1fr 350px', gap: 0,
+          }} onClick={(e) => e.stopPropagation()}>
+            {/* Left: Image */}
+            <div style={{
+              background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden',
+            }}>
+              {getThumbnail(selectedPost) ? (
+                <img src={getThumbnail(selectedPost)} alt="" style={{
+                  maxWidth: '100%', maxHeight: '100%', objectFit: 'contain',
+                }} />
+              ) : (
+                <div style={{
+                  width: '100%', height: '100%',
+                  background: `linear-gradient(135deg, ${CATEGORIES.find(c => c.value === selectedPost.category)?.color || '#ddd'}22, ${CATEGORIES.find(c => c.value === selectedPost.category)?.color || '#ddd'}44)`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '5rem',
+                }}>
+                  {CATEGORIES.find(c => c.value === selectedPost.category)?.label?.split(' ')[0] || '📸'}
+                </div>
+              )}
+            </div>
+
+            {/* Right: Details + Comments */}
+            <div style={{
+              display: 'flex', flexDirection: 'column',
+              background: '#fff', overflowY: 'auto',
+            }}>
+              {/* Header */}
+              <div style={{
+                padding: '1rem', borderBottom: '1px solid #e0e0e0',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <img src={getAvatarUrl(selectedPost.author_avatar) || '/default-avatar.jpg'} alt="" style={{
+                    width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', background: '#daa520',
+                  }} />
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1a0a3e' }}>
+                      {selectedPost.author_name || 'Utilizador'}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: '#888' }}>{timeAgo(selectedPost.created_at)}</div>
+                  </div>
+                </div>
+                <button onClick={() => setSelectedPost(null)} style={{
+                  background: 'none', border: 'none', fontSize: '1.3rem', cursor: 'pointer', color: '#999',
+                }}>✕</button>
+              </div>
+
+              {/* Post Content */}
+              <div style={{ padding: '1rem', borderBottom: '1px solid #e0e0e0', flex: 1, overflowY: 'auto' }}>
+                <p style={{ margin: '0 0 0.5rem', fontSize: '0.95rem', color: '#1a0a3e', lineHeight: 1.5 }}>
+                  {selectedPost.content || ''}
+                </p>
+              </div>
+
+              {/* Like + Comment buttons */}
+              <div style={{
+                display: 'flex', gap: 0, borderBottom: '1px solid #e0e0e0',
+                padding: '0.5rem',
+              }}>
+                <button onClick={() => handleLike(selectedPost.id)} style={{
+                  flex: 1, padding: '0.6rem', border: 'none', background: 'none',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  fontSize: '0.85rem', color: likedPosts[selectedPost.id] ? '#e74c3c' : '#666',
+                  fontWeight: likedPosts[selectedPost.id] ? 600 : 400,
+                  transition: 'all 0.2s',
+                }}>
+                  <Heart size={18} fill={likedPosts[selectedPost.id] ? '#e74c3c' : 'none'} />
+                  {selectedPost.like_count || 0}
+                </button>
+                <button style={{
+                  flex: 1, padding: '0.6rem', border: 'none', background: 'none',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  fontSize: '0.85rem', color: '#666',
+                }}>
+                  <MessageCircle size={18} />
+                  {selectedPost.comment_count || 0}
+                </button>
+              </div>
+
+              {/* Comments */}
+              <div style={{ flex: 1, overflowY: 'auto', padding: '0.5rem' }}>
+                {(commentsData[selectedPost.id] || []).map(comment => (
+                  <div key={comment.id} style={{
+                    padding: '0.6rem', marginBottom: '0.5rem', borderRadius: 8,
+                    background: '#f5f5f5', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
+                  }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600, fontSize: '0.8rem', color: '#1a0a3e' }}>
+                        {comment.author_name || 'Utilizador'}
+                      </div>
+                      <div style={{ fontSize: '0.8rem', color: '#666', marginTop: 2 }}>{comment.content}</div>
+                    </div>
+                    {(user?.id === comment.user_id || user?.id === selectedPost.user_id) && (
+                      <button onClick={() => handleDeleteComment(comment.id, selectedPost.id)} style={{
+                        background: 'none', border: 'none', color: '#e74c3c', cursor: 'pointer',
+                        fontSize: '0.7rem', padding: '2px 6px',
+                      }}>✕</button>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Comment input */}
+              {user ? (
+                <div style={{
+                  padding: '0.75rem', borderTop: '1px solid #e0e0e0',
+                  display: 'flex', gap: 6,
+                }}>
+                  <input
+                    type="text"
+                    value={commentText[selectedPost.id] || ''}
+                    onChange={(e) => setCommentText(prev => ({ ...prev, [selectedPost.id]: e.target.value }))}
+                    placeholder="Escreva um comentário..."
+                    style={{
+                      flex: 1, padding: '0.6rem', borderRadius: 20, border: '1px solid #e0e0e0',
+                      fontSize: '0.8rem', outline: 'none',
+                    }}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendComment(selectedPost.id)}
+                  />
+                  <button onClick={() => handleSendComment(selectedPost.id)} disabled={sendingComment[selectedPost.id]} style={{
+                    background: '#daa520', border: 'none', borderRadius: '50%', width: 32, height: 32,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                    color: '#fff',
+                  }}>
+                    <Send size={16} />
+                  </button>
+                </div>
+              ) : (
+                <div style={{
+                  padding: '0.75rem', borderTop: '1px solid #e0e0e0', textAlign: 'center',
+                }}>
+                  <button onClick={() => navigate('/login')} style={{
+                    padding: '0.6rem 1rem', borderRadius: 20, border: 'none',
+                    background: '#daa520', color: '#fff', fontWeight: 600, cursor: 'pointer',
+                    fontSize: '0.8rem',
+                  }}>Entrar para comentar</button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .instagram-grid-hover {
+          background: rgba(0,0,0,0.3);
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+      `}</style>
+    </div>
+  );
+}

@@ -11,7 +11,7 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Kids from './pages/Kids';
-import Mural from './pages/Mural';
+import MuralGrid from './pages/MuralGrid';
 import ChurchRegister from './pages/ChurchRegister';
 import HelpRequests from './pages/HelpRequests';
 import PastorChat from './pages/PastorChat';
@@ -292,7 +292,7 @@ ${shareData.url}`); alert('Link copiado! ✅'); }
             <Routes>
               <Route path="/" element={user ? <Navigate to="/mural" /> : <Home />} />
               <Route path="/oracoes" element={<PrayerFeed />} />
-              <Route path="/mural" element={<Mural />} />
+              <Route path="/mural" element={<MuralGrid />} />
               <Route path="/ao-vivo" element={<LivePrayer />} />
               <Route path="/igrejas" element={<ChurchMap />} />
               <Route path="/login" element={<RedirectIfLoggedIn><Login /></RedirectIfLoggedIn>} />
