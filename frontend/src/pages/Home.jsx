@@ -97,7 +97,7 @@ export default function Home() {
         <h1 style={{ fontSize: '2.8rem', fontWeight: 700, margin: '0 0 1rem 0', textShadow: '0 2px 4px rgba(0,0,0,0.1)', whiteSpace: 'nowrap' }}>
           {String.fromCharCode(128591)} Sigo com Fé
         </h1>
-        <p style={{ fontSize: '1.1rem', margin: '0 0 1.5rem', opacity: 0.95, maxWidth: '600px', margin: '0 auto 1.5rem' }}>
+        <p style={{ fontSize: '1.1rem', margin: '0 auto 1.5rem', opacity: 0.95, maxWidth: '600px' }}>
           {t('home.subtitle', 'Ore, conecte-se e fortaleça sua fé com milhares de irmãos ao redor do mundo.')}
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
