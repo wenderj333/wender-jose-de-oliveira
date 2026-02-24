@@ -676,18 +676,19 @@ export default function MuralGrid() {
         )}
       </div>
 
-      {/* Modal - Post Detail */}
+      {/* Modal - Post Detail (Dark Mode) */}
       {selectedPost && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.5)', zIndex: 10000,
+          background: 'rgba(0,0,0,0.7)', zIndex: 10000,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           padding: '1rem',
         }} onClick={() => setSelectedPost(null)}>
           <div style={{
-            background: '#fff', borderRadius: '16px',
+            background: '#1a1a2e', borderRadius: '16px',
             maxWidth: '700px', width: '100%', maxHeight: '90vh', overflow: 'hidden',
             display: 'grid', gridTemplateColumns: '1fr 350px', gap: 0,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
           }} onClick={(e) => e.stopPropagation()}>
             {/* Left: Image/Video/Audio/YouTube */}
             <div style={{
@@ -700,11 +701,11 @@ export default function MuralGrid() {
             {/* Right: Details + Comments */}
             <div style={{
               display: 'flex', flexDirection: 'column',
-              background: '#fff', overflowY: 'auto',
+              background: '#1a1a2e', overflowY: 'auto', color: '#fff',
             }}>
               {/* Header */}
               <div style={{
-                padding: '1rem', borderBottom: '1px solid #e0e0e0',
+                padding: '1rem', borderBottom: '1px solid rgba(218,165,32,0.2)',
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -712,33 +713,33 @@ export default function MuralGrid() {
                     width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', background: '#daa520',
                   }} />
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1a0a3e' }}>
+                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#fff' }}>
                       {selectedPost.author_name || 'Utilizador'}
                     </div>
-                    <div style={{ fontSize: '0.75rem', color: '#888' }}>{timeAgo(selectedPost.created_at)}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#aaa' }}>{timeAgo(selectedPost.created_at)}</div>
                   </div>
                 </div>
                 <button onClick={() => setSelectedPost(null)} style={{
-                  background: 'none', border: 'none', fontSize: '1.3rem', cursor: 'pointer', color: '#999',
+                  background: 'none', border: 'none', fontSize: '1.3rem', cursor: 'pointer', color: '#daa520',
                 }}>✕</button>
               </div>
 
               {/* Post Content */}
-              <div style={{ padding: '1rem', borderBottom: '1px solid #e0e0e0', flex: 1, overflowY: 'auto' }}>
-                <p style={{ margin: '0 0 0.5rem', fontSize: '0.95rem', color: '#1a0a3e', lineHeight: 1.5 }}>
-                  {selectedPost.content || ''}
+              <div style={{ padding: '1rem', borderBottom: '1px solid rgba(218,165,32,0.2)', flex: 1, overflowY: 'auto' }}>
+                <p style={{ margin: 0, fontSize: '0.95rem', color: '#fff', lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                  {selectedPost.content || '(Sem texto)'}
                 </p>
               </div>
 
               {/* Like + Comment buttons */}
               <div style={{
-                display: 'flex', gap: 0, borderBottom: '1px solid #e0e0e0',
+                display: 'flex', gap: 0, borderBottom: '1px solid rgba(218,165,32,0.2)',
                 padding: '0.5rem',
               }}>
                 <button onClick={() => handleLike(selectedPost.id)} style={{
                   flex: 1, padding: '0.6rem', border: 'none', background: 'none',
                   cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                  fontSize: '0.85rem', color: likedPosts[selectedPost.id] ? '#e74c3c' : '#666',
+                  fontSize: '0.85rem', color: likedPosts[selectedPost.id] ? '#e74c3c' : '#aaa',
                   fontWeight: likedPosts[selectedPost.id] ? 600 : 400,
                   transition: 'all 0.2s',
                 }}>
@@ -748,7 +749,7 @@ export default function MuralGrid() {
                 <button style={{
                   flex: 1, padding: '0.6rem', border: 'none', background: 'none',
                   cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                  fontSize: '0.85rem', color: '#666',
+                  fontSize: '0.85rem', color: '#aaa',
                 }}>
                   <MessageCircle size={18} />
                   {selectedPost.comment_count || 0}
@@ -760,13 +761,13 @@ export default function MuralGrid() {
                 {(commentsData[selectedPost.id] || []).map(comment => (
                   <div key={comment.id} style={{
                     padding: '0.6rem', marginBottom: '0.5rem', borderRadius: 8,
-                    background: '#f5f5f5', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
+                    background: 'rgba(218,165,32,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
                   }}>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 600, fontSize: '0.8rem', color: '#1a0a3e' }}>
+                      <div style={{ fontWeight: 600, fontSize: '0.8rem', color: '#daa520' }}>
                         {comment.author_name || 'Utilizador'}
                       </div>
-                      <div style={{ fontSize: '0.8rem', color: '#666', marginTop: 2 }}>{comment.content}</div>
+                      <div style={{ fontSize: '0.8rem', color: '#ccc', marginTop: 2 }}>{comment.content}</div>
                     </div>
                     {(user?.id === comment.user_id || user?.id === selectedPost.user_id) && (
                       <button onClick={() => handleDeleteComment(comment.id, selectedPost.id)} style={{
@@ -781,7 +782,7 @@ export default function MuralGrid() {
               {/* Comment input */}
               {user ? (
                 <div style={{
-                  padding: '0.75rem', borderTop: '1px solid #e0e0e0',
+                  padding: '0.75rem', borderTop: '1px solid rgba(218,165,32,0.2)',
                   display: 'flex', gap: 6,
                 }}>
                   <input
@@ -790,26 +791,27 @@ export default function MuralGrid() {
                     onChange={(e) => setCommentText(prev => ({ ...prev, [selectedPost.id]: e.target.value }))}
                     placeholder="Escreva um comentário..."
                     style={{
-                      flex: 1, padding: '0.6rem', borderRadius: 20, border: '1px solid #e0e0e0',
+                      flex: 1, padding: '0.6rem', borderRadius: 20, border: '1px solid rgba(218,165,32,0.3)',
                       fontSize: '0.8rem', outline: 'none',
+                      background: 'rgba(218,165,32,0.05)', color: '#fff',
                     }}
                     onKeyPress={(e) => e.key === 'Enter' && handleSendComment(selectedPost.id)}
                   />
                   <button onClick={() => handleSendComment(selectedPost.id)} disabled={sendingComment[selectedPost.id]} style={{
                     background: '#daa520', border: 'none', borderRadius: '50%', width: 32, height: 32,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-                    color: '#fff',
+                    color: '#1a0a3e', fontWeight: 600,
                   }}>
                     <Send size={16} />
                   </button>
                 </div>
               ) : (
                 <div style={{
-                  padding: '0.75rem', borderTop: '1px solid #e0e0e0', textAlign: 'center',
+                  padding: '0.75rem', borderTop: '1px solid rgba(218,165,32,0.2)', textAlign: 'center',
                 }}>
                   <button onClick={() => navigate('/login')} style={{
                     padding: '0.6rem 1rem', borderRadius: 20, border: 'none',
-                    background: '#daa520', color: '#fff', fontWeight: 600, cursor: 'pointer',
+                    background: '#daa520', color: '#1a0a3e', fontWeight: 600, cursor: 'pointer',
                     fontSize: '0.8rem',
                   }}>Entrar para comentar</button>
                 </div>
