@@ -127,7 +127,11 @@ export default function Mural() {
   const [showLoginPopup, setShowLoginPopup] = useState(false); // Beautiful login prompt
   const [commentsData, setCommentsData] = useState({}); // postId -> [comments]
   const [commentText, setCommentText] = useState({});
+  const [playingState, setPlayingState] = useState({}); // { postId: true/false }
+  const [postVolumes, setPostVolumes] = useState({}); // { postId: { video: 1, music: 0.5 } }
   const [sendingComment, setSendingComment] = useState({});
+  const mediaRefs = useRef({}); // Refs para o vídeo/áudio principal do post
+  const audioBackgroundRefs = useRef({}); // Refs para o áudio de fundo (se houver)
 
   useEffect(() => {
     fetchPosts();
@@ -263,6 +267,47 @@ export default function Mural() {
       ));
     } catch {}
   }
+
+  // ===== CUSTOM MEDIA CONTROLS =====
+  const togglePlayPause = useCallback((postId) => {
+    setPlayingState(prev => {
+      const isCurrentlyPlaying = !!prev[postId];
+      const videoEl = mediaRefs.current[postId];
+      const audioEl = audioBackgroundRefs.current[postId];
+
+      if (isCurrentlyPlaying) {
+        videoEl?.pause();
+        audioEl?.pause();
+      } else {
+        videoEl?.play().catch(e => console.error('Error playing video:', e));
+        audioEl?.play().catch(e => console.error('Error playing background audio:', e));
+      }
+
+      return { ...prev, [postId]: !isCurrentlyPlaying };
+    });
+  }, []);
+
+  const handleVideoVolumeChange = useCallback((postId, volume) => {
+    const videoEl = mediaRefs.current[postId];
+    if (videoEl) {
+      videoEl.volume = volume;
+    }
+    setPostVolumes(prev => ({
+      ...prev,
+      [postId]: { ...prev[postId], video: volume }
+    }));
+  }, []);
+
+  const handleMusicVolumeChange = useCallback((postId, volume) => {
+    const audioEl = audioBackgroundRefs.current[postId];
+    if (audioEl) {
+      audioEl.volume = volume;
+    }
+    setPostVolumes(prev => ({
+      ...prev,
+      [postId]: { ...prev[postId], music: volume }
+    }));
+  }, []);
 
   // ===== MEDIA UPLOAD =====
   // Popular gospel songs (YouTube)
@@ -492,7 +537,10 @@ export default function Mural() {
     const lang = localStorage.getItem('i18nextLng') || 'pt';
     const targetLang = lang.substring(0, 2);
     // Detect source: if target is pt, source is probably es/en; otherwise source is pt
-    const sourceLang = targetLang === 'pt' ? 'es' : 'pt';
+    const sourceLang = 
+  targetLang === 'pt' ? 'es' : // Se quer ver em PT, assume que a origem é ES
+  targetLang === 'es' ? 'pt' : // Se quer ver em ES, assume que a origem é PT
+  'en'; // Para DE, EN, FR, RO, etc., assume que a origem é EN (inglês é uma boa ponte)
     setPosts(prev => prev.map(p => p.id === postId ? { ...p, translating: true } : p));
     try {
       const parts = [];
@@ -1053,7 +1101,7 @@ export default function Mural() {
 
               {/* Media — TikTok-style: only visible media plays */}
               {post.media_url && (
-                <div style={{ width: '100%' }}>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                   {isYouTube(post.media_url) ? (
                     <div style={{ borderRadius: 12, overflow: 'hidden', background: '#000' }}>
                       <iframe
@@ -1070,10 +1118,10 @@ export default function Mural() {
                       padding: '1rem', textAlign: 'center',
                     }}>
                       <span style={{ fontSize: '2rem' }}>🎵</span>
-                      <audio ref={observeMedia} src={getMediaUrl(post.media_url)} controls style={{ width: '100%', marginTop: 8 }} />
+                      <audio ref={observeMedia} src={getMediaUrl(post.media_url)} style={{ width: '100%', marginTop: 8 }} />
                     </div>
                   ) : (post.media_type === 'video' || isVideo(post.media_url)) ? (
-                    <video ref={observeMedia} src={getMediaUrl(post.media_url)} controls playsInline muted preload="metadata"
+                    <video ref={observeMedia} src={getMediaUrl(post.media_url)} playsInline muted preload="metadata"
                       style={{ width: '100%', maxHeight: 500, background: '#000' }} />
                   ) : (
                     <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', maxHeight: 500, objectFit: 'cover' }} />
@@ -1083,7 +1131,7 @@ export default function Mural() {
               {/* Audio attached to photo post */}
               {post.audio_url && (
                 isYouTube(post.audio_url) ? (
-                  <div style={{ borderRadius: 12, overflow: 'hidden', background: '#000' }}>
+                  <div style={{ borderRadius: 12, overflow: 'hidden', background: '#000', maxWidth: '100%', margin: '0 auto' }}>
                     <iframe
                       ref={observeMedia}
                       src={`https://www.youtube.com/embed/${getYouTubeId(post.audio_url)}?rel=0&enablejsapi=1`}
@@ -1098,7 +1146,7 @@ export default function Mural() {
                     padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', gap: 8,
                   }}>
                     <span style={{ fontSize: '1.3rem' }}>🎵</span>
-                    <audio ref={observeMedia} src={getMediaUrl(post.audio_url)} controls style={{ flex: 1, height: 32 }} />
+                    <audio ref={observeMedia} src={getMediaUrl(post.audio_url)} style={{ flex: 1, height: 32 }} />
                   </div>
                 )
               )}

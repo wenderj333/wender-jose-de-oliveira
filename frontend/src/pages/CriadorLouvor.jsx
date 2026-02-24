@@ -69,6 +69,18 @@ export default function CriadorLouvor() {
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
+<<<<<<< HEAD
+  const [showCustomLyricForm, setShowCustomLyricForm] = useState(false); // Novo estado para controlar a visibilidade do formulário de letra própria
+  // Estados para o formulário de letra própria
+  const [customTitle, setCustomTitle] = useState('');
+  const [customLyrics, setCustomLyrics] = useState('');
+  const [customTheme, setCustomTheme] = useState('');
+  const [customStyle, setCustomStyle] = useState('worship');
+  const [savingCustomLyric, setSavingCustomLyric] = useState(false);
+  const [audioUrl, setAudioUrl] = useState(null); // Novo estado para o URL do áudio
+  const [generatingAudio, setGeneratingAudio] = useState(false); // Novo estado para o carregamento do áudio
+  const [generatingAudioForSongId, setGeneratingAudioForSongId] = useState(null); // Novo estado para controlar qual música está gerando áudio na lista
+=======
   const [audioUrl, setAudioUrl] = useState(null);
   const [generatingAudio, setGeneratingAudio] = useState(false);
   const [audioError, setAudioError] = useState('');
@@ -79,6 +91,7 @@ export default function CriadorLouvor() {
   const [customTheme, setCustomTheme] = useState('');
   const [customStyle, setCustomStyle] = useState('');
   const [savingCustomLyric, setSavingCustomLyric] = useState(false);
+>>>>>>> ae3430498bffb3fe64c298d720b8491f5b3961ff
 
   useEffect(() => {
     if (token) { fetchCredits(); fetchMySongs(); }
@@ -153,13 +166,97 @@ export default function CriadorLouvor() {
     }
   }
 
+<<<<<<< HEAD
+  async function handleGenerateAudio(song = result?.song) { // Aceitar 'song' como argumento, com fallback para 'result.song'
+    if (!token) return navigate('/login');
+    if (!song || !song.lyrics || !song.id) { // Usar 'song' em vez de 'result'
+      setError('Primeiro gere uma letra de louvor ou selecione uma música.');
+      return;
+    }
+
+    setGeneratingAudioForSongId(song.id); // Definir qual música está gerando
+    setError('');
+    // setAudioUrl(null); // Não limpar audioUrl globalmente para não afetar outras músicas na lista
+
+    try {
+      const res = await fetch(`${API}/ai-louvor/generate-audio`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          lyrics: song.lyrics,
+          songId: song.id,
+          title: song.title,
+          style: song.style, // Usar o estilo da música salva
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || data.message || `Erro ${res.status}: Falha ao gerar música.`);
+        console.error('Replicate Audio error:', res.status, data);
+        return;
+      }
+      // Atualizar o frontend para mostrar o novo audioUrl para a música específica
+      setMySongs(prevSongs => prevSongs.map(s => s.id === song.id ? { ...s, audio_url: data.audioUrl } : s));
+      // Se for a música que acabou de ser gerada na aba "Criar Louvor", atualiza o result.audioUrl
+      if (result?.song?.id === song.id) {
+        setResult(prevResult => ({ ...prevResult, audioUrl: data.audioUrl }));
+      }
+    } catch (err) {
+      console.error('Network error (audio generation):', err);
+      setError(`Erro de conexão ao gerar música: ${err.message || 'Verifique sua internet.'}`);
+    } finally {
+      setGeneratingAudioForSongId(null); // Limpar ao finalizar
+    }
+  }
+
+  async function handleSaveCustomLyric() {
+    if (!token) return navigate('/login');
+    if (!customTitle || !customLyrics) {
+      setError('Título e letra são obrigatórios para salvar sua letra.');
+      return;
+    }
+
+    setSavingCustomLyric(true);
+    setError('');
+
+=======
   async function handleSaveCustomLyric() {
     if (!customTitle || !customLyrics) { setError('Título e letra são obrigatórios!'); return; }
     setSavingCustomLyric(true); setError('');
+>>>>>>> ae3430498bffb3fe64c298d720b8491f5b3961ff
     try {
       const res = await fetch(`${API}/ai-louvor/save-custom`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+<<<<<<< HEAD
+        body: JSON.stringify({
+          title: customTitle,
+          lyrics: customLyrics,
+          theme: customTheme || null,
+          style: customStyle || null,
+          language: detectedLang,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || data.message || `Erro ${res.status}: Falha ao salvar sua letra.`);
+        console.error('Save custom lyric error:', res.status, data);
+        return;
+      }
+      // Resetar formulário e estados
+      setCustomTitle('');
+      setCustomLyrics('');
+      setCustomTheme('');
+      setCustomStyle('worship');
+      setShowCustomLyricForm(false);
+      fetchMySongs(); // Atualizar a lista de músicas para incluir a letra salva
+    } catch (err) {
+      console.error('Network error (save custom lyric):', err);
+      setError(`Erro de conexão ao salvar sua letra: ${err.message || 'Verifique sua internet.'}`);
+    } finally {
+      setSavingCustomLyric(false);
+    }
+=======
         body: JSON.stringify({ title: customTitle, lyrics: customLyrics, theme: customTheme, style: customStyle, language: detectedLang }),
       });
       const data = await res.json();
@@ -169,6 +266,7 @@ export default function CriadorLouvor() {
       alert('✅ Letra salva!');
     } catch (err) { setError(`Erro: ${err.message}`); }
     finally { setSavingCustomLyric(false); }
+>>>>>>> ae3430498bffb3fe64c298d720b8491f5b3961ff
   }
 
   async function handleDelete(songId) {
@@ -275,8 +373,28 @@ export default function CriadorLouvor() {
             </div>
           )}
 
+<<<<<<< HEAD
+          {/* Generate button */}
+          <button onClick={handleGenerate} disabled={generating || (credits !== null && credits <= 0)}
+            style={{
+              width: '100%', padding: '0.85rem', borderRadius: 14, border: 'none',
+              background: generating ? '#ccc' : 'linear-gradient(135deg, #9b59b6, #667eea)',
+              color: '#fff', fontWeight: 700, fontSize: '1rem', cursor: generating ? 'default' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              boxShadow: generating ? 'none' : '0 4px 15px rgba(155,89,182,0.3)',
+            }}>
+            {generating ? (
+              <>
+                <div style={{ width: 20, height: 20, border: '3px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                Criando louvor... pode demorar até 30s
+              </>
+            ) : (
+              <><Sparkles size={20} /> Gerar Louvor com IA</>
+            )}
+=======
           <button onClick={handleGenerate} disabled={generating || (credits !== null && credits <= 0)} style={{ width: '100%', padding: '0.85rem', borderRadius: 14, border: 'none', background: generating ? '#ccc' : 'linear-gradient(135deg, #9b59b6, #667eea)', color: '#fff', fontWeight: 700, fontSize: '1rem', cursor: generating ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
             {generating ? (<><div style={{ width: 20, height: 20, border: '3px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />Criando...</>) : (<><Sparkles size={20} /> Gerar Louvor com IA</>)}
+>>>>>>> ae3430498bffb3fe64c298d720b8491f5b3961ff
           </button>
 
           <button onClick={() => setShowCustomLyricForm(prev => !prev)} style={{ width: '100%', padding: '0.75rem', borderRadius: 14, border: '2px solid #9b59b6', background: showCustomLyricForm ? '#f0e8ff' : '#fff', color: '#9b59b6', fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer', marginTop: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
@@ -307,6 +425,102 @@ export default function CriadorLouvor() {
 
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
+<<<<<<< HEAD
+          {/* Botão Adicionar Minha Letra */}
+          <button onClick={() => setShowCustomLyricForm(prev => !prev)}
+            style={{
+              width: '100%', padding: '0.85rem', borderRadius: 14, border: '1px solid #9b59b6',
+              background: showCustomLyricForm ? '#e8f0ff' : '#fff', color: '#9b59b6',
+              fontWeight: 700, fontSize: '1rem', cursor: 'pointer', marginTop: '0.75rem',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            }}>
+            <Music size={20} /> {showCustomLyricForm ? 'Esconder Formulário' : 'Adicionar Minha Letra'}
+          </button>
+
+          {/* Formulário Adicionar Minha Letra */}
+          {showCustomLyricForm && (
+            <div style={{
+              marginTop: '1rem', background: '#f8f8f8', borderRadius: 16, padding: '1rem',
+              border: '1px solid #ddd', boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+            }}>
+              <h3 style={{ margin: '0 0 1rem', fontSize: '1.1rem', color: '#1a0a3e' }}>✍️ Minha Letra</h3>
+              
+              <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>
+                🎵 Título da Música
+              </label>
+              <input value={customTitle} onChange={e => setCustomTitle(e.target.value)}
+                placeholder='Ex: "A Graça que me Alcançou"'
+                style={{
+                  width: '100%', padding: '0.6rem', borderRadius: 10, border: '1px solid #ddd',
+                  fontSize: '0.85rem', marginBottom: '0.75rem', boxSizing: 'border-box',
+                }} />
+
+              <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>
+                📝 Letra Completa
+              </label>
+              <textarea value={customLyrics} onChange={e => setCustomLyrics(e.target.value)}
+                placeholder='Escreva sua letra aqui (Verso, Coro, Ponte, etc.)'
+                rows={10}
+                style={{
+                  width: '100%', padding: '0.6rem', borderRadius: 10, border: '1px solid #ddd',
+                  fontSize: '0.85rem', marginBottom: '0.75rem', boxSizing: 'border-box',
+                  resize: 'vertical',
+                }} />
+              
+              {/* Theme (reusing THEMES constant) */}
+              <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>
+                🎯 Tema (opcional)
+              </label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1rem' }}>
+                {THEMES.map(th => (
+                  <button key={`custom-theme-${th.value}`} onClick={() => setCustomTheme(th.value)} style={{
+                    padding: '5px 12px', borderRadius: 16, border: 'none', cursor: 'pointer', fontSize: '0.78rem',
+                    background: customTheme === th.value ? th.color + '25' : '#f5f5f5',
+                    color: customTheme === th.value ? th.color : '#666',
+                    fontWeight: customTheme === th.value ? 700 : 400,
+                    boxShadow: customTheme === th.value ? `0 2px 8px ${th.color}30` : 'none',
+                  }}>{th.label}</button>
+                ))}
+              </div>
+
+              {/* Style (reusing STYLES constant) */}
+              <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>
+                🎵 Estilo Musical (opcional)
+              </label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1rem' }}>
+                {STYLES.map(s => (
+                  <button key={`custom-style-${s.value}`} onClick={() => setCustomStyle(s.value)} style={{
+                    padding: '5px 12px', borderRadius: 16, border: 'none', cursor: 'pointer', fontSize: '0.78rem',
+                    background: customStyle === s.value ? '#9b59b622' : '#f5f5f5',
+                    color: customStyle === s.value ? '#9b59b6' : '#666',
+                    fontWeight: customStyle === s.value ? 700 : 400, // BUG FIX: customTitle to customStyle
+                  }}>{s.label}</button>
+                ))}
+              </div>
+
+              {/* Botão Salvar Letra */}
+              <button onClick={handleSaveCustomLyric} disabled={savingCustomLyric}
+                style={{
+                  width: '100%', padding: '0.85rem', borderRadius: 14, border: 'none',
+                  background: savingCustomLyric ? '#ccc' : 'linear-gradient(135deg, #28a745, #218838)',
+                  color: '#fff', fontWeight: 700, fontSize: '1rem', cursor: savingCustomLyric ? 'default' : 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  boxShadow: savingCustomLyric ? 'none' : '0 4px 15px rgba(40,167,69,0.3)',
+                  marginTop: '0.75rem',
+                }}>
+                {savingCustomLyric ? (
+                  <div style={{ width: 20, height: 20, border: '3px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                ) : (
+                  <Heart size={20} />
+                )}
+                {savingCustomLyric ? 'Salvando...' : 'Salvar Minha Letra'}
+              </button>
+            </div>
+          )}
+
+          {/* Result */}
+=======
+>>>>>>> ae3430498bffb3fe64c298d720b8491f5b3961ff
           {result && (
             <div style={{ marginTop: '1rem', background: 'linear-gradient(135deg, #f8f0ff, #f0e8ff)', borderRadius: 16, padding: '1rem', border: '2px solid #9b59b6' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
@@ -316,6 +530,38 @@ export default function CriadorLouvor() {
                   <button onClick={() => handleDownload(result.song || result)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9b59b6' }}><Download size={18} /></button>
                 </div>
               </div>
+<<<<<<< HEAD
+              <pre style={{
+                whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontFamily: 'inherit',
+                fontSize: '0.88rem', lineHeight: 1.7, color: '#333', margin: 0,
+                maxHeight: 500, overflowY: 'auto',
+              }}>{result.lyrics}</pre>
+              {result && !audioUrl && ( // Mostrar botão Gerar Música apenas se a letra existe e o áudio ainda não foi gerado
+                <button onClick={handleGenerateAudio} disabled={generatingAudio}
+                  style={{
+                    width: '100%', padding: '0.85rem', borderRadius: 14, border: 'none',
+                    background: generatingAudio ? '#ccc' : 'linear-gradient(135deg, #2ecc71, #27ae60)',
+                    color: '#fff', fontWeight: 700, fontSize: '1rem', cursor: generatingAudio ? 'default' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    boxShadow: generatingAudio ? 'none' : '0 4px 15px rgba(46,204,113,0.3)',
+                    marginTop: '1rem',
+                  }}>
+                  {generatingAudio ? (
+                    <>
+                      <div style={{ width: 20, height: 20, border: '3px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                      Gerando Música... pode demorar
+                    </>
+                  ) : (
+                    <><Music size={20} /> Gerar Música</>
+                  )}
+                </button>
+              )}
+
+              {audioUrl && ( // Mostrar player de áudio se o URL existe
+                <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                  <audio controls src={audioUrl} style={{ width: '100%', borderRadius: 10 }} />
+                  <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.5rem' }}>Música gerada pela Suno AI</p>
+=======
               <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontFamily: 'inherit', fontSize: '0.88rem', lineHeight: 1.7, color: '#333', margin: 0, maxHeight: 500, overflowY: 'auto' }}>{result.lyrics}</pre>
               {!audioUrl && (
                 <button onClick={() => handleGenerateAudio(null)} disabled={generatingAudio} style={{ width: '100%', marginTop: '1rem', padding: '0.75rem', borderRadius: 14, border: 'none', background: generatingAudio ? '#ccc' : 'linear-gradient(135deg, #27ae60, #2ecc71)', color: '#fff', fontWeight: 700, fontSize: '0.95rem', cursor: generatingAudio ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
@@ -331,6 +577,7 @@ export default function CriadorLouvor() {
                     <source src={audioUrl} type="audio/wav" />
                   </audio>
                   <a href={audioUrl} download="louvor.mp3" style={{ display: 'inline-block', padding: '0.4rem 1rem', borderRadius: 10, background: '#27ae60', color: '#fff', fontWeight: 600, fontSize: '0.8rem', textDecoration: 'none' }}>⬇️ Baixar Música</a>
+>>>>>>> ae3430498bffb3fe64c298d720b8491f5b3961ff
                 </div>
               )}
               <div style={{ marginTop: '0.75rem', textAlign: 'center', fontSize: '0.8rem', color: '#999' }}>
@@ -369,6 +616,33 @@ export default function CriadorLouvor() {
                   </div>
                   {expandedSong === song.id && (
                     <div style={{ padding: '0 1rem 1rem', borderTop: '1px solid #f0f0f0' }}>
+<<<<<<< HEAD
+                      <pre style={{
+                        whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontFamily: 'inherit',
+                        fontSize: '0.85rem', lineHeight: 1.6, color: '#333', margin: '0.75rem 0',
+                        maxHeight: 400, overflowY: 'auto',
+                      }}>{song.lyrics}</pre>
+                      {song.audio_url ? (
+                        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                          <audio controls src={song.audio_url} style={{ width: '100%', borderRadius: 10 }} />
+                          <p style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.5rem' }}>Música gerada</p>
+                        </div>
+                      ) : (
+                        <button onClick={() => handleGenerateAudio(song)} disabled={generatingAudioForSongId === song.id}
+                          style={{
+                            width: '100%', padding: '0.5rem', borderRadius: 10, border: 'none',
+                            background: generatingAudioForSongId === song.id ? '#ccc' : 'linear-gradient(135deg, #2ecc71, #27ae60)',
+                            color: '#fff', fontWeight: 600, fontSize: '0.8rem', cursor: generatingAudioForSongId === song.id ? 'default' : 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                            marginTop: '0.75rem',
+                          }}>
+                          {generatingAudioForSongId === song.id ? (
+                            <div style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                          ) : (
+                            <Music size={14} />
+                          )}
+                          {generatingAudioForSongId === song.id ? 'Gerando...' : 'Gerar Música'}
+=======
                       <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontFamily: 'inherit', fontSize: '0.85rem', lineHeight: 1.6, color: '#333', margin: '0.75rem 0', maxHeight: 400, overflowY: 'auto' }}>{song.lyrics}</pre>
                       {song.audio_url ? (
                         <div style={{ marginBottom: '0.75rem' }}>
@@ -381,6 +655,7 @@ export default function CriadorLouvor() {
                         <button onClick={() => handleGenerateAudio(song)} disabled={generatingAudioForSongId === song.id} style={{ width: '100%', padding: '0.5rem', borderRadius: 10, border: 'none', background: generatingAudioForSongId === song.id ? '#ccc' : 'linear-gradient(135deg, #27ae60, #2ecc71)', color: '#fff', fontWeight: 600, fontSize: '0.8rem', cursor: generatingAudioForSongId === song.id ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginBottom: '0.75rem' }}>
                           {generatingAudioForSongId === song.id ? <div style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /> : <Music size={14} />}
                           {generatingAudioForSongId === song.id ? 'Gerando...' : '🎵 Gerar Música'}
+>>>>>>> ae3430498bffb3fe64c298d720b8491f5b3961ff
                         </button>
                       )}
                       <div style={{ display: 'flex', gap: 8 }}>

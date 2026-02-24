@@ -170,14 +170,9 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="hero__icon-glow">
-          <img src="/logo.jpg" alt="Sigo com Fé" style={{ width: 120, height: 120, borderRadius: '50%', objectFit: 'cover' }} />
-        </div>
-
-        <h1 className="hero__title">A Rede Social Cristã feita para você</h1>
-        <p className="hero__subtitle" style={{ fontSize: '1.15rem', maxWidth: 520, margin: '0 auto', opacity: 0.9 }}>
-          Conecte-se com cristãos do mundo todo. Oração, louvor, amizades e propósito — tudo em um só lugar.
-        </p>
+        <h1 className="hero__title" style={{ fontSize: '2.2rem', maxWidth: 600, margin: '0 auto 1.5rem' }}>
+          Bem-vindo à Rede Social Cristã! Aqui a fé conecta corações. Oração, louvor, amizade e comunhão em um só lugar. Cristãos do mundo inteiro já fazem parte dessa família. Agora é a sua vez! ✨ Crie sua conta gratuita em menos de 30 segundos e faça parte dessa missão!
+        </h1>
 
         {/* Versículo do dia */}
         <div className="hero__verse">

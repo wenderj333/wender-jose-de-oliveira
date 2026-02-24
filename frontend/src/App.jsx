@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, Component } from 'react';
 import { Routes, Route, Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './context/AuthContext';
-import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users, User, Download, Bell, Music } from 'lucide-react';
+import { BookOpen, HandHeart, Radio, MapPin, LayoutDashboard, Menu, X, Church, Baby, Newspaper, ShieldAlert, MessageCircle, Bot, Users, User, Download, Bell, Music, LogOut } from 'lucide-react';
 import Home from './pages/Home';
 import PrayerFeed from './pages/PrayerFeed';
 import LivePrayer from './pages/LivePrayer';
@@ -38,11 +38,21 @@ import LiveStream from './pages/LiveStream';
 // import MusicPlayer from './components/MusicPlayer';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import RegistrationPromptPopup from './components/RegistrationPromptPopup';
+<<<<<<< HEAD
+
+export const RegistrationPromptContext = React.createContext(null);
+=======
+>>>>>>> ae3430498bffb3fe64c298d720b8491f5b3961ff
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
+  const { promptRegistration } = React.useContext(RegistrationPromptContext);
+
   if (loading) return <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="loading-spinner" /></div>;
-  if (!user) return <Navigate to="/login" />;
+  if (!user) {
+    promptRegistration();
+    return <Navigate to="/" />; // Redireciona para a home para o popup ser mostrado
+  }
   return children;
 }
 
@@ -82,6 +92,11 @@ export default function App() {
   const [installPrompt, setInstallPrompt] = useState(null);
   const [showInstallBtn, setShowInstallBtn] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [showRegistrationPopup, setShowRegistrationPopup] = useState(false);
+
+  const promptRegistration = () => {
+    setShowRegistrationPopup(true);
+  };
 
   // Poll unread notifications every 60 seconds
   const prevUnreadRef = useRef(0);
@@ -188,46 +203,48 @@ export default function App() {
           </div>
         </div>
         <div className={`nav-overlay ${menuOpen ? 'nav-overlay--open' : ''}`} onClick={() => setMenuOpen(false)} />
-        <div className={`nav-links ${menuOpen ? 'nav-links--open' : ''}`}>
-          <Link to="/mural" className={isActive('/mural')} onClick={() => setMenuOpen(false)}><Newspaper size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Mural</Link>
-          <Link to="/ao-vivo" className={isActive('/ao-vivo')} onClick={() => setMenuOpen(false)}><Radio size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Ao Vivo</Link>
-          <Link to="/directo" className={isActive('/directo')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔴</span>Directo</Link>
-          <Link to="/cadastrar-igreja" className={isActive('/cadastrar-igreja')} onClick={() => setMenuOpen(false)}><Church size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Igreja</Link>
-          {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')} onClick={() => setMenuOpen(false)}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#e74c3c' }} />Pedidos</Link>}
-          {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/oracoes" className={isActive('/oracoes')} onClick={() => setMenuOpen(false)}><HandHeart size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Orações</Link>}
-          <Link to="/chat-pastoral" className={isActive('/chat-pastoral')} onClick={() => setMenuOpen(false)}><MessageCircle size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />Chat</Link>
+        <div className={`nav-links ${menuOpen ? 'nav-links--open' : ''}`} style={{ paddingBottom: '20px' }}>          <Link to="/mural" className={isActive('/mural')} onClick={() => setMenuOpen(false)}><Newspaper size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.mural')}</Link>
+          <Link to="/ao-vivo" className={isActive('/ao-vivo')} onClick={() => setMenuOpen(false)}><Radio size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.live')}</Link>
+          <Link to="/directo" className={isActive('/directo')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔴</span>{t('nav.live')}</Link> {/* Reutilizando nav.live para 'Directo' */}
+          <Link to="/cadastrar-igreja" className={isActive('/cadastrar-igreja')} onClick={() => setMenuOpen(false)}><Church size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.registerChurch')}</Link>
+          {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')} onClick={() => setMenuOpen(false)}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#e74c3c' }} />{t('nav.helpRequests')}</Link>}
+          {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/oracoes" className={isActive('/oracoes')} onClick={() => setMenuOpen(false)}><HandHeart size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.prayers')}</Link>}
+          <Link to="/chat-pastoral" className={isActive('/chat-pastoral')} onClick={() => setMenuOpen(false)}><MessageCircle size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.chatPastoral')}</Link>
           {user && (
             <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)} onClick={() => setMenuOpen(false)} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-              <User size={20} style={{ verticalAlign: 'middle', color: '#daa520' }} />Seu Perfil
+              <User size={20} style={{ verticalAlign: 'middle', color: '#daa520' }} />{t('nav.myProfile')}
             </Link>
           )}
-          <Link to="/ia-biblica" className={isActive('/ia-biblica')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>📖</span>IA 📖</Link>
-          {user?.role === 'pastor' && <Link to="/ia-pastoral" className={isActive('/ia-pastoral')} onClick={() => setMenuOpen(false)}><Bot size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />IA Pastoral</Link>}
-          <Link to="/musica" className={isActive('/musica')} onClick={() => setMenuOpen(false)}><Music size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: 'var(--purple)' }} />Música</Link>
-          <Link to="/criador-louvor" className={isActive('/criador-louvor')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>✨</span>Criar Louvor IA</Link>
-          {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/membros" className={isActive('/membros')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4caf50' }} />Membros</Link>}
-          <Link to="/kids" className={isActive('/kids')} onClick={() => setMenuOpen(false)}><Baby size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Kids</Link>
-          <Link to="/consagracao" className={isActive('/consagracao')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔥</span>Consagração</Link>
-          <Link to="/jornadas" className={isActive('/jornadas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>✨</span>Jornadas de Fé</Link>
-          <Link to="/curso-biblico" className={isActive('/curso-biblico')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>📖</span>Curso Bíblico Grátis</Link>
-          <Link to="/curso-financas" className={isActive('/curso-financas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>💰</span>Finanças Bíblicas</Link>
-          <Link to="/curso-teologia" className={isActive('/curso-teologia')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🎓</span>Teologia</Link>
-          <Link to="/grupos" className={isActive('/grupos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4a1a8e' }} />Grupos</Link>
-          {user && <Link to="/amigos" className={isActive('/amigos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#667eea' }} />Amigos</Link>}
+          <Link to="/ia-biblica" className={isActive('/ia-biblica')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>📖</span>{t('nav.bibleAI')}</Link>
+          {user?.role === 'pastor' && <Link to="/ia-pastoral" className={isActive('/ia-pastoral')} onClick={() => setMenuOpen(false)}><Bot size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.pastoralAI')}</Link>}
+          <Link to="/musica" className={isActive('/musica')} onClick={() => setMenuOpen(false)}><Music size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: 'var(--purple)' }} />{t('nav.music')}</Link>
+          <Link to="/criador-louvor" className={isActive('/criador-louvor')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>✨</span>{t('nav.createWorshipAI')}</Link>
+          {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/membros" className={isActive('/membros')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4caf50' }} />{t('nav.members')}</Link>}
+          <Link to="/kids" className={isActive('/kids')} onClick={() => setMenuOpen(false)}><Baby size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.kids')}</Link>
+          <Link to="/consagracao" className={isActive('/consagracao')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔥</span>{t('nav.consecration')}</Link>
+          <Link to="/jornadas" className={isActive('/jornadas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>✨</span>{t('nav.faithJourneys')}</Link>
+          <Link to="/curso-biblico" className={isActive('/curso-biblico')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>📖</span>{t('nav.courseFree')}</Link>
+          <Link to="/curso-financas" className={isActive('/curso-financas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>💰</span>{t('nav.courseFinance')}</Link>
+          <Link to="/curso-teologia" className={isActive('/curso-teologia')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🎓</span>{t('nav.courseTheology')}</Link>
+          <Link to="/grupos" className={isActive('/grupos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4a1a8e' }} />{t('nav.groups')}</Link>
+          {user && <Link to="/amigos" className={isActive('/amigos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#667eea' }} />{t('nav.friends')}</Link>}
           {user && (
-            <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setMenuOpen(false)}><LayoutDashboard size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Dashboard</Link>
+            <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setMenuOpen(false)}><LayoutDashboard size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.dashboard')}</Link>
           )}
           {(user?.role === 'pastor' || user?.role === 'admin') && (
-            <Link to="/pastor" className={isActive('/pastor')} onClick={() => setMenuOpen(false)} style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', color: '#fff', borderRadius: 12, padding: '0.4rem 0.8rem', fontWeight: 700 }}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />🏛️ Sala do Pastor</Link>
+            <Link to="/pastor" className={isActive('/pastor')} onClick={() => setMenuOpen(false)} style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', color: '#fff', borderRadius: 12, padding: '0.4rem 0.8rem', fontWeight: 700 }}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />🏛️ {t('nav.pastorRoom')}</Link>
           )}
-          {/* Ofertas temporarily hidden */}
-          {/* {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/ofertas" className={isActive('/ofertas')} onClick={() => setMenuOpen(false)}>❤️ Ofertas</Link>} */}
+                    {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/ofertas" className={isActive('/ofertas')} onClick={() => setMenuOpen(false)}><HandHeart size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#e74c3c' }} />{t('nav.offerings')}</Link>}
           {/* Igrejas (map) hidden — using Igreja (register) instead */}
           {/* <Link to="/igrejas" className={isActive('/igrejas')} onClick={() => setMenuOpen(false)}><MapPin size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Igrejas</Link> */}
           {user ? (
             <>
-              <span className="nav-user">{t('nav.hello', { name: user.full_name?.split(' ')[0] })}</span>
-              <button onClick={() => { logout(); setMenuOpen(false); }} className="btn btn-outline btn-sm">{t('nav.logout')}</button>
+              <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)} onClick={() => setMenuOpen(false)} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontWeight: 'bold', color: 'var(--golden)', padding: '0.5rem 1rem' }}>
+                <User size={20} style={{ verticalAlign: 'middle' }} /> {t('nav.hello', { name: user.full_name?.split(' ')[0] })}
+              </Link>
+              <button onClick={() => { logout(); setMenuOpen(false); }} className="btn btn-outline btn-sm" style={{ width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center', gap: 4, marginTop: '1rem' }}>
+                <LogOut size={16} style={{ verticalAlign: 'middle' }} /> {t('nav.logout')}
+              </button>
             </>
           ) : (
             <>
@@ -272,40 +289,44 @@ export default function App() {
 
       <main className="main-content">
         <ErrorBoundary>
-        <Routes>
-          <Route path="/" element={user ? <Navigate to="/mural" /> : <Home />} />
-          <Route path="/oracoes" element={<PrayerFeed />} />
-          <Route path="/mural" element={<Mural />} />
-          <Route path="/ao-vivo" element={<LivePrayer />} />
-          <Route path="/igrejas" element={<ChurchMap />} />
-          <Route path="/login" element={<RedirectIfLoggedIn><Login /></RedirectIfLoggedIn>} />
-          <Route path="/cadastro" element={<RedirectIfLoggedIn><Register /></RedirectIfLoggedIn>} />
-          <Route path="/kids" element={<Kids />} />
-          <Route path="/pedidos-ajuda" element={<HelpRequests />} />
-          <Route path="/chat-pastoral" element={<PastorChat />} />
-          <Route path="/ia-biblica" element={<BibleAI />} />
-          <Route path="/ia-pastoral" element={<ProtectedRoute><PastoralAI /></ProtectedRoute>} />
-          <Route path="/cadastrar-igreja" element={<ChurchRegister />} />
-          <Route path="/amigos" element={<Friends />} />
-          <Route path="/perfil/:userId" element={<Profile />} />
-                    <Route path="/musica" element={<MusicLibrary />} />
-          <Route path="/consagracao" element={<Consecration />} />
-          <Route path="/grupos" element={<Groups />} />
-          <Route path="/mensagens" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
-          <Route path="/membros" element={<ProtectedRoute><Members /></ProtectedRoute>} />
-          <Route path="/ofertas" element={<ProtectedRoute><Offerings /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/pastor" element={<ProtectedRoute><PastorDashboard /></ProtectedRoute>} />
-          <Route path="/jornadas" element={<FaithJourneys />} />
-          <Route path="/curso-biblico" element={<BiblicalCourse />} />
-          <Route path="/curso-financas" element={<BiblicalFinance />} />
-          <Route path="/curso-teologia" element={<TheologyCourse />} />
-          <Route path="/doar" element={<ProtectedRoute><Donation /></ProtectedRoute>} />
-          <Route path="/directo" element={<ProtectedRoute><LiveStream /></ProtectedRoute>} />
-          <Route path="/criador-louvor" element={<CriadorLouvor />} />
-        </Routes>
+          <RegistrationPromptContext.Provider value={{ user, promptRegistration }}>
+            <Routes>
+              <Route path="/" element={user ? <Navigate to="/mural" /> : <Home />} />
+              <Route path="/oracoes" element={<PrayerFeed />} />
+              <Route path="/mural" element={<Mural />} />
+              <Route path="/ao-vivo" element={<LivePrayer />} />
+              <Route path="/igrejas" element={<ChurchMap />} />
+              <Route path="/login" element={<RedirectIfLoggedIn><Login /></RedirectIfLoggedIn>} />
+              <Route path="/cadastro" element={<RedirectIfLoggedIn><Register /></RedirectIfLoggedIn>} />
+              <Route path="/kids" element={<Kids />} />
+              <Route path="/pedidos-ajuda" element={<HelpRequests />} />
+              <Route path="/chat-pastoral" element={<PastorChat />} />
+              <Route path="/ia-biblica" element={<BibleAI />} />
+              <Route path="/ia-pastoral" element={<ProtectedRoute><PastoralAI /></ProtectedRoute>} />
+              <Route path="/cadastrar-igreja" element={<ChurchRegister />} />
+              <Route path="/amigos" element={<Friends />} />
+              <Route path="/perfil/:userId" element={<Profile />} />
+              <Route path="/musica" element={<MusicLibrary />} />
+              <Route path="/consagracao" element={<Consecration />} />
+              <Route path="/grupos" element={<Groups />} />
+              <Route path="/mensagens" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
+              <Route path="/membros" element={<ProtectedRoute><Members /></ProtectedRoute>} />
+              <Route path="/ofertas" element={<ProtectedRoute><Offerings /></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/pastor" element={<ProtectedRoute><PastorDashboard /></ProtectedRoute>} />
+              <Route path="/jornadas" element={<FaithJourneys />} />
+              <Route path="/curso-biblico" element={<BiblicalCourse />} />
+              <Route path="/curso-financas" element={<BiblicalFinance />} />
+              <Route path="/curso-teologia" element={<TheologyCourse />} />
+              <Route path="/doar" element={<ProtectedRoute><Donation /></ProtectedRoute>} />
+              <Route path="/directo" element={<ProtectedRoute><LiveStream /></ProtectedRoute>} />
+              <Route path="/criador-louvor" element={<CriadorLouvor />} />
+            </Routes>
+          </RegistrationPromptContext.Provider>
         </ErrorBoundary>
       </main>
+
+      {showRegistrationPopup && <RegistrationPromptPopup isOpen={showRegistrationPopup} onClose={() => setShowRegistrationPopup(false)} />}
 
       {/* Music player temporarily disabled */}
 
