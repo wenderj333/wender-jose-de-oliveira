@@ -179,6 +179,7 @@ export default function App() {
             <img src="/logo.jpg" alt="Sigo com Fé" style={{ width: 36, height: 36, verticalAlign: 'middle', marginRight: '8px', borderRadius: '50%', objectFit: 'cover', background: '#b3d4fc' }} />{t('brand')}
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <LanguageSwitcher />
             {user && (
               <Link to="/mensagens" style={{ position: 'relative', color: '#fff', textDecoration: 'none' }}>
                 <Bell size={22} />

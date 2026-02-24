@@ -1,88 +1,121 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Globe } from 'lucide-react';
-
-const LANGUAGES = [
-  { code: 'pt', flag: '🇧🇷', label: 'Português' },
-  { code: 'en', flag: '🇺🇸', label: 'English' },
-  { code: 'es', flag: '🇪🇸', label: 'Español' },
-  { code: 'de', flag: '🇩🇪', label: 'Deutsch' },
-  { code: 'ro', flag: '🇷🇴', label: 'Română' },
-  { code: 'ru', flag: '🇷🇺', label: 'Русский' },
-];
+import { Globe, Check } from 'lucide-react';
 
 export default function LanguageSwitcher() {
   const { i18n } = useTranslation();
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-  const current = i18n.language?.substring(0, 2) || 'pt';
-  const currentLang = LANGUAGES.find(l => l.code === current) || LANGUAGES[0];
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  useEffect(() => {
-    const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
+  const languages = [
+    { code: 'pt', name: '🇧🇷 Português', flag: '🇵🇹' },
+    { code: 'es', name: '🇪🇸 Español', flag: '🇪🇸' },
+    { code: 'en', name: '🇺🇸 English', flag: '🇬🇧' },
+    { code: 'de', name: '🇩🇪 Deutsch', flag: '🇩🇪' },
+    { code: 'fr', name: '🇫🇷 Français', flag: '🇫🇷' },
+    { code: 'ro', name: '🇷🇴 Română', flag: '🇷🇴' },
+    { code: 'ru', name: '🇷🇺 Русский', flag: '🇷🇺' },
+  ];
+
+  const handleLanguageChange = (langCode) => {
+    i18n.changeLanguage(langCode);
+    localStorage.setItem('i18nextLng', langCode);
+    setShowDropdown(false);
+  };
+
+  const currentLang = languages.find(l => l.code === i18n.language?.substring(0, 2));
 
   return (
-    <div ref={ref} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+    <div style={{ position: 'relative' }}>
       <button
-        onClick={() => setOpen(!open)}
+        onClick={() => setShowDropdown(!showDropdown)}
         style={{
-          background: 'transparent',
+          background: 'none',
           border: 'none',
+          color: '#fff',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
-          gap: '4px',
-          padding: '4px 8px',
-          borderRadius: '6px',
+          gap: 6,
+          padding: '0.4rem 0.8rem',
+          borderRadius: 20,
           fontSize: '0.85rem',
-          color: 'var(--gray-500)',
+          fontWeight: 600,
+          transition: 'all 0.2s',
+          backgroundColor: 'rgba(255,255,255,0.15)',
         }}
-        title="Idioma"
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.25)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.15)';
+        }}
       >
         <Globe size={16} />
-        <span>{currentLang.flag}</span>
+        {currentLang?.flag} {currentLang?.code.toUpperCase()}
       </button>
-      {open && (
-        <div style={{
-          position: 'absolute',
-          top: '100%',
-          right: 0,
-          background: '#fff',
-          borderRadius: '8px',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-          zIndex: 1000,
-          minWidth: '140px',
-          overflow: 'hidden',
-          marginTop: '4px',
-        }}>
-          {LANGUAGES.map((lang) => (
+
+      {showDropdown && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '100%',
+            right: 0,
+            background: '#fff',
+            borderRadius: 12,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            minWidth: 200,
+            zIndex: 1000,
+            marginTop: 8,
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {languages.map(lang => (
             <button
               key={lang.code}
-              onClick={() => { i18n.changeLanguage(lang.code); setOpen(false); }}
+              onClick={() => handleLanguageChange(lang.code)}
               style={{
+                width: '100%',
+                padding: '0.75rem 1rem',
+                border: 'none',
+                background: i18n.language?.substring(0, 2) === lang.code ? '#f0f0f0' : 'transparent',
+                color: '#1a0a3e',
+                cursor: 'pointer',
+                textAlign: 'left',
+                fontSize: '0.9rem',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                width: '100%',
-                padding: '10px 14px',
-                border: 'none',
-                background: current === lang.code ? '#f0f4ff' : 'transparent',
-                cursor: 'pointer',
-                fontSize: '0.85rem',
-                fontWeight: current === lang.code ? 600 : 400,
-                color: '#333',
+                justifyContent: 'space-between',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#e8e8e8';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = i18n.language?.substring(0, 2) === lang.code ? '#f0f0f0' : 'transparent';
               }}
             >
-              <span style={{ fontSize: '1.1rem' }}>{lang.flag}</span>
-              {lang.label}
+              <span>{lang.name}</span>
+              {i18n.language?.substring(0, 2) === lang.code && (
+                <Check size={16} color="#daa520" strokeWidth={3} />
+              )}
             </button>
           ))}
         </div>
+      )}
+
+      {/* Click outside to close */}
+      {showDropdown && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 999,
+          }}
+          onClick={() => setShowDropdown(false)}
+        />
       )}
     </div>
   );

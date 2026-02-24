@@ -16,12 +16,27 @@ i18n
   .init({
     resources: {
       pt: { translation: pt },
+      'pt-BR': { translation: pt },
+      'pt-PT': { translation: pt },
       en: { translation: en },
+      'en-US': { translation: en },
+      'en-GB': { translation: en },
+      'en-AU': { translation: en },
       es: { translation: es },
+      'es-ES': { translation: es },
+      'es-MX': { translation: es },
+      'es-AR': { translation: es },
       de: { translation: de },
+      'de-DE': { translation: de },
+      'de-AT': { translation: de },
+      'de-CH': { translation: de },
       ro: { translation: ro },
+      'ro-RO': { translation: ro },
       ru: { translation: ru },
+      'ru-RU': { translation: ru },
       fr: { translation: fr },
+      'fr-FR': { translation: fr },
+      'fr-CA': { translation: fr },
     },
     fallbackLng: 'pt',
     interpolation: {
@@ -30,6 +45,10 @@ i18n
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
+      // Normalize language codes to support regional variants
+      lookupLocalStorage: 'i18nextLng',
+      lookupFromPathIndex: 0,
+      lookupFromSubdomainIndex: 0,
     },
   });
 
