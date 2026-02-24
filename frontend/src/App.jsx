@@ -270,9 +270,7 @@ export default function App() {
         </button>
         <style>{`@keyframes louvorPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }`}</style>
         <button onClick={() => {
-          const shareData = { title: 'Sigo com Fé', text: '🙏 Conheça o Sigo com Fé! Rede social cristã.
-
-✨ Crie sua conta grátis:', url: 'https://sigo-com-fe.vercel.app' };
+            const shareData = { title: 'Sigo com Fe', text: 'Conheca o Sigo com Fe! Rede social crista.', url: 'https://sigo-com-fe.vercel.app' };
           if (navigator.share) navigator.share(shareData).catch(() => {});
           else { navigator.clipboard?.writeText(`${shareData.text}
 ${shareData.url}`); alert('Link copiado! ✅'); }
@@ -349,3 +347,4 @@ ${shareData.url}`); alert('Link copiado! ✅'); }
     </div>
   );
 }
+
