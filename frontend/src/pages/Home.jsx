@@ -8,36 +8,36 @@ import { HandHeart, Radio, Users, ShieldAlert, MessageCircle, BookOpen, Music, F
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
 
-const FEATURES = [
-  { emoji: '🙏', label: 'Orações', path: '/oracoes', color: '#daa520' },
-  { emoji: '🔴', label: 'Ao Vivo', path: '/ao-vivo', color: '#e74c3c' },
-  { emoji: '💬', label: 'Chat Pastoral', path: '/chat-pastoral', color: '#8e44ad' },
-  { emoji: '📖', label: 'IA Bíblica', path: '/ia-biblica', color: '#3498db' },
-  { emoji: '🎵', label: 'Música', path: '/musica', color: '#9b59b6' },
-  { emoji: '🔥', label: 'Consagração', path: '/consagracao', color: '#e67e22' },
-  { emoji: '👥', label: 'Grupos', path: '/grupos', color: '#1abc9c' },
-  { emoji: '📸', label: 'Mural', path: '/mural', color: '#f39c12' },
+const FEATURES_CONFIG = [
+  { emoji: '🙏', labelKey: 'home.features.prayers', path: '/oracoes', color: '#daa520' },
+  { emoji: '🔴', labelKey: 'home.features.live', path: '/ao-vivo', color: '#e74c3c' },
+  { emoji: '💬', labelKey: 'home.features.pastoral', path: '/chat-pastoral', color: '#8e44ad' },
+  { emoji: '📖', labelKey: 'home.features.biblicalAI', path: '/ia-biblica', color: '#3498db' },
+  { emoji: '🎵', labelKey: 'home.features.music', path: '/musica', color: '#9b59b6' },
+  { emoji: '🔥', labelKey: 'home.features.consecration', path: '/consagracao', color: '#e67e22' },
+  { emoji: '👥', labelKey: 'home.features.groups', path: '/grupos', color: '#1abc9c' },
+  { emoji: '📸', labelKey: 'home.features.mural', path: '/mural', color: '#f39c12' },
 ];
 
 const TESTIMONIES_DEMO = [
   {
     id: '1',
     author_name: 'Maria Silva',
-    content: 'Encontrei paz e comunidade nesta plataforma. Minhas orações foram ouvidas e respondidas.',
+    content: 'testimonies.demo1',
     avatar_url: 'https://i.pravatar.cc/100?u=maria',
     created_at: new Date(Date.now() - 86400000).toISOString(),
   },
   {
     id: '2',
     author_name: 'João Santos',
-    content: 'A IA Bíblica me ajudou a entender melhor as escrituras e fortalecer minha fé diariamente.',
+    content: 'testimonies.demo2',
     avatar_url: 'https://i.pravatar.cc/100?u=joao',
     created_at: new Date(Date.now() - 172800000).toISOString(),
   },
   {
     id: '3',
     author_name: 'Ana Costa',
-    content: 'Encontrei minha igreja local e agora sou membro ativo da comunidade cristã online e presencial.',
+    content: 'testimonies.demo3',
     avatar_url: 'https://i.pravatar.cc/100?u=ana',
     created_at: new Date(Date.now() - 259200000).toISOString(),
   },
@@ -208,7 +208,7 @@ export default function Home() {
         <section style={{ maxWidth: '1200px', margin: '0 auto 3rem', padding: '0 1rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#e74c3c', animation: 'pulse 1.5s infinite', display: 'inline-block' }} />
-            🔴 Ao Vivo Agora
+            🔴 {t('home.liveNow', 'Ao Vivo Agora')}
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
             {liveStreams.map(stream => (
@@ -238,7 +238,7 @@ export default function Home() {
                   </div>
                   <div style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{stream.userName || 'Ao Vivo'}</div>
                   <div style={{ background: '#e74c3c', borderRadius: 8, padding: '4px 8px', fontSize: '0.7rem', fontWeight: 700, display: 'inline-block', animation: 'pulse 1.5s infinite' }}>
-                    🔴 DIRECTO
+                    🔴 {t('home.live', 'DIRECTO')}
                   </div>
                   <div style={{ fontSize: '0.85rem', opacity: 0.7, marginTop: '0.5rem' }}>👁 {stream.viewerCount || 0}</div>
                 </div>
@@ -250,13 +250,13 @@ export default function Home() {
 
       {/* Features Grid */}
       <section style={{ maxWidth: '1200px', margin: '0 auto 3rem', padding: '0 1rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', textAlign: 'center' }}>Explore as Principais Funcionalidades</h2>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', textAlign: 'center' }}>{t('home.exploreFeatures', 'Explore as Principais Funcionalidades')}</h2>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '1rem',
         }}>
-          {FEATURES.map(feature => (
+          {FEATURES_CONFIG.map(feature => (
             <Link key={feature.path} to={feature.path} style={{ textDecoration: 'none' }}>
               <div style={{
                 background: 'linear-gradient(135deg, rgba(218,165,32,0.1), rgba(218,165,32,0.05))',
@@ -281,7 +281,7 @@ export default function Home() {
                 e.currentTarget.style.boxShadow = 'none';
               }}>
                 <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>{feature.emoji}</div>
-                <div style={{ fontWeight: 700, fontSize: '1rem' }}>{feature.label}</div>
+                <div style={{ fontWeight: 700, fontSize: '1rem' }}>{t(feature.labelKey)}</div>
               </div>
             </Link>
           ))}
@@ -291,7 +291,7 @@ export default function Home() {
       {/* Recent Testimonies */}
       {recentTestimonies.length > 0 && (
         <section style={{ maxWidth: '1200px', margin: '0 auto 3rem', padding: '0 1rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', textAlign: 'center' }}>Testemunhos Recentes</h2>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', textAlign: 'center' }}>{t('home.recentTestimonies', 'Testemunhos Recentes')}</h2>
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
@@ -315,11 +315,11 @@ export default function Home() {
                   />
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{testimony.author_name}</div>
-                    <div style={{ fontSize: '0.75rem', opacity: 0.6 }}>Há alguns dias</div>
+                    <div style={{ fontSize: '0.75rem', opacity: 0.6 }}>{t('home.daysAgo', 'Há alguns dias')}</div>
                   </div>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.95rem', lineHeight: 1.6, opacity: 0.9 }}>
-                  "{testimony.content}"
+                  "{t(testimony.content)}"
                 </p>
               </div>
             ))}
@@ -329,17 +329,17 @@ export default function Home() {
 
       {/* Why Choose Us */}
       <section style={{ maxWidth: '1200px', margin: '0 auto 3rem', padding: '0 1rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', textAlign: 'center' }}>Por Que Escolher Sigo com Fé?</h2>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', textAlign: 'center' }}>{t('home.whyChoose', 'Por Que Escolher Sigo com Fé?')}</h2>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
           gap: '1.5rem',
         }}>
           {[
-            { icon: '🌍', title: 'Comunidade Global', desc: 'Conecte-se com cristãos de todo o mundo' },
-            { icon: '🔐', title: 'Seguro e Privado', desc: 'Seus dados estão sempre protegidos' },
-            { icon: '⚡', title: 'Totalmente Grátis', desc: 'Acesso completo sem custos ocultos' },
-            { icon: '📱', title: 'Mobile First', desc: 'Funciona perfeitamente em seu telemóvel' },
+            { icon: '🌍', titleKey: 'home.global', descKey: 'home.globalDesc' },
+            { icon: '🔐', titleKey: 'home.secure', descKey: 'home.secureDesc' },
+            { icon: '⚡', titleKey: 'home.free', descKey: 'home.freeDesc' },
+            { icon: '📱', titleKey: 'home.mobile', descKey: 'home.mobileDesc' },
           ].map((item, idx) => (
             <div key={idx} style={{
               background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
@@ -349,8 +349,8 @@ export default function Home() {
               border: '1px solid rgba(218,165,32,0.2)',
             }}>
               <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{item.icon}</div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem' }}>{item.title}</h3>
-              <p style={{ margin: 0, opacity: 0.8, fontSize: '0.9rem' }}>{item.desc}</p>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem' }}>{t(item.titleKey)}</h3>
+              <p style={{ margin: 0, opacity: 0.8, fontSize: '0.9rem' }}>{t(item.descKey)}</p>
             </div>
           ))}
         </div>
@@ -363,9 +363,9 @@ export default function Home() {
         padding: '3rem 1rem',
         textAlign: 'center',
       }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem' }}>Para Pastores</h2>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem' }}>{t('home.forPastors', 'Para Pastores')}</h2>
         <p style={{ fontSize: '1rem', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem', opacity: 0.9 }}>
-          Ferramentas completas para gerenciar sua congregação, finanças, campanhas e muito mais.
+          {t('home.forPastorsDesc', 'Ferramentas completas para gerenciar sua congregação, finanças, campanhas e muito mais.')}
         </p>
         <Link to="/cadastro" style={{ textDecoration: 'none' }}>
           <button style={{

@@ -42,6 +42,32 @@
     "footer":  "© 2026 Sigo com Fé - Tecnologia a serviço do Reino",
     "home":  {
                  "subtitle":  "Ore, conecte-se e fortaleça sua fé com milhares de irmãos ao redor do mundo.",
+                 "exploreFeatures":  "Explore as Principais Funcionalidades",
+                 "recentTestimonies":  "Testemunhos Recentes",
+                 "daysAgo":  "Há alguns dias",
+                 "liveNow":  "Ao Vivo Agora",
+                 "live":  "DIRECTO",
+                 "whyChoose":  "Por Que Escolher Sigo com Fé?",
+                 "global":  "Comunidade Global",
+                 "globalDesc":  "Conecte-se com cristãos de todo o mundo",
+                 "secure":  "Seguro e Privado",
+                 "secureDesc":  "Seus dados estão sempre protegidos",
+                 "free":  "Totalmente Grátis",
+                 "freeDesc":  "Acesso completo sem custos ocultos",
+                 "mobile":  "Mobile First",
+                 "mobileDesc":  "Funciona perfeitamente em seu telemóvel",
+                 "forPastors":  "Para Pastores",
+                 "forPastorsDesc":  "Ferramentas completas para gerenciar sua congregação, finanças, campanhas e muito mais.",
+                 "features":  {
+                     "prayers":  "🙏 Orações",
+                     "live":  "🔴 Ao Vivo",
+                     "pastoral":  "💬 Chat Pastoral",
+                     "biblicalAI":  "📖 IA Bíblica",
+                     "music":  "🎵 Música",
+                     "consecration":  "🔥 Consagração",
+                     "groups":  "👥 Grupos",
+                     "mural":  "📸 Mural"
+                 },
                  "startNow":  "Comece Agora",
                  "seePrayerRequests":  "Ver Pedidos de Oração",
                  "churchPraying_one":  "{{count}} igreja orando agora!",
@@ -579,7 +605,12 @@
                    "beFirst":  "Seja o primeiro a publicar!",
                    "translate":  "Traduzir",
                    "translation":  "Tradução",
-                   "hideTranslation":  "Ocultar tradução"
+                   "hideTranslation":  "Ocultar tradução",
+                   "remove":  "Remover",
+                   "cancel":  "Cancelar",
+                   "user":  "Utilizador",
+                   "noText":  "(Sem texto)",
+                   "deleteConfirm":  "Tem certeza que deseja excluir esta publicação?"
                },
     "offerings":  {
                       "title":  "Ofertas e Dízimos",
@@ -631,5 +662,38 @@
                            "title":  "Curso de Teologia",
                            "description":  "Aprofunde seu conhecimento teológico",
                            "topics":  "Cristologia, Soteriologia, Eclesiologia, Escatologia, Pneumatologia, Hermenêutica"
-                       }
+                       },
+    "testimonies":  {
+                        "demo1":  "Encontrei paz e comunidade nesta plataforma. Minhas orações foram ouvidas e respondidas.",
+                        "demo2":  "A IA Bíblica me ajudou a entender melhor as escrituras e fortalecer minha fé diariamente.",
+                        "demo3":  "Encontrei minha igreja local e agora sou membro ativo da comunidade cristã online e presencial."
+                    },
+    "media":  {
+                  "photo":  "Foto",
+                  "video":  "Vídeo",
+                  "audio":  "Áudio",
+                  "url":  "URL",
+                  "urlPrompt":  "Cole a URL (YouTube, Vimeo, etc):",
+                  "urlPlaceholder":  "Cole a URL de YouTube ou outro vídeo...",
+                  "clearUrl":  "Limpar URL",
+                  "youtubePreview":  "YouTube (preview indisponível)"
+              },
+    "time":  {
+                 "now":  "Agora",
+                 "minAgo":  "Há {{count}}min",
+                 "hoursAgo":  "Há {{count}}h",
+                 "daysAgo":  "Há {{count}}d"
+             },
+    "mural":  {
+                  "testimony":  "🙏 Testemunho",
+                  "worship":  "🎵 Louvor",
+                  "photo":  "📸 Foto/Vídeo",
+                  "verse":  "📖 Versículo",
+                  "reflection":  "💭 Reflexão",
+                  "campaign":  "💝 Campanha / Causa",
+                  "placeholder":  "Compartilhe algo com a comunidade...",
+                  "publish":  "Publicar",
+                  "noPosts":  "Nenhum post ainda. Seja o primeiro a publicar! 📸",
+                  "commentPlaceholder":  "Escreva um comentário..."
+              }
 }

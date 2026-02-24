@@ -45,6 +45,32 @@
     "footer": "© 2026 Sigo com Fé - Technologie im Dienst des Reiches Gottes",
     "home": {
         "subtitle": "Bete, verbinde dich und stärke deinen Glauben mit Tausenden von Geschwistern auf der ganzen Welt.",
+        "exploreFeatures": "Erkunde die Hauptfunktionen",
+        "recentTestimonies": "Aktuelle Zeugnisse",
+        "daysAgo": "Vor ein paar Tagen",
+        "liveNow": "Jetzt Live",
+        "live": "LIVE",
+        "whyChoose": "Warum Sigo com Fé wählen?",
+        "global": "Globale Gemeinschaft",
+        "globalDesc": "Verbinde dich mit Christen aus der ganzen Welt",
+        "secure": "Sicher und privat",
+        "secureDesc": "Deine Daten sind immer geschützt",
+        "free": "Völlig kostenlos",
+        "freeDesc": "Voller Zugriff ohne versteckte Kosten",
+        "mobile": "Mobil-First",
+        "mobileDesc": "Funktioniert perfekt auf deinem Handy",
+        "forPastors": "Für Pastoren",
+        "forPastorsDesc": "Umfassende Werkzeuge zur Verwaltung deiner Gemeinde, Finanzen, Kampagnen und mehr.",
+        "features": {
+            "prayers": "🙏 Gebete",
+            "live": "🔴 Live",
+            "pastoral": "💬 Seelsorge-Chat",
+            "biblicalAI": "📖 Bibel-KI",
+            "music": "🎵 Musik",
+            "consecration": "🔥 Weihe",
+            "groups": "👥 Gruppen",
+            "mural": "📸 Pinnwand"
+        },
         "startNow": "Jetzt starten",
         "seePrayerRequests": "Gebetsanliegen ansehen",
         "churchPraying_one": "{{count}} Kirche betet gerade!",
@@ -557,7 +583,45 @@
         "beFirst": "Sei der Erste, der etwas veröffentlicht!",
         "translate": "Übersetzen",
         "translation": "Übersetzung",
-        "hideTranslation": "Übersetzung ausblenden"
+        "hideTranslation": "Übersetzung ausblenden",
+        "remove": "Entfernen",
+        "cancel": "Abbrechen",
+        "user": "Benutzer",
+        "noText": "(Kein Text)",
+        "deleteConfirm": "Bist du sicher, dass du diesen Beitrag löschen möchtest?"
+    },
+    "testimonies": {
+        "demo1": "Ich fand Frieden und Gemeinschaft auf dieser Plattform. Meine Gebete wurden erhört und beantwortet.",
+        "demo2": "Die Bibel-KI hat mir geholfen, die Schriften besser zu verstehen und meinen Glauben täglich zu stärken.",
+        "demo3": "Ich fand meine Ortskirche und bin jetzt aktives Mitglied der christlichen Online- und Präsenzgemeinde."
+    },
+    "media": {
+        "photo": "Foto",
+        "video": "Video",
+        "audio": "Audio",
+        "url": "URL",
+        "urlPrompt": "Füge die URL ein (YouTube, Vimeo, etc):",
+        "urlPlaceholder": "Füge die YouTube- oder Video-URL ein...",
+        "clearUrl": "URL löschen",
+        "youtubePreview": "YouTube (Vorschau nicht verfügbar)"
+    },
+    "time": {
+        "now": "Gerade eben",
+        "minAgo": "Vor {{count}}min",
+        "hoursAgo": "Vor {{count}}h",
+        "daysAgo": "Vor {{count}}d"
+    },
+    "mural": {
+        "testimony": "🙏 Zeugnis",
+        "worship": "🎵 Lobpreis",
+        "photo": "📸 Foto/Video",
+        "verse": "📖 Bibelvers",
+        "reflection": "💭 Reflexion",
+        "campaign": "💝 Kampagne / Anliegen",
+        "placeholder": "Teile etwas mit der Gemeinschaft...",
+        "publish": "Veröffentlichen",
+        "noPosts": "Noch keine Beiträge. Sei der Erste, der etwas veröffentlicht! 📸",
+        "commentPlaceholder": "Schreibe einen Kommentar..."
     },
     "offerings": {
         "title": "Gaben und Zehnten",

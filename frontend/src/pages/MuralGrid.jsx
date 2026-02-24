@@ -8,13 +8,13 @@ import { useNavigate, Link } from 'react-router-dom';
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
 
-const CATEGORIES = [
-  { value: 'testemunho', label: '🙏 Testemunho', color: '#daa520' },
-  { value: 'louvor', label: '🎵 Louvor', color: '#9b59b6' },
-  { value: 'foto', label: '📸 Foto/Vídeo', color: '#3498db' },
-  { value: 'versiculo', label: '📖 Versículo', color: '#27ae60' },
-  { value: 'reflexao', label: '💭 Reflexão', color: '#e67e22' },
-  { value: 'campanha', label: '💝 Campanha / Causa', color: '#e74c3c' },
+const CATEGORIES_CONFIG = [
+  { value: 'testemunho', labelKey: 'mural.testimony', color: '#daa520' },
+  { value: 'louvor', labelKey: 'mural.worship', color: '#9b59b6' },
+  { value: 'foto', labelKey: 'mural.photo', color: '#3498db' },
+  { value: 'versiculo', labelKey: 'mural.verse', color: '#27ae60' },
+  { value: 'reflexao', labelKey: 'mural.reflection', color: '#e67e22' },
+  { value: 'campanha', labelKey: 'mural.campaign', color: '#e74c3c' },
 ];
 
 function isAudio(url) {
@@ -39,15 +39,15 @@ function getYouTubeId(url) {
   return m ? m[1] : null;
 }
 
-function timeAgo(dateStr) {
+function getTimeAgo(dateStr, t) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'Agora';
-  if (mins < 60) return `Há ${mins}min`;
+  if (mins < 1) return t('time.now', 'Agora');
+  if (mins < 60) return t('time.minAgo', 'Há {{count}}min', { count: mins });
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `Há ${hrs}h`;
+  if (hrs < 24) return t('time.hoursAgo', 'Há {{count}}h', { count: hrs });
   const days = Math.floor(hrs / 24);
-  return `Há ${days}d`;
+  return t('time.daysAgo', 'Há {{count}}d', { count: days });
 }
 
 export default function MuralGrid() {
@@ -166,7 +166,7 @@ export default function MuralGrid() {
   }
 
   async function handleDeletePost(postId) {
-    if (!confirm('Tem certeza que deseja excluir esta publicação?')) return;
+    if (!confirm(t('common.deleteConfirm', 'Tem certeza que deseja excluir esta publicação?'))) return;
     try {
       const res = await fetch(`${API}/feed/${postId}`, {
         method: 'DELETE',
@@ -389,7 +389,7 @@ export default function MuralGrid() {
       );
     }
     // Fallback: emoji based on category
-    const categoryInfo = CATEGORIES.find(c => c.value === post.category);
+    const categoryInfo = CATEGORIES_CONFIG.find(c => c.value === post.category);
     return (
       <div style={{
         width: '100%',
@@ -400,7 +400,7 @@ export default function MuralGrid() {
         justifyContent: 'center',
         fontSize: '5rem',
       }}>
-        {categoryInfo?.label?.split(' ')[0] || '📸'}
+        {t(categoryInfo?.labelKey)?.split(' ')[0] || '📸'}
       </div>
     );
   };
@@ -415,7 +415,7 @@ export default function MuralGrid() {
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         position: 'sticky', top: 70, zIndex: 100,
       }}>
-        <h1 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 700, color: '#1a0a3e' }}>📸 Mural</h1>
+        <h1 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 700, color: '#1a0a3e' }}>📸 {t('nav.mural', 'Mural')}</h1>
         {user && (
           <button onClick={() => setShowForm(!showForm)} style={{
             padding: '0.5rem 1rem', borderRadius: 20, border: 'none',
@@ -424,7 +424,7 @@ export default function MuralGrid() {
             fontSize: '0.9rem',
           }}>
             {showForm ? <X size={16} /> : <Plus size={16} />}
-            {showForm ? 'Cancelar' : 'Publicar'}
+            {showForm ? t('common.cancel', 'Cancelar') : t('mural.publish', 'Publicar')}
           </button>
         )}
       </div>
@@ -441,19 +441,19 @@ export default function MuralGrid() {
           <form onSubmit={handlePost}>
             {/* Categories */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '0.75rem' }}>
-              {CATEGORIES.map(cat => (
+              {CATEGORIES_CONFIG.map(cat => (
                 <button type="button" key={cat.value} onClick={() => setNewCategory(cat.value)} style={{
                   padding: '4px 12px', borderRadius: 16, border: 'none', cursor: 'pointer', fontSize: '0.8rem',
                   background: newCategory === cat.value ? cat.color + '22' : '#f5f5f5',
                   color: newCategory === cat.value ? cat.color : '#666',
                   fontWeight: newCategory === cat.value ? 600 : 400,
-                }}>{cat.label}</button>
+                }}>{t(cat.labelKey)}</button>
               ))}
             </div>
 
             {/* Text */}
             <textarea value={newText} onChange={e => setNewText(e.target.value)}
-              placeholder="Compartilhe algo com a comunidade..."
+              placeholder={t('mural.placeholder', 'Compartilhe algo com a comunidade...')}
               rows={2} style={{
                 width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd',
                 fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box', marginBottom: '0.5rem',
@@ -469,7 +469,7 @@ export default function MuralGrid() {
                 transition: 'all 0.2s',
               }}>
                 <span style={{ fontSize: '1.5rem' }}>📸</span>
-                Foto
+                {t('media.photo', 'Foto')}
               </button>
               <button type="button" onClick={() => videoRef.current?.click()} style={{
                 padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
@@ -478,7 +478,7 @@ export default function MuralGrid() {
                 fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'video' ? 600 : 400,
               }}>
                 <span style={{ fontSize: '1.5rem' }}>🎬</span>
-                Vídeo
+                {t('media.video', 'Vídeo')}
               </button>
               <button type="button" onClick={() => audioRef.current?.click()} style={{
                 padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
@@ -487,10 +487,10 @@ export default function MuralGrid() {
                 fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'audio' ? 600 : 400,
               }}>
                 <span style={{ fontSize: '1.5rem' }}>🎵</span>
-                Áudio
+                {t('media.audio', 'Áudio')}
               </button>
               <button type="button" onClick={() => {
-                const url = prompt('Cole a URL (YouTube, Vimeo, etc):');
+                const url = prompt(t('media.urlPrompt', 'Cole a URL (YouTube, Vimeo, etc):'));
                 if (url) { setNewMediaUrl(url); setNewMediaType('url'); }
               }} style={{
                 padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
@@ -499,7 +499,7 @@ export default function MuralGrid() {
                 fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'url' ? 600 : 400,
               }}>
                 <span style={{ fontSize: '1.5rem' }}>🔗</span>
-                URL
+                {t('media.url', 'URL')}
               </button>
             </div>
 
@@ -510,7 +510,7 @@ export default function MuralGrid() {
                   type="text"
                   value={newMediaUrl}
                   onChange={e => setNewMediaUrl(e.target.value)}
-                  placeholder="Cole a URL de YouTube ou outro vídeo..."
+                  placeholder={t('media.urlPlaceholder', 'Cole a URL de YouTube ou outro vídeo...')}
                   style={{
                     width: '100%', padding: '0.7rem', borderRadius: 10, border: '2px solid #daa520',
                     fontSize: '0.9rem', boxSizing: 'border-box', marginBottom: '0.5rem',
@@ -520,7 +520,7 @@ export default function MuralGrid() {
                 <button type="button" onClick={() => { setNewMediaUrl(''); setNewMediaType(null); }} style={{
                   fontSize: '0.75rem', color: '#e74c3c', background: 'none', border: 'none',
                   cursor: 'pointer', padding: '0.25rem',
-                }}>Limpar URL</button>
+                }}>{t('media.clearUrl', 'Limpar URL')}</button>
               </div>
             )}
 
@@ -531,7 +531,7 @@ export default function MuralGrid() {
                   <video src={newMediaPreview} controls style={{ width: '100%', maxHeight: 280, borderRadius: 12 }} />
                 ) : newMediaType === 'url' && isYouTube(newMediaUrl) ? (
                   <div style={{ background: '#000', borderRadius: 12, padding: '1rem', textAlign: 'center' }}>
-                    <span style={{ color: '#fff', fontSize: '0.9rem' }}>🎬 YouTube (preview indisponível)</span>
+                    <span style={{ color: '#fff', fontSize: '0.9rem' }}>🎬 {t('media.youtubePreview', 'YouTube (preview indisponível)')}</span>
                   </div>
                 ) : (
                   <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 280, objectFit: 'cover', borderRadius: 12 }} />
@@ -551,7 +551,7 @@ export default function MuralGrid() {
                 <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaType(null); }} style={{
                   background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', borderRadius: 20, padding: '0.4rem 1rem',
                   cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600,
-                }}>Remover</button>
+                }}>{t('common.remove', 'Remover')}</button>
               </div>
             )}
 
@@ -560,7 +560,7 @@ export default function MuralGrid() {
               background: (newText.trim() || newMedia || newMediaUrl.trim()) ? 'linear-gradient(135deg, #daa520, #f4c542)' : '#ddd',
               color: (newText.trim() || newMedia || newMediaUrl.trim()) ? '#1a0a3e' : '#999',
               fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem',
-            }}>{posting ? (postingText || 'Publicando...') : 'Publicar'}</button>
+            }}>{posting ? (postingText || t('common.publishing', 'Publicando...')) : t('mural.publish', 'Publicar')}</button>
             
             <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleMediaSelect(e, 'photo')} />
             <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={(e) => handleMediaSelect(e, 'video')} />
@@ -587,12 +587,12 @@ export default function MuralGrid() {
           </div>
         ) : posts.length === 0 ? (
           <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem' }}>
-            <p style={{ color: '#999', fontSize: '0.95rem' }}>Nenhum post ainda. Seja o primeiro a publicar! 📸</p>
+            <p style={{ color: '#999', fontSize: '0.95rem' }}>{t('mural.noPosts', 'Nenhum post ainda. Seja o primeiro a publicar! 📸')}</p>
           </div>
         ) : (
           posts.map(post => {
             const thumbnail = getThumbnail(post);
-            const categoryInfo = CATEGORIES.find(c => c.value === post.category);
+            const categoryInfo = CATEGORIES_CONFIG.find(c => c.value === post.category);
 
             return (
               <div
@@ -714,9 +714,9 @@ export default function MuralGrid() {
                   }} />
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#fff' }}>
-                      {selectedPost.author_name || 'Utilizador'}
+                      {selectedPost.author_name || t('common.user', 'Utilizador')}
                     </div>
-                    <div style={{ fontSize: '0.75rem', color: '#aaa' }}>{timeAgo(selectedPost.created_at)}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#aaa' }}>{getTimeAgo(selectedPost.created_at, t)}</div>
                   </div>
                 </div>
                 <button onClick={() => setSelectedPost(null)} style={{
@@ -727,7 +727,7 @@ export default function MuralGrid() {
               {/* Post Content */}
               <div style={{ padding: '1rem', borderBottom: '1px solid rgba(218,165,32,0.2)', flex: 1, overflowY: 'auto' }}>
                 <p style={{ margin: 0, fontSize: '0.95rem', color: '#fff', lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                  {selectedPost.content || '(Sem texto)'}
+                  {selectedPost.content || t('common.noText', '(Sem texto)')}
                 </p>
               </div>
 
@@ -765,7 +765,7 @@ export default function MuralGrid() {
                   }}>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 600, fontSize: '0.8rem', color: '#daa520' }}>
-                        {comment.author_name || 'Utilizador'}
+                        {comment.author_name || t('common.user', 'Utilizador')}
                       </div>
                       <div style={{ fontSize: '0.8rem', color: '#ccc', marginTop: 2 }}>{comment.content}</div>
                     </div>
@@ -789,7 +789,7 @@ export default function MuralGrid() {
                     type="text"
                     value={commentText[selectedPost.id] || ''}
                     onChange={(e) => setCommentText(prev => ({ ...prev, [selectedPost.id]: e.target.value }))}
-                    placeholder="Escreva um comentário..."
+                    placeholder={t('mural.commentPlaceholder', 'Escreva um comentário...')}
                     style={{
                       flex: 1, padding: '0.6rem', borderRadius: 20, border: '1px solid rgba(218,165,32,0.3)',
                       fontSize: '0.8rem', outline: 'none',
@@ -813,7 +813,7 @@ export default function MuralGrid() {
                     padding: '0.6rem 1rem', borderRadius: 20, border: 'none',
                     background: '#daa520', color: '#1a0a3e', fontWeight: 600, cursor: 'pointer',
                     fontSize: '0.8rem',
-                  }}>Entrar para comentar</button>
+                  }}>{t('common.loginToComment', 'Entrar para comentar')}</button>
                 </div>
               )}
             </div>
