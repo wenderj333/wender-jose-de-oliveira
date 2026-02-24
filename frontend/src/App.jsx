@@ -199,7 +199,7 @@ export default function App() {
           </div>
         </div>
         <div className={`nav-overlay ${menuOpen ? 'nav-overlay--open' : ''}`} onClick={() => setMenuOpen(false)} />
-        <div className="nav-links" style={{ paddingBottom: '20px', maxHeight: 'calc(100vh - 60px)', overflowY: 'auto' }}>
+        <div className={`nav-links ${menuOpen ? 'nav-links--open' : ''}`} style={{ paddingBottom: '20px', maxHeight: 'calc(100vh - 60px)', overflowY: 'auto' }}>
           <Link to="/mural" className={isActive('/mural')} onClick={() => setMenuOpen(false)}><Newspaper size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.mural')}</Link>
           <Link to="/ao-vivo" className={isActive('/ao-vivo')} onClick={() => setMenuOpen(false)}><Radio size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.live')}</Link>
           <Link to="/directo" className={isActive('/directo')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔴</span>{t('nav.live')}</Link>

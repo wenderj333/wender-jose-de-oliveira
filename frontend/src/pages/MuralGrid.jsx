@@ -569,16 +569,18 @@ export default function MuralGrid() {
         </div>
       )}
 
-      {/* Posts Grid - Instagram style */}
+      {/* Posts Grid - Instagram style (3 columns) */}
       <div style={{
-        maxWidth: '1200px',
+        maxWidth: '100%',
         margin: '0 auto',
-        padding: '0 0.5rem',
+        padding: '0.5rem',
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-        gap: '0.5rem',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: '8px',
         marginTop: '1rem',
-      }}>
+      }}
+      className="mural-grid">
+      
         {loading ? (
           <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem' }}>
             <div style={{ display: 'inline-block', width: 40, height: 40, borderRadius: '50%', border: '3px solid #ddd', borderTopColor: '#daa520', animation: 'spin 1s linear infinite' }} />
@@ -825,6 +827,26 @@ export default function MuralGrid() {
           background: rgba(0,0,0,0.3);
           opacity: 0;
           transition: opacity 0.2s;
+        }
+        .mural-grid {
+          grid-template-columns: repeat(3, 1fr) !important;
+        }
+        @media (max-width: 1024px) {
+          .mural-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .mural-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 6px !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .mural-grid {
+            grid-template-columns: repeat(1, 1fr) !important;
+            gap: 4px !important;
+          }
         }
       `}</style>
     </div>
