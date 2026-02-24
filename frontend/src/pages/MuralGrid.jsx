@@ -28,6 +28,17 @@ function isVideo(url) {
   return /\.(mp4|webm|mov)/i.test(url) || url.includes('/video/') || url.includes('resource_type=video');
 }
 
+function isYouTube(url) {
+  if (!url) return false;
+  return url.includes('youtube.com/watch') || url.includes('youtu.be/');
+}
+
+function getYouTubeId(url) {
+  if (!url) return null;
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+  return m ? m[1] : null;
+}
+
 function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
@@ -276,9 +287,72 @@ export default function MuralGrid() {
       if (post.media_url.includes('cloudinary')) {
         return post.media_url.replace('/upload/', '/upload/w_400,h_400,c_fill,q_auto/');
       }
+      // Fallback: video icon
+      return null;
+    }
+    if (post.audio_url || (post.media_url && isAudio(post.media_url))) {
+      // Audio: return music icon
+      return null;
     }
     // Fallback: generate emoji thumbnail based on category
     return null;
+  };
+
+  // Render media in modal (supports images, videos, audio, youtube)
+  const renderModalMedia = (post) => {
+    if (post.media_url && post.media_type === 'image') {
+      return <img src={getMediaUrl(post.media_url)} alt="" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />;
+    }
+    if (post.media_url && post.media_type === 'video') {
+      return <video src={getMediaUrl(post.media_url)} controls style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />;
+    }
+    if (isYouTube(post.media_url)) {
+      const youtubeId = getYouTubeId(post.media_url);
+      return (
+        <iframe
+          width="100%"
+          height="100%"
+          src={`https://www.youtube.com/embed/${youtubeId}`}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          style={{ maxWidth: '100%', maxHeight: '100%' }}
+        />
+      );
+    }
+    if (post.audio_url || (post.media_url && isAudio(post.media_url))) {
+      const audioUrl = post.audio_url || post.media_url;
+      return (
+        <div style={{
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(135deg, #667eea, #764ba2)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem',
+        }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎵</div>
+          <audio src={getMediaUrl(audioUrl)} controls style={{ width: '80%', maxWidth: '300px' }} />
+        </div>
+      );
+    }
+    // Fallback: emoji based on category
+    const categoryInfo = CATEGORIES.find(c => c.value === post.category);
+    return (
+      <div style={{
+        width: '100%',
+        height: '100%',
+        background: `linear-gradient(135deg, ${categoryInfo?.color || '#ddd'}22, ${categoryInfo?.color || '#ddd'}44)`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '5rem',
+      }}>
+        {categoryInfo?.label?.split(' ')[0] || '📸'}
+      </div>
+    );
   };
 
   return (
@@ -503,25 +577,12 @@ export default function MuralGrid() {
             maxWidth: '700px', width: '100%', maxHeight: '90vh', overflow: 'hidden',
             display: 'grid', gridTemplateColumns: '1fr 350px', gap: 0,
           }} onClick={(e) => e.stopPropagation()}>
-            {/* Left: Image */}
+            {/* Left: Image/Video/Audio/YouTube */}
             <div style={{
               background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              overflow: 'hidden',
+              overflow: 'hidden', minHeight: '400px',
             }}>
-              {getThumbnail(selectedPost) ? (
-                <img src={getThumbnail(selectedPost)} alt="" style={{
-                  maxWidth: '100%', maxHeight: '100%', objectFit: 'contain',
-                }} />
-              ) : (
-                <div style={{
-                  width: '100%', height: '100%',
-                  background: `linear-gradient(135deg, ${CATEGORIES.find(c => c.value === selectedPost.category)?.color || '#ddd'}22, ${CATEGORIES.find(c => c.value === selectedPost.category)?.color || '#ddd'}44)`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '5rem',
-                }}>
-                  {CATEGORIES.find(c => c.value === selectedPost.category)?.label?.split(' ')[0] || '📸'}
-                </div>
-              )}
+              {renderModalMedia(selectedPost)}
             </div>
 
             {/* Right: Details + Comments */}
