@@ -433,6 +433,9 @@ app.use('/api/stripe', require('./routes/stripe'));
 app.use('/api/ai-louvor', require('./routes/ai-louvor'));
 app.use('/api/openclaw', require('./routes/openclaw'));
 
+// Log OpenClaw routes for debugging
+console.log('✅ OpenClaw routes registered: /api/openclaw/health, /api/openclaw/users/new, etc');
+
 // Root route
 app.get('/', (req, res) => {
   res.json({ name: 'Sigo com Fé API', status: 'online', version: '1.0.0' });
