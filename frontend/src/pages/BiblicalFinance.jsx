@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { DollarSign, BookOpen, CheckCircle, TrendingUp, Shield, Heart, ArrowRight, Star, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../context/AuthContext';
 import { getPrice, getPriceForBackend } from '../utils/regionPricing';
 import LessonReader from '../components/LessonReader';
 import FINANCE_CONTENT from '../data/financeContent';
@@ -28,6 +29,8 @@ const FINANCE_LESSONS = [
 
 export default function BiblicalFinance() {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const isPastor = user?.role === 'pastor' || user?.role === 'admin';
   const [searchParams] = useSearchParams();
   const [buying, setBuying] = useState(false);
   const [paid, setPaid] = useState(false);
@@ -133,11 +136,20 @@ export default function BiblicalFinance() {
 
       {/* TOPICS GRID */}
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '2rem 1rem' }}>
+        {!isPastor && (
+          <div style={{ background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.3)', borderRadius: 12, padding: '1rem', marginBottom: '1.5rem', color: '#d4af37', fontSize: '0.9rem' }}>
+            🔒 Algumas lições são restritas apenas para pastores.
+          </div>
+        )}
         <h2 style={{ color: '#d4af37', textAlign: 'center', marginBottom: '1.5rem', fontSize: '1.5rem' }}>
           {'📋'} O que você vai aprender
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
-          {FINANCE_LESSONS.map((lesson, i) => (
+          {FINANCE_LESSONS.filter(lesson => {
+            // Hide "Dízimo" lesson from non-pastors
+            if (!isPastor && lesson.title.toLowerCase().includes('dízimo')) return false;
+            return true;
+          }).map((lesson, i) => (
             <div key={lesson.id} onClick={() => setReadingLesson(i)}
               style={{
                 background: 'linear-gradient(135deg, #1a2f1a, #2d4a1a)',

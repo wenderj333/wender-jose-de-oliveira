@@ -63,12 +63,18 @@ export default function Offerings() {
   const thisMonth = records.filter(r => new Date(r.created_at).getMonth() === new Date().getMonth());
   const monthTotal = thisMonth.reduce((sum, r) => sum + parseFloat(r.amount || 0), 0);
 
+  // Non-pastor public view (support/contribution without showing "tithe")
   if (!isPastor) {
     return (
-      <div style={{ maxWidth: 500, margin: '0 auto', padding: '2rem 1rem', textAlign: 'center' }}>
-        <Heart size={48} color="#e74c3c" style={{ marginBottom: '1rem' }} />
-        <h2 style={{ color: '#1a0a3e' }}>{t('offerings.title')}</h2>
-        <p style={{ color: '#666', marginTop: '0.5rem' }}>{t('offerings.notPastor')}</p>
+      <div style={{ maxWidth: 500, margin: '0 auto', padding: '1rem 0.5rem' }}>
+        <h1 style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '1.5rem', color: '#1a0a3e', marginBottom: '1rem' }}>
+          <Heart size={24} color="#e74c3c" /> {t('offerings.title')}
+        </h1>
+        <div style={{ background: 'linear-gradient(135deg, #fff3e0, #ffe0b2)', borderRadius: 16, padding: '1.5rem', marginBottom: '1.5rem', border: '1px solid #ffe0b2' }}>
+          <p style={{ color: '#1a0a3e', margin: 0, lineHeight: 1.6 }}>
+            {t('offerings.notPastor')}
+          </p>
+        </div>
       </div>
     );
   }
