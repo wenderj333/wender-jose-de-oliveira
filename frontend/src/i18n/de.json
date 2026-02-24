@@ -27,7 +27,20 @@
         "music": "Musik",
         "courseFinance": "Biblische Finanzen",
         "courseTheology": "Theologie",
-        "courseFree": "Kostenloser Bibelkurs"
+        "courseFree": "Kostenloser Bibelkurs",
+        "createWorshipAI": "KI-Lobpreis erstellen",
+        "faithJourneys": "Glaubensreisen",
+        "pastorRoom": "🏛️ Pastorenraum",
+        "popup": {
+            "verse": "Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen. Matthäus 18:20",
+            "joinCommunity": "Treten Sie unserer christlichen Gemeinschaft bei!",
+            "bullet1": "Zusammen beten",
+            "bullet2": "Zeugnisse teilen",
+            "bullet3": "Kirchen finden",
+            "bullet4": "Mit Gläubigen verbinden",
+            "registerBtn": "Kostenlos registrieren",
+            "signInBtn": "Ich habe ein Konto - Anmelden"
+        }
     },
     "footer": "© 2026 Sigo com Fé - Technologie im Dienst des Reiches Gottes",
     "home": {
