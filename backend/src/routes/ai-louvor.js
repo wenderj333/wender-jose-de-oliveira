@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
 const { Pool } = require('pg');
+const Replicate = require('replicate');
 
 // Direct pool for table creation (bypass wrapper)
 let tablesReady = false;
@@ -21,6 +22,8 @@ async function ensureTables() {
         author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         title VARCHAR(255),
         lyrics TEXT NOT NULL,
+        audio_url TEXT,
+        is_ai BOOLEAN DEFAULT TRUE,
         theme VARCHAR(100),
         style VARCHAR(50),
         emotion VARCHAR(50),
@@ -48,8 +51,9 @@ async function ensureTables() {
 }
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const SUNO_API_KEY = process.env.SUNO_API_KEY;
 // Use 1.5-flash for higher rate limits on free tier
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/google/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 const FREE_CREDITS = 4;
 const PACK_CREDITS = 250;
@@ -276,6 +280,110 @@ router.post('/buy-credits', authenticate, async (req, res) => {
     res.json({ success: true, credits: updated.credits_remaining, totalGenerated: updated.total_generated });
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+// POST /api/ai-louvor/generate-audio — generate audio from lyrics using Replicate AI (MusicGen)
+router.post('/generate-audio', authenticate, async (req, res) => {
+  try {
+    const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN;
+    if (!REPLICATE_API_TOKEN) {
+      return res.status(500).json({ error: 'API da Replicate não configurada. Contacte o administrador.' });
+    }
+
+    const { lyrics, songId, title, style } = req.body;
+    if (!lyrics) {
+      return res.status(400).json({ error: 'A letra é necessária para gerar a música.' });
+    }
+
+    // Inicializar o cliente Replicate
+    const replicate = new Replicate({
+      auth: REPLICATE_API_TOKEN,
+    });
+
+    // Criar o prompt para o MusicGen
+    const prompt = `${title ? title + " - " : ""} ${lyrics}. Music style: ${style || 'worship, uplifting'}.`;
+
+    console.log('Iniciando geração de música com Replicate MusicGen para prompt:', prompt);
+
+    let audioUrl = null;
+    try {
+        const output = await replicate.run(
+            "meta/musicgen:b05b1dff1d8c6dc0e6537bf26f01fa4e6c6f675a8a0c647b0a37637de283ba9a",
+            {
+              input: {
+                prompt: prompt,
+                model_version: "large", // ou 'medium', 'small', 'melody' se preferir
+                duration: 30, // 30 segundos, conforme solicitado
+              }
+            }
+        );
+        // O `output` do Replicate MusicGen é o URL do áudio ou um array de URLs
+        if (Array.isArray(output) && output.length > 0) {
+            audioUrl = output[0];
+        } else if (typeof output === 'string') {
+            audioUrl = output;
+        }
+
+    } catch (replicateError) {
+        console.error('Erro ao chamar Replicate MusicGen:', replicateError);
+        return res.status(500).json({ error: `Erro ao gerar música com Replicate AI: ${replicateError.message || 'Erro desconhecido.'}` });
+    }
+
+    if (!audioUrl) {
+      console.error('Replicate MusicGen não retornou URL de áudio.');
+      return res.status(500).json({ error: 'A Replicate AI não conseguiu gerar a música. Tente novamente.' });
+    }
+
+    // 3. Salvar o URL do áudio no banco de dados
+    if (songId) {
+      await db.prepare('UPDATE ai_songs SET audio_url = ? WHERE id = ? AND author_id = ?').run(audioUrl, songId, req.user.id);
+    } else {
+      console.warn('Geração de áudio sem songId. Inserir nova entrada ou requerer songId.');
+    }
+
+    res.json({ audioUrl });
+
+  } catch (err) {
+    console.error('Erro geral ao gerar áudio com Replicate AI:', err);
+    res.status(500).json({ error: 'Erro interno ao gerar a música com Replicate AI.' });
+  }
+});
+
+// POST /api/ai-louvor/save-custom — save custom lyrics
+router.post('/save-custom', authenticate, async (req, res) => {
+  try {
+    await ensureTables();
+    const { title, lyrics, theme, style, emotion, bibleBook, verse, language } = req.body;
+
+    if (!title || !lyrics) {
+      return res.status(400).json({ error: 'Título e letra são obrigatórios.' });
+    }
+
+    const lang = language || 'pt';
+
+    // Save custom song to DB with is_ai: false
+    const song = await db.prepare(
+      `INSERT INTO ai_songs (author_id, title, lyrics, theme, style, emotion, bible_book, verse_reference, language, is_ai)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
+    ).get(
+      req.user.id,
+      title,
+      lyrics,
+      theme || null,
+      style || null,
+      emotion || null,
+      bibleBook || null,
+      verse || null,
+      lang,
+      false // Explicitly mark as not AI-generated
+    );
+
+    res.json({ success: true, song });
+
+  } catch (err) {
+    console.error('Erro ao salvar letra personalizada:', err);
+    res.status(500).json({ error: 'Erro interno ao salvar sua letra.' });
   }
 });
 
