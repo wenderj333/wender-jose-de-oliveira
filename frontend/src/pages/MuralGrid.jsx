@@ -675,9 +675,14 @@ export default function MuralGrid() {
                   <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 280, objectFit: 'cover', borderRadius: 12 }} />
                 )}
                 <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaType(null); }} style={{
-                  position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.6)', border: 'none',
-                  borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-                }}><X size={16} color="#fff" /></button>
+                  position: 'absolute', top: 8, right: 8, background: '#e74c3c', border: 'none',
+                  borderRadius: '6px', padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                  cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600, color: '#fff', gap: 4,
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = '#c0392b'; e.currentTarget.style.transform = 'scale(1.05)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = '#e74c3c'; e.currentTarget.style.transform = 'scale(1)'; }}
+                ><X size={14} /> {t('common.delete', 'Apagar')}</button>
               </div>
             )}
 
@@ -687,9 +692,12 @@ export default function MuralGrid() {
                 <div style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '0.5rem' }}>🎵</div>
                 <div style={{ color: '#fff', fontSize: '0.85rem', marginBottom: '1rem', wordBreak: 'break-word' }}>{newMediaPreview}</div>
                 <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaType(null); }} style={{
-                  background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', borderRadius: 20, padding: '0.4rem 1rem',
-                  cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600,
-                }}>{t('common.remove', 'Remover')}</button>
+                  background: '#e74c3c', border: 'none', color: '#fff', borderRadius: 6, padding: '0.5rem 1rem',
+                  cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600, transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = '#c0392b'; e.currentTarget.style.transform = 'scale(1.05)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = '#e74c3c'; e.currentTarget.style.transform = 'scale(1)'; }}
+                >🗑️ {t('common.delete', 'Apagar')}</button>
               </div>
             )}
 
@@ -699,9 +707,12 @@ export default function MuralGrid() {
                 <div style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '0.5rem' }}>🎸</div>
                 <div style={{ color: '#fff', fontSize: '0.85rem', marginBottom: '1rem', wordBreak: 'break-word' }}>🎵 Música da biblioteca pessoal (reproduzida com o post)</div>
                 <button type="button" onClick={() => { setSelectedMusicUrl(''); }} style={{
-                  background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', borderRadius: 20, padding: '0.4rem 1rem',
-                  cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600,
-                }}>{t('common.remove', 'Remover')}</button>
+                  background: '#e74c3c', border: 'none', color: '#fff', borderRadius: 6, padding: '0.5rem 1rem',
+                  cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600, transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = '#c0392b'; e.currentTarget.style.transform = 'scale(1.05)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = '#e74c3c'; e.currentTarget.style.transform = 'scale(1)'; }}
+                >🗑️ {t('common.delete', 'Apagar')}</button>
               </div>
             )}
 
