@@ -444,14 +444,21 @@ export default function MuralGrid() {
       
       return (
         <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-          {/* Áudio silencioso (para reproduzir música junto com vídeo) */}
-          {audioUrl && <audio src={audioUrl} autoPlay loop style={{ display: 'none' }} />}
+          {/* Áudio (para reproduzir música junto com vídeo) */}
+          {audioUrl && (
+            <audio 
+              src={audioUrl} 
+              controls
+              style={{ position: 'absolute', bottom: 10, left: 10, width: 'calc(100% - 20px)', zIndex: 10 }}
+            />
+          )}
           
           <video 
             key={post.id}
             src={videoUrl} 
             controls 
-            preload="none"
+            controlsList="nodownload"
+            preload="metadata"
             style={{ 
               width: '100%', 
               height: '100%', 
@@ -459,9 +466,6 @@ export default function MuralGrid() {
               maxWidth: '100%',
               maxHeight: '100%',
               display: 'block',
-            }}
-            onError={(e) => {
-              console.warn('❌ Video load error:', videoUrl);
             }}
           />
         </div>
