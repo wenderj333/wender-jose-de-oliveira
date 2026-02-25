@@ -259,6 +259,8 @@ export default function MuralGrid() {
       throw new Error(`Arquivo muito grande! Máximo ${maxSize / (1024 * 1024)}MB.`);
     }
 
+    console.log(`📤 Starting upload: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB), type=${resourceType}`);
+
     // Show progress for large files
     if (file.size > 5 * 1024 * 1024) {
       setPostingText(`📤 Enviando ${file.name}... isso pode levar alguns minutos. Não feche a página!`);
@@ -270,26 +272,28 @@ export default function MuralGrid() {
     fd.append('file', file);
     fd.append('upload_preset', 'sigo_com_fe');
     fd.append('folder', 'sigo-com-fe/posts');
-    fd.append('chunk_size', 5242880); // 5MB chunks para ficheiros grandes
+    fd.append('resource_type', resourceType);
     
     try {
-      const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/${resourceType}/upload`, { 
+      const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/upload`, { 
         method: 'POST', 
         body: fd,
         signal: AbortSignal.timeout(600000) // 10 minutos timeout
       });
       
       if (!uploadRes.ok) {
-        throw new Error(`Upload error: ${uploadRes.status} ${uploadRes.statusText}`);
+        const errorData = await uploadRes.json().catch(() => ({}));
+        throw new Error(`Cloudinary error ${uploadRes.status}: ${errorData.error?.message || uploadRes.statusText}`);
       }
       
       const result = await uploadRes.json();
-      if (result.error) throw new Error(result.error.message);
-      if (!result.secure_url) throw new Error('Upload falhou. Tente um arquivo menor.');
+      if (result.error) throw new Error(`Cloudinary: ${result.error.message}`);
+      if (!result.secure_url) throw new Error('Sem URL retornada. Tente novamente.');
       
+      console.log(`✅ Upload complete: ${result.secure_url}`);
       return { url: result.secure_url, type: resourceType };
     } catch (err) {
-      console.error('Upload error:', err);
+      console.error('❌ Upload error:', err);
       if (err.name === 'AbortError') {
         throw new Error('Upload demorou muito. A sua ligação pode estar lenta. Tente novamente.');
       }
@@ -436,10 +440,13 @@ export default function MuralGrid() {
     }
     if (post.media_url && post.media_type === 'video') {
       const videoUrl = getMediaUrl(post.media_url);
-      console.log('▶️ Video URL:', videoUrl);
+      const audioUrl = post.audio_url ? getMediaUrl(post.audio_url) : null;
       
       return (
-        <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+        <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          {/* Áudio silencioso (para reproduzir música junto com vídeo) */}
+          {audioUrl && <audio src={audioUrl} autoPlay loop style={{ display: 'none' }} />}
+          
           <video 
             key={post.id}
             src={videoUrl} 
@@ -453,16 +460,10 @@ export default function MuralGrid() {
               maxHeight: '100%',
               display: 'block',
             }}
-            onLoadedData={() => {
-              // Video loaded successfully
-            }}
             onError={(e) => {
-              console.warn('Video load failed, URL:', videoUrl);
+              console.warn('❌ Video load error:', videoUrl);
             }}
-          >
-            <source src={videoUrl} type="video/mp4" />
-            Seu navegador não suporta vídeos HTML5
-          </video>
+          />
         </div>
       );
     }

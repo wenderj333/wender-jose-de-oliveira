@@ -139,24 +139,38 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
     const vis = visibility || 'public';
 
     // Insert and get the created post
+    console.log('📝 Creating post:', {
+      author_id: req.user.id,
+      content,
+      category: cat,
+      media_url: mediaUrl,
+      media_type: mediaType,
+      audio_url: audioUrl,
+      visibility: vis,
+    });
+
     let result;
     try {
       result = await db.prepare(
         `INSERT INTO feed_posts (author_id, content, category, media_url, media_type, verse_reference, visibility, audio_url)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
-      ).get(req.user.id, content, cat, mediaUrl, mediaType, verse_reference || null, vis, audioUrl);
+      ).get(req.user.id, content, cat, mediaUrl, mediaType, verse_reference || null, vis, audioUrl || null);
     } catch (insertErr) {
       // Fallback if audio_url column doesn't exist yet
+      console.warn('⚠️ Insert with audio_url failed:', insertErr.message);
       if (insertErr.message && insertErr.message.includes('audio_url')) {
+        console.log('↪️ Retrying without audio_url...');
         result = await db.prepare(
           `INSERT INTO feed_posts (author_id, content, category, media_url, media_type, verse_reference, visibility)
            VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *`
         ).get(req.user.id, content, cat, mediaUrl, mediaType, verse_reference || null, vis);
       } else {
+        console.error('❌ Database insert error:', insertErr);
         throw insertErr;
       }
     }
 
+    console.log('✅ Post created:', { id: result?.id, media_url: result?.media_url, audio_url: result?.audio_url });
     res.status(201).json({ post: result });
   } catch (err) {
     console.error('Erro ao criar publicação:', err);
