@@ -118,11 +118,13 @@ export default function MuralGrid() {
       const res = await fetch(`${API}/music`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      const songs = Array.isArray(data.songs) ? data.songs : data.songs?.rows || Object.values(data.songs || {}) || [];
-      setMyMusic(songs);
+      const songs = Array.isArray(data.songs) ? data.songs : (data.songs?.rows || []);
+      setMyMusic(songs || []);
     } catch (err) {
-      console.error('Error fetching my music:', err);
+      console.warn('Error fetching my music:', err.message);
+      setMyMusic([]);
     } finally {
       setLoadingMyMusic(false);
     }
@@ -414,8 +416,6 @@ export default function MuralGrid() {
 
   // Render media in modal (supports images, videos, audio, youtube)
   const renderModalMedia = (post) => {
-    console.log('🎬 Rendering modal media:', { media_url: post.media_url, media_type: post.media_type });
-    
     if (post.media_url && post.media_type === 'image') {
       return <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
     }
@@ -424,21 +424,19 @@ export default function MuralGrid() {
       let videoUrl = getMediaUrl(post.media_url);
       
       // If it's a Cloudinary URL, optimize for streaming
-      if (videoUrl && videoUrl.includes('cloudinary')) {
+      if (videoUrl?.includes('cloudinary')) {
         // Cloudinary adaptive streaming - get best format for mobile
         videoUrl = videoUrl.replace('/upload/', '/upload/q_auto,vc_auto/');
       }
       
-      console.log('📹 Playing video:', videoUrl);
       return (
         <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
           <video 
-            key={post.id} // Force remount if post changes
+            key={post.id}
             src={videoUrl} 
             controls 
-            preload="auto"
+            preload="metadata"
             controlsList="nodownload"
-            crossOrigin="use-credentials"
             style={{ 
               width: '100%', 
               height: '100%', 
@@ -446,25 +444,13 @@ export default function MuralGrid() {
               maxWidth: '100%',
               maxHeight: '100%',
               display: 'block',
-              backgroundColor: '#000',
             }} 
-            onError={(e) => {
-              console.error('❌ Video error:', e);
-              e.currentTarget.style.display = 'none';
-            }}
-            onLoadedMetadata={() => {
-              console.log('✅ Video metadata loaded, duration:', e.currentTarget.duration);
-            }}
-            onCanPlay={() => {
-              console.log('✅ Video ready to play');
-            }}
           />
         </div>
       );
     }
     if (post.media_url && isYouTube(post.media_url)) {
       const youtubeId = getYouTubeId(post.media_url);
-      console.log('📺 Playing YouTube:', youtubeId);
       return (
         <iframe
           width="100%"
@@ -479,7 +465,6 @@ export default function MuralGrid() {
     }
     if (post.audio_url || (post.media_url && isAudio(post.media_url))) {
       const audioUrl = post.audio_url || post.media_url;
-      console.log('🎵 Playing audio:', audioUrl);
       return (
         <div style={{
           width: '100%',
@@ -498,7 +483,6 @@ export default function MuralGrid() {
     }
     // Fallback: emoji based on category
     const categoryInfo = CATEGORIES_CONFIG.find(c => c.value === post.category);
-    console.log('📸 No media found, using category emoji:', categoryInfo?.labelKey);
     return (
       <div style={{
         width: '100%',
