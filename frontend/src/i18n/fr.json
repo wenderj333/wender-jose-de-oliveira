@@ -722,6 +722,25 @@
         "loading": "Chargement...",
         "noMusicUploaded": "Aucune musique téléchargée pour l'instant"
     },
+    "members": {
+        "never": "Jamais",
+        "now": "Maintenant",
+        "minsAgo": "il y a {{mins}}min",
+        "hoursAgo": "il y a {{hrs}}h",
+        "daysAgo": "il y a {{days}}j",
+        "roleMember": "👤 Membre",
+        "roleLeader": "⭐ Leader",
+        "rolePastor": "🙏 Pasteur",
+        "roleAdmin": "👑 Admin",
+        "title": "Membres de la Communauté",
+        "searchPlaceholder": "Rechercher un membre...",
+        "memberCount": "{{count}} membres",
+        "pastorCount": "{{count}} pasteurs",
+        "loading": "Chargement des membres...",
+        "noMembers": "Aucun membre trouvé",
+        "noMessages": "Aucun message pour le moment. Envoie le premier!",
+        "messagePlaceholder": "Écris ton message..."
+    },
     "criadorLouvor": {
         "title": "Créateur de Louanges avec IA",
         "subtitle": "Créez des paroles de louange inspirées par la Bible!",

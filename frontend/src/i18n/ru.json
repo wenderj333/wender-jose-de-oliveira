@@ -99,6 +99,25 @@
         "loading": "Загрузка...",
         "noMusicUploaded": "Музыка еще не загружена"
     },
+    "members": {
+        "never": "Никогда",
+        "now": "Сейчас",
+        "minsAgo": "{{mins}}мин назад",
+        "hoursAgo": "{{hrs}}ч назад",
+        "daysAgo": "{{days}}д назад",
+        "roleMember": "👤 Участник",
+        "roleLeader": "⭐ Лидер",
+        "rolePastor": "🙏 Пастор",
+        "roleAdmin": "👑 Админ",
+        "title": "Члены Сообщества",
+        "searchPlaceholder": "Поиск участника...",
+        "memberCount": "{{count}} участников",
+        "pastorCount": "{{count}} пасторов",
+        "loading": "Загрузка участников...",
+        "noMembers": "Участники не найдены",
+        "noMessages": "Сообщений еще нет. Отправьте первое!",
+        "messagePlaceholder": "Напишите ваше сообщение..."
+    },
     "common": {
         "linkCopied": "Ссылка скопирована!",
         "share": "Поделиться",

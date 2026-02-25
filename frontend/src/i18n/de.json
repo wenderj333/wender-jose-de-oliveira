@@ -787,6 +787,25 @@
         "loading": "Lädt...",
         "noMusicUploaded": "Noch keine Musik hochgeladen"
     },
+    "members": {
+        "never": "Nie",
+        "now": "Jetzt",
+        "minsAgo": "vor {{mins}}min",
+        "hoursAgo": "vor {{hrs}}h",
+        "daysAgo": "vor {{days}}d",
+        "roleMember": "👤 Mitglied",
+        "roleLeader": "⭐ Anführer",
+        "rolePastor": "🙏 Pastor",
+        "roleAdmin": "👑 Admin",
+        "title": "Gemeindemitglieder",
+        "searchPlaceholder": "Mitglied suchen...",
+        "memberCount": "{{count}} Mitglieder",
+        "pastorCount": "{{count}} Pastoren",
+        "loading": "Mitglieder werden geladen...",
+        "noMembers": "Keine Mitglieder gefunden",
+        "noMessages": "Noch keine Nachrichten. Schreib die erste!",
+        "messagePlaceholder": "Schreib deine Nachricht..."
+    },
     "criadorLouvor": {
         "title": "KI-Lobpreis-Ersteller",
         "subtitle": "Erstelle biblisch inspirierte Lobpreis-Texte!",

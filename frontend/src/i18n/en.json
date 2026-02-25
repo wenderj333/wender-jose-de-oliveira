@@ -722,6 +722,25 @@
         "loading": "Loading...",
         "noMusicUploaded": "No music uploaded yet"
     },
+    "members": {
+        "never": "Never",
+        "now": "Now",
+        "minsAgo": "{{mins}}min ago",
+        "hoursAgo": "{{hrs}}h ago",
+        "daysAgo": "{{days}}d ago",
+        "roleMember": "👤 Member",
+        "roleLeader": "⭐ Leader",
+        "rolePastor": "🙏 Pastor",
+        "roleAdmin": "👑 Admin",
+        "title": "Community Members",
+        "searchPlaceholder": "Search member...",
+        "memberCount": "{{count}} members",
+        "pastorCount": "{{count}} pastors",
+        "loading": "Loading members...",
+        "noMembers": "No members found",
+        "noMessages": "No messages yet. Send the first one!",
+        "messagePlaceholder": "Write your message..."
+    },
     "criadorLouvor": {
         "title": "AI Praise Creator",
         "subtitle": "Create praise lyrics inspired by the Bible!",

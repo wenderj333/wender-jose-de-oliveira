@@ -722,6 +722,25 @@
         "loading": "Cargando...",
         "noMusicUploaded": "Ninguna música subida aún"
     },
+    "members": {
+        "never": "Nunca",
+        "now": "Ahora",
+        "minsAgo": "hace {{mins}}min",
+        "hoursAgo": "hace {{hrs}}h",
+        "daysAgo": "hace {{days}}d",
+        "roleMember": "👤 Miembro",
+        "roleLeader": "⭐ Líder",
+        "rolePastor": "🙏 Pastor",
+        "roleAdmin": "👑 Admin",
+        "title": "Miembros de la Comunidad",
+        "searchPlaceholder": "Buscar miembro...",
+        "memberCount": "{{count}} miembros",
+        "pastorCount": "{{count}} pastores",
+        "loading": "Cargando miembros...",
+        "noMembers": "No se encontraron miembros",
+        "noMessages": "Sin mensajes aún. ¡Envía el primero!",
+        "messagePlaceholder": "Escribe tu mensaje..."
+    },
     "criadorLouvor": {
         "title": "Creador de Alabanzas con IA",
         "subtitle": "¡Crea letras de alabanza inspiradas en la Biblia!",

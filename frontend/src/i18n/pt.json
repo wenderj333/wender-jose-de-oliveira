@@ -306,6 +306,25 @@
                   "loading":  "Carregando...",
                   "noMusicUploaded":  "Nenhuma música subida ainda"
               },
+    "members":  {
+                  "never":  "Nunca",
+                  "now":  "Agora",
+                  "minsAgo":  "{{mins}}min atrás",
+                  "hoursAgo":  "{{hrs}}h atrás",
+                  "daysAgo":  "{{days}}d atrás",
+                  "roleMember":  "👤 Membro",
+                  "roleLeader":  "⭐ Líder",
+                  "rolePastor":  "🙏 Pastor",
+                  "roleAdmin":  "👑 Admin",
+                  "title":  "Membros da Comunidade",
+                  "searchPlaceholder":  "Buscar membro...",
+                  "memberCount":  "{{count}} membros",
+                  "pastorCount":  "{{count}} pastores",
+                  "loading":  "Carregando membros...",
+                  "noMembers":  "Nenhum membro encontrado",
+                  "noMessages":  "Nenhuma mensagem ainda. Envie a primeira!",
+                  "messagePlaceholder":  "Escreva sua mensagem..."
+              },
     "kids":  {
                  "title":  "Escola Dominical Digital",
                  "subtitle":  "Aprenda sobre a Bíblia de um jeito divertido!",

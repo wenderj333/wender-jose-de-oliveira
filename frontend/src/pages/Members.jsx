@@ -135,11 +135,11 @@ export default function Members() {
         {/* Messages */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '0.5rem', display: 'flex', flexDirection: 'column', gap: 8 }}>
           {loadingMsgs ? (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>Carregando...</div>
+            <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>{t('members.loading', 'Carregando...')}</div>
           ) : messages.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
               <MessageCircle size={40} style={{ opacity: 0.3, marginBottom: 8 }} />
-              <p>Nenhuma mensagem ainda. Envie a primeira!</p>
+              <p>{t('members.noMessages', 'Nenhuma mensagem ainda. Envie a primeira!')}</p>
             </div>
           ) : (
             messages.map(msg => {
@@ -166,7 +166,7 @@ export default function Members() {
         {/* Input */}
         <form onSubmit={sendMessage} style={{ display: 'flex', gap: 8, padding: '0.5rem 0' }}>
           <input value={newMsg} onChange={e => setNewMsg(e.target.value)}
-            placeholder="Escreva sua mensagem..."
+            placeholder={t('members.messagePlaceholder', 'Escreva sua mensagem...')}
             style={{ flex: 1, padding: '0.7rem 1rem', borderRadius: 25, border: '1px solid #ddd', fontSize: '0.9rem' }} />
           <button type="submit" disabled={sending || !newMsg.trim()} style={{
             width: 44, height: 44, borderRadius: '50%', border: 'none',
@@ -184,29 +184,29 @@ export default function Members() {
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem' }}>
       <h1 style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '1.5rem', color: '#1a0a3e', marginBottom: '1rem' }}>
-        <Users size={24} /> Membros da Comunidade
+        <Users size={24} /> {t('members.title', 'Membros da Comunidade')}
       </h1>
 
       {/* Search */}
       <div style={{ position: 'relative', marginBottom: '1rem' }}>
         <Search size={18} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#999' }} />
         <input value={search} onChange={e => setSearch(e.target.value)}
-          placeholder="Buscar membro..."
+          placeholder={t('members.searchPlaceholder', 'Buscar membro...')}
           style={{ width: '100%', padding: '0.7rem 0.7rem 0.7rem 2.5rem', borderRadius: 12, border: '1px solid #ddd', fontSize: '0.9rem', boxSizing: 'border-box' }} />
       </div>
 
       {/* Stats */}
       <div style={{ display: 'flex', gap: 12, marginBottom: '1rem', flexWrap: 'wrap' }}>
         <div style={{ padding: '0.5rem 1rem', borderRadius: 10, background: '#e8f5e9', fontSize: '0.85rem', color: '#2e7d32', fontWeight: 600 }}>
-          👥 {members.length} membros
+          👥 {t('members.memberCount', '{{count}} membros', { count: members.length })}
         </div>
         <div style={{ padding: '0.5rem 1rem', borderRadius: 10, background: '#fff3e0', fontSize: '0.85rem', color: '#e65100', fontWeight: 600 }}>
-          🙏 {members.filter(m => m.role === 'pastor').length} pastores
+          🙏 {t('members.pastorCount', '{{count}} pastores', { count: members.filter(m => m.role === 'pastor').length })}
         </div>
       </div>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>Carregando membros...</div>
+        <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>{t('members.loading', 'Carregando membros...')}</div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {filtered.map(member => (
@@ -237,7 +237,7 @@ export default function Members() {
                     {ROLE_LABELS[member.role]}
                   </span>
                   <span style={{ fontSize: '0.7rem', color: '#aaa' }}>
-                    <Calendar size={10} style={{ verticalAlign: 'middle' }} /> {timeAgo(member.last_seen_at)}
+                    <Calendar size={10} style={{ verticalAlign: 'middle' }} /> {timeAgo(member.last_seen_at, t)}
                   </span>
                 </div>
               </div>
@@ -253,7 +253,7 @@ export default function Members() {
             </div>
           ))}
           {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>Nenhum membro encontrado</div>
+            <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>{t('members.noMembers', 'Nenhum membro encontrado')}</div>
           )}
         </div>
       )}

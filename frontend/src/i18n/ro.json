@@ -722,6 +722,25 @@
         "loading": "Se încarcă...",
         "noMusicUploaded": "Nicio muzică încărcată încă"
     },
+    "members": {
+        "never": "Niciodată",
+        "now": "Acum",
+        "minsAgo": "acum {{mins}}min",
+        "hoursAgo": "acum {{hrs}}h",
+        "daysAgo": "acum {{days}}z",
+        "roleMember": "👤 Membru",
+        "roleLeader": "⭐ Lider",
+        "rolePastor": "🙏 Pastor",
+        "roleAdmin": "👑 Admin",
+        "title": "Membri Comunității",
+        "searchPlaceholder": "Cauta membru...",
+        "memberCount": "{{count}} membri",
+        "pastorCount": "{{count}} pastori",
+        "loading": "Se încarcă membri...",
+        "noMembers": "Nu s-au găsit membri",
+        "noMessages": "Nicio mesaj încă. Trimite primul!",
+        "messagePlaceholder": "Scrie mesajul tău..."
+    },
     "criadorLouvor": {
         "title": "Creator de Cântece de Laudă cu IA",
         "subtitle": "Creează versuri de laudă inspirate de Biblie!",
