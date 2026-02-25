@@ -420,14 +420,7 @@ export default function MuralGrid() {
       return <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
     }
     if (post.media_url && post.media_type === 'video') {
-      // Cloudinary video - use optimized streaming
-      let videoUrl = getMediaUrl(post.media_url);
-      
-      // If it's a Cloudinary URL, optimize for streaming
-      if (videoUrl?.includes('cloudinary')) {
-        // Cloudinary adaptive streaming - get best format for mobile
-        videoUrl = videoUrl.replace('/upload/', '/upload/q_auto,vc_auto/');
-      }
+      const videoUrl = getMediaUrl(post.media_url);
       
       return (
         <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
@@ -435,8 +428,7 @@ export default function MuralGrid() {
             key={post.id}
             src={videoUrl} 
             controls 
-            preload="metadata"
-            controlsList="nodownload"
+            preload="none"
             style={{ 
               width: '100%', 
               height: '100%', 
@@ -444,8 +436,17 @@ export default function MuralGrid() {
               maxWidth: '100%',
               maxHeight: '100%',
               display: 'block',
-            }} 
-          />
+            }}
+            onLoadedData={() => {
+              // Video loaded successfully
+            }}
+            onError={(e) => {
+              console.warn('Video load failed, URL:', videoUrl);
+            }}
+          >
+            <source src={videoUrl} type="video/mp4" />
+            Seu navegador não suporta vídeos HTML5
+          </video>
         </div>
       );
     }
