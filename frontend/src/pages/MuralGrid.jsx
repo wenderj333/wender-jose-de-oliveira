@@ -254,7 +254,14 @@ export default function MuralGrid() {
 
   async function handlePost(e) {
     e.preventDefault();
-    if ((!newText.trim() && !newMedia && !newMediaUrl.trim()) || !token) return;
+    if (!token) {
+      alert('Por favor, faça login para publicar');
+      return;
+    }
+    if (!newText.trim() && !newMedia && !newMediaUrl.trim()) {
+      alert('Por favor, adicione texto ou mídia');
+      return;
+    }
     setPosting(true);
     setPostingText('');
     try {
@@ -265,10 +272,11 @@ export default function MuralGrid() {
       if (!postContent) {
         if (newMediaUrl) postContent = isYouTube(newMediaUrl) ? '🎬' : '🔗';
         else if (newMediaIsVideo) postContent = '🎬';
-        else if (isAudio(newMedia?.type)) postContent = '🎵';
+        else if (newMedia && isAudio(newMedia.type)) postContent = '🎵';
         else postContent = '📸';
       }
       
+      console.log('Posting with content:', postContent, 'category:', newCategory, 'media:', newMedia ? newMedia.name : 'none', 'url:', newMediaUrl);
       formData.append('content', postContent);
       formData.append('category', newCategory);
       
@@ -292,8 +300,13 @@ export default function MuralGrid() {
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
-      if (!res.ok) throw new Error(`Server error ${res.status}`);
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Server error:', res.status, errorText);
+        throw new Error(`Server error ${res.status}: ${errorText}`);
+      }
       const data = await res.json();
+      console.log('Post response:', data);
       if (data.post) {
         data.post.author_name = user.full_name;
         data.post.author_avatar = user.avatar_url;
