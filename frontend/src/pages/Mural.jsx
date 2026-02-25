@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Plus, X, Send, Heart, MessageCircle, Image, Trash2, Grid, List } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -7,12 +7,12 @@ const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
 
 const CATEGORIES = [
-  { value: 'testemunho', label: '🙏 Testemunho', color: '#daa520' },
-  { value: 'louvor', label: '🎵 Louvor', color: '#9b59b6' },
-  { value: 'foto', label: '📸 Foto/Vídeo', color: '#3498db' },
-  { value: 'versiculo', label: '📖 Versículo', color: '#27ae60' },
-  { value: 'reflexao', label: '💭 Reflexão', color: '#e67e22' },
-  { value: 'campanha', label: '🤝 Campanha', color: '#e74c3c' },
+  { value: 'testemunho', label: 'ðŸ™ Testemunho', color: '#daa520' },
+  { value: 'louvor', label: 'ðŸŽµ Louvor', color: '#9b59b6' },
+  { value: 'foto', label: 'ðŸ“¸ Foto/VÃ­deo', color: '#3498db' },
+  { value: 'versiculo', label: 'ðŸ“– VersÃ­culo', color: '#27ae60' },
+  { value: 'reflexao', label: 'ðŸ’­ ReflexÃ£o', color: '#e67e22' },
+  { value: 'campanha', label: 'ðŸ¤ Campanha', color: '#e74c3c' },
 ];
 
 export default function Mural() {
@@ -107,7 +107,30 @@ export default function Mural() {
 
   const getCategoryColor = (cat) => CATEGORIES.find(c => c.value === cat)?.color || '#daa520';
 
-  // ── MODAL POST DETAIL ──
+const isVideo = (url) => {
+  if (!url) return false;
+  const lower = url.toLowerCase();
+  return lower.includes('youtube.com') || lower.includes('youtu.be') ||
+    lower.includes('vimeo.com') || lower.match(/\.(mp4|webm|ogg|mov)(\?|$)/);
+};
+const getYoutubeId = (url) => {
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
+  return match ? match[1] : null;
+};
+const MediaPlayer = ({ url, style }) => {
+  if (!url) return null;
+  const ytId = getYoutubeId(url);
+  if (ytId) return (
+    <iframe src={`https://www.youtube.com/embed/${ytId}`}
+      style={{ width: '100%', aspectRatio: '16/9', border: 'none', ...style }}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen />
+  );
+  if (isVideo(url)) return <video src={url} controls style={{ width: '100%', maxHeight: 400, ...style }} />;
+  return <img src={url} alt="" style={{ width: '100%', maxHeight: 400, objectFit: 'cover', ...style }} />;
+};
+
+  // â”€â”€ MODAL POST DETAIL â”€â”€
   const PostModal = ({ post, onClose }) => (
     <div style={{
       position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
@@ -127,14 +150,14 @@ export default function Mural() {
           minHeight: 300, position: 'relative'
         }}>
           {post.media_url ? (
-            <img src={post.media_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <MediaPlayer url={post.media_url} style={{ height: "100%", objectFit: "cover" }} />
           ) : (
             <div style={{ padding: 32, textAlign: 'center' }}>
               <div style={{
                 fontSize: '3rem', marginBottom: 16,
                 background: `linear-gradient(135deg, ${getCategoryColor(post.category)}, #fff)`,
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
-              }}>✝️</div>
+              }}>âœï¸</div>
               <p style={{ color: '#fff', fontSize: '1.1rem', lineHeight: 1.6 }}>{post.content}</p>
             </div>
           )}
@@ -224,7 +247,7 @@ export default function Mural() {
                   value={comment}
                   onChange={e => setComment(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleComment(post.id)}
-                  placeholder="Adicionar comentário..."
+                  placeholder="Adicionar comentÃ¡rio..."
                   style={{
                     flex: 1, background: '#0f0f1a', border: '1px solid #333',
                     borderRadius: 20, padding: '8px 14px', color: '#fff', fontSize: '0.85rem'
@@ -244,7 +267,7 @@ export default function Mural() {
     </div>
   );
 
-  // ── GRID CARD ──
+  // â”€â”€ GRID CARD â”€â”€
   const GridCard = ({ post }) => (
     <div
       onClick={() => setSelectedPost(post)}
@@ -254,7 +277,7 @@ export default function Mural() {
       }}
     >
       {post.media_url ? (
-        <img src={post.media_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <MediaPlayer url={post.media_url} style={{ height: "100%", objectFit: "cover" }} />
       ) : (
         <div style={{
           width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -288,7 +311,7 @@ export default function Mural() {
     </div>
   );
 
-  // ── FEED CARD ──
+  // â”€â”€ FEED CARD â”€â”€
   const FeedCard = ({ post }) => (
     <div style={{ background: '#1a1a2e', borderRadius: 12, marginBottom: 16, overflow: 'hidden', border: '1px solid #333' }}>
       {/* Header */}
@@ -317,7 +340,7 @@ export default function Mural() {
 
       {/* Media */}
       {post.media_url && (
-        <img src={post.media_url} alt="" style={{ width: '100%', maxHeight: 400, objectFit: 'cover' }} />
+        <MediaPlayer url={post.media_url} />
       )}
 
       {/* Content */}
@@ -353,7 +376,7 @@ export default function Mural() {
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 0 16px', borderBottom: '1px solid #333', marginBottom: 16 }}>
-        <h2 style={{ color: '#daa520', margin: 0, fontSize: '1.4rem' }}>✝️ Mural</h2>
+        <h2 style={{ color: '#daa520', margin: 0, fontSize: '1.4rem' }}>âœï¸ Mural</h2>
         <div style={{ display: 'flex', gap: 8 }}>
           <button onClick={() => setViewMode('grid')} style={{
             background: viewMode === 'grid' ? '#daa520' : 'transparent',
@@ -436,7 +459,7 @@ export default function Mural() {
         }}>
           <div style={{ background: '#1a1a2e', borderRadius: 12, padding: 24, width: '90%', maxWidth: 500 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
-              <h3 style={{ color: '#daa520', margin: 0 }}>Nova Publicação</h3>
+              <h3 style={{ color: '#daa520', margin: 0 }}>Nova PublicaÃ§Ã£o</h3>
               <button onClick={() => setShowNewPost(false)} style={{ background: 'none', border: 'none', color: '#aaa', cursor: 'pointer' }}>
                 <X size={20} />
               </button>
@@ -481,3 +504,4 @@ export default function Mural() {
     </div>
   );
 }
+
