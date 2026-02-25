@@ -266,14 +266,14 @@ export default function App() {
           boxShadow: '0 2px 10px rgba(155,89,182,0.35)',
           animation: 'louvorPulse 2.5s ease-in-out infinite',
         }}>
-          🎵 Cria teu Louvor com IA!
+          🎵 {t('nav.createWorshipAI', 'Cria teu Louvor com IA!')}
         </button>
         <style>{`@keyframes louvorPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }`}</style>
         <button onClick={() => {
-            const shareData = { title: 'Sigo com Fe', text: 'Conheca o Sigo com Fe! Rede social crista.', url: 'https://sigo-com-fe.vercel.app' };
+            const shareData = { title: 'Sigo com Fe', text: t('home.shareText', 'Conheça o Sigo com Fé! Rede social cristã.'), url: 'https://sigo-com-fe.vercel.app' };
           if (navigator.share) navigator.share(shareData).catch(() => {});
           else { navigator.clipboard?.writeText(`${shareData.text}
-${shareData.url}`); alert('Link copiado! ✅'); }
+${shareData.url}`); alert(t('common.linkCopied', 'Link copiado! ✅')); }
         }} style={{
           padding: '0.45rem 1rem', borderRadius: 25, border: 'none',
           background: 'linear-gradient(135deg, #daa520, #f4c542)',
@@ -281,7 +281,7 @@ ${shareData.url}`); alert('Link copiado! ✅'); }
           display: 'flex', alignItems: 'center', gap: 6,
           boxShadow: '0 2px 10px rgba(218,165,32,0.3)',
         }}>
-          📤 Compartilhar
+          📤 {t('common.share', 'Compartilhar')}
         </button>
       </div>
 
