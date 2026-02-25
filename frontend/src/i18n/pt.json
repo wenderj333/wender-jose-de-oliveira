@@ -294,7 +294,17 @@
                                      "reflexao":  "Reflexão Bíblica",
                                      "versiculo":  "Versículo",
                                      "foto":  "Foto"
-                                 }
+                                 },
+                  "loginRequired":  "Por favor, faça login para publicar",
+                  "addContent":  "Por favor, adicione texto ou mídia",
+                  "fileTooLarge":  "Arquivo muito grande! Máximo {{maxSize}} MB.",
+                  "uploading":  "📤 Enviando {{filename}}...",
+                  "uploadingLarge":  "📤 Enviando {{filename}}... isso pode levar alguns minutos. Não feche a página!",
+                  "uploadTooSlow":  "Upload demorou muito. A sua ligação pode estar lenta. Tente novamente.",
+                  "fileTooLargeSimple":  "❌ Arquivo muito grande! Tente um ficheiro menor.",
+                  "doNotClose":  "Por favor não feche ou atualize a página!",
+                  "loading":  "Carregando...",
+                  "noMusicUploaded":  "Nenhuma música subida ainda"
               },
     "kids":  {
                  "title":  "Escola Dominical Digital",

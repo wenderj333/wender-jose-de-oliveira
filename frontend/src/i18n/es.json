@@ -710,7 +710,17 @@
         "noPosts": "Ninguna publicación aún. ¡Sé el primero en publicar! 📸",
         "commentPlaceholder": "Escribe un comentario...",
         "confirmDelete": "¿Estás seguro de que quieres eliminar este post?",
-        "delete": "Eliminar post"
+        "delete": "Eliminar post",
+        "loginRequired": "Por favor, inicia sesión para publicar",
+        "addContent": "Por favor, añade texto o media",
+        "fileTooLarge": "¡Archivo muy grande! Máximo {{maxSize}} MB.",
+        "uploading": "📤 Subiendo {{filename}}...",
+        "uploadingLarge": "📤 Subiendo {{filename}}... esto puede tomar algunos minutos. ¡No cierres la página!",
+        "uploadTooSlow": "La subida tardó demasiado. Tu conexión puede ser lenta. Intenta de nuevo.",
+        "fileTooLargeSimple": "❌ ¡Archivo muy grande! Intenta un archivo más pequeño.",
+        "doNotClose": "¡Por favor no cierres ni recargues la página!",
+        "loading": "Cargando...",
+        "noMusicUploaded": "Ninguna música subida aún"
     },
     "criadorLouvor": {
         "title": "Creador de Alabanzas con IA",

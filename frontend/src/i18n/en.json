@@ -710,7 +710,17 @@
         "noPosts": "No posts yet. Be the first to post! 📸",
         "commentPlaceholder": "Write a comment...",
         "confirmDelete": "Are you sure you want to delete this post?",
-        "delete": "Delete post"
+        "delete": "Delete post",
+        "loginRequired": "Please log in to post",
+        "addContent": "Please add text or media",
+        "fileTooLarge": "File too large! Maximum {{maxSize}} MB.",
+        "uploading": "📤 Uploading {{filename}}...",
+        "uploadingLarge": "📤 Uploading {{filename}}... this may take a few minutes. Don't close the page!",
+        "uploadTooSlow": "Upload took too long. Your connection may be slow. Try again.",
+        "fileTooLargeSimple": "❌ File too large! Try a smaller file.",
+        "doNotClose": "Please don't close or refresh the page!",
+        "loading": "Loading...",
+        "noMusicUploaded": "No music uploaded yet"
     },
     "criadorLouvor": {
         "title": "AI Praise Creator",

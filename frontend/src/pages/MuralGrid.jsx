@@ -256,16 +256,16 @@ export default function MuralGrid() {
     // Check file size
     const maxSize = isVid ? 500 * 1024 * 1024 : (isAud ? 100 * 1024 * 1024 : 50 * 1024 * 1024);
     if (file.size > maxSize) {
-      throw new Error(`Arquivo muito grande! Máximo ${maxSize / (1024 * 1024)}MB.`);
+      throw new Error(t('mural.fileTooLarge', { maxSize: maxSize / (1024 * 1024) }));
     }
 
     console.log(`📤 Starting upload: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB), type=${resourceType}`);
 
     // Show progress for large files
     if (file.size > 5 * 1024 * 1024) {
-      setPostingText(`📤 Enviando ${file.name}... isso pode levar alguns minutos. Não feche a página!`);
+      setPostingText(t('mural.uploadingLarge', { filename: file.name }));
     } else {
-      setPostingText(`📤 Enviando ${file.name}...`);
+      setPostingText(t('mural.uploading', { filename: file.name }));
     }
 
     const fd = new FormData();
@@ -295,7 +295,7 @@ export default function MuralGrid() {
     } catch (err) {
       console.error('❌ Upload error:', err);
       if (err.name === 'AbortError') {
-        throw new Error('Upload demorou muito. A sua ligação pode estar lenta. Tente novamente.');
+        throw new Error(t('mural.uploadTooSlow'));
       }
       throw err;
     }
@@ -304,11 +304,11 @@ export default function MuralGrid() {
   async function handlePost(e) {
     e.preventDefault();
     if (!token) {
-      alert('Por favor, faça login para publicar');
+      alert(t('mural.loginRequired'));
       return;
     }
     if (!newText.trim() && !newMedia && !newMediaUrl.trim()) {
-      alert('Por favor, adicione texto ou mídia');
+      alert(t('mural.addContent'));
       return;
     }
     setPosting(true);
@@ -389,9 +389,9 @@ export default function MuralGrid() {
       console.error('Post error:', err);
       const msg = err.message || 'Tente novamente em alguns segundos.';
       if (msg.includes('File size') || msg.includes('too large')) {
-        alert('❌ Arquivo muito grande! Tente um ficheiro menor.');
+        alert(t('mural.fileTooLargeSimple'));
       } else if (msg.includes('network') || msg.includes('fetch')) {
-        alert('❌ Erro de conexão. Verifique sua internet.');
+        alert(t('mural.networkError', '❌ Erro de conexão. Verifique sua internet.'));
       } else {
         alert('❌ Erro ao publicar: ' + msg);
       }
@@ -564,7 +564,7 @@ export default function MuralGrid() {
               fontSize: '0.9rem',
             }}>
               <div style={{ fontWeight: 700, marginBottom: '0.5rem' }}>⏳ {postingText}</div>
-              <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Por favor não feche ou atualize a página!</div>
+              <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>{t('mural.doNotClose')}</div>
             </div>
           )}
           <form onSubmit={handlePost}>
@@ -871,9 +871,9 @@ export default function MuralGrid() {
             
             <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
               {loadingMyMusic ? (
-                <div style={{ textAlign: 'center', padding: '2rem', color: '#aaa' }}>Carregando...</div>
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#aaa' }}>{t('mural.loading')}</div>
               ) : myMusic.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '2rem', color: '#aaa' }}>Nenhuma música subida ainda</div>
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#aaa' }}>{t('mural.noMusicUploaded')}</div>
               ) : (
                 myMusic.map((song) => (
                   <button

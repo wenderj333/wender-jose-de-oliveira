@@ -710,7 +710,17 @@
         "noPosts": "Aucune publication pour le moment. Soyez le premier à publier! 📸",
         "commentPlaceholder": "Écrivez un commentaire...",
         "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce post?",
-        "delete": "Supprimer le post"
+        "delete": "Supprimer le post",
+        "loginRequired": "Veuillez vous connecter pour publier",
+        "addContent": "Veuillez ajouter du texte ou des médias",
+        "fileTooLarge": "Fichier trop volumineux ! Maximum {{maxSize}} MB.",
+        "uploading": "📤 Envoi de {{filename}}...",
+        "uploadingLarge": "📤 Envoi de {{filename}}... cela peut prendre quelques minutes. Ne fermez pas la page !",
+        "uploadTooSlow": "L'envoi a pris trop de temps. Votre connexion peut être lente. Réessayez.",
+        "fileTooLargeSimple": "❌ Fichier trop volumineux ! Essayez un fichier plus petit.",
+        "doNotClose": "Veuillez ne pas fermer ou rafraîchir la page !",
+        "loading": "Chargement...",
+        "noMusicUploaded": "Aucune musique téléchargée pour l'instant"
     },
     "criadorLouvor": {
         "title": "Créateur de Louanges avec IA",

@@ -1,29 +1,36 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { Users, Send, ArrowLeft, User, Mail, Calendar, Shield, MessageCircle, Search } from 'lucide-react';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
-function timeAgo(d) {
-  if (!d) return 'Nunca';
+function timeAgo(d, t) {
+  if (!d) return t('members.never', 'Nunca');
   const diff = Date.now() - new Date(d).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'Agora';
-  if (mins < 60) return `${mins}min atrás`;
+  if (mins < 1) return t('members.now', 'Agora');
+  if (mins < 60) return t('members.minsAgo', '{{mins}}min atrás', { mins });
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h atrás`;
+  if (hrs < 24) return t('members.hoursAgo', '{{hrs}}h atrás', { hrs });
   const days = Math.floor(hrs / 24);
-  return `${days}d atrás`;
+  return t('members.daysAgo', '{{days}}d atrás', { days });
 }
 
-const ROLE_LABELS = { member: '👤 Membro', leader: '⭐ Líder', pastor: '🙏 Pastor', admin: '👑 Admin' };
 const ROLE_COLORS = { member: '#666', leader: '#e67e22', pastor: '#4caf50', admin: '#e74c3c' };
 
 const ADMIN_ID = 'c7c930da-5fe8-4b4e-887d-ba547804b7e1';
 
 export default function Members() {
+  const { t } = useTranslation();
   const { token, user } = useAuth();
+  const ROLE_LABELS = {
+    member: t('members.roleMember', '👤 Membro'),
+    leader: t('members.roleLeader', '⭐ Líder'),
+    pastor: t('members.rolePastor', '🙏 Pastor'),
+    admin: t('members.roleAdmin', '👑 Admin')
+  };
   const navigate = useNavigate();
   const isAdmin = user?.id === ADMIN_ID;
   const [members, setMembers] = useState([]);

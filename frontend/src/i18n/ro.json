@@ -710,7 +710,17 @@
         "noPosts": "Nicio postare încă. Fii primul care postează! 📸",
         "commentPlaceholder": "Scrie un comentariu...",
         "confirmDelete": "Ești sigur că vrei să ștergi această postare?",
-        "delete": "Șterge postarea"
+        "delete": "Șterge postarea",
+        "loginRequired": "Vă rugăm să vă conectați pentru a publica",
+        "addContent": "Vă rugăm adăugați text sau media",
+        "fileTooLarge": "Fișier prea mare! Maximum {{maxSize}} MB.",
+        "uploading": "📤 Se trimite {{filename}}...",
+        "uploadingLarge": "📤 Se trimite {{filename}}... aceasta poate dura câteva minute. Nu închideți pagina!",
+        "uploadTooSlow": "Trimiterea a durat prea mult. Conexiunea dvs. poate fi lentă. Încercați din nou.",
+        "fileTooLargeSimple": "❌ Fișier prea mare! Încercați un fișier mai mic.",
+        "doNotClose": "Vă rugăm nu închideți sau reîmprospătați pagina!",
+        "loading": "Se încarcă...",
+        "noMusicUploaded": "Nicio muzică încărcată încă"
     },
     "criadorLouvor": {
         "title": "Creator de Cântece de Laudă cu IA",

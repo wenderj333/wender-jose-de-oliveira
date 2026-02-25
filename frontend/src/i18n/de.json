@@ -775,7 +775,17 @@
         "noPosts": "Noch keine Beiträge. Sei der Erste, der postet! 📸",
         "commentPlaceholder": "Schreib einen Kommentar...",
         "confirmDelete": "Bist du sicher, dass du diesen Beitrag löschen möchtest?",
-        "delete": "Beitrag löschen"
+        "delete": "Beitrag löschen",
+        "loginRequired": "Bitte melden Sie sich an, um zu posten",
+        "addContent": "Bitte fügen Sie Text oder Medien hinzu",
+        "fileTooLarge": "Datei zu groß! Maximum {{maxSize}} MB.",
+        "uploading": "📤 {{filename}} wird hochgeladen...",
+        "uploadingLarge": "📤 {{filename}} wird hochgeladen... Dies kann einige Minuten dauern. Schließe die Seite nicht!",
+        "uploadTooSlow": "Das Hochladen hat zu lange gedauert. Deine Verbindung kann langsam sein. Versuche es erneut.",
+        "fileTooLargeSimple": "❌ Datei zu groß! Versuche eine kleinere Datei.",
+        "doNotClose": "Bitte schließe oder aktualisiere die Seite nicht!",
+        "loading": "Lädt...",
+        "noMusicUploaded": "Noch keine Musik hochgeladen"
     },
     "criadorLouvor": {
         "title": "KI-Lobpreis-Ersteller",
