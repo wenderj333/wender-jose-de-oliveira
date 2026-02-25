@@ -56,9 +56,22 @@ router.get("/users/all-ids", auth, async (req, res) => {
 
 router.post("/users/:userId/send-message", auth, async (req, res) => {
   try {
-    await pool.query("INSERT INTO notifications (user_id, content, created_at) VALUES ($1, $2, NOW())", [req.params.userId, "openclaw", "Mensagem", req.body.message]);
-    res.json({ success: true });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+    const { message, title, type } = req.body;
+    if (!message) {
+      return res.status(400).json({ error: "Campo 'message' é obrigatório" });
+    }
+    
+    await pool.query(
+      "INSERT INTO notifications (user_id, type, title, body, created_at) VALUES ($1, $2, $3, $4, NOW())",
+      [req.params.userId, type || 'welcome', title || 'Nova mensagem', message]
+    );
+    
+    console.log(`✅ OpenClaw: Mensagem enviada para utilizador ${req.params.userId}`);
+    res.json({ success: true, message: 'Mensagem enviada com sucesso' });
+  } catch (err) { 
+    console.error(`❌ OpenClaw: Erro ao enviar mensagem:`, err.message);
+    res.status(500).json({ error: err.message }); 
+  }
 });
 
 router.get("/users/new", auth, async (req, res) => {
