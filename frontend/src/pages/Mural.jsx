@@ -111,7 +111,7 @@ const isVideo = (url) => {
   if (!url) return false;
   const lower = url.toLowerCase();
   return lower.includes('youtube.com') || lower.includes('youtu.be') ||
-    lower.includes('vimeo.com') || lower.match(/\.(mp4|webm|ogg|mov)(\?|$)/);
+    lower.includes('vimeo.com') || /\.(mp4|webm|ogg|mov)(\?|$)/.test(lower);
 };
 const getYoutubeId = (url) => {
   const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
@@ -120,12 +120,14 @@ const getYoutubeId = (url) => {
 const MediaPlayer = ({ url, style }) => {
   if (!url) return null;
   const ytId = getYoutubeId(url);
-  if (ytId) return (
-    <iframe src={`https://www.youtube.com/embed/${ytId}`}
-      style={{ width: '100%', aspectRatio: '16/9', border: 'none', ...style }}
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen />
-  );
+  if (ytId) {
+    return React.createElement('iframe', {
+      src: 'https://www.youtube.com/embed/' + ytId,
+      style: { width: '100%', aspectRatio: '16/9', border: 'none', ...style },
+      allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
+      allowFullScreen: true
+    });
+  }
   if (isVideo(url)) return <video src={url} controls style={{ width: '100%', maxHeight: 400, ...style }} />;
   return <img src={url} alt="" style={{ width: '100%', maxHeight: 400, objectFit: 'cover', ...style }} />;
 };
@@ -504,4 +506,5 @@ const MediaPlayer = ({ url, style }) => {
     </div>
   );
 }
+
 
