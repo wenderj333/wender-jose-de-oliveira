@@ -1,0 +1,98 @@
+{
+  "pt": {
+    "pastorChat.title": "Chat Pastoral",
+    "pastorChat.subtitle": "Converse com um pastor",
+    "pastorChat.sendMessage": "Enviar Mensagem",
+    "pastorChat.messagePlaceholder": "Digite sua mensagem...",
+    "pastorChat.typingPastor": "Pastor está digitando...",
+    "pastorChat.offline": "Pastor offline",
+    "pastorChat.online": "Online",
+    "pastorChat.loading": "Carregando...",
+    "pastorChat.noChatHistory": "Nenhuma mensagem anterior",
+    "pastorChat.closeChat": "Fechar Chat"
+  },
+  "pt_BR": {
+    "pastorChat.title": "Chat Pastoral",
+    "pastorChat.subtitle": "Converse com um pastor",
+    "pastorChat.sendMessage": "Enviar Mensagem",
+    "pastorChat.messagePlaceholder": "Digite sua mensagem...",
+    "pastorChat.typingPastor": "Pastor está digitando...",
+    "pastorChat.offline": "Pastor offline",
+    "pastorChat.online": "Online",
+    "pastorChat.loading": "Carregando...",
+    "pastorChat.noChatHistory": "Nenhuma mensagem anterior",
+    "pastorChat.closeChat": "Fechar Chat"
+  },
+  "en": {
+    "pastorChat.title": "Pastoral Chat",
+    "pastorChat.subtitle": "Talk with a pastor",
+    "pastorChat.sendMessage": "Send Message",
+    "pastorChat.messagePlaceholder": "Type your message...",
+    "pastorChat.typingPastor": "Pastor is typing...",
+    "pastorChat.offline": "Pastor offline",
+    "pastorChat.online": "Online",
+    "pastorChat.loading": "Loading...",
+    "pastorChat.noChatHistory": "No previous messages",
+    "pastorChat.closeChat": "Close Chat"
+  },
+  "es": {
+    "pastorChat.title": "Chat Pastoral",
+    "pastorChat.subtitle": "Habla con un pastor",
+    "pastorChat.sendMessage": "Enviar Mensaje",
+    "pastorChat.messagePlaceholder": "Escribe tu mensaje...",
+    "pastorChat.typingPastor": "El pastor está escribiendo...",
+    "pastorChat.offline": "Pastor desconectado",
+    "pastorChat.online": "En línea",
+    "pastorChat.loading": "Cargando...",
+    "pastorChat.noChatHistory": "Sin mensajes anteriores",
+    "pastorChat.closeChat": "Cerrar Chat"
+  },
+  "de": {
+    "pastorChat.title": "Seelsorge-Chat",
+    "pastorChat.subtitle": "Sprechen Sie mit einem Pfarrer",
+    "pastorChat.sendMessage": "Nachricht senden",
+    "pastorChat.messagePlaceholder": "Geben Sie Ihre Nachricht ein...",
+    "pastorChat.typingPastor": "Pfarrer tippt...",
+    "pastorChat.offline": "Pfarrer offline",
+    "pastorChat.online": "Online",
+    "pastorChat.loading": "Wird geladen...",
+    "pastorChat.noChatHistory": "Keine vorherigen Nachrichten",
+    "pastorChat.closeChat": "Chat schließen"
+  },
+  "fr": {
+    "pastorChat.title": "Chat Pastoral",
+    "pastorChat.subtitle": "Parlez avec un pasteur",
+    "pastorChat.sendMessage": "Envoyer un message",
+    "pastorChat.messagePlaceholder": "Tapez votre message...",
+    "pastorChat.typingPastor": "Le pasteur est en train d'écrire...",
+    "pastorChat.offline": "Pasteur hors ligne",
+    "pastorChat.online": "En ligne",
+    "pastorChat.loading": "Chargement...",
+    "pastorChat.noChatHistory": "Aucun message précédent",
+    "pastorChat.closeChat": "Fermer le chat"
+  },
+  "ro": {
+    "pastorChat.title": "Chat Pastoral",
+    "pastorChat.subtitle": "Vorbește cu un pastor",
+    "pastorChat.sendMessage": "Trimite Mesaj",
+    "pastorChat.messagePlaceholder": "Scrie-ți mesajul...",
+    "pastorChat.typingPastor": "Pastorul scrie...",
+    "pastorChat.offline": "Pastor deconectat",
+    "pastorChat.online": "Online",
+    "pastorChat.loading": "Se încarcă...",
+    "pastorChat.noChatHistory": "Niciun mesaj anterior",
+    "pastorChat.closeChat": "Închide Chat"
+  },
+  "ru": {
+    "pastorChat.title": "Пастырский чат",
+    "pastorChat.subtitle": "Поговорите с пастором",
+    "pastorChat.sendMessage": "Отправить сообщение",
+    "pastorChat.messagePlaceholder": "Введите ваше сообщение...",
+    "pastorChat.typingPastor": "Пастор печатает...",
+    "pastorChat.offline": "Пастор не в сети",
+    "pastorChat.online": "В сети",
+    "pastorChat.loading": "Загрузка...",
+    "pastorChat.noChatHistory": "Нет предыдущих сообщений",
+    "pastorChat.closeChat": "Закрыть чат"
+  }
+}
