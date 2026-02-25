@@ -938,9 +938,27 @@ export default function MuralGrid() {
                     <div style={{ fontSize: '0.75rem', color: '#aaa' }}>{getTimeAgo(selectedPost.created_at, t)}</div>
                   </div>
                 </div>
-                <button onClick={() => setSelectedPost(null)} style={{
-                  background: 'none', border: 'none', fontSize: '1.3rem', cursor: 'pointer', color: '#daa520',
-                }}>✕</button>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  {user?.id === selectedPost.user_id && (
+                    <button onClick={() => {
+                      if (confirm(t('mural.confirmDelete', 'Tem a certeza que quer deletar este post?'))) {
+                        handleDeletePost(selectedPost.id);
+                      }
+                    }} style={{
+                      background: 'none', border: 'none', cursor: 'pointer', color: '#e74c3c',
+                      fontSize: '1.1rem', padding: '4px 8px', display: 'flex', alignItems: 'center',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
+                    onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                    title={t('mural.delete', 'Deletar post')}>
+                      <Trash2 size={18} />
+                    </button>
+                  )}
+                  <button onClick={() => setSelectedPost(null)} style={{
+                    background: 'none', border: 'none', fontSize: '1.3rem', cursor: 'pointer', color: '#daa520',
+                  }}>✕</button>
+                </div>
               </div>
 
               {/* Post Content */}

@@ -596,5 +596,35 @@
         "title": "Curso de Teología",
         "description": "Profundiza tu conocimiento teológico",
         "topics": "Cristología, Soteriología, Eclesiología, Escatología, Pneumatología, Hermenéutica"
+    },
+    "media": {
+        "photo": "Foto",
+        "video": "Vídeo",
+        "audio": "Audio",
+        "url": "URL",
+        "urlPrompt": "Pega la URL (YouTube, Vimeo, etc):",
+        "urlPlaceholder": "Pega URL de YouTube u otro vídeo...",
+        "clearUrl": "Limpiar URL",
+        "youtubePreview": "YouTube (vista previa no disponible)"
+    },
+    "time": {
+        "now": "Ahora",
+        "minAgo": "hace {{count}}min",
+        "hoursAgo": "hace {{count}}h",
+        "daysAgo": "hace {{count}}d"
+    },
+    "mural": {
+        "testimony": "🙏 Testimonio",
+        "worship": "🎵 Adoración",
+        "photo": "📸 Foto/Vídeo",
+        "verse": "📖 Versículo",
+        "reflection": "💭 Reflexión",
+        "campaign": "💝 Campaña / Causa",
+        "placeholder": "Comparte algo con la comunidad...",
+        "publish": "Publicar",
+        "noPosts": "Ninguna publicación aún. ¡Sé el primero en publicar! 📸",
+        "commentPlaceholder": "Escribe un comentario...",
+        "confirmDelete": "¿Estás seguro de que quieres eliminar este post?",
+        "delete": "Eliminar post"
     }
 }

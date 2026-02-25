@@ -596,5 +596,35 @@
         "title": "Cours de Théologie",
         "description": "Approfondissez vos connaissances théologiques",
         "topics": "Christologie, Sotériologie, Ecclésiologie, Eschatologie, Pneumatologie, Herméneutique"
+    },
+    "media": {
+        "photo": "Photo",
+        "video": "Vidéo",
+        "audio": "Audio",
+        "url": "URL",
+        "urlPrompt": "Collez l'URL (YouTube, Vimeo, etc):",
+        "urlPlaceholder": "Collez l'URL YouTube ou une autre vidéo...",
+        "clearUrl": "Effacer l'URL",
+        "youtubePreview": "YouTube (aperçu indisponible)"
+    },
+    "time": {
+        "now": "Maintenant",
+        "minAgo": "il y a {{count}}min",
+        "hoursAgo": "il y a {{count}}h",
+        "daysAgo": "il y a {{count}}j"
+    },
+    "mural": {
+        "testimony": "🙏 Témoignage",
+        "worship": "🎵 Louange",
+        "photo": "📸 Photo/Vidéo",
+        "verse": "📖 Verset",
+        "reflection": "💭 Réflexion",
+        "campaign": "💝 Campagne / Cause",
+        "placeholder": "Partagez quelque chose avec la communauté...",
+        "publish": "Publier",
+        "noPosts": "Aucune publication pour le moment. Soyez le premier à publier! 📸",
+        "commentPlaceholder": "Écrivez un commentaire...",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce post?",
+        "delete": "Supprimer le post"
     }
 }

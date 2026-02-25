@@ -596,5 +596,35 @@
         "title": "Theology Course",
         "description": "Deepen your theological knowledge",
         "topics": "Christology, Soteriology, Ecclesiology, Eschatology, Pneumatology, Hermeneutics"
+    },
+    "media": {
+        "photo": "Photo",
+        "video": "Video",
+        "audio": "Audio",
+        "url": "URL",
+        "urlPrompt": "Paste URL (YouTube, Vimeo, etc):",
+        "urlPlaceholder": "Paste YouTube or other video URL...",
+        "clearUrl": "Clear URL",
+        "youtubePreview": "YouTube (preview unavailable)"
+    },
+    "time": {
+        "now": "Now",
+        "minAgo": "{{count}}min ago",
+        "hoursAgo": "{{count}}h ago",
+        "daysAgo": "{{count}}d ago"
+    },
+    "mural": {
+        "testimony": "🙏 Testimony",
+        "worship": "🎵 Worship",
+        "photo": "📸 Photo/Video",
+        "verse": "📖 Verse",
+        "reflection": "💭 Reflection",
+        "campaign": "💝 Campaign / Cause",
+        "placeholder": "Share something with the community...",
+        "publish": "Publish",
+        "noPosts": "No posts yet. Be the first to post! 📸",
+        "commentPlaceholder": "Write a comment...",
+        "confirmDelete": "Are you sure you want to delete this post?",
+        "delete": "Delete post"
     }
 }

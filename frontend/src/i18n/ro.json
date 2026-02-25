@@ -596,5 +596,35 @@
         "title": "Curs de Teologie",
         "description": "Aprofundează-ți cunoștințele teologice",
         "topics": "Cristologie, Soteriologie, Eclesiologie, Escatologie, Pneumatologie, Hermeneutică"
+    },
+    "media": {
+        "photo": "Fotografie",
+        "video": "Video",
+        "audio": "Audio",
+        "url": "URL",
+        "urlPrompt": "Lipește URL-ul (YouTube, Vimeo, etc):",
+        "urlPlaceholder": "Lipește URL-ul YouTube sau alt video...",
+        "clearUrl": "Șterge URL-ul",
+        "youtubePreview": "YouTube (previzualizare indisponibilă)"
+    },
+    "time": {
+        "now": "Acum",
+        "minAgo": "acum {{count}}min",
+        "hoursAgo": "acum {{count}}h",
+        "daysAgo": "acum {{count}}z"
+    },
+    "mural": {
+        "testimony": "🙏 Mărturisire",
+        "worship": "🎵 Laudă",
+        "photo": "📸 Fotografie/Video",
+        "verse": "📖 Verset",
+        "reflection": "💭 Reflecție",
+        "campaign": "💝 Campanie / Cauză",
+        "placeholder": "Împărtășește ceva cu comunitatea...",
+        "publish": "Publică",
+        "noPosts": "Nicio postare încă. Fii primul care postează! 📸",
+        "commentPlaceholder": "Scrie un comentariu...",
+        "confirmDelete": "Ești sigur că vrei să ștergi această postare?",
+        "delete": "Șterge postarea"
     }
 }

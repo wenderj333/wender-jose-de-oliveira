@@ -674,5 +674,35 @@
         "title": "Theologiekurs",
         "description": "Vertiefe dein theologisches Wissen",
         "topics": "Christologie, Soteriologie, Ekklesiologie, Eschatologie, Pneumatologie, Hermeneutik"
+    },
+    "media": {
+        "photo": "Foto",
+        "video": "Video",
+        "audio": "Audio",
+        "url": "URL",
+        "urlPrompt": "URL einfügen (YouTube, Vimeo, etc):",
+        "urlPlaceholder": "YouTube-URL oder anderes Video einfügen...",
+        "clearUrl": "URL löschen",
+        "youtubePreview": "YouTube (Vorschau nicht verfügbar)"
+    },
+    "time": {
+        "now": "Jetzt",
+        "minAgo": "vor {{count}}min",
+        "hoursAgo": "vor {{count}}h",
+        "daysAgo": "vor {{count}}d"
+    },
+    "mural": {
+        "testimony": "🙏 Zeugnis",
+        "worship": "🎵 Lobpreis",
+        "photo": "📸 Foto/Video",
+        "verse": "📖 Bibelvers",
+        "reflection": "💭 Überlegung",
+        "campaign": "💝 Kampagne / Anliegen",
+        "placeholder": "Teile etwas mit der Gemeinde...",
+        "publish": "Veröffentlichen",
+        "noPosts": "Noch keine Beiträge. Sei der Erste, der postet! 📸",
+        "commentPlaceholder": "Schreib einen Kommentar...",
+        "confirmDelete": "Bist du sicher, dass du diesen Beitrag löschen möchtest?",
+        "delete": "Beitrag löschen"
     }
 }

@@ -695,6 +695,8 @@
                   "placeholder":  "Compartilhe algo com a comunidade...",
                   "publish":  "Publicar",
                   "noPosts":  "Nenhum post ainda. Seja o primeiro a publicar! 📸",
-                  "commentPlaceholder":  "Escreva um comentário..."
+                  "commentPlaceholder":  "Escreva um comentário...",
+                  "confirmDelete":  "Tem a certeza que quer deletar este post?",
+                  "delete":  "Deletar post"
               }
 }
