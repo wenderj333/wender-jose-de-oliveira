@@ -27,7 +27,17 @@
         "music": "Muzică",
         "courseFinance": "Finanțe Biblice",
         "courseTheology": "Teologie",
-        "courseFree": "Curs Biblic Gratuit"
+        "courseFree": "Curs Biblic Gratuit",
+        "popup": {
+            "verse": "Căci unde sunt doi sau trei adunați în Numele Meu, sunt și Eu în mijlocul lor. Matei 18:20",
+            "joinCommunity": "Alătură-te comunității noastre creștine!",
+            "bullet1": "Rugați-vă împreună",
+            "bullet2": "Împarte mărturii",
+            "bullet3": "Găsește biserici",
+            "bullet4": "Conectează-te cu frații și surorile din credință",
+            "registerBtn": "Înregistrare Gratuită",
+            "signInBtn": "Am deja cont - Conectare"
+        }
     },
     "footer": "© 2026 Sigo com Fé - Tehnologie în slujba Împărăției",
     "home": {

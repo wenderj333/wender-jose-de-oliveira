@@ -27,7 +27,17 @@
         "music": "Music",
         "courseFinance": "Biblical Finance",
         "courseTheology": "Theology",
-        "courseFree": "Free Bible Course"
+        "courseFree": "Free Bible Course",
+        "popup": {
+            "verse": "For where two or three gather in my name, there am I with them. Matthew 18:20",
+            "joinCommunity": "Join our Christian community!",
+            "bullet1": "Pray together",
+            "bullet2": "Share testimonies",
+            "bullet3": "Find churches",
+            "bullet4": "Connect with brothers and sisters in faith",
+            "registerBtn": "Register Free",
+            "signInBtn": "I have an account - Sign In"
+        }
     },
     "footer": "© 2026 Sigo com Fé - Technology serving the Kingdom",
     "home": {

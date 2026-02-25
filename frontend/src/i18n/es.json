@@ -27,7 +27,17 @@
         "music": "Música",
         "courseFinance": "Finanzas Bíblicas",
         "courseTheology": "Teología",
-        "courseFree": "Curso Bíblico Gratis"
+        "courseFree": "Curso Bíblico Gratis",
+        "popup": {
+            "verse": "Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos. Mateo 18:20",
+            "joinCommunity": "¡Únete a nuestra comunidad cristiana!",
+            "bullet1": "Orar juntos",
+            "bullet2": "Compartir testimonios",
+            "bullet3": "Encontrar iglesias",
+            "bullet4": "Conectar con hermanos y hermanas de fe",
+            "registerBtn": "Registrarse Gratis",
+            "signInBtn": "Ya tengo cuenta - Iniciar Sesión"
+        }
     },
     "footer": "© 2026 Sigo com Fé - Tecnología al servicio del Reino",
     "home": {

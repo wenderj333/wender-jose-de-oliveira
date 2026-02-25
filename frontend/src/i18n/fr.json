@@ -27,7 +27,17 @@
         "music": "Musique",
         "courseFinance": "Finances Bibliques",
         "courseTheology": "Théologie",
-        "courseFree": "Cours Biblique Gratuit"
+        "courseFree": "Cours Biblique Gratuit",
+        "popup": {
+            "verse": "Car là où deux ou trois sont assemblés en mon nom, je suis au milieu d'eux. Matthieu 18:20",
+            "joinCommunity": "Rejoignez notre communauté chrétienne !",
+            "bullet1": "Prier ensemble",
+            "bullet2": "Partager des témoignages",
+            "bullet3": "Trouver des églises",
+            "bullet4": "Se connecter avec des frères et sœurs dans la foi",
+            "registerBtn": "S'inscrire Gratuitement",
+            "signInBtn": "J'ai un compte - Se connecter"
+        }
     },
     "footer": "© 2026 Sigo com Fé - La technologie au service du Royaume",
     "home": {
