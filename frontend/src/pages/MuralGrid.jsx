@@ -67,6 +67,7 @@ export default function MuralGrid() {
   const [newMediaIsVideo, setNewMediaIsVideo] = useState(false);
   const [newMediaType, setNewMediaType] = useState(null); // 'photo' | 'video' | 'audio' | 'url'
   const [newMediaUrl, setNewMediaUrl] = useState(''); // Para URLs (YouTube, etc)
+  const [selectedMusicUrl, setSelectedMusicUrl] = useState(''); // Música selecionada de "Minha Música"
   const [posting, setPosting] = useState(false);
   const [postingText, setPostingText] = useState('');
   const [likedPosts, setLikedPosts] = useState({});
@@ -128,8 +129,7 @@ export default function MuralGrid() {
   }
 
   function selectMyMusic(song) {
-    setNewMediaUrl(song.url);
-    setNewMediaType('mymusic');
+    setSelectedMusicUrl(song.url);
     setShowMyMusicPicker(false);
   }
 
@@ -333,14 +333,16 @@ export default function MuralGrid() {
           console.warn('Direct upload failed:', uploadErr);
           throw uploadErr;
         }
-      } else if (newMediaType === 'mymusic' && newMediaUrl.trim()) {
-        formData.append('media_url', newMediaUrl.trim());
-        formData.append('media_type', 'video'); // Minha música é armazenada como video/áudio
-        if (!postContent || postContent === '📸') postContent = '🎵';
-        formData.set('content', postContent);
       } else if (newMediaUrl.trim()) {
         formData.append('media_url', newMediaUrl.trim());
         formData.append('media_type', 'video'); // YouTube e URLs tratadas como video
+      }
+      
+      // Handle Minha Música (separadamente - pode ter vídeo + música)
+      if (selectedMusicUrl) {
+        formData.append('audio_url', selectedMusicUrl);
+        if (!postContent || postContent === '📸') postContent = '🎵';
+        formData.set('content', postContent);
       }
 
       const res = await fetch(`${API}/feed`, {
@@ -369,6 +371,7 @@ export default function MuralGrid() {
         setNewMediaIsVideo(false);
         setNewMediaType(null);
         setNewMediaUrl('');
+        setSelectedMusicUrl('');
         setShowForm(false);
       }
     } catch (err) {
@@ -685,11 +688,11 @@ export default function MuralGrid() {
             )}
 
             {/* My Music preview */}
-            {newMediaType === 'mymusic' && newMediaUrl.trim() && (
+            {selectedMusicUrl && (
               <div style={{ background: 'linear-gradient(135deg, #9b59b6, #667eea)', borderRadius: 12, padding: '1rem', marginBottom: '0.5rem', textAlign: 'center' }}>
                 <div style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '0.5rem' }}>🎸</div>
-                <div style={{ color: '#fff', fontSize: '0.85rem', marginBottom: '1rem', wordBreak: 'break-word' }}>Música da biblioteca pessoal</div>
-                <button type="button" onClick={() => { setNewMediaUrl(''); setNewMediaType(null); }} style={{
+                <div style={{ color: '#fff', fontSize: '0.85rem', marginBottom: '1rem', wordBreak: 'break-word' }}>🎵 Música da biblioteca pessoal (reproduzida com o post)</div>
+                <button type="button" onClick={() => { setSelectedMusicUrl(''); }} style={{
                   background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', borderRadius: 20, padding: '0.4rem 1rem',
                   cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600,
                 }}>{t('common.remove', 'Remover')}</button>
