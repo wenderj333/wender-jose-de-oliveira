@@ -54,20 +54,16 @@ export default function Home() {
   const [helpPhase, setHelpPhase] = useState('initial');
 
   useEffect(() => {
-    // Get verse of the day
-    const verses = [
-      { text: 'Onde dois ou três estiverem reunidos em meu nome, ali estou eu no meio deles.', ref: 'Mateus 18:20' },
-      { text: 'Tudo posso naquele que me fortalece.', ref: 'Filipenses 4:13' },
-      { text: 'O Senhor é meu pastor; nada me faltará.', ref: 'Salmos 23:1' },
-      { text: 'Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito.', ref: 'João 3:16' },
-      { text: 'Confie no Senhor de todo o seu coração e não se apoie no seu próprio entendimento.', ref: 'Provérbios 3:5' },
-    ];
-    const today = new Date().getDate();
-    setDailyVerse(verses[today % verses.length]);
+    // Get verse of the day from i18n translations
+    const verses = t('home.verses', []);
+    if (verses && verses.length > 0) {
+      const today = new Date().getDate();
+      setDailyVerse(verses[today % verses.length]);
+    }
 
     // Fetch recent testimonies
     fetchRecentTestimonies();
-  }, []);
+  }, [t]);
 
   const fetchRecentTestimonies = async () => {
     try {

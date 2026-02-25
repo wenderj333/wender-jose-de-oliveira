@@ -691,6 +691,38 @@
         "hoursAgo": "vor {{count}}h",
         "daysAgo": "vor {{count}}d"
     },
+    "home": {
+        "verses": [
+            {
+                "text": "Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.",
+                "ref": "Matthäus 18:20"
+            },
+            {
+                "text": "Ich vermag alles durch den, der mich stark macht.",
+                "ref": "Philipper 4:13"
+            },
+            {
+                "text": "Der Herr ist mein Hirte; mir wird nichts mangeln.",
+                "ref": "Psalm 23:1"
+            },
+            {
+                "text": "Vertraue auf den Herrn von ganzem Herzen und verlass dich nicht auf deinen Verstand.",
+                "ref": "Sprüche 3:5"
+            },
+            {
+                "text": "Denn ich weiß, welche Gedanken ich für euch habe, spricht der Herr.",
+                "ref": "Jeremia 29:11"
+            },
+            {
+                "text": "Sei stark und mutig, fürchte dich nicht, denn der Herr ist mit dir.",
+                "ref": "Deuteronomium 31:6"
+            },
+            {
+                "text": "Das Gebet eines Gerechten vermag viel.",
+                "ref": "Jakobus 5:16"
+            }
+        ]
+    },
     "mural": {
         "testimony": "🙏 Zeugnis",
         "worship": "🎵 Lobpreis",

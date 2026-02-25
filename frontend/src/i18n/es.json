@@ -623,6 +623,38 @@
         "hoursAgo": "hace {{count}}h",
         "daysAgo": "hace {{count}}d"
     },
+    "home": {
+        "verses": [
+            {
+                "text": "Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos.",
+                "ref": "Mateo 18:20"
+            },
+            {
+                "text": "Todo lo puedo en Cristo que me fortalece.",
+                "ref": "Filipenses 4:13"
+            },
+            {
+                "text": "El Señor es mi pastor; nada me faltará.",
+                "ref": "Salmos 23:1"
+            },
+            {
+                "text": "Confía en el Señor con todo tu corazón y no te apoyes en tu propio entendimiento.",
+                "ref": "Proverbios 3:5"
+            },
+            {
+                "text": "Porque yo sé los pensamientos que tengo acerca de vosotros, dice el Señor.",
+                "ref": "Jeremías 29:11"
+            },
+            {
+                "text": "Esfuérzate y sé valiente, no tengas miedo ni desmayes, porque el Señor tu Dios está contigo.",
+                "ref": "Deuteronomio 31:6"
+            },
+            {
+                "text": "La oración eficaz del justo puede mucho.",
+                "ref": "Santiago 5:16"
+            }
+        ]
+    },
     "mural": {
         "testimony": "🙏 Testimonio",
         "worship": "🎵 Adoración",

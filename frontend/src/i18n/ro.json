@@ -623,6 +623,38 @@
         "hoursAgo": "acum {{count}}h",
         "daysAgo": "acum {{count}}z"
     },
+    "home": {
+        "verses": [
+            {
+                "text": "Căci unde sunt doi sau trei adunați în Numele Meu, sunt și Eu în mijlocul lor.",
+                "ref": "Matei 18:20"
+            },
+            {
+                "text": "Pot totul în Hristos care mă întărește.",
+                "ref": "Filipeni 4:13"
+            },
+            {
+                "text": "Domnul este Păstorul meu; nu voi duce lipsă de nimic.",
+                "ref": "Psalmul 23:1"
+            },
+            {
+                "text": "Încrede-te în Domnul din toată inima ta și nu te bizui pe înțelepciunea ta.",
+                "ref": "Proverbe 3:5"
+            },
+            {
+                "text": "Căci Eu știu gândurile pe care le am pentru voi, zice Domnul.",
+                "ref": "Ieremia 29:11"
+            },
+            {
+                "text": "Fiți tari și curajoși, nu vă temeți, căci Domnul este cu voi.",
+                "ref": "Deuteronomy 31:6"
+            },
+            {
+                "text": "Rugăciunea unui om drept are multă putere.",
+                "ref": "Iacov 5:16"
+            }
+        ]
+    },
     "mural": {
         "testimony": "🙏 Mărturisire",
         "worship": "🎵 Laudă",

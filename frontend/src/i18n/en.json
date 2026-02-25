@@ -623,6 +623,38 @@
         "hoursAgo": "{{count}}h ago",
         "daysAgo": "{{count}}d ago"
     },
+    "home": {
+        "verses": [
+            {
+                "text": "For where two or three gather in my name, there am I with them.",
+                "ref": "Matthew 18:20"
+            },
+            {
+                "text": "I can do all things through him who strengthens me.",
+                "ref": "Philippians 4:13"
+            },
+            {
+                "text": "The Lord is my shepherd; I shall not want.",
+                "ref": "Psalm 23:1"
+            },
+            {
+                "text": "Trust in the Lord with all your heart and lean not on your own understanding.",
+                "ref": "Proverbs 3:5"
+            },
+            {
+                "text": "For I know the plans I have for you, plans to prosper you and not to harm you.",
+                "ref": "Jeremiah 29:11"
+            },
+            {
+                "text": "Be strong and courageous. Do not be afraid, for the Lord will be with you.",
+                "ref": "Deuteronomy 31:6"
+            },
+            {
+                "text": "The prayer of a righteous person is powerful and effective.",
+                "ref": "James 5:16"
+            }
+        ]
+    },
     "mural": {
         "testimony": "🙏 Testimony",
         "worship": "🎵 Worship",
