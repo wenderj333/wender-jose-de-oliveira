@@ -2,73 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import PrayerCard from '../components/PrayerCard';
 import { useAuth } from '../context/AuthContext';
-import { HandHeart, Trophy, Sparkles, AlertTriangle, Plus, ChevronDown, ChevronUp } from 'lucide-react';
+import { HandHeart, Trophy, AlertTriangle, Plus, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
 const DEMO_PRAYERS = [
-  {
-    id: 'demo-1',
-    author_name: 'Maria Silva',
-    church_name: 'Igreja Batista Central',
-    category: 'health',
-    title: 'Oração pela saúde do meu pai',
-    content: 'Meu pai foi diagnosticado com uma doença grave e está internado. Peço orações para que Deus toque na vida dele e traga cura completa. Acreditamos no poder da oração!',
-    is_urgent: true,
-    is_answered: false,
-    prayer_count: 47,
-    created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 'demo-2',
-    author_name: 'João Santos',
-    church_name: 'Assembleia de Deus',
-    category: 'work_finance',
-    title: 'Novo emprego',
-    content: 'Estou desempregado há 3 meses e preciso muito de um novo trabalho para sustentar minha família. Oro para que Deus abra portas e me dê sabedoria nas entrevistas.',
-    is_urgent: false,
-    is_answered: false,
-    prayer_count: 23,
-    created_at: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 'demo-3',
-    author_name: 'Ana Oliveira',
-    church_name: 'Comunidade da Graça',
-    category: 'family',
-    title: 'Restauração do meu casamento',
-    content: 'Estamos passando por um momento muito difícil no casamento. Peço que orem por restauração, paciência e amor entre nós. Deus é fiel e pode restaurar todas as coisas.',
-    is_urgent: false,
-    is_answered: false,
-    prayer_count: 35,
-    created_at: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 'demo-4',
-    author_name: 'Lucas Ferreira',
-    church_name: 'Igreja Presbiteriana',
-    category: 'emotional',
-    title: 'Luta contra a ansiedade',
-    content: 'Tenho sofrido muito com ansiedade e crises de pânico. Sei que Deus não nos deu espírito de medo. Orem para que eu encontre paz e consiga confiar mais no Senhor.',
-    is_urgent: false,
-    is_answered: false,
-    prayer_count: 52,
-    created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 'demo-5',
-    author_name: 'Camila Rodrigues',
-    church_name: 'Igreja Metodista',
-    category: 'studies',
-    title: 'Aprovação no vestibular',
-    content: 'Estou me preparando para o vestibular de medicina. Preciso de muita concentração e sabedoria. Orem para que Deus me ajude a alcançar essa conquista para servir ao próximo.',
-    is_urgent: false,
-    is_answered: false,
-    prayer_count: 18,
-    created_at: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
-  },
+  { id: 'demo-1', author_name: 'Maria Silva', church_name: 'Igreja Batista', category: 'health', title: 'Oracao pela saude do meu pai', content: 'Meu pai foi diagnosticado com uma doenca grave. Peco oracoes para que Deus traga cura completa!', is_urgent: true, is_answered: false, prayer_count: 47, created_at: new Date(Date.now() - 2*3600000).toISOString() },
+  { id: 'demo-2', author_name: 'Joao Santos', church_name: 'Assembleia de Deus', category: 'work_finance', title: 'Novo emprego', content: 'Estou desempregado ha 3 meses. Oro para que Deus abra portas para sustentar minha familia.', is_urgent: false, is_answered: false, prayer_count: 23, created_at: new Date(Date.now() - 5*3600000).toISOString() },
+  { id: 'demo-3', author_name: 'Ana Oliveira', church_name: 'Comunidade da Graca', category: 'family', title: 'Restauracao do meu casamento', content: 'Estamos passando por momento muito dificil. Deus e fiel e pode restaurar todas as coisas.', is_urgent: false, is_answered: false, prayer_count: 35, created_at: new Date(Date.now() - 12*3600000).toISOString() },
 ];
+
+const CATEGORY_CONFIG = {
+  health:       { label: 'Saude',     color: '#e74c3c' },
+  work_finance: { label: 'Trabalho',  color: '#f39c12' },
+  family:       { label: 'Familia',   color: '#3498db' },
+  studies:      { label: 'Estudos',   color: '#9b59b6' },
+  housing:      { label: 'Moradia',   color: '#1abc9c' },
+  emotional:    { label: 'Emocional', color: '#5b8def' },
+  decisions:    { label: 'Decisoes',  color: '#e67e22' },
+  other:        { label: 'Outro',     color: '#daa520' },
+};
 
 export default function PrayerFeed() {
   const { user, token } = useAuth();
@@ -78,36 +32,19 @@ export default function PrayerFeed() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ title: '', content: '', category: 'other', is_urgent: false });
   const [loading, setLoading] = useState(true);
-
-  const CATEGORIES = [
-    { value: '', label: t('prayerFeed.categories.all') },
-    { value: 'health', label: t('prayerFeed.categories.health') },
-    { value: 'work_finance', label: t('prayerFeed.categories.work_finance') },
-    { value: 'family', label: t('prayerFeed.categories.family') },
-    { value: 'studies', label: t('prayerFeed.categories.studies') },
-    { value: 'housing', label: t('prayerFeed.categories.housing') },
-    { value: 'emotional', label: t('prayerFeed.categories.emotional') },
-    { value: 'decisions', label: t('prayerFeed.categories.decisions') },
-    { value: 'other', label: t('prayerFeed.categories.other') },
-  ];
-
   const isPastor = user?.role === 'pastor' || user?.role === 'admin';
 
   const fetchPrayers = async () => {
     setLoading(true);
-    const endpoint = tab === 'answered' ? `${API_BASE}/api/prayers/answered` : `${API_BASE}/api/prayers`;
+    const endpoint = tab === 'answered' ? API_BASE+'/api/prayers/answered' : API_BASE+'/api/prayers';
     try {
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const headers = token ? { Authorization: 'Bearer '+token } : {};
       const res = await fetch(endpoint, { headers });
       const data = await res.json();
       let result = data.prayers || [];
-      if (user && !isPastor) {
-        result = result.filter(p => p.author_id === user.id);
-      }
+      if (user && !isPastor) result = result.filter(p => p.author_id === user.id);
       setPrayers(result);
-    } catch {
-      setPrayers(tab === 'answered' ? [] : (user ? [] : DEMO_PRAYERS));
-    }
+    } catch { setPrayers(tab === 'answered' ? [] : (user ? [] : DEMO_PRAYERS)); }
     setLoading(false);
   };
 
@@ -116,137 +53,101 @@ export default function PrayerFeed() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.content.trim()) return;
-    await fetch(`${API_BASE}/api/prayers`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify(form),
-    });
+    await fetch(API_BASE+'/api/prayers', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+token }, body: JSON.stringify(form) });
     setForm({ title: '', content: '', category: 'other', is_urgent: false });
     setShowForm(false);
     fetchPrayers();
   };
 
   const handlePray = async (prayerId) => {
-    if (prayerId.startsWith('demo-')) {
-      setPrayers(prev => prev.map(p => p.id === prayerId ? { ...p, prayer_count: (p.prayer_count || 0) + 1 } : p));
-      return;
-    }
-    await fetch(`${API_BASE}/api/prayers/${prayerId}/pray`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ message: '' }),
-    });
+    if (prayerId.startsWith('demo-')) { setPrayers(prev => prev.map(p => p.id === prayerId ? {...p, prayer_count: (p.prayer_count||0)+1} : p)); return; }
+    await fetch(API_BASE+'/api/prayers/'+prayerId+'/pray', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer '+token }, body: JSON.stringify({ message: '' }) });
     fetchPrayers();
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: 680, margin: '0 auto', padding: '0 0 80px' }}>
+      <style>{'.pinput{width:100%;background:#0f0f1a;border:1px solid #333;border-radius:10px;padding:10px 14px;color:#fff;font-size:.9rem;box-sizing:border-box;outline:none}.pinput:focus{border-color:#daa520}'}</style>
+
+      <div style={{ background:'linear-gradient(135deg,#0f0f1a,#1a1a2e)', borderRadius:'0 0 24px 24px', padding:'28px 20px 20px', marginBottom:20, borderBottom:'1px solid rgba(218,165,32,0.2)' }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+          <div>
+            <h2 style={{ color:'#daa520', margin:0, fontSize:'1.5rem', display:'flex', alignItems:'center', gap:8 }}>
+              {tab === 'answered' ? <><Trophy size={24} /> Mural de Vitorias</> : <><HandHeart size={24} /> Pedidos de Oracao</>}
+            </h2>
+            <p style={{ color:'rgba(255,255,255,0.5)', margin:'4px 0 0', fontSize:'0.85rem' }}>Ore pelos seus irmaos na fe</p>
+          </div>
+          {user && (
+            <button onClick={() => setShowForm(!showForm)} style={{ background: showForm ? 'rgba(218,165,32,0.2)' : 'linear-gradient(135deg,#daa520,#f4d03f)', border: showForm ? '1px solid #daa520' : 'none', color: showForm ? '#daa520' : '#0f0f1a', borderRadius:50, padding:'10px 18px', cursor:'pointer', fontWeight:700, display:'flex', alignItems:'center', gap:6, fontSize:'0.9rem' }}>
+              {showForm ? <><X size={16} /> Fechar</> : <><Plus size={16} /> Novo Pedido</>}
+            </button>
+          )}
+        </div>
+        <div style={{ display:'flex', gap:8 }}>
+          {[['all','Todos os Pedidos'],['answered','Oracoes Respondidas']].map(([val,label]) => (
+            <button key={val} onClick={() => setTab(val)} style={{ flex:1, padding:'10px', borderRadius:12, border:'none', cursor:'pointer', fontWeight:600, fontSize:'0.85rem', background: tab===val ? 'rgba(218,165,32,0.2)' : 'rgba(255,255,255,0.05)', color: tab===val ? '#daa520' : 'rgba(255,255,255,0.5)', borderBottom: tab===val ? '2px solid #daa520' : '2px solid transparent' }}>{label}</button>
+          ))}
+        </div>
+      </div>
+
       {!user && (
-        <Link to="/cadastro" style={{ textDecoration: 'none' }}>
-          <div style={{
-            background: 'linear-gradient(135deg, #daa520, #f4d03f)', borderRadius: 12, padding: '0.75rem 1rem',
-            marginBottom: '1rem', textAlign: 'center', color: '#1a0a3e', fontWeight: 600, fontSize: '0.9rem',
-          }}>
-            ✨ Crie sua conta para participar! <span style={{ textDecoration: 'underline' }}>Cadastre-se</span>
+        <Link to="/cadastro" style={{ textDecoration:'none', display:'block', margin:'0 16px 16px' }}>
+          <div style={{ background:'rgba(218,165,32,0.1)', border:'1px solid rgba(218,165,32,0.4)', borderRadius:14, padding:'14px 16px', display:'flex', justifyContent:'space-between' }}>
+            <span style={{ color:'#daa520', fontWeight:600 }}>Crie sua conta para participar!</span>
+            <span style={{ color:'#daa520' }}>Cadastrar</span>
           </div>
         </Link>
       )}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-        <h2 style={{ color: 'var(--green-dark)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          {tab === 'answered' ? <><Trophy size={24} /> {t('prayerFeed.victoryWall')}</> : <><HandHeart size={24} /> {t('prayerFeed.prayerRequests')}</>}
-        </h2>
-        {user && (
-          <button className="btn btn-green" onClick={() => setShowForm(!showForm)} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            {showForm ? <ChevronUp size={18} /> : <Plus size={18} />} {t('prayerFeed.newRequest')}
-          </button>
-        )}
-      </div>
-
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-        <button className={`btn ${tab === 'all' ? 'btn-green' : 'btn-outline'}`} style={tab !== 'all' ? { color: 'var(--green)', borderColor: 'var(--green)' } : {}} onClick={() => setTab('all')}>
-          {t('prayerFeed.allRequests')}
-        </button>
-        <button className={`btn ${tab === 'answered' ? 'btn-primary' : 'btn-outline'}`} style={tab !== 'answered' ? { color: 'var(--gold-dark)', borderColor: 'var(--gold)' } : {}} onClick={() => setTab('answered')}>
-          <Sparkles size={16} /> {t('prayerFeed.answeredPrayers')}
-        </button>
-      </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="card" style={{ marginBottom: '1.5rem' }}>
-          <h3 style={{ color: 'var(--green-dark)', marginBottom: '1rem' }}>{t('prayerFeed.newPrayerRequest')}</h3>
-          <div className="form-group">
-            <label>{t('prayerFeed.titleOptional')}</label>
-            <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder={t('prayerFeed.titlePlaceholder')} />
-          </div>
-          <div className="form-group">
-            <label>{t('prayerFeed.yourRequest')}</label>
-            <textarea rows={4} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} placeholder={t('prayerFeed.requestPlaceholder')} required />
-          </div>
-          <div className="form-group">
-            <label>{t('prayerFeed.category')}</label>
-            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
-              {CATEGORIES.filter(c => c.value).map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-            </select>
-          </div>
-          <div className="form-group">
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <input type="checkbox" checked={form.is_urgent} onChange={(e) => setForm({ ...form, is_urgent: e.target.checked })} />
-              <AlertTriangle size={16} style={{ color: 'var(--red)' }} /> {t('prayerFeed.urgentRequest')}
+        <div style={{ padding:'0 16px', marginBottom:20 }}>
+          <form onSubmit={handleSubmit} style={{ background:'linear-gradient(135deg,#1a1a2e,#16213e)', borderRadius:20, padding:24, border:'1px solid rgba(218,165,32,0.2)' }}>
+            <h3 style={{ color:'#daa520', margin:'0 0 20px' }}>Novo Pedido de Oracao</h3>
+            <input className="pinput" value={form.title} onChange={e => setForm({...form,title:e.target.value})} placeholder="Titulo (opcional)" style={{ marginBottom:10 }} />
+            <textarea className="pinput" rows={4} value={form.content} onChange={e => setForm({...form,content:e.target.value})} placeholder="Descreva seu pedido..." required style={{ resize:'none', marginBottom:12 }} />
+            <div style={{ display:'flex', flexWrap:'wrap', gap:6, marginBottom:16 }}>
+              {Object.entries(CATEGORY_CONFIG).map(([val,cfg]) => (
+                <button key={val} type="button" onClick={() => setForm({...form,category:val})} style={{ background: form.category===val ? cfg.color+'33' : 'rgba(255,255,255,0.05)', border: '1px solid '+(form.category===val ? cfg.color : '#333'), color: form.category===val ? cfg.color : 'rgba(255,255,255,0.5)', borderRadius:20, padding:'4px 12px', cursor:'pointer', fontSize:'0.75rem', fontWeight:600 }}>{cfg.label}</button>
+              ))}
+            </div>
+            <label style={{ display:'flex', alignItems:'center', gap:8, marginBottom:20, cursor:'pointer' }}>
+              <input type="checkbox" checked={form.is_urgent} onChange={e => setForm({...form,is_urgent:e.target.checked})} style={{ accentColor:'#e74c3c' }} />
+              <span style={{ color:'#e74c3c', fontSize:'0.85rem' }}>Pedido urgente</span>
             </label>
-          </div>
-          <button type="submit" className="btn btn-green"><HandHeart size={18} /> {t('prayerFeed.submitRequest')}</button>
-        </form>
+            <button type="submit" style={{ width:'100%', background:'linear-gradient(135deg,#daa520,#f4d03f)', border:'none', borderRadius:12, padding:14, color:'#0f0f1a', fontWeight:800, cursor:'pointer', fontSize:'1rem' }}>Enviar Pedido de Oracao</button>
+          </form>
+        </div>
       )}
 
-      {/* Explanatory card about the power of prayer */}
-      <div style={{
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.97), rgba(232,245,233,0.95))',
-        border: '2px solid transparent',
-        borderImage: 'linear-gradient(135deg, #4caf50, #81c784, #daa520) 1',
-        borderRadius: 16,
-        padding: '1.25rem',
-        marginBottom: '1.5rem',
-        boxShadow: '0 4px 15px rgba(76,175,80,0.12)',
-      }}>
-        <h3 style={{ fontSize: '1.05rem', color: '#2e7d32', margin: '0 0 0.6rem', textAlign: 'center' }}>
-          ✨ O Poder da Oração
-        </h3>
-        <p style={{ fontSize: '0.88rem', color: '#444', lineHeight: 1.7, margin: '0 0 0.6rem' }}>
-          A oração é a nossa comunicação direta com Deus. Quando você compartilha seu pedido aqui, 
-          irmãos de todo o mundo se unem em oração por você.
-        </p>
-        <p style={{ fontSize: '0.85rem', color: '#2e7d32', fontStyle: 'italic', margin: '0 0 0.8rem', textAlign: 'center', fontWeight: 500 }}>
-          "Confessai as vossas culpas uns aos outros e orai uns pelos outros, para que sareis. 
-          A oração feita por um justo pode muito em seus efeitos." — Tiago 5:16
-        </p>
-        <div style={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.7 }}>
-          <strong style={{ color: '#2e7d32' }}>Como funciona:</strong>
-          <div style={{ marginTop: 4 }}>
-            1️⃣ Escreva seu pedido com fé<br />
-            2️⃣ Irmãos orarão por você<br />
-            3️⃣ Quando Deus responder, compartilhe seu testemunho no Mural de Vitórias!
-          </div>
+      <div style={{ padding:'0 16px', marginBottom:20 }}>
+        <div style={{ background:'rgba(39,174,96,0.1)', border:'1px solid rgba(39,174,96,0.3)', borderRadius:16, padding:'16px 20px', textAlign:'center' }}>
+          <p style={{ color:'#27ae60', fontWeight:600, margin:'0 0 6px' }}>O Poder da Oracao</p>
+          <p style={{ color:'rgba(255,255,255,0.6)', fontSize:'0.82rem', fontStyle:'italic', margin:0 }}>"A oracao feita por um justo pode muito em seus efeitos." — Tiago 5:16</p>
         </div>
       </div>
 
       {user && !isPastor && (
-        <div className="card" style={{ marginBottom: '1rem', padding: '0.75rem 1rem', background: 'rgba(102,126,234,0.1)', borderLeft: '3px solid var(--primary)' }}>
-          <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--gray-500)' }}>🔒 Seus pedidos de oração são privados. Somente você e os pastores podem ver.</p>
+        <div style={{ padding:'0 16px', marginBottom:16 }}>
+          <div style={{ background:'rgba(91,141,239,0.1)', border:'1px solid rgba(91,141,239,0.3)', borderRadius:12, padding:'10px 14px' }}>
+            <p style={{ margin:0, fontSize:'0.82rem', color:'rgba(255,255,255,0.6)' }}>Seus pedidos sao privados. Somente voce e os pastores podem ver.</p>
+          </div>
         </div>
       )}
 
-      {loading ? (
-        <p style={{ textAlign: 'center', color: 'var(--gray-500)' }}>{t('prayerFeed.loading')}</p>
-      ) : prayers.length === 0 ? (
-        <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
-          <HandHeart size={48} style={{ color: 'var(--gray-200)', margin: '0 auto 1rem' }} />
-          <p style={{ color: 'var(--gray-500)' }}>{t('prayerFeed.noRequests')}</p>
-        </div>
-      ) : (
-        prayers.map((prayer) => (
-          <PrayerCard key={prayer.id} prayer={prayer} onPray={handlePray} user={user || { id: 'visitor' }} />
-        ))
-      )}
+      <div style={{ padding:'0 16px' }}>
+        {loading ? (
+          <div style={{ textAlign:'center', padding:40, color:'rgba(255,255,255,0.4)' }}>A carregar...</div>
+        ) : prayers.length === 0 ? (
+          <div style={{ background:'#1a1a2e', borderRadius:16, padding:'40px 20px', textAlign:'center', border:'1px solid #333' }}>
+            <HandHeart size={48} style={{ color:'rgba(255,255,255,0.2)', marginBottom:12 }} />
+            <p style={{ color:'rgba(255,255,255,0.4)', margin:0 }}>Nenhum pedido ainda.</p>
+          </div>
+        ) : prayers.map((prayer) => (
+          <div key={prayer.id} style={{ marginBottom:12 }}>
+            <PrayerCard prayer={prayer} onPray={handlePray} user={user || { id: 'visitor' }} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
