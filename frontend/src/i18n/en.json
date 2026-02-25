@@ -8,6 +8,7 @@
         "registerChurch": "Register Church",
         "kids": "Kids",
         "helpRequests": "Help Requests",
+        "faithJourneys": "Faith Journeys",
         "dashboard": "Dashboard",
         "hello": "Hello, {{name}}",
         "logout": "Log Out",
@@ -454,18 +455,23 @@
         "friendRemoved": "Friend removed."
     },
     "helpRequests": {
-        "title": "Help Requests",
+        "title": "🆘 How Do Help Requests Work?",
         "subtitle": "People in need of spiritual support and prayer. Respond with love.",
-        "loading": "Loading...",
-        "empty": "No help requests at the moment. Praise God!",
-        "justNow": "just now",
+        "howWorks": "This is a safe and confidential space where believers in difficulty can share their challenges and receive pastoral support. Each request is an opportunity to demonstrate the love of Christ.",
+        "statusPending": "🔴 Pending — Waiting for a pastor to attend",
+        "statusInProgress": "🟡 In Progress — A pastor is already caring",
+        "statusResolved": "🟢 Resolved — The person received the necessary support",
+        "verse": "Levai as cargas uns dos outros e assim cumprireis a lei de Cristo. — Gálatas 6:2",
         "filter_all": "All",
         "filter_pending": "Pending",
         "filter_in_progress": "In Progress",
         "filter_resolved": "Resolved",
-        "markInProgress": "I'm attending",
-        "markResolved": "Resolved",
-        "resolved": "Attended"
+        "loading": "Loading...",
+        "empty": "No help requests at the moment. Relief!",
+        "justNow": "Just now",
+        "markInProgress": "Mark as in progress",
+        "markResolved": "Mark as resolved",
+        "resolved": "Resolved ✓"
     },
     "profile": {
         "title": "Profile",

@@ -88,20 +88,18 @@ export default function HelpRequests() {
         boxShadow: '0 4px 15px rgba(231,76,60,0.1)',
       }}>
         <h3 style={{ fontSize: '1.05rem', color: '#c0392b', margin: '0 0 0.6rem', textAlign: 'center' }}>
-          🆘 Como Funcionam os Pedidos de Ajuda?
+          {t('helpRequests.title')}
         </h3>
         <p style={{ fontSize: '0.88rem', color: '#444', lineHeight: 1.7, margin: '0 0 0.6rem' }}>
-          Este é um espaço seguro para pessoas que estão passando por momentos difíceis e precisam de apoio. 
-          Quando alguém envia um pedido de ajuda, pastores e voluntários são notificados imediatamente para 
-          oferecer acolhimento, oração e orientação.
+          {t('helpRequests.howWorks')}
         </p>
         <p style={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.7, margin: '0 0 0.5rem' }}>
-          🔴 <strong>Pendente</strong> — Aguardando um pastor atender<br />
-          🟡 <strong>Em andamento</strong> — Um pastor já está cuidando<br />
-          🟢 <strong>Resolvido</strong> — A pessoa recebeu o apoio necessário
+          {t('helpRequests.statusPending')}<br />
+          {t('helpRequests.statusInProgress')}<br />
+          {t('helpRequests.statusResolved')}
         </p>
         <p style={{ fontSize: '0.85rem', color: '#6a1b9a', fontStyle: 'italic', margin: 0, textAlign: 'center', fontWeight: 500 }}>
-          "Levai as cargas uns dos outros e assim cumprireis a lei de Cristo." — Gálatas 6:2
+          "{t('helpRequests.verse')}"
         </p>
       </div>
 

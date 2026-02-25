@@ -482,18 +482,23 @@
         "friendRemoved": "Freund entfernt."
     },
     "helpRequests": {
-        "title": "Hilfegesuche",
+        "title": "🆘 Wie funktionieren Hilfegesuche?",
         "subtitle": "Menschen, die geistliche Unterstützung und Gebet brauchen. Antworte mit Liebe.",
-        "loading": "Wird geladen...",
-        "empty": "Keine Hilfegesuche im Moment. Gott sei Dank!",
-        "justNow": "gerade eben",
+        "howWorks": "Dies ist ein sicherer und vertraulicher Raum, in dem Gläubige in Schwierigkeiten ihre Herausforderungen teilen und pastorale Unterstützung erhalten können. Jede Anfrage ist eine Gelegenheit, die Liebe Christi zu zeigen.",
+        "statusPending": "🔴 Ausstehend — Wartet darauf, dass ein Pastor antwortet",
+        "statusInProgress": "🟡 In Bearbeitung — Ein Pastor kümmert sich bereits",
+        "statusResolved": "🟢 Erledigt — Die Person erhielt die notwendige Unterstützung",
+        "verse": "Levai as cargas uns dos outros e assim cumprireis a lei de Cristo. — Gálatas 6:2",
         "filter_all": "Alle",
         "filter_pending": "Ausstehend",
         "filter_in_progress": "In Bearbeitung",
         "filter_resolved": "Erledigt",
-        "markInProgress": "Ich kümmere mich",
-        "markResolved": "Erledigt",
-        "resolved": "Betreut"
+        "loading": "Wird geladen...",
+        "empty": "Keine Hilfegesuche im Moment. Welch eine Erleichterung!",
+        "justNow": "Gerade eben",
+        "markInProgress": "Als in Bearbeitung markieren",
+        "markResolved": "Als erledigt markieren",
+        "resolved": "Erledigt ✓"
     },
     "profile": {
         "title": "Profil",

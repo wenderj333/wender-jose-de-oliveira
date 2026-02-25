@@ -52,7 +52,25 @@
 - **Safety**: Checks `window.gtag` before firing to prevent runtime errors
 - **TODO**: Verify OAuth method tracking (Google/Facebook logins)
 
-## Recent Accomplishments (Multi-Session Push)
+## Latest Session (2026-02-25 22:30 GMT+1) — i18n Migration Sprint
+
+### ✅ COMPLETED
+- **App.jsx UTF-8 fix**: Fixed broken emojis, removed hardcoded Portuguese, added missing i18n keys (commit `1eebdd9`)
+- **Consecration.jsx i18n**: Removed 25+ hardcoded strings, added 32 translation keys to all 8 languages
+- **Comprehensive analysis**: Analyzed all 32 JSX page files, identified ~280-320 hardcoded strings, created 4-phase migration plan
+
+### 🚨 BLOCKER
+- **npm hanging**: Final build blocked due to npm commands hanging indefinitely (system-level Node.js/npm issue)
+- **Impact**: Cannot commit Consecration changes to master yet (code is ready, just needs build)
+- **Resolution needed**: User must diagnose/fix npm environment on their machine
+
+### 📊 i18n Migration Scope
+- **Total hardcoded strings**: ~280-320 across 27 files
+- **4-phase plan**: CRITICAL (3 files, ~95 keys) → HIGH (5 files) → MEDIUM (8 files) → LOW/QA
+- **Consecration.jsx**: Phase 1 complete (pending commit after npm fix)
+- **Next priorities**: CriadorLouvor.jsx, PastorDashboard.jsx
+
+## Recent Accomplishments (Previous Sessions)
 - ✅ Multi-language auto-detection with fallback to Portuguese (7 languages)
 - ✅ Mural redesigned as Instagram-style grid (3 cols desktop, responsive mobile)
 - ✅ Mobile menu hamburger fix (nav-links--open class toggle)
