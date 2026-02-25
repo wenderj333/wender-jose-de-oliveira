@@ -417,15 +417,46 @@ export default function MuralGrid() {
       return <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
     }
     if (post.media_url && post.media_type === 'video') {
-      const videoUrl = getMediaUrl(post.media_url);
+      // Cloudinary video - use optimized streaming
+      let videoUrl = getMediaUrl(post.media_url);
+      
+      // If it's a Cloudinary URL, optimize for streaming
+      if (videoUrl && videoUrl.includes('cloudinary')) {
+        // Cloudinary adaptive streaming - get best format for mobile
+        videoUrl = videoUrl.replace('/upload/', '/upload/q_auto,vc_auto/');
+      }
+      
       console.log('📹 Playing video:', videoUrl);
       return (
-        <video 
-          src={videoUrl} 
-          controls 
-          autoPlay
-          style={{ width: '100%', height: '100%', objectFit: 'contain', background: '#000' }} 
-        />
+        <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <video 
+            key={post.id} // Force remount if post changes
+            src={videoUrl} 
+            controls 
+            preload="auto"
+            controlsList="nodownload"
+            crossOrigin="use-credentials"
+            style={{ 
+              width: '100%', 
+              height: '100%', 
+              objectFit: 'contain', 
+              maxWidth: '100%',
+              maxHeight: '100%',
+              display: 'block',
+              backgroundColor: '#000',
+            }} 
+            onError={(e) => {
+              console.error('❌ Video error:', e);
+              e.currentTarget.style.display = 'none';
+            }}
+            onLoadedMetadata={() => {
+              console.log('✅ Video metadata loaded, duration:', e.currentTarget.duration);
+            }}
+            onCanPlay={() => {
+              console.log('✅ Video ready to play');
+            }}
+          />
+        </div>
       );
     }
     if (post.media_url && isYouTube(post.media_url)) {
@@ -872,6 +903,7 @@ export default function MuralGrid() {
             <div style={{
               background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center',
               overflow: 'hidden', minHeight: '400px', position: 'relative',
+              flex: 1,
             }}>
               {renderModalMedia(selectedPost)}
             </div>
