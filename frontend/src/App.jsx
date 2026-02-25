@@ -67,11 +67,11 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) return (
       <div style={{ textAlign: 'center', padding: '3rem' }}>
-        <h2>ðŸ˜" Algo deu errado</h2>
-        <p>Tente recarregar a pÃ¡gina.</p>
+        <h2>😔 Algo deu errado</h2>
+        <p>Tente recarregar a página.</p>
         <button onClick={() => { this.setState({ hasError: false }); window.location.reload(); }}
           style={{ padding: '0.5rem 1.5rem', borderRadius: 20, border: 'none', background: 'var(--gold)', color: '#fff', cursor: 'pointer', fontWeight: 600 }}>
-          ðŸ"" Recarregar
+          🔄 Recarregar
         </button>
       </div>
     );
@@ -117,8 +117,8 @@ export default function App() {
               const notifData = await notifRes.json();
               const latest = notifData.notifications?.[0];
               if (latest && !latest.is_read) {
-                new Notification(latest.title || 'ðŸ"" Sigo com FÃ©', {
-                  body: latest.body || 'VocÃª tem uma nova notificaÃ§Ã£o!',
+                new Notification(latest.title || '🙏 Sigo com Fé', {
+                  body: latest.body || 'Você tem uma nova notificação!',
                   icon: '/logo.jpg',
                   tag: 'sigo-notif-' + latest.id,
                 });
@@ -137,7 +137,7 @@ export default function App() {
     checkUnread();
     const interval = setInterval(checkUnread, 30000);
 
-    // Heartbeat â€" update online status every 60s
+    // Heartbeat – update online status every 60s
     function sendHeartbeat() {
       fetch(`${API}/profile/heartbeat`, {
         method: 'POST', headers: { Authorization: `Bearer ${token}` },
@@ -220,9 +220,9 @@ export default function App() {
           <Link to="/kids" className={isActive('/kids')} onClick={() => setMenuOpen(false)}><Baby size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.kids')}</Link>
           <Link to="/consagracao" className={isActive('/consagracao')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔥</span>{t('nav.consecration')}</Link>
           <Link to="/jornadas" className={isActive('/jornadas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>✨</span>{t('nav.faithJourneys')}</Link>
-          <Link to="/curso-biblico" className={isActive('/curso-biblico')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>ðŸ"-</span>{t('nav.courseFree')}</Link>
-          <Link to="/curso-financas" className={isActive('/curso-financas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>ðŸ'°</span>{t('nav.courseFinance')}</Link>
-          <Link to="/curso-teologia" className={isActive('/curso-teologia')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>ðŸŽ"</span>{t('nav.courseTheology')}</Link>
+          <Link to="/curso-biblico" className={isActive('/curso-biblico')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>📘</span>{t('nav.courseFree')}</Link>
+          <Link to="/curso-financas" className={isActive('/curso-financas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>💰</span>{t('nav.courseFinance')}</Link>
+          <Link to="/curso-teologia" className={isActive('/curso-teologia')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🎓</span>{t('nav.courseTheology')}</Link>
           <Link to="/grupos" className={isActive('/grupos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4a1a8e' }} />{t('nav.groups')}</Link>
           {user && <Link to="/amigos" className={isActive('/amigos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#667eea' }} />{t('nav.friends')}</Link>}
           {user && (
@@ -232,6 +232,7 @@ export default function App() {
             <Link to="/pastor" className={isActive('/pastor')} onClick={() => setMenuOpen(false)} style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', color: '#fff', borderRadius: 12, padding: '0.4rem 0.8rem', fontWeight: 700 }}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />ðŸ›ï¸ {t('nav.pastorRoom')}</Link>
           )}
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/ofertas" className={isActive('/ofertas')} onClick={() => setMenuOpen(false)}><HandHeart size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#e74c3c' }} />{t('nav.offerings')}</Link>}
+          {/* Igrejas (map) hidden – using Igreja (register) instead */}
           {/* Igrejas (map) hidden – using Igreja (register) instead */}
           {/* <Link to="/igrejas" className={isActive('/igrejas')} onClick={() => setMenuOpen(false)}><MapPin size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Igrejas</Link> */}
           {user ? (
@@ -270,10 +271,9 @@ export default function App() {
         </button>
         <style>{`@keyframes louvorPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }`}</style>
         <button onClick={() => {
-            const shareData = { title: 'Sigo com Fe', text: t('home.shareText', 'ConheÃ§a o Sigo com FÃ©! Rede social cristÃ£.'), url: 'https://sigo-com-fe.vercel.app' };
+            const shareData = { title: t('brand'), text: t('home.shareText'), url: 'https://sigo-com-fe.vercel.app' };
           if (navigator.share) navigator.share(shareData).catch(() => {});
-          else { navigator.clipboard?.writeText(`${shareData.text}
-${shareData.url}`); alert(t('common.linkCopied', 'Link copiado! âœ…')); }
+          else { navigator.clipboard?.writeText(`${shareData.text}\n${shareData.url}`); alert(t('common.linkCopied')); }
         }} style={{
           padding: '0.3rem 0.7rem', borderRadius: 20, border: 'none',
           background: 'linear-gradient(135deg, #daa520, #f4c542)',
@@ -281,7 +281,7 @@ ${shareData.url}`); alert(t('common.linkCopied', 'Link copiado! âœ…')); }
           display: 'flex', alignItems: 'center', gap: 4,
           boxShadow: '0 2px 8px rgba(218,165,32,0.2)',
         }}>
-          📤 {t('common.share', 'Partilhar')}
+          📤 {t('common.share')}
         </button>
       </div>
 
@@ -337,7 +337,7 @@ ${shareData.url}`); alert(t('common.linkCopied', 'Link copiado! âœ…')); }
             fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer',
             boxShadow: '0 4px 12px rgba(218,165,32,0.4)',
           }}>
-            <Download size={18} /> ðŸ"² Instalar App
+            <Download size={18} /> 📲 {t('common.installApp')}
           </button>
         )}
         <p>{t('footer')} <BookOpen size={16} style={{ verticalAlign: 'middle' }} /></p>

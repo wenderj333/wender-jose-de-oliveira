@@ -28,6 +28,8 @@
         "courseFinance": "Biblical Finance",
         "courseTheology": "Theology",
         "courseFree": "Free Bible Course",
+        "pastorRoom": "Pastor Room",
+        "createWorshipAI": "AI Worship Creator",
         "popup": {
             "verse": "For where two or three gather in my name, there am I with them. Matthew 18:20",
             "joinCommunity": "Join our Christian community!",
@@ -554,7 +556,8 @@
         "beFirst": "Be the first to post!",
         "translate": "Translate",
         "translation": "Translation",
-        "hideTranslation": "Hide translation"
+        "hideTranslation": "Hide translation",
+        "installApp": "Install App"
     },
     "offerings": {
         "title": "Offerings and Tithes",

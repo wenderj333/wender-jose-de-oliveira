@@ -28,6 +28,8 @@
                 "courseFinance":  "Finanças Bíblicas",
                 "courseTheology":  "Teologia",
                 "courseFree":  "Curso Bíblico Grátis",
+                "pastorRoom":  "Sala do Pastor",
+                "createWorshipAI":  "Louvor com IA",
                 "popup":  {
                               "verse":  "Onde dois ou três estiverem reunidos em meu nome, ali estou eu no meio deles. Mateus 18:20",
                               "joinCommunity":  "Junte-se à nossa comunidade cristã!",
@@ -611,7 +613,8 @@
                    "cancel":  "Cancelar",
                    "user":  "Utilizador",
                    "noText":  "(Sem texto)",
-                   "deleteConfirm":  "Tem certeza que deseja excluir esta publicação?"
+                   "deleteConfirm":  "Tem certeza que deseja excluir esta publicação?",
+                   "installApp":  "Instalar App"
                },
     "offerings":  {
                       "title":  "Ofertas e Dízimos",

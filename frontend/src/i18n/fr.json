@@ -28,6 +28,8 @@
         "courseFinance": "Finances Bibliques",
         "courseTheology": "Théologie",
         "courseFree": "Cours Biblique Gratuit",
+        "pastorRoom": "Salle du Pasteur",
+        "createWorshipAI": "Créateur de Louange avec IA",
         "popup": {
             "verse": "Car là où deux ou trois sont assemblés en mon nom, je suis au milieu d'eux. Matthieu 18:20",
             "joinCommunity": "Rejoignez notre communauté chrétienne !",
@@ -554,7 +556,8 @@
         "beFirst": "Soyez le premier à publier !",
         "translate": "Traduire",
         "translation": "Traduction",
-        "hideTranslation": "Masquer la traduction"
+        "hideTranslation": "Masquer la traduction",
+        "installApp": "Installer l'App"
     },
     "offerings": {
         "title": "Offrandes et Dîmes",

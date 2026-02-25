@@ -28,6 +28,8 @@
         "courseFinance": "Finanțe Biblice",
         "courseTheology": "Teologie",
         "courseFree": "Curs Biblic Gratuit",
+        "pastorRoom": "Sala Pastorului",
+        "createWorshipAI": "Creator de Laudă cu IA",
         "popup": {
             "verse": "Căci unde sunt doi sau trei adunați în Numele Meu, sunt și Eu în mijlocul lor. Matei 18:20",
             "joinCommunity": "Alătură-te comunității noastre creștine!",
@@ -554,7 +556,8 @@
         "beFirst": "Fii primul care publică!",
         "translate": "Traduce",
         "translation": "Traducere",
-        "hideTranslation": "Ascunde traducerea"
+        "hideTranslation": "Ascunde traducerea",
+        "installApp": "Instalează Aplicația"
     },
     "offerings": {
         "title": "Ofrande și Zeciuieli",

@@ -1,366 +1,741 @@
 {
-  "brand": "Sigo com Fé",
-  "nav": {
-    "prayers": "Gebete",
-    "mural": "Gemeinschaftswand",
-    "live": "Live",
-    "churches": "Kirchen",
-    "registerChurch": "Kirche registrieren",
-    "kids": "Kids",
-    "dashboard": "Dashboard",
-    "hello": "Hallo, {{name}}",
-    "logout": "Abmelden",
-    "login": "Anmelden",
-    "register": "Registrieren",
-    "notifications": "Benachrichtigungen",
-    "members": "Mitglieder",
-    "groups": "Gruppen",
-    "pastoralAI": "Pastoral-KI",
-    "bibleAI": "Bibel-KI",
-    "chatPastoral": "Pastoral-Chat",
-    "friends": "Freunde",
-    "messages": "Nachrichten",
-    "consecration": "Weihe",
-    "myProfile": "Mein Profil",
-    "offerings": "Opfergaben",
-    "music": "Musik"
-  },
-  "footer": "© 2026 Sigo com Fé — Technologie im Dienst des Reiches Gottes",
-  "home": {
-    "subtitle": "Bete, vernetze dich und stärke deinen Glauben zusammen mit tausenden Geschwistern auf der ganzen Welt.",
-    "startNow": "Jetzt starten",
-    "seePrayerRequests": "Gebetsanliegen ansehen",
-    "churchPraying_one": "{{count}} Kirche betet gerade!",
-    "churchPraying_other": "{{count}} Kirchen beten gerade!",
-    "featurePrayers": "Gebetsanliegen",
-    "featurePrayersDesc": "Teile deine Anliegen und bete für andere. Entdecke die Kraft des gemeinsamen Gebets und feiere Siege!",
-    "featureLive": "Pastor betet live",
-    "featureLiveDesc": "Erfahre in Echtzeit, wenn dein Pastor betet. Gebetsblasen steigen auf wie Weihrauch zum Himmel.",
-    "featureMap": "Kirchenkarte",
-    "featureMapDesc": "Finde Kirchen in jeder Stadt. Perfekt für Reisende und umziehende Familien.",
-    "featureDashboard": "Pastoral-Dashboard",
-    "featureDashboardDesc": "Umfassende Verwaltungstools für Pastoren: Mitglieder, Finanzen, Kampagnen und vieles mehr.",
-    "featureMural": "Gemeinschaftswand",
-    "featureMuralDesc": "Teile Zeugnisse, Lob und Bibelverse mit der christlichen Gemeinschaft.",
-    "featureKids": "Kinderecke",
-    "featureKidsDesc": "Bibelgeschichten, interaktive Quiz und Aktivitäten für Kinder, um die Bibel zu entdecken!",
-    "featureChurch": "Deine Kirche registrieren",
-    "featureChurchDesc": "Registriere deine Kirche auf der Plattform und verbinde dich mit Gläubigen aus aller Welt.",
-    "explore": "Erkunden",
-    "registerBtn": "Registrieren",
-    "helpTitle": "Brauchst du Hilfe?",
-    "helpSubtitle": "Du bist nicht allein. Eine Kirche kann dir helfen.",
-    "helpSeeThings": "👁️ Ich sehe Dinge",
-    "helpHearThings": "👂 Ich höre Geräusche",
-    "helpFeelAlone": "💔 Ich fühle mich einsam",
-    "helpNeedPrayer": "🙏 Ich brauche Gebet",
-    "helpAnxious": "😰 Ich bin ängstlich",
-    "helpDepressed": "😢 Ich bin traurig/deprimiert",
-    "helpSent": "✅ Deine Anfrage wurde gesendet! Eine nahegelegene Kirche wird sich bei dir melden. Gott segne dich! 🙏",
-    "helpNamePlaceholder": "Dein Name (optional)",
-    "helpContactPlaceholder": "Telefon oder E-Mail",
-    "helpMessagePlaceholder": "Erzähl uns etwas mehr darüber, wie du dich fühlst...",
-    "helpSend": "Hilfe anfordern",
-    "helpBtn": "Hilfe anfordern",
-    "verses": [
-      { "text": "Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.", "ref": "Matthäus 18:20" },
-      { "text": "Ich vermag alles durch den, der mich stärkt, Christus.", "ref": "Philipper 4:13" },
-      { "text": "Der Herr ist mein Hirte, mir wird nichts mangeln.", "ref": "Psalm 23:1" },
-      { "text": "Vertraue auf den Herrn von ganzem Herzen und stütze dich nicht auf deinen Verstand.", "ref": "Sprüche 3:5" },
-      { "text": "Denn ich kenne die Gedanken, die ich über euch habe, Gedanken des Friedens und nicht des Unheils.", "ref": "Jeremia 29:11" },
-      { "text": "Seid stark und mutig. Fürchtet euch nicht, denn der Herr wird mit euch sein.", "ref": "Deuteronomium 31:6" },
-      { "text": "Das Gebet eines Gerechten vermag viel und bewirkt Großes.", "ref": "Jakobus 5:16" }
-    ]
-  },
-  "login": {
-    "welcomeBack": "Willkommen zurück!",
-    "email": "E-Mail",
-    "emailPlaceholder": "deine@email.com",
-    "password": "Passwort",
-    "passwordPlaceholder": "Dein Passwort",
-    "submit": "Anmelden",
-    "or": "oder",
-    "google": "Mit Google anmelden",
-    "noAccount": "Noch kein Konto?",
-    "signUp": "Registrieren"
-  },
-  "register": {
-    "joinCommunity": "Tritt der Gemeinschaft bei!",
-    "fullName": "Vollständiger Name",
-    "fullNamePlaceholder": "Dein vollständiger Name",
-    "email": "E-Mail",
-    "emailPlaceholder": "deine@email.com",
-    "password": "Passwort",
-    "passwordPlaceholder": "Mindestens 6 Zeichen",
-    "passwordError": "Das Passwort muss mindestens 6 Zeichen haben",
-    "iAm": "Ich bin:",
-    "member": "Mitglied / Gläubiger",
-    "pastor": "Pastor / Leiter",
-    "submit": "Registrieren",
-    "or": "oder",
-    "google": "Mit Google registrieren",
-    "hasAccount": "Bereits ein Konto?",
-    "signIn": "Anmelden"
-  },
-  "prayerFeed": {
-    "victoryWall": "Siegeswand",
-    "prayerRequests": "Gebetsanliegen",
-    "newRequest": "Neues Anliegen",
-    "allRequests": "Alle Anliegen",
-    "answeredPrayers": "Erhörte Gebete",
-    "newPrayerRequest": "Neues Gebetsanliegen",
-    "titleOptional": "Titel (optional)",
-    "titlePlaceholder": "Z.B.: Gebet für meine Familie",
-    "yourRequest": "Dein Anliegen *",
-    "requestPlaceholder": "Teile dein Gebetsanliegen...",
-    "category": "Kategorie",
-    "urgentRequest": "Dringendes Anliegen",
-    "submitRequest": "Anliegen einreichen",
-    "loading": "Gebete werden geladen...",
-    "noRequests": "Noch keine Gebetsanliegen. Sei der Erste!",
-    "categories": {
-      "all": "Alle",
-      "health": "Gesundheit",
-      "work_finance": "Arbeit/Finanzen",
-      "family": "Familie",
-      "studies": "Studium",
-      "housing": "Wohnen",
-      "emotional": "Emotional",
-      "decisions": "Entscheidungen",
-      "other": "Sonstiges"
-    }
-  },
-  "livePrayer": {
-    "title": "Live-Gebet",
-    "churchPraying_one": "Kirche betet",
-    "churchPraying_other": "Kirchen beten",
-    "rightNow": "gerade jetzt",
-    "closeOverlay": "Overlay schließen",
-    "immersiveView": "Immersives Gebet",
-    "pastorPanel": "Pastor-Panel",
-    "focusOptional": "Gebetsfokus (optional)",
-    "focusPlaceholder": "Z.B.: Gebet für Familien",
-    "startLive": "Live-Gebet starten",
-    "prayingLive": "Du betest live...",
-    "endPrayer": "Gebet beenden",
-    "pastorsPraying": "Pastoren, die gerade beten:",
-    "noPastors": "Kein Pastor betet gerade live.",
-    "comeBack": "Komm bald wieder!"
-  },
-  "churchMap": {
-    "title": "Kirchenkarte",
-    "searchPlaceholder": "Nach Stadt, Land oder Name suchen...",
-    "search": "Suchen",
-    "searching": "Kirchen werden gesucht...",
-    "noResults": "Keine Kirchen für \"{{query}}\" gefunden. Registriere deine!"
-  },
-  "churchRegister": {
-    "title": "Kirche registrieren",
-    "subtitle": "Registriere deine Kirche auf der Sigo com Fé Plattform",
-    "churchName": "Kirchenname *",
-    "churchNamePlaceholder": "Z.B.: Zentrale Baptistenkirche",
-    "denomination": "Konfession",
-    "denominationPlaceholder": "Z.B.: Baptistisch, Pfingstlich, usw.",
-    "address": "Adresse",
-    "addressPlaceholder": "Straße, Nummer, Stadtteil",
-    "city": "Stadt",
-    "cityPlaceholder": "Deine Stadt",
-    "country": "Land",
-    "countryPlaceholder": "Land",
-    "phone": "Telefon",
-    "phonePlaceholder": "+49 30 12345678",
-    "pastorName": "Pastorenname",
-    "pastorNamePlaceholder": "Name des verantwortlichen Pastors",
-    "submit": "Kirche registrieren",
-    "submitting": "Wird registriert...",
-    "success": "Kirche registriert!",
-    "redirecting": "Weiterleitung zur Kirchenkarte...",
-    "nameRequired": "Kirchenname ist erforderlich",
-    "loginRequired": "Du musst angemeldet sein, um eine Kirche zu registrieren.",
-    "error": "Fehler bei der Registrierung"
-  },
-  "dashboard": {
-    "title": "Dashboard",
-    "loading": "Daten werden geladen...",
-    "users": "Benutzer",
-    "churches": "Kirchen",
-    "prayerRequests": "Gebetsanliegen",
-    "answeredPrayers": "Erhörte Gebete",
-    "quickActions": "Schnellaktionen",
-    "newPrayerRequest": "Neues Gebetsanliegen",
-    "registerChurch": "Kirche registrieren",
-    "kidsCorner": "Kinderecke",
-    "recentActivity": "Letzte Aktivität",
-    "requestedPrayer": "hat um Gebet gebeten:",
-    "noActivity": "Keine Aktivität. Erstelle ein Gebetsanliegen!",
-    "viewAll": "Alle Anliegen ansehen"
-  },
-  "mural": {
-    "title": "Gemeinschaftswand",
-    "subtitle": "Teile Zeugnisse, Lob und Bibelverse mit der christlichen Gemeinschaft",
-    "newPost": "Neuer Beitrag",
-    "cancel": "Abbrechen",
-    "shareWithCommunity": "Mit der Gemeinschaft teilen",
-    "categoryLabel": "Kategorie",
-    "message": "Nachricht",
-    "messagePlaceholder": "Schreibe dein Zeugnis, deine Reflexion oder deinen Bibelvers...",
-    "publish": "Veröffentlichen",
-    "noPostsFound": "Keine Beiträge in dieser Kategorie gefunden.",
-    "filters": {
-      "all": "Alle",
-      "myChurch": "Meine Kirche",
-      "testimonies": "Zeugnisse",
-      "worship": "Lobpreis",
-      "verses": "Verse"
+    "brand": "Sigo com Fé",
+    "nav": {
+        "prayers": "Gebete",
+        "mural": "Pinnwand",
+        "live": "Live",
+        "churches": "Kirchen",
+        "registerChurch": "Kirche registrieren",
+        "kids": "Kids",
+        "helpRequests": "Hilfegesuche",
+        "dashboard": "Dashboard",
+        "hello": "Hallo, {{name}}",
+        "logout": "Abmelden",
+        "login": "Anmelden",
+        "register": "Registrieren",
+        "chatPastoral": "Seelsorge-Chat",
+        "pastoralAI": "Seelsorge-KI",
+        "friends": "Freunde",
+        "bibleAI": "Bibel-KI",
+        "messages": "Nachrichten",
+        "groups": "Gruppen",
+        "consecration": "Weihe",
+        "members": "Mitglieder",
+        "offerings": "Gaben",
+        "notifications": "Benachrichtigungen",
+        "myProfile": "Mein Profil",
+        "music": "Musik",
+        "courseFinance": "Biblische Finanzen",
+        "courseTheology": "Theologie",
+        "courseFree": "Kostenloser Bibelkurs",
+        "createWorshipAI": "KI-Lobpreis erstellen",
+        "faithJourneys": "Glaubensreisen",
+        "pastorRoom": "🏛️ Pastorenraum",
+        "popup": {
+            "verse": "Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen. Matthäus 18:20",
+            "joinCommunity": "Treten Sie unserer christlichen Gemeinschaft bei!",
+            "bullet1": "Zusammen beten",
+            "bullet2": "Zeugnisse teilen",
+            "bullet3": "Kirchen finden",
+            "bullet4": "Mit Gläubigen verbinden",
+            "registerBtn": "Kostenlos registrieren",
+            "signInBtn": "Ich habe ein Konto - Anmelden"
+        }
     },
-    "categories": {
-      "testemunho": "Zeugnis",
-      "louvor": "Lobpreis / Video",
-      "reflexao": "Biblische Reflexion",
-      "versiculo": "Bibelvers",
-      "foto": "Foto"
+    "footer": "© 2026 Sigo com Fé - Technologie im Dienst des Reiches Gottes",
+    "home": {
+        "subtitle": "Bete, verbinde dich und stärke deinen Glauben mit Tausenden von Geschwistern auf der ganzen Welt.",
+        "exploreFeatures": "Erkunde die Hauptfunktionen",
+        "recentTestimonies": "Aktuelle Zeugnisse",
+        "daysAgo": "Vor ein paar Tagen",
+        "liveNow": "Jetzt Live",
+        "live": "LIVE",
+        "whyChoose": "Warum Sigo com Fé wählen?",
+        "shareText": "Entdecke Sigo com Fé! Christliches soziales Netzwerk.",
+        "global": "Globale Gemeinschaft",
+        "globalDesc": "Verbinde dich mit Christen aus der ganzen Welt",
+        "secure": "Sicher und privat",
+        "secureDesc": "Deine Daten sind immer geschützt",
+        "free": "Völlig kostenlos",
+        "freeDesc": "Voller Zugriff ohne versteckte Kosten",
+        "mobile": "Mobil-First",
+        "mobileDesc": "Funktioniert perfekt auf deinem Handy",
+        "forPastors": "Für Pastoren",
+        "forPastorsDesc": "Umfassende Werkzeuge zur Verwaltung deiner Gemeinde, Finanzen, Kampagnen und mehr.",
+        "features": {
+            "prayers": "🙏 Gebete",
+            "live": "🔴 Live",
+            "pastoral": "💬 Seelsorge-Chat",
+            "biblicalAI": "📖 Bibel-KI",
+            "music": "🎵 Musik",
+            "consecration": "🔥 Weihe",
+            "groups": "👥 Gruppen",
+            "mural": "📸 Pinnwand"
+        },
+        "startNow": "Jetzt starten",
+        "seePrayerRequests": "Gebetsanliegen ansehen",
+        "churchPraying_one": "{{count}} Kirche betet gerade!",
+        "churchPraying_other": "{{count}} Kirchen beten gerade!",
+        "featurePrayers": "Gebetsanliegen",
+        "featurePrayersDesc": "Teile deine Anliegen und bete für deine Geschwister. Erlebe die Kraft des gemeinsamen Gebets und feiere die Siege!",
+        "featureLive": "Pastor betet live",
+        "featureLiveDesc": "Erfahre, wenn dein Pastor in Echtzeit betet. Gebetsblasen steigen wie Weihrauch zum Himmel auf.",
+        "featureMap": "Kirchenkarte",
+        "featureMapDesc": "Finde Kirchen in jeder Stadt. Perfekt für Reisende und Familien im Umzug.",
+        "featureDashboard": "Pastoral-Dashboard",
+        "featureDashboardDesc": "Umfassende Verwaltungstools für Pastoren: Mitglieder, Finanzen, Kampagnen und vieles mehr.",
+        "featureMural": "Gemeinde-Pinnwand",
+        "featureMuralDesc": "Teile Zeugnisse, Lobpreis und Bibelverse mit der christlichen Gemeinschaft.",
+        "featureKids": "Kinderecke",
+        "featureKidsDesc": "Bibelgeschichten, interaktive Quizze und Aktivitäten für Kinder, um die Bibel kennenzulernen!",
+        "featureChurch": "Registriere deine Kirche",
+        "featureChurchDesc": "Registriere deine Kirche auf der Plattform und verbinde dich mit Gläubigen aus der ganzen Welt.",
+        "explore": "Entdecken",
+        "registerBtn": "Registrieren",
+        "helpTitle": "Brauchst du Hilfe?",
+        "helpSubtitle": "Du bist nicht allein. Eine Kirche kann dir helfen.",
+        "helpSeeThings": "👁️ Ich sehe Dinge",
+        "helpHearThings": "👂 Ich höre Geräusche",
+        "helpFeelAlone": "😔 Ich fühle mich allein",
+        "helpNeedPrayer": "🙏 Ich brauche Gebet",
+        "helpAnxious": "😰 Ich bin ängstlich",
+        "helpDepressed": "😢 Ich bin traurig/deprimiert",
+        "helpSent": "✅ Dein Anliegen wurde gesendet! Eine Kirche in deiner Nähe wird sich mit dir in Verbindung setzen. Gott segne dich! 🙏",
+        "helpNamePlaceholder": "Dein Name (optional)",
+        "helpContactPlaceholder": "Telefon oder E-Mail für Kontakt",
+        "helpMessagePlaceholder": "Erzähle uns etwas mehr darüber, wie du dich fühlst...",
+        "helpSend": "Um Hilfe bitten",
+        "helpBtn": "Um Hilfe bitten",
+        "verses": [
+            {
+                "text": "Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.",
+                "ref": "Matthäus 18:20"
+            },
+            {
+                "text": "Ich vermag alles durch den, der mich stark macht.",
+                "ref": "Philipper 4:13"
+            },
+            {
+                "text": "Der Herr ist mein Hirte; mir wird nichts mangeln.",
+                "ref": "Psalm 23:1"
+            },
+            {
+                "text": "Vertraue auf den Herrn von ganzem Herzen und verlass dich nicht auf deinen Verstand.",
+                "ref": "Sprüche 3:5"
+            },
+            {
+                "text": "Denn ich weiß, was für Gedanken ich über euch habe, Gedanken des Friedens und nicht des Leids, euch eine Zukunft und eine Hoffnung zu geben.",
+                "ref": "Jeremia 29:11"
+            },
+            {
+                "text": "Seid stark und mutig. Fürchtet euch nicht, denn der Herr, euer Gott, wird mit euch sein.",
+                "ref": "5. Mose 31:6"
+            },
+            {
+                "text": "Das Gebet eines Gerechten vermag viel und ist wirksam.",
+                "ref": "Jakobus 5:16"
+            }
+        ]
+    },
+    "login": {
+        "welcomeBack": "Willkommen zurück!",
+        "email": "E-Mail",
+        "emailPlaceholder": "deine@email.com",
+        "password": "Passwort",
+        "passwordPlaceholder": "Dein Passwort",
+        "submit": "Anmelden",
+        "or": "oder",
+        "google": "Mit Google anmelden",
+        "facebook": "Mit Facebook anmelden",
+        "phone": "Mit Telefon anmelden",
+        "phoneNumber": "Telefonnummer",
+        "sendCode": "Code senden",
+        "verifyCode": "Code überprüfen",
+        "codeSent": "Code gesendet!",
+        "codePlaceholder": "6-stelliger Code",
+        "noAccount": "Noch kein Konto?",
+        "signUp": "Registrieren"
+    },
+    "register": {
+        "joinCommunity": "Tritt dem christlichen sozialen Netzwerk bei!",
+        "fullName": "Vollständiger Name",
+        "fullNamePlaceholder": "Dein vollständiger Name",
+        "email": "E-Mail",
+        "emailPlaceholder": "deine@email.com",
+        "password": "Passwort",
+        "passwordPlaceholder": "Mindestens 6 Zeichen",
+        "passwordError": "Das Passwort muss mindestens 6 Zeichen haben",
+        "iAm": "Ich bin:",
+        "member": "Mitglied / Gläubiger",
+        "pastor": "Pastor / Leiter",
+        "submit": "Registrieren",
+        "or": "oder",
+        "google": "Mit Google registrieren",
+        "facebook": "Mit Facebook registrieren",
+        "phone": "Mit Telefon registrieren",
+        "hasAccount": "Bereits ein Konto?",
+        "signIn": "Anmelden",
+        "addPhoto": "Foto hinzufügen"
+    },
+    "prayerFeed": {
+        "victoryWall": "Siegeswand",
+        "prayerRequests": "Gebetsanliegen",
+        "newRequest": "Neues Anliegen",
+        "allRequests": "Alle Anliegen",
+        "answeredPrayers": "Erhörte Gebete",
+        "newPrayerRequest": "Neues Gebetsanliegen",
+        "titleOptional": "Titel (optional)",
+        "titlePlaceholder": "Z.B.: Gebet für meine Familie",
+        "yourRequest": "Dein Anliegen *",
+        "requestPlaceholder": "Teile dein Gebetsanliegen...",
+        "category": "Kategorie",
+        "urgentRequest": "Dringendes Anliegen",
+        "submitRequest": "Anliegen senden",
+        "loading": "Gebete werden geladen...",
+        "noRequests": "Noch keine Gebetsanliegen. Sei der Erste!",
+        "categories": {
+            "all": "Alle",
+            "health": "Gesundheit",
+            "work_finance": "Arbeit/Finanzen",
+            "family": "Familie",
+            "studies": "Studium",
+            "housing": "Wohnung",
+            "emotional": "Emotional",
+            "decisions": "Entscheidungen",
+            "other": "Sonstiges"
+        }
+    },
+    "livePrayer": {
+        "title": "Live-Gebet",
+        "churchPraying_one": "Kirche betet",
+        "churchPraying_other": "Kirchen beten",
+        "rightNow": "gerade jetzt",
+        "closeOverlay": "Overlay schließen",
+        "immersiveView": "Immersives Gebet ansehen",
+        "pastorPanel": "Pastor-Panel",
+        "focusOptional": "Gebetsfokus (optional)",
+        "focusPlaceholder": "Z.B.: Gebet für Familien",
+        "startLive": "Live-Gebet starten",
+        "prayingLive": "Du betest live...",
+        "endPrayer": "Gebet beenden",
+        "pastorsPraying": "Pastoren beten jetzt:",
+        "noPastors": "Kein Pastor betet gerade live.",
+        "comeBack": "Komm bald wieder!"
+    },
+    "churchMap": {
+        "title": "Kirchenkarte",
+        "searchPlaceholder": "Nach Stadt, Land oder Name suchen...",
+        "search": "Suchen",
+        "searching": "Kirchen werden gesucht...",
+        "noResults": "Keine Kirchen gefunden für \"{{query}}\". Registriere deine!"
+    },
+    "churchRegister": {
+        "title": "Kirche registrieren",
+        "subtitle": "Registriere deine Kirche auf der Sigo com Fé Plattform",
+        "churchName": "Name der Kirche *",
+        "churchNamePlaceholder": "Z.B.: Zentrale Baptistengemeinde",
+        "denomination": "Konfession",
+        "denominationPlaceholder": "Z.B.: Baptisten, Pfingstgemeinde, etc.",
+        "address": "Adresse",
+        "addressPlaceholder": "Straße, Hausnummer, Stadtteil",
+        "city": "Stadt",
+        "cityPlaceholder": "Deine Stadt",
+        "country": "Land",
+        "countryPlaceholder": "Land",
+        "phone": "Telefon",
+        "phonePlaceholder": "+55 11 99999-9999",
+        "pastorName": "Name des Pastors",
+        "pastorNamePlaceholder": "Name des verantwortlichen Pastors",
+        "submit": "Kirche registrieren",
+        "submitting": "Wird registriert...",
+        "success": "Kirche registriert!",
+        "redirecting": "Weiterleitung zur Kirchenkarte...",
+        "nameRequired": "Der Name der Kirche ist erforderlich",
+        "loginRequired": "Du musst angemeldet sein, um eine Kirche zu registrieren.",
+        "error": "Fehler bei der Registrierung"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "loading": "Daten werden geladen...",
+        "users": "Benutzer",
+        "churches": "Kirchen",
+        "prayerRequests": "Gebetsanliegen",
+        "answeredPrayers": "Erhörte Gebete",
+        "quickActions": "Schnellaktionen",
+        "newPrayerRequest": "Neues Gebetsanliegen",
+        "registerChurch": "Kirche registrieren",
+        "kidsCorner": "Kinderecke",
+        "recentActivity": "Letzte Aktivitäten",
+        "requestedPrayer": "bat um Gebet:",
+        "noActivity": "Keine aktuellen Aktivitäten. Erstelle ein Gebetsanliegen!",
+        "viewAll": "Alle Anliegen ansehen"
+    },
+    "mural": {
+        "title": "Gemeinde-Pinnwand",
+        "subtitle": "Teile Zeugnisse, Lobpreis und Bibelverse mit der christlichen Gemeinschaft",
+        "newPost": "Neuer Beitrag",
+        "cancel": "Abbrechen",
+        "shareWithCommunity": "Mit der Gemeinschaft teilen",
+        "categoryLabel": "Kategorie",
+        "message": "Nachricht",
+        "messagePlaceholder": "Schreibe dein Zeugnis, deine Reflexion oder einen Bibelvers...",
+        "publish": "Veröffentlichen",
+        "noPostsFound": "Keine Beiträge in dieser Kategorie gefunden.",
+        "filters": {
+            "all": "Alle",
+            "myChurch": "Meine Kirche",
+            "testimonies": "Zeugnisse",
+            "worship": "Lobpreis",
+            "verses": "Bibelverse"
+        },
+        "categories": {
+            "testemunho": "Zeugnis",
+            "louvor": "Lobpreis / Video",
+            "reflexao": "Biblische Reflexion",
+            "versiculo": "Bibelvers",
+            "foto": "Foto"
+        }
+    },
+    "kids": {
+        "title": "Digitale Sonntagsschule",
+        "subtitle": "Lerne die Bibel auf unterhaltsame Weise kennen!",
+        "bibleStories": "Bibelgeschichten",
+        "readStory": "Geschichte lesen",
+        "years": "Jahre",
+        "bibleQuiz": "Bibel-Quiz",
+        "question": "Frage {{current}} von {{total}}",
+        "congrats": "Herzlichen Glückwunsch!",
+        "scoreResult": "Du hast <strong>{{score}}</strong> von <strong>{{total}}</strong> richtig!",
+        "perfect": "Perfekt! Du bist ein Bibel-Champion!",
+        "good": "Sehr gut! Lerne weiter!",
+        "tryAgain": "Gib nicht auf! Versuch es nochmal!",
+        "playAgain": "Nochmal spielen",
+        "weekVerse": "Vers der Woche",
+        "weekVerseText": "Denn so sehr hat Gott die Welt geliebt, dass er seinen eingeborenen Sohn gab, damit jeder, der an ihn glaubt, nicht verloren geht, sondern ewiges Leben hat.",
+        "weekVerseRef": "- Johannes 3:16",
+        "memorized": "Auswendig gelernt!",
+        "memorize": "Ich habe es auswendig gelernt!",
+        "activities": "Aktivitäten",
+        "comingSoon": "Demnächst!",
+        "stories": [
+            {
+                "title": "David und Goliath",
+                "desc": "Ein mutiger Junge, der einen Riesen mit einem Stein und großem Glauben an Gott besiegte",
+                "age": "6-8"
+            },
+            {
+                "title": "Die Arche Noah",
+                "desc": "Noah baute ein riesiges Boot und rettete alle Tiere vor der großen Flut",
+                "age": "3-5"
+            },
+            {
+                "title": "Jona und der Wal",
+                "desc": "Jona floh vor Gott, lernte aber, dass Er überall ist",
+                "age": "6-8"
+            },
+            {
+                "title": "Daniel in der Löwengrube",
+                "desc": "Daniel betete im Glauben und Gott verschloss den Löwen das Maul",
+                "age": "9-12"
+            },
+            {
+                "title": "Mose und das Rote Meer",
+                "desc": "Gott teilte das Meer, damit sein Volk sicher hindurchziehen konnte",
+                "age": "6-8"
+            }
+        ],
+        "quiz": [
+            {
+                "q": "Wer besiegte den Riesen Goliath?",
+                "opts": ["Saul", "David", "Mose", "Josua"]
+            },
+            {
+                "q": "Wie viele Tage dauerte die Sintflut?",
+                "opts": ["10 Tage", "20 Tage", "40 Tage", "100 Tage"]
+            },
+            {
+                "q": "Wer wurde in die Löwengrube geworfen?",
+                "opts": ["Jona", "Daniel", "Paulus", "Petrus"]
+            },
+            {
+                "q": "Welches ist das erste Buch der Bibel?",
+                "opts": ["Exodus", "Psalmen", "Genesis", "Matthäus"]
+            },
+            {
+                "q": "In welcher Stadt wurde Jesus geboren?",
+                "opts": ["Jerusalem", "Nazareth", "Bethlehem", "Kapernaum"]
+            }
+        ],
+        "activityList": [
+            {
+                "title": "Ausmalen",
+                "desc": "Male biblische Figuren mit schönen Farben aus"
+            },
+            {
+                "title": "Wortsuche",
+                "desc": "Finde versteckte Bibelwörter"
+            },
+            {
+                "title": "Memory-Spiel",
+                "desc": "Finde die passenden Paare der 12 Apostel"
+            },
+            {
+                "title": "Puzzle",
+                "desc": "Setze erstaunliche Bibelszenen zusammen"
+            }
+        ]
+    },
+    "feedPost": {
+        "tapToWatch": "Tippe zum Ansehen",
+        "photo": "Foto",
+        "amem": "Amen",
+        "share": "Teilen"
+    },
+    "prayerCard": {
+        "urgent": "DRINGEND",
+        "testimony": "Zeugnis:",
+        "personPraying_one": "{{count}} Person betet",
+        "personPraying_other": "{{count}} Personen beten",
+        "timeAgo": {
+            "min": "vor {{count}}Min",
+            "hour": "vor {{count}}Std",
+            "day": "vor {{count}}T"
+        },
+        "categories": {
+            "health": "Gesundheit",
+            "work_finance": "Arbeit/Finanzen",
+            "family": "Familie",
+            "studies": "Studium",
+            "housing": "Wohnung",
+            "emotional": "Emotional",
+            "decisions": "Entscheidungen",
+            "other": "Sonstiges"
+        }
+    },
+    "amemButton": {
+        "praying": "Ich bete!",
+        "prayForYou": "Ich bete für dich"
+    },
+    "pastorOverlay": {
+        "title": "Pastoren beten live",
+        "churchesInPrayer_one": "{{count}} Kirche betet gerade",
+        "churchesInPrayer_other": "{{count}} Kirchen beten gerade",
+        "close": "Schließen"
+    },
+    "churchPin": {
+        "pastor": "Pastor {{name}}",
+        "members": "{{count}} Mitglieder",
+        "following": "Folge ich",
+        "follow": "Folgen",
+        "directions": "Route planen",
+        "share": "Teilen",
+        "shareText": "Entdecke {{name}} auf Sigo com Fé!"
+    },
+    "langSwitcher": {
+        "label": "Sprache"
+    },
+    "pastorChat": {
+        "title": "Seelsorge-Chat",
+        "subtitle": "Sprich direkt mit einem Pastor. Automatische Übersetzung inklusive.",
+        "yourName": "Dein Name",
+        "selectHelp": "Was brauchst du?",
+        "selectLanguage": "Deine Sprache",
+        "startChat": "Gespräch starten",
+        "anyChurch": "Jede verfügbare Kirche",
+        "waiting": "Warte auf einen Pastor...",
+        "waitingDesc": "Ein Pastor wird bald dem Gespräch beitreten. Hab Glauben!",
+        "imPastor": "Ich bin Pastor",
+        "imPerson": "Ich brauche Hilfe",
+        "waitingRooms": "Wartende Personen",
+        "noWaiting": "Niemand wartet gerade.",
+        "joinChat": "Antworten",
+        "pastorName": "Dein Name (Pastor)",
+        "endChat": "Gespräch beenden",
+        "chatEnded": "Gespräch beendet. Gott segne dich!",
+        "typeMessage": "Schreibe deine Nachricht...",
+        "send": "Senden",
+        "typing": "schreibt...",
+        "translated": "Übersetzung",
+        "joinedChat": "ist dem Gespräch beigetreten",
+        "leftChat": "hat das Gespräch verlassen",
+        "langPt": "Português",
+        "langEn": "English",
+        "langEs": "Español",
+        "langDe": "Deutsch",
+        "autoTranslate": "🌐 Automatische Übersetzung aktiviert"
+    },
+    "friends": {
+        "title": "Freunde",
+        "search": "Suchen",
+        "myFriends": "Meine Freunde",
+        "requests": "Anfragen",
+        "addFriend": "Hinzufügen",
+        "pending": "Ausstehend",
+        "accept": "Annehmen",
+        "reject": "Ablehnen",
+        "removeFriend": "Entfernen",
+        "noFriends": "Du hast noch keine Freunde. Suche nach Personen, um dich zu verbinden!",
+        "noRequests": "Keine ausstehenden Freundschaftsanfragen.",
+        "searchPlaceholder": "Nach Name suchen...",
+        "requestSent": "Freundschaftsanfrage gesendet!",
+        "friendAdded": "Freundschaft angenommen!",
+        "friendRemoved": "Freund entfernt."
+    },
+    "helpRequests": {
+        "title": "Hilfegesuche",
+        "subtitle": "Menschen, die geistliche Unterstützung und Gebet brauchen. Antworte mit Liebe.",
+        "loading": "Wird geladen...",
+        "empty": "Keine Hilfegesuche im Moment. Gott sei Dank!",
+        "justNow": "gerade eben",
+        "filter_all": "Alle",
+        "filter_pending": "Ausstehend",
+        "filter_in_progress": "In Bearbeitung",
+        "filter_resolved": "Erledigt",
+        "markInProgress": "Ich kümmere mich",
+        "markResolved": "Erledigt",
+        "resolved": "Betreut"
+    },
+    "profile": {
+        "title": "Profil",
+        "memberSince": "Mitglied seit",
+        "editProfile": "Profil bearbeiten",
+        "prayers": "Gebete",
+        "posts": "Beiträge",
+        "friends": "Freunde",
+        "bio": "Über mich",
+        "noBio": "Noch keine Bio",
+        "save": "Speichern",
+        "cancel": "Abbrechen",
+        "addPhotoPrompt": "Füge ein Foto zu deinem Profil hinzu!",
+        "addPhotoDesc": "Tippe hier, um dein Profil mit einem Foto zu personalisieren.",
+        "addFriend": "Hinzufügen",
+        "pendingFriend": "Ausstehend",
+        "acceptFriend": "Annehmen",
+        "rejectFriend": "Ablehnen"
+    },
+    "messages": {
+        "title": "Nachrichten",
+        "noConversations": "Noch keine Gespräche",
+        "whenSomeone": "Wenn dir jemand eine Nachricht schickt, erscheint sie hier!",
+        "noMessages": "Noch keine Nachrichten",
+        "writePlaceholder": "Schreibe deine Nachricht...",
+        "loading": "Wird geladen...",
+        "back": "Zurück"
+    },
+    "groups": {
+        "title": "Gruppen",
+        "createGroup": "Gruppe erstellen",
+        "newGroup": "Neue Gruppe erstellen",
+        "groupName": "Gruppenname",
+        "description": "Beschreibung (optional)",
+        "public": "Öffentlich",
+        "private": "Privat",
+        "creating": "Wird erstellt...",
+        "cancel": "Abbrechen",
+        "noGroups": "Noch keine Gruppen",
+        "createFirst": "Erstelle die erste Gemeindegruppe!",
+        "members": "Mitglieder",
+        "join": "Gruppe beitreten",
+        "leave": "Gruppe verlassen",
+        "noPosts": "Noch keine Beiträge",
+        "writePlaceholder": "Schreibe in der Gruppe...",
+        "back": "Zurück"
+    },
+    "consecration": {
+        "title": "Weihe",
+        "subtitle": "Fasten und Gebet - stärke deinen Glauben",
+        "totalConsecrations": "Gesamte Weihen",
+        "fastingToday": "Fasten heute",
+        "imConsecrating": "Ich weihe mich",
+        "consecrating": "Weihe läuft...",
+        "benefits": "Vorteile des Fastens",
+        "consecratingNow": "Weihe jetzt",
+        "noOneYet": "Noch niemand in der Weihe. Sei der Erste!",
+        "loginRequired": "Melde dich an, um dich zu weihen!",
+        "conclusion": "Das Fasten: Es ist keine Diät. Es ist kein leeres Opfer. Es ist Gehorsam, Ausrichtung und Abhängigkeit von Gott."
+    },
+    "notifications": {
+        "title": "Benachrichtigungen",
+        "markAllRead": "Alle als gelesen markieren",
+        "noNotifications": "Keine Benachrichtigungen vorhanden.",
+        "flaggedPost": "Gemeldeter Beitrag"
+    },
+    "common": {
+        "loading": "Wird geladen...",
+        "send": "Senden",
+        "save": "Speichern",
+        "delete": "Löschen",
+        "edit": "Bearbeiten",
+        "close": "Schließen",
+        "confirm": "Bestätigen",
+        "loginToLike": "Melde dich an, um zu liken!",
+        "loginToComment": "Melde dich an, um zu kommentieren!",
+        "linkCopied": "Link kopiert!",
+        "share": "Teilen",
+        "comment": "Kommentieren",
+        "report": "Melden",
+        "reportConfirm": "Diesen Beitrag als unangemessen melden?",
+        "reported": "Beitrag gemeldet! Die Moderatoren werden ihn überprüfen.",
+        "writeComment": "Schreibe einen Kommentar...",
+        "publish": "Veröffentlichen",
+        "publishing": "Wird gesendet...",
+        "shareCommunity": "Teile etwas mit der Gemeinschaft...",
+        "noPostsYet": "Noch keine Beiträge.",
+        "beFirst": "Sei der Erste, der etwas veröffentlicht!",
+        "translate": "Übersetzen",
+        "translation": "Übersetzung",
+        "hideTranslation": "Übersetzung ausblenden",
+        "remove": "Entfernen",
+        "cancel": "Abbrechen",
+        "user": "Benutzer",
+        "noText": "(Kein Text)",
+        "deleteConfirm": "Bist du sicher, dass du diesen Beitrag löschen möchtest?",
+        "installApp": "App installieren"
+    },
+    "testimonies": {
+        "demo1": "Ich fand Frieden und Gemeinschaft auf dieser Plattform. Meine Gebete wurden erhört und beantwortet.",
+        "demo2": "Die Bibel-KI hat mir geholfen, die Schriften besser zu verstehen und meinen Glauben täglich zu stärken.",
+        "demo3": "Ich fand meine Ortskirche und bin jetzt aktives Mitglied der christlichen Online- und Präsenzgemeinde."
+    },
+    "media": {
+        "photo": "Foto",
+        "video": "Video",
+        "audio": "Audio",
+        "url": "URL",
+        "urlPrompt": "Füge die URL ein (YouTube, Vimeo, etc):",
+        "urlPlaceholder": "Füge die YouTube- oder Video-URL ein...",
+        "clearUrl": "URL löschen",
+        "youtubePreview": "YouTube (Vorschau nicht verfügbar)"
+    },
+    "time": {
+        "now": "Gerade eben",
+        "minAgo": "Vor {{count}}min",
+        "hoursAgo": "Vor {{count}}h",
+        "daysAgo": "Vor {{count}}d"
+    },
+    "mural": {
+        "testimony": "🙏 Zeugnis",
+        "worship": "🎵 Lobpreis",
+        "photo": "📸 Foto/Video",
+        "verse": "📖 Bibelvers",
+        "reflection": "💭 Reflexion",
+        "campaign": "💝 Kampagne / Anliegen",
+        "placeholder": "Teile etwas mit der Gemeinschaft...",
+        "publish": "Veröffentlichen",
+        "noPosts": "Noch keine Beiträge. Sei der Erste, der etwas veröffentlicht! 📸",
+        "commentPlaceholder": "Schreibe einen Kommentar..."
+    },
+    "offerings": {
+        "title": "Gaben und Zehnten",
+        "notPastor": "Um beizutragen, kontaktiere den Pastor deiner Kirche.",
+        "configure": "Konfigurieren",
+        "records": "Aufzeichnungen",
+        "pixKey": "PIX-Schlüssel (CPF, E-Mail, Telefon oder Zufällig)",
+        "pixKeyPlaceholder": "Dein PIX-Schlüssel",
+        "pixName": "Name des Kontoinhabers",
+        "pixNamePlaceholder": "Name, der bei PIX angezeigt wird",
+        "paypalEmail": "PayPal E-Mail",
+        "bank": "Bank",
+        "agency": "Filiale",
+        "account": "Konto",
+        "holder": "Inhaber",
+        "holderPlaceholder": "Name des Kontoinhabers",
+        "bankTransfer": "Banküberweisung",
+        "messageToMembers": "Nachricht an die Mitglieder",
+        "messagePlaceholder": "Gott segne deine Gabe!",
+        "save": "Einstellungen speichern",
+        "saving": "Wird gespeichert...",
+        "saved": "Gespeichert!",
+        "thisMonth": "Diesen Monat",
+        "totalGeneral": "Gesamtsumme",
+        "contributions": "Beiträge",
+        "noContributions": "Noch keine Beiträge verzeichnet",
+        "tithe": "Zehnter",
+        "offering": "Gabe"
+    },
+    "music": {
+        "title": "Gospel-Musik",
+        "subtitle": "Lobpreis und Anbetung 100% kostenlos",
+        "worship": "Lobpreis & Anbetung",
+        "hymns": "Klassische Hymnen",
+        "instrumental": "Instrumental",
+        "kids": "Kids Gospel",
+        "prayer": "Gebetsmusik",
+        "favorites": "Favoriten",
+        "noFavorites": "Noch keine Favoriten",
+        "tapHeart": "Tippe auf ❤️ um Lieder zu speichern",
+        "freeSources": "Mehr kostenlose Musik"
+    },
+    "courseFinance": {
+        "title": "Biblische Finanzen",
+        "description": "Lerne, deine Finanzen nach biblischen Prinzipien zu verwalten",
+        "topics": "Zehnter, Gaben, Sparen, Investitionen, Schulden, Wohlstand"
+    },
+    "courseTheology": {
+        "title": "Theologiekurs",
+        "description": "Vertiefe dein theologisches Wissen",
+        "topics": "Christologie, Soteriologie, Ekklesiologie, Eschatologie, Pneumatologie, Hermeneutik"
+    },
+    "media": {
+        "photo": "Foto",
+        "video": "Video",
+        "audio": "Audio",
+        "url": "URL",
+        "urlPrompt": "URL einfügen (YouTube, Vimeo, etc):",
+        "urlPlaceholder": "YouTube-URL oder anderes Video einfügen...",
+        "clearUrl": "URL löschen",
+        "youtubePreview": "YouTube (Vorschau nicht verfügbar)"
+    },
+    "time": {
+        "now": "Jetzt",
+        "minAgo": "vor {{count}}min",
+        "hoursAgo": "vor {{count}}h",
+        "daysAgo": "vor {{count}}d"
+    },
+    "home": {
+        "verses": [
+            {
+                "text": "Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.",
+                "ref": "Matthäus 18:20"
+            },
+            {
+                "text": "Ich vermag alles durch den, der mich stark macht.",
+                "ref": "Philipper 4:13"
+            },
+            {
+                "text": "Der Herr ist mein Hirte; mir wird nichts mangeln.",
+                "ref": "Psalm 23:1"
+            },
+            {
+                "text": "Vertraue auf den Herrn von ganzem Herzen und verlass dich nicht auf deinen Verstand.",
+                "ref": "Sprüche 3:5"
+            },
+            {
+                "text": "Denn ich weiß, welche Gedanken ich für euch habe, spricht der Herr.",
+                "ref": "Jeremia 29:11"
+            },
+            {
+                "text": "Sei stark und mutig, fürchte dich nicht, denn der Herr ist mit dir.",
+                "ref": "Deuteronomium 31:6"
+            },
+            {
+                "text": "Das Gebet eines Gerechten vermag viel.",
+                "ref": "Jakobus 5:16"
+            }
+        ]
+    },
+    "mural": {
+        "testimony": "🙏 Zeugnis",
+        "worship": "🎵 Lobpreis",
+        "photo": "📸 Foto/Video",
+        "verse": "📖 Bibelvers",
+        "reflection": "💭 Überlegung",
+        "campaign": "💝 Kampagne / Anliegen",
+        "placeholder": "Teile etwas mit der Gemeinde...",
+        "publish": "Veröffentlichen",
+        "noPosts": "Noch keine Beiträge. Sei der Erste, der postet! 📸",
+        "commentPlaceholder": "Schreib einen Kommentar...",
+        "confirmDelete": "Bist du sicher, dass du diesen Beitrag löschen möchtest?",
+        "delete": "Beitrag löschen"
     }
-  },
-  "kids": {
-    "title": "Digitale Sonntagsschule",
-    "subtitle": "Lerne die Bibel auf spielerische Weise kennen!",
-    "bibleStories": "Bibelgeschichten",
-    "readStory": "Geschichte lesen",
-    "years": "Jahre",
-    "bibleQuiz": "Bibelquiz",
-    "question": "Frage {{current}} von {{total}}",
-    "congrats": "Herzlichen Glückwunsch!",
-    "scoreResult": "Du hast <strong>{{score}}</strong> von <strong>{{total}}</strong> erraten!",
-    "perfect": "Perfekt! Du bist ein Bibelchampion!",
-    "good": "Sehr gut! Lerne weiter!",
-    "tryAgain": "Nicht aufgeben! Versuche es erneut!",
-    "playAgain": "Erneut spielen",
-    "weekVerse": "Vers der Woche",
-    "weekVerseText": "Denn so sehr hat Gott die Welt geliebt, dass er seinen eingeborenen Sohn gab, damit jeder, der an ihn glaubt, nicht verloren geht, sondern ewiges Leben hat.",
-    "weekVerseRef": "— Johannes 3:16",
-    "memorized": "Auswendig gelernt!",
-    "memorize": "Ich habe es gelernt!",
-    "activities": "Aktivitäten",
-    "comingSoon": "Demnächst!",
-    "stories": [
-      { "title": "David und Goliath", "desc": "Ein mutiger Junge, der einen Riesen mit einem Stein und großem Gottvertrauen besiegte", "age": "6-8" },
-      { "title": "Noahs Arche", "desc": "Noah baute ein riesiges Boot und rettete alle Tiere vor der großen Flut", "age": "3-5" },
-      { "title": "Jona und der Wal", "desc": "Jona floh vor Gott, lernte aber, dass Er überall ist", "age": "6-8" },
-      { "title": "Daniel in der Löwengrube", "desc": "Daniel betete im Glauben und Gott verschloss den Löwen die Mäuler", "age": "9-12" },
-      { "title": "Mose und das Rote Meer", "desc": "Gott teilte das Meer, damit sein Volk sicher hindurchgehen konnte", "age": "6-8" }
-    ],
-    "quiz": [
-      { "q": "Wer besiegte den Riesen Goliath?", "opts": ["Saul", "David", "Mose", "Josua"] },
-      { "q": "Wie viele Tage dauerte die Flut?", "opts": ["10 Tage", "20 Tage", "40 Tage", "100 Tage"] },
-      { "q": "Wer wurde in die Löwengrube geworfen?", "opts": ["Jona", "Daniel", "Paulus", "Petrus"] },
-      { "q": "Was ist das erste Buch der Bibel?", "opts": ["Exodus", "Psalmen", "Genesis", "Matthäus"] },
-      { "q": "In welcher Stadt wurde Jesus geboren?", "opts": ["Jerusalem", "Nazareth", "Bethlehem", "Kapernaum"] }
-    ],
-    "activityList": [
-      { "title": "Ausmalen", "desc": "Male Bibelcharaktere mit bunten Farben aus" },
-      { "title": "Wortsuche", "desc": "Finde versteckte Bibelwörter" },
-      { "title": "Gedächtnisspiel", "desc": "Finde die Paare der 12 Apostel" },
-      { "title": "Puzzle", "desc": "Setze erstaunliche Bibelszenen zusammen" }
-    ]
-  },
-  "feedPost": { "tapToWatch": "Tippen zum Ansehen", "photo": "Foto", "amem": "Amen", "share": "Teilen" },
-  "prayerCard": {
-    "urgent": "DRINGEND",
-    "testimony": "Zeugnis:",
-    "personPraying_one": "{{count}} Person betet",
-    "personPraying_other": "{{count}} Personen beten",
-    "timeAgo": { "min": "vor {{count}}min", "hour": "vor {{count}}h", "day": "vor {{count}}T" },
-    "categories": {
-      "health": "Gesundheit", "work_finance": "Arbeit/Finanzen", "family": "Familie",
-      "studies": "Studium", "housing": "Wohnen", "emotional": "Emotional",
-      "decisions": "Entscheidungen", "other": "Sonstiges"
-    }
-  },
-  "amemButton": { "praying": "Ich bete!", "prayForYou": "Ich bete für dich" },
-  "pastorOverlay": {
-    "title": "Pastoren beten live",
-    "churchesInPrayer_one": "{{count}} Kirche betet gerade",
-    "churchesInPrayer_other": "{{count}} Kirchen beten gerade",
-    "close": "Schließen"
-  },
-  "churchPin": {
-    "pastor": "Pastor {{name}}", "members": "{{count}} Mitglieder", "following": "Folge ich",
-    "follow": "Folgen", "directions": "Wegbeschreibung", "share": "Teilen",
-    "shareText": "Entdecke {{name}} auf Sigo com Fé!"
-  },
-  "langSwitcher": { "label": "Sprache" },
-  "pastorChat": {
-    "title": "Pastoral-Chat", "subtitle": "Sprich mit einem Pastor.",
-    "yourName": "Dein Name", "send": "Senden", "startChat": "Starten"
-  },
-  "notifications": {
-    "title": "Benachrichtigungen", "markAllRead": "Alle als gelesen markieren",
-    "noNotifications": "Noch keine Benachrichtigungen."
-  },
-  "offerings": {
-    "title": "Opfergaben und Zehnter", "notPastor": "Kontaktiere den Pastor.",
-    "configure": "Konfigurieren", "records": "Aufzeichnungen",
-    "pixKey": "PIX-Schlüssel", "pixKeyPlaceholder": "Dein PIX-Schlüssel",
-    "pixName": "Inhaber", "pixNamePlaceholder": "Name des Inhabers",
-    "paypalEmail": "PayPal-E-Mail", "bank": "Bank", "agency": "Filiale", "account": "Konto",
-    "holder": "Inhaber", "holderPlaceholder": "Name des Inhabers", "bankTransfer": "Banküberweisung",
-    "messageToMembers": "Nachricht an Mitglieder", "messagePlaceholder": "Gott segne euch!",
-    "save": "Speichern", "saving": "Wird gespeichert...", "saved": "Gespeichert!",
-    "thisMonth": "Diesen Monat", "totalGeneral": "Gesamt", "contributions": "Beiträge",
-    "noContributions": "Noch keine Beiträge", "tithe": "Zehnter", "offering": "Opfergabe"
-  },
-  "groups": {
-    "title": "Gruppen", "createGroup": "Gruppe erstellen", "newGroup": "Neue Gruppe",
-    "groupName": "Gruppenname", "description": "Beschreibung (optional)",
-    "public": "Öffentlich", "private": "Privat", "creating": "Wird erstellt...", "cancel": "Abbrechen",
-    "noGroups": "Noch keine Gruppen", "createFirst": "Erstelle die erste Gruppe!",
-    "members": "Mitglieder", "join": "Beitreten", "leave": "Verlassen",
-    "noPosts": "Keine Beiträge", "writePlaceholder": "In Gruppe schreiben...", "back": "Zurück"
-  },
-  "helpRequests": {
-    "title": "Hilfeanfragen", "subtitle": "Menschen, die Unterstützung brauchen.",
-    "loading": "Wird geladen...", "empty": "Keine Hilfeanfragen."
-  },
-  "profile": {
-    "title": "Profil", "memberSince": "Mitglied seit", "editProfile": "Profil bearbeiten",
-    "prayers": "Gebete", "posts": "Beiträge", "friends": "Freunde",
-    "bio": "Über mich", "noBio": "Keine Biografie", "save": "Speichern", "cancel": "Abbrechen"
-  },
-  "messages": {
-    "title": "Nachrichten", "noConversations": "Noch keine Gespräche",
-    "whenSomeone": "Wenn jemand dir eine Nachricht sendet, erscheint sie hier!",
-    "noMessages": "Noch keine Nachrichten", "writePlaceholder": "Schreibe deine Nachricht...",
-    "loading": "Wird geladen...", "back": "Zurück"
-  },
-  "consecration": {
-    "title": "Weihe", "subtitle": "Fasten und Gebet — stärke deinen Glauben",
-    "totalConsecrations": "Gesamte Weihen", "fastingToday": "Fasten heute",
-    "imConsecrating": "Ich weihe mich", "consecrating": "Weihe...",
-    "benefits": "Vorteile des Fastens", "consecratingNow": "Weihe jetzt",
-    "noOneYet": "Noch niemand weiht sich. Sei der Erste!", "loginRequired": "Melde dich an, um dich zu weihen!"
-  },
-  "friends": {
-    "title": "Freunde", "search": "Suchen", "myFriends": "Meine Freunde", "requests": "Anfragen",
-    "addFriend": "Hinzufügen", "pending": "Ausstehend", "accept": "Annehmen", "reject": "Ablehnen",
-    "removeFriend": "Entfernen", "noFriends": "Noch keine Freunde.", "noRequests": "Keine Anfragen."
-  },
-  "common": {
-    "loading": "Wird geladen...", "send": "Senden", "save": "Speichern", "delete": "Löschen",
-    "edit": "Bearbeiten", "close": "Schließen", "confirm": "Bestätigen",
-    "loginToLike": "Anmelden!", "loginToComment": "Anmelden!",
-    "linkCopied": "Link kopiert!", "share": "Teilen", "comment": "Kommentieren",
-    "report": "Melden", "reportConfirm": "Diesen Beitrag melden?",
-    "reported": "Beitrag gemeldet!", "writeComment": "Kommentar schreiben...",
-    "publish": "Veröffentlichen", "publishing": "Wird gesendet...",
-    "shareCommunity": "Teile etwas mit der Gemeinschaft...", "noPostsYet": "Noch keine Beiträge.",
-    "beFirst": "Sei der Erste!", "translate": "Übersetzen",
-    "translation": "Übersetzung", "hideTranslation": "Übersetzung ausblenden"
-  },
-  "music": {
-    "title": "Musikbibliothek", "subtitle": "100% kostenloser Lobpreis und Anbetung",
-    "worship": "Lobpreis & Anbetung", "hymns": "Klassische Hymnen", "instrumental": "Instrumental",
-    "kids": "Kids Gospel", "prayer": "Gebetsmusik", "favorites": "Favoriten",
-    "noFavorites": "Noch keine Favoriten", "tapHeart": "Tippe ❤️ zum Speichern",
-    "freeSources": "Mehr kostenlose Musik"
-  }
 }

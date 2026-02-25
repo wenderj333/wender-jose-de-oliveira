@@ -28,6 +28,8 @@
         "courseFinance": "Finanzas Bíblicas",
         "courseTheology": "Teología",
         "courseFree": "Curso Bíblico Gratis",
+        "pastorRoom": "Sala del Pastor",
+        "createWorshipAI": "Creador de Alabanza con IA",
         "popup": {
             "verse": "Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos. Mateo 18:20",
             "joinCommunity": "¡Únete a nuestra comunidad cristiana!",
@@ -554,7 +556,8 @@
         "beFirst": "¡Sé el primero en publicar!",
         "translate": "Traducir",
         "translation": "Traducción",
-        "hideTranslation": "Ocultar traducción"
+        "hideTranslation": "Ocultar traducción",
+        "installApp": "Instalar App"
     },
     "offerings": {
         "title": "Ofrendas y Diezmos",
