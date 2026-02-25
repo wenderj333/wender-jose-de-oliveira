@@ -259,23 +259,40 @@ export default function MuralGrid() {
 
     // Show progress for large files
     if (file.size > 5 * 1024 * 1024) {
-      setPostingText(`📤 Enviando ${file.name}... isso pode levar um tempo.`);
+      setPostingText(`📤 Enviando ${file.name}... isso pode levar alguns minutos. Não feche a página!`);
+    } else {
+      setPostingText(`📤 Enviando ${file.name}...`);
     }
 
     const fd = new FormData();
     fd.append('file', file);
     fd.append('upload_preset', 'sigo_com_fe');
     fd.append('folder', 'sigo-com-fe/posts');
+    fd.append('chunk_size', 5242880); // 5MB chunks para ficheiros grandes
     
-    const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/${resourceType}/upload`, { 
-      method: 'POST', 
-      body: fd 
-    });
-    const result = await uploadRes.json();
-    if (result.error) throw new Error(result.error.message);
-    if (!result.secure_url) throw new Error('Upload falhou. Tente um arquivo menor.');
-    
-    return { url: result.secure_url, type: resourceType };
+    try {
+      const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/${resourceType}/upload`, { 
+        method: 'POST', 
+        body: fd,
+        signal: AbortSignal.timeout(600000) // 10 minutos timeout
+      });
+      
+      if (!uploadRes.ok) {
+        throw new Error(`Upload error: ${uploadRes.status} ${uploadRes.statusText}`);
+      }
+      
+      const result = await uploadRes.json();
+      if (result.error) throw new Error(result.error.message);
+      if (!result.secure_url) throw new Error('Upload falhou. Tente um arquivo menor.');
+      
+      return { url: result.secure_url, type: resourceType };
+    } catch (err) {
+      console.error('Upload error:', err);
+      if (err.name === 'AbortError') {
+        throw new Error('Upload demorou muito. A sua ligação pode estar lenta. Tente novamente.');
+      }
+      throw err;
+    }
   }
 
   async function handlePost(e) {
@@ -496,6 +513,20 @@ export default function MuralGrid() {
           maxWidth: '600px',
           margin: '0 auto',
         }}>
+          {posting && (
+            <div style={{
+              background: 'linear-gradient(135deg, #f093fb, #f5576c)',
+              color: '#fff',
+              padding: '1rem',
+              borderRadius: '10px',
+              marginBottom: '1rem',
+              textAlign: 'center',
+              fontSize: '0.9rem',
+            }}>
+              <div style={{ fontWeight: 700, marginBottom: '0.5rem' }}>⏳ {postingText}</div>
+              <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Por favor não feche ou atualize a página!</div>
+            </div>
+          )}
           <form onSubmit={handlePost}>
             {/* Categories */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '0.75rem' }}>
@@ -636,10 +667,18 @@ export default function MuralGrid() {
 
             <button type="submit" disabled={posting || (!newText.trim() && !newMedia && !newMediaUrl.trim())} style={{
               width: '100%', padding: '0.75rem', borderRadius: 14, border: 'none',
-              background: (newText.trim() || newMedia || newMediaUrl.trim()) ? 'linear-gradient(135deg, #daa520, #f4c542)' : '#ddd',
-              color: (newText.trim() || newMedia || newMediaUrl.trim()) ? '#1a0a3e' : '#999',
-              fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem',
-            }}>{posting ? (postingText || t('common.publishing', 'Publicando...')) : t('mural.publish', 'Publicar')}</button>
+              background: (newText.trim() || newMedia || newMediaUrl.trim()) && !posting ? 'linear-gradient(135deg, #daa520, #f4c542)' : '#ddd',
+              color: (newText.trim() || newMedia || newMediaUrl.trim()) && !posting ? '#1a0a3e' : '#999',
+              fontWeight: 700, cursor: posting ? 'not-allowed' : 'pointer', fontSize: '0.95rem',
+              opacity: posting ? 0.7 : 1,
+            }}>
+              {posting ? (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                  <div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid #999', borderTopColor: '#daa520', animation: 'spin 1s linear infinite' }} />
+                  {postingText || t('common.publishing', 'Publicando...')}
+                </div>
+              ) : t('mural.publish', 'Publicar')}
+            </button>
             
             <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleMediaSelect(e, 'photo')} />
             <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={(e) => handleMediaSelect(e, 'video')} />
