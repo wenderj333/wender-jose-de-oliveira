@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { ShieldCheck, Users, Heart, BookOpen, MessageCircle, DollarSign, Calendar, ArrowLeft, Megaphone, HandHeart, BarChart3, Settings, Plus, Send, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
 
@@ -77,6 +78,7 @@ const styles = {
 };
 
 function PastorDashboard() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, token } = useAuth();
   const [section, setSection] = useState(null);
@@ -120,34 +122,34 @@ function PastorDashboard() {
   return (
     <div style={styles.page}>
       <div style={styles.header}>
-        <div style={styles.headerTitle}><ShieldCheck size={24} /> Painel do Pastor</div>
+        <div style={styles.headerTitle}><ShieldCheck size={24} /> {t('pastorDashboard.title')}</div>
         <div style={styles.verse}>{verse}</div>
         {overview?.church && <div style={{ fontSize: 13, opacity: 0.8, paddingBottom: 8 }}>{overview.church}</div>}
       </div>
       <div style={styles.container}>
         {!section && (
           <>
-            {loadingOverview ? <div style={styles.loading}>Carregando...</div> : stats && (
+            {loadingOverview ? <div style={styles.loading}>{t('pastorDashboard.loading')}</div> : stats && (
               <div style={styles.statGrid}>
-                <div style={styles.statCard}><div style={styles.statNum}>{stats.members ?? 0}</div><div style={styles.statLabel}>Membros</div></div>
-                <div style={styles.statCard}><div style={styles.statNum}>{stats.prayers ?? 0}</div><div style={styles.statLabel}>Orações</div></div>
-                <div style={styles.statCard}><div style={{ ...styles.statNum, color: GOLD }}>{formatCurrency((stats.tithesTotal || 0) + (stats.offeringsTotal || 0))}</div><div style={styles.statLabel}>Entradas do Mês</div></div>
-                <div style={styles.statCard}><div style={styles.statNum}>{stats.activeChats ?? 0}</div><div style={styles.statLabel}>Chats Ativos</div></div>
+                <div style={styles.statCard}><div style={styles.statNum}>{stats.members ?? 0}</div><div style={styles.statLabel}>{t('pastorDashboard.membersCount')}</div></div>
+                <div style={styles.statCard}><div style={styles.statNum}>{stats.prayers ?? 0}</div><div style={styles.statLabel}>{t('pastorDashboard.prayersCount')}</div></div>
+                <div style={styles.statCard}><div style={{ ...styles.statNum, color: GOLD }}>{formatCurrency((stats.tithesTotal || 0) + (stats.offeringsTotal || 0))}</div><div style={styles.statLabel}>{t('pastorDashboard.monthlyIncome')}</div></div>
+                <div style={styles.statCard}><div style={styles.statNum}>{stats.activeChats ?? 0}</div><div style={styles.statLabel}>{t('pastorDashboard.activeChats')}</div></div>
               </div>
             )}
             
             {/* Pastor Dashboard Welcome */}
             <div style={{ background: 'linear-gradient(135deg, rgba(108,63,160,0.08), rgba(212,168,67,0.1))', border: '1px solid rgba(108,63,160,0.2)', borderRadius: 16, padding: '1rem', marginBottom: '1rem' }}>
-              <h3 style={{ fontSize: '1rem', color: '#4A2270', margin: '0 0 0.5rem' }}>👋 Bem-vindo ao Painel do Pastor!</h3>
+              <h3 style={{ fontSize: '1rem', color: '#4A2270', margin: '0 0 0.5rem' }}>{t('pastorDashboard.welcomeTitle')}</h3>
               <p style={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.5, margin: '0 0 0.5rem' }}>
-                Aqui você gerencia toda a sua igreja. Toque em qualquer botão abaixo para acessar:
+                {t('pastorDashboard.welcomeText')}
               </p>
               <div style={{ fontSize: '0.78rem', color: '#666', lineHeight: 1.6 }}>
-                👥 <strong>Membros</strong> — veja e gerencie quem faz parte da sua igreja<br/>
-                💰 <strong>Dízimos</strong> — registre dízimos e ofertas recebidas<br/>
-                🙏 <strong>Orações</strong> — acompanhe pedidos de ora\u00e7ão da comunidade<br/>
-                💬 <strong>Chat</strong> — converse com membros que precisam de apoio<br/>
-                💳 <strong>Despesas</strong> — controle os gastos da igreja<br/>
+                {t('pastorDashboard.welcomeMembers')}<br/>
+                {t('pastorDashboard.welcomeTithes')}<br/>
+                {t('pastorDashboard.welcomePrayers')}<br/>
+                {t('pastorDashboard.welcomeChat')}<br/>
+                {t('pastorDashboard.welcomeExpenses')}<br/>
                 📖 <strong>Estudos</strong> — crie e compartilhe estudos bíblicos<br/>
                 📢 <strong>Comunicados</strong> — envie avisos para toda a igreja<br/>
                 📅 <strong>Agenda</strong> — organize eventos e cultos<br/>
