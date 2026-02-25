@@ -78,7 +78,9 @@ router.get('/credits', authenticate, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' });
   }
-});router.post('/generate', authenticate, async (req, res) => {
+});
+
+router.post('/generate', authenticate, async (req, res) => {
   try {
     await ensureTables();
     if (!GEMINI_API_KEY) return res.status(500).json({ error: 'API de IA nao configurada.' });
@@ -132,43 +134,6 @@ router.get('/credits', authenticate, async (req, res) => {
   } catch (err) {
     console.error('Generate error:', err);
     res.status(500).json({ error: 'Erro interno ao gerar musica' });
-  }
-});
-
-router.post('/generate-audio', authenticate, async (req, res) => {
-  try {
-    const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN;
-    if (!REPLICATE_API_TOKEN) return res.status(500).json({ error: 'API da Replicate nao configurada.' });
-    const { lyrics, songId, style } = req.body;
-    if (!lyrics) return res.status(400).json({ error: 'A letra e necessaria.' });
-    const replicate = new Replicate({ auth: REPLICATE_API_TOKEN });
-    const prompt = (style || 'worship, uplifting, gospel') + ', christian music, inspirational';
-    const output = await replicate.run(
-      'meta/musicgen:671ac645ce5e552cc0f9b6dc90d7ce29b2b1cc9e9ae58d3ae7c7e944d6d89d57',
-      { input: { prompt: prompt, model_version: 'stereo-large', duration: 30, output_format: 'mp3' } }
-    );
-    let audioUrl = Array.isArray(output) ? output[0] : output;
-    if (!audioUrl) return res.status(500).json({ error: 'A IA nao conseguiu gerar a musica.' });
-    if (songId) {
-      await db.prepare('UPDATE ai_songs SET audio_url = ? WHERE id = ? AND author_id = ?').run(audioUrl, songId, req.user.id);
-    }
-    res.json({ audioUrl });
-  } catch (err) {
-    console.error('Erro ao gerar audio:', err);
-    res.status(500).json({ error: 'Erro interno ao gerar a musica.' });
-  }
-});
-
-router.post('/save-custom', authenticate, async (req, res) => {
-  try {
-    await ensureTables();
-    const { title, lyrics, theme, style, emotion, bibleBook, verse, language } = req.body;
-    if (!title || !lyrics) return res.status(400).json({ error: 'Titulo e letra sao obrigatorios.' });
-    const lang = language || 'pt';
-    const song = await db.prepare('INSERT INTO ai_songs (author_id, title, lyrics, theme, style, emotion, bible_book, verse_reference, language, is_ai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *').get(req.user.id, title, lyrics, theme || null, style || null, emotion || null, bibleBook || null, verse || null, lang, false);
-    res.json({ success: true, song });
-  } catch (err) {
-    res.status(500).json({ error: 'Erro interno ao salvar sua letra.' });
   }
 });
 

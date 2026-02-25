@@ -124,14 +124,14 @@ router.get("/stats/new-users", auth, async (req, res) => {
 
 router.get("/stats/posts", auth, async (req, res) => {
   try {
-    const r = await pool.query("SELECT COUNT(*) AS count FROM posts WHERE created_at >= NOW() - INTERVAL '7 days'");
+    const r = await pool.query("SELECT COUNT(*) AS count FROM feed_posts WHERE created_at >= NOW() - INTERVAL '7 days'");
     res.json({ count: parseInt(r.rows[0].count) });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 router.get("/stats/most-viewed", auth, async (req, res) => {
   try {
-    const r = await pool.query("SELECT id, content FROM posts ORDER BY created_at DESC LIMIT 5");
+    const r = await pool.query("SELECT id, content FROM feed_posts ORDER BY created_at DESC LIMIT 5");
     res.json(r.rows);
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -139,9 +139,15 @@ router.get("/stats/most-viewed", auth, async (req, res) => {
 router.post("/posts/schedule", auth, async (req, res) => {
   try {
     const { userId, content, scheduledAt } = req.body;
-    await pool.query("INSERT INTO posts (user_id, content, scheduled_at, created_at) VALUES ($1, $2, $3, NOW())", [userId, content, scheduledAt]);
-    res.json({ success: true });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+    if (!userId || !content) {
+      return res.status(400).json({ error: "userId e content são obrigatórios" });
+    }
+    await pool.query("INSERT INTO feed_posts (author_id, content, created_at) VALUES ($1, $2, NOW())", [userId, content]);
+    res.json({ success: true, message: 'Post agendado com sucesso' });
+  } catch (err) { 
+    console.error("❌ Erro ao agendar post:", err.message);
+    res.status(500).json({ error: err.message }); 
+  }
 });
 
 module.exports = router;
