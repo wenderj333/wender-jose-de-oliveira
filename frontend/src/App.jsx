@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Component } from 'react';
+﻿import React, { useState, useEffect, useRef, Component } from 'react';
 import { Routes, Route, Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './context/AuthContext';
@@ -34,8 +34,8 @@ import CriadorLouvor from './pages/CriadorLouvor';
 import TheologyCourse from './pages/TheologyCourse';
 import Donation from './pages/Donation';
 import LiveStream from './pages/LiveStream';
-// import { MusicProvider } from './context/MusicContext';
-// import MusicPlayer from './components/MusicPlayer';
+import { MusicProvider } from './context/MusicContext';
+import MusicPlayer from './components/MusicPlayer';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import RegistrationPromptPopup from './components/RegistrationPromptPopup';
 
@@ -67,11 +67,11 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) return (
       <div style={{ textAlign: 'center', padding: '3rem' }}>
-        <h2>😔 Algo deu errado</h2>
-        <p>Tente recarregar a página.</p>
+        <h2>ðŸ˜” Algo deu errado</h2>
+        <p>Tente recarregar a pÃ¡gina.</p>
         <button onClick={() => { this.setState({ hasError: false }); window.location.reload(); }}
           style={{ padding: '0.5rem 1.5rem', borderRadius: 20, border: 'none', background: 'var(--gold)', color: '#fff', cursor: 'pointer', fontWeight: 600 }}>
-          🔄 Recarregar
+          ðŸ”„ Recarregar
         </button>
       </div>
     );
@@ -117,8 +117,8 @@ export default function App() {
               const notifData = await notifRes.json();
               const latest = notifData.notifications?.[0];
               if (latest && !latest.is_read) {
-                new Notification(latest.title || '🔔 Sigo com Fé', {
-                  body: latest.body || 'Você tem uma nova notificação!',
+                new Notification(latest.title || 'ðŸ”” Sigo com FÃ©', {
+                  body: latest.body || 'VocÃª tem uma nova notificaÃ§Ã£o!',
                   icon: '/logo.jpg',
                   tag: 'sigo-notif-' + latest.id,
                 });
@@ -137,7 +137,7 @@ export default function App() {
     checkUnread();
     const interval = setInterval(checkUnread, 30000);
 
-    // Heartbeat — update online status every 60s
+    // Heartbeat â€” update online status every 60s
     function sendHeartbeat() {
       fetch(`${API}/profile/heartbeat`, {
         method: 'POST', headers: { Authorization: `Bearer ${token}` },
@@ -176,7 +176,7 @@ export default function App() {
       <nav className="navbar">
         <div className="navbar__top">
           <Link to="/" className="nav-brand" onClick={() => setMenuOpen(false)}>
-            <img src="/logo.jpg" alt="Sigo com Fé" style={{ width: 36, height: 36, verticalAlign: 'middle', marginRight: '8px', borderRadius: '50%', objectFit: 'cover', background: '#b3d4fc' }} />{t('brand')}
+            <img src="/logo.jpg" alt="Sigo com FÃ©" style={{ width: 36, height: 36, verticalAlign: 'middle', marginRight: '8px', borderRadius: '50%', objectFit: 'cover', background: '#b3d4fc' }} />{t('brand')}
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <LanguageSwitcher />
@@ -202,7 +202,7 @@ export default function App() {
         <div className={`nav-links ${menuOpen ? 'nav-links--open' : ''}`} style={{ paddingBottom: '20px', maxHeight: 'calc(100vh - 60px)', overflowY: 'auto' }}>
           <Link to="/mural" className={isActive('/mural')} onClick={() => setMenuOpen(false)}><Newspaper size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.mural')}</Link>
           <Link to="/ao-vivo" className={isActive('/ao-vivo')} onClick={() => setMenuOpen(false)}><Radio size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.live')}</Link>
-          <Link to="/directo" className={isActive('/directo')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔴</span>{t('nav.live')}</Link>
+          <Link to="/directo" className={isActive('/directo')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>ðŸ”´</span>{t('nav.live')}</Link>
           <Link to="/cadastrar-igreja" className={isActive('/cadastrar-igreja')} onClick={() => setMenuOpen(false)}><Church size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.registerChurch')}</Link>
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')} onClick={() => setMenuOpen(false)}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#e74c3c' }} />{t('nav.helpRequests')}</Link>}
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/oracoes" className={isActive('/oracoes')} onClick={() => setMenuOpen(false)}><HandHeart size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.prayers')}</Link>}
@@ -212,27 +212,27 @@ export default function App() {
               <User size={20} style={{ verticalAlign: 'middle', color: 'var(--gold)' }} /> {t('nav.myProfile')}
             </Link>
           )}
-          <Link to="/ia-biblica" className={isActive('/ia-biblica')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>📖</span>{t('nav.bibleAI')}</Link>
+          <Link to="/ia-biblica" className={isActive('/ia-biblica')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>ðŸ“–</span>{t('nav.bibleAI')}</Link>
           {user?.role === 'pastor' && <Link to="/ia-pastoral" className={isActive('/ia-pastoral')} onClick={() => setMenuOpen(false)}><Bot size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#8e44ad' }} />{t('nav.pastoralAI')}</Link>}
           <Link to="/musica" className={isActive('/musica')} onClick={() => setMenuOpen(false)}><Music size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: 'var(--purple)' }} />{t('nav.music')}</Link>
-          <Link to="/criador-louvor" className={isActive('/criador-louvor')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>✨</span>{t('nav.createWorshipAI')}</Link>
+          <Link to="/criador-louvor" className={isActive('/criador-louvor')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>âœ¨</span>{t('nav.createWorshipAI')}</Link>
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/membros" className={isActive('/membros')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4caf50' }} />{t('nav.members')}</Link>}
           <Link to="/kids" className={isActive('/kids')} onClick={() => setMenuOpen(false)}><Baby size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.kids')}</Link>
-          <Link to="/consagracao" className={isActive('/consagracao')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🔥</span>{t('nav.consecration')}</Link>
-          <Link to="/jornadas" className={isActive('/jornadas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>✨</span>{t('nav.faithJourneys')}</Link>
-          <Link to="/curso-biblico" className={isActive('/curso-biblico')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>📖</span>{t('nav.courseFree')}</Link>
-          <Link to="/curso-financas" className={isActive('/curso-financas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>💰</span>{t('nav.courseFinance')}</Link>
-          <Link to="/curso-teologia" className={isActive('/curso-teologia')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>🎓</span>{t('nav.courseTheology')}</Link>
+          <Link to="/consagracao" className={isActive('/consagracao')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>ðŸ”¥</span>{t('nav.consecration')}</Link>
+          <Link to="/jornadas" className={isActive('/jornadas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>âœ¨</span>{t('nav.faithJourneys')}</Link>
+          <Link to="/curso-biblico" className={isActive('/curso-biblico')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>ðŸ“–</span>{t('nav.courseFree')}</Link>
+          <Link to="/curso-financas" className={isActive('/curso-financas')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>ðŸ’°</span>{t('nav.courseFinance')}</Link>
+          <Link to="/curso-teologia" className={isActive('/curso-teologia')} onClick={() => setMenuOpen(false)}><span style={{ verticalAlign: 'middle', marginRight: '4px' }}>ðŸŽ“</span>{t('nav.courseTheology')}</Link>
           <Link to="/grupos" className={isActive('/grupos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#4a1a8e' }} />{t('nav.groups')}</Link>
           {user && <Link to="/amigos" className={isActive('/amigos')} onClick={() => setMenuOpen(false)}><Users size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#667eea' }} />{t('nav.friends')}</Link>}
           {user && (
             <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setMenuOpen(false)}><LayoutDashboard size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.dashboard')}</Link>
           )}
           {(user?.role === 'pastor' || user?.role === 'admin') && (
-            <Link to="/pastor" className={isActive('/pastor')} onClick={() => setMenuOpen(false)} style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', color: '#fff', borderRadius: 12, padding: '0.4rem 0.8rem', fontWeight: 700 }}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />🏛️ {t('nav.pastorRoom')}</Link>
+            <Link to="/pastor" className={isActive('/pastor')} onClick={() => setMenuOpen(false)} style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', color: '#fff', borderRadius: 12, padding: '0.4rem 0.8rem', fontWeight: 700 }}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />ðŸ›ï¸ {t('nav.pastorRoom')}</Link>
           )}
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/ofertas" className={isActive('/ofertas')} onClick={() => setMenuOpen(false)}><HandHeart size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#e74c3c' }} />{t('nav.offerings')}</Link>}
-          {/* Igrejas (map) hidden — using Igreja (register) instead */}
+          {/* Igrejas (map) hidden â€” using Igreja (register) instead */}
           {/* <Link to="/igrejas" className={isActive('/igrejas')} onClick={() => setMenuOpen(false)}><MapPin size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Igrejas</Link> */}
           {user ? (
             <>
@@ -266,14 +266,14 @@ export default function App() {
           boxShadow: '0 2px 10px rgba(155,89,182,0.35)',
           animation: 'louvorPulse 2.5s ease-in-out infinite',
         }}>
-          🎵 {t('nav.createWorshipAI', 'Cria teu Louvor com IA!')}
+          ðŸŽµ {t('nav.createWorshipAI', 'Cria teu Louvor com IA!')}
         </button>
         <style>{`@keyframes louvorPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }`}</style>
         <button onClick={() => {
-            const shareData = { title: 'Sigo com Fe', text: t('home.shareText', 'Conheça o Sigo com Fé! Rede social cristã.'), url: 'https://sigo-com-fe.vercel.app' };
+            const shareData = { title: 'Sigo com Fe', text: t('home.shareText', 'ConheÃ§a o Sigo com FÃ©! Rede social cristÃ£.'), url: 'https://sigo-com-fe.vercel.app' };
           if (navigator.share) navigator.share(shareData).catch(() => {});
           else { navigator.clipboard?.writeText(`${shareData.text}
-${shareData.url}`); alert(t('common.linkCopied', 'Link copiado! ✅')); }
+${shareData.url}`); alert(t('common.linkCopied', 'Link copiado! âœ…')); }
         }} style={{
           padding: '0.45rem 1rem', borderRadius: 25, border: 'none',
           background: 'linear-gradient(135deg, #daa520, #f4c542)',
@@ -281,12 +281,11 @@ ${shareData.url}`); alert(t('common.linkCopied', 'Link copiado! ✅')); }
           display: 'flex', alignItems: 'center', gap: 6,
           boxShadow: '0 2px 10px rgba(218,165,32,0.3)',
         }}>
-          📤 {t('common.share', 'Compartilhar')}
+          ðŸ“¤ {t('common.share', 'Compartilhar')}
         </button>
       </div>
 
-      <main className="main-content">
-        <ErrorBoundary>
+      <MusicProvider><main className="main-content"><ErrorBoundary>
           <RegistrationPromptContext.Provider value={{ user, promptRegistration }}>
             <Routes>
               <Route path="/" element={user ? <Navigate to="/mural" /> : <Home />} />
@@ -323,12 +322,11 @@ ${shareData.url}`); alert(t('common.linkCopied', 'Link copiado! ✅')); }
           </RegistrationPromptContext.Provider>
         </ErrorBoundary>
       </main>
-
       {showRegistrationPopup && <RegistrationPromptPopup isOpen={showRegistrationPopup} onClose={() => setShowRegistrationPopup(false)} />}
 
-      {/* Music player temporarily disabled */}
+      <MusicPlayer /></MusicProvider>{/* Music player active */}
 
-      {/* NO floating buttons — moved to navbar area */}
+      {/* NO floating buttons â€” moved to navbar area */}
 
       <footer className="footer">
         {showInstallBtn && (
@@ -339,7 +337,7 @@ ${shareData.url}`); alert(t('common.linkCopied', 'Link copiado! ✅')); }
             fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer',
             boxShadow: '0 4px 12px rgba(218,165,32,0.4)',
           }}>
-            <Download size={18} /> 📲 Instalar App
+            <Download size={18} /> ðŸ“² Instalar App
           </button>
         )}
         <p>{t('footer')} <BookOpen size={16} style={{ verticalAlign: 'middle' }} /></p>
@@ -347,4 +345,7 @@ ${shareData.url}`); alert(t('common.linkCopied', 'Link copiado! ✅')); }
     </div>
   );
 }
+
+
+
 
