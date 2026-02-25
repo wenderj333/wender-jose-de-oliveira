@@ -33,7 +33,13 @@ const verses = [
 
 // Health check (public, sem autenticação)
 router.get("/health", (req, res) => {
-  res.json({ status: "ok", service: "openclaw", message: "OpenClaw API online" });
+  res.json({ 
+    status: "ok", 
+    service: "openclaw", 
+    message: "OpenClaw API online",
+    version: "1.0.1",
+    endpoints: ["GET /health", "GET /users/new", "GET /bible-verse/random", "POST /users/:userId/send-message"]
+  });
 });
 
 // Bible verse (com autenticação)
