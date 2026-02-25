@@ -710,8 +710,9 @@ export default function MuralGrid() {
           background: 'rgba(0,0,0,0.7)', zIndex: 10000,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           padding: '1rem',
+          overflowY: 'auto',
         }} onClick={() => setSelectedPost(null)}>
-          <div style={{
+          <div className="modal-detail" style={{
             background: '#1a1a2e', borderRadius: '16px',
             maxWidth: '700px', width: '100%', maxHeight: '90vh', overflow: 'hidden',
             display: 'grid', gridTemplateColumns: '1fr 350px', gap: 0,
@@ -870,11 +871,19 @@ export default function MuralGrid() {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 6px !important;
           }
+          .modal-detail {
+            grid-template-columns: 1fr !important;
+          }
         }
         @media (max-width: 480px) {
           .mural-grid {
             grid-template-columns: repeat(1, 1fr) !important;
             gap: 4px !important;
+          }
+          .modal-detail {
+            max-width: 95vw !important;
+            max-height: 95vh !important;
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>
