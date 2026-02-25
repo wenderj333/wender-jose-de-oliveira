@@ -1,0 +1,46 @@
+{
+    "brand": "Sigo com Fé",
+    "nav": {
+        "prayers": "Orações",
+        "mural": "Mural",
+        "live": "Ao Vivo",
+        "churches": "Igrejas",
+        "registerChurch": "Cadastrar Igreja",
+        "kids": "Kids",
+        "helpRequests": "Pedidos de Ajuda",
+        "dashboard": "Dashboard",
+        "hello": "Olá, {{name}}",
+        "logout": "Sair",
+        "login": "Entrar",
+        "register": "Cadastrar",
+        "chatPastoral": "Chat Pastoral",
+        "pastoralAI": "IA Pastoral",
+        "friends": "Amigos",
+        "bibleAI": "IA Bíblica",
+        "messages": "Mensagens",
+        "groups": "Grupos",
+        "consecration": "Consagração",
+        "members": "Membros",
+        "offerings": "Ofertas",
+        "notifications": "Notificações",
+        "myProfile": "Meu Perfil",
+        "music": "Música",
+        "courseFinance": "Finanças Bíblicas",
+        "courseTheology": "Teologia",
+        "courseFree": "Curso Bíblico Grátis",
+        "createWorshipAI": "Louvor com IA",
+        "pastorRoom": "Sala do Pastor"
+    },
+    "home": {
+        "helpSeeThings": "👀 Vejo coisas",
+        "helpHearThings": "👂 Escuto barulhos",
+        "helpFeelAlone": "😔 Me sinto sozinho(a)",
+        "helpNeedPrayer": "🙏 Preciso de oração",
+        "helpAnxious": "😰 Estou ansioso(a)",
+        "helpDepressed": "😢 Estou triste/deprimido(a)",
+        "helpSent": "✅ Seu pedido foi enviado! Uma igreja próxima entrará em contato para te ajudar. Deus te abençoe! 🙏"
+    },
+    "pastorChat": {
+        "autoTranslate": "🌍 Tradução automática ativada"
+    }
+}
