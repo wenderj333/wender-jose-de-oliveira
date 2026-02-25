@@ -50,14 +50,9 @@ async function ensureTables() {
 }
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-<<<<<<< HEAD
 const SUNO_API_KEY = process.env.SUNO_API_KEY;
-// Use 1.5-flash for higher rate limits on free tier
+// Use 2.5-flash for higher rate limits on free tier
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/google/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-
-=======
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
->>>>>>> ae3430498bffb3fe64c298d720b8491f5b3961ff
 const FREE_CREDITS = 4;
 const PACK_CREDITS = 250;
 
