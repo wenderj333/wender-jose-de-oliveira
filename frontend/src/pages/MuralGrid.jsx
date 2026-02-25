@@ -74,6 +74,9 @@ export default function MuralGrid() {
   const [commentText, setCommentText] = useState({});
   const [sendingComment, setSendingComment] = useState({});
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [showMyMusicPicker, setShowMyMusicPicker] = useState(false);
+  const [myMusic, setMyMusic] = useState([]);
+  const [loadingMyMusic, setLoadingMyMusic] = useState(false);
 
   const photoRef = useRef(null);
   const videoRef = useRef(null);
@@ -105,6 +108,29 @@ export default function MuralGrid() {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function fetchMyMusic() {
+    if (!token) return;
+    setLoadingMyMusic(true);
+    try {
+      const res = await fetch(`${API}/music`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      const songs = Array.isArray(data.songs) ? data.songs : data.songs?.rows || Object.values(data.songs || {}) || [];
+      setMyMusic(songs);
+    } catch (err) {
+      console.error('Error fetching my music:', err);
+    } finally {
+      setLoadingMyMusic(false);
+    }
+  }
+
+  function selectMyMusic(song) {
+    setNewMediaUrl(song.url);
+    setNewMediaType('mymusic');
+    setShowMyMusicPicker(false);
   }
 
   async function handleLike(postId) {
@@ -290,6 +316,11 @@ export default function MuralGrid() {
           console.warn('Direct upload failed:', uploadErr);
           throw uploadErr;
         }
+      } else if (newMediaType === 'mymusic' && newMediaUrl.trim()) {
+        formData.append('media_url', newMediaUrl.trim());
+        formData.append('media_type', 'video'); // Minha música é armazenada como video/áudio
+        if (!postContent || postContent === '📸') postContent = '🎵';
+        formData.set('content', postContent);
       } else if (newMediaUrl.trim()) {
         formData.append('media_url', newMediaUrl.trim());
         formData.append('media_type', 'video'); // YouTube e URLs tratadas como video
@@ -487,7 +518,7 @@ export default function MuralGrid() {
               }} />
 
             {/* Media buttons - Instagram style */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, marginBottom: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 6, marginBottom: '1rem' }}>
               <button type="button" onClick={() => photoRef.current?.click()} style={{
                 padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
                 background: newMediaType === 'photo' ? '#f0f0f0' : '#fff',
@@ -515,6 +546,15 @@ export default function MuralGrid() {
               }}>
                 <span style={{ fontSize: '1.5rem' }}>🎵</span>
                 {t('media.audio', 'Áudio')}
+              </button>
+              <button type="button" onClick={() => { fetchMyMusic(); setShowMyMusicPicker(true); }} style={{
+                padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
+                background: newMediaType === 'mymusic' ? '#f0f0f0' : '#fff',
+                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'mymusic' ? 600 : 400,
+              }}>
+                <span style={{ fontSize: '1.5rem' }}>🎸</span>
+                Minha Música
               </button>
               <button type="button" onClick={() => {
                 const url = prompt(t('media.urlPrompt', 'Cole a URL (YouTube, Vimeo, etc):'));
@@ -576,6 +616,18 @@ export default function MuralGrid() {
                 <div style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '0.5rem' }}>🎵</div>
                 <div style={{ color: '#fff', fontSize: '0.85rem', marginBottom: '1rem', wordBreak: 'break-word' }}>{newMediaPreview}</div>
                 <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaType(null); }} style={{
+                  background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', borderRadius: 20, padding: '0.4rem 1rem',
+                  cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600,
+                }}>{t('common.remove', 'Remover')}</button>
+              </div>
+            )}
+
+            {/* My Music preview */}
+            {newMediaType === 'mymusic' && newMediaUrl.trim() && (
+              <div style={{ background: 'linear-gradient(135deg, #9b59b6, #667eea)', borderRadius: 12, padding: '1rem', marginBottom: '0.5rem', textAlign: 'center' }}>
+                <div style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '0.5rem' }}>🎸</div>
+                <div style={{ color: '#fff', fontSize: '0.85rem', marginBottom: '1rem', wordBreak: 'break-word' }}>Música da biblioteca pessoal</div>
+                <button type="button" onClick={() => { setNewMediaUrl(''); setNewMediaType(null); }} style={{
                   background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', borderRadius: 20, padding: '0.4rem 1rem',
                   cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600,
                 }}>{t('common.remove', 'Remover')}</button>
@@ -702,6 +754,65 @@ export default function MuralGrid() {
           })
         )}
       </div>
+
+      {/* Modal - My Music Picker */}
+      {showMyMusicPicker && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.7)', zIndex: 9999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '1rem',
+        }} onClick={() => setShowMyMusicPicker(false)}>
+          <div style={{
+            background: '#1a1a2e', borderRadius: '16px',
+            maxWidth: '500px', width: '100%', maxHeight: '80vh', overflow: 'hidden',
+            display: 'flex', flexDirection: 'column',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+          }} onClick={(e) => e.stopPropagation()}>
+            <div style={{
+              padding: '1rem', borderBottom: '1px solid rgba(218,165,32,0.2)',
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            }}>
+              <h3 style={{ margin: 0, color: '#fff', fontSize: '1.1rem' }}>🎵 Minha Música</h3>
+              <button onClick={() => setShowMyMusicPicker(false)} style={{
+                background: 'none', border: 'none', fontSize: '1.3rem', cursor: 'pointer', color: '#daa520',
+              }}>✕</button>
+            </div>
+            
+            <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+              {loadingMyMusic ? (
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#aaa' }}>Carregando...</div>
+              ) : myMusic.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#aaa' }}>Nenhuma música subida ainda</div>
+              ) : (
+                myMusic.map((song) => (
+                  <button
+                    key={song.id || song.url}
+                    onClick={() => selectMyMusic(song)}
+                    style={{
+                      width: '100%', padding: '0.75rem', marginBottom: '0.5rem',
+                      background: 'rgba(218,165,32,0.1)', border: '1px solid rgba(218,165,32,0.3)',
+                      borderRadius: '8px', cursor: 'pointer', textAlign: 'left', color: '#fff',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(218,165,32,0.2)';
+                      e.currentTarget.style.borderColor = '#daa520';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(218,165,32,0.1)';
+                      e.currentTarget.style.borderColor = 'rgba(218,165,32,0.3)';
+                    }}
+                  >
+                    <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>🎵 {song.title || song.name || 'Sem título'}</div>
+                    <div style={{ fontSize: '0.8rem', color: '#aaa', marginTop: '0.25rem' }}>{song.artist || song.user_name || 'Seu upload'}</div>
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal - Post Detail (Dark Mode) */}
       {selectedPost && (
