@@ -76,11 +76,13 @@ router.get("/users/new", auth, async (req, res) => {
       sinceDate = new Date(Date.now() - 86400000); // Últimas 24h por padrão
     }
 
+    console.log(`✅ OpenClaw: Fetching new users since ${sinceDate.toISOString()}`);
     const r = await pool.query(
       "SELECT id, email, full_name, avatar_url, created_at, role FROM users WHERE created_at >= $1 ORDER BY created_at DESC",
       [sinceDate]
     );
 
+    console.log(`📊 OpenClaw: Found ${r.rows.length} new users`);
     res.json({
       success: true,
       count: r.rows.length,
@@ -88,7 +90,7 @@ router.get("/users/new", auth, async (req, res) => {
       timestamp: Math.floor(Date.now() / 1000)
     });
   } catch (err) { 
-    console.error("Error in /users/new:", err);
+    console.error("❌ Error in /users/new:", err);
     res.status(500).json({ error: err.message }); 
   }
 });
