@@ -17,9 +17,14 @@ export default function LanguageSwitcher() {
   ];
 
   const handleLanguageChange = (langCode) => {
-    i18n.changeLanguage(langCode);
+    // Save to localStorage FIRST
     localStorage.setItem('i18nextLng', langCode);
+    // Then change the language in i18n
+    i18n.changeLanguage(langCode);
+    // Force UI update
     setShowDropdown(false);
+    // Verify it was saved
+    console.log('Language changed to:', langCode, 'localStorage:', localStorage.getItem('i18nextLng'));
   };
 
   const currentLang = languages.find(l => l.code === i18n.language?.substring(0, 2));
