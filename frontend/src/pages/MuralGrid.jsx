@@ -363,14 +363,26 @@ export default function MuralGrid() {
 
   // Render media in modal (supports images, videos, audio, youtube)
   const renderModalMedia = (post) => {
+    console.log('🎬 Rendering modal media:', { media_url: post.media_url, media_type: post.media_type });
+    
     if (post.media_url && post.media_type === 'image') {
-      return <img src={getMediaUrl(post.media_url)} alt="" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />;
+      return <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
     }
     if (post.media_url && post.media_type === 'video') {
-      return <video src={getMediaUrl(post.media_url)} controls style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />;
+      const videoUrl = getMediaUrl(post.media_url);
+      console.log('📹 Playing video:', videoUrl);
+      return (
+        <video 
+          src={videoUrl} 
+          controls 
+          autoPlay
+          style={{ width: '100%', height: '100%', objectFit: 'contain', background: '#000' }} 
+        />
+      );
     }
-    if (isYouTube(post.media_url)) {
+    if (post.media_url && isYouTube(post.media_url)) {
       const youtubeId = getYouTubeId(post.media_url);
+      console.log('📺 Playing YouTube:', youtubeId);
       return (
         <iframe
           width="100%"
@@ -379,12 +391,13 @@ export default function MuralGrid() {
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          style={{ maxWidth: '100%', maxHeight: '100%' }}
+          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
         />
       );
     }
     if (post.audio_url || (post.media_url && isAudio(post.media_url))) {
       const audioUrl = post.audio_url || post.media_url;
+      console.log('🎵 Playing audio:', audioUrl);
       return (
         <div style={{
           width: '100%',
@@ -403,6 +416,7 @@ export default function MuralGrid() {
     }
     // Fallback: emoji based on category
     const categoryInfo = CATEGORIES_CONFIG.find(c => c.value === post.category);
+    console.log('📸 No media found, using category emoji:', categoryInfo?.labelKey);
     return (
       <div style={{
         width: '100%',
@@ -706,7 +720,7 @@ export default function MuralGrid() {
             {/* Left: Image/Video/Audio/YouTube */}
             <div style={{
               background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              overflow: 'hidden', minHeight: '400px',
+              overflow: 'hidden', minHeight: '400px', position: 'relative',
             }}>
               {renderModalMedia(selectedPost)}
             </div>
