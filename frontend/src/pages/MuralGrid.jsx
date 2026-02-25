@@ -329,13 +329,15 @@ export default function MuralGrid() {
       if (newMedia) {
         try {
           const result = await uploadDirectToCloudinary(newMedia);
+          console.log('✅ Upload successful:', { url: result.url, type: result.type });
           formData.append('media_url', result.url);
           formData.append('media_type', result.type);
         } catch (uploadErr) {
-          console.warn('Direct upload failed:', uploadErr);
+          alert(`❌ Erro no upload: ${uploadErr.message}`);
           throw uploadErr;
         }
       } else if (newMediaUrl.trim()) {
+        console.log('🔗 Adding URL media:', newMediaUrl.trim());
         formData.append('media_url', newMediaUrl.trim());
         formData.append('media_type', 'video'); // YouTube e URLs tratadas como video
       }
@@ -354,11 +356,14 @@ export default function MuralGrid() {
       });
       if (!res.ok) {
         const errorText = await res.text();
-        console.error('Server error:', res.status, errorText);
+        alert(`❌ Erro do servidor: ${res.status}\n${errorText}`);
         throw new Error(`Server error ${res.status}: ${errorText}`);
       }
       const data = await res.json();
-      console.log('Post response:', data);
+      if (!data.post) {
+        alert(`❌ Erro: O vídeo não foi guardado!\nResposta: ${JSON.stringify(data)}`);
+        throw new Error('No post returned from server');
+      }
       if (data.post) {
         data.post.author_name = user.full_name;
         data.post.author_avatar = user.avatar_url;
@@ -416,11 +421,22 @@ export default function MuralGrid() {
 
   // Render media in modal (supports images, videos, audio, youtube)
   const renderModalMedia = (post) => {
+    // Debug: Log what we're trying to render
+    if (post.media_url) {
+      console.log('🎬 renderModalMedia:', { 
+        media_url: post.media_url, 
+        media_type: post.media_type,
+        isVideo: post.media_type === 'video',
+        isAudio: post.media_type === 'audio'
+      });
+    }
+    
     if (post.media_url && post.media_type === 'image') {
       return <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
     }
     if (post.media_url && post.media_type === 'video') {
       const videoUrl = getMediaUrl(post.media_url);
+      console.log('▶️ Video URL:', videoUrl);
       
       return (
         <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
