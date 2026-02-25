@@ -254,7 +254,7 @@ export default function LiveStream() {
     btnPrimary: { background: 'linear-gradient(135deg, #e74c3c, #c0392b)', color: '#fff' },
     btnGold: { background: 'linear-gradient(135deg, #daa520, #f4c542)', color: '#1a0a3e' },
     btnOutline: { background: 'transparent', border: '2px solid #daa520', color: '#daa520' },
-    video: { width: '100%', borderRadius: 12, background: '#000', maxHeight: 400 },
+    video: { width: '100%', height: '100%', objectFit: 'cover', borderRadius: 0, background: '#000' },
     chatBox: { background: 'rgba(0,0,0,0.3)', borderRadius: 12, padding: '0.75rem', height: 200, overflowY: 'auto', marginTop: '0.75rem' },
     chatMsg: { marginBottom: 6, fontSize: '0.85rem' },
     chatName: { fontWeight: 700, color: '#daa520', marginRight: 6 },
