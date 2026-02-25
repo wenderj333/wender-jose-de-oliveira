@@ -1,0 +1,98 @@
+{
+  "pt": {
+    "livePrayer.title": "Orações ao Vivo",
+    "livePrayer.subtitle": "Ore com outros cristãos em tempo real",
+    "livePrayer.startPraying": "Começar a Orar",
+    "livePrayer.endPrayer": "Terminar Oração",
+    "livePrayer.prayerCount": "{{count}} pessoas orando",
+    "livePrayer.noActivePrayers": "Nenhuma oração ativa no momento",
+    "livePrayer.loading": "Carregando...",
+    "livePrayer.youArePraying": "Você está orando",
+    "livePrayer.joinPrayer": "Participar",
+    "livePrayer.leavePrayer": "Sair da Oração"
+  },
+  "pt_BR": {
+    "livePrayer.title": "Orações ao Vivo",
+    "livePrayer.subtitle": "Ore com outros cristãos em tempo real",
+    "livePrayer.startPraying": "Começar a Orar",
+    "livePrayer.endPrayer": "Terminar Oração",
+    "livePrayer.prayerCount": "{{count}} pessoas orando",
+    "livePrayer.noActivePrayers": "Nenhuma oração ativa no momento",
+    "livePrayer.loading": "Carregando...",
+    "livePrayer.youArePraying": "Você está orando",
+    "livePrayer.joinPrayer": "Participar",
+    "livePrayer.leavePrayer": "Sair da Oração"
+  },
+  "en": {
+    "livePrayer.title": "Live Prayers",
+    "livePrayer.subtitle": "Pray with other Christians in real time",
+    "livePrayer.startPraying": "Start Praying",
+    "livePrayer.endPrayer": "End Prayer",
+    "livePrayer.prayerCount": "{{count}} people praying",
+    "livePrayer.noActivePrayers": "No active prayers at the moment",
+    "livePrayer.loading": "Loading...",
+    "livePrayer.youArePraying": "You are praying",
+    "livePrayer.joinPrayer": "Join",
+    "livePrayer.leavePrayer": "Leave Prayer"
+  },
+  "es": {
+    "livePrayer.title": "Oraciones en Vivo",
+    "livePrayer.subtitle": "Ora con otros cristianos en tiempo real",
+    "livePrayer.startPraying": "Comenzar a Orar",
+    "livePrayer.endPrayer": "Terminar Oración",
+    "livePrayer.prayerCount": "{{count}} personas orando",
+    "livePrayer.noActivePrayers": "Sin oraciones activas en este momento",
+    "livePrayer.loading": "Cargando...",
+    "livePrayer.youArePraying": "Estás orando",
+    "livePrayer.joinPrayer": "Participar",
+    "livePrayer.leavePrayer": "Salir de la Oración"
+  },
+  "de": {
+    "livePrayer.title": "Live-Gebete",
+    "livePrayer.subtitle": "Bete mit anderen Christen in Echtzeit",
+    "livePrayer.startPraying": "Zum Beten anfangen",
+    "livePrayer.endPrayer": "Gebet Beenden",
+    "livePrayer.prayerCount": "{{count}} Personen beten",
+    "livePrayer.noActivePrayers": "Derzeit keine aktiven Gebete",
+    "livePrayer.loading": "Lädt...",
+    "livePrayer.youArePraying": "Du betest",
+    "livePrayer.joinPrayer": "Beitreten",
+    "livePrayer.leavePrayer": "Gebet Verlassen"
+  },
+  "fr": {
+    "livePrayer.title": "Prières en Direct",
+    "livePrayer.subtitle": "Priez avec d'autres chrétiens en temps réel",
+    "livePrayer.startPraying": "Commencer à Prier",
+    "livePrayer.endPrayer": "Terminer la Prière",
+    "livePrayer.prayerCount": "{{count}} personnes prient",
+    "livePrayer.noActivePrayers": "Pas de prières actives pour le moment",
+    "livePrayer.loading": "Chargement...",
+    "livePrayer.youArePraying": "Vous priez",
+    "livePrayer.joinPrayer": "Rejoindre",
+    "livePrayer.leavePrayer": "Quitter la Prière"
+  },
+  "ro": {
+    "livePrayer.title": "Rugăciuni Live",
+    "livePrayer.subtitle": "Rugați-vă cu alți creștini în timp real",
+    "livePrayer.startPraying": "Începeți să Vă Rugați",
+    "livePrayer.endPrayer": "Termina Rugăciunea",
+    "livePrayer.prayerCount": "{{count}} persoane rugandu-se",
+    "livePrayer.noActivePrayers": "Nicio rugăciune activă în acest moment",
+    "livePrayer.loading": "Se încarcă...",
+    "livePrayer.youArePraying": "Te rogi",
+    "livePrayer.joinPrayer": "Participă",
+    "livePrayer.leavePrayer": "Ieși din Rugăciune"
+  },
+  "ru": {
+    "livePrayer.title": "Прямые Молитвы",
+    "livePrayer.subtitle": "Молитесь с другими христианами в режиме реального времени",
+    "livePrayer.startPraying": "Начать Молиться",
+    "livePrayer.endPrayer": "Завершить Молитву",
+    "livePrayer.prayerCount": "{{count}} человек молится",
+    "livePrayer.noActivePrayers": "В данный момент нет активных молитв",
+    "livePrayer.loading": "Загрузка...",
+    "livePrayer.youArePraying": "Вы молитесь",
+    "livePrayer.joinPrayer": "Присоединиться",
+    "livePrayer.leavePrayer": "Выйти из Молитвы"
+  }
+}

@@ -5,11 +5,11 @@ import { Users, Plus, Lock, Globe, ArrowLeft, Send, Image, User } from 'lucide-r
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
-function timeAgo(d) {
+function timeAgo(d, t) {
   if (!d) return '';
   const diff = Date.now() - new Date(d).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'Agora';
+  if (mins < 1) return t('groups.timeAgo.now', 'Agora');
   if (mins < 60) return `${mins}min`;
   const hrs = Math.floor(mins / 60);
   if (hrs < 24) return `${hrs}h`;
@@ -124,20 +124,20 @@ export default function Groups() {
           <h2 style={{ margin: 0, fontSize: '1.3rem' }}>{g.name}</h2>
           {g.description && <p style={{ opacity: 0.8, fontSize: '0.85rem', marginTop: 6 }}>{g.description}</p>}
           <div style={{ display: 'flex', gap: 16, marginTop: 12, fontSize: '0.8rem', opacity: 0.7 }}>
-            <span>{g.privacy === 'private' ? '🔒 Privado' : '🌐 Público'}</span>
+            <span>{g.privacy === 'private' ? t('groups.private') : t('groups.public')}</span>
             <span>👥 {groupData.members?.length || 0} membros</span>
           </div>
           {user && !isMember && (
             <button onClick={() => joinGroup(selectedGroup)} style={{
               marginTop: 12, padding: '0.5rem 1.5rem', borderRadius: 20, border: 'none',
               background: '#daa520', color: '#fff', fontWeight: 600, cursor: 'pointer',
-            }}>+ Entrar no Grupo</button>
+            }}>{t('groups.joinGroup')}</button>
           )}
           {user && isMember && (
             <button onClick={() => leaveGroup(selectedGroup)} style={{
               marginTop: 12, padding: '0.4rem 1rem', borderRadius: 20, border: '1px solid rgba(255,255,255,0.3)',
               background: 'transparent', color: '#fff', fontSize: '0.8rem', cursor: 'pointer',
-            }}>Sair do Grupo</button>
+            }}>{t('groups.leaveGroup')}</button>
           )}
         </div>
 
@@ -157,7 +157,7 @@ export default function Groups() {
         {user && isMember && (
           <form onSubmit={postInGroup} style={{ display: 'flex', gap: 8, marginBottom: '1rem' }}>
             <input value={newPost} onChange={e => setNewPost(e.target.value)}
-              placeholder="Escreva no grupo..." style={{ flex: 1, padding: '0.6rem 1rem', borderRadius: 25, border: '1px solid #ddd', fontSize: '0.85rem' }} />
+              placeholder={t('groups.inputPlaceholder')} style={{ flex: 1, padding: '0.6rem 1rem', borderRadius: 25, border: '1px solid #ddd', fontSize: '0.85rem' }} />
             <button type="submit" disabled={posting || !newPost.trim()} style={{
               width: 40, height: 40, borderRadius: '50%', border: 'none',
               background: newPost.trim() ? '#daa520' : '#ccc', cursor: 'pointer',
@@ -168,7 +168,7 @@ export default function Groups() {
 
         {/* Posts */}
         {groupData.posts?.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>Nenhuma publicação ainda</div>
+          <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>{t('groups.noPosts')}</div>
         ) : (
           groupData.posts?.map(p => (
             <div key={p.id} style={{ background: '#fff', borderRadius: 12, padding: '0.75rem 1rem', marginBottom: 8, border: '1px solid #eee' }}>
@@ -228,13 +228,13 @@ export default function Groups() {
       {/* Create group modal */}
       {showCreate && (
         <div style={{ background: '#fff', borderRadius: 16, padding: '1.5rem', marginBottom: '1rem', border: '2px solid #daa520' }}>
-          <h3 style={{ margin: '0 0 1rem', color: '#1a0a3e' }}>{t('groups.newGroup')}</h3>
+          <h3 style={{ margin: '0 0 1rem', color: '#1a0a3e' }}>{t('groups.createForm.submit')}</h3>
           <form onSubmit={createGroup}>
             <input value={newName} onChange={e => setNewName(e.target.value)}
-              placeholder={t('groups.groupName')} required
+              placeholder={t('groups.createForm.name')} required
               style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid #ddd', marginBottom: 8, fontSize: '0.9rem', boxSizing: 'border-box' }} />
             <textarea value={newDesc} onChange={e => setNewDesc(e.target.value)}
-              placeholder={t('groups.description')} rows={3}
+              placeholder={t('groups.createForm.desc')} rows={3}
               style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid #ddd', marginBottom: 8, fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box' }} />
             <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
               <button type="button" onClick={() => setNewPrivacy('public')} style={{
@@ -252,11 +252,11 @@ export default function Groups() {
               <button type="submit" disabled={creating} style={{
                 padding: '0.5rem 1.5rem', borderRadius: 20, border: 'none',
                 background: '#daa520', color: '#fff', fontWeight: 600, cursor: 'pointer',
-              }}>{creating ? t('groups.creating') : t('groups.createGroup')}</button>
+              }}>{t('groups.createForm.submit')}</button>
               <button type="button" onClick={() => setShowCreate(false)} style={{
                 padding: '0.5rem 1rem', borderRadius: 20, border: '1px solid #ddd',
                 background: '#fff', color: '#666', cursor: 'pointer',
-              }}>{t('groups.cancel')}</button>
+              }}>{t('groups.createForm.cancel')}</button>
             </div>
           </form>
         </div>
@@ -273,12 +273,10 @@ export default function Groups() {
         boxShadow: '0 4px 12px rgba(26,10,62,0.08)',
       }}>
         <h3 style={{ fontSize: '1rem', color: '#1a0a3e', margin: '0 0 0.5rem', textAlign: 'center' }}>
-          👥 Grupos de Comunhão
+          {t('groups.communionTitle')}
         </h3>
         <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-          Participe de grupos com irmãos que compartilham a mesma fé! Aqui você pode criar ou entrar em 
-          grupos de estudo bíblico, oração, louvor, jovens, casais e muito mais. Fortaleça seus laços 
-          com a comunidade cristã e cresça espiritualmente junto com outros.
+          {t('groups.communionDesc')}
         </p>
         <p style={{ fontSize: '0.82rem', color: '#6a1b9a', fontStyle: 'italic', margin: 0, textAlign: 'center', fontWeight: 500 }}>
           "E não deixemos de congregar-nos, como é costume de alguns; antes, façamos admoestações e tanto mais quanto vedes que o Dia se aproxima." — Hebreus 10:25
@@ -286,7 +284,7 @@ export default function Groups() {
       </div>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>Carregando...</div>
+        <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>{t('groups.loading')}</div>
       ) : groups.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>
           <Users size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
@@ -311,7 +309,7 @@ export default function Groups() {
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600, color: '#1a0a3e', fontSize: '0.95rem' }}>{g.name}</div>
                 <div style={{ fontSize: '0.8rem', color: '#999' }}>
-                  {g.privacy === 'private' ? '🔒 Privado' : '🌐 Público'} • 👥 {g.member_count} membros
+                  {g.privacy === 'private' ? t('groups.private') : t('groups.public')} • 👥 {g.member_count} membros
                 </div>
                 {g.description && <div style={{ fontSize: '0.8rem', color: '#666', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 250 }}>{g.description}</div>}
               </div>

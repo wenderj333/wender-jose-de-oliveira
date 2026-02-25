@@ -1,0 +1,98 @@
+{
+  "pt": {
+    "faithJourneys.title": "Jornadas de Fé",
+    "faithJourneys.subtitle": "Caminhe em sua jornada espiritual",
+    "faithJourneys.myJourneys": "Minhas Jornadas",
+    "faithJourneys.startJourney": "Começar Jornada",
+    "faithJourneys.continueJourney": "Continuar",
+    "faithJourneys.view": "Ver",
+    "faithJourneys.loading": "Carregando...",
+    "faithJourneys.noJourneys": "Nenhuma jornada encontrada",
+    "faithJourneys.progress": "Progresso",
+    "faithJourneys.completed": "Concluído"
+  },
+  "pt_BR": {
+    "faithJourneys.title": "Jornadas de Fé",
+    "faithJourneys.subtitle": "Caminhe em sua jornada espiritual",
+    "faithJourneys.myJourneys": "Minhas Jornadas",
+    "faithJourneys.startJourney": "Começar Jornada",
+    "faithJourneys.continueJourney": "Continuar",
+    "faithJourneys.view": "Ver",
+    "faithJourneys.loading": "Carregando...",
+    "faithJourneys.noJourneys": "Nenhuma jornada encontrada",
+    "faithJourneys.progress": "Progresso",
+    "faithJourneys.completed": "Concluído"
+  },
+  "en": {
+    "faithJourneys.title": "Faith Journeys",
+    "faithJourneys.subtitle": "Walk in your spiritual journey",
+    "faithJourneys.myJourneys": "My Journeys",
+    "faithJourneys.startJourney": "Start Journey",
+    "faithJourneys.continueJourney": "Continue",
+    "faithJourneys.view": "View",
+    "faithJourneys.loading": "Loading...",
+    "faithJourneys.noJourneys": "No journeys found",
+    "faithJourneys.progress": "Progress",
+    "faithJourneys.completed": "Completed"
+  },
+  "es": {
+    "faithJourneys.title": "Jornadas de Fe",
+    "faithJourneys.subtitle": "Camina en tu jornada espiritual",
+    "faithJourneys.myJourneys": "Mis Jornadas",
+    "faithJourneys.startJourney": "Comenzar Jornada",
+    "faithJourneys.continueJourney": "Continuar",
+    "faithJourneys.view": "Ver",
+    "faithJourneys.loading": "Cargando...",
+    "faithJourneys.noJourneys": "No se encontraron jornadas",
+    "faithJourneys.progress": "Progreso",
+    "faithJourneys.completed": "Completado"
+  },
+  "de": {
+    "faithJourneys.title": "Glaubenswege",
+    "faithJourneys.subtitle": "Gehen Sie auf Ihrer geistlichen Reise",
+    "faithJourneys.myJourneys": "Meine Wege",
+    "faithJourneys.startJourney": "Weg Beginnen",
+    "faithJourneys.continueJourney": "Fortsetzen",
+    "faithJourneys.view": "Ansicht",
+    "faithJourneys.loading": "Wird geladen...",
+    "faithJourneys.noJourneys": "Keine Wege gefunden",
+    "faithJourneys.progress": "Fortschritt",
+    "faithJourneys.completed": "Abgeschlossen"
+  },
+  "fr": {
+    "faithJourneys.title": "Chemins de Foi",
+    "faithJourneys.subtitle": "Marchez dans votre cheminement spirituel",
+    "faithJourneys.myJourneys": "Mes Chemins",
+    "faithJourneys.startJourney": "Commencer le Chemin",
+    "faithJourneys.continueJourney": "Continuer",
+    "faithJourneys.view": "Afficher",
+    "faithJourneys.loading": "Chargement...",
+    "faithJourneys.noJourneys": "Aucun chemin trouvé",
+    "faithJourneys.progress": "Progression",
+    "faithJourneys.completed": "Terminé"
+  },
+  "ro": {
+    "faithJourneys.title": "Călători Ale Credinței",
+    "faithJourneys.subtitle": "Mergeți în călătoria spirituală a dvs.",
+    "faithJourneys.myJourneys": "Călătoriile Mele",
+    "faithJourneys.startJourney": "Începe Călătoria",
+    "faithJourneys.continueJourney": "Continuă",
+    "faithJourneys.view": "Vizualizare",
+    "faithJourneys.loading": "Se încarcă...",
+    "faithJourneys.noJourneys": "Nicio călătorie găsită",
+    "faithJourneys.progress": "Progres",
+    "faithJourneys.completed": "Completat"
+  },
+  "ru": {
+    "faithJourneys.title": "Путешествия Веры",
+    "faithJourneys.subtitle": "Идите в своем духовном путешествии",
+    "faithJourneys.myJourneys": "Мои Путешествия",
+    "faithJourneys.startJourney": "Начать Путешествие",
+    "faithJourneys.continueJourney": "Продолжить",
+    "faithJourneys.view": "Просмотр",
+    "faithJourneys.loading": "Загрузка...",
+    "faithJourneys.noJourneys": "Путешествия не найдены",
+    "faithJourneys.progress": "Прогресс",
+    "faithJourneys.completed": "Завершено"
+  }
+}

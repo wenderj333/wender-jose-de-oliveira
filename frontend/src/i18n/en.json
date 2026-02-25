@@ -722,6 +722,28 @@
         "loading": "Loading...",
         "noMusicUploaded": "No music uploaded yet"
     },
+    "groups": {
+        "joinGroup": "+ Join Group",
+        "leaveGroup": "Leave Group",
+        "inputPlaceholder": "Write in the group...",
+        "noPosts": "No posts yet",
+        "private": "🔒 Private",
+        "public": "🌐 Public",
+        "communionTitle": "🤝 Fellowship Groups",
+        "communionDesc": "Join groups with brothers and sisters who share the same faith! Here you can create or join Bible study, prayer, praise, youth, couples groups and much more.",
+        "loading": "Loading...",
+        "noGroups": "No groups found",
+        "createFirst": "Create the first group!",
+        "createForm": {
+            "name": "Group Name",
+            "desc": "Description (optional)",
+            "submit": "Create Group",
+            "cancel": "Cancel"
+        },
+        "timeAgo": {
+            "now": "Now"
+        }
+    },
     "members": {
         "never": "Never",
         "now": "Now",

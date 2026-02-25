@@ -722,6 +722,28 @@
         "loading": "Cargando...",
         "noMusicUploaded": "Ninguna música subida aún"
     },
+    "groups": {
+        "joinGroup": "+ Unirse al Grupo",
+        "leaveGroup": "Salir del Grupo",
+        "inputPlaceholder": "Escribe en el grupo...",
+        "noPosts": "Sin publicaciones aún",
+        "private": "🔒 Privado",
+        "public": "🌐 Público",
+        "communionTitle": "🤝 Grupos de Comunión",
+        "communionDesc": "¡Únete a grupos con hermanos que comparten la misma fe! Aquí puedes crear o unirte a grupos de estudio bíblico, oración, alabanza, jóvenes, parejas y mucho más.",
+        "loading": "Cargando...",
+        "noGroups": "No se encontraron grupos",
+        "createFirst": "¡Crea el primer grupo!",
+        "createForm": {
+            "name": "Nombre del Grupo",
+            "desc": "Descripción (opcional)",
+            "submit": "Crear Grupo",
+            "cancel": "Cancelar"
+        },
+        "timeAgo": {
+            "now": "Ahora"
+        }
+    },
     "members": {
         "never": "Nunca",
         "now": "Ahora",

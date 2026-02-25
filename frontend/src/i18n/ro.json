@@ -722,6 +722,28 @@
         "loading": "Se încarcă...",
         "noMusicUploaded": "Nicio muzică încărcată încă"
     },
+    "groups": {
+        "joinGroup": "+ Alăturați-vă grupului",
+        "leaveGroup": "Ieșiți din grup",
+        "inputPlaceholder": "Scrieți în grup...",
+        "noPosts": "Încă nici o postare",
+        "private": "🔒 Privat",
+        "public": "🌐 Public",
+        "communionTitle": "🤝 Grupuri de Comuniune",
+        "communionDesc": "Alăturați-vă grupurilor cu frații și surorile care împărtășesc aceeași credință! Aici puteți crea sau alătura grupuri de studiu biblic, rugăciune, laudă, tineri, cupluri și mult mai mult.",
+        "loading": "Se încarcă...",
+        "noGroups": "Nu s-au găsit grupuri",
+        "createFirst": "Creați primul grup!",
+        "createForm": {
+            "name": "Numele grupului",
+            "desc": "Descriere (opțional)",
+            "submit": "Creare grup",
+            "cancel": "Anulare"
+        },
+        "timeAgo": {
+            "now": "Acum"
+        }
+    },
     "members": {
         "never": "Niciodată",
         "now": "Acum",

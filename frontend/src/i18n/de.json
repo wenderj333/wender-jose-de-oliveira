@@ -787,6 +787,28 @@
         "loading": "Lädt...",
         "noMusicUploaded": "Noch keine Musik hochgeladen"
     },
+    "groups": {
+        "joinGroup": "+ Gruppe beitreten",
+        "leaveGroup": "Gruppe verlassen",
+        "inputPlaceholder": "Schreibe in der Gruppe...",
+        "noPosts": "Noch keine Beiträge",
+        "private": "🔒 Privat",
+        "public": "🌐 Öffentlich",
+        "communionTitle": "🤝 Gemeinschaftsgruppen",
+        "communionDesc": "Treten Sie Gruppen mit Brüdern und Schwestern bei, die den gleichen Glauben teilen! Hier können Sie Bibelstudien-, Gebets-, Lob-, Jugend-, Paar- und vieles mehr erstellen oder beitreten.",
+        "loading": "Wird geladen...",
+        "noGroups": "Keine Gruppen gefunden",
+        "createFirst": "Erstellen Sie die erste Gruppe!",
+        "createForm": {
+            "name": "Gruppenname",
+            "desc": "Beschreibung (optional)",
+            "submit": "Gruppe erstellen",
+            "cancel": "Abbrechen"
+        },
+        "timeAgo": {
+            "now": "Gerade eben"
+        }
+    },
     "members": {
         "never": "Nie",
         "now": "Jetzt",
