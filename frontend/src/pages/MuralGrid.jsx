@@ -401,8 +401,18 @@ export default function MuralGrid() {
     }
   }
 
-  const getMediaUrl = (url) => url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
-  const getAvatarUrl = (url) => url ? (url.startsWith('http') ? url : `${API_BASE}${url}`) : null;
+  const getMediaUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith('http')) return url;
+    if (API_BASE) return `${API_BASE}${url}`;
+    return url; // Fallback to relative path
+  };
+  const getAvatarUrl = (url) => {
+    if (!url) return 'https://via.placeholder.com/44?text=User';
+    if (url.startsWith('http')) return url;
+    if (API_BASE) return `${API_BASE}${url}`;
+    return url;
+  };
 
   // Get thumb for grid (prioritize media_url, fallback to others)
   const getThumbnail = (post) => {
@@ -521,7 +531,7 @@ export default function MuralGrid() {
   };
 
   return (
-    <div style={{ background: '#fafbfc', minHeight: '100vh', paddingBottom: '2rem' }}>
+    <div style={{ background: '#0f0f1a', minHeight: '100vh', paddingBottom: '2rem' }}>
       {/* Header */}
       <div style={{
         padding: '1rem 1rem',
@@ -939,7 +949,7 @@ export default function MuralGrid() {
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <img src={getAvatarUrl(selectedPost.author_avatar) || '/default-avatar.jpg'} alt="" style={{
+                  <img src={getAvatarUrl(selectedPost.author_avatar)} alt="" style={{
                     width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', background: '#daa520',
                   }} />
                   <div>
