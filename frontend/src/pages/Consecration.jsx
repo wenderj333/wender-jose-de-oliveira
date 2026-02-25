@@ -5,40 +5,8 @@ import { Flame, ChevronDown, ChevronUp } from 'lucide-react';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
-const BENEFITS = [
-  {
-    title: '🕊️ BENEFÍCIOS ESPIRITUAIS',
-    items: [
-      { icon: '🔥', text: 'Fortalece o espírito e submete a carne', verse: '"Mas esmurro o meu corpo e o reduzo à servidão." — 1 Coríntios 9:27' },
-      { icon: '🧭', text: 'Direção e revelação de Deus', verse: '"Jejuamos, pois, e pedimos isso ao nosso Deus, e Ele nos ouviu." — Esdras 8:23' },
-      { icon: '🛡️', text: 'Quebra de opressões espirituais', verse: '"Porventura não é este o jejum que escolhi?" — Isaías 58:6' },
-      { icon: '🙏', text: 'Intimidade com Deus', verse: '"Quando jejuares… teu Pai, que vê em secreto, te recompensará." — Mateus 6:17–18' },
-    ],
-  },
-  {
-    title: '🧠 BENEFÍCIOS PARA A MENTE',
-    items: [
-      { icon: '🧘', text: 'Humilhação da alma e paz interior', verse: '"Humilhei a minha alma com o jejum." — Salmos 35:13' },
-      { icon: '🎯', text: 'Domínio próprio', verse: '"Melhor é o que domina o seu espírito do que o que conquista uma cidade." — Provérbios 16:32' },
-      { icon: '🧠', text: 'Renovação da mente', verse: '"Transformai-vos pela renovação do vosso entendimento." — Romanos 12:2' },
-    ],
-  },
-  {
-    title: '💪 BENEFÍCIOS PARA O CORPO',
-    items: [
-      { icon: '♻️', text: 'Purificação e renovação', verse: '"Purifiquemo-nos de toda impureza da carne e do espírito." — 2 Coríntios 7:1' },
-      { icon: '🛡️', text: 'O corpo como templo', verse: '"Vosso corpo é templo do Espírito Santo." — 1 Coríntios 6:19' },
-      { icon: '🔥', text: 'Disciplina física com propósito eterno', verse: '"O exercício físico é de pouco proveito, mas a piedade é proveitosa para tudo." — 1 Timóteo 4:8' },
-    ],
-  },
-  {
-    title: '🍞 QUEBRA DO JEJUM',
-    items: [
-      { icon: '🥣', text: 'Com simplicidade e gratidão', verse: '"E, tomando o pão, deu graças." — Lucas 22:19' },
-      { icon: '📖', text: 'Tudo para a glória de Deus', verse: '"Quer comais, quer bebais, fazei tudo para a glória de Deus." — 1 Coríntios 10:31' },
-    ],
-  },
-];
+// BENEFITS is built inside the component now to use t() for i18n
+// This allows translation of benefit titles and descriptions
 
 export default function Consecration() {
   const { t } = useTranslation();
@@ -49,6 +17,42 @@ export default function Consecration() {
   const [toggling, setToggling] = useState(false);
   const [showBenefits, setShowBenefits] = useState(true);
   const [expandedSection, setExpandedSection] = useState(null);
+
+  // Build BENEFITS array using i18n keys
+  const BENEFITS = [
+    {
+      title: '🕊️ ' + t('consecration.spiritualBenefits'),
+      items: [
+        { icon: '🔥', text: t('consecration.spiritualStrength'), verse: '"Mas esmurro o meu corpo e o reduzo à servidão." — 1 Coríntios 9:27' },
+        { icon: '🧭', text: t('consecration.godDirection'), verse: '"Jejuamos, pois, e pedimos isso ao nosso Deus, e Ele nos ouviu." — Esdras 8:23' },
+        { icon: '🛡️', text: t('consecration.breakOppression'), verse: '"Porventura não é este o jejum que escolhi?" — Isaías 58:6' },
+        { icon: '🙏', text: t('consecration.intimacy'), verse: '"Quando jejuares… teu Pai, que vê em secreto, te recompensará." — Mateus 6:17–18' },
+      ],
+    },
+    {
+      title: '🧠 ' + t('consecration.mentalBenefits'),
+      items: [
+        { icon: '🧘', text: t('consecration.mentalHumility'), verse: '"Humilhei a minha alma com o jejum." — Salmos 35:13' },
+        { icon: '🎯', text: t('consecration.selfControl'), verse: '"Melhor é o que domina o seu espírito do que o que conquista uma cidade." — Provérbios 16:32' },
+        { icon: '🧠', text: t('consecration.mindRenewal'), verse: '"Transformai-vos pela renovação do vosso entendimento." — Romanos 12:2' },
+      ],
+    },
+    {
+      title: '💪 ' + t('consecration.physicalBenefits'),
+      items: [
+        { icon: '♻️', text: t('consecration.purification'), verse: '"Purifiquemo-nos de toda impureza da carne e do espírito." — 2 Coríntios 7:1' },
+        { icon: '🛡️', text: t('consecration.templeBody'), verse: '"Vosso corpo é templo do Espírito Santo." — 1 Coríntios 6:19' },
+        { icon: '🔥', text: t('consecration.disciplineFaith'), verse: '"O exercício físico é de pouco proveito, mas a piedade é proveitosa para tudo." — 1 Timóteo 4:8' },
+      ],
+    },
+    {
+      title: '🍞 ' + t('consecration.breakFasting'),
+      items: [
+        { icon: '🥣', text: t('consecration.breakSimplicity'), verse: '"E, tomando o pão, deu graças." — Lucas 22:19' },
+        { icon: '📖', text: t('consecration.breakGlory'), verse: '"Quer comais, quer bebais, fazei tudo para a glória de Deus." — 1 Coríntios 10:31' },
+      ],
+    },
+  ];
 
   useEffect(() => {
     fetchStats();
@@ -172,11 +176,10 @@ export default function Consecration() {
           border: '1px solid rgba(218,165,32,0.2)',
         }}>
           <h3 style={{ fontSize: '1rem', color: '#1a0a3e', margin: '0 0 0.5rem', textAlign: 'center' }}>
-            🔥 O Poder do Jejum
+            🔥 {t('consecration.powerOfFasting')}
           </h3>
           <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-            O jejum é uma das armas espirituais mais poderosas que Deus nos deu. Não é apenas abster-se de comida 
-            — é render-se inteiramente a Deus, buscando Sua presença e Sua vontade acima de tudo.
+            {t('consecration.powerDesc')}
           </p>
           <p style={{ fontSize: '0.82rem', color: '#555', fontStyle: 'italic', margin: '0 0 0.4rem', textAlign: 'center' }}>
             📖 "Quando jejuares, unge a tua cabeça e lava o teu rosto, para não pareceres aos homens que jejuas... 
@@ -193,7 +196,7 @@ export default function Consecration() {
           border: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
         }}>
           <h3 style={{ fontSize: '0.95rem', color: '#1a0a3e', margin: '0 0 0.6rem', textAlign: 'center' }}>
-            📋 Como funciona?
+            📋 {t('consecration.howWorks')}
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
@@ -202,7 +205,7 @@ export default function Consecration() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0,
               }}>1</span>
               <p style={{ margin: 0, fontSize: '0.82rem', color: '#444', lineHeight: 1.5 }}>
-                <strong>Comece seu jejum:</strong> Toque no botão de fogo abaixo para indicar que você está <strong>iniciando</strong> sua consagração (jejum e oração).
+                <strong>{t('consecration.beginFasting')}:</strong> {t('consecration.beginFastingDesc')}
               </p>
             </div>
             <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
@@ -211,7 +214,7 @@ export default function Consecration() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0,
               }}>2</span>
               <p style={{ margin: 0, fontSize: '0.82rem', color: '#444', lineHeight: 1.5 }}>
-                <strong>Sua chama sobe:</strong> Enquanto você está consagrando, uma <strong>chama de fogo</strong> sobe na tela representando você. Cada pessoa é uma chama!
+                <strong>{t('consecration.flameRises')}:</strong> {t('consecration.flameRisesDesc')}
               </p>
             </div>
             <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
@@ -220,7 +223,7 @@ export default function Consecration() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0,
               }}>3</span>
               <p style={{ margin: 0, fontSize: '0.82rem', color: '#444', lineHeight: 1.5 }}>
-                <strong>Termine seu jejum:</strong> Quando terminar, toque no botão novamente para <strong>encerrar</strong>. Sua chama se apaga, mas sua oração permanece!
+                <strong>{t('consecration.endFasting')}:</strong> {t('consecration.endFastingDesc')}
               </p>
             </div>
           </div>
@@ -229,7 +232,7 @@ export default function Consecration() {
             background: 'rgba(255,102,0,0.08)', border: '1px solid rgba(255,102,0,0.2)', textAlign: 'center',
           }}>
             <span style={{ fontSize: '0.78rem', color: '#cc5500' }}>
-              🔥 Quanto mais pessoas consagrando, <strong>mais chamas de fogo sobem!</strong> Cada chama é uma pessoa em oração.
+              🔥 {t('consecration.morePeople')}
             </span>
           </div>
         </div>
@@ -284,7 +287,7 @@ export default function Consecration() {
               <Flame size={44} />
             </span>
             <span style={{ position: 'relative', zIndex: 2, textShadow: isActive ? '0 0 10px rgba(255,200,0,0.8)' : 'none', fontSize: '0.95rem' }}>
-              {isActive ? 'Consagrando...' : 'Consagrar'}
+              {isActive ? t('consecration.consecrating') : t('consecration.startButton')}
             </span>
           </button>
           <div style={{
@@ -294,8 +297,8 @@ export default function Consecration() {
           }}>
             <p style={{ margin: 0, textAlign: 'center', fontSize: '0.82rem', fontWeight: 600, color: isActive ? '#cc5500' : '#666' }}>
               {isActive
-                ? '✅ Você está consagrando agora! Toque no botão quando terminar.'
-                : '👆 Toque no botão acima para INICIAR sua consagração'}
+                ? '✅ ' + t('consecration.currentlyConsecrating')
+                : '👆 ' + t('consecration.touchButton')}
             </p>
           </div>
         </div>
@@ -307,16 +310,16 @@ export default function Consecration() {
             padding: '0.8rem 1rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 160,
           }}>
             <div style={{ fontSize: '1.8rem', fontWeight: 800 }}>🔥 {stats.totalConsecrations}</div>
-            <div style={{ fontSize: '0.72rem', opacity: 0.95, fontWeight: 600 }}>Consagrações já realizadas</div>
-            <div style={{ fontSize: '0.65rem', opacity: 0.7, marginTop: 2 }}>desde o início da plataforma</div>
+            <div style={{ fontSize: '0.72rem', opacity: 0.95, fontWeight: 600 }}>{t('consecration.totalCount')}</div>
+            <div style={{ fontSize: '0.65rem', opacity: 0.7, marginTop: 2 }}>{t('consecration.totalCountDesc')}</div>
           </div>
           <div style={{
             background: 'linear-gradient(135deg, #daa520, #b8860b)', borderRadius: 14,
             padding: '0.8rem 1rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 160,
           }}>
             <div style={{ fontSize: '1.8rem', fontWeight: 800 }}>🙏 {stats.activeFasting}</div>
-            <div style={{ fontSize: '0.72rem', opacity: 0.95, fontWeight: 600 }}>Pessoas jejuando AGORA</div>
-            <div style={{ fontSize: '0.65rem', opacity: 0.7, marginTop: 2 }}>cada pessoa = uma chama de fogo 🔥</div>
+            <div style={{ fontSize: '0.72rem', opacity: 0.95, fontWeight: 600 }}>{t('consecration.activeFasting')}</div>
+            <div style={{ fontSize: '0.65rem', opacity: 0.7, marginTop: 2 }}>{t('consecration.activeFastingDesc')}</div>
           </div>
         </div>
 
@@ -329,7 +332,7 @@ export default function Consecration() {
             fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem',
             display: 'inline-flex', alignItems: 'center', gap: 6,
           }}>
-            📖 Benefícios do Jejum {showBenefits ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            📖 {t('consecration.benefitsTitle')} {showBenefits ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           </button>
         </div>
 
@@ -371,7 +374,7 @@ export default function Consecration() {
                 "Nem só de pão viverá o homem, mas de toda Palavra que sai da boca de Deus." — Mateus 4:4
               </p>
               <p style={{ fontSize: '0.75rem', opacity: 0.8, margin: 0 }}>
-                🔑 O jejum: Não é dieta. Não é sacrifício vazio. É obediência, alinhamento e dependência de Deus.
+                🔑 {t('consecration.conclusion')}
               </p>
             </div>
           </div>
