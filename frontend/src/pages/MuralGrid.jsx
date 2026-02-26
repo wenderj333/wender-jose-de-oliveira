@@ -251,7 +251,7 @@ export default function MuralGrid() {
   async function uploadDirectToCloudinary(file) {
     const isVid = file.type.startsWith('video/');
     const isAud = file.type.startsWith('audio/');
-    const resourceType = isAud ? 'video' : (isVid ? 'video' : 'image');
+    const resourceType = isAud ? 'auto' : (isVid ? 'video' : 'image');
 
     // Check file size
     const maxSize = isVid ? 500 * 1024 * 1024 : (isAud ? 100 * 1024 * 1024 : 50 * 1024 * 1024);
