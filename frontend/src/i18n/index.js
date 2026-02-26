@@ -38,6 +38,8 @@ i18n
       'fr-FR': { translation: fr },
       'fr-CA': { translation: fr },
     },
+    lng: localStorage.getItem('i18nextLng') || 'pt',
+    lng: localStorage.getItem('i18nextLng') || 'pt',
     fallbackLng: 'pt',
     interpolation: {
       escapeValue: false,
