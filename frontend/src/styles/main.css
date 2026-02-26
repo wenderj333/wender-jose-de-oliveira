@@ -1771,7 +1771,7 @@ body {
 
 /* ===== INSTAGRAM-STYLE MURAL GRID ===== */
 .mural-grid-container {
-  background: #fafbfc;
+  background: #0f0f1a; /* Dark mode background */
   min-height: 100vh;
   padding-bottom: 2rem;
 }
