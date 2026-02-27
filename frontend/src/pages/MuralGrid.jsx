@@ -1,1122 +1,434 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Search, Grid, List } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { useWebSocket } from '../context/WebSocketContext';
-import { Plus, Filter, X, Send, Heart, MessageCircle, Image, Video, Play, User, Share2, ChevronDown, Trash2, Music, Radio } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
-const API = `${API_BASE}/api`;
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'degxiuf43';
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'sigo_com_fe';
 
-const CATEGORIES_CONFIG = [
-  { value: 'testemunho', labelKey: 'mural.testimony', color: '#daa520' },
-  { value: 'louvor', labelKey: 'mural.worship', color: '#9b59b6' },
-  { value: 'foto', labelKey: 'mural.photo', color: '#3498db' },
-  { value: 'versiculo', labelKey: 'mural.verse', color: '#27ae60' },
-  { value: 'reflexao', labelKey: 'mural.reflection', color: '#e67e22' },
-  { value: 'campanha', labelKey: 'mural.campaign', color: '#e74c3c' },
+async function uploadToCloudinary(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  const resourceType = file.type.startsWith('video') ? 'video' : 'auto';
+  const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
+  const res = await fetch(url, { method: 'POST', body: formData });
+  if (!res.ok) throw new Error('Erro upload Cloudinary');
+  const data = await res.json();
+  return data.secure_url;
+}
+
+const DEMO_POSTS = [
+  { id: 1, type: 'testemunho', authorInitials: 'MC', authorName: 'Maria Clara', avatarColor: '#f97316', church: 'Igreja Batista Central', time: 'Há 2 horas', content: 'Glória a Deus! Depois de 3 anos desempregada, fui aprovada no concurso público. Nunca desistam de orar!', amemCount: 47, commentCount: 12, liked: false, mediaUrl: null, mediaType: null, musicUrl: null },
+  { id: 2, type: 'louvor', authorInitials: 'PR', authorName: 'Paulo Ricardo', avatarColor: '#a855f7', church: 'Comunidade Graça e Paz', time: 'Há 4 horas', content: 'Novo louvor do ministério de adoração. Que o Espírito Santo toque cada coração!', amemCount: 31, commentCount: 8, liked: false, mediaUrl: 'https://images.unsplash.com/photo-1478147427282-58a87a433968?w=600&q=80', mediaType: 'foto', musicUrl: null },
+  { id: 3, type: 'versiculo', authorInitials: 'DF', authorName: 'Daniela Ferreira', avatarColor: '#22c55e', church: 'Assembleia de Deus', time: 'Há 10 horas', content: 'Porque eu bem sei os pensamentos que penso de vós, diz o Senhor; pensamentos de paz e não de mal.', reference: 'Jeremias 29:11', amemCount: 112, commentCount: 5, liked: false, mediaUrl: null, mediaType: null, musicUrl: null },
+  { id: 4, type: 'reflexao', authorInitials: 'JL', authorName: 'Pastor João Lucas', avatarColor: '#3b82f6', church: 'Igreja Presbiteriana', time: 'Há 8 horas', content: 'Muitas vezes queremos que Deus mude as circunstâncias, mas Ele quer mudar o nosso coração primeiro.', amemCount: 65, commentCount: 18, liked: false, mediaUrl: null, mediaType: null, musicUrl: null },
 ];
 
-function isAudio(url) {
-  if (!url) return false;
-  return /\.(mp3|wav|ogg|m4a|aac|flac)/i.test(url);
+const CATEGORIES = [
+  { value: 'testemunho', label: '🙌 Testemunho', color: '#f97316' },
+  { value: 'louvor',     label: '🎵 Louvor',     color: '#a855f7' },
+  { value: 'reflexao',  label: '📖 Reflexão',   color: '#3b82f6' },
+  { value: 'versiculo', label: '✨ Versículo',  color: '#22c55e' },
+  { value: 'foto',      label: '📸 Foto/Vídeo', color: '#f43f5e' },
+];
+
+function Avatar({ initials, color, size = 40 }) {
+  return (
+    <div style={{
+      width: size, height: size, borderRadius: '50%',
+      background: `linear-gradient(135deg, ${color}, ${color}99)`,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      color: 'white', fontWeight: '700', fontSize: size * 0.35, flexShrink: 0,
+      border: '2px solid white', boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+    }}>
+      {initials}
+    </div>
+  );
 }
 
-function isVideo(url) {
-  if (!url) return false;
-  if (isAudio(url)) return false;
-  return /\.(mp4|webm|mov)/i.test(url) || url.includes('/video/') || url.includes('resource_type=video');
+function MiniAudioPlayer({ src }) {
+  const audioRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const toggle = async () => {
+    if (!audioRef.current) return;
+    try {
+      if (playing) { audioRef.current.pause(); setPlaying(false); }
+      else { await audioRef.current.play(); setPlaying(true); }
+    } catch (err) { console.error(err); }
+  };
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'linear-gradient(135deg,#667eea15,#764ba215)', border: '1px solid #667eea30', borderRadius: 12, padding: '10px 14px', marginTop: 10 }}>
+      <audio ref={audioRef} src={src} onTimeUpdate={() => { if (audioRef.current?.duration) setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100); }} onEnded={() => { setPlaying(false); setProgress(0); }} preload="metadata" playsInline />
+      <button onClick={toggle} style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0 }}>
+        {playing ? <Pause size={15} /> : <Play size={15} />}
+      </button>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>🎵 Música anexada</div>
+        <div style={{ height: 3, background: '#e2e8f0', borderRadius: 2 }}>
+          <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg,#667eea,#764ba2)', borderRadius: 2 }} />
+        </div>
+      </div>
+    </div>
+  );
 }
 
-function isYouTube(url) {
-  if (!url) return false;
-  return url.includes('youtube.com/watch') || url.includes('youtu.be/');
+function AmenButton({ count, liked, onLike }) {
+  const [animate, setAnimate] = useState(false);
+  const [floaters, setFloaters] = useState([]);
+  const handleClick = () => {
+    onLike();
+    setAnimate(true);
+    setTimeout(() => setAnimate(false), 300);
+    const id = Date.now();
+    setFloaters(f => [...f, id]);
+    setTimeout(() => setFloaters(f => f.filter(x => x !== id)), 900);
+  };
+  return (
+    <div style={{ position: 'relative', display: 'inline-flex' }}>
+      {floaters.map(id => (
+        <span key={id} style={{ position: 'absolute', bottom: '100%', left: '50%', fontSize: 18, pointerEvents: 'none', animation: 'floatUp 0.9s ease-out forwards' }}>🙏</span>
+      ))}
+      <button onClick={handleClick} style={{ display: 'flex', alignItems: 'center', gap: 5, background: liked ? '#fff0f3' : 'transparent', border: liked ? '1px solid #fecdd3' : '1px solid transparent', cursor: 'pointer', color: liked ? '#e11d48' : '#666', fontSize: 13, fontWeight: 600, padding: '7px 12px', borderRadius: 20, transition: 'all 0.2s', transform: animate ? 'scale(1.25)' : 'scale(1)' }}>
+        <span style={{ fontSize: animate ? 20 : 17, transition: 'font-size 0.2s' }}>🙏</span>
+        <span>{count}</span>
+      </button>
+    </div>
+  );
 }
 
-function getYouTubeId(url) {
-  if (!url) return null;
-  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
-  return m ? m[1] : null;
-}
-
-function getTimeAgo(dateStr, t) {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return t('time.now', 'Agora');
-  if (mins < 60) return t('time.minAgo', 'Há {{count}}min', { count: mins });
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return t('time.hoursAgo', 'Há {{count}}h', { count: hrs });
-  const days = Math.floor(hrs / 24);
-  return t('time.daysAgo', 'Há {{count}}d', { count: days });
+// Modal fullscreen para ver post
+function PostModal({ post, onClose, onLike, onDelete }) {
+  const cat = CATEGORIES.find(c => c.value === post.type) || CATEGORIES[0];
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([]);
+  const submitComment = (e) => {
+    e.preventDefault();
+    if (!comment.trim()) return;
+    setComments([...comments, { id: Date.now(), text: comment, author: 'Você' }]);
+    setComment('');
+  };
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={onClose}>
+      <div style={{ background: 'white', borderRadius: 16, maxWidth: 860, width: '100%', maxHeight: '90vh', display: 'flex', flexDirection: window.innerWidth < 700 ? 'column' : 'row', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
+        {/* Media side */}
+        <div style={{ flex: '1.2', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 300, position: 'relative' }}>
+          {post.mediaType === 'foto' && post.mediaUrl ? (
+            <img src={post.mediaUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          ) : post.mediaType === 'video' && post.mediaUrl ? (
+            <video src={post.mediaUrl} controls playsInline style={{ width: '100%', maxHeight: 500 }} />
+          ) : (
+            <div style={{ padding: 32, textAlign: 'center' }}>
+              <div style={{ fontSize: 48, marginBottom: 16 }}>{cat.label.split(' ')[0]}</div>
+              <p style={{ color: 'white', fontSize: 16, lineHeight: 1.6 }}>{post.content}</p>
+              {post.reference && <p style={{ color: cat.color, fontWeight: 700, marginTop: 8 }}>— {post.reference}</p>}
+            </div>
+          )}
+          <button onClick={onClose} style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(0,0,0,0.5)', border: 'none', color: 'white', borderRadius: '50%', width: 32, height: 32, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={16} /></button>
+        </div>
+        {/* Info side */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}>
+          <div style={{ padding: '14px 16px', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <Avatar initials={post.authorInitials} color={post.avatarColor || cat.color} size={36} />
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>{post.authorName}</div>
+              <div style={{ fontSize: 11, color: '#888' }}>{post.church}</div>
+            </div>
+            <span style={{ fontSize: 11, padding: '3px 8px', borderRadius: 12, background: cat.color + '20', color: cat.color, fontWeight: 600 }}>{cat.label}</span>
+            {post.id > 1000 && <button onClick={() => { onDelete(post.id); onClose(); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ddd' }} onMouseEnter={e => e.currentTarget.style.color='#e11d48'} onMouseLeave={e => e.currentTarget.style.color='#ddd'}><Trash2 size={15} /></button>}
+          </div>
+          {post.mediaUrl && post.content && (
+            <div style={{ padding: '10px 16px', borderBottom: '1px solid #f0f0f0', fontSize: 14, color: '#333' }}>{post.content}</div>
+          )}
+          {post.musicUrl && <div style={{ padding: '0 16px' }}><MiniAudioPlayer src={post.musicUrl} /></div>}
+          <div style={{ flex: 1, overflowY: 'auto', padding: '10px 16px' }}>
+            {comments.map(c => (
+              <div key={c.id} style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#667eea', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>EU</div>
+                <div style={{ background: '#f8f8f8', borderRadius: 12, padding: '6px 10px', fontSize: 13 }}>
+                  <span style={{ fontWeight: 600, color: '#333' }}>{c.author} </span>
+                  <span style={{ color: '#555' }}>{c.text}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ borderTop: '1px solid #f0f0f0', padding: '10px 16px' }}>
+            <div style={{ display: 'flex', gap: 12, marginBottom: 10 }}>
+              <AmenButton count={post.amemCount} liked={post.liked} onLike={() => onLike(post.id)} />
+              <button style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', color: '#666', fontSize: 13 }}><MessageCircle size={18} />{post.commentCount + comments.length}</button>
+              <button style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', color: '#666', fontSize: 13, marginLeft: 'auto' }}><Share2 size={18} /></button>
+            </div>
+            <form onSubmit={submitComment} style={{ display: 'flex', gap: 8 }}>
+              <input value={comment} onChange={e => setComment(e.target.value)} placeholder="Adicionar comentário..." style={{ flex: 1, padding: '9px 14px', borderRadius: 20, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none' }} />
+              <button type="submit" style={{ padding: '9px 14px', borderRadius: 20, background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', color: 'white', cursor: 'pointer' }}><Send size={13} /></button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function MuralGrid() {
   const { t } = useTranslation();
-  const { user, token } = useAuth();
-  const navigate = useNavigate();
-  const { liveStreams } = useWebSocket();
-  
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const [posts, setPosts] = useState(DEMO_POSTS);
+  const [activeFilter, setActiveFilter] = useState('todas');
+  const [viewMode, setViewMode] = useState('feed');
   const [showForm, setShowForm] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [newText, setNewText] = useState('');
-  const [newCategory, setNewCategory] = useState('testemunho');
-  const [newMedia, setNewMedia] = useState(null);
-  const [newMediaPreview, setNewMediaPreview] = useState(null);
-  const [newMediaIsVideo, setNewMediaIsVideo] = useState(false);
-  const [newMediaType, setNewMediaType] = useState(null); // 'photo' | 'video' | 'audio' | 'url'
-  const [newMediaUrl, setNewMediaUrl] = useState(''); // Para URLs (YouTube, etc)
-  const [selectedMusicUrl, setSelectedMusicUrl] = useState(''); // Música selecionada de "Minha Música"
-  const [posting, setPosting] = useState(false);
-  const [postingText, setPostingText] = useState('');
-  const [likedPosts, setLikedPosts] = useState({});
-  const [commentsData, setCommentsData] = useState({});
-  const [commentText, setCommentText] = useState({});
-  const [sendingComment, setSendingComment] = useState({});
-  const [showLoginPopup, setShowLoginPopup] = useState(false);
-  const [showMyMusicPicker, setShowMyMusicPicker] = useState(false);
-  const [myMusic, setMyMusic] = useState([]);
-  const [loadingMyMusic, setLoadingMyMusic] = useState(false);
-
+  const [postText, setPostText] = useState('');
+  const [postCategory, setPostCategory] = useState('testemunho');
+  const [mediaFile, setMediaFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
+  const [mediaType, setMediaType] = useState(null);
+  const [musicFile, setMusicFile] = useState(null);
+  const [musicName, setMusicName] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
   const photoRef = useRef(null);
   const videoRef = useRef(null);
-  const audioRef = useRef(null);
+  const musicRef = useRef(null);
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  const filteredPosts = activeFilter === 'todas' ? posts : posts.filter(p => p.type === activeFilter);
 
-  async function fetchPosts() {
-    try {
-      const res = await fetch(`${API}/feed?limit=50`);
-      const data = await res.json();
-      const p = data.posts || [];
-      setPosts(p);
-      if (token) {
-        try {
-          const r = await fetch(`${API}/feed/liked-posts`, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          const d = await r.json();
-          const liked = {};
-          (d.likedIds || []).forEach(id => { liked[id] = true; });
-          setLikedPosts(liked);
-        } catch {}
-      }
-    } catch (err) {
-      console.error('Error fetching feed:', err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function fetchMyMusic() {
-    if (!token) return;
-    setLoadingMyMusic(true);
-    try {
-      const res = await fetch(`${API}/music`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      const songs = Array.isArray(data.songs) ? data.songs : (data.songs?.rows || []);
-      setMyMusic(songs || []);
-    } catch (err) {
-      console.warn('Error fetching my music:', err.message);
-      setMyMusic([]);
-    } finally {
-      setLoadingMyMusic(false);
-    }
-  }
-
-  function selectMyMusic(song) {
-    setSelectedMusicUrl(song.url);
-    setShowMyMusicPicker(false);
-  }
-
-  async function handleLike(postId) {
-    if (!token) { setShowLoginPopup(true); return; }
-    const wasLiked = likedPosts[postId];
-    setLikedPosts(prev => ({ ...prev, [postId]: !wasLiked }));
-    setPosts(prev => prev.map(p => p.id === postId
-      ? { ...p, like_count: Math.max(0, (p.like_count || 0) + (wasLiked ? -1 : 1)) }
-      : p
-    ));
-    try {
-      await fetch(`${API}/feed/${postId}/like`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-    } catch {
-      setLikedPosts(prev => ({ ...prev, [postId]: wasLiked }));
-      setPosts(prev => prev.map(p => p.id === postId
-        ? { ...p, like_count: Math.max(0, (p.like_count || 0) + (wasLiked ? 1 : -1)) }
-        : p
-      ));
-    }
-  }
-
-  async function fetchComments(postId) {
-    try {
-      const res = await fetch(`${API}/feed/${postId}/comments`);
-      const data = await res.json();
-      setCommentsData(prev => ({ ...prev, [postId]: data.comments || [] }));
-    } catch {
-      setCommentsData(prev => ({ ...prev, [postId]: [] }));
-    }
-  }
-
-  async function handleSendComment(postId) {
-    const text = (commentText[postId] || '').trim();
-    if (!text || !token) return;
-    setSendingComment(prev => ({ ...prev, [postId]: true }));
-    try {
-      const res = await fetch(`${API}/feed/${postId}/comments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ content: text }),
-      });
-      const data = await res.json();
-      if (data.comment) {
-        setCommentsData(prev => ({
-          ...prev,
-          [postId]: [...(prev[postId] || []), data.comment]
-        }));
-        setCommentText(prev => ({ ...prev, [postId]: '' }));
-        setPosts(prev => prev.map(p => p.id === postId
-          ? { ...p, comment_count: (p.comment_count || 0) + 1 }
-          : p
-        ));
-      }
-    } catch (err) { console.error(err); }
-    finally { setSendingComment(prev => ({ ...prev, [postId]: false })); }
-  }
-
-  async function handleDeletePost(postId) {
-    if (!confirm(t('common.deleteConfirm', 'Tem certeza que deseja excluir esta publicação?'))) return;
-    try {
-      const res = await fetch(`${API}/feed/${postId}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        setPosts(prev => prev.filter(p => p.id !== postId));
-        setSelectedPost(null);
-      }
-    } catch (err) { console.error(err); }
-  }
-
-  async function handleDeleteComment(commentId, postId) {
-    try {
-      await fetch(`${API}/feed/comments/${commentId}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCommentsData(prev => ({
-        ...prev,
-        [postId]: (prev[postId] || []).filter(c => c.id !== commentId)
-      }));
-      setPosts(prev => prev.map(p => p.id === postId
-        ? { ...p, comment_count: Math.max(0, (p.comment_count || 0) - 1) }
-        : p
-      ));
-    } catch {}
-  }
-
-  function handleMediaSelect(e, type) {
-    const file = e.target.files?.[0];
+  const handleMediaSelect = (e, type) => {
+    const file = e.target.files[0];
     if (!file) return;
-    
-    const isVid = file.type.startsWith('video/');
-    const isAud = file.type.startsWith('audio/');
-    
-    setNewMedia(file);
-    setNewMediaType(type); // 'photo', 'video', 'audio'
-    setNewMediaIsVideo(isVid);
-    
-    if (isAud) {
-      // Para áudio, mostrar nome do ficheiro em vez de preview
-      setNewMediaPreview(file.name);
-    } else if (isVid) {
-      setNewMediaPreview(URL.createObjectURL(file));
-    } else {
-      // Foto
-      const reader = new FileReader();
-      reader.onload = () => setNewMediaPreview(reader.result);
-      reader.readAsDataURL(file);
-    }
-  }
+    setMediaFile(file); setMediaType(type); setMediaPreview(URL.createObjectURL(file));
+  };
 
-  async function uploadDirectToCloudinary(file) {
-    const isVid = file.type.startsWith('video/');
-    const isAud = file.type.startsWith('audio/');
-    const resourceType = isAud ? 'auto' : (isVid ? 'video' : 'image');
+  const clearMedia = () => {
+    setMediaFile(null); setMediaPreview(null); setMediaType(null);
+    if (photoRef.current) photoRef.current.value = '';
+    if (videoRef.current) videoRef.current.value = '';
+  };
 
-    // Check file size
-    const maxSize = isVid ? 500 * 1024 * 1024 : (isAud ? 100 * 1024 * 1024 : 50 * 1024 * 1024);
-    if (file.size > maxSize) {
-      throw new Error(t('mural.fileTooLarge', { maxSize: maxSize / (1024 * 1024) }));
-    }
+  const clearMusic = () => {
+    setMusicFile(null); setMusicName('');
+    if (musicRef.current) musicRef.current.value = '';
+  };
 
-    console.log(`📤 Starting upload: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB), type=${resourceType}`);
-
-    // Show progress for large files
-    if (file.size > 5 * 1024 * 1024) {
-      setPostingText(t('mural.uploadingLarge', { filename: file.name }));
-    } else {
-      setPostingText(t('mural.uploading', { filename: file.name }));
-    }
-
-    const fd = new FormData();
-    fd.append('file', file);
-    fd.append('upload_preset', 'sigo_com_fe');
-    fd.append('folder', 'sigo-com-fe/posts');
-    fd.append('resource_type', resourceType);
-    
+  const handleSubmit = async () => {
+    if (!postText.trim() && !mediaFile) return;
+    setUploading(true); setUploadError('');
     try {
-      const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/upload`, { 
-        method: 'POST', 
-        body: fd,
-        signal: AbortSignal.timeout(600000) // 10 minutos timeout
-      });
-      
-      if (!uploadRes.ok) {
-        const errorData = await uploadRes.json().catch(() => ({}));
-        throw new Error(`Cloudinary error ${uploadRes.status}: ${errorData.error?.message || uploadRes.statusText}`);
-      }
-      
-      const result = await uploadRes.json();
-      if (result.error) throw new Error(`Cloudinary: ${result.error.message}`);
-      if (!result.secure_url) throw new Error('Sem URL retornada. Tente novamente.');
-      
-      console.log(`✅ Upload complete: ${result.secure_url}`);
-      return { url: result.secure_url, type: resourceType };
+      let mediaUrl = null, musicUrl = null;
+      if (mediaFile) mediaUrl = await uploadToCloudinary(mediaFile);
+      if (musicFile) musicUrl = await uploadToCloudinary(musicFile);
+      const cat = CATEGORIES.find(c => c.value === postCategory);
+      const newPost = {
+        id: Date.now(), type: postCategory,
+        authorInitials: user?.full_name?.slice(0,2).toUpperCase() || 'EU',
+        authorName: user?.full_name || 'Você',
+        avatarColor: cat?.color || '#667eea',
+        church: user?.church || 'Minha Igreja',
+        time: 'Agora', content: postText,
+        amemCount: 0, commentCount: 0, liked: false,
+        mediaUrl, mediaType, musicUrl,
+      };
+      setPosts([newPost, ...posts]);
+      setPostText(''); setPostCategory('testemunho');
+      clearMedia(); clearMusic(); setShowForm(false);
     } catch (err) {
-      console.error('❌ Upload error:', err);
-      if (err.name === 'AbortError') {
-        throw new Error(t('mural.uploadTooSlow'));
-      }
-      throw err;
-    }
-  }
-
-  async function handlePost(e) {
-    e.preventDefault();
-    if (!token) {
-      alert(t('mural.loginRequired'));
-      return;
-    }
-    if (!newText.trim() && !newMedia && !newMediaUrl.trim()) {
-      alert(t('mural.addContent'));
-      return;
-    }
-    setPosting(true);
-    setPostingText('');
-    try {
-      const formData = new FormData();
-      let postContent = newText.trim();
-      
-      // Determine default content based on media type
-      if (!postContent) {
-        if (newMediaUrl) postContent = isYouTube(newMediaUrl) ? '🎬' : '🔗';
-        else if (newMediaIsVideo) postContent = '🎬';
-        else if (newMedia && isAudio(newMedia.type)) postContent = '🎵';
-        else postContent = '📸';
-      }
-      
-      console.log('Posting with content:', postContent, 'category:', newCategory, 'media:', newMedia ? newMedia.name : 'none', 'url:', newMediaUrl);
-      formData.append('content', postContent);
-      formData.append('category', newCategory);
-      
-      // Handle media upload
-      if (newMedia) {
-        try {
-          const result = await uploadDirectToCloudinary(newMedia);
-          console.log('✅ Upload successful:', { url: result.url, type: result.type });
-          formData.append('media_url', result.url);
-          formData.append('media_type', result.type);
-        } catch (uploadErr) {
-          alert(`❌ Erro no upload: ${uploadErr.message}`);
-          throw uploadErr;
-        }
-      } else if (newMediaUrl.trim()) {
-        console.log('🔗 Adding URL media:', newMediaUrl.trim());
-        formData.append('media_url', newMediaUrl.trim());
-        formData.append('media_type', 'video'); // YouTube e URLs tratadas como video
-      }
-      
-      // Handle Minha Música (separadamente - pode ter vídeo + música)
-      if (selectedMusicUrl) {
-        formData.append('audio_url', selectedMusicUrl);
-        if (!postContent || postContent === '📸') postContent = '🎵';
-        formData.set('content', postContent);
-      }
-
-      const res = await fetch(`${API}/feed`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
-      if (!res.ok) {
-        const errorText = await res.text();
-        alert(`❌ Erro do servidor: ${res.status}\n${errorText}`);
-        throw new Error(`Server error ${res.status}: ${errorText}`);
-      }
-      const data = await res.json();
-      if (!data.post) {
-        alert(`❌ Erro: O vídeo não foi guardado!\nResposta: ${JSON.stringify(data)}`);
-        throw new Error('No post returned from server');
-      }
-      if (data.post) {
-        data.post.author_name = user.full_name;
-        data.post.author_avatar = user.avatar_url;
-        data.post.like_count = 0;
-        data.post.comment_count = 0;
-        setPosts(prev => [data.post, ...prev]);
-        
-        // Reset form
-        setNewText('');
-        setNewMedia(null);
-        setNewMediaPreview(null);
-        setNewMediaIsVideo(false);
-        setNewMediaType(null);
-        setNewMediaUrl('');
-        setSelectedMusicUrl('');
-        setShowForm(false);
-      }
-    } catch (err) {
-      console.error('Post error:', err);
-      const msg = err.message || 'Tente novamente em alguns segundos.';
-      if (msg.includes('File size') || msg.includes('too large')) {
-        alert(t('mural.fileTooLargeSimple'));
-      } else if (msg.includes('network') || msg.includes('fetch')) {
-        alert(t('mural.networkError', '❌ Erro de conexão. Verifique sua internet.'));
-      } else {
-        alert('❌ Erro ao publicar: ' + msg);
-      }
-    } finally {
-      setPosting(false);
-      setPostingText('');
-    }
-  }
-
-  const getMediaUrl = (url) => {
-    if (!url) return null;
-    if (url.startsWith('http')) return url;
-    if (API_BASE) return `${API_BASE}${url}`;
-    return url; // Fallback to relative path
-  };
-  const getAvatarUrl = (url) => {
-    if (!url) return 'https://via.placeholder.com/44?text=User';
-    if (url.startsWith('http')) return url;
-    if (API_BASE) return `${API_BASE}${url}`;
-    return url;
+      setUploadError('Erro no upload. Tenta novamente.');
+    } finally { setUploading(false); }
   };
 
-  // Get thumb for grid (prioritize media_url, fallback to others)
-  const getThumbnail = (post) => {
-    if (post.media_url && post.media_type === 'image') return getMediaUrl(post.media_url);
-    if (post.media_url && post.media_type === 'video') {
-      // Try to get thumbnail from cloudinary
-      if (post.media_url.includes('cloudinary')) {
-        return post.media_url.replace('/upload/', '/upload/w_400,h_400,c_fill,q_auto/');
-      }
-      // Fallback: video icon
-      return null;
-    }
-    if (post.audio_url || (post.media_url && isAudio(post.media_url))) {
-      // Audio: return music icon
-      return null;
-    }
-    // Fallback: generate emoji thumbnail based on category
-    return null;
+  const handleLike = (postId) => {
+    setPosts(posts.map(p => p.id === postId ? { ...p, liked: !p.liked, amemCount: p.liked ? p.amemCount - 1 : p.amemCount + 1 } : p));
+    if (selectedPost?.id === postId) setSelectedPost(prev => ({ ...prev, liked: !prev.liked, amemCount: prev.liked ? prev.amemCount - 1 : prev.amemCount + 1 }));
   };
 
-  // Render media in modal (supports images, videos, audio, youtube)
-  const renderModalMedia = (post) => {
-    // Debug: Log what we're trying to render
-    if (post.media_url) {
-      console.log('🎬 renderModalMedia:', { 
-        media_url: post.media_url, 
-        media_type: post.media_type,
-        isVideo: post.media_type === 'video',
-        isAudio: post.media_type === 'audio'
-      });
+  const handleDelete = (postId) => {
+    if (window.confirm('Apagar esta publicação?')) {
+      setPosts(posts.filter(p => p.id !== postId));
+      setSelectedPost(null);
     }
-    
-    if (post.media_url && post.media_type === 'image') {
-      return <img src={getMediaUrl(post.media_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />;
-    }
-    if (post.media_url && post.media_type === 'video') {
-      const videoUrl = getMediaUrl(post.media_url);
-      const audioUrl = post.audio_url ? getMediaUrl(post.audio_url) : null;
-      
-      return (
-        <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-          {/* Áudio (para reproduzir música junto com vídeo) */}
-          {audioUrl && (
-            <audio 
-              src={audioUrl} 
-              controls
-              style={{ position: 'absolute', bottom: 10, left: 10, width: 'calc(100% - 20px)', zIndex: 10 }}
-            />
-          )}
-          
-          <video 
-            key={post.id}
-            src={videoUrl} 
-            controls 
-            controlsList="nodownload"
-            preload="metadata"
-            style={{ 
-              width: '100%', 
-              height: '100%', 
-              objectFit: 'contain', 
-              maxWidth: '100%',
-              maxHeight: '100%',
-              display: 'block',
-            }}
-          />
-        </div>
-      );
-    }
-    if (post.media_url && isYouTube(post.media_url)) {
-      const youtubeId = getYouTubeId(post.media_url);
-      return (
-        <iframe
-          width="100%"
-          height="100%"
-          src={`https://www.youtube.com/embed/${youtubeId}`}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-        />
-      );
-    }
-    if (post.audio_url || (post.media_url && isAudio(post.media_url))) {
-      const audioUrl = post.audio_url || post.media_url;
-      return (
-        <div style={{
-          width: '100%',
-          height: '100%',
-          background: 'linear-gradient(135deg, #667eea, #764ba2)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '2rem',
-        }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎵</div>
-          <audio src={getMediaUrl(audioUrl)} controls style={{ width: '80%', maxWidth: '300px' }} />
-        </div>
-      );
-    }
-    // Fallback: emoji based on category
-    const categoryInfo = CATEGORIES_CONFIG.find(c => c.value === post.category);
+  };
+
+  // Feed card
+  const FeedCard = ({ post }) => {
+    const cat = CATEGORIES.find(c => c.value === post.type) || CATEGORIES[0];
+    const [showComments, setShowComments] = useState(false);
+    const [comment, setComment] = useState('');
+    const [comments, setComments] = useState([]);
     return (
-      <div style={{
-        width: '100%',
-        height: '100%',
-        background: `linear-gradient(135deg, ${categoryInfo?.color || '#ddd'}22, ${categoryInfo?.color || '#ddd'}44)`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '5rem',
-      }}>
-        {t(categoryInfo?.labelKey)?.split(' ')[0] || '📸'}
+      <div style={{ background: 'white', borderRadius: 16, overflow: 'hidden', marginBottom: 16, boxShadow: '0 1px 8px rgba(0,0,0,0.08)', border: '1px solid #f0f0f0' }}>
+        {/* Header */}
+        <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Avatar initials={post.authorInitials} color={post.avatarColor || cat.color} size={40} />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 700, fontSize: 14, color: '#1a1a1a' }}>{post.authorName}</div>
+            <div style={{ fontSize: 11, color: '#999' }}>{post.church} · {post.time}</div>
+          </div>
+          <span style={{ fontSize: 11, padding: '3px 9px', borderRadius: 20, background: cat.color + '18', color: cat.color, fontWeight: 600, border: `1px solid ${cat.color}30` }}>{cat.label}</span>
+          {post.id > 1000 && (
+            <button onClick={() => handleDelete(post.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#e0e0e0', padding: 4, borderRadius: 6 }} onMouseEnter={e => e.currentTarget.style.color='#e11d48'} onMouseLeave={e => e.currentTarget.style.color='#e0e0e0'}><Trash2 size={15} /></button>
+          )}
+        </div>
+        {/* Media */}
+        {post.mediaType === 'foto' && post.mediaUrl && (
+          <img src={post.mediaUrl} alt="" onClick={() => setSelectedPost(post)} style={{ width: '100%', maxHeight: 420, objectFit: 'cover', display: 'block', cursor: 'pointer' }} />
+        )}
+        {post.mediaType === 'video' && post.mediaUrl && (
+          <video src={post.mediaUrl} controls playsInline controlsList="nodownload nofullscreen" disablePictureInPicture style={{ width: '100%', maxHeight: 420, display: 'block', background: '#000' }} />
+        )}
+        {/* Content */}
+        <div style={{ padding: '10px 16px' }}>
+          {post.type === 'versiculo' ? (
+            <div style={{ borderLeft: `4px solid ${cat.color}`, paddingLeft: 12, background: cat.color + '08', borderRadius: '0 8px 8px 0', padding: '10px 10px 10px 14px' }}>
+              <p style={{ fontStyle: 'italic', color: '#333', fontSize: 14, lineHeight: 1.65, margin: 0 }}>"{post.content}"</p>
+              {post.reference && <p style={{ fontWeight: 700, color: cat.color, marginTop: 6, marginBottom: 0, fontSize: 12 }}>— {post.reference}</p>}
+            </div>
+          ) : (
+            <p style={{ color: '#222', fontSize: 14, lineHeight: 1.65, margin: 0 }}>{post.content}</p>
+          )}
+          {post.musicUrl && <MiniAudioPlayer src={post.musicUrl} />}
+        </div>
+        {/* Actions */}
+        <div style={{ padding: '6px 16px 12px', borderTop: '1px solid #f5f5f5', display: 'flex', gap: 4, alignItems: 'center' }}>
+          <AmenButton count={post.amemCount} liked={post.liked} onLike={() => handleLike(post.id)} />
+          <button onClick={() => setShowComments(!showComments)} style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', color: '#666', fontSize: 13, fontWeight: 600, padding: '7px 10px', borderRadius: 20 }}>
+            <MessageCircle size={17} /> {post.commentCount + comments.length}
+          </button>
+          <button onClick={() => setSelectedPost(post)} style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', color: '#666', fontSize: 13, marginLeft: 'auto', padding: '7px 10px', borderRadius: 20 }}>
+            <Share2 size={17} />
+          </button>
+        </div>
+        {showComments && (
+          <div style={{ padding: '0 16px 14px', borderTop: '1px solid #f5f5f5' }}>
+            {comments.map(c => (
+              <div key={c.id} style={{ display: 'flex', gap: 8, marginBottom: 8, marginTop: 8 }}>
+                <div style={{ width: 26, height: 26, borderRadius: '50%', background: '#667eea', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 10, fontWeight: 700 }}>EU</div>
+                <div style={{ background: '#f8f8f8', borderRadius: 12, padding: '6px 10px', fontSize: 13, flex: 1 }}>
+                  <span style={{ fontWeight: 600 }}>{c.author} </span>
+                  <span style={{ color: '#555' }}>{c.text}</span>
+                </div>
+              </div>
+            ))}
+            <form onSubmit={e => { e.preventDefault(); if (!comment.trim()) return; setComments([...comments, { id: Date.now(), text: comment, author: 'Você' }]); setComment(''); }} style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+              <input value={comment} onChange={e => setComment(e.target.value)} placeholder="Comentar..." style={{ flex: 1, padding: '8px 12px', borderRadius: 20, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none' }} />
+              <button type="submit" style={{ padding: '8px 13px', borderRadius: 20, background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', color: 'white', cursor: 'pointer' }}><Send size={13} /></button>
+            </form>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Grid card
+  const GridCard = ({ post }) => {
+    const cat = CATEGORIES.find(c => c.value === post.type) || CATEGORIES[0];
+    return (
+      <div onClick={() => setSelectedPost(post)} style={{ aspectRatio: '1/1', cursor: 'pointer', borderRadius: 8, overflow: 'hidden', position: 'relative', background: '#f0f0f0' }}>
+        {post.mediaType === 'foto' && post.mediaUrl ? (
+          <img src={post.mediaUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : post.mediaType === 'video' && post.mediaUrl ? (
+          <div style={{ width: '100%', height: '100%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Play size={32} color="white" />
+          </div>
+        ) : (
+          <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${cat.color}25, ${cat.color}10)`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 12 }}>
+            <p style={{ color: '#333', fontSize: 12, textAlign: 'center', lineHeight: 1.4, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical' }}>{post.content}</p>
+          </div>
+        )}
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0)', transition: 'background 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16 }} className="grid-hover">
+        </div>
+        <div style={{ position: 'absolute', top: 6, right: 6, width: 8, height: 8, borderRadius: '50%', background: cat.color }} />
       </div>
     );
   };
 
   return (
-    <div style={{ background: '#0f0f1a', minHeight: '100vh', paddingBottom: '2rem' }}>
+    <div style={{ maxWidth: 640, margin: '0 auto', padding: '0 16px 80px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+      <style>{`
+        @keyframes floatUp { 0%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)} 100%{opacity:0;transform:translateX(-50%) translateY(-55px) scale(1.4)} }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+      `}</style>
+
       {/* Header */}
-      <div style={{
-        padding: '1rem 1rem',
-        background: '#fff',
-        borderBottom: '1px solid #e0e0e0',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        position: 'sticky', top: 70, zIndex: 100,
-      }}>
-        <h1 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 700, color: '#1a0a3e' }}>📸 {t('nav.mural', 'Mural')}</h1>
-        {user && (
-          <button onClick={() => setShowForm(!showForm)} style={{
-            padding: '0.5rem 1rem', borderRadius: 20, border: 'none',
-            background: showForm ? '#e74c3c' : '#daa520', color: '#fff',
-            fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
-            fontSize: '0.9rem',
-          }}>
-            {showForm ? <X size={16} /> : <Plus size={16} />}
-            {showForm ? t('common.cancel', 'Cancelar') : t('mural.publish', 'Publicar')}
-          </button>
-        )}
+      <div style={{ position: 'sticky', top: 0, background: 'white', zIndex: 100, borderBottom: '1px solid #f0f0f0', padding: '14px 0 10px', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+          <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, background: 'linear-gradient(135deg,#667eea,#764ba2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            Mural
+          </h1>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <button onClick={() => setViewMode(viewMode === 'feed' ? 'grid' : 'feed')} style={{ background: '#f5f5f5', border: 'none', borderRadius: 10, padding: '8px 10px', cursor: 'pointer', color: '#555', display: 'flex', alignItems: 'center' }}>
+              {viewMode === 'feed' ? <Grid size={17} /> : <List size={17} />}
+            </button>
+            <button onClick={() => setShowForm(!showForm)} style={{ background: showForm ? '#fee2e2' : 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', borderRadius: 12, padding: '8px 16px', cursor: 'pointer', color: showForm ? '#e11d48' : 'white', fontWeight: 700, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
+              {showForm ? <><X size={15} /> Cancelar</> : <><Plus size={15} /> Publicar</>}
+            </button>
+          </div>
+        </div>
+        {/* Filtros */}
+        <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 2 }}>
+          <button onClick={() => setActiveFilter('todas')} style={{ padding: '5px 14px', borderRadius: 20, whiteSpace: 'nowrap', border: activeFilter === 'todas' ? 'none' : '1px solid #e5e5e5', background: activeFilter === 'todas' ? 'linear-gradient(135deg,#667eea,#764ba2)' : 'white', color: activeFilter === 'todas' ? 'white' : '#666', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>🌟 Todas</button>
+          {CATEGORIES.map(cat => (
+            <button key={cat.value} onClick={() => setActiveFilter(cat.value)} style={{ padding: '5px 14px', borderRadius: 20, whiteSpace: 'nowrap', border: activeFilter === cat.value ? 'none' : `1px solid ${cat.color}40`, background: activeFilter === cat.value ? cat.color : 'white', color: activeFilter === cat.value ? 'white' : cat.color, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>{cat.label}</button>
+          ))}
+        </div>
       </div>
 
-      {/* New Post Form */}
-      {showForm && user && (
-        <div style={{
-          background: '#fff',
-          borderBottom: '1px solid #e0e0e0',
-          padding: '1rem',
-          maxWidth: '600px',
-          margin: '0 auto',
-        }}>
-          {posting && (
-            <div style={{
-              background: 'linear-gradient(135deg, #f093fb, #f5576c)',
-              color: '#fff',
-              padding: '1rem',
-              borderRadius: '10px',
-              marginBottom: '1rem',
-              textAlign: 'center',
-              fontSize: '0.9rem',
-            }}>
-              <div style={{ fontWeight: 700, marginBottom: '0.5rem' }}>⏳ {postingText}</div>
-              <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>{t('mural.doNotClose')}</div>
+      {/* Form publicar */}
+      {showForm && (
+        <div style={{ background: 'white', borderRadius: 16, padding: 20, border: '1px solid #e5e5e5', boxShadow: '0 4px 24px rgba(0,0,0,0.08)', marginBottom: 20, animation: 'slideDown 0.2s ease' }}>
+          {/* Categorias */}
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
+            {CATEGORIES.map(cat => (
+              <button key={cat.value} onClick={() => setPostCategory(cat.value)} style={{ padding: '5px 12px', borderRadius: 20, border: `1.5px solid ${postCategory === cat.value ? cat.color : '#e5e5e5'}`, background: postCategory === cat.value ? cat.color + '15' : 'white', color: postCategory === cat.value ? cat.color : '#888', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.15s' }}>{cat.label}</button>
+            ))}
+          </div>
+          <textarea rows={3} placeholder="Partilha com a comunidade..." value={postText} onChange={e => setPostText(e.target.value)} style={{ width: '100%', padding: 12, borderRadius: 12, border: '1.5px solid #e5e5e5', fontSize: 14, outline: 'none', resize: 'none', lineHeight: 1.6, boxSizing: 'border-box', marginBottom: 12, fontFamily: 'inherit' }} />
+          {mediaPreview && (
+            <div style={{ position: 'relative', marginBottom: 12, borderRadius: 12, overflow: 'hidden' }}>
+              {mediaType === 'foto' ? <img src={mediaPreview} alt="" style={{ width: '100%', maxHeight: 280, objectFit: 'cover', display: 'block' }} /> : <video src={mediaPreview} controls playsInline style={{ width: '100%', maxHeight: 280, display: 'block' }} />}
+              <button onClick={clearMedia} style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: '50%', width: 28, height: 28, cursor: 'pointer', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={13} /></button>
             </div>
           )}
-          <form onSubmit={handlePost}>
-            {/* Categories */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '0.75rem' }}>
-              {CATEGORIES_CONFIG.map(cat => (
-                <button type="button" key={cat.value} onClick={() => setNewCategory(cat.value)} style={{
-                  padding: '4px 12px', borderRadius: 16, border: 'none', cursor: 'pointer', fontSize: '0.8rem',
-                  background: newCategory === cat.value ? cat.color + '22' : '#f5f5f5',
-                  color: newCategory === cat.value ? cat.color : '#666',
-                  fontWeight: newCategory === cat.value ? 600 : 400,
-                }}>{t(cat.labelKey)}</button>
-              ))}
+          {musicName && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, background: '#f8f4ff', border: '1px solid #a855f740', borderRadius: 10, padding: '8px 12px' }}>
+              <Music size={16} style={{ color: '#a855f7' }} />
+              <span style={{ flex: 1, fontSize: 12, color: '#666' }}>{musicName}</span>
+              <button onClick={clearMusic} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa' }}><X size={13} /></button>
             </div>
-
-            {/* Text */}
-            <textarea value={newText} onChange={e => setNewText(e.target.value)}
-              placeholder={t('mural.placeholder', 'Compartilhe algo com a comunidade...')}
-              rows={2} style={{
-                width: '100%', padding: '0.7rem', borderRadius: 10, border: '1px solid #ddd',
-                fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box', marginBottom: '0.5rem',
-              }} />
-
-            {/* Media buttons - Instagram style */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 6, marginBottom: '1rem' }}>
-              <button type="button" onClick={() => photoRef.current?.click()} style={{
-                padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
-                background: newMediaType === 'photo' ? '#f0f0f0' : '#fff',
-                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'photo' ? 600 : 400,
-                transition: 'all 0.2s',
-              }}>
-                <span style={{ fontSize: '1.5rem' }}>📸</span>
-                {t('media.photo', 'Foto')}
-              </button>
-              <button type="button" onClick={() => videoRef.current?.click()} style={{
-                padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
-                background: newMediaType === 'video' ? '#f0f0f0' : '#fff',
-                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'video' ? 600 : 400,
-              }}>
-                <span style={{ fontSize: '1.5rem' }}>🎬</span>
-                {t('media.video', 'Vídeo')}
-              </button>
-              <button type="button" onClick={() => audioRef.current?.click()} style={{
-                padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
-                background: newMediaType === 'audio' ? '#f0f0f0' : '#fff',
-                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'audio' ? 600 : 400,
-              }}>
-                <span style={{ fontSize: '1.5rem' }}>🎵</span>
-                {t('media.audio', 'Áudio')}
-              </button>
-              <button type="button" onClick={() => { fetchMyMusic(); setShowMyMusicPicker(true); }} style={{
-                padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
-                background: newMediaType === 'mymusic' ? '#f0f0f0' : '#fff',
-                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'mymusic' ? 600 : 400,
-              }}>
-                <span style={{ fontSize: '1.5rem' }}>🎸</span>
-                Minha Música
-              </button>
-              <button type="button" onClick={() => {
-                const url = prompt(t('media.urlPrompt', 'Cole a URL (YouTube, Vimeo, etc):'));
-                if (url) { setNewMediaUrl(url); setNewMediaType('url'); }
-              }} style={{
-                padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
-                background: newMediaType === 'url' ? '#f0f0f0' : '#fff',
-                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'url' ? 600 : 400,
-              }}>
-                <span style={{ fontSize: '1.5rem' }}>🔗</span>
-                {t('media.url', 'URL')}
-              </button>
-            </div>
-
-            {/* URL Input */}
-            {newMediaType === 'url' && (
-              <div style={{ marginBottom: '0.5rem' }}>
-                <input
-                  type="text"
-                  value={newMediaUrl}
-                  onChange={e => setNewMediaUrl(e.target.value)}
-                  placeholder={t('media.urlPlaceholder', 'Cole a URL de YouTube ou outro vídeo...')}
-                  style={{
-                    width: '100%', padding: '0.7rem', borderRadius: 10, border: '2px solid #daa520',
-                    fontSize: '0.9rem', boxSizing: 'border-box', marginBottom: '0.5rem',
-                    background: '#fffbf0',
-                  }}
-                />
-                <button type="button" onClick={() => { setNewMediaUrl(''); setNewMediaType(null); }} style={{
-                  fontSize: '0.75rem', color: '#e74c3c', background: 'none', border: 'none',
-                  cursor: 'pointer', padding: '0.25rem',
-                }}>{t('media.clearUrl', 'Limpar URL')}</button>
-              </div>
-            )}
-
-            {/* Preview */}
-            {newMediaPreview && newMediaType !== 'audio' && (
-              <div style={{ position: 'relative', marginBottom: '0.5rem', borderRadius: 12, overflow: 'hidden' }}>
-                {newMediaType === 'video' ? (
-                  <video src={newMediaPreview} controls style={{ width: '100%', maxHeight: 280, borderRadius: 12 }} />
-                ) : newMediaType === 'url' && isYouTube(newMediaUrl) ? (
-                  <div style={{ background: '#000', borderRadius: 12, padding: '1rem', textAlign: 'center' }}>
-                    <span style={{ color: '#fff', fontSize: '0.9rem' }}>🎬 {t('media.youtubePreview', 'YouTube (preview indisponível)')}</span>
-                  </div>
-                ) : (
-                  <img src={newMediaPreview} alt="" style={{ width: '100%', maxHeight: 280, objectFit: 'cover', borderRadius: 12 }} />
-                )}
-                <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaType(null); }} style={{
-                  position: 'absolute', top: 8, right: 8, background: '#e74c3c', border: 'none',
-                  borderRadius: '6px', padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                  cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600, color: '#fff', gap: 4,
-                  transition: 'all 0.2s',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = '#c0392b'; e.currentTarget.style.transform = 'scale(1.05)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = '#e74c3c'; e.currentTarget.style.transform = 'scale(1)'; }}
-                ><X size={14} /> {t('common.delete', 'Apagar')}</button>
-              </div>
-            )}
-
-            {/* Audio preview */}
-            {newMediaPreview && newMediaType === 'audio' && (
-              <div style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12, padding: '1rem', marginBottom: '0.5rem', textAlign: 'center' }}>
-                <div style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '0.5rem' }}>🎵</div>
-                <div style={{ color: '#fff', fontSize: '0.85rem', marginBottom: '1rem', wordBreak: 'break-word' }}>{newMediaPreview}</div>
-                <button type="button" onClick={() => { setNewMedia(null); setNewMediaPreview(null); setNewMediaType(null); }} style={{
-                  background: '#e74c3c', border: 'none', color: '#fff', borderRadius: 6, padding: '0.5rem 1rem',
-                  cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600, transition: 'all 0.2s',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = '#c0392b'; e.currentTarget.style.transform = 'scale(1.05)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = '#e74c3c'; e.currentTarget.style.transform = 'scale(1)'; }}
-                >🗑️ {t('common.delete', 'Apagar')}</button>
-              </div>
-            )}
-
-            {/* My Music preview */}
-            {selectedMusicUrl && (
-              <div style={{ background: 'linear-gradient(135deg, #9b59b6, #667eea)', borderRadius: 12, padding: '1rem', marginBottom: '0.5rem', textAlign: 'center' }}>
-                <div style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '0.5rem' }}>🎸</div>
-                <div style={{ color: '#fff', fontSize: '0.85rem', marginBottom: '1rem', wordBreak: 'break-word' }}>🎵 Música da biblioteca pessoal (reproduzida com o post)</div>
-                <button type="button" onClick={() => { setSelectedMusicUrl(''); }} style={{
-                  background: '#e74c3c', border: 'none', color: '#fff', borderRadius: 6, padding: '0.5rem 1rem',
-                  cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600, transition: 'all 0.2s',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = '#c0392b'; e.currentTarget.style.transform = 'scale(1.05)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = '#e74c3c'; e.currentTarget.style.transform = 'scale(1)'; }}
-                >🗑️ {t('common.delete', 'Apagar')}</button>
-              </div>
-            )}
-
-            <button type="submit" disabled={posting || (!newText.trim() && !newMedia && !newMediaUrl.trim())} style={{
-              width: '100%', padding: '0.75rem', borderRadius: 14, border: 'none',
-              background: (newText.trim() || newMedia || newMediaUrl.trim()) && !posting ? 'linear-gradient(135deg, #daa520, #f4c542)' : '#ddd',
-              color: (newText.trim() || newMedia || newMediaUrl.trim()) && !posting ? '#1a0a3e' : '#999',
-              fontWeight: 700, cursor: posting ? 'not-allowed' : 'pointer', fontSize: '0.95rem',
-              opacity: posting ? 0.7 : 1,
-            }}>
-              {posting ? (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                  <div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid #999', borderTopColor: '#daa520', animation: 'spin 1s linear infinite' }} />
-                  {postingText || t('common.publishing', 'Publicando...')}
-                </div>
-              ) : t('mural.publish', 'Publicar')}
-            </button>
-            
-            <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleMediaSelect(e, 'photo')} />
-            <input ref={videoRef} type="file" accept="video/mp4,video/webm,video/quicktime" style={{ display: 'none' }} onChange={(e) => handleMediaSelect(e, 'video')} />
-            <input ref={audioRef} type="file" accept="audio/mp3,audio/mpeg,audio/wav,audio/ogg,audio/m4a,audio/*" style={{ display: 'none' }} onChange={(e) => handleMediaSelect(e, 'audio')} />
-          </form>
+          )}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
+            <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleMediaSelect(e, 'foto')} />
+            <input ref={videoRef} type="file" accept="video/*" style={{ display: 'none' }} onChange={e => handleMediaSelect(e, 'video')} />
+            <input ref={musicRef} type="file" accept="audio/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files[0]; if (f) { setMusicFile(f); setMusicName(f.name); } }} />
+            <button onClick={() => photoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 14px', borderRadius: 20, border: '1px solid #fecdd3', background: '#fff1f2', cursor: 'pointer', fontSize: 12, color: '#e11d48', fontWeight: 600 }}><Image size={15} /> Foto</button>
+            <button onClick={() => videoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 14px', borderRadius: 20, border: '1px solid #bfdbfe', background: '#eff6ff', cursor: 'pointer', fontSize: 12, color: '#3b82f6', fontWeight: 600 }}><Video size={15} /> Vídeo</button>
+            <button onClick={() => musicRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '7px 14px', borderRadius: 20, border: '1px solid #e9d5ff', background: '#faf5ff', cursor: 'pointer', fontSize: 12, color: '#a855f7', fontWeight: 600 }}><Music size={15} /> Música</button>
+          </div>
+          {uploadError && <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: 8, padding: '8px 12px', marginBottom: 12, fontSize: 12, color: '#e11d48' }}>⚠️ {uploadError}</div>}
+          <button onClick={handleSubmit} disabled={uploading || (!postText.trim() && !mediaFile)} style={{ width: '100%', padding: 12, background: uploading || (!postText.trim() && !mediaFile) ? '#e5e5e5' : 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', borderRadius: 12, color: uploading || (!postText.trim() && !mediaFile) ? '#aaa' : 'white', fontSize: 14, fontWeight: 700, cursor: uploading || (!postText.trim() && !mediaFile) ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+            {uploading ? <><div style={{ width: 15, height: 15, border: '2px solid rgba(255,255,255,0.3)', borderTop: '2px solid white', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />A publicar...</> : <><Send size={15} /> Publicar</>}
+          </button>
         </div>
       )}
 
-      {/* Posts Grid - Instagram style (3 columns) */}
-      <div style={{
-        maxWidth: '100%',
-        margin: '0 auto',
-        padding: '0.5rem',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '8px',
-        marginTop: '1rem',
-      }}
-      className="mural-grid">
-      
-        {loading ? (
-          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem' }}>
-            <div style={{ display: 'inline-block', width: 40, height: 40, borderRadius: '50%', border: '3px solid #ddd', borderTopColor: '#daa520', animation: 'spin 1s linear infinite' }} />
-          </div>
-        ) : posts.length === 0 ? (
-          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem' }}>
-            <p style={{ color: '#999', fontSize: '0.95rem' }}>{t('mural.noPosts', 'Nenhum post ainda. Seja o primeiro a publicar! 📸')}</p>
-          </div>
-        ) : (
-          posts.map(post => {
-            const thumbnail = getThumbnail(post);
-            const categoryInfo = CATEGORIES_CONFIG.find(c => c.value === post.category);
-
-            return (
-              <div
-                key={post.id}
-                onClick={() => {
-                  setSelectedPost(post);
-                  if (!commentsData[post.id]) fetchComments(post.id);
-                }}
-                style={{
-                  position: 'relative',
-                  aspectRatio: '1',
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  background: '#f0f0f0',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.02)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
-                }}
-              >
-                {/* Thumbnail */}
-                {thumbnail ? (
-                  <img src={thumbnail} alt="" style={{
-                    width: '100%', height: '100%', objectFit: 'cover',
-                  }} />
-                ) : (
-                  <div style={{
-                    width: '100%', height: '100%',
-                    background: `linear-gradient(135deg, ${categoryInfo?.color || '#ddd'}22, ${categoryInfo?.color || '#ddd'}44)`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '3rem',
-                  }}>
-                    {categoryInfo?.label?.split(' ')[0] || '📸'}
-                  </div>
-                )}
-
-                {/* Overlay with stats */}
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                  background: 'rgba(0,0,0,0)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  gap: '1.5rem',
-                  fontSize: '0.9rem',
-                  color: '#fff',
-                  fontWeight: 700,
-                  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-                  opacity: 0,
-                  transition: 'all 0.2s',
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <Heart size={18} fill="white" /> {post.like_count || 0}
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <MessageCircle size={18} /> {post.comment_count || 0}
-                  </div>
-                </div>
-
-                {/* Hover state with darker overlay */}
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                  background: 'rgba(0,0,0,0.3)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  gap: '1.5rem',
-                  fontSize: '1.2rem',
-                  color: '#fff',
-                  fontWeight: 700,
-                  opacity: 0,
-                  transition: 'opacity 0.2s',
-                  pointerEvents: 'none',
-                }} className="instagram-grid-hover" />
-              </div>
-            );
-          })
-        )}
-      </div>
-
-      {/* Modal - My Music Picker */}
-      {showMyMusicPicker && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.7)', zIndex: 9999,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: '1rem',
-        }} onClick={() => setShowMyMusicPicker(false)}>
-          <div style={{
-            background: '#1a1a2e', borderRadius: '16px',
-            maxWidth: '500px', width: '100%', maxHeight: '80vh', overflow: 'hidden',
-            display: 'flex', flexDirection: 'column',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-          }} onClick={(e) => e.stopPropagation()}>
-            <div style={{
-              padding: '1rem', borderBottom: '1px solid rgba(218,165,32,0.2)',
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            }}>
-              <h3 style={{ margin: 0, color: '#fff', fontSize: '1.1rem' }}>🎵 Minha Música</h3>
-              <button onClick={() => setShowMyMusicPicker(false)} style={{
-                background: 'none', border: 'none', fontSize: '1.3rem', cursor: 'pointer', color: '#daa520',
-              }}>✕</button>
-            </div>
-            
-            <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
-              {loadingMyMusic ? (
-                <div style={{ textAlign: 'center', padding: '2rem', color: '#aaa' }}>{t('mural.loading')}</div>
-              ) : myMusic.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '2rem', color: '#aaa' }}>{t('mural.noMusicUploaded')}</div>
-              ) : (
-                myMusic.map((song) => (
-                  <button
-                    key={song.id || song.url}
-                    onClick={() => selectMyMusic(song)}
-                    style={{
-                      width: '100%', padding: '0.75rem', marginBottom: '0.5rem',
-                      background: 'rgba(218,165,32,0.1)', border: '1px solid rgba(218,165,32,0.3)',
-                      borderRadius: '8px', cursor: 'pointer', textAlign: 'left', color: '#fff',
-                      transition: 'all 0.2s',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(218,165,32,0.2)';
-                      e.currentTarget.style.borderColor = '#daa520';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(218,165,32,0.1)';
-                      e.currentTarget.style.borderColor = 'rgba(218,165,32,0.3)';
-                    }}
-                  >
-                    <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>🎵 {song.title || song.name || 'Sem título'}</div>
-                    <div style={{ fontSize: '0.8rem', color: '#aaa', marginTop: '0.25rem' }}>{song.artist || song.user_name || 'Seu upload'}</div>
-                  </button>
-                ))
-              )}
-            </div>
-          </div>
+      {/* Posts */}
+      {viewMode === 'feed' ? (
+        filteredPosts.map(post => <FeedCard key={post.id} post={post} />)
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 3 }}>
+          {filteredPosts.map(post => <GridCard key={post.id} post={post} />)}
         </div>
       )}
 
-      {/* Modal - Post Detail (Dark Mode) */}
-      {selectedPost && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.7)', zIndex: 10000,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: '1rem',
-          overflowY: 'auto',
-        }} onClick={() => setSelectedPost(null)}>
-          <div className="modal-detail" style={{
-            background: '#1a1a2e', borderRadius: '16px',
-            maxWidth: '700px', width: '100%', maxHeight: '90vh', overflow: 'hidden',
-            display: 'grid', gridTemplateColumns: '1fr 350px', gap: 0,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-          }} onClick={(e) => e.stopPropagation()}>
-            {/* Left: Image/Video/Audio/YouTube */}
-            <div style={{
-              background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              overflow: 'hidden', minHeight: '400px', position: 'relative',
-              flex: 1,
-            }}>
-              {renderModalMedia(selectedPost)}
-            </div>
-
-            {/* Right: Details + Comments */}
-            <div style={{
-              display: 'flex', flexDirection: 'column',
-              background: '#1a1a2e', overflowY: 'auto', color: '#fff',
-            }}>
-              {/* Header */}
-              <div style={{
-                padding: '1rem', borderBottom: '1px solid rgba(218,165,32,0.2)',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <img src={getAvatarUrl(selectedPost.author_avatar)} alt="" style={{
-                    width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', background: '#daa520',
-                  }} />
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#fff' }}>
-                      {selectedPost.author_name || t('common.user', 'Utilizador')}
-                    </div>
-                    <div style={{ fontSize: '0.75rem', color: '#aaa' }}>{getTimeAgo(selectedPost.created_at, t)}</div>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                  {user?.id === selectedPost.user_id && (
-                    <button onClick={() => {
-                      if (confirm(t('mural.confirmDelete', 'Tem a certeza que quer deletar este post?'))) {
-                        handleDeletePost(selectedPost.id);
-                      }
-                    }} style={{
-                      background: 'none', border: 'none', cursor: 'pointer', color: '#e74c3c',
-                      fontSize: '1.1rem', padding: '4px 8px', display: 'flex', alignItems: 'center',
-                      transition: 'all 0.2s',
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
-                    onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
-                    title={t('mural.delete', 'Deletar post')}>
-                      <Trash2 size={18} />
-                    </button>
-                  )}
-                  <button onClick={() => setSelectedPost(null)} style={{
-                    background: 'none', border: 'none', fontSize: '1.3rem', cursor: 'pointer', color: '#daa520',
-                  }}>✕</button>
-                </div>
-              </div>
-
-              {/* Post Content */}
-              <div style={{ padding: '1rem', borderBottom: '1px solid rgba(218,165,32,0.2)', flex: 1, overflowY: 'auto' }}>
-                <p style={{ margin: 0, fontSize: '0.95rem', color: '#fff', lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                  {selectedPost.content || t('common.noText', '(Sem texto)')}
-                </p>
-              </div>
-
-              {/* Like + Comment buttons */}
-              <div style={{
-                display: 'flex', gap: 0, borderBottom: '1px solid rgba(218,165,32,0.2)',
-                padding: '0.5rem',
-              }}>
-                <button onClick={() => handleLike(selectedPost.id)} style={{
-                  flex: 1, padding: '0.6rem', border: 'none', background: 'none',
-                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                  fontSize: '0.85rem', color: likedPosts[selectedPost.id] ? '#e74c3c' : '#aaa',
-                  fontWeight: likedPosts[selectedPost.id] ? 600 : 400,
-                  transition: 'all 0.2s',
-                }}>
-                  <Heart size={18} fill={likedPosts[selectedPost.id] ? '#e74c3c' : 'none'} />
-                  {selectedPost.like_count || 0}
-                </button>
-                <button style={{
-                  flex: 1, padding: '0.6rem', border: 'none', background: 'none',
-                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                  fontSize: '0.85rem', color: '#aaa',
-                }}>
-                  <MessageCircle size={18} />
-                  {selectedPost.comment_count || 0}
-                </button>
-              </div>
-
-              {/* Comments */}
-              <div style={{ flex: 1, overflowY: 'auto', padding: '0.5rem' }}>
-                {(commentsData[selectedPost.id] || []).map(comment => (
-                  <div key={comment.id} style={{
-                    padding: '0.6rem', marginBottom: '0.5rem', borderRadius: 8,
-                    background: 'rgba(218,165,32,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
-                  }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 600, fontSize: '0.8rem', color: '#daa520' }}>
-                        {comment.author_name || t('common.user', 'Utilizador')}
-                      </div>
-                      <div style={{ fontSize: '0.8rem', color: '#ccc', marginTop: 2 }}>{comment.content}</div>
-                    </div>
-                    {(user?.id === comment.user_id || user?.id === selectedPost.user_id) && (
-                      <button onClick={() => handleDeleteComment(comment.id, selectedPost.id)} style={{
-                        background: 'none', border: 'none', color: '#e74c3c', cursor: 'pointer',
-                        fontSize: '0.7rem', padding: '2px 6px',
-                      }}>✕</button>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Comment input */}
-              {user ? (
-                <div style={{
-                  padding: '0.75rem', borderTop: '1px solid rgba(218,165,32,0.2)',
-                  display: 'flex', gap: 6,
-                }}>
-                  <input
-                    type="text"
-                    value={commentText[selectedPost.id] || ''}
-                    onChange={(e) => setCommentText(prev => ({ ...prev, [selectedPost.id]: e.target.value }))}
-                    placeholder={t('mural.commentPlaceholder', 'Escreva um comentário...')}
-                    style={{
-                      flex: 1, padding: '0.6rem', borderRadius: 20, border: '1px solid rgba(218,165,32,0.3)',
-                      fontSize: '0.8rem', outline: 'none',
-                      background: 'rgba(218,165,32,0.05)', color: '#fff',
-                    }}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendComment(selectedPost.id)}
-                  />
-                  <button onClick={() => handleSendComment(selectedPost.id)} disabled={sendingComment[selectedPost.id]} style={{
-                    background: '#daa520', border: 'none', borderRadius: '50%', width: 32, height: 32,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-                    color: '#1a0a3e', fontWeight: 600,
-                  }}>
-                    <Send size={16} />
-                  </button>
-                </div>
-              ) : (
-                <div style={{
-                  padding: '0.75rem', borderTop: '1px solid rgba(218,165,32,0.2)', textAlign: 'center',
-                }}>
-                  <button onClick={() => navigate('/login')} style={{
-                    padding: '0.6rem 1rem', borderRadius: 20, border: 'none',
-                    background: '#daa520', color: '#1a0a3e', fontWeight: 600, cursor: 'pointer',
-                    fontSize: '0.8rem',
-                  }}>{t('common.loginToComment', 'Entrar para comentar')}</button>
-                </div>
-              )}
-            </div>
-          </div>
+      {filteredPosts.length === 0 && (
+        <div style={{ textAlign: 'center', padding: 60, color: '#aaa' }}>
+          <BookOpen size={40} style={{ opacity: 0.3, marginBottom: 12 }} />
+          <p style={{ margin: 0, fontSize: 15 }}>Nenhuma publicação encontrada.</p>
+          <p style={{ margin: '4px 0 0', fontSize: 13 }}>Sê o primeiro a partilhar!</p>
         </div>
       )}
 
-      <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-        .instagram-grid-hover {
-          background: rgba(0,0,0,0.3);
-          opacity: 0;
-          transition: opacity 0.2s;
-        }
-        .mural-grid {
-          grid-template-columns: repeat(3, 1fr) !important;
-        }
-        @media (max-width: 1024px) {
-          .mural-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-        }
-        @media (max-width: 768px) {
-          .mural-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 6px !important;
-          }
-          .modal-detail {
-            grid-template-columns: 1fr !important;
-          }
-        }
-        @media (max-width: 480px) {
-          .mural-grid {
-            grid-template-columns: repeat(1, 1fr) !important;
-            gap: 4px !important;
-          }
-          .modal-detail {
-            max-width: 95vw !important;
-            max-height: 95vh !important;
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
+      {selectedPost && <PostModal post={selectedPost} onClose={() => setSelectedPost(null)} onLike={handleLike} onDelete={handleDelete} />}
     </div>
   );
 }
