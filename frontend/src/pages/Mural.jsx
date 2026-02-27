@@ -1,510 +1,677 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Plus, Filter, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, ChevronLeft, ChevronRight, BookOpen, Mic } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { Plus, X, Send, Heart, MessageCircle, Image, Trash2, Grid, List } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
-const API = `${API_BASE}/api`;
+// =============================================
+// CLOUDINARY CONFIG — coloca as tuas credenciais
+// =============================================
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'SEU_CLOUD_NAME';
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'SEU_UPLOAD_PRESET';
 
-const CATEGORIES = [
-  { value: 'testemunho', label: 'ðŸ™ Testemunho', color: '#daa520' },
-  { value: 'louvor', label: 'ðŸŽµ Louvor', color: '#9b59b6' },
-  { value: 'foto', label: 'ðŸ“¸ Foto/VÃ­deo', color: '#3498db' },
-  { value: 'versiculo', label: 'ðŸ“– VersÃ­culo', color: '#27ae60' },
-  { value: 'reflexao', label: 'ðŸ’­ ReflexÃ£o', color: '#e67e22' },
-  { value: 'campanha', label: 'ðŸ¤ Campanha', color: '#e74c3c' },
+async function uploadToCloudinary(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+  const resourceType = file.type.startsWith('video') ? 'video' : 'auto';
+  const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
+
+  const res = await fetch(url, { method: 'POST', body: formData });
+  if (!res.ok) throw new Error('Erro ao fazer upload para Cloudinary');
+  const data = await res.json();
+  return data.secure_url;
+}
+
+// =============================================
+// DEMO POSTS
+// =============================================
+const DEMO_POSTS = [
+  {
+    id: 1, type: 'testemunho',
+    authorInitials: 'MC', authorName: 'Maria Clara',
+    church: 'Igreja Batista Central', time: 'Há 2 horas',
+    content: 'Glória a Deus! Depois de 3 anos desempregada, o Senhor abriu as portas e fui aprovada no concurso público. Nunca desistam de orar, irmãos! Deus é fiel.',
+    amemCount: 47, commentCount: 12, liked: false,
+    mediaUrl: null, mediaType: null, musicUrl: null,
+  },
+  {
+    id: 2, type: 'louvor',
+    authorInitials: 'PR', authorName: 'Paulo Ricardo',
+    church: 'Comunidade Graça e Paz', time: 'Há 4 horas',
+    content: 'Novo louvor do ministério de adoração da nossa igreja. Que o Espírito Santo toque cada coração!',
+    amemCount: 31, commentCount: 8, liked: false,
+    mediaUrl: 'https://images.unsplash.com/photo-1478147427282-58a87a433968?w=600&q=80',
+    mediaType: 'foto', musicUrl: null,
+  },
+  {
+    id: 3, type: 'versiculo',
+    authorInitials: 'DF', authorName: 'Daniela Ferreira',
+    church: 'Assembleia de Deus', time: 'Há 10 horas',
+    content: 'Porque eu bem sei os pensamentos que penso de vós, diz o Senhor; pensamentos de paz e não de mal, para vos dar o fim que esperais.',
+    reference: 'Jeremias 29:11',
+    amemCount: 112, commentCount: 5, liked: false,
+    mediaUrl: null, mediaType: null, musicUrl: null,
+  },
+  {
+    id: 4, type: 'reflexao',
+    authorInitials: 'JL', authorName: 'Pastor João Lucas',
+    church: 'Igreja Presbiteriana do Centro', time: 'Há 8 horas',
+    content: 'Muitas vezes queremos que Deus mude as circunstâncias, mas Ele quer mudar o nosso coração primeiro. Confie no processo de Deus para a sua vida.',
+    amemCount: 65, commentCount: 18, liked: false,
+    mediaUrl: null, mediaType: null, musicUrl: null,
+  },
 ];
 
-export default function Mural() {
-  const { user, token } = useAuth();
-  const navigate = useNavigate();
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'feed'
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [showNewPost, setShowNewPost] = useState(false);
-  const [newPost, setNewPost] = useState({ content: '', category: 'reflexao', mediaUrl: '' });
-  const [comment, setComment] = useState('');
-  const [filterCategory, setFilterCategory] = useState('all');
-
-  const fetchPosts = useCallback(async () => {
-    try {
-      const res = await fetch(`${API}/posts?limit=60`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      });
-      const data = await res.json();
-      setPosts(data.posts || data || []);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
-
-  useEffect(() => { fetchPosts(); }, [fetchPosts]);
-
-  const handleLike = async (postId) => {
-    if (!user) { navigate('/login'); return; }
-    try {
-      await fetch(`${API}/posts/${postId}/like`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      fetchPosts();
-      if (selectedPost?.id === postId) {
-        setSelectedPost(prev => ({
-          ...prev,
-          liked: !prev.liked,
-          likes_count: prev.liked ? prev.likes_count - 1 : prev.likes_count + 1
-        }));
-      }
-    } catch (e) { console.error(e); }
-  };
-
-  const handleComment = async (postId) => {
-    if (!user) { navigate('/login'); return; }
-    if (!comment.trim()) return;
-    try {
-      await fetch(`${API}/posts/${postId}/comments`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: comment })
-      });
-      setComment('');
-      fetchPosts();
-    } catch (e) { console.error(e); }
-  };
-
-  const handleDelete = async (postId) => {
-    if (!window.confirm('Eliminar post?')) return;
-    try {
-      await fetch(`${API}/posts/${postId}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setSelectedPost(null);
-      fetchPosts();
-    } catch (e) { console.error(e); }
-  };
-
-  const handleSubmitPost = async () => {
-    if (!newPost.content.trim()) return;
-    try {
-      await fetch(`${API}/posts`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify(newPost)
-      });
-      setNewPost({ content: '', category: 'reflexao', mediaUrl: '' });
-      setShowNewPost(false);
-      fetchPosts();
-    } catch (e) { console.error(e); }
-  };
-
-  const filteredPosts = filterCategory === 'all'
-    ? posts
-    : posts.filter(p => p.category === filterCategory);
-
-  const getCategoryColor = (cat) => CATEGORIES.find(c => c.value === cat)?.color || '#daa520';
-
-const isVideo = (url) => {
-  if (!url) return false;
-  const lower = url.toLowerCase();
-  return lower.includes('youtube.com') || lower.includes('youtu.be') ||
-    lower.includes('vimeo.com') || /\.(mp4|webm|ogg|mov)(\?|$)/.test(lower);
-};
-const getYoutubeId = (url) => {
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
-  return match ? match[1] : null;
-};
-const MediaPlayer = ({ url, style }) => {
-  if (!url) return null;
-  const ytId = getYoutubeId(url);
-  if (ytId) {
-    return React.createElement('iframe', {
-      src: 'https://www.youtube.com/embed/' + ytId,
-      style: { width: '100%', aspectRatio: '16/9', border: 'none', ...style },
-      allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
-      allowFullScreen: true
-    });
-  }
-  if (isVideo(url)) return <video src={url} controls style={{ width: '100%', maxHeight: 400, ...style }} />;
-  return <img src={url} alt="" style={{ width: '100%', maxHeight: 400, objectFit: 'cover', ...style }} />;
+// =============================================
+// CATEGORY CONFIG
+// =============================================
+const CATEGORY_COLORS = {
+  testemunho: { bg: '#fff7ed', border: '#f97316', text: '#ea580c', emoji: '🙌' },
+  louvor:     { bg: '#fdf4ff', border: '#a855f7', text: '#9333ea', emoji: '🎵' },
+  reflexao:   { bg: '#eff6ff', border: '#3b82f6', text: '#2563eb', emoji: '📖' },
+  versiculo:  { bg: '#f0fdf4', border: '#22c55e', text: '#16a34a', emoji: '✨' },
+  foto:       { bg: '#fff1f2', border: '#f43f5e', text: '#e11d48', emoji: '📸' },
 };
 
-  // â”€â”€ MODAL POST DETAIL â”€â”€
-  const PostModal = ({ post, onClose }) => (
+// =============================================
+// AUDIO PLAYER MINI
+// =============================================
+function MiniAudioPlayer({ src }) {
+  const audioRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const toggle = () => {
+    if (!audioRef.current) return;
+    if (playing) { audioRef.current.pause(); setPlaying(false); }
+    else { audioRef.current.play(); setPlaying(true); }
+  };
+
+  const onTimeUpdate = () => {
+    if (!audioRef.current) return;
+    setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100 || 0);
+  };
+
+  const onEnded = () => { setPlaying(false); setProgress(0); };
+
+  return (
     <div style={{
-      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
-      zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center'
-    }} onClick={onClose}>
-      <div style={{
-        background: '#1a1a2e', borderRadius: 12, maxWidth: 900, width: '95vw',
-        maxHeight: '90vh', display: 'flex', overflow: 'hidden',
-        flexDirection: window.innerWidth < 768 ? 'column' : 'row'
-      }} onClick={e => e.stopPropagation()}>
-
-        {/* Left: Media or Text */}
-        <div style={{
-          flex: post.media_url ? '1.2' : '1',
-          background: '#0f0f1a',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          minHeight: 300, position: 'relative'
-        }}>
-          {post.media_url ? (
-            <MediaPlayer url={post.media_url} style={{ height: "100%", objectFit: "cover" }} />
-          ) : (
-            <div style={{ padding: 32, textAlign: 'center' }}>
-              <div style={{
-                fontSize: '3rem', marginBottom: 16,
-                background: `linear-gradient(135deg, ${getCategoryColor(post.category)}, #fff)`,
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
-              }}>âœï¸</div>
-              <p style={{ color: '#fff', fontSize: '1.1rem', lineHeight: 1.6 }}>{post.content}</p>
-            </div>
-          )}
-          <button onClick={onClose} style={{
-            position: 'absolute', top: 12, right: 12,
-            background: 'rgba(0,0,0,0.5)', border: 'none', color: '#fff',
-            borderRadius: '50%', width: 32, height: 32, cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center'
-          }}><X size={16} /></button>
-        </div>
-
-        {/* Right: Info + Comments */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}>
-          {/* Header */}
-          <div style={{ padding: '16px', borderBottom: '1px solid #333', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <Link to={`/perfil/${post.user_id}`} onClick={onClose}>
-              <img
-                src={post.avatar_url || `https://ui-avatars.com/api/?name=${post.full_name || 'U'}&background=daa520&color=fff`}
-                style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }}
-                alt=""
-              />
-            </Link>
-            <div style={{ flex: 1 }}>
-              <Link to={`/perfil/${post.user_id}`} onClick={onClose} style={{ color: '#daa520', fontWeight: 600, textDecoration: 'none' }}>
-                {post.full_name || 'Utilizador'}
-              </Link>
-              <div style={{ color: '#999', fontSize: '0.75rem' }}>
-                {new Date(post.created_at).toLocaleDateString('pt-BR')}
-              </div>
-            </div>
-            <span style={{
-              background: getCategoryColor(post.category) + '33',
-              color: getCategoryColor(post.category),
-              padding: '2px 8px', borderRadius: 12, fontSize: '0.7rem'
-            }}>
-              {CATEGORIES.find(c => c.value === post.category)?.label || post.category}
-            </span>
-            {user?.id === post.user_id && (
-              <button onClick={() => handleDelete(post.id)} style={{ background: 'none', border: 'none', color: '#e74c3c', cursor: 'pointer' }}>
-                <Trash2 size={16} />
-              </button>
-            )}
-          </div>
-
-          {/* Content if has media */}
-          {post.media_url && post.content && (
-            <div style={{ padding: '12px 16px', borderBottom: '1px solid #333', color: '#ccc', fontSize: '0.9rem' }}>
-              {post.content}
-            </div>
-          )}
-
-          {/* Comments */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '12px 16px' }}>
-            {(post.comments || []).map((c, i) => (
-              <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-                <img
-                  src={c.avatar_url || `https://ui-avatars.com/api/?name=${c.full_name || 'U'}&background=555&color=fff`}
-                  style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
-                  alt=""
-                />
-                <div>
-                  <span style={{ color: '#daa520', fontWeight: 600, fontSize: '0.82rem' }}>{c.full_name} </span>
-                  <span style={{ color: '#ccc', fontSize: '0.82rem' }}>{c.content}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Actions */}
-          <div style={{ borderTop: '1px solid #333', padding: '12px 16px' }}>
-            <div style={{ display: 'flex', gap: 16, marginBottom: 8 }}>
-              <button onClick={() => handleLike(post.id)} style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                color: post.liked ? '#e74c3c' : '#aaa', display: 'flex', alignItems: 'center', gap: 4
-              }}>
-                <Heart size={20} fill={post.liked ? '#e74c3c' : 'none'} />
-                <span style={{ fontSize: '0.85rem' }}>{post.likes_count || 0}</span>
-              </button>
-              <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', display: 'flex', alignItems: 'center', gap: 4 }}>
-                <MessageCircle size={20} />
-                <span style={{ fontSize: '0.85rem' }}>{(post.comments || []).length}</span>
-              </button>
-            </div>
-            {user && (
-              <div style={{ display: 'flex', gap: 8 }}>
-                <input
-                  value={comment}
-                  onChange={e => setComment(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleComment(post.id)}
-                  placeholder="Adicionar comentÃ¡rio..."
-                  style={{
-                    flex: 1, background: '#0f0f1a', border: '1px solid #333',
-                    borderRadius: 20, padding: '8px 14px', color: '#fff', fontSize: '0.85rem'
-                  }}
-                />
-                <button onClick={() => handleComment(post.id)} style={{
-                  background: '#daa520', border: 'none', borderRadius: '50%',
-                  width: 34, height: 34, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}>
-                  <Send size={14} color="#000" />
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  // â”€â”€ GRID CARD â”€â”€
-  const GridCard = ({ post }) => (
-    <div
-      onClick={() => setSelectedPost(post)}
-      style={{
-        aspectRatio: '1/1', position: 'relative', cursor: 'pointer',
-        background: '#1a1a2e', overflow: 'hidden', borderRadius: 4
-      }}
-    >
-      {post.media_url ? (
-        <MediaPlayer url={post.media_url} style={{ height: "100%", objectFit: "cover" }} />
-      ) : (
-        <div style={{
-          width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: `linear-gradient(135deg, ${getCategoryColor(post.category)}22, #1a1a2e)`,
-          padding: 12
-        }}>
-          <p style={{ color: '#fff', fontSize: '0.75rem', textAlign: 'center', lineHeight: 1.4, overflow: 'hidden',
-            display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical' }}>
-            {post.content}
-          </p>
-        </div>
-      )}
-      {/* Hover overlay */}
-      <div className="grid-overlay" style={{
-        position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16,
-        opacity: 0, transition: 'opacity 0.2s'
+      display: 'flex', alignItems: 'center', gap: '10px',
+      background: 'linear-gradient(135deg, #667eea22, #764ba222)',
+      border: '1px solid #667eea44',
+      borderRadius: '12px', padding: '10px 14px', marginTop: '10px',
+    }}>
+      <audio ref={audioRef} src={src} onTimeUpdate={onTimeUpdate} onEnded={onEnded} />
+      <button onClick={toggle} style={{
+        width: '36px', height: '36px', borderRadius: '50%',
+        background: 'linear-gradient(135deg, #667eea, #764ba2)',
+        border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: 'white', flexShrink: 0,
       }}>
-        <span style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Heart size={16} fill="#fff" /> {post.likes_count || 0}
-        </span>
-        <span style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: 4 }}>
-          <MessageCircle size={16} /> {(post.comments || []).length}
-        </span>
+        {playing ? <Pause size={16} /> : <Play size={16} />}
+      </button>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: '11px', color: '#666', marginBottom: '4px' }}>🎵 Música anexada</div>
+        <div style={{ height: '4px', background: '#e2e8f0', borderRadius: '2px', overflow: 'hidden' }}>
+          <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #667eea, #764ba2)', transition: 'width 0.1s' }} />
+        </div>
       </div>
-      {/* Category dot */}
-      <div style={{
-        position: 'absolute', top: 6, right: 6, width: 8, height: 8,
-        borderRadius: '50%', background: getCategoryColor(post.category)
-      }} />
     </div>
   );
+}
 
-  // â”€â”€ FEED CARD â”€â”€
-  const FeedCard = ({ post }) => (
-    <div style={{ background: '#1a1a2e', borderRadius: 12, marginBottom: 16, overflow: 'hidden', border: '1px solid #333' }}>
+// =============================================
+// POST CARD
+// =============================================
+function PostCard({ post, onLike, onComment }) {
+  const cat = CATEGORY_COLORS[post.type] || CATEGORY_COLORS.reflexao;
+  const [showComments, setShowComments] = useState(false);
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([]);
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const videoRef = useRef(null);
+
+  const toggleVideo = () => {
+    if (!videoRef.current) return;
+    if (videoPlaying) { videoRef.current.pause(); setVideoPlaying(false); }
+    else { videoRef.current.play(); setVideoPlaying(true); }
+  };
+
+  const submitComment = (e) => {
+    e.preventDefault();
+    if (!comment.trim()) return;
+    setComments([...comments, { id: Date.now(), text: comment, author: 'Você', time: 'Agora' }]);
+    setComment('');
+  };
+
+  return (
+    <div style={{
+      background: 'white',
+      borderRadius: '16px',
+      border: `1px solid ${cat.border}33`,
+      overflow: 'hidden',
+      boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+      transition: 'transform 0.2s, box-shadow 0.2s',
+      marginBottom: '16px',
+    }}
+      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.10)'; }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.06)'; }}
+    >
       {/* Header */}
-      <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
-        <Link to={`/perfil/${post.user_id}`}>
-          <img
-            src={post.avatar_url || `https://ui-avatars.com/api/?name=${post.full_name || 'U'}&background=daa520&color=fff`}
-            style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover' }}
-            alt=""
-          />
-        </Link>
+      <div style={{ padding: '14px 16px 10px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{
+          width: '42px', height: '42px', borderRadius: '50%',
+          background: `linear-gradient(135deg, ${cat.border}, ${cat.border}88)`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: 'white', fontWeight: '700', fontSize: '14px', flexShrink: 0,
+        }}>
+          {post.authorInitials}
+        </div>
         <div style={{ flex: 1 }}>
-          <Link to={`/perfil/${post.user_id}`} style={{ color: '#daa520', fontWeight: 600, textDecoration: 'none', fontSize: '0.9rem' }}>
-            {post.full_name || 'Utilizador'}
-          </Link>
-          <div style={{ color: '#999', fontSize: '0.72rem' }}>{new Date(post.created_at).toLocaleDateString('pt-BR')}</div>
+          <div style={{ fontWeight: '600', fontSize: '14px', color: '#1a1a2e' }}>{post.authorName}</div>
+          <div style={{ fontSize: '12px', color: '#888' }}>{post.church} · {post.time}</div>
         </div>
         <span style={{
-          background: getCategoryColor(post.category) + '33',
-          color: getCategoryColor(post.category),
-          padding: '2px 8px', borderRadius: 12, fontSize: '0.7rem'
+          fontSize: '11px', fontWeight: '600', padding: '4px 10px',
+          borderRadius: '20px', background: cat.bg, color: cat.text,
+          border: `1px solid ${cat.border}44`,
         }}>
-          {CATEGORIES.find(c => c.value === post.category)?.label || post.category}
+          {cat.emoji} {post.type}
         </span>
       </div>
 
-      {/* Media */}
-      {post.media_url && (
-        <MediaPlayer url={post.media_url} />
+      {/* Media — Foto */}
+      {post.mediaType === 'foto' && post.mediaUrl && (
+        <div style={{ width: '100%', maxHeight: '400px', overflow: 'hidden' }}>
+          <img src={post.mediaUrl} alt="post" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        </div>
+      )}
+
+      {/* Media — Vídeo */}
+      {post.mediaType === 'video' && post.mediaUrl && (
+        <div style={{ position: 'relative', background: '#000', cursor: 'pointer' }} onClick={toggleVideo}>
+          <video
+            ref={videoRef}
+            src={post.mediaUrl}
+            style={{ width: '100%', maxHeight: '400px', objectFit: 'contain', display: 'block' }}
+            onEnded={() => setVideoPlaying(false)}
+          />
+          {!videoPlaying && (
+            <div style={{
+              position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: 'rgba(0,0,0,0.3)',
+            }}>
+              <div style={{
+                width: '56px', height: '56px', borderRadius: '50%', background: 'rgba(255,255,255,0.9)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Play size={24} style={{ color: '#333', marginLeft: '3px' }} />
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Content */}
-      <div style={{ padding: '12px 16px', color: '#ddd', fontSize: '0.9rem', lineHeight: 1.6 }}>
-        {post.content}
+      <div style={{ padding: '12px 16px' }}>
+        {post.type === 'versiculo' ? (
+          <div style={{
+            background: `linear-gradient(135deg, ${cat.bg}, white)`,
+            border: `2px solid ${cat.border}33`,
+            borderLeft: `4px solid ${cat.border}`,
+            borderRadius: '8px', padding: '12px 14px',
+          }}>
+            <p style={{ fontStyle: 'italic', color: '#333', fontSize: '15px', lineHeight: '1.6', margin: 0 }}>"{post.content}"</p>
+            {post.reference && (
+              <p style={{ fontWeight: '700', color: cat.text, marginTop: '8px', marginBottom: 0, fontSize: '13px' }}>— {post.reference}</p>
+            )}
+          </div>
+        ) : (
+          <p style={{ color: '#333', fontSize: '14px', lineHeight: '1.65', margin: 0 }}>{post.content}</p>
+        )}
+
+        {/* Música */}
+        {post.musicUrl && <MiniAudioPlayer src={post.musicUrl} />}
       </div>
 
       {/* Actions */}
-      <div style={{ padding: '8px 16px 12px', display: 'flex', gap: 16, borderTop: '1px solid #2a2a3e' }}>
-        <button onClick={() => handleLike(post.id)} style={{
+      <div style={{
+        padding: '8px 16px 12px',
+        borderTop: '1px solid #f0f0f0',
+        display: 'flex', gap: '16px', alignItems: 'center',
+      }}>
+        <button onClick={() => onLike(post.id)} style={{
+          display: 'flex', alignItems: 'center', gap: '6px',
           background: 'none', border: 'none', cursor: 'pointer',
-          color: post.liked ? '#e74c3c' : '#aaa', display: 'flex', alignItems: 'center', gap: 4
+          color: post.liked ? '#e11d48' : '#888', fontSize: '13px', fontWeight: '600',
+          padding: '6px 10px', borderRadius: '8px',
+          transition: 'all 0.2s',
         }}>
-          <Heart size={18} fill={post.liked ? '#e74c3c' : 'none'} />
-          <span style={{ fontSize: '0.82rem' }}>{post.likes_count || 0}</span>
+          <Heart size={18} fill={post.liked ? '#e11d48' : 'none'} />
+          {post.amemCount} Améns
         </button>
-        <button onClick={() => setSelectedPost(post)} style={{
-          background: 'none', border: 'none', cursor: 'pointer', color: '#aaa', display: 'flex', alignItems: 'center', gap: 4
+        <button onClick={() => setShowComments(!showComments)} style={{
+          display: 'flex', alignItems: 'center', gap: '6px',
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: '#888', fontSize: '13px', fontWeight: '600',
+          padding: '6px 10px', borderRadius: '8px',
         }}>
           <MessageCircle size={18} />
-          <span style={{ fontSize: '0.82rem' }}>{(post.comments || []).length}</span>
+          {post.commentCount + comments.length}
+        </button>
+        <button style={{
+          display: 'flex', alignItems: 'center', gap: '6px',
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: '#888', fontSize: '13px', fontWeight: '600',
+          padding: '6px 10px', borderRadius: '8px', marginLeft: 'auto',
+        }}>
+          <Share2 size={18} />
         </button>
       </div>
-    </div>
-  );
 
-  return (
-    <div style={{ maxWidth: 935, margin: '0 auto', padding: '0 16px 80px' }}>
-      <style>{`
-        .grid-card:hover .grid-overlay { opacity: 1 !important; }
-        @media (max-width: 600px) { .mural-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 2px !important; } }
-      `}</style>
-
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 0 16px', borderBottom: '1px solid #333', marginBottom: 16 }}>
-        <h2 style={{ color: '#daa520', margin: 0, fontSize: '1.4rem' }}>âœï¸ Mural</h2>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={() => setViewMode('grid')} style={{
-            background: viewMode === 'grid' ? '#daa520' : 'transparent',
-            border: '1px solid #daa520', borderRadius: 6, padding: '6px 10px', cursor: 'pointer',
-            color: viewMode === 'grid' ? '#000' : '#daa520'
-          }}><Grid size={16} /></button>
-          <button onClick={() => setViewMode('feed')} style={{
-            background: viewMode === 'feed' ? '#daa520' : 'transparent',
-            border: '1px solid #daa520', borderRadius: 6, padding: '6px 10px', cursor: 'pointer',
-            color: viewMode === 'feed' ? '#000' : '#daa520'
-          }}><List size={16} /></button>
-          {user && (
-            <button onClick={() => setShowNewPost(true)} style={{
-              background: '#daa520', border: 'none', borderRadius: 6, padding: '6px 12px',
-              cursor: 'pointer', color: '#000', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4
-            }}>
-              <Plus size={16} /> Publicar
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Category Filter */}
-      <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 12, marginBottom: 16 }}>
-        <button onClick={() => setFilterCategory('all')} style={{
-          background: filterCategory === 'all' ? '#daa520' : '#1a1a2e',
-          border: '1px solid #333', borderRadius: 20, padding: '4px 14px',
-          color: filterCategory === 'all' ? '#000' : '#aaa', cursor: 'pointer', whiteSpace: 'nowrap', fontSize: '0.82rem'
-        }}>Todos</button>
-        {CATEGORIES.map(cat => (
-          <button key={cat.value} onClick={() => setFilterCategory(cat.value)} style={{
-            background: filterCategory === cat.value ? cat.color : '#1a1a2e',
-            border: `1px solid ${cat.color}`, borderRadius: 20, padding: '4px 14px',
-            color: filterCategory === cat.value ? '#000' : cat.color, cursor: 'pointer', whiteSpace: 'nowrap', fontSize: '0.82rem'
-          }}>{cat.label}</button>
-        ))}
-      </div>
-
-      {/* Loading */}
-      {loading && (
-        <div style={{ textAlign: 'center', padding: 40, color: '#daa520' }}>A carregar...</div>
-      )}
-
-      {/* Grid View */}
-      {!loading && viewMode === 'grid' && (
-        <div className="mural-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 3
-        }}>
-          {filteredPosts.map(post => (
-            <div key={post.id} className="grid-card" style={{ position: 'relative' }}>
-              <GridCard post={post} />
+      {/* Comments */}
+      {showComments && (
+        <div style={{ padding: '0 16px 14px', borderTop: '1px solid #f0f0f0' }}>
+          {comments.map(c => (
+            <div key={c.id} style={{ padding: '8px 0', borderBottom: '1px solid #f8f8f8', fontSize: '13px' }}>
+              <span style={{ fontWeight: '600', color: '#333' }}>{c.author}</span>
+              <span style={{ color: '#555', marginLeft: '8px' }}>{c.text}</span>
             </div>
           ))}
-        </div>
-      )}
-
-      {/* Feed View */}
-      {!loading && viewMode === 'feed' && (
-        <div style={{ maxWidth: 614, margin: '0 auto' }}>
-          {filteredPosts.map(post => <FeedCard key={post.id} post={post} />)}
-        </div>
-      )}
-
-      {filteredPosts.length === 0 && !loading && (
-        <div style={{ textAlign: 'center', padding: 60, color: '#666' }}>
-          <p>Nenhum post encontrado.</p>
-        </div>
-      )}
-
-      {/* Post Modal */}
-      {selectedPost && <PostModal post={selectedPost} onClose={() => setSelectedPost(null)} />}
-
-      {/* New Post Modal */}
-      {showNewPost && (
-        <div style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)',
-          zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>
-          <div style={{ background: '#1a1a2e', borderRadius: 12, padding: 24, width: '90%', maxWidth: 500 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
-              <h3 style={{ color: '#daa520', margin: 0 }}>Nova PublicaÃ§Ã£o</h3>
-              <button onClick={() => setShowNewPost(false)} style={{ background: 'none', border: 'none', color: '#aaa', cursor: 'pointer' }}>
-                <X size={20} />
-              </button>
-            </div>
-            <textarea
-              value={newPost.content}
-              onChange={e => setNewPost(p => ({ ...p, content: e.target.value }))}
-              placeholder="Partilha algo com a comunidade..."
-              rows={4}
-              style={{
-                width: '100%', background: '#0f0f1a', border: '1px solid #333',
-                borderRadius: 8, padding: 12, color: '#fff', fontSize: '0.9rem',
-                resize: 'none', boxSizing: 'border-box'
-              }}
-            />
+          <form onSubmit={submitComment} style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
             <input
-              value={newPost.mediaUrl}
-              onChange={e => setNewPost(p => ({ ...p, mediaUrl: e.target.value }))}
-              placeholder="URL da imagem (opcional)"
+              value={comment}
+              onChange={e => setComment(e.target.value)}
+              placeholder="Escreve um comentário..."
               style={{
-                width: '100%', background: '#0f0f1a', border: '1px solid #333',
-                borderRadius: 8, padding: 10, color: '#fff', fontSize: '0.85rem',
-                marginTop: 8, boxSizing: 'border-box'
+                flex: 1, padding: '8px 12px', borderRadius: '20px',
+                border: '1px solid #e2e8f0', fontSize: '13px', outline: 'none',
               }}
             />
-            <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
-              {CATEGORIES.map(cat => (
-                <button key={cat.value} onClick={() => setNewPost(p => ({ ...p, category: cat.value }))} style={{
-                  background: newPost.category === cat.value ? cat.color : 'transparent',
-                  border: `1px solid ${cat.color}`, borderRadius: 20, padding: '3px 10px',
-                  color: newPost.category === cat.value ? '#000' : cat.color, cursor: 'pointer', fontSize: '0.75rem'
-                }}>{cat.label}</button>
-              ))}
-            </div>
-            <button onClick={handleSubmitPost} style={{
-              width: '100%', marginTop: 16, background: '#daa520', border: 'none',
-              borderRadius: 8, padding: 12, color: '#000', fontWeight: 700, cursor: 'pointer', fontSize: '1rem'
-            }}>Publicar</button>
-          </div>
+            <button type="submit" style={{
+              padding: '8px 14px', borderRadius: '20px',
+              background: 'linear-gradient(135deg, #667eea, #764ba2)',
+              border: 'none', color: 'white', cursor: 'pointer', fontSize: '13px',
+            }}>
+              <Send size={14} />
+            </button>
+          </form>
         </div>
       )}
     </div>
   );
 }
 
+// =============================================
+// MAIN MURAL COMPONENT
+// =============================================
+export default function Mural() {
+  const { t } = useTranslation();
+  const { user, token } = useAuth();
+  const [activeFilter, setActiveFilter] = useState('todas');
+  const [showForm, setShowForm] = useState(false);
+  const [posts, setPosts] = useState(DEMO_POSTS);
 
+  // Form state
+  const [postText, setPostText] = useState('');
+  const [postCategory, setPostCategory] = useState('testemunho');
+  const [mediaFile, setMediaFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
+  const [mediaType, setMediaType] = useState(null);
+  const [musicFile, setMusicFile] = useState(null);
+  const [musicName, setMusicName] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
+
+  const photoInputRef = useRef(null);
+  const videoInputRef = useRef(null);
+  const musicInputRef = useRef(null);
+
+  const FILTERS = [
+    { key: 'todas', label: '🌟 Todas' },
+    { key: 'testemunho', label: '🙌 Testemunhos' },
+    { key: 'louvor', label: '🎵 Louvores' },
+    { key: 'versiculo', label: '✨ Versículos' },
+    { key: 'reflexao', label: '📖 Reflexões' },
+  ];
+
+  const CATEGORIES = [
+    { value: 'testemunho', label: '🙌 Testemunho' },
+    { value: 'louvor', label: '🎵 Louvor' },
+    { value: 'reflexao', label: '📖 Reflexão' },
+    { value: 'versiculo', label: '✨ Versículo' },
+    { value: 'foto', label: '📸 Foto/Vídeo' },
+  ];
+
+  const filteredPosts = activeFilter === 'todas'
+    ? posts
+    : posts.filter(p => p.type === activeFilter);
+
+  const handleMediaSelect = (e, type) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setMediaFile(file);
+    setMediaType(type);
+    setMediaPreview(URL.createObjectURL(file));
+  };
+
+  const handleMusicSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setMusicFile(file);
+    setMusicName(file.name);
+  };
+
+  const clearMedia = () => {
+    setMediaFile(null);
+    setMediaPreview(null);
+    setMediaType(null);
+    if (photoInputRef.current) photoInputRef.current.value = '';
+    if (videoInputRef.current) videoInputRef.current.value = '';
+  };
+
+  const clearMusic = () => {
+    setMusicFile(null);
+    setMusicName(null);
+    if (musicInputRef.current) musicInputRef.current.value = '';
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!postText.trim() && !mediaFile) return;
+
+    setUploading(true);
+    setUploadError(null);
+
+    try {
+      let mediaUrl = null;
+      let musicUrl = null;
+
+      // Upload media se existir
+      if (mediaFile) {
+        mediaUrl = await uploadToCloudinary(mediaFile);
+      }
+
+      // Upload música se existir
+      if (musicFile) {
+        musicUrl = await uploadToCloudinary(musicFile);
+      }
+
+      const newPost = {
+        id: Date.now(),
+        type: postCategory,
+        authorInitials: user ? user.full_name?.slice(0, 2).toUpperCase() : 'EU',
+        authorName: user ? user.full_name : 'Você',
+        church: user?.church || 'Sua Igreja',
+        time: 'Agora',
+        content: postText,
+        amemCount: 0,
+        commentCount: 0,
+        liked: false,
+        mediaUrl,
+        mediaType,
+        musicUrl,
+      };
+
+      setPosts([newPost, ...posts]);
+      setPostText('');
+      setPostCategory('testemunho');
+      clearMedia();
+      clearMusic();
+      setShowForm(false);
+    } catch (err) {
+      setUploadError('Erro no upload. Verifica a tua ligação e tenta novamente.');
+      console.error(err);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleLike = (postId) => {
+    setPosts(posts.map(p =>
+      p.id === postId
+        ? { ...p, liked: !p.liked, amemCount: p.liked ? p.amemCount - 1 : p.amemCount + 1 }
+        : p
+    ));
+  };
+
+  return (
+    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '16px' }}>
+
+      {/* Header */}
+      <div style={{
+        background: 'linear-gradient(135deg, #667eea, #764ba2)',
+        borderRadius: '16px', padding: '20px 24px', marginBottom: '20px',
+        color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <div>
+          <h1 style={{ margin: 0, fontSize: '22px', fontWeight: '700' }}>
+            📋 Mural da Comunidade
+          </h1>
+          <p style={{ margin: '4px 0 0', fontSize: '13px', opacity: 0.85 }}>
+            Partilha testemunhos, louvores e reflexões
+          </p>
+        </div>
+        <button
+          onClick={() => setShowForm(!showForm)}
+          style={{
+            background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.4)',
+            borderRadius: '12px', padding: '10px 16px', color: 'white',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
+            fontSize: '14px', fontWeight: '600', transition: 'all 0.2s',
+          }}
+        >
+          {showForm ? <X size={16} /> : <Plus size={16} />}
+          {showForm ? 'Cancelar' : 'Publicar'}
+        </button>
+      </div>
+
+      {/* FORM */}
+      {showForm && (
+        <div style={{
+          background: 'white', borderRadius: '16px', padding: '20px',
+          border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          marginBottom: '20px',
+        }}>
+          <h3 style={{ margin: '0 0 16px', fontSize: '16px', color: '#1a1a2e' }}>
+            ✍️ Partilha com a comunidade
+          </h3>
+
+          {/* Categoria */}
+          <div style={{ marginBottom: '14px' }}>
+            <label style={{ fontSize: '13px', fontWeight: '600', color: '#555', display: 'block', marginBottom: '6px' }}>
+              Categoria
+            </label>
+            <select
+              value={postCategory}
+              onChange={e => setPostCategory(e.target.value)}
+              style={{
+                width: '100%', padding: '10px 12px', borderRadius: '10px',
+                border: '1px solid #e2e8f0', fontSize: '14px', outline: 'none',
+                background: 'white',
+              }}
+            >
+              {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+            </select>
+          </div>
+
+          {/* Texto */}
+          <div style={{ marginBottom: '14px' }}>
+            <label style={{ fontSize: '13px', fontWeight: '600', color: '#555', display: 'block', marginBottom: '6px' }}>
+              Mensagem
+            </label>
+            <textarea
+              rows={4}
+              placeholder="Escreve o teu testemunho, louvor ou reflexão..."
+              value={postText}
+              onChange={e => setPostText(e.target.value)}
+              style={{
+                width: '100%', padding: '12px', borderRadius: '10px',
+                border: '1px solid #e2e8f0', fontSize: '14px', outline: 'none',
+                resize: 'vertical', lineHeight: '1.5', boxSizing: 'border-box',
+              }}
+            />
+          </div>
+
+          {/* Preview de media */}
+          {mediaPreview && (
+            <div style={{ position: 'relative', marginBottom: '14px', borderRadius: '12px', overflow: 'hidden' }}>
+              {mediaType === 'foto' ? (
+                <img src={mediaPreview} alt="preview" style={{ width: '100%', maxHeight: '300px', objectFit: 'cover', display: 'block' }} />
+              ) : (
+                <video src={mediaPreview} controls style={{ width: '100%', maxHeight: '300px', display: 'block' }} />
+              )}
+              <button
+                onClick={clearMedia}
+                style={{
+                  position: 'absolute', top: '8px', right: '8px',
+                  background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: '50%',
+                  width: '28px', height: '28px', cursor: 'pointer', color: 'white',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}
+              >
+                <X size={14} />
+              </button>
+            </div>
+          )}
+
+          {/* Música selecionada */}
+          {musicName && (
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px',
+              background: '#f8f4ff', border: '1px solid #a855f744', borderRadius: '10px', padding: '10px 14px',
+            }}>
+              <Music size={18} style={{ color: '#9333ea' }} />
+              <span style={{ flex: 1, fontSize: '13px', color: '#555' }}>{musicName}</span>
+              <button onClick={clearMusic} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}>
+                <X size={14} />
+              </button>
+            </div>
+          )}
+
+          {/* Botões de media */}
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+            <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleMediaSelect(e, 'foto')} />
+            <input ref={videoInputRef} type="file" accept="video/*" style={{ display: 'none' }} onChange={e => handleMediaSelect(e, 'video')} />
+            <input ref={musicInputRef} type="file" accept="audio/*" style={{ display: 'none' }} onChange={e => handleMusicSelect(e)} />
+
+            <button
+              onClick={() => photoInputRef.current?.click()}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px',
+                borderRadius: '20px', border: '1px solid #e2e8f0', background: 'white',
+                cursor: 'pointer', fontSize: '13px', color: '#555', fontWeight: '500',
+              }}
+            >
+              <Image size={16} style={{ color: '#f43f5e' }} /> Foto
+            </button>
+
+            <button
+              onClick={() => videoInputRef.current?.click()}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px',
+                borderRadius: '20px', border: '1px solid #e2e8f0', background: 'white',
+                cursor: 'pointer', fontSize: '13px', color: '#555', fontWeight: '500',
+              }}
+            >
+              <Video size={16} style={{ color: '#3b82f6' }} /> Vídeo
+            </button>
+
+            <button
+              onClick={() => musicInputRef.current?.click()}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px',
+                borderRadius: '20px', border: '1px solid #e2e8f0', background: 'white',
+                cursor: 'pointer', fontSize: '13px', color: '#555', fontWeight: '500',
+              }}
+            >
+              <Music size={16} style={{ color: '#a855f7' }} /> Música
+            </button>
+          </div>
+
+          {/* Erro */}
+          {uploadError && (
+            <div style={{
+              background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: '8px',
+              padding: '10px 14px', marginBottom: '14px', fontSize: '13px', color: '#e11d48',
+            }}>
+              ⚠️ {uploadError}
+            </div>
+          )}
+
+          {/* Botão publicar */}
+          <button
+            onClick={handleSubmit}
+            disabled={uploading || (!postText.trim() && !mediaFile)}
+            style={{
+              width: '100%', padding: '12px',
+              background: uploading ? '#ccc' : 'linear-gradient(135deg, #667eea, #764ba2)',
+              border: 'none', borderRadius: '12px', color: 'white',
+              fontSize: '15px', fontWeight: '600', cursor: uploading ? 'not-allowed' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              transition: 'opacity 0.2s',
+            }}
+          >
+            {uploading ? (
+              <>
+                <div style={{
+                  width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.3)',
+                  borderTop: '2px solid white', borderRadius: '50%',
+                  animation: 'spin 0.8s linear infinite',
+                }} />
+                A publicar...
+              </>
+            ) : (
+              <><Send size={16} /> Publicar</>
+            )}
+          </button>
+        </div>
+      )}
+
+      {/* Filtros */}
+      <div style={{
+        display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px',
+        marginBottom: '16px', scrollbarWidth: 'none',
+      }}>
+        {FILTERS.map(f => (
+          <button
+            key={f.key}
+            onClick={() => setActiveFilter(f.key)}
+            style={{
+              padding: '8px 16px', borderRadius: '20px', whiteSpace: 'nowrap',
+              border: activeFilter === f.key ? 'none' : '1px solid #e2e8f0',
+              background: activeFilter === f.key ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'white',
+              color: activeFilter === f.key ? 'white' : '#555',
+              cursor: 'pointer', fontSize: '13px', fontWeight: '500',
+              transition: 'all 0.2s',
+            }}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Posts */}
+      {filteredPosts.map(post => (
+        <PostCard key={post.id} post={post} onLike={handleLike} />
+      ))}
+
+      {filteredPosts.length === 0 && (
+        <div style={{
+          textAlign: 'center', padding: '40px', color: '#888',
+          background: 'white', borderRadius: '16px', border: '1px dashed #e2e8f0',
+        }}>
+          <BookOpen size={40} style={{ opacity: 0.3, marginBottom: '12px' }} />
+          <p style={{ margin: 0, fontSize: '15px' }}>Nenhuma publicação encontrada.</p>
+          <p style={{ margin: '4px 0 0', fontSize: '13px' }}>Sê o primeiro a partilhar!</p>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        ::-webkit-scrollbar { display: none; }
+      `}</style>
+    </div>
+  );
+}
