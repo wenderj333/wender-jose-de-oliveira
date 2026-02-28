@@ -391,7 +391,7 @@
         "label": "Language"
     },
     "pastorChat": {
-        "title": "Pastoral Chat",
+        "title": "Seelsorge-Chat",
         "subtitle": "Chat directly with a pastor. Automatic translation included.",
         "yourName": "Your name",
         "selectHelp": "What do you need?",
@@ -418,7 +418,14 @@
         "langEn": "English",
         "langEs": "Español",
         "langDe": "Deutsch",
-        "autoTranslate": "🌐 Automatic translation enabled"
+        "autoTranslate": "🌐 Automatic translation enabled",
+        "introHeading": "🕊️ Ein Pastor ist bereit, dir zuzuhören",
+        "introParagraph": "Manchmal bringt das Leben Lasten mit sich, die zu schwer sind, um sie allein zu tragen. Hier kannst du dich vertraulich mit einem Pastor unterhalten, der dir zuhört, dich mit biblischer Weisheit berät und für dich betet.",
+        "introVerse1": "Kommt zu mir, alle, die ihr mühselig und beladen seid; ich will euch Ruhe geben. — Matthäus 11:28",
+        "introFeature1": "💜 Vertrauliche und sichere Gespräche",
+        "introFeature2": "🌍 Automatische Übersetzung in 15 Sprachen",
+        "introFeature3": "🙏 Freiwillige Pastoren aus aller Welt",
+        "introVerse2": "Wo kein Plan ist, scheitert das Vorhaben; wo aber viele Ratgeber sind, gelingt es. — Sprüche 15:22"
     },
     "friends": {
         "title": "Friends",

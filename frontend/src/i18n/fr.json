@@ -432,7 +432,14 @@
         "langEn": "English",
         "langEs": "Español",
         "langDe": "Deutsch",
-        "autoTranslate": "🌐 Traduction automatique activée"
+        "autoTranslate": "🌐 Traduction automatique activée",
+        "introHeading": "🕊️ Un Pasteur Est Prêt à Vous Écouter",
+        "introParagraph": "Parfois, la vie nous apporte des fardeaux trop lourds à porter seuls. Ici, vous pouvez converser en toute confidentialité avec un pasteur qui vous écoutera, vous conseillera avec la sagesse biblique et priera pour vous.",
+        "introVerse1": "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos. — Matthieu 11:28",
+        "introFeature1": "💜 Conversation confidentielle et sécurisée",
+        "introFeature2": "🌍 Traduction automatique en 15 langues",
+        "introFeature3": "🙏 Pasteurs bénévoles du monde entier",
+        "introVerse2": "Faute de conseil, les projets échouent; mais avec le concours de nombreux conseillers, ils réussissent. — Proverbes 15:22"
     },
     "friends": {
         "title": "Amis",

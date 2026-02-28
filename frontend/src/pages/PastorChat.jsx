@@ -268,23 +268,21 @@ export default function PastorChat() {
           boxShadow: '0 4px 20px rgba(142,68,173,0.12)',
         }}>
           <h3 style={{ fontSize: '1.1rem', color: '#6a1b9a', margin: '0 0 0.8rem' }}>
-            🕊️ Um Pastor Está Pronto Para Ouvir Você
+            {t('pastorChat.introHeading')}
           </h3>
           <p style={{ fontSize: '0.9rem', color: '#444', lineHeight: 1.7, margin: '0 0 0.8rem' }}>
-            Às vezes a vida nos traz fardos pesados demais para carregar sozinhos. 
-            Aqui você pode conversar de forma confidencial com um pastor que vai te ouvir, 
-            aconselhar com sabedoria bíblica e orar por você.
+            {t('pastorChat.introParagraph')}
           </p>
           <p style={{ fontSize: '0.88rem', color: '#6a1b9a', fontStyle: 'italic', margin: '0 0 0.8rem', fontWeight: 500 }}>
-            "Vinde a mim, todos os que estais cansados e oprimidos, e eu vos aliviarei." — Mateus 11:28
+            "{t('pastorChat.introVerse1')}"
           </p>
           <p style={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-            💜 Conversa confidencial e segura<br />
-            🌍 Tradução automática em 15 idiomas<br />
-            🙏 Pastores voluntários de todo o mundo
+            {t('pastorChat.introFeature1')}<br />
+            {t('pastorChat.introFeature2')}<br />
+            {t('pastorChat.introFeature3')}
           </p>
           <p style={{ fontSize: '0.82rem', color: '#8e44ad', fontStyle: 'italic', margin: 0, fontWeight: 500 }}>
-            "Onde não há conselho, os projetos saem vãos; mas com a multidão de conselheiros se confirmarão." — Provérbios 15:22
+            "{t('pastorChat.introVerse2')}"
           </p>
         </div>
 
@@ -296,7 +294,7 @@ export default function PastorChat() {
             boxShadow: '0 4px 15px rgba(142,68,173,0.4)',
             display: 'inline-flex', alignItems: 'center', gap: 10,
           }}>
-            <MessageCircle size={20} /> Iniciar Conversa
+            <MessageCircle size={20} /> {t('pastorChat.startChat')}
           </button>
         </div>
 

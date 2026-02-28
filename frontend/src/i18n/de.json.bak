@@ -432,14 +432,7 @@
         "langEn": "English",
         "langEs": "Español",
         "langDe": "Deutsch",
-        "autoTranslate": "🌐 Traducción automática activada",
-        "introHeading": "🕊️ Un Pastor Está Listo Para Escucharte",
-        "introParagraph": "A veces la vida nos trae cargas demasiado pesadas para llevar solos. Aquí puedes conversar de forma confidencial con un pastor que te escuchará, te aconsejaré con sabiduría bíblica y oraré por ti.",
-        "introVerse1": "Vengan a mí, todos ustedes que están cansados y agobiados, y yo les daré descanso. — Mateo 11:28",
-        "introFeature1": "💜 Conversación confidencial y segura",
-        "introFeature2": "🌍 Traducción automática en 15 idiomas",
-        "introFeature3": "🙏 Pastores voluntarios de todo el mundo",
-        "introVerse2": "Sin consejo fracasan los planes; con muchos consejeros tienen éxito. — Proverbios 15:22"
+        "autoTranslate": "🌐 Traducción automática activada"
     },
     "friends": {
         "title": "Amigos",
