@@ -1,134 +1,90 @@
-const express = require('express');
-const router = express.Router();
-const multer = require('multer');
-const db = require('../db/connection');
-const { authenticate } = require('../middleware/auth');
-const cloudinary = require('cloudinary').v2;
+const router = require('express').Router();
+const db = require('../db');
+const authenticateToken = require('../middleware/authenticateToken');
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'degxiuf43',
-  api_key: process.env.CLOUDINARY_API_KEY || '914835643241235',
-  api_secret: process.env.CLOUDINARY_API_SECRET || '7Eu52T0NYAAy2hmXHl0i4C0TgUo',
-});
-
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    if (/^image\/(jpeg|png|gif|webp)$/.test(file.mimetype)) cb(null, true);
-    else cb(new Error('Apenas imagens são permitidas'));
-  },
-});
-
-// GET /api/profile/member-count — public member count
-router.get('/member-count', async (req, res) => {
+// Get user profile (public)
+router.get('/:userId', authenticateToken, async (req, res) => {
   try {
-    const result = await db.prepare('SELECT COUNT(*) AS count FROM users WHERE is_active = true').get();
-    res.json({ count: parseInt(result?.count || 0) });
-  } catch (err) {
-    res.json({ count: 68 }); // fallback
-  }
-});
+    const { userId } = req.params;
+    const user = await db.get('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, location, join_date FROM users WHERE id = ?', [userId]);
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
-// POST /api/profile/heartbeat — update last_seen_at (call every 60s from frontend)
-router.post('/heartbeat', authenticate, async (req, res) => {
-  try {
-    await db.prepare('UPDATE users SET last_seen_at = NOW() WHERE id = ?').run(req.user.id);
-    res.json({ ok: true });
-  } catch (err) {
-    console.error('Heartbeat error:', err);
-    res.status(500).json({ error: 'Erro' });
-  }
-});
+    // TODO: Fetch user stats (posts, friends, prayers)
+    user.stats = { posts: 0, friends: 0, prayers: 0 };
 
-// GET /api/profile/:userId — public profile
-router.get('/:userId', async (req, res) => {
-  try {
-    const user = await db.prepare(
-      `SELECT u.id, u.full_name, u.display_name, u.avatar_url, u.bio, u.role, u.is_private, u.created_at,
-              u.last_seen_at,
-              cr.role_name AS church_role, c.name AS church_name, c.id AS church_id
-       FROM users u
-       LEFT JOIN church_roles cr ON cr.user_id = u.id
-       LEFT JOIN churches c ON c.id = cr.church_id
-       WHERE u.id = ?
-       LIMIT 1`
-    ).get(req.params.userId);
-
-    if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
     res.json({ user });
   } catch (err) {
-    console.error('Erro ao buscar perfil:', err);
-    res.status(500).json({ error: 'Erro interno do servidor' });
+    console.error('Error fetching user profile:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// GET /api/profile/:userId/stats
-router.get('/:userId/stats', async (req, res) => {
+// Update profile fields (private, requires auth)
+router.patch('/', authenticateToken, async (req, res) => {
   try {
-    const userId = req.params.userId;
-    const prayers = await db.prepare('SELECT COUNT(*) AS count FROM prayers WHERE author_id = ?').get(userId);
-    const posts = await db.prepare('SELECT COUNT(*) AS count FROM feed_posts WHERE author_id = ?').get(userId);
-    let friends = { count: 0 };
-    try {
-      friends = await db.prepare(
-        `SELECT COUNT(*) AS count FROM friendships WHERE (requester_id = ? OR addressee_id = ?) AND status = 'accepted'`
-      ).get(userId, userId);
-    } catch (e) { /* friendships table may not exist */ }
+    const { full_name, bio, location, church_name, cover_url } = req.body;
+    const userId = req.user.id; // From auth middleware
 
-    res.json({
-      prayers: parseInt(prayers?.count || 0),
-      posts: parseInt(posts?.count || 0),
-      friends: parseInt(friends?.count || 0),
-    });
+    const updates = {};
+    if (full_name !== undefined) updates.full_name = full_name;
+    if (bio !== undefined) updates.bio = bio;
+    if (location !== undefined) updates.location = location;
+    if (church_name !== undefined) updates.church_name = church_name;
+    if (cover_url !== undefined) updates.cover_url = cover_url;
+
+    const updateKeys = Object.keys(updates);
+    if (updateKeys.length === 0) {
+      return res.status(400).json({ error: 'No fields to update' });
+    }
+
+    const setClause = updateKeys.map(key => `${key} = ?`).join(', ');
+    const updateValues = Object.values(updates);
+
+    await db.run(`UPDATE users SET ${setClause} WHERE id = ?`, [...updateValues, userId]);
+
+    // Fetch updated user to return
+    const updatedUser = await db.get('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, location, join_date FROM users WHERE id = ?', [userId]);
+
+    res.json({ success: true, user: updatedUser });
   } catch (err) {
-    console.error('Erro ao buscar stats:', err);
-    res.status(500).json({ error: 'Erro interno do servidor' });
+    console.error('Error updating profile:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// POST /api/profile/avatar — upload avatar (auth required)
-router.post('/avatar', authenticate, upload.single('avatar'), async (req, res) => {
+// New route: Update profile photo (avatar_url)
+router.patch('/photo', authenticateToken, async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ error: 'Nenhuma imagem enviada' });
+    const { photoURL } = req.body;
+    const userId = req.user.id; // From auth middleware
 
-    // Upload to Cloudinary
-    const result = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { folder: 'sigo-com-fe/avatars', resource_type: 'image' },
-        (err, result) => err ? reject(err) : resolve(result)
-      );
-      stream.end(req.file.buffer);
-    });
+    if (!photoURL) {
+      return res.status(400).json({ error: 'photoURL is required' });
+    }
 
-    const avatarUrl = result.secure_url;
-    await db.prepare('UPDATE users SET avatar_url = ?, updated_at = NOW() WHERE id = ?')
-      .run(avatarUrl, req.user.id);
+    await db.run('UPDATE users SET avatar_url = ? WHERE id = ?', [photoURL, userId]);
 
-    res.json({ avatar_url: avatarUrl });
+    // Fetch updated user to return
+    const updatedUser = await db.get('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, location, join_date FROM users WHERE id = ?', [userId]);
+
+    res.json({ success: true, user: { photoURL: updatedUser.avatar_url } }); // Return only photoURL in user object
   } catch (err) {
-    console.error('Erro ao fazer upload do avatar:', err);
-    res.status(500).json({ error: 'Erro interno do servidor' });
-  }
-});
-
-// PUT /api/profile — update own profile (auth required)
-router.put('/', authenticate, async (req, res) => {
-  try {
-    const { display_name, bio, avatar_url, phone, is_private } = req.body;
-    await db.prepare(
-      `UPDATE users SET display_name = ?, bio = ?, avatar_url = ?, phone = ?, is_private = ?, updated_at = NOW() WHERE id = ?`
-    ).run(display_name || null, bio || null, avatar_url || null, phone || null, is_private === true || is_private === 'true' ? true : false, req.user.id);
-
-    const updated = await db.prepare(
-      'SELECT id, full_name, display_name, avatar_url, bio, phone, role, is_private, created_at FROM users WHERE id = ?'
-    ).get(req.user.id);
-
-    res.json({ user: updated });
-  } catch (err) {
-    console.error('Erro ao atualizar perfil:', err);
-    res.status(500).json({ error: 'Erro interno do servidor' });
+    console.error('Error updating profile photo:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 module.exports = router;
+// PATCH /profile/photo
+router.patch('/photo', async (req, res) => {
+  try {
+    const { photoURL } = req.body;
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ error: 'Nao autenticado' });
+    if (!photoURL) return res.status(400).json({ error: 'photoURL obrigatorio' });
+    await db.run('UPDATE users SET avatar_url = ? WHERE id = ?', [photoURL, userId]);
+    res.json({ success: true, user: { photoURL } });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});

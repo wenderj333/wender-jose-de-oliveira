@@ -1,4 +1,4 @@
-﻿{
+{
     "brand":  "Sigo com Fé",
     "nav":  {
                 "prayers":  "Oraciones",
@@ -8,10 +8,11 @@
                 "registerChurch":  "Registrar Iglesia",
                 "kids":  "Kids",
                 "helpRequests":  "Pedidos de Ayuda",
+                "faithJourneys":  "Jornadas de Fe",
                 "dashboard":  "Dashboard",
                 "hello":  "Hola, {{name}}",
                 "logout":  "Salir",
-                "login":  "Iniciar Sesión",
+                ""login":  "Iniciar Sesión",
                 "register":  "Registrarse",
                 "chatPastoral":  "Chat Pastoral",
                 "pastoralAI":  "IA Pastoral",
@@ -28,6 +29,8 @@
                 "courseFinance":  "Finanzas Bíblicas",
                 "courseTheology":  "Teología",
                 "courseFree":  "Curso Bíblico Gratis",
+                "pastorRoom":  "🏛️ Sala del Pastor",
+                "createWorshipAI":  "Alabanza con IA",
                 "popup":  {
                               "verse":  "Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos. Mateo 18:20",
                               "joinCommunity":  "¡Únete a nuestra comunidad cristiana!",
@@ -41,6 +44,68 @@
             },
     "footer":  "© 2026 Sigo com Fé - Tecnología al servicio del Reino",
     "home":  {
+                 "subtitle":  "Ora, conéctate y fortalece tu fe con miles de hermanos alrededor del mundo.",
+                 "exploreFeatures":  "Explora las Principales Funcionalidades",
+                 "recentTestimonies":  "Testimonios Recientes",
+                 "daysAgo":  "Hace algunos días",
+                 "liveNow":  "En Vivo Ahora",
+                 "live":  "DIRECTO",
+                 "whyChoose":  "¿Por Qué Elegir Sigo com Fé?",
+                 "shareText":  "¡Conoce Sigo com Fé! Red social cristiana.",
+                 "global":  "Comunidad Global",
+                 "globalDesc":  "Conéctate con cristianos de todo el mundo",
+                 "secure":  "Seguro y Privado",
+                 "secureDesc":  "Tus datos están siempre protegidos",
+                 "free":  "Totalmente Gratis",
+                 "freeDesc":  "Acceso completo sin costos ocultos",
+                 "mobile":  "Mobile First",
+                 "mobileDesc":  "Funciona perfectamente en tu móvil",
+                 "forPastors":  "Para Pastores",
+                 "forPastorsDesc":  "Herramientas completas para gestionar tu congregación, finanzas, campañas y mucho más.",
+                 "features":  {
+                     "prayers":  "🙏 Oraciones",
+                     "live":  "🔴 En Vivo",
+                     "pastoral":  "💬 Chat Pastoral",
+                     "biblicalAI":  "📖 IA Bíblica",
+                     "music":  "🎵 Música",
+                     "consecration":  "🔥 Consagración",
+                     "groups":  "👥 Grupos",
+                     "mural":  "📸 Mural"
+                 },
+                 "startNow":  "Comienza Ahora",
+                 "seePrayerRequests":  "Ver Pedidos de Oración",
+                 "churchPraying_one":  "{{count}} iglesia orando ahora!",
+                 "churchPraying_other":  "{{count}} iglesias orando ahora!",
+                 "featurePrayers":  "Pedidos de Oración",
+                 "featurePrayersDesc":  "Comparte tus pedidos y ora por los hermanos. ¡Ve el poder de la oración colectiva y celebra las victorias!",
+                 "featureLive":  "Pastor Orando en Vivo",
+                 "featureLiveDesc":  "Descubre cuándo tu pastor está orando en tiempo real. Burbujas de oración suben como incienso al cielo.",
+                 "featureMap":  "Mapa de Iglesias",
+                 "featureMapDesc":  "Encuentra iglesias en cualquier ciudad. Perfecto para viajeros y familias en movimiento.",
+                 "featureDashboard":  "Dashboard Pastoral",
+                 "featureDashboardDesc": "Herramientas completas de gestión para pastores: miembros, finanzas, campañas y mucho más.",
+                 "featureMural":  "Mural de la Comunidad",
+                 "featureMuralDesc":  "Comparte testimonios, alabanzas y versículos con la comunidad cristiana.",
+                 "featureKids":  "Rincón Kids",
+                 "featureKidsDesc":  "¡Historias bíblicas, quiz interactivo y actividades para que los niños aprendan sobre la Biblia!",
+                 "featureChurch":  "Registra Tu Iglesia",
+                 "featureChurchDesc":  "Registra tu iglesia en la plataforma y conéctate con fieles de todo el mundo.",
+                 "explore": "Explorar",
+                 "registerBtn": "Registrarse Gratis",
+                 "helpTitle":  "¿Necesitas Ayuda?",
+                 "helpSubtitle":  "No estás solo. Una iglesia puede ayudarte.",
+                 "helpSeeThings":  "👁️‍🗨️ Veo cosas",
+                 "helpHearThings":  "👂 Escucho ruidos",
+                 "helpFeelAlone":  "😔 Me siento solo(a)",
+                 "helpNeedPrayer":  "🙏 Necesito oración",
+                 "helpAnxious":  "😥 Estoy ansioso(a)",
+                 "helpDepressed":  "😢 Estoy triste/deprimido(a)",
+                 "helpSent":  "✅ ¡Tu solicitud ha sido enviada! Una iglesia cercana se pondrá en contacto para ayudarte. ¡Dios te bendiga! 🙏",
+                 "helpNamePlaceholder":  "Tu nombre (opcional)",
+                 "helpContactPlaceholder":  "Teléfono o email de contacto",
+                 "helpMessagePlaceholder":  "Cuéntanos un poco más sobre lo que sientes...",
+                 "helpSend":  "Pedir Ayuda",
+                 "helpBtn":  "Pedir Ayuda",
                  "verses":  [
                                 {
                                     "text":  "Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos.",
@@ -55,22 +120,28 @@
                                     "ref":  "Salmos 23:1"
                                 },
                                 {
-                                    "text":  "Confía en el Señor con todo tu corazón y no te apoyes en tu propio entendimiento.",
-                                    "ref":  "Proverbios 3:5"
+                                    "text": "Confía en el Señor con todo tu corazón y no te apoyes en tu propio entendimiento.",
+                                    "ref": "Proverbios 3:5"
                                 },
                                 {
-                                    "text":  "Porque yo sé los pensamientos que tengo acerca de vosotros, dice el Señor.",
-                                    "ref":  "Jeremías 29:11"
+                                    "text": "Porque yo sé los pensamientos que tengo acerca de vosotros, dice el Señor.",
+                                    "ref": "Jeremías 29:11"
                                 },
                                 {
-                                    "text":  "Esfuérzate y sé valiente, no tengas miedo ni desmayes, porque el Señor tu Dios está contigo.",
-                                    "ref":  "Deuteronomio 31:6"
+                                    "text": "Esfuérzate y sé valiente, no tengas miedo ni desmayes, porque el Señor tu Dios está contigo.",
+                                    "ref": "Deuteronomio 31:6"
                                 },
                                 {
-                                    "text":  "La oración eficaz del justo puede mucho.",
-                                    "ref":  "Santiago 5:16"
+                                    "text": "La oración eficaz del justo puede mucho.",
+                                    "ref": "Santiago 5:16"
                                 }
-                            ]
+                            ],
+                "welcomePopup": {
+                    "title": "¡Bienvenido(a) a la comunidad Sigo com Fé!",
+                    "subtitle": "Conéctate con hermanos, fortalece tu fe y vive el Evangelio.",
+                    "registerBtn": "Registrarse Gratis",
+                    "viewSiteBtn": "Ver el sitio primero"
+                }
              },
     "login":  {
                   "welcomeBack":  "¡Bienvenido(a) de vuelta!",
@@ -212,7 +283,7 @@
                  "bibleQuiz":  "Quiz Bíblico",
                  "question":  "Pregunta {{current}} de {{total}}",
                  "congrats":  "¡Felicidades!",
-                 "scoreResult":  "¡Acertaste \u003cstrong\u003e{{score}}\u003c/strong\u003e de \u003cstrong\u003e{{total}}\u003c/strong\u003e!",
+                 "scoreResult":  "¡Acertaste <strong>{{score}}</strong> de <strong>{{total}}</strong>!",
                  "perfect":  "¡Perfecto! ¡Eres un campeón de la Biblia!",
                  "good":  "¡Muy bien! ¡Sigue estudiando!",
                  "tryAgain":  "¡No te rindas! ¡Inténtalo de nuevo!",
