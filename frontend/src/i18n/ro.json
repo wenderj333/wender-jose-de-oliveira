@@ -429,13 +429,12 @@
         "langEs": "Español",
         "langDe": "Deutsch",
         "autoTranslate": "🌐 Traducere automată activată",
-        "introHeading": "🕊️ Un Preot Este Gata Să Te Asculte",
-        "introParagraph": "Uneori viața ne aduce poveri prea grele de purtat singuri. Aici poți conversa confidențial cu un preot care te va asculta, te va sfătui cu înțelepciune biblică și va ruga pentru tine.",
+        "introTitle": "🕊️ Un Preot Este Gata Să Te Asculte",
+        "introDesc": "Uneori viața ne aduce poveri prea grele de purtat singuri. Aici poți conversa confidențial cu un preot care te va asculta, te va sfătui cu înțelepciune biblică și va ruga pentru tine.",
         "introVerse1": "Veniți la mine, toți cei obosiți și înmărmuritori, și vă voi odihni. — Matei 11:28",
-        "introFeature1": "💜 Conversație confidențială și sigură",
-        "introFeature2": "🌍 Traducere automată în 15 limbi",
-        "introFeature3": "🙏 Preoți voluntari din toată lumea",
-        "introVerse2": "Lipsit de sfat, planul eșuează; cu mulți sfetnici, reușește. — Proverbe 15:22"
+        "introFeatures": "💜 Conversație confidențială și sigură<br />🌍 Traducere automată în 15 limbi<br />🙏 Preoți voluntari din toată lumea",
+        "introVerse2": "Lipsit de sfat, planul eșuează; cu mulți sfetnici, reușește. — Proverbe 15:22",
+        "startBtn": "Începeți conversația"
     },
     "friends": {
         "title": "Prieteni",

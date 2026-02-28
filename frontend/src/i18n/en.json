@@ -433,13 +433,12 @@
         "langEs": "Español",
         "langDe": "Deutsch",
         "autoTranslate": "🌐 Automatic translation enabled",
-        "introHeading": "🕊️ A Pastor Is Ready to Listen to You",
-        "introParagraph": "Sometimes life brings burdens too heavy to carry alone. Here you can have a confidential conversation with a pastor who will listen to you, advise you with biblical wisdom, and pray for you.",
+        "introTitle": "🕊️ A Pastor Is Ready to Listen to You",
+        "introDesc": "Sometimes life brings burdens too heavy to carry alone. Here you can have a confidential conversation with a pastor who will listen to you, advise you with biblical wisdom, and pray for you.",
         "introVerse1": "Come to me, all you who are weary and burdened, and I will give you rest. — Matthew 11:28",
-        "introFeature1": "💜 Confidential and secure conversation",
-        "introFeature2": "🌍 Automatic translation in 15 languages",
-        "introFeature3": "🙏 Volunteer pastors from around the world",
-        "introVerse2": "Plans fail for lack of counsel, but with many advisers they succeed. — Proverbs 15:22"
+        "introFeatures": "💜 Confidential and secure conversation<br />🌍 Automatic translation in 15 languages<br />🙏 Volunteer pastors from around the world",
+        "introVerse2": "Plans fail for lack of counsel, but with many advisers they succeed. — Proverbs 15:22",
+        "startBtn": "Start Conversation"
     },
     "friends": {
         "title": "Friends",

@@ -518,13 +518,12 @@
         "langEs": "EspaÃ±ol",
         "langDe": "Deutsch",
         "autoTranslate": "ðŸŒ Tradução automática ativada",
-        "introHeading": "🕊️ Um Pastor Está Pronto Para Ouvir Você",
-        "introParagraph": "Às vezes a vida nos traz fardos pesados demais para carregar sozinhos. Aqui você pode conversar de forma confidencial com um pastor que vai te ouvir, aconselhar com sabedoria bíblica e orar por você.",
+        "introTitle": "🕊️ Um Pastor Está Pronto Para Ouvir Você",
+        "introDesc": "Às vezes a vida nos traz fardos pesados demais para carregar sozinhos. Aqui você pode conversar de forma confidencial com um pastor que vai te ouvir, aconselhar com sabedoria bíblica e orar por você.",
         "introVerse1": "Vinde a mim, todos os que estais cansados e oprimidos, e eu vos aliviarei. — Mateus 11:28",
-        "introFeature1": "💜 Conversa confidencial e segura",
-        "introFeature2": "🌍 Tradução automática em 15 idiomas",
-        "introFeature3": "🙏 Pastores voluntários de todo o mundo",
-        "introVerse2": "Onde não há conselho, os projetos saem vãos; mas com a multidão de conselheiros se confirmarão. — Provérbios 15:22"
+        "introFeatures": "💜 Conversa confidencial e segura<br />🌍 Tradução automática em 15 idiomas<br />🙏 Pastores voluntários de todo o mundo",
+        "introVerse2": "Onde não há conselho, os projetos saem vãos; mas com a multidão de conselheiros se confirmarão. — Provérbios 15:22",
+        "startBtn": "Iniciar Conversa"
     },
     "friends": {
         "title": "Amigos",
