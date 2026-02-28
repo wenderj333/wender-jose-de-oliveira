@@ -53,6 +53,8 @@ i18n
     },
     // Force explicit language code normalization
     nonExplicitSupportedLngs: true,
+    // Ensure German loads properly
+    preload: ['pt', 'en', 'es', 'de', 'fr', 'ro', 'ru'],
   });
 
 export default i18n;
