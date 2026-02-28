@@ -39,7 +39,7 @@ i18n
       'fr-CA': { translation: fr },
     },
     //lng: 'pt',
-    fallbackLng: 'pt',
+    fallbackLng: 'en',  // Changed from 'pt' to force language selection
     interpolation: {
       escapeValue: false,
     },
