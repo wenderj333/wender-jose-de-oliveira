@@ -256,19 +256,23 @@
     },
     "dashboard": {
         "title": "Dashboard",
-        "loading": "Daten werden geladen...",
+        "overview": "Echtzeit-Übersicht",
         "users": "Benutzer",
         "churches": "Kirchen",
-        "prayerRequests": "Gebetsanliegen",
-        "answeredPrayers": "Erhörte Gebete",
-        "quickActions": "Schnellaktionen",
-        "newPrayerRequest": "Neues Gebetsanliegen",
+        "prayerRequests": "Gebetsanfragen",
+        "answeredPrayers": "Beantwortete Gebete",
+        "pastorManagement": "Pastoren-Verwaltungsraum",
+        "managementDesc": "Verwalten Sie Mitglieder, Zehnten, Ankündigungen und mehr",
+        "quickActions": "Schnelle Aktionen",
+        "newPrayerRequest": "Neue Gebetsanfrage",
         "registerChurch": "Kirche registrieren",
-        "kidsCorner": "Kinderecke",
+        "kidsCorner": "Kinder",
         "recentActivity": "Letzte Aktivitäten",
-        "requestedPrayer": "bat um Gebet:",
-        "noActivity": "Keine aktuellen Aktivitäten. Erstelle ein Gebetsanliegen!",
-        "viewAll": "Alle Anliegen ansehen"
+        "viewAll": "Alle anzeigen",
+        "requestedPrayer": "bat um ein Gebet",
+        "noActivity": "Keine aktuellen Aktivitäten",
+        "loadingUsers": "Lädt...",
+        "noUsers": "Keine Benutzer gefunden."
     },
     "mural": {
         "title": "Gemeinde-Pinnwand",
@@ -294,7 +298,26 @@
             "reflexao": "Biblische Reflexion",
             "versiculo": "Bibelvers",
             "foto": "Foto"
-        }
+        },
+        "testimony": "🙏 Zeugnis",
+        "worship": "🎵 Lobpreis",
+        "photo": "📸 Foto/Video",
+        "verse": "📖 Bibelvers",
+        "reflection": "💭 Reflexion",
+        "campaign": "💝 Kampagne / Anliegen",
+        "placeholder": "Teile etwas mit der Gemeinschaft...",
+        "noPosts": "Noch keine Beiträge. Sei der Erste, der etwas veröffentlicht! 📸",
+        "commentPlaceholder": "Schreibe einen Kommentar...",
+        "loginRequired": "Bitte melden Sie sich an, um zu posten",
+        "addContent": "Bitte fügen Sie Text oder Medien hinzu",
+        "fileTooLarge": "Datei zu groß! Maximum {{maxSize}} MB.",
+        "uploading": "📤 {{filename}} wird hochgeladen...",
+        "uploadingLarge": "📤 {{filename}} wird hochgeladen... Dies kann einige Minuten dauern. Schließe die Seite nicht!",
+        "uploadTooSlow": "Das Hochladen hat zu lange gedauert. Deine Verbindung kann langsam sein. Versuche es erneut.",
+        "fileTooLargeSimple": "❌ Datei zu groß! Versuche eine kleinere Datei.",
+        "doNotClose": "Bitte schließe oder aktualisiere die Seite nicht!",
+        "loading": "Lädt...",
+        "noMusicUploaded": "Noch keine Musik hochgeladen"
     },
     "kids": {
         "title": "Digitale Sonntagsschule",
@@ -347,23 +370,48 @@
         "quiz": [
             {
                 "q": "Wer besiegte den Riesen Goliath?",
-                "opts": ["Saul", "David", "Mose", "Josua"]
+                "opts": [
+                    "Saul",
+                    "David",
+                    "Mose",
+                    "Josua"
+                ]
             },
             {
                 "q": "Wie viele Tage dauerte die Sintflut?",
-                "opts": ["10 Tage", "20 Tage", "40 Tage", "100 Tage"]
+                "opts": [
+                    "10 Tage",
+                    "20 Tage",
+                    "40 Tage",
+                    "100 Tage"
+                ]
             },
             {
                 "q": "Wer wurde in die Löwengrube geworfen?",
-                "opts": ["Jona", "Daniel", "Paulus", "Petrus"]
+                "opts": [
+                    "Jona",
+                    "Daniel",
+                    "Paulus",
+                    "Petrus"
+                ]
             },
             {
                 "q": "Welches ist das erste Buch der Bibel?",
-                "opts": ["Exodus", "Psalmen", "Genesis", "Matthäus"]
+                "opts": [
+                    "Exodus",
+                    "Psalmen",
+                    "Genesis",
+                    "Matthäus"
+                ]
             },
             {
                 "q": "In welcher Stadt wurde Jesus geboren?",
-                "opts": ["Jerusalem", "Nazareth", "Bethlehem", "Kapernaum"]
+                "opts": [
+                    "Jerusalem",
+                    "Nazareth",
+                    "Bethlehem",
+                    "Kapernaum"
+                ]
             }
         ],
         "activityList": [
@@ -528,23 +576,26 @@
         "back": "Zurück"
     },
     "groups": {
-        "title": "Gruppen",
-        "createGroup": "Gruppe erstellen",
-        "newGroup": "Neue Gruppe erstellen",
-        "groupName": "Gruppenname",
-        "description": "Beschreibung (optional)",
-        "public": "Öffentlich",
-        "private": "Privat",
-        "creating": "Wird erstellt...",
-        "cancel": "Abbrechen",
-        "noGroups": "Noch keine Gruppen",
-        "createFirst": "Erstelle die erste Gemeindegruppe!",
-        "members": "Mitglieder",
-        "join": "Gruppe beitreten",
-        "leave": "Gruppe verlassen",
+        "joinGroup": "+ Gruppe beitreten",
+        "leaveGroup": "Gruppe verlassen",
+        "inputPlaceholder": "Schreibe in der Gruppe...",
         "noPosts": "Noch keine Beiträge",
-        "writePlaceholder": "Schreibe in der Gruppe...",
-        "back": "Zurück"
+        "private": "🔒 Privat",
+        "public": "🌐 Öffentlich",
+        "communionTitle": "🤝 Gemeinschaftsgruppen",
+        "communionDesc": "Treten Sie Gruppen mit Brüdern und Schwestern bei, die den gleichen Glauben teilen! Hier können Sie Bibelstudien-, Gebets-, Lob-, Jugend-, Paar- und vieles mehr erstellen oder beitreten.",
+        "loading": "Wird geladen...",
+        "noGroups": "Keine Gruppen gefunden",
+        "createFirst": "Erstellen Sie die erste Gruppe!",
+        "createForm": {
+            "name": "Gruppenname",
+            "desc": "Beschreibung (optional)",
+            "submit": "Gruppe erstellen",
+            "cancel": "Abbrechen"
+        },
+        "timeAgo": {
+            "now": "Gerade eben"
+        }
     },
     "consecration": {
         "title": "Weihe",
@@ -641,61 +692,16 @@
         "video": "Video",
         "audio": "Audio",
         "url": "URL",
-        "urlPrompt": "Füge die URL ein (YouTube, Vimeo, etc):",
-        "urlPlaceholder": "Füge die YouTube- oder Video-URL ein...",
+        "urlPrompt": "URL einfügen (YouTube, Vimeo, etc):",
+        "urlPlaceholder": "YouTube-URL oder anderes Video einfügen...",
         "clearUrl": "URL löschen",
         "youtubePreview": "YouTube (Vorschau nicht verfügbar)"
     },
     "time": {
-        "now": "Gerade eben",
-        "minAgo": "Vor {{count}}min",
-        "hoursAgo": "Vor {{count}}h",
-        "daysAgo": "Vor {{count}}d"
-    },
-    "mural": {
-        "title": "Gemeinde-Pinnwand",
-        "subtitle": "Teile Zeugnisse, Lobpreis und Bibelverse mit der christlichen Gemeinschaft",
-        "newPost": "Neuer Beitrag",
-        "cancel": "Abbrechen",
-        "shareWithCommunity": "Mit der Gemeinschaft teilen",
-        "categoryLabel": "Kategorie",
-        "message": "Nachricht",
-        "messagePlaceholder": "Schreibe dein Zeugnis, deine Reflexion oder einen Bibelvers...",
-        "publish": "Veröffentlichen",
-        "noPostsFound": "Keine Beiträge in dieser Kategorie gefunden.",
-        "filters": {
-            "all": "Alle",
-            "myChurch": "Meine Kirche",
-            "testimonies": "Zeugnisse",
-            "worship": "Lobpreis",
-            "verses": "Bibelverse"
-        },
-        "categories": {
-            "testemunho": "Zeugnis",
-            "louvor": "Lobpreis / Video",
-            "reflexao": "Biblische Reflexion",
-            "versiculo": "Bibelvers",
-            "foto": "Foto"
-        },
-        "testimony": "🙏 Zeugnis",
-        "worship": "🎵 Lobpreis",
-        "photo": "📸 Foto/Video",
-        "verse": "📖 Bibelvers",
-        "reflection": "💭 Reflexion",
-        "campaign": "💝 Kampagne / Anliegen",
-        "placeholder": "Teile etwas mit der Gemeinschaft...",
-        "noPosts": "Noch keine Beiträge. Sei der Erste, der etwas veröffentlicht! 📸",
-        "commentPlaceholder": "Schreibe einen Kommentar...",
-        "loginRequired": "Bitte melden Sie sich an, um zu posten",
-        "addContent": "Bitte fügen Sie Text oder Medien hinzu",
-        "fileTooLarge": "Datei zu groß! Maximum {{maxSize}} MB.",
-        "uploading": "📤 {{filename}} wird hochgeladen...",
-        "uploadingLarge": "📤 {{filename}} wird hochgeladen... Dies kann einige Minuten dauern. Schließe die Seite nicht!",
-        "uploadTooSlow": "Das Hochladen hat zu lange gedauert. Deine Verbindung kann langsam sein. Versuche es erneut.",
-        "fileTooLargeSimple": "❌ Datei zu groß! Versuche eine kleinere Datei.",
-        "doNotClose": "Bitte schließe oder aktualisiere die Seite nicht!",
-        "loading": "Lädt...",
-        "noMusicUploaded": "Noch keine Musik hochgeladen"
+        "now": "Jetzt",
+        "minAgo": "vor {{count}}min",
+        "hoursAgo": "vor {{count}}h",
+        "daysAgo": "vor {{count}}d"
     },
     "offerings": {
         "title": "Gaben und Zehnten",
@@ -748,64 +754,6 @@
         "description": "Vertiefe dein theologisches Wissen",
         "topics": "Christologie, Soteriologie, Ekklesiologie, Eschatologie, Pneumatologie, Hermeneutik"
     },
-    "media": {
-        "photo": "Foto",
-        "video": "Video",
-        "audio": "Audio",
-        "url": "URL",
-        "urlPrompt": "URL einfügen (YouTube, Vimeo, etc):",
-        "urlPlaceholder": "YouTube-URL oder anderes Video einfügen...",
-        "clearUrl": "URL löschen",
-        "youtubePreview": "YouTube (Vorschau nicht verfügbar)"
-    },
-    "time": {
-        "now": "Jetzt",
-        "minAgo": "vor {{count}}min",
-        "hoursAgo": "vor {{count}}h",
-        "daysAgo": "vor {{count}}d"
-    },
-    "groups": {
-        "joinGroup": "+ Gruppe beitreten",
-        "leaveGroup": "Gruppe verlassen",
-        "inputPlaceholder": "Schreibe in der Gruppe...",
-        "noPosts": "Noch keine Beiträge",
-        "private": "🔒 Privat",
-        "public": "🌐 Öffentlich",
-        "communionTitle": "🤝 Gemeinschaftsgruppen",
-        "communionDesc": "Treten Sie Gruppen mit Brüdern und Schwestern bei, die den gleichen Glauben teilen! Hier können Sie Bibelstudien-, Gebets-, Lob-, Jugend-, Paar- und vieles mehr erstellen oder beitreten.",
-        "loading": "Wird geladen...",
-        "noGroups": "Keine Gruppen gefunden",
-        "createFirst": "Erstellen Sie die erste Gruppe!",
-        "createForm": {
-            "name": "Gruppenname",
-            "desc": "Beschreibung (optional)",
-            "submit": "Gruppe erstellen",
-            "cancel": "Abbrechen"
-        },
-        "timeAgo": {
-            "now": "Gerade eben"
-        }
-    },
-    "dashboard":  {
-                      "title":  "Dashboard",
-                      "overview":  "Echtzeit-Übersicht",
-                      "users":  "Benutzer",
-                      "churches":  "Kirchen",
-                      "prayerRequests":  "Gebetsanfragen",
-                      "answeredPrayers":  "Beantwortete Gebete",
-                      "pastorManagement":  "Pastoren-Verwaltungsraum",
-                      "managementDesc":  "Verwalten Sie Mitglieder, Zehnten, Ankündigungen und mehr",
-                      "quickActions":  "Schnelle Aktionen",
-                      "newPrayerRequest":  "Neue Gebetsanfrage",
-                      "registerChurch":  "Kirche registrieren",
-                      "kidsCorner":  "Kinder",
-                      "recentActivity":  "Letzte Aktivitäten",
-                      "viewAll":  "Alle anzeigen",
-                      "requestedPrayer":  "bat um ein Gebet",
-                      "noActivity":  "Keine aktuellen Aktivitäten",
-                      "loadingUsers":  "Lädt...",
-                      "noUsers":  "Keine Benutzer gefunden."
-                  },
     "members": {
         "never": "Nie",
         "now": "Jetzt",
@@ -827,44 +775,145 @@
     },
     "biblicalCourse": {
         "themes": [
-            { "value": "fe", "label": "✝️ Glaube" },
-            { "value": "esperanca", "label": "🌅 Hoffnung" },
-            { "value": "gratidao", "label": "🙏 Dankbarkeit" },
-            { "value": "cura", "label": "💚 Heilung" },
-            { "value": "familia", "label": "👨‍👩‍👧‍👦 Familie" },
-            { "value": "amor", "label": "❤️ Gottes Liebe" },
-            { "value": "adoracao", "label": "👑 Anbetung" },
-            { "value": "vitoria", "label": "🏆 Sieg" },
-            { "value": "paz", "label": "🕊️ Frieden" },
-            { "value": "avivamento", "label": "🔥 Erweckung" },
-            { "value": "perdao", "label": "💝 Vergebung" },
-            { "value": "salvacao", "label": "✨ Heil" }
+            {
+                "value": "fe",
+                "label": "✝️ Glaube"
+            },
+            {
+                "value": "esperanca",
+                "label": "🌅 Hoffnung"
+            },
+            {
+                "value": "gratidao",
+                "label": "🙏 Dankbarkeit"
+            },
+            {
+                "value": "cura",
+                "label": "💚 Heilung"
+            },
+            {
+                "value": "familia",
+                "label": "👨‍👩‍👧‍👦 Familie"
+            },
+            {
+                "value": "amor",
+                "label": "❤️ Gottes Liebe"
+            },
+            {
+                "value": "adoracao",
+                "label": "👑 Anbetung"
+            },
+            {
+                "value": "vitoria",
+                "label": "🏆 Sieg"
+            },
+            {
+                "value": "paz",
+                "label": "🕊️ Frieden"
+            },
+            {
+                "value": "avivamento",
+                "label": "🔥 Erweckung"
+            },
+            {
+                "value": "perdao",
+                "label": "💝 Vergebung"
+            },
+            {
+                "value": "salvacao",
+                "label": "✨ Heil"
+            }
         ],
         "styles": [
-            { "value": "worship", "label": "🎹 Anbetung" },
-            { "value": "pentecostal", "label": "🔥 Pfingstlich" },
-            { "value": "coral", "label": "🎶 Chor" },
-            { "value": "acustico", "label": "🎸 Akustisch" },
-            { "value": "pop_gospel", "label": "🎤 Pop Gospel" },
-            { "value": "sertanejo_gospel", "label": "🤠 Country Gospel" },
-            { "value": "reggae_gospel", "label": "🎵 Reggae Gospel" },
-            { "value": "hino", "label": "📖 Traditioneller Hymnus" }
+            {
+                "value": "worship",
+                "label": "🎹 Anbetung"
+            },
+            {
+                "value": "pentecostal",
+                "label": "🔥 Pfingstlich"
+            },
+            {
+                "value": "coral",
+                "label": "🎶 Chor"
+            },
+            {
+                "value": "acustico",
+                "label": "🎸 Akustisch"
+            },
+            {
+                "value": "pop_gospel",
+                "label": "🎤 Pop Gospel"
+            },
+            {
+                "value": "sertanejo_gospel",
+                "label": "🤠 Country Gospel"
+            },
+            {
+                "value": "reggae_gospel",
+                "label": "🎵 Reggae Gospel"
+            },
+            {
+                "value": "hino",
+                "label": "📖 Traditioneller Hymnus"
+            }
         ],
         "emotions": [
-            { "value": "alegre", "label": "😊 Fröhlich" },
-            { "value": "profundo", "label": "🌊 Tief" },
-            { "value": "oracao", "label": "🙏 Gebet" },
-            { "value": "celebracao", "label": "🎉 Feier" },
-            { "value": "intimidade", "label": "💜 Intimität mit Gott" },
-            { "value": "guerra", "label": "⚔️ Geistlicher Kampf" },
-            { "value": "conforto", "label": "🤗 Trost" },
-            { "value": "louvor_intenso", "label": "🔥 Intensives Lob" }
+            {
+                "value": "alegre",
+                "label": "😊 Fröhlich"
+            },
+            {
+                "value": "profundo",
+                "label": "🌊 Tief"
+            },
+            {
+                "value": "oracao",
+                "label": "🙏 Gebet"
+            },
+            {
+                "value": "celebracao",
+                "label": "🎉 Feier"
+            },
+            {
+                "value": "intimidade",
+                "label": "💜 Intimität mit Gott"
+            },
+            {
+                "value": "guerra",
+                "label": "⚔️ Geistlicher Kampf"
+            },
+            {
+                "value": "conforto",
+                "label": "🤗 Trost"
+            },
+            {
+                "value": "louvor_intenso",
+                "label": "🔥 Intensives Lob"
+            }
         ],
         "bibleBooks": [
-            "Genesis", "Exodus", "Psalmen", "Sprichwörter", "Jesaja", "Jeremia",
-            "Matthäus", "Markus", "Lukas", "Johannes", "Apostelgeschichte", "Römer",
-            "1 Korinther", "2 Korinther", "Galater", "Epheser", "Philipper",
-            "Kolosser", "Hebräer", "Jakobus", "Offenbarung"
+            "Genesis",
+            "Exodus",
+            "Psalmen",
+            "Sprichwörter",
+            "Jesaja",
+            "Jeremia",
+            "Matthäus",
+            "Markus",
+            "Lukas",
+            "Johannes",
+            "Apostelgeschichte",
+            "Römer",
+            "1 Korinther",
+            "2 Korinther",
+            "Galater",
+            "Epheser",
+            "Philipper",
+            "Kolosser",
+            "Hebräer",
+            "Jakobus",
+            "Offenbarung"
         ]
     },
     "bibleAI": {
