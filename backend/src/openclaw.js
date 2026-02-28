@@ -34,7 +34,7 @@ router.post("/users/:userId/send-message", auth, async (req, res) => {
 router.get("/users/new", auth, async (req, res) => {
   try {
     const r = await pool.query("SELECT id, email, created_at FROM users WHERE created_at >= $1", [req.query.since || new Date(Date.now()-86400000).toISOString()]);
-    res.json(r.rows);
+    res.json({ users: r.rows });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
