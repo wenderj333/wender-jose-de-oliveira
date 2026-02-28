@@ -474,6 +474,6 @@ export default function PastorChat() {
       </div>
     </div>
   );
-}
+} // Added a comment to force re-deploy
 
 
