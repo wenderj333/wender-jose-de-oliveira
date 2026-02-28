@@ -197,8 +197,27 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const updateProfilePhoto = async (photoURL) => {
+    if (!user || !token) throw new Error('User not authenticated.');
+    const res = await fetch(`${API}/profile/photo`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ photoURL }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erro ao atualizar foto de perfil');
+
+    const updatedUser = { ...user, photoURL: data.user.photoURL };
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    return updatedUser;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode, register, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode, register, logout, updateProfilePhoto }}>
       {children}
     </AuthContext.Provider>
   );

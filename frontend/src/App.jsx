@@ -42,13 +42,19 @@ import RegistrationPromptPopup from './components/RegistrationPromptPopup';
 export const RegistrationPromptContext = React.createContext(null);
 
 function ProtectedRoute({ children }) {
-  const { user, loading } = useAuth();
+  const { user, loading, updateProfilePhoto } = useAuth(); // Adiciona updateProfilePhoto
   const { promptRegistration } = React.useContext(RegistrationPromptContext);
+
+  useEffect(() => {
+    if (user && !user.photoURL) {
+      promptRegistration();
+    }
+  }, [user, promptRegistration]);
 
   if (loading) return <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="loading-spinner" /></div>;
   if (!user) {
-    promptRegistration();
-    return <Navigate to="/" />; // Redireciona para a home para o popup ser mostrado
+    promptRegistration(); // Caso o user não esteja logado, redireciona para a home e mostra o popup
+    return <Navigate to="/" />;
   }
   return children;
 }

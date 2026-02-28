@@ -30,20 +30,66 @@ const CATEGORIES = [
 
 const getCatColor = (type) => CATEGORIES.find(c => c.value === type)?.color || '#888';
 
-function MiniAudioPlayer({ src }) {
+function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay, onPause: externalOnPause, onEnded: externalOnEnded }) {
   const audioRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
+  const [internalPlaying, setInternalPlaying] = useState(false);
+  const playing = propIsPlaying !== undefined ? propIsPlaying : internalPlaying;
   const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      if (playing) {
+        audioRef.current.play().catch(e => console.error("Error playing audio:", e));
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [playing]);
+
   const toggle = async () => {
     if (!audioRef.current) return;
+    if (propIsPlaying !== undefined) return; // If controlled externally, disable internal toggle
+
     try {
-      if (playing) { audioRef.current.pause(); setPlaying(false); }
-      else { await audioRef.current.play(); setPlaying(true); }
+      if (internalPlaying) { audioRef.current.pause(); }
+      else { await audioRef.current.play(); }
+      setInternalPlaying(!internalPlaying);
     } catch (err) { console.error(err); }
   };
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current?.duration) {
+      setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
+    }
+  };
+
+  const handleEnded = () => {
+    if (propIsPlaying === undefined) setInternalPlaying(false);
+    setProgress(0);
+    externalOnEnded && externalOnEnded();
+  };
+
+  const handleOnPlay = () => {
+    if (propIsPlaying === undefined) setInternalPlaying(true);
+    externalOnPlay && externalOnPlay();
+  };
+
+  const handleOnPause = () => {
+    if (propIsPlaying === undefined) setInternalPlaying(false);
+    externalOnPause && externalOnPause();
+  };
+
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(102,126,234,0.12)', border: '1px solid rgba(102,126,234,0.3)', borderRadius: 12, padding: '10px 14px', marginTop: 10 }}>
-      <audio ref={audioRef} src={src} onTimeUpdate={() => { if (audioRef.current?.duration) setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100); }} onEnded={() => { setPlaying(false); setProgress(0); }} preload="metadata" />
+      <audio
+        ref={audioRef}
+        src={src}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleEnded}
+        onPlay={handleOnPlay}
+        onPause={handleOnPause}
+        preload="metadata"
+      />
       <button onClick={toggle} style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0 }}>
         {playing ? <Pause size={16} /> : <Play size={16} />}
       </button>
