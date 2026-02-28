@@ -15,22 +15,23 @@ async function uploadToCloudinary(file) {
   const resourceType = file.type.startsWith('video') ? 'video' : file.type.startsWith('audio') ? 'video' : 'auto';
   const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
   const res = await fetch(url, { method: 'POST', body: formData });
-  if (!res.ok) throw new Error('Erro upload Cloudinary');
+  if (!res.ok) throw new Error('mural.uploadErrorCloudinary');
   const data = await res.json();
   return data.secure_url;
 }
 
-const CATEGORIES = [
-  { value: 'testemunho', label: '🙌 Testemunho', color: '#f97316' },
-  { value: 'louvor',     label: '🎵 Louvor',     color: '#a855f7' },
-  { value: 'reflexao',   label: '📖 Reflexão',   color: '#3b82f6' },
-  { value: 'versiculo',  label: '✨ Versículo',  color: '#22c55e' },
-  { value: 'foto',       label: '📸 Foto/Vídeo', color: '#f43f5e' },
+const CATEGORIES_CONFIG = [
+  { value: 'testemunho', labelKey: 'mural.categories.testemunho', color: '#f97316' },
+  { value: 'louvor',     labelKey: 'mural.categories.louvor',     color: '#a855f7' },
+  { value: 'reflexao',   labelKey: 'mural.categories.reflexao',   color: '#3b82f6' },
+  { value: 'versiculo',  labelKey: 'mural.categories.versiculo',  color: '#22c55e' },
+  { value: 'foto',       labelKey: 'mural.categories.foto', color: '#f43f5e' },
 ];
 
-const getCatColor = (type) => CATEGORIES.find(c => c.value === type)?.color || '#888';
+const getCatColor = (type) => CATEGORIES_CONFIG.find(c => c.value === type)?.color || '#888';
 
 function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay, onPause: externalOnPause, onEnded: externalOnEnded }) {
+  const { t } = useTranslation(); // Add useTranslation
   const audioRef = useRef(null);
   const [internalPlaying, setInternalPlaying] = useState(false);
   const playing = propIsPlaying !== undefined ? propIsPlaying : internalPlaying;
@@ -94,7 +95,7 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
         {playing ? <Pause size={16} /> : <Play size={16} />}
       </button>
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>🎵 Música</div>
+        <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>{t('mural.musicLabel', '🎵 Música')}</div>
         <div style={{ height: 4, background: '#e2e8f0', borderRadius: 2 }}>
           <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg,#667eea,#764ba2)', transition: 'width 0.1s' }} />
         </div>
@@ -104,11 +105,12 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
 }
 
 function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause }) {
+  const { t } = useTranslation(); // Add useTranslation
   const color = getCatColor(post.category || post.type);
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(post.comments || []);
-  const authorName = post.full_name || post.author_name || post.authorName || 'Utilizador';
+  const authorName = post.full_name || post.author_name || post.authorName || t('common.user', 'Utilizador');
   const authorInitials = authorName.slice(0, 2).toUpperCase();
   const mediaUrl = post.media_url || post.mediaUrl;
   const musicUrl = post.audio_url || post.musicUrl;
@@ -200,7 +202,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       if (data.comment) setComments([...comments, data.comment]);
       setComment('');
     } catch (e) {
-      setComments([...comments, { id: Date.now(), content: comment, full_name: user?.full_name || 'Você' }]);
+      setComments([...comments, { id: Date.now(), content: comment, full_name: user?.full_name || t('common.user', 'Você') }]);
       setComment('');
     }
   };
@@ -213,10 +215,10 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ fontWeight: 600, fontSize: 14, color: '#1a1a2e' }}>{authorName}</div>
-          <div style={{ fontSize: 12, color: '#888' }}>{post.church || ''}{post.church ? ' · ' : ''}{post.time || (post.created_at ? new Date(post.created_at).toLocaleDateString('pt-BR') : 'Agora')}</div>
+          <div style={{ fontSize: 12, color: '#888' }}>{post.church || ''}{post.church ? ' · ' : ''}{post.created_at ? new Date(post.created_at).toLocaleDateString(t('locale', 'pt-BR')) : t('time.now', 'Agora')}</div>
         </div>
         <span style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 20, background: `${color}18`, color, border: `1px solid ${color}44` }}>
-          {CATEGORIES.find(c => c.value === (post.category || post.type))?.label || post.category || post.type}
+          {CATEGORIES_CONFIG.find(c => c.value === (post.category || post.type))?.labelKey ? t(CATEGORIES_CONFIG.find(c => c.value === (post.category || post.type)).labelKey) : (post.category || post.type)}
         </span>
         {isOwner && (
           <button onClick={() => onDelete(post.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', padding: 4, borderRadius: 6 }}
@@ -269,26 +271,26 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       <div style={{ padding: '8px 16px 12px', borderTop: '1px solid #f0f0f0', display: 'flex', gap: 8, alignItems: 'center' }}>
         <button onClick={() => onLike(post.id)} style={{ display: 'flex', alignItems: 'center', gap: 6, background: post.liked ? '#fff0f3' : 'none', border: post.liked ? '1px solid #fecdd3' : 'none', cursor: 'pointer', color: post.liked ? '#e11d48' : '#888', fontSize: 13, fontWeight: 700, padding: '6px 12px', borderRadius: 20, transition: 'all 0.2s' }}>
           <Heart size={18} fill={post.liked ? '#e11d48' : 'none'} />
-          {post.like_count || post.amemCount || 0} Amén
+          {post.like_count || post.amemCount || 0} {t('mural.amen', 'Amén')}
         </button>
         <button onClick={() => setShowComments(!showComments)} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, fontWeight: 600, padding: '6px 10px', borderRadius: 8 }}>
-          <MessageCircle size={18} /> {post.comment_count || post.commentCount || comments.length}
+          <MessageCircle size={18} /> {post.comment_count || post.commentCount || comments.length} {t('common.comment', 'Comentários')}
         </button>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, marginLeft: 'auto', padding: '6px 10px', borderRadius: 8 }}><Share2 size={18} /></button>
+        <button style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, marginLeft: 'auto', padding: '6px 10px', borderRadius: 8 }}><Share2 size={18} /> {t('common.share', 'Partilhar')}</button>
       </div>
 
       {showComments && (
         <div style={{ padding: '0 16px 14px', borderTop: '1px solid #f0f0f0' }}>
           {comments.map((c, i) => (
             <div key={c.id || i} style={{ padding: '8px 0', fontSize: 13 }}>
-              <span style={{ fontWeight: 600, color: '#333' }}>{c.full_name || c.author_name || 'Utilizador'}</span>
+              <span style={{ fontWeight: 600, color: '#333' }}>{c.full_name || c.author_name || t('common.user', 'Utilizador')}</span>
               <span style={{ color: '#555', marginLeft: 8 }}>{c.content}</span>
             </div>
           ))}
           {user && (
             <form onSubmit={submitComment} style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-              <input value={comment} onChange={e => setComment(e.target.value)} placeholder="Escreve um comentário..." style={{ flex: 1, padding: '8px 12px', borderRadius: 20, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none' }} />
-              <button type="submit" style={{ padding: '8px 14px', borderRadius: 20, background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', color: 'white', cursor: 'pointer' }}><Send size={14} /></button>
+              <input value={comment} onChange={e => setComment(e.target.value)} placeholder={t('mural.commentPlaceholder', 'Escreve um comentário...')} style={{ flex: 1, padding: '8px 12px', borderRadius: 20, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none' }} />
+              <button type="submit" style={{ padding: '8px 14px', borderRadius: 20, background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', color: 'white', cursor: 'pointer' }}><Send size={14} /> {t('common.send', 'Enviar')}</button>
             </form>
           )}
         </div>
@@ -298,6 +300,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 }
 
 export default function MuralGrid() {
+  const { t } = useTranslation(); // Use useTranslation
   const { user, token } = useAuth();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -399,7 +402,7 @@ export default function MuralGrid() {
   };
 
   const handleDelete = async (postId) => {
-    if (!window.confirm('Apagar esta publicação?')) return;
+    if (!window.confirm(t('mural.confirmDelete', 'Apagar esta publicação?'))) return;
     try {
       await fetch(`${API}/feed/${postId}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
       setPosts(posts.filter(p => p.id !== postId));
@@ -441,7 +444,7 @@ export default function MuralGrid() {
         })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erro ao publicar');
+      if (!res.ok) throw new Error(data.error || t('mural.uploadError', 'Erro ao publicar'));
 
       const newPost = { ...(data.post || {}), liked: false, full_name: user?.full_name, like_count: 0, comment_count: 0 };
       setPosts([newPost, ...posts]);
@@ -450,20 +453,20 @@ export default function MuralGrid() {
       if (musicRef.current) musicRef.current.value = '';
       setShowForm(false);
     } catch (err) {
-      setUploadError(err.message || 'Erro no upload. Verifica a ligação.');
+      setUploadError(err.message || t('mural.uploadConnectionError', 'Erro no upload. Verifica a ligação.'));
       console.error(err);
     } finally { setUploading(false); }
   };
 
   const filteredPosts = activeFilter === 'todas' ? posts : posts.filter(p => (p.category || p.type) === activeFilter);
 
-  const FILTERS = [
-    { key: 'todas', label: '🌟 Todas' },
-    { key: 'testemunho', label: '🙌 Testemunhos' },
-    { key: 'louvor', label: '🎵 Louvores' },
-    { key: 'versiculo', label: '✨ Versículos' },
-    { key: 'reflexao', label: '📖 Reflexões' },
-    { key: 'foto', label: '📸 Fotos/Vídeos' },
+  const FILTERS_CONFIG = [
+    { key: 'todas', labelKey: 'mural.filters.all' },
+    { key: 'testemunho', labelKey: 'mural.filters.testimonies' },
+    { key: 'louvor', labelKey: 'mural.filters.worship' },
+    { key: 'versiculo', labelKey: 'mural.filters.verses' },
+    { key: 'reflexao', labelKey: 'mural.filters.reflections' },
+    { key: 'foto', labelKey: 'mural.filters.photos' },
   ];
 
   return (
@@ -471,8 +474,8 @@ export default function MuralGrid() {
       {/* Header */}
       <div style={{ background: 'linear-gradient(135deg,#667eea,#764ba2)', borderRadius: 16, padding: '20px 24px', marginBottom: 20, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>📋 Mural da Comunidade</h1>
-          <p style={{ margin: '4px 0 0', fontSize: 13, opacity: 0.85 }}>Partilha testemunhos, louvores e reflexões</p>
+          <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>{t('mural.title', '📋 Mural da Comunidade')}</h1>
+          <p style={{ margin: '4px 0 0', fontSize: 13, opacity: 0.85 }}>{t('mural.subtitle', 'Partilha testemunhos, louvores e reflexões')}</p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button onClick={() => setViewMode(viewMode === 'feed' ? 'grid' : 'feed')} style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.4)', borderRadius: 10, padding: '8px 12px', color: 'white', cursor: 'pointer' }}>
@@ -481,7 +484,7 @@ export default function MuralGrid() {
           {user && (
             <button onClick={() => setShowForm(!showForm)} style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.4)', borderRadius: 12, padding: '10px 16px', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 600 }}>
               {showForm ? <X size={16} /> : <Plus size={16} />}
-              {showForm ? 'Cancelar' : 'Publicar'}
+              {showForm ? t('mural.cancel', 'Cancelar') : t('mural.newPost', 'Publicar')}
             </button>
           )}
         </div>
@@ -491,9 +494,9 @@ export default function MuralGrid() {
       {showForm && (
         <div style={{ background: 'white', borderRadius: 16, padding: 20, border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', marginBottom: 20 }}>
           <select value={postCategory} onChange={e => setPostCategory(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 14, marginBottom: 14, outline: 'none' }}>
-            {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+            {CATEGORIES_CONFIG.map(c => <option key={c.value} value={c.value}>{t(c.labelKey)}</option>)}
           </select>
-          <textarea rows={4} placeholder="Escreve o teu testemunho, louvor ou reflexão..." value={postText} onChange={e => setPostText(e.target.value)} style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 14, outline: 'none', resize: 'vertical', boxSizing: 'border-box', marginBottom: 14 }} />
+          <textarea rows={4} placeholder={t('mural.messagePlaceholder', 'Escreve o teu testemunho, louvor ou reflexão...')} value={postText} onChange={e => setPostText(e.target.value)} style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 14, outline: 'none', resize: 'vertical', boxSizing: 'border-box', marginBottom: 14 }} />
 
           {mediaPreview && (
             <div style={{ position: 'relative', marginBottom: 14, borderRadius: 12, overflow: 'hidden' }}>
@@ -515,28 +518,28 @@ export default function MuralGrid() {
           <input ref={musicRef} type="file" accept="audio/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files[0]; if (f) { setMusicFile(f); setMusicName(f.name); } }} />
 
           <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
-            <button onClick={() => photoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Image size={16} style={{ color: '#f43f5e' }} /> Foto</button>
-            <button onClick={() => videoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Video size={16} style={{ color: '#3b82f6' }} /> Vídeo</button>
-            <button onClick={() => musicRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Music size={16} style={{ color: '#a855f7' }} /> Música</button>
+            <button onClick={() => photoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Image size={16} style={{ color: '#f43f5e' }} /> {t('media.photo', 'Foto')}</button>
+            <button onClick={() => videoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Video size={16} style={{ color: '#3b82f6' }} /> {t('media.video', 'Vídeo')}</button>
+            <button onClick={() => musicRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Music size={16} style={{ color: '#a855f7' }} /> {t('media.audio', 'Música')}</button>
           </div>
 
           {uploadError && <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#e11d48' }}>⚠️ {uploadError}</div>}
 
           <button onClick={handleSubmit} disabled={uploading || (!postText.trim() && !mediaFile)} style={{ width: '100%', padding: 12, background: uploading ? '#ccc' : 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', borderRadius: 12, color: 'white', fontSize: 15, fontWeight: 600, cursor: uploading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-            {uploading ? 'A publicar...' : <><Send size={16} /> Publicar</>}
+            {uploading ? t('mural.publishing', 'A publicar...') : <><Send size={16} /> {t('mural.publish', 'Publicar')}</>}
           </button>
         </div>
       )}
 
       {/* Filtros */}
       <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4, marginBottom: 16, scrollbarWidth: 'none' }}>
-        {FILTERS.map(f => (
-          <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{ padding: '8px 16px', borderRadius: 20, whiteSpace: 'nowrap', border: activeFilter === f.key ? 'none' : '1px solid #e2e8f0', background: activeFilter === f.key ? 'linear-gradient(135deg,#667eea,#764ba2)' : 'white', color: activeFilter === f.key ? 'white' : '#555', cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>{f.label}</button>
+        {FILTERS_CONFIG.map(f => (
+          <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{ padding: '8px 16px', borderRadius: 20, whiteSpace: 'nowrap', border: activeFilter === f.key ? 'none' : '1px solid #e2e8f0', background: activeFilter === f.key ? 'linear-gradient(135deg,#667eea,#764ba2)' : 'white', color: activeFilter === f.key ? 'white' : '#555', cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>{t(f.labelKey)}</button>
         ))}
       </div>
 
       {/* Loading */}
-      {loading && <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>A carregar...</div>}
+      {loading && <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>{t('common.loading', 'A carregar...')}</div>}
 
       {/* Grid View */}
       {!loading && viewMode === 'grid' && (
@@ -582,8 +585,8 @@ export default function MuralGrid() {
       {!loading && filteredPosts.length === 0 && (
         <div style={{ textAlign: 'center', padding: 40, color: '#888', background: 'white', borderRadius: 16, border: '1px dashed #e2e8f0' }}>
           <BookOpen size={40} style={{ opacity: 0.3, marginBottom: 12 }} />
-          <p style={{ margin: 0 }}>Nenhuma publicação encontrada.</p>
-          {!user && <p style={{ margin: '8px 0 0', fontSize: 13 }}>Faz login para publicar!</p>}
+          <p style={{ margin: 0 }}>{t('mural.noPostsFound', 'Nenhuma publicação encontrada.')}</p>
+          {!user && <p style={{ margin: '8px 0 0', fontSize: 13 }}>{t('mural.loginRequired', 'Faz login para publicar!')}</p>}
         </div>
       )}
     </div>
