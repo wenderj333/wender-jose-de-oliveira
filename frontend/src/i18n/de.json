@@ -225,6 +225,13 @@
             "reflexao": "Biblische Reflexion",
             "versiculo": "Bibelvers",
             "foto": "Foto"
+        },
+        "filters": {
+            "all": "Alle",
+            "myChurch": "Meine Kirche",
+            "testimonies": "Zeugnisse",
+            "worship": "Lobpreis",
+            "verses": "Bibelverse"
         }
     },
     "kids": {
@@ -931,5 +938,10 @@
         "noData": "No data",
         "error": "Error loading",
         "confirm": "Confirm"
+    },
+    "categoryLabels": {
+        "photo": "Foto",
+        "video": "Video",
+        "music": "Musik"
     }
 }
