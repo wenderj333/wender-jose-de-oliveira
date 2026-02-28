@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const db = require('../db/connection');
-const authenticateToken = require('../middleware/authenticateToken');
+const authenticateToken = require('../middleware/auth');
 
 // Get user profile (public)
 router.get('/:userId', authenticateToken, async (req, res) => {
