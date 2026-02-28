@@ -75,16 +75,3 @@ router.patch('/photo', authenticateToken, async (req, res) => {
 });
 
 module.exports = router;
-// PATCH /profile/photo
-router.patch('/photo', async (req, res) => {
-  try {
-    const { photoURL } = req.body;
-    const userId = req.user?.id;
-    if (!userId) return res.status(401).json({ error: 'Nao autenticado' });
-    if (!photoURL) return res.status(400).json({ error: 'photoURL obrigatorio' });
-    await db.run('UPDATE users SET avatar_url = ? WHERE id = ?', [photoURL, userId]);
-    res.json({ success: true, user: { photoURL } });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
