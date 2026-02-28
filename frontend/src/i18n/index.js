@@ -54,11 +54,4 @@ i18n
     nonExplicitSupportedLngs: true,
   });
 
-// Ensure saved language preference is respected on app load
-const savedLng = localStorage.getItem('i18nextLng');
-if (savedLng) {
-  const normalizedLng = savedLng.split('-')[0]; // Extract base language code (pt from pt-BR)
-  i18n.changeLanguage(normalizedLng);
-}
-
 export default i18n;

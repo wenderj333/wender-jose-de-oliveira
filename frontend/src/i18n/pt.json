@@ -328,6 +328,26 @@
                                   "now":  "Agora"
                               }
               },
+    "dashboard":  {
+                      "title":  "Dashboard",
+                      "overview":  "Visão geral em tempo real",
+                      "users":  "Utilizadores",
+                      "churches":  "Igrejas",
+                      "prayerRequests":  "Pedidos de Oração",
+                      "answeredPrayers":  "Orações Respondidas",
+                      "pastorManagement":  "Sala de Gestão do Pastor",
+                      "managementDesc":  "Gerencie membros, dízimos, comunicados e mais",
+                      "quickActions":  "Ações Rápidas",
+                      "newPrayerRequest":  "Nova Oração",
+                      "registerChurch":  "Reg. Igreja",
+                      "kidsCorner":  "Kids",
+                      "recentActivity":  "Atividade Recente",
+                      "viewAll":  "Ver tudo",
+                      "requestedPrayer":  "pediu oração",
+                      "noActivity":  "Nenhuma atividade recente",
+                      "loadingUsers":  "Carregando...",
+                      "noUsers":  "Nenhum usuário encontrado."
+                  },
     "members":  {
                   "never":  "Nunca",
                   "now":  "Agora",
@@ -794,6 +814,60 @@
                   "delete":  "Deletar post"
               }
     ,
+    "biblicalCourse": {
+        "themes": [
+            { "value": "fe", "label": "✝️ Fé" },
+            { "value": "esperanca", "label": "🌅 Esperança" },
+            { "value": "gratidao", "label": "🙏 Gratidão" },
+            { "value": "cura", "label": "💚 Cura" },
+            { "value": "familia", "label": "👨‍👩‍👧‍👦 Família" },
+            { "value": "amor", "label": "❤️ Amor de Deus" },
+            { "value": "adoracao", "label": "👑 Adoração" },
+            { "value": "vitoria", "label": "🏆 Vitória" },
+            { "value": "paz", "label": "🕊️ Paz" },
+            { "value": "avivamento", "label": "🔥 Avivamento" },
+            { "value": "perdao", "label": "💝 Perdão" },
+            { "value": "salvacao", "label": "✨ Salvação" }
+        ],
+        "styles": [
+            { "value": "worship", "label": "🎹 Worship" },
+            { "value": "pentecostal", "label": "🔥 Pentecostal" },
+            { "value": "coral", "label": "🎶 Coral" },
+            { "value": "acustico", "label": "🎸 Acústico" },
+            { "value": "pop_gospel", "label": "🎤 Pop Gospel" },
+            { "value": "sertanejo_gospel", "label": "🤠 Sertanejo Gospel" },
+            { "value": "reggae_gospel", "label": "🎵 Reggae Gospel" },
+            { "value": "hino", "label": "📖 Hino Tradicional" }
+        ],
+        "emotions": [
+            { "value": "alegre", "label": "😊 Alegre" },
+            { "value": "profundo", "label": "🌊 Profundo" },
+            { "value": "oracao", "label": "🙏 Oração" },
+            { "value": "celebracao", "label": "🎉 Celebração" },
+            { "value": "intimidade", "label": "💜 Intimidade com Deus" },
+            { "value": "guerra", "label": "⚔️ Guerra Espiritual" },
+            { "value": "conforto", "label": "🤗 Conforto" },
+            { "value": "louvor_intenso", "label": "🔥 Louvor Intenso" }
+        ],
+        "bibleBooks": [
+            "Gênesis", "Êxodo", "Salmos", "Provérbios", "Isaías", "Jeremias",
+            "Mateus", "Marcos", "Lucas", "João", "Atos", "Romanos",
+            "1 Coríntios", "2 Coríntios", "Gálatas", "Efésios", "Filipenses",
+            "Colossenses", "Hebreus", "Tiago", "Apocalipse"
+        ]
+    },
+    "bibleAI": {
+        "title": "IA Bíblica 📖",
+        "subtitle": "Tire suas dúvidas sobre a Bíblia",
+        "placeholder": "Digite sua pergunta...",
+        "contextBible": "📖 Bíblia",
+        "contextQuestions": "❓ Dúvidas",
+        "contextPrayer": "🙏 Oração",
+        "contextGuidance": "💬 Orientação",
+        "welcome": "Olá! Sou a IA Bíblica do Sigo com Fé. Posso te ajudar a entender a Bíblia, responder dúvidas sobre a fé cristã e te orientar espiritualmente. Pergunte qualquer coisa! 📖✨",
+        "error": "Desculpe, ocorreu um erro. Tente novamente.",
+        "thinking": "Pensando..."
+    },
     "criadorLouvor":  {
                   "title":  "Criador de Louvor com IA",
                   "subtitle":  "Crie letras de louvor inspiradas na Bíblia!",

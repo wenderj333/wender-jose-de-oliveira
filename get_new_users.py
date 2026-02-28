@@ -1,20 +1,20 @@
 
-import urllib.request
+import requests
 import json
-import datetime
+import os
 
-last_checked_timestamp = 1740336660
-api_base_url = 'https://sigo-com-fe-api.onrender.com'
-auth_token = 'sigocomfe2026'
+base_url = "https://sigo-com-fe-api.onrender.com"
+token = "sigocomfe2026"
+last_check_timestamp = 1772104298 # From memory/new_users_check_state.json
 
-# Fetch new users
-url = f"{api_base_url}/api/openclaw/users/new?since={last_checked_timestamp}"
-headers = {"Authorization": f"Bearer {auth_token}"}
+headers = {
+    "Authorization": f"Bearer {token}"
+}
 
-req = urllib.request.Request(url, headers=headers)
 try:
-    with urllib.request.urlopen(req) as response:
-        response_data = json.loads(response.read().decode())
-        print(json.dumps(response_data))
-except urllib.error.URLError as e:
-    print(json.dumps({"status": "error", "message": str(e)}))
+    response = requests.get(f"{base_url}/api/openclaw/users/new?since={last_check_timestamp}", headers=headers)
+    response.raise_for_status() # Raise an exception for HTTP errors (4xx or 5xx)
+    users = response.json()
+    print(json.dumps(users))
+except requests.exceptions.RequestException as e:
+    print(json.dumps({"error": str(e)}))

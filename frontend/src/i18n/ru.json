@@ -211,6 +211,60 @@
         "breakSimplicity": "С простотой и благодарностью",
         "breakGlory": "Всё для славы Бога"
     },
+    "biblicalCourse": {
+        "themes": [
+            { "value": "fe", "label": "✝️ Вера" },
+            { "value": "esperanca", "label": "🌅 Надежда" },
+            { "value": "gratidao", "label": "🙏 Благодарность" },
+            { "value": "cura", "label": "💚 Исцеление" },
+            { "value": "familia", "label": "👨‍👩‍👧‍👦 Семья" },
+            { "value": "amor", "label": "❤️ Любовь Бога" },
+            { "value": "adoracao", "label": "👑 Поклонение" },
+            { "value": "vitoria", "label": "🏆 Победа" },
+            { "value": "paz", "label": "🕊️ Мир" },
+            { "value": "avivamento", "label": "🔥 Возрождение" },
+            { "value": "perdao", "label": "💝 Прощение" },
+            { "value": "salvacao", "label": "✨ Спасение" }
+        ],
+        "styles": [
+            { "value": "worship", "label": "🎹 Поклонение" },
+            { "value": "pentecostal", "label": "🔥 Пятидесятнический" },
+            { "value": "coral", "label": "🎶 Хор" },
+            { "value": "acustico", "label": "🎸 Акустика" },
+            { "value": "pop_gospel", "label": "🎤 Поп-госпель" },
+            { "value": "sertanejo_gospel", "label": "🤠 Кантри-госпель" },
+            { "value": "reggae_gospel", "label": "🎵 Реггей-госпель" },
+            { "value": "hino", "label": "📖 Традиционный Гимн" }
+        ],
+        "emotions": [
+            { "value": "alegre", "label": "😊 Радостный" },
+            { "value": "profundo", "label": "🌊 Глубокий" },
+            { "value": "oracao", "label": "🙏 Молитва" },
+            { "value": "celebracao", "label": "🎉 Празднование" },
+            { "value": "intimidade", "label": "💜 Близость с Богом" },
+            { "value": "guerra", "label": "⚔️ Духовная Война" },
+            { "value": "conforto", "label": "🤗 Утешение" },
+            { "value": "louvor_intenso", "label": "🔥 Интенсивная Хвала" }
+        ],
+        "bibleBooks": [
+            "Бытие", "Исход", "Псалмы", "Притчи", "Исайя", "Иеремия",
+            "Матфей", "Марк", "Лука", "Иоанн", "Деяния", "Римлянам",
+            "1 Коринфянам", "2 Коринфянам", "Галатам", "Ефесянам", "Филиппийцам",
+            "Колоссянам", "Евреям", "Иакова", "Откровение"
+        ]
+    },
+    "bibleAI": {
+        "title": "Библейский ИИ 📖",
+        "subtitle": "Задавайте свои вопросы о Библии",
+        "placeholder": "Введите ваш вопрос...",
+        "contextBible": "📖 Библия",
+        "contextQuestions": "❓ Вопросы",
+        "contextPrayer": "🙏 Молитва",
+        "contextGuidance": "💬 Руководство",
+        "welcome": "Привет! Я библейский ИИ Sigo com Fé. Я могу помочь вам понять Библию, ответить на вопросы о христианской вере и предоставить духовное руководство. Спросите меня что угодно! 📖✨",
+        "error": "Извините, произошла ошибка. Пожалуйста, попробуйте еще раз.",
+        "thinking": "Думаю..."
+    },
     "criadorLouvor": {
         "title": "Создатель Песен Хвалы с ИИ",
         "subtitle": "Создавайте текст хвалы вдохновленный Библией!",

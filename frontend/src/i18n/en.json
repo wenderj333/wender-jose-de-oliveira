@@ -744,6 +744,26 @@
             "now": "Now"
         }
     },
+    "dashboard":  {
+                      "title":  "Dashboard",
+                      "overview":  "Real-time overview",
+                      "users":  "Users",
+                      "churches":  "Churches",
+                      "prayerRequests":  "Prayer Requests",
+                      "answeredPrayers":  "Answered Prayers",
+                      "pastorManagement":  "Pastor Management Room",
+                      "managementDesc":  "Manage members, tithes, announcements, and more",
+                      "quickActions":  "Quick Actions",
+                      "newPrayerRequest":  "New Prayer Request",
+                      "registerChurch":  "Register Church",
+                      "kidsCorner":  "Kids",
+                      "recentActivity":  "Recent Activity",
+                      "viewAll":  "View all",
+                      "requestedPrayer":  "requested prayer",
+                      "noActivity":  "No recent activity",
+                      "loadingUsers":  "Loading...",
+                      "noUsers":  "No users found."
+                  },
     "members": {
         "never": "Never",
         "now": "Now",
@@ -762,6 +782,60 @@
         "noMembers": "No members found",
         "noMessages": "No messages yet. Send the first one!",
         "messagePlaceholder": "Write your message..."
+    },
+    "biblicalCourse": {
+        "themes": [
+            { "value": "fe", "label": "✝️ Faith" },
+            { "value": "esperanca", "label": "🌅 Hope" },
+            { "value": "gratidao", "label": "🙏 Gratitude" },
+            { "value": "cura", "label": "💚 Healing" },
+            { "value": "familia", "label": "👨‍👩‍👧‍👦 Family" },
+            { "value": "amor", "label": "❤️ God's Love" },
+            { "value": "adoracao", "label": "👑 Worship" },
+            { "value": "vitoria", "label": "🏆 Victory" },
+            { "value": "paz", "label": "🕊️ Peace" },
+            { "value": "avivamento", "label": "🔥 Revival" },
+            { "value": "perdao", "label": "💝 Forgiveness" },
+            { "value": "salvacao", "label": "✨ Salvation" }
+        ],
+        "styles": [
+            { "value": "worship", "label": "🎹 Worship" },
+            { "value": "pentecostal", "label": "🔥 Pentecostal" },
+            { "value": "coral", "label": "🎶 Choir" },
+            { "value": "acustico", "label": "🎸 Acoustic" },
+            { "value": "pop_gospel", "label": "🎤 Pop Gospel" },
+            { "value": "sertanejo_gospel", "label": "🤠 Country Gospel" },
+            { "value": "reggae_gospel", "label": "🎵 Reggae Gospel" },
+            { "value": "hino", "label": "📖 Traditional Hymn" }
+        ],
+        "emotions": [
+            { "value": "alegre", "label": "😊 Joyful" },
+            { "value": "profundo", "label": "🌊 Deep" },
+            { "value": "oracao", "label": "🙏 Prayer" },
+            { "value": "celebracao", "label": "🎉 Celebration" },
+            { "value": "intimidade", "label": "💜 Intimacy with God" },
+            { "value": "guerra", "label": "⚔️ Spiritual Warfare" },
+            { "value": "conforto", "label": "🤗 Comfort" },
+            { "value": "louvor_intenso", "label": "🔥 Intense Praise" }
+        ],
+        "bibleBooks": [
+            "Genesis", "Exodus", "Psalms", "Proverbs", "Isaiah", "Jeremiah",
+            "Matthew", "Mark", "Luke", "John", "Acts", "Romans",
+            "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians",
+            "Colossians", "Hebrews", "James", "Revelation"
+        ]
+    },
+    "bibleAI": {
+        "title": "Bible AI 📖",
+        "subtitle": "Ask your Bible questions",
+        "placeholder": "Type your question...",
+        "contextBible": "📖 Bible",
+        "contextQuestions": "❓ Questions",
+        "contextPrayer": "🙏 Prayer",
+        "contextGuidance": "💬 Guidance",
+        "welcome": "Hello! I'm the Bible AI from Sigo com Fé. I can help you understand the Bible, answer questions about the Christian faith, and offer spiritual guidance. Ask me anything! 📖✨",
+        "error": "Sorry, an error occurred. Please try again.",
+        "thinking": "Thinking..."
     },
     "criadorLouvor": {
         "title": "AI Praise Creator",

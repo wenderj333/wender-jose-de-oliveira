@@ -809,6 +809,26 @@
             "now": "Gerade eben"
         }
     },
+    "dashboard":  {
+                      "title":  "Dashboard",
+                      "overview":  "Echtzeit-Übersicht",
+                      "users":  "Benutzer",
+                      "churches":  "Kirchen",
+                      "prayerRequests":  "Gebetsanfragen",
+                      "answeredPrayers":  "Beantwortete Gebete",
+                      "pastorManagement":  "Pastoren-Verwaltungsraum",
+                      "managementDesc":  "Verwalten Sie Mitglieder, Zehnten, Ankündigungen und mehr",
+                      "quickActions":  "Schnelle Aktionen",
+                      "newPrayerRequest":  "Neue Gebetsanfrage",
+                      "registerChurch":  "Kirche registrieren",
+                      "kidsCorner":  "Kinder",
+                      "recentActivity":  "Letzte Aktivitäten",
+                      "viewAll":  "Alle anzeigen",
+                      "requestedPrayer":  "bat um ein Gebet",
+                      "noActivity":  "Keine aktuellen Aktivitäten",
+                      "loadingUsers":  "Lädt...",
+                      "noUsers":  "Keine Benutzer gefunden."
+                  },
     "members": {
         "never": "Nie",
         "now": "Jetzt",
@@ -827,6 +847,60 @@
         "noMembers": "Keine Mitglieder gefunden",
         "noMessages": "Noch keine Nachrichten. Schreib die erste!",
         "messagePlaceholder": "Schreib deine Nachricht..."
+    },
+    "biblicalCourse": {
+        "themes": [
+            { "value": "fe", "label": "✝️ Glaube" },
+            { "value": "esperanca", "label": "🌅 Hoffnung" },
+            { "value": "gratidao", "label": "🙏 Dankbarkeit" },
+            { "value": "cura", "label": "💚 Heilung" },
+            { "value": "familia", "label": "👨‍👩‍👧‍👦 Familie" },
+            { "value": "amor", "label": "❤️ Gottes Liebe" },
+            { "value": "adoracao", "label": "👑 Anbetung" },
+            { "value": "vitoria", "label": "🏆 Sieg" },
+            { "value": "paz", "label": "🕊️ Frieden" },
+            { "value": "avivamento", "label": "🔥 Erweckung" },
+            { "value": "perdao", "label": "💝 Vergebung" },
+            { "value": "salvacao", "label": "✨ Heil" }
+        ],
+        "styles": [
+            { "value": "worship", "label": "🎹 Anbetung" },
+            { "value": "pentecostal", "label": "🔥 Pfingstlich" },
+            { "value": "coral", "label": "🎶 Chor" },
+            { "value": "acustico", "label": "🎸 Akustisch" },
+            { "value": "pop_gospel", "label": "🎤 Pop Gospel" },
+            { "value": "sertanejo_gospel", "label": "🤠 Country Gospel" },
+            { "value": "reggae_gospel", "label": "🎵 Reggae Gospel" },
+            { "value": "hino", "label": "📖 Traditioneller Hymnus" }
+        ],
+        "emotions": [
+            { "value": "alegre", "label": "😊 Fröhlich" },
+            { "value": "profundo", "label": "🌊 Tief" },
+            { "value": "oracao", "label": "🙏 Gebet" },
+            { "value": "celebracao", "label": "🎉 Feier" },
+            { "value": "intimidade", "label": "💜 Intimität mit Gott" },
+            { "value": "guerra", "label": "⚔️ Geistlicher Kampf" },
+            { "value": "conforto", "label": "🤗 Trost" },
+            { "value": "louvor_intenso", "label": "🔥 Intensives Lob" }
+        ],
+        "bibleBooks": [
+            "Genesis", "Exodus", "Psalmen", "Sprichwörter", "Jesaja", "Jeremia",
+            "Matthäus", "Markus", "Lukas", "Johannes", "Apostelgeschichte", "Römer",
+            "1 Korinther", "2 Korinther", "Galater", "Epheser", "Philipper",
+            "Kolosser", "Hebräer", "Jakobus", "Offenbarung"
+        ]
+    },
+    "bibleAI": {
+        "title": "Bibel-KI 📖",
+        "subtitle": "Stellen Sie Ihre Bibelfragen",
+        "placeholder": "Geben Sie Ihre Frage ein...",
+        "contextBible": "📖 Bibel",
+        "contextQuestions": "❓ Fragen",
+        "contextPrayer": "🙏 Gebet",
+        "contextGuidance": "💬 Beratung",
+        "welcome": "Hallo! Ich bin die Bibel-KI von Sigo com Fé. Ich kann Ihnen helfen, die Bibel zu verstehen, Fragen zum christlichen Glauben beantworten und geistliche Orientierung bieten. Fragen Sie mich alles! 📖✨",
+        "error": "Entschuldigung, ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+        "thinking": "Denke nach..."
     },
     "criadorLouvor": {
         "title": "KI-Lobpreis-Ersteller",

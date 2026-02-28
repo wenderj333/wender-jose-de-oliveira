@@ -744,6 +744,46 @@
             "now": "Ahora"
         }
     },
+    "dashboard":  {
+                      "title":  "Panel de control",
+                      "overview":  "Resumen en tiempo real",
+                      "users":  "Usuarios",
+                      "churches":  "Iglesias",
+                      "prayerRequests":  "Peticiones de Oración",
+                      "answeredPrayers":  "Oraciones Respondidas",
+                      "pastorManagement":  "Sala de Gestión del Pastor",
+                      "managementDesc":  "Gestiona miembros, diezmos, comunicados y más",
+                      "quickActions":  "Acciones Rápidas",
+                      "newPrayerRequest":  "Nueva Petición de Oración",
+                      "registerChurch":  "Registrar Iglesia",
+                      "kidsCorner":  "Niños",
+                      "recentActivity":  "Actividad Reciente",
+                      "viewAll":  "Ver todo",
+                      "requestedPrayer":  "pidió oración",
+                      "noActivity":  "Ninguna actividad reciente",
+                      "loadingUsers":  "Cargando...",
+                      "noUsers":  "Ningún usuario encontrado."
+                  },
+    "dashboard":  {
+                      "title":  "Panel de control",
+                      "overview":  "Resumen en tiempo real",
+                      "users":  "Usuarios",
+                      "churches":  "Iglesias",
+                      "prayerRequests":  "Peticiones de Oración",
+                      "answeredPrayers":  "Oraciones Respondidas",
+                      "pastorManagement":  "Sala de Gestión del Pastor",
+                      "managementDesc":  "Gestiona miembros, diezmos, comunicados y más",
+                      "quickActions":  "Acciones Rápidas",
+                      "newPrayerRequest":  "Nueva Petición de Oración",
+                      "registerChurch":  "Registrar Iglesia",
+                      "kidsCorner":  "Niños",
+                      "recentActivity":  "Actividad Reciente",
+                      "viewAll":  "Ver todo",
+                      "requestedPrayer":  "pidió oración",
+                      "noActivity":  "Ninguna actividad reciente",
+                      "loadingUsers":  "Cargando...",
+                      "noUsers":  "Ningún usuario encontrado."
+                  },
     "members": {
         "never": "Nunca",
         "now": "Ahora",
@@ -762,6 +802,60 @@
         "noMembers": "No se encontraron miembros",
         "noMessages": "Sin mensajes aún. ¡Envía el primero!",
         "messagePlaceholder": "Escribe tu mensaje..."
+    },
+    "biblicalCourse": {
+        "themes": [
+            { "value": "fe", "label": "✝️ Fe" },
+            { "value": "esperanca", "label": "🌅 Esperanza" },
+            { "value": "gratidao", "label": "🙏 Gratitud" },
+            { "value": "cura", "label": "💚 Sanación" },
+            { "value": "familia", "label": "👨‍👩‍👧‍👦 Familia" },
+            { "value": "amor", "label": "❤️ Amor de Dios" },
+            { "value": "adoracao", "label": "👑 Adoración" },
+            { "value": "vitoria", "label": "🏆 Victoria" },
+            { "value": "paz", "label": "🕊️ Paz" },
+            { "value": "avivamento", "label": "🔥 Avivamiento" },
+            { "value": "perdao", "label": "💝 Perdón" },
+            { "value": "salvacao", "label": "✨ Salvación" }
+        ],
+        "styles": [
+            { "value": "worship", "label": "🎹 Adoración" },
+            { "value": "pentecostal", "label": "🔥 Pentecostal" },
+            { "value": "coral", "label": "🎶 Coro" },
+            { "value": "acustico", "label": "🎸 Acústico" },
+            { "value": "pop_gospel", "label": "🎤 Pop Gospel" },
+            { "value": "sertanejo_gospel", "label": "🤠 Country Gospel" },
+            { "value": "reggae_gospel", "label": "🎵 Reggae Gospel" },
+            { "value": "hino", "label": "📖 Himno Tradicional" }
+        ],
+        "emotions": [
+            { "value": "alegre", "label": "😊 Alegre" },
+            { "value": "profundo", "label": "🌊 Profundo" },
+            { "value": "oracao", "label": "🙏 Oración" },
+            { "value": "celebracao", "label": "🎉 Celebración" },
+            { "value": "intimidade", "label": "💜 Intimidad con Dios" },
+            { "value": "guerra", "label": "⚔️ Guerra Espiritual" },
+            { "value": "conforto", "label": "🤗 Consuelo" },
+            { "value": "louvor_intenso", "label": "🔥 Alaban Intenso" }
+        ],
+        "bibleBooks": [
+            "Génesis", "Éxodo", "Salmos", "Proverbios", "Isaías", "Jeremías",
+            "Mateo", "Marcos", "Lucas", "Juan", "Hechos", "Romanos",
+            "1 Corintios", "2 Corintios", "Gálatas", "Efesios", "Filipenses",
+            "Colosenses", "Hebreos", "Santiago", "Apocalipsis"
+        ]
+    },
+    "bibleAI": {
+        "title": "IA Bíblica 📖",
+        "subtitle": "Resuelve tus dudas sobre la Biblia",
+        "placeholder": "Escribe tu pregunta...",
+        "contextBible": "📖 Biblia",
+        "contextQuestions": "❓ Dudas",
+        "contextPrayer": "🙏 Oración",
+        "contextGuidance": "💬 Orientación",
+        "welcome": "¡Hola! Soy la IA Bíblica de Sigo com Fé. Puedo ayudarte a entender la Biblia, responder dudas sobre la fe cristiana y orientarte espiritualmente. ¡Pregunta lo que quieras! 📖✨",
+        "error": "Lo siento, ocurrió un error. Inténtalo de nuevo.",
+        "thinking": "Pensando..."
     },
     "criadorLouvor": {
         "title": "Creador de Alabanzas con IA",

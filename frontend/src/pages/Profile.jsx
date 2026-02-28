@@ -1,5 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useParams } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 
 const typeColors = {
   verse: "#F59E0B",
@@ -9,25 +11,77 @@ const typeColors = {
 };
 const typeIcons = { verse:"📖", testimony:"🙌", photo:"📸", prayer:"🙏" };
 
-const mockPosts = [
-  { id:1, type:"verse",     content:'"O Senhor é meu pastor e nada me faltará" — Salmos 23:1', likes:12, comments:3 },
-  { id:2, type:"testimony", content:"Deus curou minha mãe! Glória a Deus por mais essa vitória 🙌", likes:34, comments:8 },
-  { id:3, type:"photo",     content:"Culto incrível hoje na igreja!", likes:19, comments:5 },
-  { id:4, type:"prayer",    content:"Ore por minha família, estamos passando por um momento difícil...", likes:28, comments:11 },
-];
-
-export default function ProfilePage({ user, posts = mockPosts, isOwnProfile = true, onSave, onFollow, onMessage }) {
+export default function ProfilePage({ onSave, onFollow, onMessage }) {
   const { t } = useTranslation();
+  const { userId } = useParams();
+  const { user: currentUser, token } = useAuth();
+
+  const isOwnProfile = !userId || userId === currentUser?.id;
+  const [profileUser, setProfileUser] = useState(null);
+  const [userPosts, setUserPosts] = useState([]);
+  const [userStats, setUserStats] = useState({ posts: 0, friends: 0, prayers: 0 });
+
   const [isEditing,      setIsEditing]      = useState(false);
-  const [editData,       setEditData]       = useState({ name: user?.name || "", bio: user?.bio || "" });
-  const [avatarPreview,  setAvatarPreview]  = useState(user?.photoURL  || null);
-  const [coverPreview,   setCoverPreview]   = useState(user?.coverURL  || null);
+  const [editData,       setEditData]       = useState({ name: profileUser?.name || "", bio: profileUser?.bio || "" });
+  const [avatarPreview,  setAvatarPreview]  = useState(profileUser?.photoURL  || null);
+  const [coverPreview,   setCoverPreview]   = useState(profileUser?.coverURL  || null);
   const [cropModal,      setCropModal]      = useState(null);
-  const [isConsecrating, setIsConsecrating] = useState(user?.isConsecrating || false);
+  const [isConsecrating, setIsConsecrating] = useState(profileUser?.isConsecrating || false);
   const [activeTab,      setActiveTab]      = useState("posts");
   const [lightbox,       setLightbox]       = useState(null);
   const avatarRef = useRef();
   const coverRef  = useRef();
+
+  const API_BASE = import.meta.env.VITE_API_URL || '';
+  const API = `${API_BASE}/api';
+
+  useEffect(() => {
+
+  const API_BASE = import.meta.env.VITE_API_URL || '';
+  const API = `${API_BASE}/api';
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      if (!currentUser && !userId) return; // Not logged in and no specific user ID
+
+      const targetUserId = userId || currentUser?.id;
+      if (!targetUserId) return;
+
+      try {
+        // Fetch profile user data
+        const userRes = await fetch(`${API}/profile/${targetUserId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const userData = await userRes.json();
+        setProfileUser(userData.user);
+        setEditData({ name: userData.user?.name || "", bio: userData.user?.bio || "" });
+        setAvatarPreview(userData.user?.photoURL || null);
+        setCoverPreview(userData.user?.coverURL || null);
+        setIsConsecrating(userData.user?.isConsecrating || false);
+
+        // Fetch user posts
+        const postsRes = await fetch(`${API}/feed/user/${targetUserId}?limit=50`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const postsData = await postsRes.json();
+        setUserPosts(postsData.posts || []);
+
+        // Fetch user stats (assuming stats are part of profile data for now, or fetch separately)
+        // For simplicity, let's assume basic stats are part of the user object or derived from posts/friends
+        setUserStats({ // Placeholder, real stats would come from backend
+          posts: postsData.posts?.length || 0,
+          friends: userData.user?.friendsCount || 0, // Assuming a field on user object
+          prayers: userData.user?.prayersCount || 0, // Assuming a field on user object
+        });
+
+      } catch (error) {
+        console.error("Failed to fetch profile data:", error);
+        // Handle error, e.g., show an error message
+      }
+    };
+
+    fetchProfileData();
+  }, [userId, currentUser?.id, token]);
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -166,27 +220,27 @@ export default function ProfilePage({ user, posts = mockPosts, isOwnProfile = tr
                   ✏️ {t("profile.editProfile","Editar")}
                 </button>
               </> : <>
-                <button className="pb pb-blue" onClick={onMessage}>💬 {t("messages.title","Mensagem")}</button>
-                <button className="pb pb-gold" onClick={onFollow}>➕ {t("friends.addFriend","Seguir")}</button>
+                {profileUser && <button className="pb pb-blue" onClick={onMessage}>💬 {t("messages.title","Mensagem")}</button>}
+                {profileUser && <button className="pb pb-gold" onClick={onFollow}>➕ {t("friends.addFriend","Seguir")}</button>}
               </>}
             </div>
           </div>
 
           {/* NAME */}
           <div style={S.nameLine}>
-            <h1 style={S.h1}>{user?.name || t("common.user","Utilizador")}</h1>
+            <h1 style={S.h1}>{profileUser?.name || t("common.user","Utilizador")}</h1>
             {isConsecrating && <span className="badge-fire">🔥 {t("consecration.consecrating","Em Consagração")}</span>}
-            {user?.church && <span className="badge-ch">⛪ {user.church}</span>}
+            {profileUser?.church && <span className="badge-ch">⛪ {profileUser.church}</span>}
           </div>
-          {user?.handle && <p style={S.handle}>{user.handle}</p>}
-          {user?.bio    && <p style={S.bio}>{user.bio}</p>}
+          {profileUser?.handle && <p style={S.handle}>{profileUser.handle}</p>}
+          {profileUser?.bio    && <p style={S.bio}>{profileUser.bio}</p>}
 
           {/* META */}
           <div style={S.meta}>
             {[
-              user?.church   && { icon:"⛪", text: user.church },
-              user?.location && { icon:"📍", text: user.location },
-              user?.joinDate && { icon:"📅", text:`${t("profile.memberSince","Desde")} ${user.joinDate}` },
+              profileUser?.church   && { icon:"⛪", text: profileUser.church },
+              profileUser?.location && { icon:"📍", text: profileUser.location },
+              profileUser?.joinDate && { icon:"📅", text:`${t("profile.memberSince","Desde")} ${profileUser.joinDate}` },
             ].filter(Boolean).map((m,i) => (
               <span key={i} style={S.metaItem}><span>{m.icon}</span><span>{m.text}</span></span>
             ))}
@@ -195,9 +249,9 @@ export default function ProfilePage({ user, posts = mockPosts, isOwnProfile = tr
           {/* STATS */}
           <div style={S.stats}>
             {[
-              { label:t("profile.posts","Posts"),          value:user?.stats?.posts   ||0, icon:"📝" },
-              { label:t("profile.friends","Amigos"),       value:user?.stats?.friends ||0, icon:"👥" },
-              { label:t("nav.prayers","Orações"),          value:user?.stats?.prayers ||0, icon:"🙏" },
+              { label:t("profile.posts","Posts"),          value:userStats.posts   ||0, icon:"📝" },
+              { label:t("profile.friends","Amigos"),       value:userStats.friends ||0, icon:"👥" },
+              { label:t("nav.prayers","Orações"),          value:userStats.prayers ||0, icon:"🙏" },
             ].map((s,i) => (
               <div key={i} className="sb">
                 <div style={{fontSize:18,marginBottom:4}}>{s.icon}</div>
@@ -225,9 +279,9 @@ export default function ProfilePage({ user, posts = mockPosts, isOwnProfile = tr
           {/* POSTS */}
           {activeTab==="posts" && (
             <div style={{display:"flex",flexDirection:"column",gap:12}}>
-              {(posts||[]).length===0
+              {(userPosts||[]).length===0
                 ? <div style={S.emptyState}><div style={{fontSize:40,marginBottom:10}}>📝</div><p style={{fontSize:13}}>{t("common.noPostsYet","Nenhum post ainda")}</p></div>
-                : (posts||[]).map(p=>(
+                : (userPosts||[]).map(p=>(
                   <div key={p.id} className="pc">
                     <div style={{marginBottom:10}}>
                       <span style={{padding:"3px 10px",borderRadius:50,fontSize:11,fontWeight:600,

@@ -744,6 +744,26 @@
             "now": "À l'instant"
         }
     },
+    "dashboard":  {
+                      "title":  "Tableau de bord",
+                      "overview":  "Aperçu en temps réel",
+                      "users":  "Utilisateurs",
+                      "churches":  "Églises",
+                      "prayerRequests":  "Requêtes de prière",
+                      "answeredPrayers":  "Prières exaucées",
+                      "pastorManagement":  "Salle de gestion du pasteur",
+                      "managementDesc":  "Gérez les membres, les dîmes, les annonces et plus encore",
+                      "quickActions":  "Actions rapides",
+                      "newPrayerRequest":  "Nouvelle requête de prière",
+                      "registerChurch":  "Enregistrer l'église",
+                      "kidsCorner":  "Enfants",
+                      "recentActivity":  "Activité récente",
+                      "viewAll":  "Tout voir",
+                      "requestedPrayer":  "a demandé la prière",
+                      "noActivity":  "Aucune activité récente",
+                      "loadingUsers":  "Chargement...",
+                      "noUsers":  "Aucun utilisateur trouvé."
+                  },
     "members": {
         "never": "Jamais",
         "now": "Maintenant",
@@ -762,6 +782,60 @@
         "noMembers": "Aucun membre trouvé",
         "noMessages": "Aucun message pour le moment. Envoie le premier!",
         "messagePlaceholder": "Écris ton message..."
+    },
+    "biblicalCourse": {
+        "themes": [
+            { "value": "fe", "label": "✝️ Foi" },
+            { "value": "esperanca", "label": "🌅 Espoir" },
+            { "value": "gratidao", "label": "🙏 Gratitude" },
+            { "value": "cura", "label": "💚 Guérison" },
+            { "value": "familia", "label": "👨‍👩‍👧‍👦 Famille" },
+            { "value": "amor", "label": "❤️ Amour de Dieu" },
+            { "value": "adoracao", "label": "👑 Adoration" },
+            { "value": "vitoria", "label": "🏆 Victoire" },
+            { "value": "paz", "label": "🕊️ Paix" },
+            { "value": "avivamento", "label": "🔥 Réveil" },
+            { "value": "perdao", "label": "💝 Pardon" },
+            { "value": "salvacao", "label": "✨ Salut" }
+        ],
+        "styles": [
+            { "value": "worship", "label": "🎹 Adoration" },
+            { "value": "pentecostal", "label": "🔥 Pentecôtiste" },
+            { "value": "coral", "label": "🎶 Choral" },
+            { "value": "acustico", "label": "🎸 Acoustique" },
+            { "value": "pop_gospel", "label": "🎤 Pop Gospel" },
+            { "value": "sertanejo_gospel", "label": "🤠 Country Gospel" },
+            { "value": "reggae_gospel", "label": "🎵 Reggae Gospel" },
+            { "value": "hino", "label": "📖 Hymne Traditionnel" }
+        ],
+        "emotions": [
+            { "value": "alegre", "label": "😊 Joyeux" },
+            { "value": "profundo", "label": "🌊 Profond" },
+            { "value": "oracao", "label": "🙏 Prière" },
+            { "value": "celebracao", "label": "🎉 Célébration" },
+            { "value": "intimidade", "label": "💜 Intimité avec Dieu" },
+            { "value": "guerra", "label": "⚔️ Guerre Spirituelle" },
+            { "value": "conforto", "label": "🤗 Réconfort" },
+            { "value": "louvor_intenso", "label": "🔥 Louange Intense" }
+        ],
+        "bibleBooks": [
+            "Genèse", "Exode", "Psaumes", "Proverbes", "Isaïe", "Jérémie",
+            "Matthieu", "Marc", "Luc", "Jean", "Actes", "Romains",
+            "1 Corinthiens", "2 Corinthiens", "Galates", "Éphésiens", "Philippiens",
+            "Colossiens", "Hébreux", "Jacques", "Apocalypse"
+        ]
+    },
+    "bibleAI": {
+        "title": "IA Biblique 📖",
+        "subtitle": "Posez vos questions sur la Bible",
+        "placeholder": "Tapez votre question...",
+        "contextBible": "📖 Bible",
+        "contextQuestions": "❓ Questions",
+        "contextPrayer": "🙏 Prière",
+        "contextGuidance": "💬 Orientation",
+        "welcome": "Bonjour! Je suis l'IA Biblique de Sigo com Fé. Je peux vous aider à comprendre la Bible, répondre à vos questions sur la foi chrétienne et vous offrir une orientation spirituelle. Posez-moi n'importe quelle question! 📖✨",
+        "error": "Désolé, une erreur s'est produite. Veuillez réessayer.",
+        "thinking": "Je réfléchis..."
     },
     "criadorLouvor": {
         "title": "Créateur de Louanges avec IA",

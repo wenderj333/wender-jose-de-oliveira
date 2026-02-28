@@ -278,7 +278,9 @@ export default function MuralGrid() {
       const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/upload`, { 
         method: 'POST', 
         body: fd,
-        signal: AbortSignal.timeout(600000) // 10 minutos timeout
+        signal: AbortSignal.timeout(600000), // 10 minutos timeout
+        credentials: 'omit', // Não envia cookies, etc. com a requisição cross-origin
+        mode: 'cors', // Garante que a requisição é feita em modo CORS
       });
       
       if (!uploadRes.ok) {
@@ -294,6 +296,7 @@ export default function MuralGrid() {
       return { url: result.secure_url, type: resourceType };
     } catch (err) {
       console.error('❌ Upload error:', err);
+      alert(`❌ Erro no upload (Cloudinary): ${err.message}`); // Novo alerta para debug
       if (err.name === 'AbortError') {
         throw new Error(t('mural.uploadTooSlow'));
       }
@@ -387,14 +390,7 @@ export default function MuralGrid() {
       }
     } catch (err) {
       console.error('Post error:', err);
-      const msg = err.message || 'Tente novamente em alguns segundos.';
-      if (msg.includes('File size') || msg.includes('too large')) {
-        alert(t('mural.fileTooLargeSimple'));
-      } else if (msg.includes('network') || msg.includes('fetch')) {
-        alert(t('mural.networkError', '❌ Erro de conexão. Verifique sua internet.'));
-      } else {
-        alert('❌ Erro ao publicar: ' + msg);
-      }
+      alert(`❌ Erro ao publicar: ${err.message || 'Tente novamente em alguns segundos.'}`); // Novo alerta para debug
     } finally {
       setPosting(false);
       setPostingText('');
@@ -626,16 +622,7 @@ export default function MuralGrid() {
                 fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'audio' ? 600 : 400,
               }}>
                 <span style={{ fontSize: '1.5rem' }}>🎵</span>
-                {t('media.audio', 'Áudio')}
-              </button>
-              <button type="button" onClick={() => { fetchMyMusic(); setShowMyMusicPicker(true); }} style={{
-                padding: '0.8rem', borderRadius: 12, border: '2px solid #e0e0e0',
-                background: newMediaType === 'mymusic' ? '#f0f0f0' : '#fff',
-                cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                fontSize: '0.75rem', color: '#666', fontWeight: newMediaType === 'mymusic' ? 600 : 400,
-              }}>
-                <span style={{ fontSize: '1.5rem' }}>🎸</span>
-                Minha Música
+                {t('media.audio', 'Música')}
               </button>
               <button type="button" onClick={() => {
                 const url = prompt(t('media.urlPrompt', 'Cole a URL (YouTube, Vimeo, etc):'));

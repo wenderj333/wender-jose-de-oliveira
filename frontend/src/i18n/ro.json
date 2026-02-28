@@ -763,6 +763,60 @@
         "noMessages": "Nicio mesaj încă. Trimite primul!",
         "messagePlaceholder": "Scrie mesajul tău..."
     },
+    "biblicalCourse": {
+        "themes": [
+            { "value": "fe", "label": "✝️ Credință" },
+            { "value": "esperanca", "label": "🌅 Speranță" },
+            { "value": "gratidao", "label": "🙏 Recunoștință" },
+            { "value": "cura", "label": "💚 Vindecare" },
+            { "value": "familia", "label": "👨‍👩‍👧‍👦 Familie" },
+            { "value": "amor", "label": "❤️ Dragostea lui Dumnezeu" },
+            { "value": "adoracao", "label": "👑 Adorare" },
+            { "value": "vitoria", "label": "🏆 Victorie" },
+            { "value": "paz", "label": "🕊️ Pace" },
+            { "value": "avivamento", "label": "🔥 Trezire" },
+            { "value": "perdao", "label": "💝 Iertare" },
+            { "value": "salvacao", "label": "✨ Mântuire" }
+        ],
+        "styles": [
+            { "value": "worship", "label": "🎹 Adorare" },
+            { "value": "pentecostal", "label": "🔥 Penticostal" },
+            { "value": "coral", "label": "🎶 Coral" },
+            { "value": "acustico", "label": "🎸 Acustic" },
+            { "value": "pop_gospel", "label": "🎤 Pop Gospel" },
+            { "value": "sertanejo_gospel", "label": "🤠 Country Gospel" },
+            { "value": "reggae_gospel", "label": "🎵 Reggae Gospel" },
+            { "value": "hino", "label": "📖 Imn Tradițional" }
+        ],
+        "emotions": [
+            { "value": "alegre", "label": "😊 Vesel" },
+            { "value": "profundo", "label": "🌊 Adânc" },
+            { "value": "oracao", "label": "🙏 Rugăciune" },
+            { "value": "celebracao", "label": "🎉 Sărbătoare" },
+            { "value": "intimidade", "label": "💜 Intimitate cu Dumnezeu" },
+            { "value": "guerra", "label": "⚔️ Luptă Spirituală" },
+            { "value": "conforto", "label": "🤗 Mângâiere" },
+            { "value": "louvor_intenso", "label": "🔥 Laudă Intensă" }
+        ],
+        "bibleBooks": [
+            "Geneza", "Exodus", "Psalmi", "Proverbe", "Isaia", "Ieremia",
+            "Matei", "Marcu", "Luca", "Ioan", "Fapte", "Romani",
+            "1 Corinteni", "2 Corinteni", "Galateni", "Efeseni", "Filipeni",
+            "Coloseni", "Evrei", "Iacov", "Apocalipsa"
+        ]
+    },
+    "bibleAI": {
+        "title": "IA Biblică 📖",
+        "subtitle": "Răspunde-ți întrebările despre Biblie",
+        "placeholder": "Tastează-ți întrebarea...",
+        "contextBible": "📖 Biblie",
+        "contextQuestions": "❓ Întrebări",
+        "contextPrayer": "🙏 Rugăciune",
+        "contextGuidance": "💬 Orientare",
+        "welcome": "Salut! Sunt IA Biblică din Sigo com Fé. Pot să te ajut să înțelegi Biblia, să răspund întrebărilor tale despre credința creștină și să-ți ofer orientare spirituală. Întreabă-mă orice! 📖✨",
+        "error": "Ne pare rău, a apărut o eroare. Încearcă din nou.",
+        "thinking": "Mă gândesc..."
+    },
     "criadorLouvor": {
         "title": "Creator de Cântece de Laudă cu IA",
         "subtitle": "Creează versuri de laudă inspirate de Biblie!",
