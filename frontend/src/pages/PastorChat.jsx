@@ -268,21 +268,34 @@ export default function PastorChat() {
           boxShadow: '0 4px 20px rgba(142,68,173,0.12)',
         }}>
           <h3 style={{ fontSize: '1.1rem', color: '#6a1b9a', margin: '0 0 0.8rem' }}>
+<<<<<<< HEAD
             {t('pastorChat.introTitle', '🕊️ Um Pastor Está Pronto Para Ouvir Você')}
+=======
+            {t('pastorChat.introTitle')}
+>>>>>>> 443efd3898b618ca4a6f25b5262de6c7cd669e3a
           </h3>
           <p style={{ fontSize: '0.9rem', color: '#444', lineHeight: 1.7, margin: '0 0 0.8rem' }}>
             {t('pastorChat.introDesc')}
           </p>
           <p style={{ fontSize: '0.88rem', color: '#6a1b9a', fontStyle: 'italic', margin: '0 0 0.8rem', fontWeight: 500 }}>
+<<<<<<< HEAD
             {t('pastorChat.introVerse1')}
           </p>
           <p style={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
             💜 Conversa confidencial e segura<br />
             🌍 Tradução automática em 15 idiomas<br />
             🙏 Pastores voluntários de todo o mundo
+=======
+            "{t('pastorChat.introVerse1')}"
+>>>>>>> 443efd3898b618ca4a6f25b5262de6c7cd669e3a
           </p>
+          <p style={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.6, margin: '0 0 0.5rem' }} dangerouslySetInnerHTML={{ __html: t('pastorChat.introFeatures') }} />
           <p style={{ fontSize: '0.82rem', color: '#8e44ad', fontStyle: 'italic', margin: 0, fontWeight: 500 }}>
+<<<<<<< HEAD
             {t('pastorChat.introVerse2')}
+=======
+            "{t('pastorChat.introVerse2')}"
+>>>>>>> 443efd3898b618ca4a6f25b5262de6c7cd669e3a
           </p>
         </div>
 
@@ -294,7 +307,11 @@ export default function PastorChat() {
             boxShadow: '0 4px 15px rgba(142,68,173,0.4)',
             display: 'inline-flex', alignItems: 'center', gap: 10,
           }}>
+<<<<<<< HEAD
             <MessageCircle size={20} /> {t('pastorChat.startBtn', 'Iniciar Conversa')}
+=======
+            <MessageCircle size={20} /> {t('pastorChat.startBtn')}
+>>>>>>> 443efd3898b618ca4a6f25b5262de6c7cd669e3a
           </button>
         </div>
 

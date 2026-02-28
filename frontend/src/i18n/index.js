@@ -39,7 +39,7 @@ i18n
       'fr-CA': { translation: fr },
     },
     //lng: 'pt',
-    fallbackLng: 'pt',
+    fallbackLng: 'en',  // Changed from 'pt' to force language selection
     interpolation: {
       escapeValue: false,
     },
@@ -53,13 +53,8 @@ i18n
     },
     // Force explicit language code normalization
     nonExplicitSupportedLngs: true,
+    // Ensure German loads properly
+    preload: ['pt', 'en', 'es', 'de', 'fr', 'ro', 'ru'],
   });
-
-// Ensure saved language preference is respected on app load
-const savedLng = localStorage.getItem('i18nextLng');
-if (savedLng) {
-  const normalizedLng = savedLng.split('-')[0]; // Extract base language code (pt from pt-BR)
-  i18n.changeLanguage(normalizedLng);
-}
 
 export default i18n;

@@ -1,0 +1,3 @@
+BUILD: 2026-02-28 16:30
+PURPOSE: Force Vercel rebuild - i18n cache issue
+TIMESTAMP: 1740750600

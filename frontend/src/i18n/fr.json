@@ -44,41 +44,6 @@
     },
     "footer": "© 2026 Sigo com Fé - La technologie au service du Royaume",
     "home": {
-        "subtitle": "Priez, connectez-vous et fortifiez votre foi avec des milliers de frères et sœurs à travers le monde.",
-        "startNow": "Commencez Maintenant",
-        "seePrayerRequests": "Voir les Demandes de Prière",
-        "churchPraying_one": "{{count}} église en prière en ce moment !",
-        "churchPraying_other": "{{count}} églises en prière en ce moment !",
-        "featurePrayers": "Demandes de Prière",
-        "featurePrayersDesc": "Partagez vos demandes et priez pour vos frères et sœurs. Découvrez la puissance de la prière collective et célébrez les victoires !",
-        "featureLive": "Pasteur en Prière en Direct",
-        "featureLiveDesc": "Sachez quand votre pasteur prie en temps réel. Des bulles de prière s'élèvent comme de l'encens vers le ciel.",
-        "featureMap": "Carte des Églises",
-        "featureMapDesc": "Trouvez des églises dans n'importe quelle ville. Parfait pour les voyageurs et les familles en déménagement.",
-        "featureDashboard": "Tableau de Bord Pastoral",
-        "featureDashboardDesc": "Outils de gestion complets pour les pasteurs : membres, finances, campagnes et bien plus encore.",
-        "featureMural": "Mur de la Communauté",
-        "featureMuralDesc": "Partagez des témoignages, des louanges et des versets avec la communauté chrétienne.",
-        "featureKids": "Coin des Enfants",
-        "featureKidsDesc": "Histoires bibliques, quiz interactifs et activités pour que les enfants découvrent la Bible !",
-        "featureChurch": "Inscrivez Votre Église",
-        "featureChurchDesc": "Inscrivez votre église sur la plateforme et connectez-vous avec des croyants du monde entier.",
-        "explore": "Explorer",
-        "registerBtn": "S'inscrire",
-        "helpTitle": "Besoin d'Aide ?",
-        "helpSubtitle": "Vous n'êtes pas seul(e). Une église peut vous aider.",
-        "helpSeeThings": "👁️ Je vois des choses",
-        "helpHearThings": "👂 J'entends des bruits",
-        "helpFeelAlone": "😔 Je me sens seul(e)",
-        "helpNeedPrayer": "🙏 J'ai besoin de prière",
-        "helpAnxious": "😰 Je suis anxieux(se)",
-        "helpDepressed": "😢 Je suis triste/déprimé(e)",
-        "helpSent": "✅ Votre demande a été envoyée ! Une église proche vous contactera pour vous aider. Que Dieu vous bénisse ! 🙏",
-        "helpNamePlaceholder": "Votre nom (facultatif)",
-        "helpContactPlaceholder": "Téléphone ou email de contact",
-        "helpMessagePlaceholder": "Dites-nous en un peu plus sur ce que vous ressentez...",
-        "helpSend": "Demander de l'Aide",
-        "helpBtn": "Demander de l'Aide",
         "verses": [
             {
                 "text": "Car là où deux ou trois sont assemblés en mon nom, je suis au milieu d'eux.",
@@ -89,23 +54,23 @@
                 "ref": "Philippiens 4:13"
             },
             {
-                "text": "L'Éternel est mon berger ; je ne manquerai de rien.",
+                "text": "L'Éternel est mon berger; je ne manquerai de rien.",
                 "ref": "Psaume 23:1"
             },
             {
-                "text": "Confie-toi en l'Éternel de tout ton cœur et ne t'appuie pas sur ta propre sagesse.",
+                "text": "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse.",
                 "ref": "Proverbes 3:5"
             },
             {
-                "text": "Car je connais les projets que j'ai formés sur vous, des projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance.",
+                "text": "Car je connais les pensées que j'ai pour vous, dit l'Éternel.",
                 "ref": "Jérémie 29:11"
             },
             {
-                "text": "Soyez forts et courageux. N'ayez pas peur, car l'Éternel, votre Dieu, sera avec vous.",
+                "text": "Fortifie-toi et prends courage, car l'Éternel est avec toi.",
                 "ref": "Deutéronome 31:6"
             },
             {
-                "text": "La prière fervente du juste a une grande efficacité.",
+                "text": "La prière du juste a une grande efficacité.",
                 "ref": "Jacques 5:16"
             }
         ]
@@ -228,46 +193,53 @@
         "error": "Erreur lors de l'inscription"
     },
     "dashboard": {
-        "title": "Tableau de Bord",
-        "loading": "Chargement des données...",
+        "title": "Tableau de bord",
+        "overview": "Aperçu en temps réel",
         "users": "Utilisateurs",
         "churches": "Églises",
-        "prayerRequests": "Demandes de Prière",
-        "answeredPrayers": "Prières Exaucées",
-        "quickActions": "Actions Rapides",
-        "newPrayerRequest": "Nouvelle Demande de Prière",
-        "registerChurch": "Inscrire une Église",
-        "kidsCorner": "Coin des Enfants",
-        "recentActivity": "Activité Récente",
-        "requestedPrayer": "a demandé la prière :",
-        "noActivity": "Aucune activité récente. Commencez en créant une demande de prière !",
-        "viewAll": "Voir toutes les demandes"
+        "prayerRequests": "Requêtes de prière",
+        "answeredPrayers": "Prières exaucées",
+        "pastorManagement": "Salle de gestion du pasteur",
+        "managementDesc": "Gérez les membres, les dîmes, les annonces et plus encore",
+        "quickActions": "Actions rapides",
+        "newPrayerRequest": "Nouvelle requête de prière",
+        "registerChurch": "Enregistrer l'église",
+        "kidsCorner": "Enfants",
+        "recentActivity": "Activité récente",
+        "viewAll": "Tout voir",
+        "requestedPrayer": "a demandé la prière",
+        "noActivity": "Aucune activité récente",
+        "loadingUsers": "Chargement...",
+        "noUsers": "Aucun utilisateur trouvé."
     },
     "mural": {
-        "title": "Mur de la Communauté",
-        "subtitle": "Partagez des témoignages, des louanges et des versets avec la communauté chrétienne",
-        "newPost": "Nouveau Post",
-        "cancel": "Annuler",
-        "shareWithCommunity": "Partager avec la Communauté",
-        "categoryLabel": "Catégorie",
-        "message": "Message",
-        "messagePlaceholder": "Écrivez votre témoignage, réflexion ou verset...",
+        "testimony": "🙏 Témoignage",
+        "worship": "🎵 Louange",
+        "photo": "📸 Photo/Vidéo",
+        "verse": "📖 Verset",
+        "reflection": "💭 Réflexion",
+        "campaign": "💝 Campagne / Cause",
+        "placeholder": "Partagez quelque chose avec la communauté...",
         "publish": "Publier",
-        "noPostsFound": "Aucune publication trouvée dans cette catégorie.",
-        "filters": {
-            "all": "Toutes",
-            "myChurch": "Mon Église",
-            "testimonies": "Témoignages",
-            "worship": "Louanges",
-            "verses": "Versets"
-        },
-        "categories": {
-            "testemunho": "Témoignage",
-            "louvor": "Louange / Vidéo",
-            "reflexao": "Réflexion Biblique",
-            "versiculo": "Verset",
-            "foto": "Photo"
-        }
+        "noPosts": "Aucune publication pour le moment. Soyez le premier à publier! 📸",
+        "commentPlaceholder": "Écrivez un commentaire...",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce post?",
+        "delete": "Supprimer le post",
+        "loginRequired": "Veuillez vous connecter pour publier",
+        "addContent": "Veuillez ajouter du texte ou des médias",
+        "fileTooLarge": "Fichier trop volumineux ! Maximum {{maxSize}} MB.",
+        "uploading": "📤 Envoi de {{filename}}...",
+        "uploadingLarge": "📤 Envoi de {{filename}}... cela peut prendre quelques minutes. Ne fermez pas la page !",
+        "uploadTooSlow": "L'envoi a pris trop de temps. Votre connexion peut être lente. Réessayez.",
+        "fileTooLargeSimple": "❌ Fichier trop volumineux ! Essayez un fichier plus petit.",
+        "doNotClose": "Veuillez ne pas fermer ou rafraîchir la page !",
+        "loading": "Chargement...",
+        "noMusicUploaded": "Aucune musique téléchargée pour l'instant",
+        "title": "Mur Communautaire",
+        "subtitle": "Partagez des témoignages, des louanges et des versets bibliques avec la communauté chrétienne",
+        "newPost": "Nouveau Message",
+        "cancel": "Annuler",
+        "messagePlaceholder": "Écrivez votre témoignage, votre réflexion ou un verset biblique..."
     },
     "kids": {
         "title": "École du Dimanche Numérique",
@@ -320,23 +292,48 @@
         "quiz": [
             {
                 "q": "Qui a vaincu le géant Goliath ?",
-                "opts": ["Saül", "David", "Moïse", "Josué"]
+                "opts": [
+                    "Saül",
+                    "David",
+                    "Moïse",
+                    "Josué"
+                ]
             },
             {
                 "q": "Combien de jours a duré le déluge ?",
-                "opts": ["10 jours", "20 jours", "40 jours", "100 jours"]
+                "opts": [
+                    "10 jours",
+                    "20 jours",
+                    "40 jours",
+                    "100 jours"
+                ]
             },
             {
                 "q": "Qui a été jeté dans la fosse aux lions ?",
-                "opts": ["Jonas", "Daniel", "Paul", "Pierre"]
+                "opts": [
+                    "Jonas",
+                    "Daniel",
+                    "Paul",
+                    "Pierre"
+                ]
             },
             {
                 "q": "Quel est le premier livre de la Bible ?",
-                "opts": ["Exode", "Psaumes", "Genèse", "Matthieu"]
+                "opts": [
+                    "Exode",
+                    "Psaumes",
+                    "Genèse",
+                    "Matthieu"
+                ]
             },
             {
                 "q": "Dans quelle ville Jésus est-il né ?",
-                "opts": ["Jérusalem", "Nazareth", "Bethléem", "Capharnaüm"]
+                "opts": [
+                    "Jérusalem",
+                    "Nazareth",
+                    "Bethléem",
+                    "Capharnaüm"
+                ]
             }
         ],
         "activityList": [
@@ -435,7 +432,13 @@
         "langEn": "English",
         "langEs": "Español",
         "langDe": "Deutsch",
-        "autoTranslate": "🌐 Traduction automatique activée"
+        "autoTranslate": "🌐 Traduction automatique activée",
+        "introTitle": "🕊️ Un Pasteur Est Prêt à Vous Écouter",
+        "introDesc": "Parfois, la vie nous apporte des fardeaux trop lourds à porter seuls. Ici, vous pouvez converser en toute confidentialité avec un pasteur qui vous écoutera, vous conseillera avec la sagesse biblique et priera pour vous.",
+        "introVerse1": "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos. — Matthieu 11:28",
+        "introFeatures": "💜 Conversation confidentielle et sécurisée<br />🌍 Traduction automatique en 15 langues<br />🙏 Pasteurs bénévoles du monde entier",
+        "introVerse2": "Faute de conseil, les projets échouent; mais avec le concours de nombreux conseillers, ils réussissent. — Proverbes 15:22",
+        "startBtn": "Commencer la conversation"
     },
     "friends": {
         "title": "Amis",
@@ -501,23 +504,26 @@
         "back": "Retour"
     },
     "groups": {
-        "title": "Groupes",
-        "createGroup": "Créer un Groupe",
-        "newGroup": "Créer un Nouveau Groupe",
-        "groupName": "Nom du groupe",
-        "description": "Description (facultatif)",
-        "public": "Public",
-        "private": "Privé",
-        "creating": "Création en cours...",
-        "cancel": "Annuler",
-        "noGroups": "Aucun groupe pour l'instant",
-        "createFirst": "Créez le premier groupe de la communauté !",
-        "members": "membres",
-        "join": "Rejoindre le Groupe",
-        "leave": "Quitter le Groupe",
-        "noPosts": "Aucune publication pour l'instant",
-        "writePlaceholder": "Écrivez dans le groupe...",
-        "back": "Retour"
+        "joinGroup": "+ Rejoindre le groupe",
+        "leaveGroup": "Quitter le groupe",
+        "inputPlaceholder": "Écrivez dans le groupe...",
+        "noPosts": "Pas de publications encore",
+        "private": "🔒 Privé",
+        "public": "🌐 Public",
+        "communionTitle": "🤝 Groupes de Communion",
+        "communionDesc": "Rejoignez des groupes avec des frères et sœurs qui partagent la même foi ! Ici, vous pouvez créer ou rejoindre des groupes d'étude biblique, de prière, de louange, de jeunes, de couples et bien plus encore.",
+        "loading": "Chargement...",
+        "noGroups": "Aucun groupe trouvé",
+        "createFirst": "Créez le premier groupe!",
+        "createForm": {
+            "name": "Nom du groupe",
+            "desc": "Description (optionnel)",
+            "submit": "Créer un groupe",
+            "cancel": "Annuler"
+        },
+        "timeAgo": {
+            "now": "À l'instant"
+        }
     },
     "consecration": {
         "title": "Consécration",
@@ -666,84 +672,6 @@
         "hoursAgo": "il y a {{count}}h",
         "daysAgo": "il y a {{count}}j"
     },
-    "home": {
-        "verses": [
-            {
-                "text": "Car là où deux ou trois sont assemblés en mon nom, je suis au milieu d'eux.",
-                "ref": "Matthieu 18:20"
-            },
-            {
-                "text": "Je puis tout par celui qui me fortifie.",
-                "ref": "Philippiens 4:13"
-            },
-            {
-                "text": "L'Éternel est mon berger; je ne manquerai de rien.",
-                "ref": "Psaume 23:1"
-            },
-            {
-                "text": "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse.",
-                "ref": "Proverbes 3:5"
-            },
-            {
-                "text": "Car je connais les pensées que j'ai pour vous, dit l'Éternel.",
-                "ref": "Jérémie 29:11"
-            },
-            {
-                "text": "Fortifie-toi et prends courage, car l'Éternel est avec toi.",
-                "ref": "Deutéronome 31:6"
-            },
-            {
-                "text": "La prière du juste a une grande efficacité.",
-                "ref": "Jacques 5:16"
-            }
-        ]
-    },
-    "mural": {
-        "testimony": "🙏 Témoignage",
-        "worship": "🎵 Louange",
-        "photo": "📸 Photo/Vidéo",
-        "verse": "📖 Verset",
-        "reflection": "💭 Réflexion",
-        "campaign": "💝 Campagne / Cause",
-        "placeholder": "Partagez quelque chose avec la communauté...",
-        "publish": "Publier",
-        "noPosts": "Aucune publication pour le moment. Soyez le premier à publier! 📸",
-        "commentPlaceholder": "Écrivez un commentaire...",
-        "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce post?",
-        "delete": "Supprimer le post",
-        "loginRequired": "Veuillez vous connecter pour publier",
-        "addContent": "Veuillez ajouter du texte ou des médias",
-        "fileTooLarge": "Fichier trop volumineux ! Maximum {{maxSize}} MB.",
-        "uploading": "📤 Envoi de {{filename}}...",
-        "uploadingLarge": "📤 Envoi de {{filename}}... cela peut prendre quelques minutes. Ne fermez pas la page !",
-        "uploadTooSlow": "L'envoi a pris trop de temps. Votre connexion peut être lente. Réessayez.",
-        "fileTooLargeSimple": "❌ Fichier trop volumineux ! Essayez un fichier plus petit.",
-        "doNotClose": "Veuillez ne pas fermer ou rafraîchir la page !",
-        "loading": "Chargement...",
-        "noMusicUploaded": "Aucune musique téléchargée pour l'instant"
-    },
-    "groups": {
-        "joinGroup": "+ Rejoindre le groupe",
-        "leaveGroup": "Quitter le groupe",
-        "inputPlaceholder": "Écrivez dans le groupe...",
-        "noPosts": "Pas de publications encore",
-        "private": "🔒 Privé",
-        "public": "🌐 Public",
-        "communionTitle": "🤝 Groupes de Communion",
-        "communionDesc": "Rejoignez des groupes avec des frères et sœurs qui partagent la même foi ! Ici, vous pouvez créer ou rejoindre des groupes d'étude biblique, de prière, de louange, de jeunes, de couples et bien plus encore.",
-        "loading": "Chargement...",
-        "noGroups": "Aucun groupe trouvé",
-        "createFirst": "Créez le premier groupe!",
-        "createForm": {
-            "name": "Nom du groupe",
-            "desc": "Description (optionnel)",
-            "submit": "Créer un groupe",
-            "cancel": "Annuler"
-        },
-        "timeAgo": {
-            "now": "À l'instant"
-        }
-    },
     "members": {
         "never": "Jamais",
         "now": "Maintenant",
@@ -762,6 +690,161 @@
         "noMembers": "Aucun membre trouvé",
         "noMessages": "Aucun message pour le moment. Envoie le premier!",
         "messagePlaceholder": "Écris ton message..."
+    },
+    "biblicalCourse": {
+        "themes": [
+            {
+                "value": "fe",
+                "label": "✝️ Foi"
+            },
+            {
+                "value": "esperanca",
+                "label": "🌅 Espoir"
+            },
+            {
+                "value": "gratidao",
+                "label": "🙏 Gratitude"
+            },
+            {
+                "value": "cura",
+                "label": "💚 Guérison"
+            },
+            {
+                "value": "familia",
+                "label": "👨‍👩‍👧‍👦 Famille"
+            },
+            {
+                "value": "amor",
+                "label": "❤️ Amour de Dieu"
+            },
+            {
+                "value": "adoracao",
+                "label": "👑 Adoration"
+            },
+            {
+                "value": "vitoria",
+                "label": "🏆 Victoire"
+            },
+            {
+                "value": "paz",
+                "label": "🕊️ Paix"
+            },
+            {
+                "value": "avivamento",
+                "label": "🔥 Réveil"
+            },
+            {
+                "value": "perdao",
+                "label": "💝 Pardon"
+            },
+            {
+                "value": "salvacao",
+                "label": "✨ Salut"
+            }
+        ],
+        "styles": [
+            {
+                "value": "worship",
+                "label": "🎹 Adoration"
+            },
+            {
+                "value": "pentecostal",
+                "label": "🔥 Pentecôtiste"
+            },
+            {
+                "value": "coral",
+                "label": "🎶 Choral"
+            },
+            {
+                "value": "acustico",
+                "label": "🎸 Acoustique"
+            },
+            {
+                "value": "pop_gospel",
+                "label": "🎤 Pop Gospel"
+            },
+            {
+                "value": "sertanejo_gospel",
+                "label": "🤠 Country Gospel"
+            },
+            {
+                "value": "reggae_gospel",
+                "label": "🎵 Reggae Gospel"
+            },
+            {
+                "value": "hino",
+                "label": "📖 Hymne Traditionnel"
+            }
+        ],
+        "emotions": [
+            {
+                "value": "alegre",
+                "label": "😊 Joyeux"
+            },
+            {
+                "value": "profundo",
+                "label": "🌊 Profond"
+            },
+            {
+                "value": "oracao",
+                "label": "🙏 Prière"
+            },
+            {
+                "value": "celebracao",
+                "label": "🎉 Célébration"
+            },
+            {
+                "value": "intimidade",
+                "label": "💜 Intimité avec Dieu"
+            },
+            {
+                "value": "guerra",
+                "label": "⚔️ Guerre Spirituelle"
+            },
+            {
+                "value": "conforto",
+                "label": "🤗 Réconfort"
+            },
+            {
+                "value": "louvor_intenso",
+                "label": "🔥 Louange Intense"
+            }
+        ],
+        "bibleBooks": [
+            "Genèse",
+            "Exode",
+            "Psaumes",
+            "Proverbes",
+            "Isaïe",
+            "Jérémie",
+            "Matthieu",
+            "Marc",
+            "Luc",
+            "Jean",
+            "Actes",
+            "Romains",
+            "1 Corinthiens",
+            "2 Corinthiens",
+            "Galates",
+            "Éphésiens",
+            "Philippiens",
+            "Colossiens",
+            "Hébreux",
+            "Jacques",
+            "Apocalypse"
+        ]
+    },
+    "bibleAI": {
+        "title": "IA Biblique 📖",
+        "subtitle": "Posez vos questions sur la Bible",
+        "placeholder": "Tapez votre question...",
+        "contextBible": "📖 Bible",
+        "contextQuestions": "❓ Questions",
+        "contextPrayer": "🙏 Prière",
+        "contextGuidance": "💬 Orientation",
+        "welcome": "Bonjour! Je suis l'IA Biblique de Sigo com Fé. Je peux vous aider à comprendre la Bible, répondre à vos questions sur la foi chrétienne et vous offrir une orientation spirituelle. Posez-moi n'importe quelle question! 📖✨",
+        "error": "Désolé, une erreur s'est produite. Veuillez réessayer.",
+        "thinking": "Je réfléchis..."
     },
     "criadorLouvor": {
         "title": "Créateur de Louanges avec IA",

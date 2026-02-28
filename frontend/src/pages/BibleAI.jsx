@@ -5,55 +5,15 @@ import { useTranslation } from 'react-i18next';
 
 const API = import.meta.env.VITE_API_URL || '';
 
-const i18n = {
-  pt: {
-    title: 'IA Bíblica 📖',
-    subtitle: 'Tire suas dúvidas sobre a Bíblia',
-    placeholder: 'Digite sua pergunta...',
-    contexts: { bible: '📖 Bíblia', questions: '❓ Dúvidas', prayer: '🙏 Oração', guidance: '💬 Orientação' },
-    welcome: 'Olá! Sou a IA Bíblica do Sigo com Fé. Posso te ajudar a entender a Bíblia, responder dúvidas sobre a fé cristã e te orientar espiritualmente. Pergunte qualquer coisa! 📖✨',
-    error: 'Desculpe, ocorreu um erro. Tente novamente.',
-    thinking: 'Pensando...',
-  },
-  en: {
-    title: 'Bible AI 📖',
-    subtitle: 'Ask your Bible questions',
-    placeholder: 'Type your question...',
-    contexts: { bible: '📖 Bible', questions: '❓ Questions', prayer: '🙏 Prayer', guidance: '💬 Guidance' },
-    welcome: 'Hello! I\'m the Bible AI from Sigo com Fé. I can help you understand the Bible, answer questions about the Christian faith, and offer spiritual guidance. Ask me anything! 📖✨',
-    error: 'Sorry, an error occurred. Please try again.',
-    thinking: 'Thinking...',
-  },
-  es: {
-    title: 'IA Bíblica 📖',
-    subtitle: 'Resuelve tus dudas sobre la Biblia',
-    placeholder: 'Escribe tu pregunta...',
-    contexts: { bible: '📖 Biblia', questions: '❓ Dudas', prayer: '🙏 Oración', guidance: '💬 Orientación' },
-    welcome: '¡Hola! Soy la IA Bíblica de Sigo com Fé. Puedo ayudarte a entender la Biblia, responder dudas sobre la fe cristiana y orientarte espiritualmente. ¡Pregunta lo que quieras! 📖✨',
-    error: 'Lo siento, ocurrió un error. Inténtalo de nuevo.',
-    thinking: 'Pensando...',
-  },
-  de: {
-    title: 'Bibel-KI 📖',
-    subtitle: 'Stellen Sie Ihre Bibelfragen',
-    placeholder: 'Geben Sie Ihre Frage ein...',
-    contexts: { bible: '📖 Bibel', questions: '❓ Fragen', prayer: '🙏 Gebet', guidance: '💬 Beratung' },
-    welcome: 'Hallo! Ich bin die Bibel-KI von Sigo com Fé. Ich kann Ihnen helfen, die Bibel zu verstehen, Fragen zum christlichen Glauben beantworten und geistliche Orientierung bieten. Fragen Sie mich alles! 📖✨',
-    error: 'Entschuldigung, ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
-    thinking: 'Denke nach...',
-  },
-};
-
 const CONTEXT_KEYS = ['bible', 'questions', 'prayer', 'guidance'];
 
 export default function BibleAI() {
-  const { i18n: i18nInstance } = useTranslation();
+  const { t, i18n: i18nInstance } = useTranslation();
   const lang = (i18nInstance.language || 'pt').substring(0, 2);
-  const t = i18n[lang] || i18n.pt;
   const navigate = useNavigate();
 
   const [messages, setMessages] = useState([
-    { role: 'ai', text: t.welcome },
+    { role: 'ai', text: t('bibleAI.welcome') },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -79,9 +39,9 @@ export default function BibleAI() {
         body: JSON.stringify({ message: text, language: lang, context }),
       });
       const data = await res.json();
-      setMessages((prev) => [...prev, { role: 'ai', text: data.reply || t.error }]);
+      setMessages((prev) => [...prev, { role: 'ai', text: data.reply || t('bibleAI.error') }]);
     } catch {
-      setMessages((prev) => [...prev, { role: 'ai', text: t.error }]);
+      setMessages((prev) => [...prev, { role: 'ai', text: t('bibleAI.error') }]);
     } finally {
       setLoading(false);
     }
@@ -127,25 +87,33 @@ export default function BibleAI() {
         <button style={styles.backBtn} onClick={() => navigate('/')}><ArrowLeft size={22} /></button>
         <BookOpen size={28} />
         <div style={styles.headerText}>
-          <h2 style={styles.title}>{t.title}</h2>
-          <p style={styles.subtitle}>{t.subtitle}</p>
+          <h2 style={styles.title}>{t('bibleAI.title')}</h2>
+          <p style={styles.subtitle}>{t('bibleAI.subtitle')}</p>
         </div>
         <Sparkles size={20} style={{ opacity: 0.7 }} />
       </div>
 
       <div style={styles.contextBar}>
-        {CONTEXT_KEYS.map((key) => (
-          <button key={key} style={styles.contextBtn(context === key)} onClick={() => setContext(key)}>
-            {t.contexts[key]}
-          </button>
-        ))}
+        {CONTEXT_KEYS.map((key) => {
+          const contextLabel = {
+            bible: t('bibleAI.contextBible'),
+            questions: t('bibleAI.contextQuestions'),
+            prayer: t('bibleAI.contextPrayer'),
+            guidance: t('bibleAI.contextGuidance'),
+          }[key];
+          return (
+            <button key={key} style={styles.contextBtn(context === key)} onClick={() => setContext(key)}>
+              {contextLabel}
+            </button>
+          );
+        })}
       </div>
 
       <div style={styles.chatArea}>
         {messages.map((msg, i) => (
           <div key={i} style={styles.bubble(msg.role === 'user')}>{msg.text}</div>
         ))}
-        {loading && <div style={styles.loadingBubble}>💭 {t.thinking}</div>}
+        {loading && <div style={styles.loadingBubble}>💭 {t('bibleAI.thinking')}</div>}
         <div ref={bottomRef} />
       </div>
 
@@ -155,7 +123,7 @@ export default function BibleAI() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKey}
-          placeholder={t.placeholder}
+          placeholder={t('bibleAI.placeholder')}
         />
         <button style={styles.sendBtn} onClick={sendMessage} disabled={loading}>
           <Send size={20} />

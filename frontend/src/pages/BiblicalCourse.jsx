@@ -6,49 +6,20 @@ import { Music, Sparkles, BookOpen, Heart, Download, Share2, Trash2, ChevronDown
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
-const THEMES = [
-  { value: 'fe', label: '✝️ Fé', color: '#daa520' },
-  { value: 'esperanca', label: '🌅 Esperança', color: '#f39c12' },
-  { value: 'gratidao', label: '🙏 Gratidão', color: '#27ae60' },
-  { value: 'cura', label: '💚 Cura', color: '#2ecc71' },
-  { value: 'familia', label: '👨‍👩‍👧‍👦 Família', color: '#e74c3c' },
-  { value: 'amor', label: '❤️ Amor de Deus', color: '#c0392b' },
-  { value: 'adoracao', label: '👑 Adoração', color: '#9b59b6' },
-  { value: 'vitoria', label: '🏆 Vitória', color: '#f1c40f' },
-  { value: 'paz', label: '🕊️ Paz', color: '#3498db' },
-  { value: 'avivamento', label: '🔥 Avivamento', color: '#e67e22' },
-  { value: 'perdao', label: '💝 Perdão', color: '#e91e63' },
-  { value: 'salvacao', label: '✨ Salvação', color: '#8e44ad' },
-];
-
-const STYLES = [
-  { value: 'worship', label: '🎹 Worship' },
-  { value: 'pentecostal', label: '🔥 Pentecostal' },
-  { value: 'coral', label: '🎶 Coral' },
-  { value: 'acustico', label: '🎸 Acústico' },
-  { value: 'pop_gospel', label: '🎤 Pop Gospel' },
-  { value: 'sertanejo_gospel', label: '🤠 Sertanejo Gospel' },
-  { value: 'reggae_gospel', label: '🎵 Reggae Gospel' },
-  { value: 'hino', label: '📖 Hino Tradicional' },
-];
-
-const EMOTIONS = [
-  { value: 'alegre', label: '😊 Alegre' },
-  { value: 'profundo', label: '🌊 Profundo' },
-  { value: 'oracao', label: '🙏 Oração' },
-  { value: 'celebracao', label: '🎉 Celebração' },
-  { value: 'intimidade', label: '💜 Intimidade com Deus' },
-  { value: 'guerra', label: '⚔️ Guerra Espiritual' },
-  { value: 'conforto', label: '🤗 Conforto' },
-  { value: 'louvor_intenso', label: '🔥 Louvor Intenso' },
-];
-
-const BIBLE_BOOKS = [
-  'Gênesis', 'Êxodo', 'Salmos', 'Provérbios', 'Isaías', 'Jeremias',
-  'Mateus', 'Marcos', 'Lucas', 'João', 'Atos', 'Romanos',
-  '1 Coríntios', '2 Coríntios', 'Gálatas', 'Efésios', 'Filipenses',
-  'Colossenses', 'Hebreus', 'Tiago', 'Apocalipse',
-];
+const THEME_COLORS = {
+  fe: '#daa520',
+  esperanca: '#f39c12',
+  gratidao: '#27ae60',
+  cura: '#2ecc71',
+  familia: '#e74c3c',
+  amor: '#c0392b',
+  adoracao: '#9b59b6',
+  vitoria: '#f1c40f',
+  paz: '#3498db',
+  avivamento: '#e67e22',
+  perdao: '#e91e63',
+  salvacao: '#8e44ad',
+};
 
 export default function CriadorLouvor() {
   const { t } = useTranslation();
@@ -272,11 +243,11 @@ export default function CriadorLouvor() {
           {/* Theme */}
           <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>🎯 Tema do Louvor</label>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1rem' }}>
-            {THEMES.map(th => (
+            {t('biblicalCourse.themes', { returnObjects: true }).map(th => (
               <button key={th.value} onClick={() => setTheme(th.value)} style={{
                 padding: '5px 12px', borderRadius: 16, border: 'none', cursor: 'pointer', fontSize: '0.78rem',
-                background: theme === th.value ? th.color + '25' : '#f5f5f5',
-                color: theme === th.value ? th.color : '#666',
+                background: theme === th.value ? THEME_COLORS[th.value] + '25' : '#f5f5f5',
+                color: theme === th.value ? THEME_COLORS[th.value] : '#666',
                 fontWeight: theme === th.value ? 700 : 400,
               }}>{th.label}</button>
             ))}
@@ -285,7 +256,7 @@ export default function CriadorLouvor() {
           {/* Style */}
           <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>🎵 Estilo Musical</label>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1rem' }}>
-            {STYLES.map(s => (
+            {t('biblicalCourse.styles', { returnObjects: true }).map(s => (
               <button key={s.value} onClick={() => setStyle(s.value)} style={{
                 padding: '5px 12px', borderRadius: 16, border: 'none', cursor: 'pointer', fontSize: '0.78rem',
                 background: style === s.value ? '#9b59b622' : '#f5f5f5',
@@ -298,7 +269,7 @@ export default function CriadorLouvor() {
           {/* Emotion */}
           <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>💫 Emoção</label>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1rem' }}>
-            {EMOTIONS.map(em => (
+            {t('biblicalCourse.emotions', { returnObjects: true }).map(em => (
               <button key={em.value} onClick={() => setEmotion(em.value)} style={{
                 padding: '5px 12px', borderRadius: 16, border: 'none', cursor: 'pointer', fontSize: '0.78rem',
                 background: emotion === em.value ? '#667eea22' : '#f5f5f5',
@@ -315,7 +286,7 @@ export default function CriadorLouvor() {
             fontSize: '0.85rem', marginBottom: '0.75rem', boxSizing: 'border-box',
           }}>
             <option value="">Escolha um livro...</option>
-            {BIBLE_BOOKS.map(b => <option key={b} value={b}>{b}</option>)}
+            {t('biblicalCourse.bibleBooks', { returnObjects: true }).map(b => <option key={b} value={b}>{b}</option>)}
           </select>
 
           {/* Verse */}
