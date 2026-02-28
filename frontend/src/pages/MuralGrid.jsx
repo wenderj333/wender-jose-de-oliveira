@@ -103,7 +103,7 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
   );
 }
 
-function PostCard({ post, onLike, onDelete, token, user }) {
+function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause }) {
   const color = getCatColor(post.category || post.type);
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState('');
@@ -113,6 +113,61 @@ function PostCard({ post, onLike, onDelete, token, user }) {
   const mediaUrl = post.media_url || post.mediaUrl;
   const musicUrl = post.audio_url || post.musicUrl;
   const isOwner = user && (user.id === post.author_id || user.id === post.user_id);
+
+  const videoRef = useRef(null);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const postCardRef = useRef(null);
+
+  const isVideo = mediaUrl && mediaUrl.match(/\.(mp4|webm|mov|ogg)(\?|$)/i);
+  const isImage = mediaUrl && !mediaUrl.match(/\.(mp4|webm|mov|ogg|mp3|wav|aac|m4a)(\?|$)/i);
+
+  // Effect to manage video play/pause based on `isPlaying` prop
+  useEffect(() => {
+    if (videoRef.current && isVideo) {
+      if (isPlaying) {
+        videoRef.current.play().catch(e => console.error("Error playing video:", e));
+        videoRef.current.volume = 0.3; // Set video volume to 30%
+        if (musicUrl) {
+            setIsMusicPlaying(true);
+        }
+      } else {
+        videoRef.current.pause();
+        if (musicUrl) {
+            setIsMusicPlaying(false);
+        }
+      }
+    }
+  }, [isPlaying, isVideo, musicUrl]);
+
+  // Effect for image + music autoplay (IntersectionObserver)
+  useEffect(() => {
+    if (!postCardRef.current || !musicUrl || !isImage) return; // Only apply for images with music
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsMusicPlaying(true);
+        } else {
+          setIsMusicPlaying(false);
+        }
+      },
+      { threshold: 0.7 } // Trigger when 70% of the item is visible
+    );
+
+    observer.observe(postCardRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [musicUrl, isImage]);
+
+  const handleInternalVideoPlay = () => {
+    onVideoPlay(post.id); // Notify parent that this video is playing
+  };
+
+  const handleInternalVideoPause = () => {
+    onVideoPause(post.id); // Notify parent that this video is paused
+  };
 
   const submitComment = async (e) => {
     e.preventDefault();
@@ -133,7 +188,7 @@ function PostCard({ post, onLike, onDelete, token, user }) {
   };
 
   return (
-    <div style={{ background: 'white', borderRadius: 16, border: `1px solid ${color}33`, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 16 }}>
+    <div ref={postCardRef} style={{ background: 'white', borderRadius: 16, border: `1px solid ${color}33`, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 16 }}>
       <div style={{ padding: '14px 16px 10px', display: 'flex', alignItems: 'center', gap: 12 }}>
         <div style={{ width: 42, height: 42, borderRadius: '50%', background: `linear-gradient(135deg,${color},${color}88)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14, flexShrink: 0 }}>
           {authorInitials}
@@ -153,12 +208,20 @@ function PostCard({ post, onLike, onDelete, token, user }) {
         )}
       </div>
 
-      {mediaUrl && mediaUrl.match(/\.(mp4|webm|mov|ogg)(\?|$)/i) && (
+      {isVideo && (
         <div style={{ background: '#000' }}>
-          <video src={mediaUrl} controls playsInline style={{ width: '100%', maxHeight: 400, objectFit: 'contain', display: 'block' }} />
+          <video
+            ref={videoRef}
+            src={mediaUrl}
+            controls
+            playsInline
+            style={{ width: '100%', maxHeight: 400, objectFit: 'contain', display: 'block' }}
+            onPlay={handleInternalVideoPlay}
+            onPause={handleInternalVideoPause}
+          />
         </div>
       )}
-      {mediaUrl && !mediaUrl.match(/\.(mp4|webm|mov|ogg|mp3|wav|aac|m4a)(\?|$)/i) && (
+      {isImage && (
         <div style={{ width: '100%', maxHeight: 400, overflow: 'hidden' }}>
           <img src={mediaUrl} alt="post" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
@@ -173,7 +236,7 @@ function PostCard({ post, onLike, onDelete, token, user }) {
         ) : (
           <p style={{ color: '#333', fontSize: 14, lineHeight: 1.65, margin: 0 }}>{post.content}</p>
         )}
-        {musicUrl && <MiniAudioPlayer src={musicUrl} />}
+        {musicUrl && <MiniAudioPlayer src={musicUrl} isPlaying={isMusicPlaying} />}
       </div>
 
       <div style={{ padding: '8px 16px 12px', borderTop: '1px solid #f0f0f0', display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -227,6 +290,10 @@ export default function MuralGrid() {
   const videoRef = useRef(null);
   const musicRef = useRef(null);
 
+  // State for active video playback
+  const [activeVideoId, setActiveVideoId] = useState(null);
+  const videoRefs = useRef({}); // To store refs for each video post
+
   const fetchPosts = useCallback(async () => {
     try {
       const res = await fetch(`${API}/feed?limit=50`, {
@@ -252,6 +319,49 @@ export default function MuralGrid() {
   }, [token]);
 
   useEffect(() => { fetchPosts(); }, [fetchPosts]);
+
+  // Intersection Observer for video autoplay
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.7) {
+            // If a video is 70% visible, set it as active
+            setActiveVideoId(entry.target.dataset.postId);
+          } else if (!entry.isIntersecting && entry.target.dataset.postId === activeVideoId) {
+            // If the active video scrolls out of view, pause it
+            setActiveVideoId(null);
+          }
+        });
+      },
+      { threshold: 0.7 } // Trigger when 70% of the item is visible
+    );
+
+    // Observe all video post elements
+    posts.forEach(post => {
+      if (post.media_url && post.media_url.match(/\.(mp4|webm|mov|ogg)(\?|$)/i)) {
+        const videoElement = videoRefs.current[post.id];
+        if (videoElement) {
+          observer.observe(videoElement);
+        }
+      }
+    });
+
+    return () => {
+      observer.disconnect();
+      videoRefs.current = {}; // Clear refs on unmount
+    };
+  }, [posts, activeVideoId]);
+
+  const handleVideoPlay = useCallback((videoId) => {
+    setActiveVideoId(videoId);
+  }, []);
+
+  const handleVideoPause = useCallback((videoId) => {
+    if (activeVideoId === videoId) {
+      setActiveVideoId(null);
+    }
+  }, [activeVideoId]);
 
   const handleLike = async (postId) => {
     if (!user) return;
@@ -429,7 +539,17 @@ export default function MuralGrid() {
 
       {/* Feed View */}
       {!loading && viewMode === 'feed' && filteredPosts.map(post => (
-        <PostCard key={post.id} post={post} onLike={handleLike} onDelete={handleDelete} token={token} user={user} />
+        <PostCard
+          key={post.id}
+          post={post}
+          onLike={handleLike}
+          onDelete={handleDelete}
+          token={token}
+          user={user}
+          isPlaying={activeVideoId === post.id} // Pass isPlaying prop
+          onVideoPlay={handleVideoPlay}
+          onVideoPause={handleVideoPause}
+        />
       ))}
 
       {!loading && filteredPosts.length === 0 && (

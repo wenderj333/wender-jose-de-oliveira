@@ -83,59 +83,65 @@
                  "featureMap":  "Mapa de Igrejas",
                  "featureMapDesc":  "Encontre igrejas em qualquer cidade. Perfeito para viajantes e famílias em mudança.",
                  "featureDashboard":  "Dashboard Pastoral",
-                 "featureDashboardDesc":  "Ferramentas completas de gestão para pastores: membros, finanças, campanhas e muito mais.",
+                 "featureDashboardDesc": "Ferramentas completas de gestão para pastores: membros, finanças, campanhas e muito mais.",
                  "featureMural":  "Mural da Comunidade",
                  "featureMuralDesc":  "Compartilhe testemunhos, louvores e versículos com a comunidade cristã.",
                  "featureKids":  "Cantinho Kids",
                  "featureKidsDesc":  "Histórias bíblicas, quiz interativo e atividades para as crianças aprenderem sobre a Bíblia!",
                  "featureChurch":  "Cadastre Sua Igreja",
                  "featureChurchDesc":  "Registre sua igreja na plataforma e conecte-se com fiéis de todo o mundo.",
-                 "explore":  "Explorar",
-                 "registerBtn":  "Cadastrar",
+                 "explore": "Explorar",
+                 "registerBtn": "Registrar Grátis",
                  "helpTitle":  "Precisa de Ajuda?",
                  "helpSubtitle":  "Você não está sozinho. Uma igreja pode te ajudar.",
-                 "helpSeeThings":  "ðŸ‘ï¸ Vejo coisas",
-                 "helpHearThings":  "ðŸ‘‚ Escuto barulhos",
-                 "helpFeelAlone":  "ðŸ˜” Me sinto sozinho(a)",
-                 "helpNeedPrayer":  "ðŸ™ Preciso de oração",
-                 "helpAnxious":  "ðŸ˜° Estou ansioso(a)",
-                 "helpDepressed":  "ðŸ˜¢ Estou triste/deprimido(a)",
-                 "helpSent":  "âœ… Seu pedido foi enviado! Uma igreja próxima entrará em contato para te ajudar. Deus te abençoe! ðŸ™",
+                 "helpSeeThings":  "👁️‍🗨️ Vejo coisas",
+                 "helpHearThings":  "👂 Escuto barulhos",
+                 "helpFeelAlone":  "😔 Me sinto sozinho(a)",
+                 "helpNeedPrayer":  "🙏 Preciso de oração",
+                 "helpAnxious":  "😥 Estou ansioso(a)",
+                 "helpDepressed":  "😢 Estou triste/deprimido(a)",
+                 "helpSent":  "✅ Seu pedido foi enviado! Uma igreja próxima entrará em contato para te ajudar. Deus te abençoe! 🙏",
                  "helpNamePlaceholder":  "Seu nome (opcional)",
                  "helpContactPlaceholder":  "Telefone ou email para contato",
                  "helpMessagePlaceholder":  "Conte um pouco mais sobre o que está sentindo...",
                  "helpSend":  "Pedir Ajuda",
                  "helpBtn":  "Pedir Ajuda",
                  "verses":  [
-                                {
-                                    "text":  "Porque onde estiverem dois ou três reunidos em meu nome, ali estou no meio deles.",
-                                    "ref":  "Mateus 18:20"
-                                },
-                                {
-                                    "text":  "Tudo posso naquele que me fortalece.",
-                                    "ref":  "Filipenses 4:13"
-                                },
-                                {
-                                    "text":  "O Senhor é o meu pastor; nada me faltará.",
-                                    "ref":  "Salmos 23:1"
-                                },
-                                {
-                                    "text":  "Confie no Senhor de todo o seu coração e não se apoie no seu próprio entendimento.",
-                                    "ref":  "Provérbios 3:5"
-                                },
-                                {
-                                    "text":  "Pois eu sei os planos que tenho para vocês, planos de dar a vocês esperança e um futuro.",
-                                    "ref":  "Jeremias 29:11"
-                                },
-                                {
-                                    "text":  "Sejam fortes e corajosos. Não tenham medo, pois o Senhor estará com vocês.",
-                                    "ref":  "Deuteronômio 31:6"
-                                },
-                                {
-                                    "text":  "A oração de um justo é poderosa e eficaz.",
-                                    "ref":  "Tiago 5:16"
-                                }
-                            ]
+                                 {
+                                     "text":  "Porque onde estiverem dois ou três reunidos em meu nome, ali estou no meio deles.",
+                                     "ref":  "Mateus 18:20"
+                                 },
+                                 {
+                                     "text":  "Tudo posso naquele que me fortalece.",
+                                     "ref":  "Filipenses 4:13"
+                                 },
+                                 {
+                                     "text":  "O Senhor é o meu pastor; nada me faltará.",
+                                     "ref":  "Salmos 23:1"
+                                 },
+                                 {
+                                     "text": "Confie no Senhor de todo o seu coração e não se apoie no seu próprio entendimento.",
+                                     "ref": "Provérbios 3:5"
+                                 },
+                                 {
+                                     "text": "Pois eu sei os planos que tenho para vocês, planos de dar a vocês esperança e um futuro.",
+                                     "ref": "Jeremias 29:11"
+                                 },
+                                 {
+                                     "text": "Sejam fortes e corajosos. Não tenham medo, pois o Senhor estará com vocês.",
+                                     "ref": "Deuteronômio 31:6"
+                                 },
+                                 {
+                                     "text": "A oração de um justo é poderosa e eficaz.",
+                                     "ref": "Tiago 5:16"
+                                 }
+                             ],
+                "welcomePopup": {
+                    "title": "Bem-vindo(a) à comunidade Sigo com Fé!",
+                    "subtitle": "Conecte-se com irmãos, fortaleça sua fé e viva o Evangelho.",
+                    "registerBtn": "Registrar Grátis",
+                    "viewSiteBtn": "Ver o site primeiro"
+                }
              },
     "login":  {
                   "welcomeBack":  "Bem-vindo de volta!",
@@ -356,7 +362,7 @@
                  "bibleQuiz":  "Quiz Bíblico",
                  "question":  "Pergunta {{current}} de {{total}}",
                  "congrats":  "Parabéns!",
-                 "scoreResult":  "Você acertou \u003cstrong\u003e{{score}}\u003c/strong\u003e de \u003cstrong\u003e{{total}}\u003c/strong\u003e!",
+                 "scoreResult":  "Você acertou <strong>{{score}}</strong> de <strong>{{total}}</strong>!",
                  "perfect":  "Perfeito! Você é um campeão da Bíblia!",
                  "good":  "Muito bem! Continue estudando!",
                  "tryAgain":  "Não desista! Tente de novo!",
@@ -426,7 +432,7 @@
                               {
                                   "q":  "Qual o primeiro livro da Bíblia?",
                                   "opts":  [
-                                               "ÃŠxodo",
+                                               "Êxodo",
                                                "Salmos",
                                                "Gênesis",
                                                "Mateus"
@@ -536,9 +542,9 @@
                        "leftChat":  "saiu da conversa",
                        "langPt":  "Português",
                        "langEn":  "English",
-                       "langEs":  "EspaÃ±ol",
+                       "langEs":  "Español",
                        "langDe":  "Deutsch",
-                       "autoTranslate":  "ðŸŒ Tradução automática ativada"
+                       "autoTranslate":  "🌐 Tradução automática ativada"
                    },
     "friends":  {
                     "title":  "Amigos",
@@ -738,14 +744,14 @@
     "music":  {
                   "title":  "Música Gospel",
                   "subtitle":  "Louvor e adoração 100% gratuitos",
-                  "worship":  "Louvor \u0026 Adoração",
+                  "worship":  "Louvor & Adoração",
                   "hymns":  "Hinos Clássicos",
                   "instrumental":  "Instrumental",
                   "kids":  "Kids Gospel",
                   "prayer":  "Música para Oração",
                   "favorites":  "Favoritos",
                   "noFavorites":  "Nenhum favorito ainda",
-                  "tapHeart":  "Toque no â¤ï¸ para salvar músicas",
+                  "tapHeart":  "Toque no ❤️ para salvar músicas",
                   "freeSources":  "Mais música gratuita"
               },
     "courseFinance":  {
@@ -792,8 +798,7 @@
                   "commentPlaceholder":  "Escreva um comentário...",
                   "confirmDelete":  "Tem a certeza que quer deletar este post?",
                   "delete":  "Deletar post"
-              }
-    ,
+              },
     "criadorLouvor":  {
                   "title":  "Criador de Louvor com IA",
                   "subtitle":  "Crie letras de louvor inspiradas na Bíblia!",
@@ -874,30 +879,6 @@
         "memberEmail": "Email",
         "memberPhone": "Telefone",
         "memberRole": "Função",
-        "selectRole": "Selecione uma função",
-        "save": "Salvar",
-        "cancel": "Cancelar",
-        "delete": "Deletar",
-        "edit": "Editar",
-        "tithesSectionTitle": "Dízimos & Ofertas",
-        "tithesDesc": "Registre entradas financeiras",
-        "addTithe": "Registrar Dízimo",
-        "titheMember": "Membro",
-        "titheAmount": "Valor",
-        "titheDate": "Data",
-        "titheType": "Tipo",
-        "selectType": "Selecione o tipo",
-        "tithe": "Dízimo",
-        "offering": "Oferta",
-        "expense": "Despesa",
-        "expensesSectionTitle": "Despesas",
-        "expensesDesc": "Controle os gastos da igreja",
-        "addExpense": "Registrar Despesa",
-        "expenseCategory": "Categoria",
-        "expenseDescription": "Descrição",
-        "back": "Voltar",
-        "noData": "Sem dados",
-        "error": "Erro ao carregar",
-        "confirm": "Confirmar"
+        "selectRole": "Selecione uma função"
     }
 }
