@@ -731,62 +731,6 @@
         "hoursAgo": "vor {{count}}h",
         "daysAgo": "vor {{count}}d"
     },
-    "home": {
-        "verses": [
-            {
-                "text": "Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.",
-                "ref": "Matthäus 18:20"
-            },
-            {
-                "text": "Ich vermag alles durch den, der mich stark macht.",
-                "ref": "Philipper 4:13"
-            },
-            {
-                "text": "Der Herr ist mein Hirte; mir wird nichts mangeln.",
-                "ref": "Psalm 23:1"
-            },
-            {
-                "text": "Vertraue auf den Herrn von ganzem Herzen und verlass dich nicht auf deinen Verstand.",
-                "ref": "Sprüche 3:5"
-            },
-            {
-                "text": "Denn ich weiß, welche Gedanken ich für euch habe, spricht der Herr.",
-                "ref": "Jeremia 29:11"
-            },
-            {
-                "text": "Sei stark und mutig, fürchte dich nicht, denn der Herr ist mit dir.",
-                "ref": "Deuteronomium 31:6"
-            },
-            {
-                "text": "Das Gebet eines Gerechten vermag viel.",
-                "ref": "Jakobus 5:16"
-            }
-        ]
-    },
-    "mural": {
-        "testimony": "🙏 Zeugnis",
-        "worship": "🎵 Lobpreis",
-        "photo": "📸 Foto/Video",
-        "verse": "📖 Bibelvers",
-        "reflection": "💭 Überlegung",
-        "campaign": "💝 Kampagne / Anliegen",
-        "placeholder": "Teile etwas mit der Gemeinde...",
-        "publish": "Veröffentlichen",
-        "noPosts": "Noch keine Beiträge. Sei der Erste, der postet! 📸",
-        "commentPlaceholder": "Schreib einen Kommentar...",
-        "confirmDelete": "Bist du sicher, dass du diesen Beitrag löschen möchtest?",
-        "delete": "Beitrag löschen",
-        "loginRequired": "Bitte melden Sie sich an, um zu posten",
-        "addContent": "Bitte fügen Sie Text oder Medien hinzu",
-        "fileTooLarge": "Datei zu groß! Maximum {{maxSize}} MB.",
-        "uploading": "📤 {{filename}} wird hochgeladen...",
-        "uploadingLarge": "📤 {{filename}} wird hochgeladen... Dies kann einige Minuten dauern. Schließe die Seite nicht!",
-        "uploadTooSlow": "Das Hochladen hat zu lange gedauert. Deine Verbindung kann langsam sein. Versuche es erneut.",
-        "fileTooLargeSimple": "❌ Datei zu groß! Versuche eine kleinere Datei.",
-        "doNotClose": "Bitte schließe oder aktualisiere die Seite nicht!",
-        "loading": "Lädt...",
-        "noMusicUploaded": "Noch keine Musik hochgeladen"
-    },
     "groups": {
         "joinGroup": "+ Gruppe beitreten",
         "leaveGroup": "Gruppe verlassen",
