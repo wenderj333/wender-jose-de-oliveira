@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Grid, List } from 'lucide-react';
+import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Grid, List, Volume2, VolumeX } from 'lucide-react'; // Import Volume2 and VolumeX
 import { useAuth } from '../context/AuthContext';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
@@ -115,6 +115,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const isOwner = user && (user.id === post.author_id || user.id === post.user_id);
 
   const videoRef = useRef(null);
+  const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const postCardRef = useRef(null);
 
@@ -124,9 +125,12 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   // Effect to manage video play/pause based on `isPlaying` prop
   useEffect(() => {
     if (videoRef.current && isVideo) {
+      videoRef.current.muted = isMuted; // Sync video muted state
       if (isPlaying) {
         videoRef.current.play().catch(e => console.error("Error playing video:", e));
-        videoRef.current.volume = 0.3; // Set video volume to 30%
+        if (!isMuted) { // Only set volume if not muted by user
+          videoRef.current.volume = musicUrl ? 0.3 : 1.0; // Set video volume to 30% if music, else 100%
+        }
         if (musicUrl) {
             setIsMusicPlaying(true);
         }
@@ -137,7 +141,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         }
       }
     }
-  }, [isPlaying, isVideo, musicUrl]);
+  }, [isPlaying, isVideo, musicUrl, isMuted]);
 
   // Effect for image + music autoplay (IntersectionObserver)
   useEffect(() => {
@@ -151,7 +155,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
           setIsMusicPlaying(false);
         }
       },
-      { threshold: 0.7 } // Trigger when 70% of the item is visible
+      { threshold: 0.7 } // Threshold for image music autoplay remains at 70%
     );
 
     observer.observe(postCardRef.current);
@@ -167,6 +171,20 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 
   const handleInternalVideoPause = () => {
     onVideoPause(post.id); // Notify parent that this video is paused
+  };
+
+  const toggleMute = () => {
+    setIsMuted(prev => !prev);
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      // If unmuting and there's music, set video volume to 0.3
+      // Otherwise, set to 1.0 (full volume)
+      if (!isMuted) { // if it was muted and now unmuting
+          videoRef.current.volume = musicUrl ? 0.3 : 1.0;
+      } else { // if it was unmuted and now muting
+          videoRef.current.volume = 0;
+      }
+    }
   };
 
   const submitComment = async (e) => {
@@ -209,16 +227,25 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       </div>
 
       {isVideo && (
-        <div style={{ background: '#000' }}>
+        <div style={{ background: '#000', position: 'relative' }}> {/* Add position: 'relative' for mute button positioning */}
           <video
             ref={videoRef}
             src={mediaUrl}
             controls
             playsInline
+            muted={isMuted} // Control muted state
             style={{ width: '100%', maxHeight: 400, objectFit: 'contain', display: 'block' }}
             onPlay={handleInternalVideoPlay}
             onPause={handleInternalVideoPause}
           />
+          <button onClick={toggleMute} style={{
+            position: 'absolute', top: 10, right: 10,
+            background: 'rgba(0,0,0,0.5)', border: 'none', borderRadius: '50%',
+            width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: 'white', cursor: 'pointer', zIndex: 10,
+          }}>
+            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+          </button>
         </div>
       )}
       {isImage && (
@@ -325,8 +352,8 @@ export default function MuralGrid() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.7) {
-            // If a video is 70% visible, set it as active
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.6) { // Changed threshold to 0.6
+            // If a video is 60% visible, set it as active
             setActiveVideoId(entry.target.dataset.postId);
           } else if (!entry.isIntersecting && entry.target.dataset.postId === activeVideoId) {
             // If the active video scrolls out of view, pause it
@@ -334,7 +361,7 @@ export default function MuralGrid() {
           }
         });
       },
-      { threshold: 0.7 } // Trigger when 70% of the item is visible
+      { threshold: 0.6 } // Changed threshold to 0.6
     );
 
     // Observe all video post elements
