@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎵 Louvor com IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4A843;
+    --gold-light: #F0C866;
+    --dark: #0D0B14;
+    --deep: #160E2A;
+    --card: #1E1535;
+    --card2: #251B42;
+    --text: #F0EBF8;
+    --muted: #9B8CC0;
+    --accent: #7B4FD0;
+    --accent2: #5B2FA8;
+    --green: #3DBE7A;
+    --glow: rgba(212,168,67,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--dark); color:var(--text); font-family:'Lato',sans-serif; min-height:100vh; overflow-x:hidden; }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(123,79,208,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(212,168,67,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 30% at 10% 60%, rgba(91,47,168,0.15) 0%, transparent 50%);
+    pointer-events:none; z-index:0;
+  }
+  .container { max-width:900px; margin:0 auto; padding:24px 20px; position:relative; z-index:1; }
+
+  header { text-align:center; padding:36px 0 28px; }
+  .logo-icon { font-size:3em; display:block; margin-bottom:8px; filter:drop-shadow(0 0 20px var(--gold)); animation:pulse-glow 3s ease-in-out infinite; }
+  @keyframes pulse-glow { 0%,100%{filter:drop-shadow(0 0 15px var(--gold))} 50%{filter:drop-shadow(0 0 30px var(--gold-light))} }
+  .logo { font-family:'Playfair Display',serif; font-size:clamp(26px,6vw,46px); font-weight:900; background:linear-gradient(135deg,var(--gold-light),var(--gold),#B8860B); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:-1px; }
+  .subtitle { color:var(--muted); font-size:12px; font-weight:300; letter-spacing:3px; text-transform:uppercase; margin-top:6px; }
+
+  /* Stats */
+  .stats-bar { display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap; }
+  .stat { background:var(--card); border:1px solid rgba(212,168,67,0.12); border-radius:12px; padding:11px 14px; flex:1; min-width:90px; text-align:center; }
+  .stat-num { font-family:'Playfair Display',serif; font-size:24px; color:var(--gold-light); font-weight:700; }
+  .stat-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
+
+  /* Tabs */
+  .tabs { display:flex; gap:4px; background:var(--deep); border-radius:14px; padding:4px; margin-bottom:24px; border:1px solid rgba(212,168,67,0.12); }
+  .tab-btn { flex:1; padding:11px 6px; border:none; border-radius:10px; background:transparent; color:var(--muted); font-family:'Lato',sans-serif; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.3s; }
+  .tab-btn.active { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:white; box-shadow:0 4px 16px rgba(123,79,208,0.4); }
+  .tab-btn:hover:not(.active) { color:var(--text); background:rgba(255,255,255,0.05); }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+
+  /* Card */
+  .card { background:var(--card); border:1px solid rgba(212,168,67,0.12); border-radius:20px; padding:22px; margin-bottom:18px; }
+  .card-title { font-family:'Playfair Display',serif; font-size:18px; color:var(--gold-light); margin-bottom:18px; }
+  .field { margin-bottom:14px; }
+  label { display:block; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  input[type="text"], select {
+    width:100%; background:var(--deep); border:1px solid rgba(255,255,255,0.1);
+    border-radius:11px; padding:12px 14px; color:var(--text); font-family:'Lato',sans-serif;
+    font-size:14px; transition:border-color 0.3s,box-shadow 0.3s; outline:none;
+  }
+  input[type="text"]:focus, select:focus { border-color:var(--gold); box-shadow:0 0 0 3px var(--glow); }
+  select option { background:var(--deep); }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media(max-width:560px){ .grid-2{grid-template-columns:1fr} }
+
+  /* Chips */
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
+  .chip { padding:5px 12px; border-radius:20px; border:1px solid rgba(255,255,255,0.13); background:transparent; color:var(--muted); font-size:13px; cursor:pointer; transition:all 0.2s; font-family:'Lato',sans-serif; }
+  .chip.selected,.chip:hover { border-color:var(--gold); color:var(--gold-light); background:var(--glow); }
+
+  /* Privacy */
+  .privacy-toggle { display:flex; gap:10px; margin-bottom:14px; }
+  .privacy-btn { flex:1; padding:12px; border-radius:12px; border:2px solid rgba(255,255,255,0.1); background:var(--deep); color:var(--muted); font-family:'Lato',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:all 0.25s; text-align:center; }
+  .privacy-btn small { display:block; font-size:11px; font-weight:400; opacity:0.7; margin-top:2px; }
+  .privacy-btn.sel-priv { border-color:var(--accent); color:#C4A6FF; background:rgba(123,79,208,0.15); }
+  .privacy-btn.sel-pub { border-color:var(--green); color:var(--green); background:rgba(61,190,122,0.12); }
+  .author-field { display:none; }
+  .author-field.show { display:block; }
+
+  /* Buttons */
+  .btn-create { width:100%; padding:16px; border:none; border-radius:13px; background:linear-gradient(135deg,var(--gold),#B8860B); color:var(--dark); font-family:'Playfair Display',serif; font-size:17px; font-weight:700; cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden; margin-bottom:18px; }
+  .btn-create::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--gold-light),var(--gold)); opacity:0; transition:opacity 0.3s; }
+  .btn-create:hover::before { opacity:1; }
+  .btn-create:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(212,168,67,0.4); }
+  .btn-create:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+  .btn-create span { position:relative; z-index:1; }
+
+  .btn-icon { padding:7px 12px; border-radius:9px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:var(--text); font-size:13px; cursor:pointer; transition:all 0.2s; font-family:'Lato',sans-serif; white-space:nowrap; }
+  .btn-icon:hover { background:rgba(212,168,67,0.15); border-color:var(--gold); color:var(--gold-light); }
+  .btn-icon.g:hover { background:rgba(61,190,122,0.15); border-color:var(--green); color:var(--green); }
+  .btn-icon.r:hover { background:rgba(220,50,50,0.15); border-color:#FF6B6B; color:#FF6B6B; }
+
+  /* Loading */
+  .loading { display:none; text-align:center; padding:34px; }
+  .loading.show { display:block; }
+  .notes-anim { font-size:36px; display:flex; justify-content:center; gap:14px; margin-bottom:12px; }
+  .notes-anim span { display:inline-block; animation:float-note 1.5s ease-in-out infinite; }
+  .notes-anim span:nth-child(2){animation-delay:0.2s} .notes-anim span:nth-child(3){animation-delay:0.4s} .notes-anim span:nth-child(4){animation-delay:0.6s}
+  @keyframes float-note { 0%,100%{transform:translateY(0);opacity:1} 50%{transform:translateY(-14px);opacity:0.4} }
+  .loading-text { color:var(--gold-light); font-size:14px; animation:fade-pulse 2s ease-in-out infinite; }
+  @keyframes fade-pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+
+  /* Result */
+  .result-card { display:none; background:var(--card); border:1px solid rgba(212,168,67,0.25); border-radius:20px; overflow:hidden; margin-bottom:20px; animation:slide-up 0.5s ease; }
+  .result-card.show { display:block; }
+  @keyframes slide-up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .result-header { background:linear-gradient(135deg,rgba(123,79,208,0.3),rgba(91,47,168,0.3)); padding:16px 20px; border-bottom:1px solid rgba(212,168,67,0.12); display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap; }
+  .result-title { font-family:'Playfair Display',serif; font-size:18px; color:var(--gold-light); }
+  .result-meta { font-size:12px; color:var(--muted); margin-top:3px; }
+  .result-actions { display:flex; gap:7px; flex-wrap:wrap; }
+  .result-body { padding:20px; }
+  .lyrics { white-space:pre-wrap; line-height:1.9; font-size:14px; color:var(--text); }
+
+  /* Error */
+  .error { display:none; background:rgba(220,50,50,0.1); border:1px solid rgba(220,50,50,0.3); border-radius:11px; padding:13px 16px; color:#FF8080; font-size:14px; margin-bottom:14px; }
+  .error.show { display:block; }
+
+  /* Song items */
+  .songs-list { display:flex; flex-direction:column; gap:11px; }
+  .song-item { background:var(--card); border:1px solid rgba(255,255,255,0.07); border-radius:15px; overflow:hidden; transition:border-color 0.3s; }
+  .song-item:hover { border-color:rgba(212,168,67,0.25); }
+  .song-header { padding:14px 17px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; gap:10px; }
+  .song-hl { flex:1; min-width:0; }
+  .song-name { font-family:'Playfair Display',serif; font-size:15px; color:var(--gold-light); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .song-meta-row { display:flex; align-items:center; gap:7px; margin-top:3px; flex-wrap:wrap; }
+  .song-meta { font-size:11px; color:var(--muted); }
+  .badge { font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; text-transform:uppercase; }
+  .badge-priv { background:rgba(123,79,208,0.2); color:#C4A6FF; border:1px solid rgba(123,79,208,0.4); }
+  .badge-pub { background:rgba(61,190,122,0.15); color:var(--green); border:1px solid rgba(61,190,122,0.4); }
+  .song-toggle { font-size:14px; color:var(--muted); user-select:none; }
+  .song-body { display:none; padding:0 17px 17px; border-top:1px solid rgba(255,255,255,0.06); }
+  .song-body.open { display:block; padding-top:14px; }
+  .song-actions { display:flex; gap:7px; margin-bottom:12px; flex-wrap:wrap; }
+
+  /* Mural */
+  .mural-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
+  .mural-title { font-family:'Playfair Display',serif; font-size:20px; color:var(--gold-light); }
+  .mural-subtitle { font-size:12px; color:var(--muted); margin-top:2px; }
+  .mural-filters { display:flex; gap:7px; margin-bottom:18px; flex-wrap:wrap; }
+  .filter-chip { padding:6px 13px; border-radius:20px; border:1px solid rgba(255,255,255,0.12); background:transparent; color:var(--muted); font-size:12px; cursor:pointer; font-family:'Lato',sans-serif; transition:all 0.2s; }
+  .filter-chip.active { border-color:var(--gold); color:var(--gold-light); background:var(--glow); }
+
+  .mural-card { background:var(--card); border:1px solid rgba(255,255,255,0.07); border-radius:16px; overflow:hidden; margin-bottom:13px; transition:border-color 0.3s,transform 0.2s; }
+  .mural-card:hover { border-color:rgba(212,168,67,0.3); transform:translateY(-2px); }
+  .mural-card-header { padding:14px 18px 10px; display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .mural-song-title { font-family:'Playfair Display',serif; font-size:16px; color:var(--gold-light); }
+  .mural-author { font-size:11px; color:var(--muted); margin-top:2px; }
+  .style-badge { font-size:11px; padding:3px 9px; border-radius:20px; background:rgba(123,79,208,0.2); color:#C4A6FF; border:1px solid rgba(123,79,208,0.3); white-space:nowrap; }
+  .mural-preview { padding:0 18px 12px; font-size:13px; color:var(--muted); line-height:1.7; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; cursor:pointer; }
+  .mural-preview:hover .read-hint { color:var(--gold); }
+  .read-hint { color:var(--gold-light); font-size:11px; }
+  .mural-footer { padding:11px 18px; border-top:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+  .mural-date { font-size:11px; color:var(--muted); }
+  .mural-actions { display:flex; gap:6px; }
+  .btn-like { padding:6px 11px; border-radius:20px; border:1px solid rgba(212,168,67,0.2); background:rgba(212,168,67,0.05); color:var(--muted); font-size:13px; cursor:pointer; transition:all 0.2s; font-family:'Lato',sans-serif; }
+  .btn-like:hover,.btn-like.liked { border-color:var(--gold); color:var(--gold-light); background:rgba(212,168,67,0.12); }
+
+  /* Modal */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.78); backdrop-filter:blur(8px); z-index:100; padding:20px; overflow-y:auto; align-items:flex-start; justify-content:center; }
+  .modal-overlay.show { display:flex; }
+  .modal { background:var(--card); border:1px solid rgba(212,168,67,0.2); border-radius:20px; width:100%; max-width:620px; margin:auto; overflow:hidden; animation:modal-in 0.3s ease; }
+  @keyframes modal-in { from{opacity:0;transform:scale(0.95) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+  .modal-header { background:linear-gradient(135deg,rgba(123,79,208,0.3),rgba(91,47,168,0.3)); padding:16px 20px; border-bottom:1px solid rgba(212,168,67,0.12); display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .modal-title { font-family:'Playfair Display',serif; font-size:18px; color:var(--gold-light); }
+  .modal-close { background:none; border:none; color:var(--muted); font-size:22px; cursor:pointer; padding:0; transition:color 0.2s; flex-shrink:0; line-height:1; }
+  .modal-close:hover { color:var(--text); }
+  .modal-body { padding:20px; max-height:58vh; overflow-y:auto; }
+  .modal-footer { padding:13px 20px; border-top:1px solid rgba(255,255,255,0.07); display:flex; gap:8px; }
+
+  /* Empty / Spinner */
+  .empty-state { text-align:center; padding:52px 20px; color:var(--muted); }
+  .empty-icon { font-size:44px; margin-bottom:12px; opacity:0.4; }
+  .empty-text { font-size:15px; margin-bottom:5px; }
+  .empty-sub { font-size:12px; opacity:0.6; }
+  .spinner { display:flex; justify-content:center; padding:40px; }
+  .spinner-ring { width:34px; height:34px; border:3px solid rgba(212,168,67,0.15); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+
+  /* Toast */
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--card2); border:1px solid var(--gold); border-radius:12px; padding:11px 20px; color:var(--gold-light); font-size:14px; font-weight:700; transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); z-index:1000; box-shadow:0 8px 32px rgba(0,0,0,0.5); white-space:nowrap; }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <span class="logo-icon">🎵</span>
+    <div class="logo">Louvor com IA</div>
+    <div class="subtitle">Compositor Inspirado na Palavra</div>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num" id="totalCount">0</div><div class="stat-label">Minhas Músicas</div></div>
+    <div class="stat"><div class="stat-num" id="publicCount">0</div><div class="stat-label">No Mural</div></div>
+    <div class="stat"><div class="stat-num" id="muralTotal">—</div><div class="stat-label">Total Comunidade</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('criar',this)">✨ Criar</button>
+    <button class="tab-btn" onclick="switchTab('salvas',this)">📂 Minhas</button>
+    <button class="tab-btn" onclick="switchTab('mural',this)">🌍 Mural</button>
+  </div>
+
+  <!-- ===== CRIAR ===== -->
+  <div id="tab-criar" class="tab-panel active">
+    <div class="card">
+      <div class="card-title">✨ Nova Composição</div>
+      <div class="field">
+        <label>Tema do Louvor</label>
+        <input type="text" id="tema" placeholder="ex: gratidão, cura, salvação..."/>
+      </div>
+      <div class="field">
+        <label>Versículo Bíblico (opcional)</label>
+        <input type="text" id="versiculo" placeholder="ex: Salmos 23, João 3:16..."/>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Estilo Musical</label>
+          <select id="estilo">
+            <option value="gospel moderno">🎸 Gospel Moderno</option>
+            <option value="sertanejo gospel">🤠 Sertanejo Gospel</option>
+            <option value="adoração suave">🕊️ Adoração Suave</option>
+            <option value="rap gospel">🎤 Rap Gospel</option>
+            <option value="forró gospel">🪗 Forró Gospel</option>
+            <option value="pagode gospel">🥁 Pagode Gospel</option>
+            <option value="hino clássico">📯 Hino Clássico</option>
+            <option value="pop gospel">🎵 Pop Gospel</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Idioma</label>
+          <select id="idioma">
+            <option value="português do Brasil">🇧🇷 Português</option>
+            <option value="espanhol">🇪🇸 Espanhol</option>
+            <option value="inglês">🇺🇸 Inglês</option>
+            <option value="português de Portugal">🇵🇹 PT Portugal</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Tom / Sentimento</label>
+        <div class="chips" id="tom-chips">
+          <button class="chip selected" onclick="selectChip(this,'tom')">🙏 Reverente</button>
+          <button class="chip" onclick="selectChip(this,'tom')">🎉 Celebração</button>
+          <button class="chip" onclick="selectChip(this,'tom')">😭 Clamor</button>
+          <button class="chip" onclick="selectChip(this,'tom')">💪 Vitória</button>
+          <button class="chip" onclick="selectChip(this,'tom')">💛 Gratidão</button>
+          <button class="chip" onclick="selectChip(this,'tom')">🌊 Intimidade</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Estrutura</label>
+        <div class="chips" id="estrutura-chips">
+          <button class="chip selected" onclick="selectChip(this,'estrutura')">Verso + Refrão</button>
+          <button class="chip" onclick="selectChip(this,'estrutura')">Verso + Refrão + Ponte</button>
+          <button class="chip" onclick="selectChip(this,'estrutura')">Estrofes + Coro</button>
+          <button class="chip" onclick="selectChip(this,'estrutura')">Só Adoração</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy -->
+    <div class="card">
+      <div class="card-title">🔒 Privacidade</div>
+      <div class="privacy-toggle">
+        <button class="privacy-btn sel-priv" id="btn-priv" onclick="selectPrivacy('private')">
+          🔒 Privada<small>Só você vê</small>
+        </button>
+        <button class="privacy-btn" id="btn-pub" onclick="selectPrivacy('public')">
+          🌍 Pública<small>Aparece no Mural</small>
+        </button>
+      </div>
+      <div class="author-field" id="author-field">
+        <div class="field">
+          <label>Seu nome (opcional)</label>
+          <input type="text" id="authorName" placeholder="Como quer aparecer no mural..."/>
+        </div>
+      </div>
+    </div>
+
+    <div class="error" id="errorMsg"></div>
+    <button class="btn-create" id="btnCriar" onclick="criarLouvor()"><span>🎵 Criar e Salvar Louvor</span></button>
+
+    <div class="loading" id="loading">
+      <div class="notes-anim"><span>🎵</span><span>🎶</span><span>✨</span><span>🙏</span></div>
+      <div class="loading-text">Compondo com o Espírito Santo...</div>
+    </div>
+
+    <div class="result-card" id="resultCard">
+      <div class="result-header">
+        <div>
+          <div class="result-title" id="resultTitle"></div>
+          <div class="result-meta" id="resultMeta"></div>
+        </div>
+        <div class="result-actions">
+          <button class="btn-icon" onclick="copiarLetra()">📋 Copiar</button>
+          <button class="btn-icon g" id="btnPublicar" onclick="compartilharMural()">🌍 Publicar no Mural</button>
+        </div>
+      </div>
+      <div class="result-body"><div class="lyrics" id="resultLyrics"></div></div>
+    </div>
+  </div>
+
+  <!-- ===== MINHAS ===== -->
+  <div id="tab-salvas" class="tab-panel">
+    <div id="savedSongs"></div>
+  </div>
+
+  <!-- ===== MURAL ===== -->
+  <div id="tab-mural" class="tab-panel">
+    <div class="mural-header">
+      <div>
+        <div class="mural-title">🌍 Mural da Comunidade</div>
+        <div class="mural-subtitle">Louvores compartilhados por todos</div>
+      </div>
+      <button class="btn-icon" onclick="loadMural(true)">🔄 Atualizar</button>
+    </div>
+    <div class="mural-filters">
+      <button class="filter-chip active" onclick="filterMural('todos',this)">Todos</button>
+      <button class="filter-chip" onclick="filterMural('gospel moderno',this)">Gospel</button>
+      <button class="filter-chip" onclick="filterMural('sertanejo gospel',this)">Sertanejo</button>
+      <button class="filter-chip" onclick="filterMural('adoração suave',this)">Adoração</button>
+      <button class="filter-chip" onclick="filterMural('rap gospel',this)">Rap</button>
+      <button class="filter-chip" onclick="filterMural('forró gospel',this)">Forró</button>
+    </div>
+    <div id="muralContent"><div class="spinner"><div class="spinner-ring"></div></div></div>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="result-meta" id="modalMeta"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body"><div class="lyrics" id="modalLyrics"></div></div>
+    <div class="modal-footer">
+      <button class="btn-icon" onclick="copiarModal()">📋 Copiar Letra</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let currentSong = null;
+let selectedTom = '🙏 Reverente';
+let selectedEstrutura = 'Verso + Refrão';
+let selectedPrivacy = 'private';
+let muralFilter = 'todos';
+let muralData = [];
+let likedSongs = [];
+
+try { likedSongs = JSON.parse(localStorage.getItem('louvor_liked') || '[]'); } catch(e) {}
+
+// ---- Privacy ----
+function selectPrivacy(p) {
+  selectedPrivacy = p;
+  document.getElementById('btn-priv').className = 'privacy-btn' + (p==='private' ? ' sel-priv' : '');
+  document.getElementById('btn-pub').className = 'privacy-btn' + (p==='public' ? ' sel-pub' : '');
+  document.getElementById('author-field').className = 'author-field' + (p==='public' ? ' show' : '');
+}
+
+// ---- Local Storage ----
+function getSongs() {
+  try { return JSON.parse(localStorage.getItem('louvor_songs') || '[]'); } catch(e) { return []; }
+}
+function saveSongsLocal(s) { localStorage.setItem('louvor_songs', JSON.stringify(s)); }
+
+// ---- Stats ----
+function updateStats() {
+  const songs = getSongs();
+  document.getElementById('totalCount').textContent = songs.length;
+  document.getElementById('publicCount').textContent = songs.filter(s=>s.isPublic).length;
+}
+
+// ---- Tabs ----
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  btn.classList.add('active');
+  if (tab==='salvas') renderSavedSongs();
+  if (tab==='mural') loadMural();
+}
+
+// ---- Chips ----
+function selectChip(el, group) {
+  document.getElementById(group+'-chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  if (group==='tom') selectedTom = el.textContent.trim();
+  if (group==='estrutura') selectedEstrutura = el.textContent.trim();
+}
+
+// ---- Create ----
+async function criarLouvor() {
+  const tema = document.getElementById('tema').value.trim();
+  if (!tema) { showError('Por favor, escreva o tema do louvor!'); return; }
+
+  const estilo = document.getElementById('estilo').value;
+  const idioma = document.getElementById('idioma').value;
+  const versiculo = document.getElementById('versiculo').value.trim();
+  const autor = document.getElementById('authorName').value.trim() || 'Anônimo';
+
+  hideError();
+  document.getElementById('resultCard').classList.remove('show');
+  document.getElementById('btnCriar').disabled = true;
+  document.getElementById('loading').classList.add('show');
+
+  const prompt = `Você é um compositor cristão talentoso. Crie uma música de louvor completa com as seguintes características:
+
+Tema: ${tema}
+Estilo musical: ${estilo}
+Idioma: ${idioma}
+Tom/Sentimento: ${selectedTom}
+Estrutura: ${selectedEstrutura}
+${versiculo ? `Baseada em: ${versiculo}` : ''}
+
+IMPORTANTE:
+- Escreva a letra completa
+- Use marcadores: [Verso 1], [Refrão], [Verso 2], [Ponte], etc.
+- Letra profunda, bíblica e inspiradora
+- Adeque rima e ritmo ao estilo ${estilo}
+- Escreva APENAS a letra, sem explicações`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || 'Erro na API');
+
+    const letra = data.content?.[0]?.text || '';
+    currentSong = {
+      id: Date.now().toString(),
+      tema, estilo, idioma, versiculo,
+      tom: selectedTom, estrutura: selectedEstrutura,
+      autor, letra,
+      isPublic: selectedPrivacy === 'public',
+      likes: 0,
+      date: new Date().toISOString()
+    };
+
+    // Save locally
+    const songs = getSongs();
+    songs.unshift(currentSong);
+    saveSongsLocal(songs);
+
+    // Publish if public
+    if (selectedPrivacy === 'public') {
+      await publishToMural(currentSong);
+      document.getElementById('btnPublicar').style.display = 'none';
+    } else {
+      document.getElementById('btnPublicar').style.display = '';
+    }
+
+    document.getElementById('resultTitle').textContent = '🎵 ' + tema;
+    document.getElementById('resultMeta').textContent =
+      estilo + ' • ' + idioma + ' • ' + selectedTom + (selectedPrivacy==='public' ? ' • 🌍 Publicada' : ' • 🔒 Privada');
+    document.getElementById('resultLyrics').textContent = letra;
+
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('resultCard').classList.add('show');
+    document.getElementById('resultCard').scrollIntoView({ behavior:'smooth', block:'start' });
+
+    updateStats();
+    showToast(selectedPrivacy==='public' ? '🌍 Publicada no Mural!' : '💾 Salva como privada!');
+
+  } catch(err) {
+    document.getElementById('loading').classList.remove('show');
+    showError('Erro: ' + err.message);
+    console.error(err);
+  }
+  document.getElementById('btnCriar').disabled = false;
+}
+
+// ---- Publish to mural ----
+async function publishToMural(song) {
+  try {
+    await window.storage.set('mural:'+song.id, JSON.stringify({
+      id: song.id, tema: song.tema, estilo: song.estilo,
+      tom: song.tom, autor: song.autor, letra: song.letra,
+      likes: 0, date: song.date
+    }), true);
+  } catch(e) { console.error('Publish error:', e); }
+}
+
+// ---- Share from result ----
+async function compartilharMural() {
+  if (!currentSong) return;
+  if (currentSong.isPublic) { showToast('🌍 Já está no mural!'); return; }
+  currentSong.isPublic = true;
+  const songs = getSongs();
+  const idx = songs.findIndex(s=>s.id===currentSong.id);
+  if (idx>=0) { songs[idx].isPublic=true; saveSongsLocal(songs); }
+  await publishToMural(currentSong);
+  updateStats();
+  document.getElementById('btnPublicar').style.display = 'none';
+  document.getElementById('resultMeta').textContent += ' → 🌍 Publicada!';
+  showToast('🌍 Publicada no Mural!');
+}
+
+function copiarLetra() {
+  navigator.clipboard.writeText(document.getElementById('resultLyrics').textContent)
+    .then(()=>showToast('📋 Letra copiada!'));
+}
+
+// ---- Saved Songs ----
+function renderSavedSongs() {
+  const songs = getSongs();
+  const c = document.getElementById('savedSongs');
+  if (!songs.length) {
+    c.innerHTML = `<div class="empty-state"><div class="empty-icon">🎵</div><div class="empty-text">Nenhuma música ainda</div><div class="empty-sub">Crie sua primeira composição!</div></div>`;
+    return;
+  }
+  c.innerHTML = `<div class="songs-list">${songs.map((s,i)=>`
+    <div class="song-item">
+      <div class="song-header" onclick="toggleSong(${i})">
+        <div class="song-hl">
+          <div class="song-name">🎵 ${esc(s.tema)}</div>
+          <div class="song-meta-row">
+            <span class="song-meta">${s.estilo} • ${fmt(s.date)}</span>
+            <span class="badge ${s.isPublic?'badge-pub':'badge-priv'}">${s.isPublic?'🌍 Pública':'🔒 Privada'}</span>
+          </div>
+        </div>
+        <div class="song-toggle" id="tog-${i}">▼</div>
+      </div>
+      <div class="song-body" id="body-${i}">
+        <div class="song-actions">
+          <button class="btn-icon" onclick="copiarSong(${i})">📋 Copiar</button>
+          ${!s.isPublic ? `<button class="btn-icon g" onclick="publishSong(${i})">🌍 Publicar</button>` : `<button class="btn-icon" onclick="unpublishSong(${i})">🔒 Tornar Privada</button>`}
+          <button class="btn-icon r" onclick="deleteSong(${i})">🗑️ Excluir</button>
+        </div>
+        <div class="lyrics">${esc(s.letra)}</div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+function toggleSong(i) {
+  const b = document.getElementById('body-'+i);
+  const t = document.getElementById('tog-'+i);
+  b.classList.toggle('open');
+  t.textContent = b.classList.contains('open') ? '▲' : '▼';
+}
+function copiarSong(i) {
+  navigator.clipboard.writeText(getSongs()[i].letra).then(()=>showToast('📋 Copiada!'));
+}
+async function publishSong(i) {
+  const songs = getSongs();
+  songs[i].isPublic = true;
+  saveSongsLocal(songs);
+  await publishToMural(songs[i]);
+  updateStats(); renderSavedSongs();
+  showToast('🌍 Publicada no Mural!');
+}
+async function unpublishSong(i) {
+  const songs = getSongs();
+  songs[i].isPublic = false;
+  saveSongsLocal(songs);
+  try { await window.storage.delete('mural:'+songs[i].id, true); } catch(e){}
+  updateStats(); renderSavedSongs();
+  showToast('🔒 Tornada privada!');
+}
+function deleteSong(i) {
+  if (!confirm('Excluir esta música?')) return;
+  const songs = getSongs();
+  if (songs[i].isPublic) window.storage.delete('mural:'+songs[i].id,true).catch(()=>{});
+  songs.splice(i,1);
+  saveSongsLocal(songs);
+  updateStats(); renderSavedSongs();
+  showToast('🗑️ Excluída!');
+}
+
+// ---- Mural ----
+async function loadMural(force=false) {
+  const c = document.getElementById('muralContent');
+  c.innerHTML = '<div class="spinner"><div class="spinner-ring"></div></div>';
+  try {
+    const kr = await window.storage.list('mural:', true);
+    const keys = kr?.keys || [];
+    document.getElementById('muralTotal').textContent = keys.length;
+
+    const songs = [];
+    for (const key of keys) {
+      try {
+        const r = await window.storage.get(key, true);
+        if (r?.value) songs.push(JSON.parse(r.value));
+      } catch(e) {}
+    }
+    songs.sort((a,b)=>new Date(b.date)-new Date(a.date));
+    muralData = songs;
+    renderMural();
+  } catch(e) {
+    c.innerHTML = `<div class="empty-state"><div class="empty-icon">🌍</div><div class="empty-text">Mural indisponível</div><div class="empty-sub">Tente novamente</div></div>`;
+  }
+}
+
+function filterMural(f, btn) {
+  muralFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  renderMural();
+}
+
+function renderMural() {
+  const c = document.getElementById('muralContent');
+  let songs = muralFilter==='todos' ? muralData : muralData.filter(s=>s.estilo===muralFilter);
+  if (!songs.length) {
+    c.innerHTML = `<div class="empty-state"><div class="empty-icon">🎵</div><div class="empty-text">Nenhuma música aqui ainda</div><div class="empty-sub">Seja o primeiro a compartilhar!</div></div>`;
+    return;
+  }
+  c.innerHTML = songs.map(s=>{
+    const liked = likedSongs.includes(s.id);
+    const preview = s.letra.replace(/\[.*?\]/g,'').split('\n').filter(l=>l.trim()).slice(0,3).join('\n');
+    return `<div class="mural-card">
+      <div class="mural-card-header">
+        <div>
+          <div class="mural-song-title">🎵 ${esc(s.tema)}</div>
+          <div class="mural-author">por ${esc(s.autor||'Anônimo')}</div>
+        </div>
+        <span class="style-badge">${esc(s.estilo)}</span>
+      </div>
+      <div class="mural-preview" onclick="openModal('${s.id}')">${esc(preview)}<br><span class="read-hint">→ Toque para ler completo</span></div>
+      <div class="mural-footer">
+        <div class="mural-date">${fmt(s.date)}</div>
+        <div class="mural-actions">
+          <button class="btn-like${liked?' liked':''}" onclick="toggleLike('${s.id}',this)">
+            ${liked?'✨':'🙏'} <span id="lc-${s.id}">${s.likes||0}</span>
+          </button>
+          <button class="btn-icon" onclick="copiarMuralSong('${s.id}')">📋</button>
+          <button class="btn-icon" onclick="openModal('${s.id}')">📖 Ler</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ---- Like ----
+async function toggleLike(id, btn) {
+  const song = muralData.find(s=>s.id===id);
+  if (!song) return;
+  const idx = likedSongs.indexOf(id);
+  if (idx>=0) {
+    likedSongs.splice(idx,1);
+    song.likes = Math.max(0,(song.likes||0)-1);
+    btn.className = 'btn-like';
+  } else {
+    likedSongs.push(id);
+    song.likes = (song.likes||0)+1;
+    btn.className = 'btn-like liked';
+  }
+  btn.innerHTML = `${likedSongs.includes(id)?'✨':'🙏'} <span id="lc-${id}">${song.likes}</span>`;
+  localStorage.setItem('louvor_liked', JSON.stringify(likedSongs));
+  try {
+    const r = await window.storage.get('mural:'+id, true);
+    if (r?.value) {
+      const stored = JSON.parse(r.value);
+      stored.likes = song.likes;
+      await window.storage.set('mural:'+id, JSON.stringify(stored), true);
+    }
+  } catch(e) {}
+}
+
+function copiarMuralSong(id) {
+  const s = muralData.find(s=>s.id===id);
+  if (s) navigator.clipboard.writeText(s.letra).then(()=>showToast('📋 Copiada!'));
+}
+
+// ---- Modal ----
+function openModal(id) {
+  const s = muralData.find(s=>s.id===id);
+  if (!s) return;
+  document.getElementById('modalTitle').textContent = '🎵 '+s.tema;
+  document.getElementById('modalMeta').textContent = s.estilo+' • por '+(s.autor||'Anônimo')+' • '+fmt(s.date);
+  document.getElementById('modalLyrics').textContent = s.letra;
+  document.getElementById('modalOverlay').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+  document.body.style.overflow='';
+}
+function closeModalOutside(e) { if(e.target===document.getElementById('modalOverlay')) closeModal(); }
+function copiarModal() {
+  navigator.clipboard.writeText(document.getElementById('modalLyrics').textContent).then(()=>showToast('📋 Copiada!'));
+}
+
+// ---- Utils ----
+function esc(t) { return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmt(d) { try{return new Date(d).toLocaleDateString('pt-BR')}catch(e){return''} }
+function showToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+function showError(msg) { const e=document.getElementById('errorMsg'); e.textContent='⚠️ '+msg; e.classList.add('show'); }
+function hideError() { document.getElementById('errorMsg').classList.remove('show'); }
+
+updateStats();
+</script>
+</body>
+</html>
