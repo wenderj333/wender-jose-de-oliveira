@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const db = require('../db/connection');
-const authenticateToken = require('../middleware/auth');
+const { authenticate: authenticateToken } = require('../middleware/auth');
 
 // Get user profile (public)
 router.get('/:userId', authenticateToken, async (req, res) => {
@@ -75,3 +75,4 @@ router.patch('/photo', authenticateToken, async (req, res) => {
 });
 
 module.exports = router;
+
