@@ -97,7 +97,12 @@
         "fileTooLargeSimple": "❌ Файл слишком большой! Попробуйте меньший файл.",
         "doNotClose": "Пожалуйста, не закрывайте и не обновляйте страницу!",
         "loading": "Загрузка...",
-        "noMusicUploaded": "Музыка еще не загружена"
+        "noMusicUploaded": "Музыка еще не загружена",
+        "title": "Стена сообщества",
+        "subtitle": "Поделитесь свидетельствами, хвалой и библейскими стихами с христианской общиной",
+        "newPost": "Новое сообщение",
+        "cancel": "Отмена",
+        "messagePlaceholder": "Напишите свое свидетельство, размышление или библейский стих..."
     },
     "groups": {
         "joinGroup": "+ Присоединиться к группе",
@@ -213,44 +218,145 @@
     },
     "biblicalCourse": {
         "themes": [
-            { "value": "fe", "label": "✝️ Вера" },
-            { "value": "esperanca", "label": "🌅 Надежда" },
-            { "value": "gratidao", "label": "🙏 Благодарность" },
-            { "value": "cura", "label": "💚 Исцеление" },
-            { "value": "familia", "label": "👨‍👩‍👧‍👦 Семья" },
-            { "value": "amor", "label": "❤️ Любовь Бога" },
-            { "value": "adoracao", "label": "👑 Поклонение" },
-            { "value": "vitoria", "label": "🏆 Победа" },
-            { "value": "paz", "label": "🕊️ Мир" },
-            { "value": "avivamento", "label": "🔥 Возрождение" },
-            { "value": "perdao", "label": "💝 Прощение" },
-            { "value": "salvacao", "label": "✨ Спасение" }
+            {
+                "value": "fe",
+                "label": "✝️ Вера"
+            },
+            {
+                "value": "esperanca",
+                "label": "🌅 Надежда"
+            },
+            {
+                "value": "gratidao",
+                "label": "🙏 Благодарность"
+            },
+            {
+                "value": "cura",
+                "label": "💚 Исцеление"
+            },
+            {
+                "value": "familia",
+                "label": "👨‍👩‍👧‍👦 Семья"
+            },
+            {
+                "value": "amor",
+                "label": "❤️ Любовь Бога"
+            },
+            {
+                "value": "adoracao",
+                "label": "👑 Поклонение"
+            },
+            {
+                "value": "vitoria",
+                "label": "🏆 Победа"
+            },
+            {
+                "value": "paz",
+                "label": "🕊️ Мир"
+            },
+            {
+                "value": "avivamento",
+                "label": "🔥 Возрождение"
+            },
+            {
+                "value": "perdao",
+                "label": "💝 Прощение"
+            },
+            {
+                "value": "salvacao",
+                "label": "✨ Спасение"
+            }
         ],
         "styles": [
-            { "value": "worship", "label": "🎹 Поклонение" },
-            { "value": "pentecostal", "label": "🔥 Пятидесятнический" },
-            { "value": "coral", "label": "🎶 Хор" },
-            { "value": "acustico", "label": "🎸 Акустика" },
-            { "value": "pop_gospel", "label": "🎤 Поп-госпель" },
-            { "value": "sertanejo_gospel", "label": "🤠 Кантри-госпель" },
-            { "value": "reggae_gospel", "label": "🎵 Реггей-госпель" },
-            { "value": "hino", "label": "📖 Традиционный Гимн" }
+            {
+                "value": "worship",
+                "label": "🎹 Поклонение"
+            },
+            {
+                "value": "pentecostal",
+                "label": "🔥 Пятидесятнический"
+            },
+            {
+                "value": "coral",
+                "label": "🎶 Хор"
+            },
+            {
+                "value": "acustico",
+                "label": "🎸 Акустика"
+            },
+            {
+                "value": "pop_gospel",
+                "label": "🎤 Поп-госпель"
+            },
+            {
+                "value": "sertanejo_gospel",
+                "label": "🤠 Кантри-госпель"
+            },
+            {
+                "value": "reggae_gospel",
+                "label": "🎵 Реггей-госпель"
+            },
+            {
+                "value": "hino",
+                "label": "📖 Традиционный Гимн"
+            }
         ],
         "emotions": [
-            { "value": "alegre", "label": "😊 Радостный" },
-            { "value": "profundo", "label": "🌊 Глубокий" },
-            { "value": "oracao", "label": "🙏 Молитва" },
-            { "value": "celebracao", "label": "🎉 Празднование" },
-            { "value": "intimidade", "label": "💜 Близость с Богом" },
-            { "value": "guerra", "label": "⚔️ Духовная Война" },
-            { "value": "conforto", "label": "🤗 Утешение" },
-            { "value": "louvor_intenso", "label": "🔥 Интенсивная Хвала" }
+            {
+                "value": "alegre",
+                "label": "😊 Радостный"
+            },
+            {
+                "value": "profundo",
+                "label": "🌊 Глубокий"
+            },
+            {
+                "value": "oracao",
+                "label": "🙏 Молитва"
+            },
+            {
+                "value": "celebracao",
+                "label": "🎉 Празднование"
+            },
+            {
+                "value": "intimidade",
+                "label": "💜 Близость с Богом"
+            },
+            {
+                "value": "guerra",
+                "label": "⚔️ Духовная Война"
+            },
+            {
+                "value": "conforto",
+                "label": "🤗 Утешение"
+            },
+            {
+                "value": "louvor_intenso",
+                "label": "🔥 Интенсивная Хвала"
+            }
         ],
         "bibleBooks": [
-            "Бытие", "Исход", "Псалмы", "Притчи", "Исайя", "Иеремия",
-            "Матфей", "Марк", "Лука", "Иоанн", "Деяния", "Римлянам",
-            "1 Коринфянам", "2 Коринфянам", "Галатам", "Ефесянам", "Филиппийцам",
-            "Колоссянам", "Евреям", "Иакова", "Откровение"
+            "Бытие",
+            "Исход",
+            "Псалмы",
+            "Притчи",
+            "Исайя",
+            "Иеремия",
+            "Матфей",
+            "Марк",
+            "Лука",
+            "Иоанн",
+            "Деяния",
+            "Римлянам",
+            "1 Коринфянам",
+            "2 Коринфянам",
+            "Галатам",
+            "Ефесянам",
+            "Филиппийцам",
+            "Колоссянам",
+            "Евреям",
+            "Иакова",
+            "Откровение"
         ]
     },
     "bibleAI": {

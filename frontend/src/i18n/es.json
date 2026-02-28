@@ -44,41 +44,6 @@
     },
     "footer": "© 2026 Sigo com Fé - Tecnología al servicio del Reino",
     "home": {
-        "subtitle": "Ora, conéctate y fortalece tu fe con miles de hermanos alrededor del mundo.",
-        "startNow": "Comienza Ahora",
-        "seePrayerRequests": "Ver Pedidos de Oración",
-        "churchPraying_one": "¡{{count}} iglesia orando ahora!",
-        "churchPraying_other": "¡{{count}} iglesias orando ahora!",
-        "featurePrayers": "Pedidos de Oración",
-        "featurePrayersDesc": "Comparte tus pedidos y ora por los hermanos. ¡Descubre el poder de la oración colectiva y celebra las victorias!",
-        "featureLive": "Pastor Orando en Vivo",
-        "featureLiveDesc": "Sabe cuándo tu pastor está orando en tiempo real. Burbujas de oración suben como incienso al cielo.",
-        "featureMap": "Mapa de Iglesias",
-        "featureMapDesc": "Encuentra iglesias en cualquier ciudad. Perfecto para viajeros y familias en mudanza.",
-        "featureDashboard": "Dashboard Pastoral",
-        "featureDashboardDesc": "Herramientas completas de gestión para pastores: miembros, finanzas, campañas y mucho más.",
-        "featureMural": "Mural de la Comunidad",
-        "featureMuralDesc": "Comparte testimonios, alabanzas y versículos con la comunidad cristiana.",
-        "featureKids": "Rincón Kids",
-        "featureKidsDesc": "¡Historias bíblicas, quiz interactivo y actividades para que los niños aprendan sobre la Biblia!",
-        "featureChurch": "Registra Tu Iglesia",
-        "featureChurchDesc": "Registra tu iglesia en la plataforma y conéctate con fieles de todo el mundo.",
-        "explore": "Explorar",
-        "registerBtn": "Registrarse",
-        "helpTitle": "¿Necesitas Ayuda?",
-        "helpSubtitle": "No estás solo(a). Una iglesia puede ayudarte.",
-        "helpSeeThings": "👁️ Veo cosas",
-        "helpHearThings": "👂 Escucho ruidos",
-        "helpFeelAlone": "😔 Me siento solo(a)",
-        "helpNeedPrayer": "🙏 Necesito oración",
-        "helpAnxious": "😰 Estoy ansioso(a)",
-        "helpDepressed": "😢 Estoy triste/deprimido(a)",
-        "helpSent": "✅ ¡Tu pedido fue enviado! Una iglesia cercana se pondrá en contacto para ayudarte. ¡Dios te bendiga! 🙏",
-        "helpNamePlaceholder": "Tu nombre (opcional)",
-        "helpContactPlaceholder": "Teléfono o email de contacto",
-        "helpMessagePlaceholder": "Cuéntanos un poco más sobre lo que estás sintiendo...",
-        "helpSend": "Pedir Ayuda",
-        "helpBtn": "Pedir Ayuda",
         "verses": [
             {
                 "text": "Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos.",
@@ -93,19 +58,19 @@
                 "ref": "Salmos 23:1"
             },
             {
-                "text": "Confía en el Señor con todo tu corazón y no te apoyes en tu propia prudencia.",
+                "text": "Confía en el Señor con todo tu corazón y no te apoyes en tu propio entendimiento.",
                 "ref": "Proverbios 3:5"
             },
             {
-                "text": "Porque yo sé los planes que tengo para ustedes, planes de darles esperanza y un futuro.",
+                "text": "Porque yo sé los pensamientos que tengo acerca de vosotros, dice el Señor.",
                 "ref": "Jeremías 29:11"
             },
             {
-                "text": "Sean fuertes y valientes. No tengan miedo, porque el Señor estará con ustedes.",
+                "text": "Esfuérzate y sé valiente, no tengas miedo ni desmayes, porque el Señor tu Dios está contigo.",
                 "ref": "Deuteronomio 31:6"
             },
             {
-                "text": "La oración del justo es poderosa y eficaz.",
+                "text": "La oración eficaz del justo puede mucho.",
                 "ref": "Santiago 5:16"
             }
         ]
@@ -228,46 +193,53 @@
         "error": "Error al registrar"
     },
     "dashboard": {
-        "title": "Dashboard",
-        "loading": "Cargando datos...",
+        "title": "Panel de control",
+        "overview": "Resumen en tiempo real",
         "users": "Usuarios",
         "churches": "Iglesias",
-        "prayerRequests": "Pedidos de Oración",
-        "answeredPrayers": "Oraciones Contestadas",
+        "prayerRequests": "Peticiones de Oración",
+        "answeredPrayers": "Oraciones Respondidas",
+        "pastorManagement": "Sala de Gestión del Pastor",
+        "managementDesc": "Gestiona miembros, diezmos, comunicados y más",
         "quickActions": "Acciones Rápidas",
-        "newPrayerRequest": "Nuevo Pedido de Oración",
+        "newPrayerRequest": "Nueva Petición de Oración",
         "registerChurch": "Registrar Iglesia",
-        "kidsCorner": "Rincón Kids",
+        "kidsCorner": "Niños",
         "recentActivity": "Actividad Reciente",
-        "requestedPrayer": "pidió oración:",
-        "noActivity": "Ninguna actividad reciente. ¡Comienza creando un pedido de oración!",
-        "viewAll": "Ver todos los pedidos"
+        "viewAll": "Ver todo",
+        "requestedPrayer": "pidió oración",
+        "noActivity": "Ninguna actividad reciente",
+        "loadingUsers": "Cargando...",
+        "noUsers": "Ningún usuario encontrado."
     },
     "mural": {
-        "title": "Mural de la Comunidad",
-        "subtitle": "Comparte testimonios, alabanzas y versículos con la comunidad cristiana",
-        "newPost": "Nuevo Post",
-        "cancel": "Cancelar",
-        "shareWithCommunity": "Compartir con la Comunidad",
-        "categoryLabel": "Categoría",
-        "message": "Mensaje",
-        "messagePlaceholder": "Escribe tu testimonio, reflexión o versículo...",
+        "testimony": "🙏 Testimonio",
+        "worship": "🎵 Adoración",
+        "photo": "📸 Foto/Vídeo",
+        "verse": "📖 Versículo",
+        "reflection": "💭 Reflexión",
+        "campaign": "💝 Campaña / Causa",
+        "placeholder": "Comparte algo con la comunidad...",
         "publish": "Publicar",
-        "noPostsFound": "Ninguna publicación encontrada en esta categoría.",
-        "filters": {
-            "all": "Todas",
-            "myChurch": "Mi Iglesia",
-            "testimonies": "Testimonios",
-            "worship": "Alabanzas",
-            "verses": "Versículos"
-        },
-        "categories": {
-            "testemunho": "Testimonio",
-            "louvor": "Alabanza / Video",
-            "reflexao": "Reflexión Bíblica",
-            "versiculo": "Versículo",
-            "foto": "Foto"
-        }
+        "noPosts": "Ninguna publicación aún. ¡Sé el primero en publicar! 📸",
+        "commentPlaceholder": "Escribe un comentario...",
+        "confirmDelete": "¿Estás seguro de que quieres eliminar este post?",
+        "delete": "Eliminar post",
+        "loginRequired": "Por favor, inicia sesión para publicar",
+        "addContent": "Por favor, añade texto o media",
+        "fileTooLarge": "¡Archivo muy grande! Máximo {{maxSize}} MB.",
+        "uploading": "📤 Subiendo {{filename}}...",
+        "uploadingLarge": "📤 Subiendo {{filename}}... esto puede tomar algunos minutos. ¡No cierres la página!",
+        "uploadTooSlow": "La subida tardó demasiado. Tu conexión puede ser lenta. Intenta de nuevo.",
+        "fileTooLargeSimple": "❌ ¡Archivo muy grande! Intenta un archivo más pequeño.",
+        "doNotClose": "¡Por favor no cierres ni recargues la página!",
+        "loading": "Cargando...",
+        "noMusicUploaded": "Ninguna música subida aún",
+        "title": "Muro Comunitario",
+        "subtitle": "Comparte testimonios, alabanzas y versículos bíblicos con la comunidad cristiana",
+        "newPost": "Nueva Publicación",
+        "cancel": "Cancelar",
+        "messagePlaceholder": "Escribe tu testimonio, reflexión o versículo bíblico..."
     },
     "kids": {
         "title": "Escuela Dominical Digital",
@@ -320,23 +292,48 @@
         "quiz": [
             {
                 "q": "¿Quién derrotó al gigante Goliat?",
-                "opts": ["Saúl", "David", "Moisés", "Josué"]
+                "opts": [
+                    "Saúl",
+                    "David",
+                    "Moisés",
+                    "Josué"
+                ]
             },
             {
                 "q": "¿Cuántos días duró el diluvio?",
-                "opts": ["10 días", "20 días", "40 días", "100 días"]
+                "opts": [
+                    "10 días",
+                    "20 días",
+                    "40 días",
+                    "100 días"
+                ]
             },
             {
                 "q": "¿Quién fue arrojado al foso de los leones?",
-                "opts": ["Jonás", "Daniel", "Pablo", "Pedro"]
+                "opts": [
+                    "Jonás",
+                    "Daniel",
+                    "Pablo",
+                    "Pedro"
+                ]
             },
             {
                 "q": "¿Cuál es el primer libro de la Biblia?",
-                "opts": ["Éxodo", "Salmos", "Génesis", "Mateo"]
+                "opts": [
+                    "Éxodo",
+                    "Salmos",
+                    "Génesis",
+                    "Mateo"
+                ]
             },
             {
                 "q": "¿En qué ciudad nació Jesús?",
-                "opts": ["Jerusalén", "Nazaret", "Belén", "Capernaúm"]
+                "opts": [
+                    "Jerusalén",
+                    "Nazaret",
+                    "Belén",
+                    "Capernaúm"
+                ]
             }
         ],
         "activityList": [
@@ -501,23 +498,26 @@
         "back": "Volver"
     },
     "groups": {
-        "title": "Grupos",
-        "createGroup": "Crear Grupo",
-        "newGroup": "Crear Nuevo Grupo",
-        "groupName": "Nombre del grupo",
-        "description": "Descripción (opcional)",
-        "public": "Público",
-        "private": "Privado",
-        "creating": "Creando...",
-        "cancel": "Cancelar",
-        "noGroups": "Ningún grupo aún",
-        "createFirst": "¡Crea el primer grupo de la comunidad!",
-        "members": "miembros",
-        "join": "Unirse al Grupo",
-        "leave": "Salir del Grupo",
-        "noPosts": "Ninguna publicación aún",
-        "writePlaceholder": "Escribe en el grupo...",
-        "back": "Volver"
+        "joinGroup": "+ Unirse al Grupo",
+        "leaveGroup": "Salir del Grupo",
+        "inputPlaceholder": "Escribe en el grupo...",
+        "noPosts": "Sin publicaciones aún",
+        "private": "🔒 Privado",
+        "public": "🌐 Público",
+        "communionTitle": "🤝 Grupos de Comunión",
+        "communionDesc": "¡Únete a grupos con hermanos que comparten la misma fe! Aquí puedes crear o unirte a grupos de estudio bíblico, oración, alabanza, jóvenes, parejas y mucho más.",
+        "loading": "Cargando...",
+        "noGroups": "No se encontraron grupos",
+        "createFirst": "¡Crea el primer grupo!",
+        "createForm": {
+            "name": "Nombre del Grupo",
+            "desc": "Descripción (opcional)",
+            "submit": "Crear Grupo",
+            "cancel": "Cancelar"
+        },
+        "timeAgo": {
+            "now": "Ahora"
+        }
     },
     "consecration": {
         "title": "Consagración",
@@ -666,124 +666,6 @@
         "hoursAgo": "hace {{count}}h",
         "daysAgo": "hace {{count}}d"
     },
-    "home": {
-        "verses": [
-            {
-                "text": "Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos.",
-                "ref": "Mateo 18:20"
-            },
-            {
-                "text": "Todo lo puedo en Cristo que me fortalece.",
-                "ref": "Filipenses 4:13"
-            },
-            {
-                "text": "El Señor es mi pastor; nada me faltará.",
-                "ref": "Salmos 23:1"
-            },
-            {
-                "text": "Confía en el Señor con todo tu corazón y no te apoyes en tu propio entendimiento.",
-                "ref": "Proverbios 3:5"
-            },
-            {
-                "text": "Porque yo sé los pensamientos que tengo acerca de vosotros, dice el Señor.",
-                "ref": "Jeremías 29:11"
-            },
-            {
-                "text": "Esfuérzate y sé valiente, no tengas miedo ni desmayes, porque el Señor tu Dios está contigo.",
-                "ref": "Deuteronomio 31:6"
-            },
-            {
-                "text": "La oración eficaz del justo puede mucho.",
-                "ref": "Santiago 5:16"
-            }
-        ]
-    },
-    "mural": {
-        "testimony": "🙏 Testimonio",
-        "worship": "🎵 Adoración",
-        "photo": "📸 Foto/Vídeo",
-        "verse": "📖 Versículo",
-        "reflection": "💭 Reflexión",
-        "campaign": "💝 Campaña / Causa",
-        "placeholder": "Comparte algo con la comunidad...",
-        "publish": "Publicar",
-        "noPosts": "Ninguna publicación aún. ¡Sé el primero en publicar! 📸",
-        "commentPlaceholder": "Escribe un comentario...",
-        "confirmDelete": "¿Estás seguro de que quieres eliminar este post?",
-        "delete": "Eliminar post",
-        "loginRequired": "Por favor, inicia sesión para publicar",
-        "addContent": "Por favor, añade texto o media",
-        "fileTooLarge": "¡Archivo muy grande! Máximo {{maxSize}} MB.",
-        "uploading": "📤 Subiendo {{filename}}...",
-        "uploadingLarge": "📤 Subiendo {{filename}}... esto puede tomar algunos minutos. ¡No cierres la página!",
-        "uploadTooSlow": "La subida tardó demasiado. Tu conexión puede ser lenta. Intenta de nuevo.",
-        "fileTooLargeSimple": "❌ ¡Archivo muy grande! Intenta un archivo más pequeño.",
-        "doNotClose": "¡Por favor no cierres ni recargues la página!",
-        "loading": "Cargando...",
-        "noMusicUploaded": "Ninguna música subida aún"
-    },
-    "groups": {
-        "joinGroup": "+ Unirse al Grupo",
-        "leaveGroup": "Salir del Grupo",
-        "inputPlaceholder": "Escribe en el grupo...",
-        "noPosts": "Sin publicaciones aún",
-        "private": "🔒 Privado",
-        "public": "🌐 Público",
-        "communionTitle": "🤝 Grupos de Comunión",
-        "communionDesc": "¡Únete a grupos con hermanos que comparten la misma fe! Aquí puedes crear o unirte a grupos de estudio bíblico, oración, alabanza, jóvenes, parejas y mucho más.",
-        "loading": "Cargando...",
-        "noGroups": "No se encontraron grupos",
-        "createFirst": "¡Crea el primer grupo!",
-        "createForm": {
-            "name": "Nombre del Grupo",
-            "desc": "Descripción (opcional)",
-            "submit": "Crear Grupo",
-            "cancel": "Cancelar"
-        },
-        "timeAgo": {
-            "now": "Ahora"
-        }
-    },
-    "dashboard":  {
-                      "title":  "Panel de control",
-                      "overview":  "Resumen en tiempo real",
-                      "users":  "Usuarios",
-                      "churches":  "Iglesias",
-                      "prayerRequests":  "Peticiones de Oración",
-                      "answeredPrayers":  "Oraciones Respondidas",
-                      "pastorManagement":  "Sala de Gestión del Pastor",
-                      "managementDesc":  "Gestiona miembros, diezmos, comunicados y más",
-                      "quickActions":  "Acciones Rápidas",
-                      "newPrayerRequest":  "Nueva Petición de Oración",
-                      "registerChurch":  "Registrar Iglesia",
-                      "kidsCorner":  "Niños",
-                      "recentActivity":  "Actividad Reciente",
-                      "viewAll":  "Ver todo",
-                      "requestedPrayer":  "pidió oración",
-                      "noActivity":  "Ninguna actividad reciente",
-                      "loadingUsers":  "Cargando...",
-                      "noUsers":  "Ningún usuario encontrado."
-                  },
-    "dashboard":  {
-                      "title":  "Panel de control",
-                      "overview":  "Resumen en tiempo real",
-                      "users":  "Usuarios",
-                      "churches":  "Iglesias",
-                      "prayerRequests":  "Peticiones de Oración",
-                      "answeredPrayers":  "Oraciones Respondidas",
-                      "pastorManagement":  "Sala de Gestión del Pastor",
-                      "managementDesc":  "Gestiona miembros, diezmos, comunicados y más",
-                      "quickActions":  "Acciones Rápidas",
-                      "newPrayerRequest":  "Nueva Petición de Oración",
-                      "registerChurch":  "Registrar Iglesia",
-                      "kidsCorner":  "Niños",
-                      "recentActivity":  "Actividad Reciente",
-                      "viewAll":  "Ver todo",
-                      "requestedPrayer":  "pidió oración",
-                      "noActivity":  "Ninguna actividad reciente",
-                      "loadingUsers":  "Cargando...",
-                      "noUsers":  "Ningún usuario encontrado."
-                  },
     "members": {
         "never": "Nunca",
         "now": "Ahora",
@@ -805,44 +687,145 @@
     },
     "biblicalCourse": {
         "themes": [
-            { "value": "fe", "label": "✝️ Fe" },
-            { "value": "esperanca", "label": "🌅 Esperanza" },
-            { "value": "gratidao", "label": "🙏 Gratitud" },
-            { "value": "cura", "label": "💚 Sanación" },
-            { "value": "familia", "label": "👨‍👩‍👧‍👦 Familia" },
-            { "value": "amor", "label": "❤️ Amor de Dios" },
-            { "value": "adoracao", "label": "👑 Adoración" },
-            { "value": "vitoria", "label": "🏆 Victoria" },
-            { "value": "paz", "label": "🕊️ Paz" },
-            { "value": "avivamento", "label": "🔥 Avivamiento" },
-            { "value": "perdao", "label": "💝 Perdón" },
-            { "value": "salvacao", "label": "✨ Salvación" }
+            {
+                "value": "fe",
+                "label": "✝️ Fe"
+            },
+            {
+                "value": "esperanca",
+                "label": "🌅 Esperanza"
+            },
+            {
+                "value": "gratidao",
+                "label": "🙏 Gratitud"
+            },
+            {
+                "value": "cura",
+                "label": "💚 Sanación"
+            },
+            {
+                "value": "familia",
+                "label": "👨‍👩‍👧‍👦 Familia"
+            },
+            {
+                "value": "amor",
+                "label": "❤️ Amor de Dios"
+            },
+            {
+                "value": "adoracao",
+                "label": "👑 Adoración"
+            },
+            {
+                "value": "vitoria",
+                "label": "🏆 Victoria"
+            },
+            {
+                "value": "paz",
+                "label": "🕊️ Paz"
+            },
+            {
+                "value": "avivamento",
+                "label": "🔥 Avivamiento"
+            },
+            {
+                "value": "perdao",
+                "label": "💝 Perdón"
+            },
+            {
+                "value": "salvacao",
+                "label": "✨ Salvación"
+            }
         ],
         "styles": [
-            { "value": "worship", "label": "🎹 Adoración" },
-            { "value": "pentecostal", "label": "🔥 Pentecostal" },
-            { "value": "coral", "label": "🎶 Coro" },
-            { "value": "acustico", "label": "🎸 Acústico" },
-            { "value": "pop_gospel", "label": "🎤 Pop Gospel" },
-            { "value": "sertanejo_gospel", "label": "🤠 Country Gospel" },
-            { "value": "reggae_gospel", "label": "🎵 Reggae Gospel" },
-            { "value": "hino", "label": "📖 Himno Tradicional" }
+            {
+                "value": "worship",
+                "label": "🎹 Adoración"
+            },
+            {
+                "value": "pentecostal",
+                "label": "🔥 Pentecostal"
+            },
+            {
+                "value": "coral",
+                "label": "🎶 Coro"
+            },
+            {
+                "value": "acustico",
+                "label": "🎸 Acústico"
+            },
+            {
+                "value": "pop_gospel",
+                "label": "🎤 Pop Gospel"
+            },
+            {
+                "value": "sertanejo_gospel",
+                "label": "🤠 Country Gospel"
+            },
+            {
+                "value": "reggae_gospel",
+                "label": "🎵 Reggae Gospel"
+            },
+            {
+                "value": "hino",
+                "label": "📖 Himno Tradicional"
+            }
         ],
         "emotions": [
-            { "value": "alegre", "label": "😊 Alegre" },
-            { "value": "profundo", "label": "🌊 Profundo" },
-            { "value": "oracao", "label": "🙏 Oración" },
-            { "value": "celebracao", "label": "🎉 Celebración" },
-            { "value": "intimidade", "label": "💜 Intimidad con Dios" },
-            { "value": "guerra", "label": "⚔️ Guerra Espiritual" },
-            { "value": "conforto", "label": "🤗 Consuelo" },
-            { "value": "louvor_intenso", "label": "🔥 Alaban Intenso" }
+            {
+                "value": "alegre",
+                "label": "😊 Alegre"
+            },
+            {
+                "value": "profundo",
+                "label": "🌊 Profundo"
+            },
+            {
+                "value": "oracao",
+                "label": "🙏 Oración"
+            },
+            {
+                "value": "celebracao",
+                "label": "🎉 Celebración"
+            },
+            {
+                "value": "intimidade",
+                "label": "💜 Intimidad con Dios"
+            },
+            {
+                "value": "guerra",
+                "label": "⚔️ Guerra Espiritual"
+            },
+            {
+                "value": "conforto",
+                "label": "🤗 Consuelo"
+            },
+            {
+                "value": "louvor_intenso",
+                "label": "🔥 Alaban Intenso"
+            }
         ],
         "bibleBooks": [
-            "Génesis", "Éxodo", "Salmos", "Proverbios", "Isaías", "Jeremías",
-            "Mateo", "Marcos", "Lucas", "Juan", "Hechos", "Romanos",
-            "1 Corintios", "2 Corintios", "Gálatas", "Efesios", "Filipenses",
-            "Colosenses", "Hebreos", "Santiago", "Apocalipsis"
+            "Génesis",
+            "Éxodo",
+            "Salmos",
+            "Proverbios",
+            "Isaías",
+            "Jeremías",
+            "Mateo",
+            "Marcos",
+            "Lucas",
+            "Juan",
+            "Hechos",
+            "Romanos",
+            "1 Corintios",
+            "2 Corintios",
+            "Gálatas",
+            "Efesios",
+            "Filipenses",
+            "Colosenses",
+            "Hebreos",
+            "Santiago",
+            "Apocalipsis"
         ]
     },
     "bibleAI": {
