@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const db = require('../db/connection');
-const authenticateToken = require('../middleware/auth').authenticate;
+const { authenticate } = require('../middleware/auth');
 
 // Get user profile (public)
-router.get('/:userId', authenticateToken, async (req, res) => {
+router.get('/:userId', authenticate, async (req, res) => {
   try {
     const { userId } = req.params;
     const user = await db.get('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, location, join_date FROM users WHERE id = ?', [userId]);
@@ -20,7 +20,7 @@ router.get('/:userId', authenticateToken, async (req, res) => {
 });
 
 // Update profile fields (private, requires auth)
-router.patch('/', authenticateToken, async (req, res) => {
+router.patch('/', authenticate, async (req, res) => {
   try {
     const { full_name, bio, location, church_name, cover_url } = req.body;
     const userId = req.user.id; // From auth middleware
@@ -53,7 +53,7 @@ router.patch('/', authenticateToken, async (req, res) => {
 });
 
 // New route: Update profile photo (avatar_url)
-router.patch('/photo', authenticateToken, async (req, res) => {
+router.patch('/photo', authenticate, async (req, res) => {
   try {
     const { photoURL } = req.body;
     const userId = req.user.id; // From auth middleware
