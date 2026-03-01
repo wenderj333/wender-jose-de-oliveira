@@ -40,7 +40,7 @@ router.patch('/', authenticate, async (req, res) => {
     const setClause = updateKeys.map(key => `${key} = ?`).join(', ');
     const updateValues = Object.values(updates);
 
-    await db.run(`UPDATE users SET ${setClause} WHERE id = ?`, [...updateValues, userId]);
+    await db.prepare(`UPDATE users SET ${setClause} WHERE id = ?`).run(...updateValues, userId);
 
     // Fetch updated user to return
     const updatedUser = await db.get('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, location, join_date FROM users WHERE id = ?', [userId]);
@@ -62,7 +62,7 @@ router.patch('/photo', authenticate, async (req, res) => {
       return res.status(400).json({ error: 'photoURL is required' });
     }
 
-    await db.run('UPDATE users SET avatar_url = ? WHERE id = ?', [photoURL, userId]);
+    await db.prepare('UPDATE users SET avatar_url = ? WHERE id = ?').run(photoURL, userId);
 
     // Fetch updated user to return
     const updatedUser = await db.get('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, location, join_date FROM users WHERE id = ?', [userId]);
