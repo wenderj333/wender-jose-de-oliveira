@@ -81,8 +81,9 @@ export function AuthProvider({ children }) {
       })
         .then((r) => (r.ok ? r.json() : Promise.reject()))
         .then((data) => {
-          setUser(data.user);
-          localStorage.setItem('user', JSON.stringify(data.user));
+          const u = { ...data.user, photoURL: data.user.photoURL || data.user.avatar_url };
+          setUser(u);
+          localStorage.setItem('user', JSON.stringify(u));
         })
         .catch(() => {
           // Token invalid, keep any Firebase user if present
@@ -224,3 +225,4 @@ export function AuthProvider({ children }) {
 }
 
 export const useAuth = () => useContext(AuthContext);
+
