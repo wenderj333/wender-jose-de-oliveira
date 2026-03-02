@@ -239,7 +239,7 @@
         "subtitle": "Comparte testimonios, alabanzas y versículos.",
         "newPost": "Nueva Publicación",
         "cancel": "Cancelar",
-        "messagePlaceholder": "Escribe tu testimonio, reflexión o versículo bíblico...",
+        "messagePlaceholder": "Escribe tu testimonio, alabanza o reflexión...",
         "categories": {
             "testemunho": "Testimonio",
             "louvor": "Alabanza",
@@ -255,7 +255,10 @@
             "verses": "Versículos",
             "reflections": "Reflexiones",
             "photos": "Fotos"
-        }
+        },
+        "yourUpload": "Tu subida",
+        "musicLibrary": "Mi Música",
+        "myMusic": "Mi Música"
     },
     "kids": {
         "title": "Escuela Dominical Digital",

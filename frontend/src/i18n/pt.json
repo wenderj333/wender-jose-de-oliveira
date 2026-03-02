@@ -304,7 +304,13 @@
             "verses": "Versículos",
             "reflections": "Reflexões",
             "photos": "Fotos"
-        }
+        },
+        "cancel": "Cancelar",
+        "messagePlaceholder": "Escreva seu testemunho, louvor ou reflexão...",
+        "newPost": "Novo Post",
+        "yourUpload": "Seu upload",
+        "musicLibrary": "Minha Música",
+        "myMusic": "Minha Música"
     },
     "groups": {
         "title": "Grupos",

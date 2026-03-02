@@ -233,9 +233,9 @@
         "noMusicUploaded": "Nicio muzică încărcată încă",
         "title": "Zidul Comunității",
         "subtitle": "Împărtășește mărturii, laude și versete.",
-        "newPost": "Nou Mesaj",
-        "cancel": "Anulare",
-        "messagePlaceholder": "Scrie-ți mărturia, reflecția sau versatul biblic...",
+        "newPost": "Postare Nouă",
+        "cancel": "Anulează",
+        "messagePlaceholder": "Scrie mărturia, lauda sau reflecția ta...",
         "categories": {
             "testemunho": "Mărturie",
             "louvor": "Laudă",
@@ -251,7 +251,10 @@
             "verses": "Versete",
             "reflections": "Reflecții",
             "photos": "Poze"
-        }
+        },
+        "yourUpload": "Încărcarea ta",
+        "musicLibrary": "Muzica Mea",
+        "myMusic": "Muzica Mea"
     },
     "kids": {
         "title": "Școala Duminicală Digitală",

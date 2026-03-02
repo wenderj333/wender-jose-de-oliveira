@@ -237,9 +237,9 @@
         "noMusicUploaded": "Aucune musique téléchargée pour l'instant",
         "title": "Mur Communautaire",
         "subtitle": "Partagez des témoignages, des louanges et des versets.",
-        "newPost": "Nouveau Message",
+        "newPost": "Nouveau Post",
         "cancel": "Annuler",
-        "messagePlaceholder": "Écrivez votre témoignage, votre réflexion ou un verset biblique...",
+        "messagePlaceholder": "Écrivez votre témoignage, louange ou réflexion...",
         "categories": {
             "testemunho": "Témoignage",
             "louvor": "Louange",
@@ -255,7 +255,10 @@
             "verses": "Versets",
             "reflections": "Réflexions",
             "photos": "Photos"
-        }
+        },
+        "yourUpload": "Votre téléchargement",
+        "musicLibrary": "Ma Musique",
+        "myMusic": "Ma Musique"
     },
     "kids": {
         "title": "École du Dimanche Numérique",

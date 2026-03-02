@@ -239,7 +239,7 @@
         "subtitle": "Share testimonies, worship, and verses.",
         "newPost": "New Post",
         "cancel": "Cancel",
-        "messagePlaceholder": "Write your testimony, reflection or Bible verse...",
+        "messagePlaceholder": "Write your testimony, worship, or reflection...",
         "categories": {
             "testemunho": "Testimony",
             "louvor": "Worship",
@@ -255,7 +255,10 @@
             "verses": "Verses",
             "reflections": "Reflections",
             "photos": "Photos"
-        }
+        },
+        "yourUpload": "Your upload",
+        "musicLibrary": "My Music",
+        "myMusic": "My Music"
     },
     "kids": {
         "title": "Digital Sunday School",

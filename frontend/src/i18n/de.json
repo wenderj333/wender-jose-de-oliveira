@@ -218,7 +218,7 @@
         "subtitle": "Teile Zeugnisse, Lobpreis und Bibelverse.",
         "newPost": "Neuer Beitrag",
         "cancel": "Abbrechen",
-        "messagePlaceholder": "Schreibe dein Zeugnis, deine Reflexion oder einen Bibelvers...",
+        "messagePlaceholder": "Schreibe dein Zeugnis, Lobpreis oder Reflexion...",
         "categories": {
             "testemunho": "Zeugnis",
             "louvor": "Lobpreis",
@@ -234,7 +234,10 @@
             "verses": "Verse",
             "reflections": "Reflexionen",
             "photos": "Fotos"
-        }
+        },
+        "yourUpload": "Dein Upload",
+        "musicLibrary": "Meine Musik",
+        "myMusic": "Meine Musik"
     },
     "kids": {
         "title": "Digital Sunday School",
