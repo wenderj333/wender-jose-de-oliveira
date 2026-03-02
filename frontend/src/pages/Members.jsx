@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { Users, Send, ArrowLeft, User, Mail, Calendar, Shield, MessageCircle, Search } from 'lucide-react';
+import { Users, Send, ArrowLeft, User, Mail, Calendar, Shield, MessageCircle, Search, X } from 'lucide-react';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
@@ -41,6 +41,7 @@ export default function Members() {
   const [newMsg, setNewMsg] = useState('');
   const [sending, setSending] = useState(false);
   const [loadingMsgs, setLoadingMsgs] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState(null); // State for lightbox
   const chatEndRef = useRef(null);
 
   useEffect(() => {
@@ -119,7 +120,7 @@ export default function Members() {
           <button onClick={() => setSelectedMember(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
             <ArrowLeft size={22} color="#1a0a3e" />
           </button>
-          <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#4caf50', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+          <div onClick={() => { if(selectedMember.avatar_url) setLightboxImage(getAvatarUrl(selectedMember.avatar_url)) }} style={{ width: 40, height: 40, borderRadius: '50%', background: '#4caf50', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, cursor: selectedMember.avatar_url ? 'pointer' : 'default' }}>
             {selectedMember.avatar_url ? (
               <img src={getAvatarUrl(selectedMember.avatar_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
@@ -176,6 +177,21 @@ export default function Members() {
             <Send size={18} color="#fff" />
           </button>
         </form>
+
+        {/* Lightbox for Chat Avatar */}
+        {lightboxImage && (
+          <div style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 9999,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', p: 20
+          }} onClick={() => setLightboxImage(null)}>
+            <img src={lightboxImage} alt="Large view" style={{ maxWidth: '90vw', maxHeight: '90vh', borderRadius: 12, objectFit: 'contain' }} />
+            <button onClick={() => setLightboxImage(null)} style={{
+              position: 'absolute', top: 20, right: 20, background: 'rgba(255,255,255,0.2)',
+              border: 'none', borderRadius: '50%', width: 40, height: 40, color: '#fff', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}><X size={24} /></button>
+          </div>
+        )}
       </div>
     );
   }
@@ -215,8 +231,13 @@ export default function Members() {
               background: '#fff', borderRadius: 12, border: '1px solid #eee',
               boxShadow: '0 1px 3px rgba(0,0,0,0.05)', cursor: 'pointer',
             }}>
-              {/* Avatar */}
-              <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#daa520', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+              {/* Avatar - Click to Lightbox */}
+              <div 
+                onClick={(e) => {
+                  e.stopPropagation(); // Stop navigation
+                  if(member.avatar_url) setLightboxImage(getAvatarUrl(member.avatar_url));
+                }}
+                style={{ width: 44, height: 44, borderRadius: '50%', background: '#daa520', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, cursor: member.avatar_url ? 'zoom-in' : 'default' }}>
                 {member.avatar_url ? (
                   <img src={getAvatarUrl(member.avatar_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
@@ -243,7 +264,7 @@ export default function Members() {
               </div>
 
               {/* Message button */}
-              <button onClick={() => openChat(member)} style={{
+              <button onClick={(e) => { e.stopPropagation(); openChat(member); }} style={{
                 padding: '0.4rem 0.8rem', borderRadius: 20, border: 'none',
                 background: '#4caf50', color: '#fff', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', fontWeight: 600,
@@ -255,6 +276,21 @@ export default function Members() {
           {filtered.length === 0 && (
             <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>{t('members.noMembers', 'Nenhum membro encontrado')}</div>
           )}
+        </div>
+      )}
+
+      {/* Lightbox Modal */}
+      {lightboxImage && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 9999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', p: 20
+        }} onClick={() => setLightboxImage(null)}>
+          <img src={lightboxImage} alt="Large view" style={{ maxWidth: '90vw', maxHeight: '90vh', borderRadius: 12, objectFit: 'contain' }} />
+          <button onClick={() => setLightboxImage(null)} style={{
+            position: 'absolute', top: 20, right: 20, background: 'rgba(255,255,255,0.2)',
+            border: 'none', borderRadius: '50%', width: 40, height: 40, color: '#fff', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}><X size={24} /></button>
         </div>
       )}
     </div>

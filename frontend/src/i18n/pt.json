@@ -577,7 +577,9 @@
         "addFriend": "Adicionar",
         "pendingFriend": "Pendente",
         "acceptFriend": "Aceitar",
-        "rejectFriend": "Recusar"
+        "rejectFriend": "Recusar",
+        "editCover": "Alterar capa",
+        "saved": "Perfil salvo com sucesso!"
     },
     "messages": {
         "title": "Mensagens",

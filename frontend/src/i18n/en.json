@@ -492,7 +492,9 @@
         "addFriend": "Add",
         "pendingFriend": "Pending",
         "acceptFriend": "Accept",
-        "rejectFriend": "Reject"
+        "rejectFriend": "Reject",
+        "editCover": "Edit Cover",
+        "saved": "Profile saved successfully!"
     },
     "messages": {
         "title": "Messages",

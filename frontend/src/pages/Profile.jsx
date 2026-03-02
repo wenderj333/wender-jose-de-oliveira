@@ -1,7 +1,24 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { useAuth } from '../context/AuthContext';
+
+const API_BASE = import.meta.env.VITE_API_URL || '';
+const API = `${API_BASE}/api`;
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'degxiuf43';
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'sigo_com_fe';
+
+async function uploadToCloudinary(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  const resourceType = 'image';
+  const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
+  const res = await fetch(url, { method: 'POST', body: formData });
+  if (!res.ok) throw new Error('Erro no upload da imagem');
+  const data = await res.json();
+  return data.secure_url;
+}
 
 const typeColors = {
   verse: "#F59E0B",
@@ -11,10 +28,10 @@ const typeColors = {
 };
 const typeIcons = { verse:"📖", testimony:"🙌", photo:"📸", prayer:"🙏" };
 
-export default function ProfilePage({ onSave, onFollow, onMessage }) {
+export default function ProfilePage({ onFollow, onMessage }) {
   const { t } = useTranslation();
   const { userId } = useParams();
-  const { user: currentUser, token } = useAuth();
+  const { user: currentUser, token, updateProfilePhoto } = useAuth(); // Assuming updateProfilePhoto updates context
 
   const isOwnProfile = !userId || userId === currentUser?.id;
   const [profileUser, setProfileUser] = useState(null);
@@ -22,28 +39,23 @@ export default function ProfilePage({ onSave, onFollow, onMessage }) {
   const [userStats, setUserStats] = useState({ posts: 0, friends: 0, prayers: 0 });
 
   const [isEditing,      setIsEditing]      = useState(false);
-  const [editData,       setEditData]       = useState({ name: profileUser?.name || "", bio: profileUser?.bio || "" });
-  const [avatarPreview,  setAvatarPreview]  = useState(profileUser?.photoURL  || null);
-  const [coverPreview,   setCoverPreview]   = useState(profileUser?.coverURL  || null);
+  const [editData,       setEditData]       = useState({ name: "", bio: "" });
+  const [avatarPreview,  setAvatarPreview]  = useState(null);
+  const [coverPreview,   setCoverPreview]   = useState(null);
+  const [avatarFile,     setAvatarFile]     = useState(null);
+  const [coverFile,      setCoverFile]      = useState(null);
+  
   const [cropModal,      setCropModal]      = useState(null);
-  const [isConsecrating, setIsConsecrating] = useState(profileUser?.isConsecrating || false);
+  const [isConsecrating, setIsConsecrating] = useState(false);
   const [activeTab,      setActiveTab]      = useState("posts");
   const [lightbox,       setLightbox]       = useState(null);
+  const [saving,         setSaving]         = useState(false);
+  
   const avatarRef = useRef();
   const coverRef  = useRef();
 
-  const API_BASE = import.meta.env.VITE_API_URL || '';
-  const API = `${API_BASE}/api';
-
-  useEffect(() => {
-
-  const API_BASE = import.meta.env.VITE_API_URL || '';
-  const API = `${API_BASE}/api';
-
   useEffect(() => {
     const fetchProfileData = async () => {
-      if (!currentUser && !userId) return; // Not logged in and no specific user ID
-
       const targetUserId = userId || currentUser?.id;
       if (!targetUserId) return;
 
@@ -54,9 +66,9 @@ export default function ProfilePage({ onSave, onFollow, onMessage }) {
         });
         const userData = await userRes.json();
         setProfileUser(userData.user);
-        setEditData({ name: userData.user?.name || "", bio: userData.user?.bio || "" });
-        setAvatarPreview(userData.user?.photoURL || null);
-        setCoverPreview(userData.user?.coverURL || null);
+        setEditData({ name: userData.user?.full_name || userData.user?.name || "", bio: userData.user?.bio || "" });
+        setAvatarPreview(userData.user?.avatar_url || userData.user?.photoURL || null);
+        setCoverPreview(userData.user?.cover_url || userData.user?.coverURL || null);
         setIsConsecrating(userData.user?.isConsecrating || false);
 
         // Fetch user posts
@@ -66,17 +78,14 @@ export default function ProfilePage({ onSave, onFollow, onMessage }) {
         const postsData = await postsRes.json();
         setUserPosts(postsData.posts || []);
 
-        // Fetch user stats (assuming stats are part of profile data for now, or fetch separately)
-        // For simplicity, let's assume basic stats are part of the user object or derived from posts/friends
-        setUserStats({ // Placeholder, real stats would come from backend
+        setUserStats({
           posts: postsData.posts?.length || 0,
-          friends: userData.user?.friendsCount || 0, // Assuming a field on user object
-          prayers: userData.user?.prayersCount || 0, // Assuming a field on user object
+          friends: userData.user?.friendsCount || 0,
+          prayers: userData.user?.prayersCount || 0,
         });
 
       } catch (error) {
         console.error("Failed to fetch profile data:", error);
-        // Handle error, e.g., show an error message
       }
     };
 
@@ -85,13 +94,73 @@ export default function ProfilePage({ onSave, onFollow, onMessage }) {
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
-    if (file) setCropModal({ type:"avatar", url: URL.createObjectURL(file) });
+    if (file) {
+      setAvatarFile(file);
+      setCropModal({ type:"avatar", url: URL.createObjectURL(file) });
+    }
   };
+
   const handleCoverChange = (e) => {
     const file = e.target.files[0];
-    if (file) setCoverPreview(URL.createObjectURL(file));
+    if (file) {
+      setCoverFile(file);
+      setCoverPreview(URL.createObjectURL(file));
+    }
   };
-  const handleSave = () => { if (onSave) onSave(editData); setIsEditing(false); };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      let newAvatarUrl = avatarPreview;
+      let newCoverUrl = coverPreview;
+
+      // Upload Avatar if changed
+      if (avatarFile) {
+        newAvatarUrl = await uploadToCloudinary(avatarFile);
+      }
+
+      // Upload Cover if changed
+      if (coverFile) {
+        newCoverUrl = await uploadToCloudinary(coverFile);
+      }
+
+      // Save to Backend
+      const res = await fetch(`${API}/profile`, {
+        method: 'PATCH',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify({
+          full_name: editData.name,
+          bio: editData.bio,
+          avatar_url: newAvatarUrl,
+          cover_url: newCoverUrl
+        })
+      });
+
+      if (!res.ok) throw new Error('Erro ao salvar perfil');
+      
+      const updatedUser = await res.json();
+      setProfileUser(prev => ({ ...prev, ...updatedUser.user }));
+      
+      // Update context if it's own profile
+      if (isOwnProfile && updateProfilePhoto) {
+        updateProfilePhoto(newAvatarUrl); 
+      }
+
+      setAvatarFile(null);
+      setCoverFile(null);
+      setIsEditing(false);
+      alert(t("profile.saved", "Perfil salvo com sucesso!"));
+
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao salvar: " + err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const S = {
     page: {
@@ -205,7 +274,7 @@ export default function ProfilePage({ onSave, onFollow, onMessage }) {
               <div className="av-inner">
                 {avatarPreview
                   ? <img src={avatarPreview} alt="avatar" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                  : (user?.name?.charAt(0) || "?")}
+                  : (profileUser?.name?.charAt(0) || "?")}
                 {isOwnProfile && <div className="av-overlay">✏️</div>}
               </div>
             </div>
@@ -228,7 +297,7 @@ export default function ProfilePage({ onSave, onFollow, onMessage }) {
 
           {/* NAME */}
           <div style={S.nameLine}>
-            <h1 style={S.h1}>{profileUser?.name || t("common.user","Utilizador")}</h1>
+            <h1 style={S.h1}>{profileUser?.full_name || profileUser?.name || t("common.user","Utilizador")}</h1>
             {isConsecrating && <span className="badge-fire">🔥 {t("consecration.consecrating","Em Consagração")}</span>}
             {profileUser?.church && <span className="badge-ch">⛪ {profileUser.church}</span>}
           </div>
@@ -278,26 +347,9 @@ export default function ProfilePage({ onSave, onFollow, onMessage }) {
 
           {/* POSTS */}
           {activeTab==="posts" && (
-            <div style={{display:"flex",flexDirection:"column",gap:12}}>
-              {(userPosts||[]).length===0
-                ? <div style={S.emptyState}><div style={{fontSize:40,marginBottom:10}}>📝</div><p style={{fontSize:13}}>{t("common.noPostsYet","Nenhum post ainda")}</p></div>
-                : (userPosts||[]).map(p=>(
-                  <div key={p.id} className="pc">
-                    <div style={{marginBottom:10}}>
-                      <span style={{padding:"3px 10px",borderRadius:50,fontSize:11,fontWeight:600,
-                        background:`${typeColors[p.type]||"#F59E0B"}18`,color:typeColors[p.type]||"#F59E0B",
-                        border:`1px solid ${typeColors[p.type]||"#F59E0B"}33`}}>
-                        {typeIcons[p.type]} {p.type}
-                      </span>
-                    </div>
-                    <p style={{color:"rgba(255,255,255,.75)",fontSize:14,lineHeight:1.6,marginBottom:12}}>{p.content}</p>
-                    <div style={{display:"flex",gap:16}}>
-                      <span style={{color:"rgba(255,255,255,.28)",fontSize:12}}>❤️ {p.likes}</span>
-                      <span style={{color:"rgba(255,255,255,.28)",fontSize:12}}>💬 {p.comments}</span>
-                    </div>
-                  </div>
-                ))
-              }
+            <div style={S.emptyState}>
+              <div style={{fontSize:40,marginBottom:10}}>📝</div>
+              <p style={{fontSize:13}}>{t("common.noPostsYet","Nenhum post ainda")}</p>
             </div>
           )}
           {(activeTab==="prayers"||activeTab==="friends") && (
@@ -324,7 +376,9 @@ export default function ProfilePage({ onSave, onFollow, onMessage }) {
               <textarea className="inp" value={editData.bio} onChange={e=>setEditData({...editData,bio:e.target.value})} placeholder={t("profile.noBio","Conte algo sobre você...")} rows={3} style={{resize:"none"}}/>
             </div>
             <div style={{display:"flex",gap:10}}>
-              <button className="pb pb-gold" style={{flex:1}} onClick={handleSave}>✅ {t("profile.save","Salvar")}</button>
+              <button className="pb pb-gold" style={{flex:1}} onClick={handleSave} disabled={saving}>
+                {saving ? "⏳ ..." : `✅ ${t("profile.save","Salvar")}`}
+              </button>
               <button className="pb pb-ghost" onClick={()=>setIsEditing(false)}>{t("profile.cancel","Cancelar")}</button>
             </div>
           </div>
@@ -344,8 +398,12 @@ export default function ProfilePage({ onSave, onFollow, onMessage }) {
               <button className="pb pb-gold" style={{flex:1}} onClick={()=>{
                 if(cropModal.type==="avatar") setAvatarPreview(cropModal.url);
                 setCropModal(null);
+                // NOTA: O arquivo real está em avatarFile, que será enviado no handleSave
               }}>✅ {t("profile.save","Usar esta foto")}</button>
-              <button className="pb pb-ghost" onClick={()=>setCropModal(null)}>{t("profile.cancel","Cancelar")}</button>
+              <button className="pb pb-ghost" onClick={()=>{
+                setCropModal(null);
+                setAvatarFile(null); // Limpar seleção se cancelar
+              }}>{t("profile.cancel","Cancelar")}</button>
             </div>
           </div>
         </div>

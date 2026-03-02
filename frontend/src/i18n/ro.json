@@ -488,7 +488,9 @@
         "addFriend": "Adaugă",
         "pendingFriend": "În așteptare",
         "acceptFriend": "Acceptă",
-        "rejectFriend": "Refuză"
+        "rejectFriend": "Refuză",
+        "editCover": "Editează coperta",
+        "saved": "Profile saved successfully!"
     },
     "messages": {
         "title": "Mesaje",
