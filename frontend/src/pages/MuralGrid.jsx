@@ -87,8 +87,11 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const [translating, setTranslating] = useState(false);
   const [showTranslation, setShowTranslation] = useState(false);
 
+  // Author data - prioritize current avatar if available
   const authorName = post.full_name || post.author_name || post.authorName || t('common.user');
   const authorInitials = authorName.slice(0, 2).toUpperCase();
+  const authorAvatar = post.author_avatar || post.avatar_url; // Use author_avatar from join query
+  
   const mediaUrl = post.media_url || post.mediaUrl;
   const musicUrl = post.audio_url || post.musicUrl;
   const isOwner = user && (user.id === post.author_id || user.id === post.user_id);
@@ -134,7 +137,6 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 
     setTranslating(true);
     try {
-      // Truncate to 500 chars to avoid API error
       const textToTranslate = post.content.length > 500 ? post.content.substring(0, 500) : post.content;
       const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToTranslate)}&langpair=pt|${i18n.language}`);
       const data = await res.json();
@@ -200,9 +202,27 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   return (
     <div ref={postCardRef} style={{ background: 'white', borderRadius: 16, border: `1px solid ${color}33`, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 16 }}>
       <div style={{ padding: '14px 16px 10px', display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div style={{ width: 42, height: 42, borderRadius: '50%', background: `linear-gradient(135deg,${color},${color}88)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14, flexShrink: 0 }}>
+        {/* Avatar Logic: Prefer authorAvatar (Cloudinary), fallback to Initials */}
+        {authorAvatar ? (
+          <img 
+            src={authorAvatar.startsWith('http') ? authorAvatar : `${API_BASE}${authorAvatar}`} 
+            alt={authorName} 
+            style={{ width: 42, height: 42, borderRadius: '50%', objectFit: 'cover', border: `2px solid ${color}44` }} 
+            onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+          />
+        ) : null}
+        
+        {/* Fallback Initials (shown if no avatar or error) */}
+        <div style={{ 
+          width: 42, height: 42, borderRadius: '50%', 
+          background: `linear-gradient(135deg,${color},${color}88)`, 
+          display: authorAvatar ? 'none' : 'flex', // Hidden if avatar exists
+          alignItems: 'center', justifyContent: 'center', 
+          color: 'white', fontWeight: 700, fontSize: 14, flexShrink: 0 
+        }}>
           {authorInitials}
         </div>
+
         <div style={{ flex: 1 }}>
           <div style={{ fontWeight: 600, fontSize: 14, color: '#1a1a2e' }}>{authorName}</div>
           <div style={{ fontSize: 12, color: '#888' }}>{post.church || ''}{post.church ? ' · ' : ''}{post.created_at ? new Date(post.created_at).toLocaleDateString(t('locale')) : t('time.now')}</div>
@@ -376,7 +396,7 @@ export default function MuralGrid() {
       const res = await fetch(`${API}/feed`, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ content: postText || '📸', category: postCategory, media_url: mediaUrl || undefined, media_type: mediaType || undefined, audio_url: audioUrl || undefined, }) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || t('mural.uploadError'));
-      const newPost = { ...(data.post || {}), liked: false, full_name: user?.full_name, like_count: 0, comment_count: 0 };
+      const newPost = { ...(data.post || {}), liked: false, full_name: user?.full_name, author_avatar: user?.avatar_url, like_count: 0, comment_count: 0 }; // Added author_avatar here too
       setPosts([newPost, ...posts]); setPostText(''); setPostCategory('testemunho'); clearMedia(); setMusicFile(null); setMusicName(null); if (musicRef.current) musicRef.current.value = ''; setShowForm(false);
     } catch (err) { setUploadError(err.message || t('mural.uploadConnectionError')); console.error(err); } finally { setUploading(false); }
   };
