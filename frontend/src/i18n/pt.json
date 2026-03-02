@@ -286,7 +286,9 @@
         "noPosts": "Nenhum post ainda. Seja o primeiro a publicar! 📸",
         "commentPlaceholder": "Escreva um comentário...",
         "confirmDelete": "Tem a certeza que quer deletar este post?",
-        "delete": "Deletar post"
+        "delete": "Deletar post",
+        "title": "Mural da Comunidade",
+        "subtitle": "Compartilhe testemunhos, louvores e versículos."
     },
     "groups": {
         "title": "Grupos",
