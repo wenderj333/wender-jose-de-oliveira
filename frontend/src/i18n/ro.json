@@ -235,7 +235,23 @@
         "subtitle": "Împărtășește mărturii, laude și versete.",
         "newPost": "Nou Mesaj",
         "cancel": "Anulare",
-        "messagePlaceholder": "Scrie-ți mărturia, reflecția sau versatul biblic..."
+        "messagePlaceholder": "Scrie-ți mărturia, reflecția sau versatul biblic...",
+        "categories": {
+            "testemunho": "Mărturie",
+            "louvor": "Laudă",
+            "foto": "Poză",
+            "versiculo": "Verset",
+            "reflexao": "Reflecție",
+            "campanha": "Campanie"
+        },
+        "filters": {
+            "all": "Toate",
+            "testimonies": "Mărturii",
+            "worship": "Laude",
+            "verses": "Versete",
+            "reflections": "Reflecții",
+            "photos": "Poze"
+        }
     },
     "kids": {
         "title": "Școala Duminicală Digitală",

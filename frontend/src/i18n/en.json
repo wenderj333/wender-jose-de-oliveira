@@ -239,7 +239,23 @@
         "subtitle": "Share testimonies, worship, and verses.",
         "newPost": "New Post",
         "cancel": "Cancel",
-        "messagePlaceholder": "Write your testimony, reflection or Bible verse..."
+        "messagePlaceholder": "Write your testimony, reflection or Bible verse...",
+        "categories": {
+            "testemunho": "Testimony",
+            "louvor": "Worship",
+            "foto": "Photo",
+            "versiculo": "Verse",
+            "reflexao": "Reflection",
+            "campanha": "Campaign"
+        },
+        "filters": {
+            "all": "All",
+            "testimonies": "Testimonies",
+            "worship": "Worship",
+            "verses": "Verses",
+            "reflections": "Reflections",
+            "photos": "Photos"
+        }
     },
     "kids": {
         "title": "Digital Sunday School",

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, Component } from 'react';
+import React, { useState, useEffect, useRef, Component } from 'react';
 import { Routes, Route, Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './context/AuthContext';
@@ -24,7 +24,6 @@ import Groups from './pages/Groups';
 import Consecration from './pages/Consecration';
 import MessagesPage from './pages/Messages';
 import Offerings from './pages/Offerings';
-// Music temporarily disabled for redesign
 import MusicLibrary from './pages/MusicLibrary';
 import PastorDashboard from './pages/PastorDashboard';
 import FaithJourneys from './pages/FaithJourneys';
@@ -42,7 +41,7 @@ import RegistrationPromptPopup from './components/RegistrationPromptPopup';
 export const RegistrationPromptContext = React.createContext(null);
 
 function ProtectedRoute({ children }) {
-  const { user, loading, updateProfilePhoto } = useAuth(); // Adiciona updateProfilePhoto
+  const { user, loading, updateProfilePhoto } = useAuth();
   const { promptRegistration } = React.useContext(RegistrationPromptContext);
 
   useEffect(() => {
@@ -53,7 +52,7 @@ function ProtectedRoute({ children }) {
 
   if (loading) return <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="loading-spinner" /></div>;
   if (!user) {
-    promptRegistration(); // Caso o user não esteja logado, redireciona para a home e mostra o popup
+    promptRegistration();
     return <Navigate to="/" />;
   }
   return children;
@@ -100,7 +99,6 @@ export default function App() {
     setShowRegistrationPopup(true);
   };
 
-  // Poll unread notifications every 60 seconds
   const prevUnreadRef = useRef(0);
   useEffect(() => {
     if (!user) return;
@@ -113,7 +111,6 @@ export default function App() {
         });
         const data = await res.json();
         const newCount = data.count || 0;
-        // Show browser notification if count increased
         if (newCount > prevUnreadRef.current && prevUnreadRef.current >= 0) {
           if ('Notification' in window && Notification.permission === 'granted') {
             try {
@@ -136,14 +133,12 @@ export default function App() {
         setUnreadCount(newCount);
       } catch (e) {}
     }
-    // Request notification permission on first load
     if ('Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission();
     }
     checkUnread();
     const interval = setInterval(checkUnread, 30000);
 
-    // Heartbeat – update online status every 60s
     function sendHeartbeat() {
       fetch(`${API}/profile/heartbeat`, {
         method: 'POST', headers: { Authorization: `Bearer ${token}` },
@@ -182,7 +177,7 @@ export default function App() {
       <nav className="navbar">
         <div className="navbar__top">
           <Link to="/" className="nav-brand" onClick={() => setMenuOpen(false)}>
-            <img src="/logo.jpg" alt="Sigo com FÃ©" style={{ width: 36, height: 36, verticalAlign: 'middle', marginRight: '8px', borderRadius: '50%', objectFit: 'cover', background: '#b3d4fc' }} />{t('brand')}
+            <img src="/logo.jpg" alt="Sigo com Fé" style={{ width: 36, height: 36, verticalAlign: 'middle', marginRight: '8px', borderRadius: '50%', objectFit: 'cover', background: '#b3d4fc' }} />{t('brand')}
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <LanguageSwitcher />
@@ -235,12 +230,9 @@ export default function App() {
             <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setMenuOpen(false)}><LayoutDashboard size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('nav.dashboard')}</Link>
           )}
           {(user?.role === 'pastor' || user?.role === 'admin') && (
-            <Link to="/pastor" className={isActive('/pastor')} onClick={() => setMenuOpen(false)} style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', color: '#fff', borderRadius: 12, padding: '0.4rem 0.8rem', fontWeight: 700 }}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />ðŸ›ï¸ {t('nav.pastorRoom')}</Link>
+            <Link to="/pastor" className={isActive('/pastor')} onClick={() => setMenuOpen(false)} style={{ background: 'linear-gradient(135deg, #daa520, #b8860b)', color: '#fff', borderRadius: 12, padding: '0.4rem 0.8rem', fontWeight: 700 }}><ShieldAlert size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />🏛️ {t('nav.pastorRoom')}</Link>
           )}
           {(user?.role === 'pastor' || user?.role === 'admin') && <Link to="/ofertas" className={isActive('/ofertas')} onClick={() => setMenuOpen(false)}><HandHeart size={16} style={{ verticalAlign: 'middle', marginRight: '4px', color: '#e74c3c' }} />{t('nav.offerings')}</Link>}
-          {/* Igrejas (map) hidden – using Igreja (register) instead */}
-          {/* Igrejas (map) hidden – using Igreja (register) instead */}
-          {/* <Link to="/igrejas" className={isActive('/igrejas')} onClick={() => setMenuOpen(false)}><MapPin size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Igrejas</Link> */}
           {user ? (
             <>
               <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)} onClick={() => setMenuOpen(false)} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontWeight: 'bold', color: 'var(--gold)', padding: '0.5rem 1rem' }}>
@@ -259,7 +251,6 @@ export default function App() {
         </div>
       </nav>
 
-      {/* Action bar below navbar */}
       <div style={{
         display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10,
         padding: '0.35rem 0.5rem', background: '#f0f2f5',
@@ -273,7 +264,7 @@ export default function App() {
           boxShadow: '0 2px 8px rgba(155,89,182,0.25)',
           animation: 'louvorPulse 2.5s ease-in-out infinite',
         }}>
-          ðŸŽµ {t('nav.createWorshipAI', 'Louvor com IA')}
+          🎵 {t('nav.createWorshipAI', 'Louvor com IA')}
         </button>
         <style>{`@keyframes louvorPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }`}</style>
         <button onClick={() => {
@@ -330,9 +321,7 @@ export default function App() {
       </main>
       {showRegistrationPopup && <RegistrationPromptPopup isOpen={showRegistrationPopup} onClose={() => setShowRegistrationPopup(false)} />}
 
-      <MusicPlayer /></MusicProvider>{/* Music player active */}
-
-      {/* NO floating buttons â€" moved to navbar area */}
+      <MusicPlayer /></MusicProvider>
 
       <footer className="footer">
         {showInstallBtn && (
@@ -351,9 +340,3 @@ export default function App() {
     </div>
   );
 }
-
-
-
-
-
-

@@ -221,10 +221,19 @@
         "messagePlaceholder": "Schreibe dein Zeugnis, deine Reflexion oder einen Bibelvers...",
         "categories": {
             "testemunho": "Zeugnis",
-            "louvor": "Lobpreis / Video",
-            "reflexao": "Biblische Reflexion",
-            "versiculo": "Bibelvers",
-            "foto": "Foto"
+            "louvor": "Lobpreis",
+            "foto": "Foto",
+            "versiculo": "Vers",
+            "reflexao": "Reflexion",
+            "campanha": "Kampagne"
+        },
+        "filters": {
+            "all": "Alle",
+            "testimonies": "Zeugnisse",
+            "worship": "Lobpreis",
+            "verses": "Verse",
+            "reflections": "Reflexionen",
+            "photos": "Fotos"
         }
     },
     "kids": {

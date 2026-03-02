@@ -239,7 +239,23 @@
         "subtitle": "Comparte testimonios, alabanzas y versículos.",
         "newPost": "Nueva Publicación",
         "cancel": "Cancelar",
-        "messagePlaceholder": "Escribe tu testimonio, reflexión o versículo bíblico..."
+        "messagePlaceholder": "Escribe tu testimonio, reflexión o versículo bíblico...",
+        "categories": {
+            "testemunho": "Testimonio",
+            "louvor": "Alabanza",
+            "foto": "Foto",
+            "versiculo": "Versículo",
+            "reflexao": "Reflexión",
+            "campanha": "Campaña"
+        },
+        "filters": {
+            "all": "Todas",
+            "testimonies": "Testimonios",
+            "worship": "Adoración",
+            "verses": "Versículos",
+            "reflections": "Reflexiones",
+            "photos": "Fotos"
+        }
     },
     "kids": {
         "title": "Escuela Dominical Digital",

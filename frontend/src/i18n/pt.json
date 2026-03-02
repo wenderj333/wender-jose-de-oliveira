@@ -288,7 +288,23 @@
         "confirmDelete": "Tem a certeza que quer deletar este post?",
         "delete": "Deletar post",
         "title": "Mural da Comunidade",
-        "subtitle": "Compartilhe testemunhos, louvores e versículos."
+        "subtitle": "Compartilhe testemunhos, louvores e versículos.",
+        "categories": {
+            "testemunho": "Testemunho",
+            "louvor": "Louvor",
+            "foto": "Foto",
+            "versiculo": "Versículo",
+            "reflexao": "Reflexão",
+            "campanha": "Campanha"
+        },
+        "filters": {
+            "all": "Todas",
+            "testimonies": "Testemunhos",
+            "worship": "Louvores",
+            "verses": "Versículos",
+            "reflections": "Reflexões",
+            "photos": "Fotos"
+        }
     },
     "groups": {
         "title": "Grupos",
