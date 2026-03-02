@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Grid, List, Volume2, VolumeX, Languages } from 'lucide-react'; // Added Languages icon
+import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Grid, List, Volume2, VolumeX, Languages } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
@@ -83,7 +83,6 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(post.comments || []);
   
-  // Translation states
   const [translatedContent, setTranslatedContent] = useState(null);
   const [translating, setTranslating] = useState(false);
   const [showTranslation, setShowTranslation] = useState(false);
@@ -130,27 +129,42 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   }, [musicUrl, isImage]);
 
   const handleTranslate = async () => {
-    if (showTranslation) {
-      setShowTranslation(false);
-      return;
-    }
-    if (translatedContent) {
-      setShowTranslation(true);
-      return;
-    }
+    if (showTranslation) { setShowTranslation(false); return; }
+    if (translatedContent) { setShowTranslation(true); return; }
 
     setTranslating(true);
     try {
-      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(post.content)}&langpair=pt|${i18n.language}`);
+      // Truncate to 500 chars to avoid API error
+      const textToTranslate = post.content.length > 500 ? post.content.substring(0, 500) : post.content;
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToTranslate)}&langpair=pt|${i18n.language}`);
       const data = await res.json();
       if (data.responseData && data.responseData.translatedText) {
-        setTranslatedContent(data.responseData.translatedText);
+        let text = data.responseData.translatedText;
+        if (post.content.length > 500) text += '...';
+        setTranslatedContent(text);
         setShowTranslation(true);
+      } else if (data.responseStatus === 403 || data.responseDetails.includes('LIMIT')) {
+         setTranslatedContent(t('mural.translationLimit', 'Tradução indisponível (texto muito longo)'));
+         setShowTranslation(true);
       }
     } catch (e) {
       console.error(e);
     } finally {
       setTranslating(false);
+    }
+  };
+
+  const handleShare = () => {
+    const shareText = `${t('mural.checkPost', 'Olha este post incrível no Sigo com Fé!')}\n\n"${post.content?.substring(0, 50)}..."`;
+    if (navigator.share) {
+      navigator.share({
+        title: 'Sigo com Fé',
+        text: shareText,
+        url: window.location.href
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(`${shareText}\n${window.location.href}`);
+      alert(t('common.linkCopied'));
     }
   };
 
@@ -239,20 +253,19 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       <div style={{ padding: '8px 16px 12px', borderTop: '1px solid #f0f0f0', display: 'flex', gap: 8, alignItems: 'center' }}>
         <button onClick={() => onLike(post.id)} style={{ display: 'flex', alignItems: 'center', gap: 6, background: post.liked ? '#fff0f3' : 'none', border: post.liked ? '1px solid #fecdd3' : 'none', cursor: 'pointer', color: post.liked ? '#e11d48' : '#888', fontSize: 13, fontWeight: 700, padding: '6px 12px', borderRadius: 20, transition: 'all 0.2s' }}>
           <Heart size={18} fill={post.liked ? '#e11d48' : 'none'} />
-          {post.like_count || post.amemCount || 0} {t('mural.amen')}
+          {post.like_count || post.amemCount || 0} {t('mural.amen', 'Amém')}
         </button>
         <button onClick={() => setShowComments(!showComments)} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, fontWeight: 600, padding: '6px 10px', borderRadius: 8 }}>
           <MessageCircle size={18} /> {post.comment_count || post.commentCount || comments.length} {t('common.comment')}
         </button>
         
-        {/* Translate Button */}
         {(post.category || post.type) !== 'versiculo' && (
           <button onClick={handleTranslate} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: showTranslation ? '#0ea5e9' : '#888', fontSize: 12, padding: '6px 10px', borderRadius: 8 }}>
             <Languages size={16} /> {translating ? '...' : (showTranslation ? t('common.hideTranslation') : t('common.translate'))}
           </button>
         )}
 
-        <button style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, marginLeft: 'auto', padding: '6px 10px', borderRadius: 8 }}><Share2 size={18} /> {t('common.share')}</button>
+        <button onClick={handleShare} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, marginLeft: 'auto', padding: '6px 10px', borderRadius: 8 }}><Share2 size={18} /> {t('common.share')}</button>
       </div>
 
       {showComments && (

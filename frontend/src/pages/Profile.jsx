@@ -31,7 +31,7 @@ const typeIcons = { verse:"📖", testimony:"🙌", photo:"📸", prayer:"🙏" 
 export default function ProfilePage({ onFollow, onMessage }) {
   const { t } = useTranslation();
   const { userId } = useParams();
-  const { user: currentUser, token, updateProfilePhoto } = useAuth(); // Assuming updateProfilePhoto updates context
+  const { user: currentUser, token, updateProfilePhoto } = useAuth();
 
   const isOwnProfile = !userId || userId === currentUser?.id;
   const [profileUser, setProfileUser] = useState(null);
@@ -60,7 +60,6 @@ export default function ProfilePage({ onFollow, onMessage }) {
       if (!targetUserId) return;
 
       try {
-        // Fetch profile user data
         const userRes = await fetch(`${API}/profile/${targetUserId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -71,7 +70,6 @@ export default function ProfilePage({ onFollow, onMessage }) {
         setCoverPreview(userData.user?.cover_url || userData.user?.coverURL || null);
         setIsConsecrating(userData.user?.isConsecrating || false);
 
-        // Fetch user posts
         const postsRes = await fetch(`${API}/feed/user/${targetUserId}?limit=50`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -111,20 +109,25 @@ export default function ProfilePage({ onFollow, onMessage }) {
   const handleSave = async () => {
     setSaving(true);
     try {
-      let newAvatarUrl = avatarPreview;
-      let newCoverUrl = coverPreview;
+      let newAvatarUrl = avatarPreview; // Keep existing unless changed
+      let newCoverUrl = coverPreview;   // Keep existing unless changed
 
       // Upload Avatar if changed
       if (avatarFile) {
+        console.log("Uploading avatar...");
         newAvatarUrl = await uploadToCloudinary(avatarFile);
+        console.log("Avatar uploaded:", newAvatarUrl);
       }
 
       // Upload Cover if changed
       if (coverFile) {
+        console.log("Uploading cover...");
         newCoverUrl = await uploadToCloudinary(coverFile);
+        console.log("Cover uploaded:", newCoverUrl);
       }
 
       // Save to Backend
+      console.log("Saving profile...");
       const res = await fetch(`${API}/profile`, {
         method: 'PATCH',
         headers: { 
@@ -134,12 +137,15 @@ export default function ProfilePage({ onFollow, onMessage }) {
         body: JSON.stringify({
           full_name: editData.name,
           bio: editData.bio,
-          avatar_url: newAvatarUrl,
-          cover_url: newCoverUrl
+          avatar_url: newAvatarUrl, // Send the URL (new or old)
+          cover_url: newCoverUrl    // Send the URL (new or old)
         })
       });
 
-      if (!res.ok) throw new Error('Erro ao salvar perfil');
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Erro no servidor: ${errorText}`);
+      }
       
       const updatedUser = await res.json();
       setProfileUser(prev => ({ ...prev, ...updatedUser.user }));
