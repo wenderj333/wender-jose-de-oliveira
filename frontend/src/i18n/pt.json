@@ -737,21 +737,112 @@
     },
     "music": {
         "title": "Música Gospel",
-        "subtitle": "Louvor e adoração 100% gratuitos",
-        "worship": "Louvor & Adoração",
+        "subtitle": "Ouça e suba suas músicas",
+        "projectTitle": "Projeto Música Gospel da Comunidade",
+        "projectDesc": "Aqui você encontra músicas gospel para adorar a Deus a qualquer momento! Na aba Comunidade, ouça músicas enviadas por irmãos de todo o mundo. Você também pode subir suas próprias músicas em MP3.",
+        "verse": "\"Cantai ao Senhor um cântico novo; cantai ao Senhor, todas as terras.\" — Salmos 96:1",
+        "createAccount": "Crie sua conta para participar!",
+        "uploadBtn": "Subir Música (MP3)",
+        "step1": "Escolha o arquivo de música",
+        "tapToChoose": "Toque aqui para escolher MP3",
+        "step2": "Nome da música",
+        "titlePlaceholder": "Ex: Grande é o Senhor",
+        "step3": "Artista (opcional)",
+        "artistPlaceholder": "Ex: Aline Barros",
+        "step4": "Publicar para a comunidade!",
+        "uploading": "Subindo...",
+        "uploadSuccess": "Música subida com sucesso!",
+        "uploadError": "Erro ao subir arquivo.",
+        "saveError": "Erro ao salvar música.",
+        "community": "Comunidade",
+        "favorites": "Favoritos",
+        "playNext": "Tocar seguinte",
+        "noUploaded": "Nenhuma música subida ainda. Seja o primeiro!",
+        "noFavorites": "Nenhum favorito ainda",
+        "worship": "Louvor e Adoração",
         "hymns": "Hinos Clássicos",
         "instrumental": "Instrumental",
         "kids": "Kids Gospel",
-        "prayer": "Música para Oração",
-        "favorites": "Favoritos",
-        "noFavorites": "Nenhum favorito ainda",
-        "tapHeart": "Toque no â¤ï¸ para salvar músicas",
-        "freeSources": "Mais música gratuita"
+        "prayer": "Música para Oração"
     },
     "courseFinance": {
         "title": "Finanças Bíblicas",
-        "description": "Aprenda a administrar suas finanças segundo os princípios bíblicos",
-        "topics": "Dízimo, Ofertas, Poupança, Investimentos, Dívidas, Prosperidade"
+        "subtitle": "Aprenda a administrar suas finanças segundo os princípios de Deus",
+        "15lessons": "15 Lições",
+        "certificate": "Certificado",
+        "lifetime": "Acesso Vitalício",
+        "buyFor": "Comprar por",
+        "processing": "Processando...",
+        "securePayment": "Pagamento seguro via Stripe • Acesso imediato",
+        "unlocked": "Curso Desbloqueado!",
+        "content": "O que você vai aprender",
+        "lesson": "Lição",
+        "emailPrompt": "Seu email para receber o curso:",
+        "paymentError": "Erro ao iniciar pagamento.",
+        "connectionError": "Erro de conexão.",
+        "pastorOnly": "Algumas lições são restritas apenas para pastores.",
+        "lessons": {
+            "l1": {
+                "title": "O Propósito do Dinheiro segundo Deus",
+                "desc": "Descubra o que a Bíblia realmente ensina sobre riqueza e pobreza."
+            },
+            "l2": {
+                "title": "Dízimo: Mandamento ou Princípio?",
+                "desc": "Uma análise profunda do dízimo no Antigo e Novo Testamento."
+            },
+            "l3": {
+                "title": "Ofertas e Generosidade",
+                "desc": "Como dar com alegria e o princípio da semeadura e colheita."
+            },
+            "l4": {
+                "title": "Liberdade das Dívidas",
+                "desc": "Estratégias bíblicas para sair das dívidas e viver livre."
+            },
+            "l5": {
+                "title": "Poupança: A Sabedoria da Formiga",
+                "desc": "Provérbios ensina sobre poupar. Aprenda a construir reservas."
+            },
+            "l6": {
+                "title": "Orçamento Familiar Bíblico",
+                "desc": "Como organizar suas finanças com princípios de mordomia."
+            },
+            "l7": {
+                "title": "Investimentos com Sabedoria",
+                "desc": "Parábola dos Talentos: multiplicar o que Deus te deu."
+            },
+            "l8": {
+                "title": "Contentamento vs. Cobiça",
+                "desc": "A paz financeira começa no coração, não na conta bancária."
+            },
+            "l9": {
+                "title": "Trabalho como Adoração",
+                "desc": "Colossenses 3:23 — trabalhar para o Senhor, não para homens."
+            },
+            "l10": {
+                "title": "Prosperidade com Propósito",
+                "desc": "Deus prospera para que você seja bênção, não para acumular."
+            },
+            "l11": {
+                "title": "Casamento e Finanças",
+                "desc": "Como alinhar finanças no casamento com princípios bíblicos."
+            },
+            "l12": {
+                "title": "Ensinar Filhos sobre Dinheiro",
+                "desc": "Crie filhos financeiramente sábios com base bíblica."
+            },
+            "l13": {
+                "title": "Empreendedorismo Cristão",
+                "desc": "Negócios que honram a Deus e servem ao próximo."
+            },
+            "l14": {
+                "title": "Planejamento para o Futuro",
+                "desc": "Aposentadoria, herança e legado financeiro bíblico."
+            },
+            "l15": {
+                "title": "Mordomia Total",
+                "desc": "Tudo pertence a Deus — você é administrador, não dono."
+            }
+        }
     },
     "courseTheology": {
         "title": "Teologia Cristã",

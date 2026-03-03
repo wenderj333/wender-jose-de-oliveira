@@ -91,7 +91,7 @@ export default function MusicLibrary() {
     instrumental: t('music.instrumental', 'Instrumental'),
     kids: t('music.kids', 'Kids Gospel'),
     prayer: t('music.prayer', 'Musica para Oracao'),
-    uploaded: 'Comunidade',
+    uploaded: t('music.community', 'Comunidade'),
   };
 
   function toggleFav(videoId) {
@@ -118,7 +118,6 @@ export default function MusicLibrary() {
       setPlayingAudio(song.url);
       audio.onended = () => {
         if (autoplay) {
-          // Find next song in uploadedSongs
           const idx = uploadedSongs.findIndex(s => s.url === song.url);
           if (idx >= 0 && idx < uploadedSongs.length - 1) {
             playUploadedSong(uploadedSongs[idx + 1]);
@@ -144,7 +143,7 @@ export default function MusicLibrary() {
       const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`, { method: 'POST', body: fd });
       const data = await res.json();
       if (!data.secure_url) {
-        alert('Erro ao subir arquivo. Tente novamente.');
+        alert(t('music.uploadError', 'Erro ao subir arquivo. Tente novamente.'));
         setUploading(false);
         return;
       }
@@ -160,9 +159,9 @@ export default function MusicLibrary() {
         setUploadTitle('');
         setUploadArtist('');
         setShowUpload(false);
-        alert('Musica subida com sucesso!');
+        alert(t('music.uploadSuccess', 'Musica subida com sucesso!'));
       } else {
-        alert('Erro ao salvar musica no banco.');
+        alert(t('music.saveError', 'Erro ao salvar musica no banco.'));
       }
     } catch (err) { console.error(err); alert('Erro: ' + err.message); }
     finally { setUploading(false); }
@@ -188,8 +187,8 @@ export default function MusicLibrary() {
               <Music size={26} color="#fff" />
             </div>
             <div>
-              <h1 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>Música Gospel</h1>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)' }}>Ouça e suba suas músicas</p>
+              <h1 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>{t('music.title', 'Música Gospel')}</h1>
+              <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)' }}>{t('music.subtitle', 'Ouça e suba suas músicas')}</p>
             </div>
           </div>
         </div>
@@ -204,16 +203,13 @@ export default function MusicLibrary() {
         boxShadow: '0 4px 12px rgba(102,126,234,0.1)',
       }}>
         <h3 style={{ fontSize: '1rem', color: '#4a1a8e', margin: '0 0 0.5rem', textAlign: 'center' }}>
-          🎵 Projeto Música Gospel da Comunidade
+          🎵 {t('music.projectTitle', 'Projeto Música Gospel da Comunidade')}
         </h3>
         <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-          Aqui você encontra músicas gospel para adorar a Deus a qualquer momento! Na aba <strong>Comunidade</strong>, 
-          ouça músicas enviadas por irmãos de todo o mundo — organizadas por quem enviou. 
-          Você também pode subir suas próprias músicas em MP3 para abençoar outros. 
-          Nas outras abas, ouça playlists de adoração, hinos clássicos, instrumentais e muito mais! 🙌
+          {t('music.projectDesc', 'Aqui você encontra músicas gospel para adorar a Deus a qualquer momento!')}
         </p>
         <p style={{ fontSize: '0.82rem', color: '#6a1b9a', fontStyle: 'italic', margin: 0, textAlign: 'center', fontWeight: 500 }}>
-          "Cantai ao Senhor um cântico novo; cantai ao Senhor, todas as terras." — Salmos 96:1
+          {t('music.verse', '"Cantai ao Senhor um cântico novo; cantai ao Senhor, todas as terras." — Salmos 96:1')}
         </p>
       </div>
 
@@ -224,7 +220,7 @@ export default function MusicLibrary() {
             background: 'linear-gradient(135deg, #daa520, #f4d03f)', borderRadius: 12, padding: '0.75rem 1rem',
             margin: '0 1rem 0.75rem', textAlign: 'center', color: '#1a0a3e', fontWeight: 600, fontSize: '0.9rem',
           }}>
-            ✨ Crie sua conta para participar! <span style={{ textDecoration: 'underline' }}>Cadastre-se</span>
+            ✨ {t('music.createAccount', 'Crie sua conta para participar!')} <span style={{ textDecoration: 'underline' }}>{t('nav.register')}</span>
           </div>
         </Link>
       )}
@@ -239,7 +235,7 @@ export default function MusicLibrary() {
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
           }}>
             {showUpload ? <X size={18} /> : <Upload size={18} />}
-            {showUpload ? 'Fechar' : 'Subir Musica (MP3)'}
+            {showUpload ? t('common.close', 'Fechar') : t('music.uploadBtn', 'Subir Musica (MP3)')}
           </button>
         </div>
       )}
@@ -310,7 +306,7 @@ export default function MusicLibrary() {
                 background: uploadFile && uploadTitle.trim() ? 'linear-gradient(135deg, #667eea, #764ba2)' : '#e0e0e0',
                 color: uploadFile && uploadTitle.trim() ? '#fff' : '#999', fontWeight: 700, fontSize: '1rem', cursor: 'pointer',
               }}>
-                {uploading ? 'Subindo...' : t('music.uploadBtn', 'Subir Musica')}
+                {uploading ? t('music.uploading', 'Subindo...') : t('music.uploadBtn', 'Subir Musica')}
               </button>
             </div>
 
@@ -326,7 +322,7 @@ export default function MusicLibrary() {
           color: !showFavs && activeCategory === 'uploaded' ? '#fff' : '#aaa', fontWeight: 600, fontSize: '0.8rem',
           display: 'flex', alignItems: 'center', gap: 5,
         }}>
-          <Upload size={14} /> Comunidade ({uploadedSongs.length})
+          <Upload size={14} /> {t('music.community', 'Comunidade')} ({uploadedSongs.length})
         </button>
 
         <button onClick={() => setShowFavs(!showFavs)} style={{
@@ -335,7 +331,7 @@ export default function MusicLibrary() {
           color: showFavs ? '#fff' : '#aaa', fontWeight: 600, fontSize: '0.8rem',
           display: 'flex', alignItems: 'center', gap: 5,
         }}>
-          <Heart size={14} fill={showFavs ? '#fff' : 'none'} /> Favoritos
+          <Heart size={14} fill={showFavs ? '#fff' : 'none'} /> {t('music.favorites', 'Favoritos')}
         </button>
 
         {CATEGORIES.map(cat => (
@@ -350,13 +346,12 @@ export default function MusicLibrary() {
         ))}
       </div>
 
-      {/* Uploaded songs from community — grouped by user */}
+      {/* Uploaded songs from community */}
       {activeCategory === 'uploaded' && !showFavs && (
         <div style={{ padding: '0 1rem' }}>
-          {/* Autoplay toggle */}
           {uploadedSongs.length > 0 && (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8, marginBottom: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#888' }}>Tocar seguinte</span>
+              <span style={{ fontSize: '0.75rem', color: '#888' }}>{t('music.playNext', 'Tocar seguinte')}</span>
               <button onClick={() => setAutoplay(!autoplay)} style={{
                 width: 40, height: 22, borderRadius: 11, border: 'none', cursor: 'pointer',
                 background: autoplay ? '#4caf50' : '#555', position: 'relative', transition: 'background 0.3s',
@@ -370,17 +365,16 @@ export default function MusicLibrary() {
             </div>
           )}
           {loadingSongs ? (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>Carregando...</div>
+            <div style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>{t('common.loading')}</div>
           ) : uploadedSongs.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
               <Upload size={40} style={{ opacity: 0.3, marginBottom: 8 }} />
-              <p>Nenhuma musica subida ainda. Seja o primeiro!</p>
+              <p>{t('music.noUploaded', 'Nenhuma musica subida ainda. Seja o primeiro!')}</p>
             </div>
           ) : (() => {
-            // Group songs by user_name
             const grouped = {};
             uploadedSongs.forEach(song => {
-              const name = song.user_name || 'Anônimo';
+              const name = song.user_name || t('common.anonymous', 'Anônimo');
               if (!grouped[name]) grouped[name] = [];
               grouped[name].push(song);
             });
@@ -434,7 +428,7 @@ export default function MusicLibrary() {
           {showFavs && displaySongs.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
               <Heart size={40} style={{ opacity: 0.3, marginBottom: 8 }} />
-              <p>Nenhum favorito ainda</p>
+              <p>{t('music.noFavorites', 'Nenhum favorito ainda')}</p>
             </div>
           ) : displaySongs.map(song => (
             <div key={song.id} style={{

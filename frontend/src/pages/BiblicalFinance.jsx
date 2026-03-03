@@ -10,21 +10,21 @@ import FINANCE_CONTENT from '../data/financeContent';
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
 const FINANCE_LESSONS = [
-  { id: 1, title: 'O Propósito do Dinheiro segundo Deus', desc: 'Descubra o que a Bíblia realmente ensina sobre riqueza e pobreza.', icon: '💰' },
-  { id: 2, title: 'Dízimo: Mandamento ou Princípio?', desc: 'Uma análise profunda do dízimo no Antigo e Novo Testamento.', icon: '⛪' },
-  { id: 3, title: 'Ofertas e Generosidade', desc: 'Como dar com alegria e o princípio da semeadura e colheita.', icon: '🌱' },
-  { id: 4, title: 'Liberdade das Dívidas', desc: 'Estratégias bíblicas para sair das dívidas e viver livre.', icon: '🔓' },
-  { id: 5, title: 'Poupança: A Sabedoria da Formiga', desc: 'Provérbios ensina sobre poupar. Aprenda a construir reservas.', icon: '🐜' },
-  { id: 6, title: 'Orçamento Familiar Bíblico', desc: 'Como organizar suas finanças com princípios de mordomia.', icon: '📊' },
-  { id: 7, title: 'Investimentos com Sabedoria', desc: 'Parábola dos Talentos: multiplicar o que Deus te deu.', icon: '📈' },
-  { id: 8, title: 'Contentamento vs. Cobica', desc: 'A paz financeira começa no coração, não na conta bancária.', icon: '🙏' },
-  { id: 9, title: 'Trabalho como Adoração', desc: 'Colossenses 3:23 \u2014 trabalhar para o Senhor, não para homens.', icon: '🛠️' },
-  { id: 10, title: 'Prosperidade com Propósito', desc: 'Deus prospera para que você seja bênção, não para acumular.', icon: '⭐' },
-  { id: 11, title: 'Casamento e Finanças', desc: 'Como alinhar finanças no casamento com princípios bíblicos.', icon: '💑' },
-  { id: 12, title: 'Ensinar Filhos sobre Dinheiro', desc: 'Crie filhos financeiramente sábios com base bíblica.', icon: '👶' },
-  { id: 13, title: 'Empreendedorismo Cristão', desc: 'Negócios que honram a Deus e servem ao próximo.', icon: '🚀' },
-  { id: 14, title: 'Planejamento para o Futuro', desc: 'Aposentadoria, herança e legado financeiro bíblico.', icon: '🎯' },
-  { id: 15, title: 'Mordomia Total', desc: 'Tudo pertence a Deus \u2014 você é administrador, não dono.', icon: '👑' },
+  { id: 1, titleKey: 'courseFinance.lessons.l1.title', descKey: 'courseFinance.lessons.l1.desc', icon: '💰' },
+  { id: 2, titleKey: 'courseFinance.lessons.l2.title', descKey: 'courseFinance.lessons.l2.desc', icon: '⛪' },
+  { id: 3, titleKey: 'courseFinance.lessons.l3.title', descKey: 'courseFinance.lessons.l3.desc', icon: '🌱' },
+  { id: 4, titleKey: 'courseFinance.lessons.l4.title', descKey: 'courseFinance.lessons.l4.desc', icon: '🔓' },
+  { id: 5, titleKey: 'courseFinance.lessons.l5.title', descKey: 'courseFinance.lessons.l5.desc', icon: '🐜' },
+  { id: 6, titleKey: 'courseFinance.lessons.l6.title', descKey: 'courseFinance.lessons.l6.desc', icon: '📊' },
+  { id: 7, titleKey: 'courseFinance.lessons.l7.title', descKey: 'courseFinance.lessons.l7.desc', icon: '📈' },
+  { id: 8, titleKey: 'courseFinance.lessons.l8.title', descKey: 'courseFinance.lessons.l8.desc', icon: '🙏' },
+  { id: 9, titleKey: 'courseFinance.lessons.l9.title', descKey: 'courseFinance.lessons.l9.desc', icon: '🛠️' },
+  { id: 10, titleKey: 'courseFinance.lessons.l10.title', descKey: 'courseFinance.lessons.l10.desc', icon: '⭐' },
+  { id: 11, titleKey: 'courseFinance.lessons.l11.title', descKey: 'courseFinance.lessons.l11.desc', icon: '💑' },
+  { id: 12, titleKey: 'courseFinance.lessons.l12.title', descKey: 'courseFinance.lessons.l12.desc', icon: '👶' },
+  { id: 13, titleKey: 'courseFinance.lessons.l13.title', descKey: 'courseFinance.lessons.l13.desc', icon: '🚀' },
+  { id: 14, titleKey: 'courseFinance.lessons.l14.title', descKey: 'courseFinance.lessons.l14.desc', icon: '🎯' },
+  { id: 15, titleKey: 'courseFinance.lessons.l15.title', descKey: 'courseFinance.lessons.l15.desc', icon: '👑' },
 ];
 
 export default function BiblicalFinance() {
@@ -54,7 +54,7 @@ export default function BiblicalFinance() {
   const handleBuy = async () => {
     setBuying(true);
     try {
-      const email = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).email : prompt('Seu email para receber o curso:');
+      const email = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).email : prompt(t('courseFinance.emailPrompt', 'Seu email para receber o curso:'));
       if (!email) { setBuying(false); return; }
       const { amount, currency } = getPriceForBackend('finance');
       const res = await fetch(`${API}/course/create-checkout-finance`, {
@@ -64,8 +64,8 @@ export default function BiblicalFinance() {
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
-      else alert('Erro ao iniciar pagamento. Tente novamente.');
-    } catch (e) { console.error(e); alert('Erro de conexão.'); }
+      else alert(t('courseFinance.paymentError', 'Erro ao iniciar pagamento. Tente novamente.'));
+    } catch (e) { console.error(e); alert(t('courseFinance.connectionError', 'Erro de conexão.')); }
     finally { setBuying(false); }
   };
 
@@ -77,7 +77,7 @@ export default function BiblicalFinance() {
   if (readingLesson !== null) {
     return (
       <LessonReader
-        lessons={FINANCE_LESSONS}
+        lessons={FINANCE_LESSONS.map(l => ({ ...l, title: t(l.titleKey), desc: t(l.descKey) }))}
         lessonContents={FINANCE_CONTENT}
         currentIndex={readingLesson}
         totalLessons={FINANCE_LESSONS.length}
@@ -97,15 +97,15 @@ export default function BiblicalFinance() {
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>{'💰📖✠'}</div>
           <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.8rem)', fontWeight: 800, margin: '0 0 0.5rem', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
-            Finanças Bíblicas
+            {t('courseFinance.title')}
           </h1>
           <p style={{ fontSize: 'clamp(1rem, 3vw, 1.3rem)', opacity: 0.9, maxWidth: 600, margin: '0 auto 1.5rem' }}>
-            Aprenda a administrar suas finanças segundo os princípios de Deus
+            {t('courseFinance.subtitle', 'Aprenda a administrar suas finanças segundo os princípios de Deus')}
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-            {['15 Liç\u00f5es', 'Certificado', 'Acesso Vitalício'].map((t, i) => (
+            {[t('courseFinance.15lessons', '15 Lições'), t('courseFinance.certificate', 'Certificado'), t('courseFinance.lifetime', 'Acesso Vitalício')].map((label, i) => (
               <span key={i} style={{ background: 'rgba(212,175,55,0.2)', border: '1px solid rgba(212,175,55,0.4)', borderRadius: 20, padding: '6px 16px', fontSize: '0.9rem' }}>
-                {['📚', '🏆', '♾️'][i]} {t}
+                {['📚', '🏆', '♾️'][i]} {label}
               </span>
             ))}
           </div>
@@ -120,15 +120,15 @@ export default function BiblicalFinance() {
                 boxShadow: '0 4px 20px rgba(212,175,55,0.4)', transform: buying ? 'none' : 'scale(1)',
                 transition: 'all 0.3s',
               }}>
-                {buying ? 'Abrindo pagamento...' : `Comprar por ${price.display}`}
+                {buying ? t('courseFinance.processing', 'Abrindo pagamento...') : `${t('courseFinance.buyFor', 'Comprar por')} ${price.display}`}
               </button>
-              <p style={{ marginTop: 10, fontSize: '0.85rem', opacity: 0.7 }}>Pagamento seguro via Stripe {'•'} Acesso imediato</p>
+              <p style={{ marginTop: 10, fontSize: '0.85rem', opacity: 0.7 }}>{t('courseFinance.securePayment', 'Pagamento seguro via Stripe • Acesso imediato')}</p>
             </div>
           )}
           {paid && (
             <div style={{ background: 'rgba(0,255,0,0.1)', border: '1px solid rgba(0,255,0,0.3)', borderRadius: 12, padding: '1rem', maxWidth: 400, margin: '0 auto' }}>
               <CheckCircle size={32} color="#4ade80" />
-              <p style={{ fontWeight: 700, fontSize: '1.1rem', margin: '0.5rem 0 0' }}>{'✅'} Curso Desbloqueado!</p>
+              <p style={{ fontWeight: 700, fontSize: '1.1rem', margin: '0.5rem 0 0' }}>✅ {t('courseFinance.unlocked', 'Curso Desbloqueado!')}</p>
             </div>
           )}
         </div>
@@ -138,16 +138,16 @@ export default function BiblicalFinance() {
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '2rem 1rem' }}>
         {!isPastor && (
           <div style={{ background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.3)', borderRadius: 12, padding: '1rem', marginBottom: '1.5rem', color: '#d4af37', fontSize: '0.9rem' }}>
-            🔒 Algumas lições são restritas apenas para pastores.
+            🔒 {t('courseFinance.pastorOnly', 'Algumas lições são restritas apenas para pastores.')}
           </div>
         )}
         <h2 style={{ color: '#d4af37', textAlign: 'center', marginBottom: '1.5rem', fontSize: '1.5rem' }}>
-          {'📋'} O que você vai aprender
+          📋 {t('courseFinance.content', 'O que você vai aprender')}
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
           {FINANCE_LESSONS.filter(lesson => {
-            // Hide "Dízimo" lesson from non-pastors
-            if (!isPastor && lesson.title.toLowerCase().includes('dízimo')) return false;
+            // Hide "Dízimo" lesson from non-pastors (check id or title key)
+            if (!isPastor && lesson.titleKey.includes('l2')) return false; // Lesson 2 is Tithe
             return true;
           }).map((lesson, i) => (
             <div key={lesson.id} onClick={() => setReadingLesson(i)}
@@ -160,12 +160,11 @@ export default function BiblicalFinance() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                 <span style={{ fontSize: '1.5rem' }}>{lesson.icon}</span>
                 <div>
-                  <div style={{ color: '#d4af37', fontWeight: 700, fontSize: '0.95rem' }}>Lição {lesson.id}</div>
-                  <div style={{ color: '#e0e0e0', fontWeight: 600 }}>{lesson.title}</div>
+                  <div style={{ color: '#d4af37', fontWeight: 700, fontSize: '0.95rem' }}>{t('courseFinance.lesson', 'Lição')} {lesson.id}</div>
+                  <div style={{ color: '#e0e0e0', fontWeight: 600 }}>{t(lesson.titleKey)}</div>
                 </div>
-{/* lock removed */}
               </div>
-              <p style={{ color: '#aaa', fontSize: '0.85rem', margin: 0 }}>{lesson.desc}</p>
+              <p style={{ color: '#aaa', fontSize: '0.85rem', margin: 0 }}>{t(lesson.descKey)}</p>
             </div>
           ))}
         </div>
@@ -178,15 +177,15 @@ export default function BiblicalFinance() {
             background: 'linear-gradient(135deg, #d4af37, #b8941f)', color: '#1a472a', border: 'none',
             padding: '16px 48px', borderRadius: 12, fontSize: '1.2rem', fontWeight: 800, cursor: 'pointer',
           }}>
-            {buying ? 'Abrindo pagamento...' : `{'💰'} Comprar por ${price.display}`}
+            {buying ? t('courseFinance.processing', 'Abrindo pagamento...') : `💰 ${t('courseFinance.buyFor', 'Comprar por')} ${price.display}`}
           </button>
         </div>
       )}
 
       {/* Footer links */}
       <div style={{ textAlign: 'center', padding: '1rem', borderTop: '1px solid rgba(212,175,55,0.1)' }}>
-        <Link to="/curso-biblico" style={{ color: '#d4af37', textDecoration: 'none', marginRight: 20 }}>{'←'} Curso Bíblico</Link>
-        <Link to="/curso-teologia" style={{ color: '#8b9dc3', textDecoration: 'none' }}>Curso de Teologia {'→'}</Link>
+        <Link to="/curso-biblico" style={{ color: '#d4af37', textDecoration: 'none', marginRight: 20 }}>← {t('nav.courseFree')}</Link>
+        <Link to="/curso-teologia" style={{ color: '#8b9dc3', textDecoration: 'none' }}>{t('nav.courseTheology')} →</Link>
       </div>
     </div>
   );

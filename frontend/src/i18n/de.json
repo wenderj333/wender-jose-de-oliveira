@@ -639,22 +639,113 @@
         "offering": "Offering"
     },
     "music": {
-        "title": "Gospel Music",
-        "subtitle": "Worship and praise 100% free",
-        "worship": "Worship & Praise",
-        "hymns": "Classic Hymns",
+        "title": "Gospel-Musik",
+        "subtitle": "Höre und lade deine Musik hoch",
+        "projectTitle": "Gemeinschafts-Gospel-Musikprojekt",
+        "projectDesc": "Hier findest du Gospelmusik, um Gott jederzeit anzubeten! Im Reiter Gemeinschaft hörst du Lieder, die von Brüdern und Schwestern weltweit hochgeladen wurden. Du kannst auch deine eigenen MP3s hochladen.",
+        "verse": "\"Singet dem Herrn ein neues Lied; singet dem Herrn, alle Welt!\" — Psalm 96:1",
+        "createAccount": "Erstelle ein Konto, um teilzunehmen!",
+        "uploadBtn": "Musik hochladen (MP3)",
+        "step1": "Musikdatei auswählen",
+        "tapToChoose": "Tippe hier, um MP3 zu wählen",
+        "step2": "Liedname",
+        "titlePlaceholder": "Bsp: Groß ist der Herr",
+        "step3": "Künstler (optional)",
+        "artistPlaceholder": "Bsp: Hillsong",
+        "step4": "In der Gemeinschaft veröffentlichen!",
+        "uploading": "Wird hochgeladen...",
+        "uploadSuccess": "Musik erfolgreich hochgeladen!",
+        "uploadError": "Fehler beim Hochladen.",
+        "saveError": "Fehler beim Speichern.",
+        "community": "Gemeinschaft",
+        "favorites": "Favoriten",
+        "playNext": "Nächstes abspielen",
+        "noUploaded": "Noch keine Musik hochgeladen. Sei der Erste!",
+        "noFavorites": "Noch keine Favoriten",
+        "worship": "Lobpreis & Anbetung",
+        "hymns": "Klassische Hymnen",
         "instrumental": "Instrumental",
-        "kids": "Kids Gospel",
-        "prayer": "Prayer Music",
-        "favorites": "Favorites",
-        "noFavorites": "No favorites yet",
-        "tapHeart": "Tap ❤️ to save songs",
-        "freeSources": "More free music"
+        "kids": "Kinder Gospel",
+        "prayer": "Gebetsmusik"
     },
     "courseFinance": {
-        "title": "Biblical Finance",
-        "description": "Learn to manage your finances according to biblical principles",
-        "topics": "Tithes, Offerings, Savings, Investments, Debts, Prosperity"
+        "title": "Biblische Finanzen",
+        "subtitle": "Verwalte deine Finanzen nach Gottes Prinzipien",
+        "15lessons": "15 Lektionen",
+        "certificate": "Zertifikat",
+        "lifetime": "Lebenslanger Zugang",
+        "buyFor": "Kaufen für",
+        "processing": "Verarbeitung...",
+        "securePayment": "Sichere Zahlung • Sofortiger Zugang",
+        "unlocked": "Kurs Freigeschaltet!",
+        "content": "Was du lernen wirst",
+        "lesson": "Lektion",
+        "emailPrompt": "Deine E-Mail:",
+        "paymentError": "Zahlungsfehler.",
+        "connectionError": "Verbindungsfehler.",
+        "pastorOnly": "Einige Lektionen sind nur für Pastoren.",
+        "lessons": {
+            "l1": {
+                "title": "Gottes Zweck für Geld",
+                "desc": "Was die Bibel wirklich über Reichtum und Armut lehrt."
+            },
+            "l2": {
+                "title": "Der Zehnte: Gebot oder Prinzip?",
+                "desc": "Eine tiefe Analyse des Zehnten im Alten und Neuen Testament."
+            },
+            "l3": {
+                "title": "Gaben und Großzügigkeit",
+                "desc": "Wie man fröhlich gibt und das Prinzip von Saat und Ernte."
+            },
+            "l4": {
+                "title": "Freiheit von Schulden",
+                "desc": "Biblische Strategien, um schuldenfrei zu werden."
+            },
+            "l5": {
+                "title": "Sparen: Die Weisheit der Ameise",
+                "desc": "Sprüche lehrt über Sparen. Lerne, Reserven aufzubauen."
+            },
+            "l6": {
+                "title": "Biblisches Familienbudget",
+                "desc": "Organisiere deine Finanzen nach Prinzipien der Verwalterschaft."
+            },
+            "l7": {
+                "title": "Weise Investieren",
+                "desc": "Gleichnis von den Talenten: Vermehre, was Gott dir gab."
+            },
+            "l8": {
+                "title": "Zufriedenheit vs. Gier",
+                "desc": "Finanzieller Frieden beginnt im Herzen."
+            },
+            "l9": {
+                "title": "Arbeit als Gottesdienst",
+                "desc": "Kolosser 3,23 — arbeite für den Herrn."
+            },
+            "l10": {
+                "title": "Wohlstand mit Zweck",
+                "desc": "Gott segnet, damit du ein Segen bist."
+            },
+            "l11": {
+                "title": "Ehe und Finanzen",
+                "desc": "Finanzen in der Ehe biblisch ausrichten."
+            },
+            "l12": {
+                "title": "Kindern Geld beibringen",
+                "desc": "Erziehe finanziell weise Kinder."
+            },
+            "l13": {
+                "title": "Christliches Unternehmertum",
+                "desc": "Geschäfte, die Gott ehren."
+            },
+            "l14": {
+                "title": "Planung für die Zukunft",
+                "desc": "Ruhestand, Erbe und biblisches Vermächtnis."
+            },
+            "l15": {
+                "title": "Totale Verwalterschaft",
+                "desc": "Alles gehört Gott — du bist Verwalter."
+            }
+        }
     },
     "courseTheology": {
         "title": "Christliche Theologie",

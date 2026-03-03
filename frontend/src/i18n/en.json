@@ -661,21 +661,112 @@
     },
     "music": {
         "title": "Gospel Music",
-        "subtitle": "Worship and praise 100% free",
+        "subtitle": "Listen and upload your music",
+        "projectTitle": "Community Gospel Music Project",
+        "projectDesc": "Here you find gospel music to worship God anytime! In the Community tab, listen to songs uploaded by brothers and sisters worldwide. You can also upload your own MP3 songs.",
+        "verse": "\"Sing to the Lord a new song; sing to the Lord, all the earth.\" — Psalm 96:1",
+        "createAccount": "Create your account to participate!",
+        "uploadBtn": "Upload Music (MP3)",
+        "step1": "Choose music file",
+        "tapToChoose": "Tap here to choose MP3",
+        "step2": "Song name",
+        "titlePlaceholder": "E.g.: Great is the Lord",
+        "step3": "Artist (optional)",
+        "artistPlaceholder": "E.g.: Chris Tomlin",
+        "step4": "Publish to the community!",
+        "uploading": "Uploading...",
+        "uploadSuccess": "Music uploaded successfully!",
+        "uploadError": "Error uploading file.",
+        "saveError": "Error saving music.",
+        "community": "Community",
+        "favorites": "Favorites",
+        "playNext": "Play next",
+        "noUploaded": "No music uploaded yet. Be the first!",
+        "noFavorites": "No favorites yet",
         "worship": "Worship & Praise",
         "hymns": "Classic Hymns",
         "instrumental": "Instrumental",
         "kids": "Kids Gospel",
-        "prayer": "Prayer Music",
-        "favorites": "Favorites",
-        "noFavorites": "No favorites yet",
-        "tapHeart": "Tap ❤️ to save songs",
-        "freeSources": "More free music"
+        "prayer": "Prayer Music"
     },
     "courseFinance": {
         "title": "Biblical Finance",
-        "description": "Learn to manage your finances according to biblical principles",
-        "topics": "Tithes, Offerings, Savings, Investments, Debts, Prosperity"
+        "subtitle": "Learn to manage your finances according to God's principles",
+        "15lessons": "15 Lessons",
+        "certificate": "Certificate",
+        "lifetime": "Lifetime Access",
+        "buyFor": "Buy for",
+        "processing": "Processing...",
+        "securePayment": "Secure payment via Stripe • Immediate access",
+        "unlocked": "Course Unlocked!",
+        "content": "What you will learn",
+        "lesson": "Lesson",
+        "emailPrompt": "Your email:",
+        "paymentError": "Error starting payment.",
+        "connectionError": "Connection error.",
+        "pastorOnly": "Some lessons are restricted to pastors only.",
+        "lessons": {
+            "l1": {
+                "title": "God's Purpose for Money",
+                "desc": "Discover what the Bible really teaches about wealth and poverty."
+            },
+            "l2": {
+                "title": "Tithing: Commandment or Principle?",
+                "desc": "A deep analysis of tithing in the Old and New Testaments."
+            },
+            "l3": {
+                "title": "Offerings and Generosity",
+                "desc": "How to give cheerfully and the principle of sowing and reaping."
+            },
+            "l4": {
+                "title": "Freedom from Debt",
+                "desc": "Biblical strategies to get out of debt and live free."
+            },
+            "l5": {
+                "title": "Saving: The Wisdom of the Ant",
+                "desc": "Proverbs teaches about saving. Learn to build reserves."
+            },
+            "l6": {
+                "title": "Biblical Family Budget",
+                "desc": "How to organize your finances with stewardship principles."
+            },
+            "l7": {
+                "title": "Investing with Wisdom",
+                "desc": "Parable of the Talents: multiply what God has given you."
+            },
+            "l8": {
+                "title": "Contentment vs. Greed",
+                "desc": "Financial peace starts in the heart, not the bank account."
+            },
+            "l9": {
+                "title": "Work as Worship",
+                "desc": "Colossians 3:23 — working for the Lord, not for men."
+            },
+            "l10": {
+                "title": "Prosperity with Purpose",
+                "desc": "God prospers so you can be a blessing, not to hoard."
+            },
+            "l11": {
+                "title": "Marriage and Finances",
+                "desc": "How to align finances in marriage with biblical principles."
+            },
+            "l12": {
+                "title": "Teaching Kids about Money",
+                "desc": "Raise financially wise children with a biblical foundation."
+            },
+            "l13": {
+                "title": "Christian Entrepreneurship",
+                "desc": "Businesses that honor God and serve others."
+            },
+            "l14": {
+                "title": "Planning for the Future",
+                "desc": "Retirement, inheritance, and biblical financial legacy."
+            },
+            "l15": {
+                "title": "Total Stewardship",
+                "desc": "Everything belongs to God — you are a manager, not an owner."
+            }
+        }
     },
     "courseTheology": {
         "title": "Christian Theology",
