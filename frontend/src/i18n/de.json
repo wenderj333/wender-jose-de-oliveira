@@ -159,7 +159,12 @@
         "endPrayer": "End Prayer",
         "pastorsPraying": "Pastors praying now:",
         "noPastors": "No pastors praying live at the moment.",
-        "comeBack": "Come back soon!"
+        "comeBack": "Come back soon!",
+        "explainerTitle": "Was ist das Live-Gebet?",
+        "explainerDesc": "Hier können Sie an Echtzeit-Gebetsmomenten mit Pastoren verschiedener Kirchen teilnehmen. Wenn ein Pastor eine Gebetssitzung beginnt, können Sie folgen, mitbeten und Gottes Gegenwart mit Brüdern und Schwestern weltweit spüren.",
+        "explainerVerse": "\"Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.\" — Matthäus 18:20",
+        "myChurch": "Meine Kirche",
+        "liveStatus": "Live"
     },
     "churchMap": {
         "title": "Church Map",
@@ -504,26 +509,26 @@
         "back": "Back"
     },
     "groups": {
-        "joinGroup": "+ Join Group",
-        "leaveGroup": "Leave Group",
-        "inputPlaceholder": "Write in the group...",
-        "noPosts": "No posts yet",
-        "private": "🔒 Private",
-        "public": "🌐 Public",
-        "communionTitle": "🤝 Fellowship Groups",
-        "communionDesc": "Join groups with brothers and sisters who share the same faith! Here you can create or join Bible study, prayer, praise, youth, couples groups and much more.",
-        "loading": "Loading...",
-        "noGroups": "No groups found",
-        "createFirst": "Create the first group!",
-        "createForm": {
-            "name": "Group Name",
-            "desc": "Description (optional)",
-            "submit": "Create Group",
-            "cancel": "Cancel"
-        },
-        "timeAgo": {
-            "now": "Now"
-        }
+        "title": "Gruppen",
+        "createGroup": "Gruppe erstellen",
+        "newGroup": "Neue Gruppe erstellen",
+        "groupName": "Gruppenname",
+        "description": "Beschreibung (optional)",
+        "public": "Öffentlich",
+        "private": "Privat",
+        "creating": "Erstelle...",
+        "cancel": "Abbrechen",
+        "noGroups": "Keine Gruppen gefunden",
+        "createFirst": "Erstelle die erste Gruppe der Gemeinschaft!",
+        "members": "Mitglieder",
+        "join": "Gruppe beitreten",
+        "leave": "Gruppe verlassen",
+        "noPosts": "Noch keine Beiträge",
+        "writePlaceholder": "Schreibe in der Gruppe...",
+        "loading": "Gruppen werden geladen...",
+        "communionTitle": "👥 Gehe im Glauben in Gemeinschaft",
+        "communionDesc": "Gruppen sind Räume zum Teilen, Lernen und gemeinsamen Wachsen im Glauben. Erstelle oder tritt Bibelstudien-, Gebets-, Lobpreis- oder anderen Gruppen bei, die Brüder und Schwestern in Christus vereinen.",
+        "communionVerse": "📖 \"Und lasst uns unsere Zusammenkünfte nicht versäumen, wie einige es tun, sondern uns gegenseitig ermutigen.\" — Hebräer 10:25"
     },
     "consecration": {
         "title": "Consecration",
@@ -652,9 +657,102 @@
         "topics": "Tithes, Offerings, Savings, Investments, Debts, Prosperity"
     },
     "courseTheology": {
-        "title": "Theology Course",
-        "description": "Deepen your theological knowledge",
-        "topics": "Christology, Soteriology, Ecclesiology, Eschatology, Pneumatology, Hermeneutics"
+        "title": "Christliche Theologie",
+        "subtitle": "Vertiefe dein theologisches Wissen",
+        "20lessons": "20 Lektionen",
+        "certificate": "Zertifikat",
+        "lifetime": "Lebenslanger Zugang",
+        "buyFor": "Kaufen für",
+        "processing": "Verarbeitung...",
+        "securePayment": "Sichere Zahlung • Sofortiger Zugang",
+        "unlocked": "Kurs Freigeschaltet!",
+        "content": "Kursinhalt",
+        "lesson": "Lektion",
+        "emailPrompt": "Deine E-Mail:",
+        "paymentError": "Zahlungsfehler.",
+        "connectionError": "Verbindungsfehler.",
+        "lessons": {
+            "l1": {
+                "title": "Einführung in die Theologie",
+                "desc": "Was Theologie ist und warum jeder Christ sie studieren sollte."
+            },
+            "l2": {
+                "title": "Die Offenbarung Gottes",
+                "desc": "Allgemeine und spezielle Offenbarung."
+            },
+            "l3": {
+                "title": "Bibliologie",
+                "desc": "Die Lehre von der Schrift."
+            },
+            "l4": {
+                "title": "Theologie im eigentlichen Sinne",
+                "desc": "Die Attribute Gottes."
+            },
+            "l5": {
+                "title": "Die Dreifaltigkeit",
+                "desc": "Vater, Sohn und Heiliger Geist."
+            },
+            "l6": {
+                "title": "Christologie I",
+                "desc": "Die Person Christi."
+            },
+            "l7": {
+                "title": "Christologie II",
+                "desc": "Das Werk Christi."
+            },
+            "l8": {
+                "title": "Pneumatologie",
+                "desc": "Die Lehre vom Heiligen Geist."
+            },
+            "l9": {
+                "title": "Biblische Anthropologie",
+                "desc": "Die Lehre vom Menschen."
+            },
+            "l10": {
+                "title": "Hamartiologie",
+                "desc": "Die Lehre von der Sünde."
+            },
+            "l11": {
+                "title": "Soteriologie",
+                "desc": "Die Lehre vom Heil."
+            },
+            "l12": {
+                "title": "Ekklesiologie",
+                "desc": "Die Lehre von der Kirche."
+            },
+            "l13": {
+                "title": "Sakramente",
+                "desc": "Taufe und Abendmahl."
+            },
+            "l14": {
+                "title": "Angelologie",
+                "desc": "Engel und Dämonen."
+            },
+            "l15": {
+                "title": "Eschatologie I",
+                "desc": "Endzeit."
+            },
+            "l16": {
+                "title": "Eschatologie II",
+                "desc": "Jüngstes Gericht."
+            },
+            "l17": {
+                "title": "Hermeneutik",
+                "desc": "Bibelauslegung."
+            },
+            "l18": {
+                "title": "Kirchengeschichte",
+                "desc": "Von der Apostelgeschichte bis heute."
+            },
+            "l19": {
+                "title": "Apologetik",
+                "desc": "Verteidigung des Glaubens."
+            },
+            "l20": {
+                "title": "Praktische Theologie",
+                "desc": "Theologie im Alltag."
+            }
+        }
     },
     "media": {
         "photo": "Photo",

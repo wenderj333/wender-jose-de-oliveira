@@ -124,26 +124,26 @@
         "myMusic": "Моя Музыка"
     },
     "groups": {
-        "joinGroup": "+ Присоединиться к группе",
-        "leaveGroup": "Выйти из группы",
-        "inputPlaceholder": "Напишите в группу...",
-        "noPosts": "Пока нет постов",
-        "private": "🔒 Приватно",
-        "public": "🌐 Общественно",
-        "communionTitle": "🤝 Группы общения",
-        "communionDesc": "Присоединяйтесь к группам с братьями и сестрами, которые разделяют вашу веру! Здесь вы можете создать или присоединиться к группам библейского изучения, молитвы, хвалы, молодежи, пар и многого другого.",
-        "loading": "Загрузка...",
+        "title": "Группы",
+        "createGroup": "Создать группу",
+        "newGroup": "Создать новую группу",
+        "groupName": "Название группы",
+        "description": "Описание (необязательно)",
+        "public": "Публичная",
+        "private": "Частная",
+        "creating": "Создание...",
+        "cancel": "Отмена",
         "noGroups": "Группы не найдены",
-        "createFirst": "Создайте первую группу!",
-        "createForm": {
-            "name": "Название группы",
-            "desc": "Описание (необязательно)",
-            "submit": "Создать группу",
-            "cancel": "Отмена"
-        },
-        "timeAgo": {
-            "now": "Только что"
-        }
+        "createFirst": "Создайте первую группу сообщества!",
+        "members": "участников",
+        "join": "Вступить в группу",
+        "leave": "Покинуть группу",
+        "noPosts": "Пока нет публикаций",
+        "writePlaceholder": "Напишите в группе...",
+        "loading": "Загрузка групп...",
+        "communionTitle": "👥 Идите в вере вместе",
+        "communionDesc": "Группы — это пространство для общения, обучения и совместного роста в вере. Создавайте или присоединяйтесь к группам по изучению Библии, молитве, поклонению или любой другой теме, объединяющей братьев и сестер во Христе.",
+        "communionVerse": "📖 \"Не будем оставлять собрания своего, как есть у некоторых обычай; но будем увещевать друг друга.\" — Евреям 10:25"
     },
     "members": {
         "never": "Никогда",
@@ -521,5 +521,110 @@
         "editCover": "Изменить обложку",
         "saved": "Profile saved successfully!"
     },
-    "media": {}
+    "media": {},
+    "courseTheology": {
+        "title": "Христианское Богословие",
+        "subtitle": "Углубите свои богословские знания",
+        "20lessons": "20 Уроков",
+        "certificate": "Сертификат",
+        "lifetime": "Пожизненный доступ",
+        "buyFor": "Купить за",
+        "processing": "Обработка...",
+        "securePayment": "Безопасная оплата",
+        "unlocked": "Курс Разблокирован!",
+        "content": "Содержание Курса",
+        "lesson": "Урок",
+        "emailPrompt": "Ваш email:",
+        "paymentError": "Ошибка оплаты.",
+        "connectionError": "Ошибка соединения.",
+        "lessons": {
+            "l1": {
+                "title": "Introduction to Theology",
+                "desc": "What theology is and why every Christian should study it."
+            },
+            "l2": {
+                "title": "Revelation of God",
+                "desc": "General and special revelation: how God reveals Himself to man."
+            },
+            "l3": {
+                "title": "Bibliology",
+                "desc": "The doctrine of Scripture: inspiration, inerrancy, and canon."
+            },
+            "l4": {
+                "title": "Theology Proper",
+                "desc": "The attributes of God: omniscience, omnipotence, omnipresence."
+            },
+            "l5": {
+                "title": "The Trinity",
+                "desc": "Father, Son, and Holy Spirit: one God in three persons."
+            },
+            "l6": {
+                "title": "Christology I",
+                "desc": "The person of Christ: divine and human nature."
+            },
+            "l7": {
+                "title": "Christology II",
+                "desc": "The work of Christ: life, death, resurrection, and ascension."
+            },
+            "l8": {
+                "title": "Pneumatology",
+                "desc": "The doctrine of the Holy Spirit: person, work, and gifts."
+            },
+            "l9": {
+                "title": "Biblical Anthropology",
+                "desc": "The doctrine of man: creation, fall, and image of God."
+            },
+            "l10": {
+                "title": "Hamartiology",
+                "desc": "The doctrine of sin: origin, nature, and consequences."
+            },
+            "l11": {
+                "title": "Soteriology",
+                "desc": "The doctrine of salvation: grace, faith, justification, and sanctification."
+            },
+            "l12": {
+                "title": "Ecclesiology",
+                "desc": "The doctrine of the Church: nature, mission, and government."
+            },
+            "l13": {
+                "title": "Sacraments",
+                "desc": "Baptism and Lord's Supper: meaning and practice."
+            },
+            "l14": {
+                "title": "Angelology",
+                "desc": "Angels, demons, and spiritual warfare."
+            },
+            "l15": {
+                "title": "Eschatology I",
+                "desc": "End times: signs, tribulation, and rapture."
+            },
+            "l16": {
+                "title": "Eschatology II",
+                "desc": "Millennium, final judgment, and new heavens and new earth."
+            },
+            "l17": {
+                "title": "Hermeneutics",
+                "desc": "How to interpret the Bible correctly: methods and principles."
+            },
+            "l18": {
+                "title": "Church History",
+                "desc": "From Acts to today: reformations, revivals, and movements."
+            },
+            "l19": {
+                "title": "Apologetics",
+                "desc": "Defending the faith with reason: answers to big questions."
+            },
+            "l20": {
+                "title": "Practical Theology",
+                "desc": "Applying theology in daily life, ministry, and missions."
+            }
+        }
+    },
+    "livePrayer": {
+        "explainerTitle": "Что такое Живая Молитва?",
+        "explainerDesc": "Здесь вы можете участвовать в молитвенных моментах в реальном времени с пасторами из разных церквей. Когда пастор начинает молитвенную сессию, вы можете следить, молиться вместе и чувствовать присутствие Бога с братьями и сестрами по всему миру.",
+        "explainerVerse": "\"Ибо, где двое или трое собраны во имя Мое, там Я посреди них.\" — Матфея 18:20",
+        "myChurch": "Моя Церковь",
+        "liveStatus": "В эфире"
+    }
 }

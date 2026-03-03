@@ -9,11 +9,12 @@ function timeAgo(d, t) {
   if (!d) return '';
   const diff = Date.now() - new Date(d).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return t('groups.timeAgo.now', 'Agora');
-  if (mins < 60) return `${mins}min`;
+  if (mins < 1) return t('time.now', 'Agora');
+  if (mins < 60) return t('time.minAgo', '{{count}}min', { count: mins });
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h`;
-  return `${Math.floor(hrs / 24)}d`;
+  if (hrs < 24) return t('time.hoursAgo', '{{count}}h', { count: hrs });
+  const days = Math.floor(hrs / 24);
+  return t('time.daysAgo', '{{count}}d', { count: days });
 }
 
 export default function Groups() {
@@ -116,7 +117,7 @@ export default function Groups() {
       <div style={{ maxWidth: 650, margin: '0 auto', padding: '1rem 0.5rem' }}>
         <button onClick={() => { setSelectedGroup(null); setGroupData(null); }}
           style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, marginBottom: '1rem', color: '#1a0a3e' }}>
-          <ArrowLeft size={20} /> Voltar
+          <ArrowLeft size={20} /> {t('common.back', 'Voltar')}
         </button>
 
         {/* Group header */}
@@ -125,19 +126,19 @@ export default function Groups() {
           {g.description && <p style={{ opacity: 0.8, fontSize: '0.85rem', marginTop: 6 }}>{g.description}</p>}
           <div style={{ display: 'flex', gap: 16, marginTop: 12, fontSize: '0.8rem', opacity: 0.7 }}>
             <span>{g.privacy === 'private' ? t('groups.private') : t('groups.public')}</span>
-            <span>👥 {groupData.members?.length || 0} membros</span>
+            <span>👥 {groupData.members?.length || 0} {t('groups.members', 'membros')}</span>
           </div>
           {user && !isMember && (
             <button onClick={() => joinGroup(selectedGroup)} style={{
               marginTop: 12, padding: '0.5rem 1.5rem', borderRadius: 20, border: 'none',
               background: '#daa520', color: '#fff', fontWeight: 600, cursor: 'pointer',
-            }}>{t('groups.joinGroup')}</button>
+            }}>{t('groups.join')}</button>
           )}
           {user && isMember && (
             <button onClick={() => leaveGroup(selectedGroup)} style={{
               marginTop: 12, padding: '0.4rem 1rem', borderRadius: 20, border: '1px solid rgba(255,255,255,0.3)',
               background: 'transparent', color: '#fff', fontSize: '0.8rem', cursor: 'pointer',
-            }}>{t('groups.leaveGroup')}</button>
+            }}>{t('groups.leave')}</button>
           )}
         </div>
 
@@ -157,7 +158,7 @@ export default function Groups() {
         {user && isMember && (
           <form onSubmit={postInGroup} style={{ display: 'flex', gap: 8, marginBottom: '1rem' }}>
             <input value={newPost} onChange={e => setNewPost(e.target.value)}
-              placeholder={t('groups.inputPlaceholder')} style={{ flex: 1, padding: '0.6rem 1rem', borderRadius: 25, border: '1px solid #ddd', fontSize: '0.85rem' }} />
+              placeholder={t('groups.writePlaceholder')} style={{ flex: 1, padding: '0.6rem 1rem', borderRadius: 25, border: '1px solid #ddd', fontSize: '0.85rem' }} />
             <button type="submit" disabled={posting || !newPost.trim()} style={{
               width: 40, height: 40, borderRadius: '50%', border: 'none',
               background: newPost.trim() ? '#daa520' : '#ccc', cursor: 'pointer',
@@ -178,7 +179,7 @@ export default function Groups() {
                 </div>
                 <div>
                   <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{p.author_name}</div>
-                  <div style={{ fontSize: '0.7rem', color: '#999' }}>{timeAgo(p.created_at)}</div>
+                  <div style={{ fontSize: '0.7rem', color: '#999' }}>{timeAgo(p.created_at, t)}</div>
                 </div>
               </div>
               <div style={{ fontSize: '0.9rem', lineHeight: 1.4 }}>{p.content}</div>
@@ -206,35 +207,33 @@ export default function Groups() {
         )}
       </div>
 
-      {/* Mensagem explicativa */}
+      {/* Explanatory message - Correctly Translated */}
       <div style={{
         background: 'linear-gradient(135deg, rgba(26,10,62,0.05), rgba(218,165,32,0.10))',
         borderRadius: 16, padding: '1.2rem', marginBottom: '1rem',
         border: '1px solid rgba(218,165,32,0.2)',
       }}>
-        <p style={{ fontSize: '0.9rem', color: '#1a0a3e', fontWeight: 600, margin: '0 0 0.5rem', textAlign: 'center' }}>
-          👥 Caminhe na Fé em Comunidade
+        <h3 style={{ fontSize: '1rem', color: '#1a0a3e', margin: '0 0 0.5rem', textAlign: 'center' }}>
+          {t('groups.communionTitle', '👥 Caminhe na Fé em Comunidade')}
+        </h3>
+        <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
+          {t('groups.communionDesc', 'Os grupos são espaços para compartilhar, aprender e crescer juntos na fé.')}
         </p>
-        <p style={{ fontSize: '0.82rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-          Os grupos são espaços para compartilhar, aprender e crescer juntos na fé. 
-          Crie ou participe de grupos de estudo bíblico, oração, louvor ou qualquer tema 
-          que una irmãos em Cristo.
-        </p>
-        <p style={{ fontSize: '0.8rem', color: '#666', fontStyle: 'italic', margin: 0, textAlign: 'center' }}>
-          📖 "Não deixemos de congregar-nos, como é costume de alguns; antes, façamos admoestações." — Hebreus 10:25
+        <p style={{ fontSize: '0.82rem', color: '#6a1b9a', fontStyle: 'italic', margin: 0, textAlign: 'center', fontWeight: 500 }}>
+          {t('groups.communionVerse', '"Não deixemos de congregar-nos..." — Hebreus 10:25')}
         </p>
       </div>
 
       {/* Create group modal */}
       {showCreate && (
         <div style={{ background: '#fff', borderRadius: 16, padding: '1.5rem', marginBottom: '1rem', border: '2px solid #daa520' }}>
-          <h3 style={{ margin: '0 0 1rem', color: '#1a0a3e' }}>{t('groups.createForm.submit')}</h3>
+          <h3 style={{ margin: '0 0 1rem', color: '#1a0a3e' }}>{t('groups.newGroup')}</h3>
           <form onSubmit={createGroup}>
             <input value={newName} onChange={e => setNewName(e.target.value)}
-              placeholder={t('groups.createForm.name')} required
+              placeholder={t('groups.groupName')} required
               style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid #ddd', marginBottom: 8, fontSize: '0.9rem', boxSizing: 'border-box' }} />
             <textarea value={newDesc} onChange={e => setNewDesc(e.target.value)}
-              placeholder={t('groups.createForm.desc')} rows={3}
+              placeholder={t('groups.description')} rows={3}
               style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid #ddd', marginBottom: 8, fontSize: '0.9rem', resize: 'vertical', boxSizing: 'border-box' }} />
             <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
               <button type="button" onClick={() => setNewPrivacy('public')} style={{
@@ -252,36 +251,15 @@ export default function Groups() {
               <button type="submit" disabled={creating} style={{
                 padding: '0.5rem 1.5rem', borderRadius: 20, border: 'none',
                 background: '#daa520', color: '#fff', fontWeight: 600, cursor: 'pointer',
-              }}>{t('groups.createForm.submit')}</button>
+              }}>{t('groups.createGroup')}</button>
               <button type="button" onClick={() => setShowCreate(false)} style={{
                 padding: '0.5rem 1rem', borderRadius: 20, border: '1px solid #ddd',
                 background: '#fff', color: '#666', cursor: 'pointer',
-              }}>{t('groups.createForm.cancel')}</button>
+              }}>{t('groups.cancel')}</button>
             </div>
           </form>
         </div>
       )}
-
-      {/* Explanatory message */}
-      <div style={{
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.97), rgba(245,240,255,0.95))',
-        border: '2px solid transparent',
-        borderImage: 'linear-gradient(135deg, #1a0a3e, #daa520) 1',
-        borderRadius: 16,
-        padding: '1.2rem',
-        marginBottom: '1rem',
-        boxShadow: '0 4px 12px rgba(26,10,62,0.08)',
-      }}>
-        <h3 style={{ fontSize: '1rem', color: '#1a0a3e', margin: '0 0 0.5rem', textAlign: 'center' }}>
-          {t('groups.communionTitle')}
-        </h3>
-        <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-          {t('groups.communionDesc')}
-        </p>
-        <p style={{ fontSize: '0.82rem', color: '#6a1b9a', fontStyle: 'italic', margin: 0, textAlign: 'center', fontWeight: 500 }}>
-          "E não deixemos de congregar-nos, como é costume de alguns; antes, façamos admoestações e tanto mais quanto vedes que o Dia se aproxima." — Hebreus 10:25
-        </p>
-      </div>
 
       {loading ? (
         <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>{t('groups.loading')}</div>
@@ -309,7 +287,7 @@ export default function Groups() {
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600, color: '#1a0a3e', fontSize: '0.95rem' }}>{g.name}</div>
                 <div style={{ fontSize: '0.8rem', color: '#999' }}>
-                  {g.privacy === 'private' ? t('groups.private') : t('groups.public')} • 👥 {g.member_count} membros
+                  {g.privacy === 'private' ? t('groups.private') : t('groups.public')} • 👥 {g.member_count} {t('groups.members', 'membros')}
                 </div>
                 {g.description && <div style={{ fontSize: '0.8rem', color: '#666', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 250 }}>{g.description}</div>}
               </div>

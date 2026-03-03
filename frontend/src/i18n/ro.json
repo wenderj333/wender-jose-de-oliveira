@@ -158,7 +158,12 @@
         "endPrayer": "Încheie Rugăciunea",
         "pastorsPraying": "Pastori care se roagă acum:",
         "noPastors": "Niciun pastor nu se roagă live în acest moment.",
-        "comeBack": "Revino curând!"
+        "comeBack": "Revino curând!",
+        "explainerTitle": "Ce este Rugăciunea Live?",
+        "explainerDesc": "Aici puteți participa la momente de rugăciune în timp real cu pastori din diverse biserici. Când un pastor începe o sesiune de rugăciune, puteți urmări, vă puteți ruga împreună și puteți simți prezența lui Dumnezeu alături de frați din întreaga lume.",
+        "explainerVerse": "\"Căci acolo unde sunt doi sau trei adunați în Numele Meu, sunt și Eu în mijlocul lor.\" — Matei 18:20",
+        "myChurch": "Biserica Mea",
+        "liveStatus": "Live"
     },
     "churchMap": {
         "title": "Harta Bisericilor",
@@ -521,26 +526,26 @@
         "back": "Înapoi"
     },
     "groups": {
-        "joinGroup": "+ Alăturați-vă grupului",
-        "leaveGroup": "Ieșiți din grup",
-        "inputPlaceholder": "Scrieți în grup...",
-        "noPosts": "Încă nici o postare",
-        "private": "🔒 Privat",
-        "public": "🌐 Public",
-        "communionTitle": "🤝 Grupuri de Comuniune",
-        "communionDesc": "Alăturați-vă grupurilor cu frații și surorile care împărtășesc aceeași credință! Aici puteți crea sau alătura grupuri de studiu biblic, rugăciune, laudă, tineri, cupluri și mult mai mult.",
-        "loading": "Se încarcă...",
+        "title": "Grupuri",
+        "createGroup": "Creează Grup",
+        "newGroup": "Creează Grup Nou",
+        "groupName": "Numele grupului",
+        "description": "Descriere (opțional)",
+        "public": "Public",
+        "private": "Privat",
+        "creating": "Se creează...",
+        "cancel": "Anulează",
         "noGroups": "Nu s-au găsit grupuri",
-        "createFirst": "Creați primul grup!",
-        "createForm": {
-            "name": "Numele grupului",
-            "desc": "Descriere (opțional)",
-            "submit": "Creare grup",
-            "cancel": "Anulare"
-        },
-        "timeAgo": {
-            "now": "Acum"
-        }
+        "createFirst": "Creează primul grup al comunității!",
+        "members": "membri",
+        "join": "Alătură-te Grupului",
+        "leave": "Părăsește Grupul",
+        "noPosts": "Nicio postare încă",
+        "writePlaceholder": "Scrie în grup...",
+        "loading": "Se încarcă grupurile...",
+        "communionTitle": "👥 Mergi prin Credință în Comunitate",
+        "communionDesc": "Grupurile sunt spații pentru a împărtăși, a învăța și a crește împreună în credință. Creează sau alătură-te grupurilor de studiu biblic, rugăciune, laudă sau orice temă care unește frații în Hristos.",
+        "communionVerse": "📖 \"Să nu părăsim adunarea noastră, cum au unii obicei; ci să ne îndemnăm unii pe alții.\" — Evrei 10:25"
     },
     "consecration": {
         "title": "Consacrare",
@@ -669,9 +674,102 @@
         "topics": "Zeciuială, Ofrande, Economii, Investiții, Datorii, Prosperitate"
     },
     "courseTheology": {
-        "title": "Curs de Teologie",
-        "description": "Aprofundează-ți cunoștințele teologice",
-        "topics": "Cristologie, Soteriologie, Eclesiologie, Escatologie, Pneumatologie, Hermeneutică"
+        "title": "Teologie Creștină",
+        "subtitle": "Aprofundează cunoștințele teologice",
+        "20lessons": "20 Lecții",
+        "certificate": "Certificat",
+        "lifetime": "Acces pe viață",
+        "buyFor": "Cumpără cu",
+        "processing": "Se procesează...",
+        "securePayment": "Plată securizată",
+        "unlocked": "Curs Deblocat!",
+        "content": "Conținutul Cursului",
+        "lesson": "Lecția",
+        "emailPrompt": "Emailul tău:",
+        "paymentError": "Eroare plată.",
+        "connectionError": "Eroare conexiune.",
+        "lessons": {
+            "l1": {
+                "title": "Introduction to Theology",
+                "desc": "What theology is and why every Christian should study it."
+            },
+            "l2": {
+                "title": "Revelation of God",
+                "desc": "General and special revelation: how God reveals Himself to man."
+            },
+            "l3": {
+                "title": "Bibliology",
+                "desc": "The doctrine of Scripture: inspiration, inerrancy, and canon."
+            },
+            "l4": {
+                "title": "Theology Proper",
+                "desc": "The attributes of God: omniscience, omnipotence, omnipresence."
+            },
+            "l5": {
+                "title": "The Trinity",
+                "desc": "Father, Son, and Holy Spirit: one God in three persons."
+            },
+            "l6": {
+                "title": "Christology I",
+                "desc": "The person of Christ: divine and human nature."
+            },
+            "l7": {
+                "title": "Christology II",
+                "desc": "The work of Christ: life, death, resurrection, and ascension."
+            },
+            "l8": {
+                "title": "Pneumatology",
+                "desc": "The doctrine of the Holy Spirit: person, work, and gifts."
+            },
+            "l9": {
+                "title": "Biblical Anthropology",
+                "desc": "The doctrine of man: creation, fall, and image of God."
+            },
+            "l10": {
+                "title": "Hamartiology",
+                "desc": "The doctrine of sin: origin, nature, and consequences."
+            },
+            "l11": {
+                "title": "Soteriology",
+                "desc": "The doctrine of salvation: grace, faith, justification, and sanctification."
+            },
+            "l12": {
+                "title": "Ecclesiology",
+                "desc": "The doctrine of the Church: nature, mission, and government."
+            },
+            "l13": {
+                "title": "Sacraments",
+                "desc": "Baptism and Lord's Supper: meaning and practice."
+            },
+            "l14": {
+                "title": "Angelology",
+                "desc": "Angels, demons, and spiritual warfare."
+            },
+            "l15": {
+                "title": "Eschatology I",
+                "desc": "End times: signs, tribulation, and rapture."
+            },
+            "l16": {
+                "title": "Eschatology II",
+                "desc": "Millennium, final judgment, and new heavens and new earth."
+            },
+            "l17": {
+                "title": "Hermeneutics",
+                "desc": "How to interpret the Bible correctly: methods and principles."
+            },
+            "l18": {
+                "title": "Church History",
+                "desc": "From Acts to today: reformations, revivals, and movements."
+            },
+            "l19": {
+                "title": "Apologetics",
+                "desc": "Defending the faith with reason: answers to big questions."
+            },
+            "l20": {
+                "title": "Practical Theology",
+                "desc": "Applying theology in daily life, ministry, and missions."
+            }
+        }
     },
     "media": {
         "photo": "Fotografie",

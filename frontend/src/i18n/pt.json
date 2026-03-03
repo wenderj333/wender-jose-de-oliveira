@@ -220,7 +220,12 @@
         "endPrayer": "Encerrar Oração",
         "pastorsPraying": "Pastores orando agora:",
         "noPastors": "Nenhum pastor orando ao vivo neste momento.",
-        "comeBack": "Volte em breve!"
+        "comeBack": "Volte em breve!",
+        "explainerTitle": "O que é a Oração ao Vivo?",
+        "explainerDesc": "Aqui você pode participar de momentos de oração em tempo real com pastores de diversas igrejas. Quando um pastor inicia uma sessão de oração, você pode acompanhar, orar junto e sentir a presença de Deus com irmãos de todo o mundo.",
+        "explainerVerse": "\"Porque onde estiverem dois ou três reunidos em meu nome, aí estou eu no meio deles.\" — Mateus 18:20",
+        "myChurch": "Minha Igreja",
+        "liveStatus": "Ao Vivo"
     },
     "churchMap": {
         "title": "Mapa de Igrejas",
@@ -322,14 +327,17 @@
         "private": "Privado",
         "creating": "Criando...",
         "cancel": "Cancelar",
-        "noGroups": "Nenhum grupo ainda",
+        "noGroups": "Nenhum grupo encontrado",
         "createFirst": "Crie o primeiro grupo da comunidade!",
         "members": "membros",
         "join": "Entrar no Grupo",
         "leave": "Sair do Grupo",
         "noPosts": "Nenhuma publicação ainda",
         "writePlaceholder": "Escreva no grupo...",
-        "back": "Voltar"
+        "loading": "Carregando grupos...",
+        "communionTitle": "👥 Caminhe na Fé em Comunidade",
+        "communionDesc": "Os grupos são espaços para compartilhar, aprender e crescer juntos na fé. Crie ou participe de grupos de estudo bíblico, oração, louvor ou qualquer tema que una irmãos em Cristo.",
+        "communionVerse": "📖 \"Não deixemos de congregar-nos, como é costume de alguns; antes, façamos admoestações.\" — Hebreus 10:25"
     },
     "members": {
         "never": "Nunca",
@@ -746,9 +754,102 @@
         "topics": "Dízimo, Ofertas, Poupança, Investimentos, Dívidas, Prosperidade"
     },
     "courseTheology": {
-        "title": "Curso de Teologia",
-        "description": "Aprofunde seu conhecimento teológico",
-        "topics": "Cristologia, Soteriologia, Eclesiologia, Escatologia, Pneumatologia, Hermenêutica"
+        "title": "Teologia Cristã",
+        "subtitle": "Aprofunde seu conhecimento teológico e fortaleça sua fé com fundamento",
+        "20lessons": "20 Lições",
+        "certificate": "Certificado",
+        "lifetime": "Acesso Vitalício",
+        "buyFor": "Comprar por",
+        "processing": "Processando...",
+        "securePayment": "Pagamento seguro via Stripe • Acesso imediato",
+        "unlocked": "Curso Desbloqueado!",
+        "content": "Conteúdo do Curso",
+        "lesson": "Lição",
+        "emailPrompt": "Seu email para receber o curso:",
+        "paymentError": "Erro ao iniciar pagamento.",
+        "connectionError": "Erro de conexão.",
+        "lessons": {
+            "l1": {
+                "title": "Introdução à Teologia",
+                "desc": "O que é teologia e por que todo cristão deveria estudá-la."
+            },
+            "l2": {
+                "title": "A Revelação de Deus",
+                "desc": "Revelação geral e especial: como Deus se revela ao homem."
+            },
+            "l3": {
+                "title": "Bibliologia",
+                "desc": "A doutrina das Escrituras: inspiração, inerrância e cânon."
+            },
+            "l4": {
+                "title": "Teologia Própria",
+                "desc": "Os atributos de Deus: onisciência, onipotência, onipresenca."
+            },
+            "l5": {
+                "title": "A Trindade",
+                "desc": "Pai, Filho e Espírito Santo: um só Deus em três pessoas."
+            },
+            "l6": {
+                "title": "Cristologia I",
+                "desc": "A pessoa de Cristo: natureza divina e humana."
+            },
+            "l7": {
+                "title": "Cristologia II",
+                "desc": "A obra de Cristo: vida, morte, ressurreição e ascensão."
+            },
+            "l8": {
+                "title": "Pneumatologia",
+                "desc": "A doutrina do Espírito Santo: pessoa, obra e dons."
+            },
+            "l9": {
+                "title": "Antropologia Bíblica",
+                "desc": "A doutrina do homem: criação, queda e imagem de Deus."
+            },
+            "l10": {
+                "title": "Hamartiologia",
+                "desc": "A doutrina do pecado: origem, natureza e consequências."
+            },
+            "l11": {
+                "title": "Soteriologia",
+                "desc": "A doutrina da salvação: graça, fé, justificação e santificação."
+            },
+            "l12": {
+                "title": "Eclesiologia",
+                "desc": "A doutrina da Igreja: natureza, missão e governo."
+            },
+            "l13": {
+                "title": "Sacramentos",
+                "desc": "Batismo e Santa Ceia: significado e prática."
+            },
+            "l14": {
+                "title": "Angelologia",
+                "desc": "Anjos, demônios e a guerra espiritual."
+            },
+            "l15": {
+                "title": "Escatologia I",
+                "desc": "Os últimos tempos: sinais, tribulação e arrebatamento."
+            },
+            "l16": {
+                "title": "Escatologia II",
+                "desc": "Milênio, juízo final e novos céus e nova terra."
+            },
+            "l17": {
+                "title": "Hermenêutica",
+                "desc": "Como interpretar a Bíblia corretamente: métodos e princípios."
+            },
+            "l18": {
+                "title": "História da Igreja",
+                "desc": "De Atos aos dias de hoje: reformas, avivamentos e movimentos."
+            },
+            "l19": {
+                "title": "Apologética",
+                "desc": "Defender a fé com razão: respostas para as grandes perguntas."
+            },
+            "l20": {
+                "title": "Teologia Prática",
+                "desc": "Aplicando a teologia no dia a dia, ministério e missões."
+            }
+        }
     },
     "testimonies": {
         "demo1": "Encontrei paz e comunidade nesta plataforma. Minhas orações foram ouvidas e respondidas.",

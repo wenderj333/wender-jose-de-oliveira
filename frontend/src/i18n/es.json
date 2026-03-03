@@ -158,7 +158,12 @@
         "endPrayer": "Finalizar Oración",
         "pastorsPraying": "Pastores orando ahora:",
         "noPastors": "Ningún pastor orando en vivo en este momento.",
-        "comeBack": "¡Vuelve pronto!"
+        "comeBack": "¡Vuelve pronto!",
+        "explainerTitle": "¿Qué es la Oración en Vivo?",
+        "explainerDesc": "Aquí puedes participar en momentos de oración en tiempo real con pastores de diversas iglesias. Cuando un pastor inicia una sesión, puedes acompañar, orar junto y sentir la presencia de Dios con hermanos de todo el mundo.",
+        "explainerVerse": "\"Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos.\" — Mateo 18:20",
+        "myChurch": "Mi Iglesia",
+        "liveStatus": "En Vivo"
     },
     "churchMap": {
         "title": "Mapa de Iglesias",
@@ -525,26 +530,26 @@
         "back": "Volver"
     },
     "groups": {
-        "joinGroup": "+ Unirse al Grupo",
-        "leaveGroup": "Salir del Grupo",
-        "inputPlaceholder": "Escribe en el grupo...",
-        "noPosts": "Sin publicaciones aún",
-        "private": "🔒 Privado",
-        "public": "🌐 Público",
-        "communionTitle": "🤝 Grupos de Comunión",
-        "communionDesc": "¡Únete a grupos con hermanos que comparten la misma fe! Aquí puedes crear o unirte a grupos de estudio bíblico, oración, alabanza, jóvenes, parejas y mucho más.",
-        "loading": "Cargando...",
+        "title": "Grupos",
+        "createGroup": "Crear Grupo",
+        "newGroup": "Crear Nuevo Grupo",
+        "groupName": "Nombre del grupo",
+        "description": "Descripción (opcional)",
+        "public": "Público",
+        "private": "Privado",
+        "creating": "Creando...",
+        "cancel": "Cancelar",
         "noGroups": "No se encontraron grupos",
-        "createFirst": "¡Crea el primer grupo!",
-        "createForm": {
-            "name": "Nombre del Grupo",
-            "desc": "Descripción (opcional)",
-            "submit": "Crear Grupo",
-            "cancel": "Cancelar"
-        },
-        "timeAgo": {
-            "now": "Ahora"
-        }
+        "createFirst": "¡Crea el primer grupo de la comunidad!",
+        "members": "miembros",
+        "join": "Unirse al Grupo",
+        "leave": "Salir del Grupo",
+        "noPosts": "Ninguna publicación aún",
+        "writePlaceholder": "Escribe en el grupo...",
+        "loading": "Cargando grupos...",
+        "communionTitle": "👥 Camina en Fe en Comunidad",
+        "communionDesc": "Los grupos son espacios para compartir, aprender y crecer juntos en la fe. Crea o únete a grupos de estudio bíblico, oración, alabanza o cualquier tema que una a hermanos en Cristo.",
+        "communionVerse": "📖 \"No dejando de congregarnos, como algunos tienen por costumbre, sino exhortándonos.\" — Hebreos 10:25"
     },
     "consecration": {
         "title": "Consagración",
@@ -673,9 +678,102 @@
         "topics": "Diezmo, Ofrendas, Ahorro, Inversiones, Deudas, Prosperidad"
     },
     "courseTheology": {
-        "title": "Curso de Teología",
-        "description": "Profundiza tu conocimiento teológico",
-        "topics": "Cristología, Soteriología, Eclesiología, Escatología, Pneumatología, Hermenéutica"
+        "title": "Teología Cristiana",
+        "subtitle": "Profundiza tu conocimiento teológico",
+        "20lessons": "20 Lecciones",
+        "certificate": "Certificado",
+        "lifetime": "Acceso de por vida",
+        "buyFor": "Comprar por",
+        "processing": "Procesando...",
+        "securePayment": "Pago seguro • Acceso inmediato",
+        "unlocked": "¡Curso Desbloqueado!",
+        "content": "Contenido del Curso",
+        "lesson": "Lección",
+        "emailPrompt": "Tu email:",
+        "paymentError": "Error de pago.",
+        "connectionError": "Error de conexión.",
+        "lessons": {
+            "l1": {
+                "title": "Introducción a la Teología",
+                "desc": "Qué es la teología y por qué todo cristiano debería estudiarla."
+            },
+            "l2": {
+                "title": "La Revelación de Dios",
+                "desc": "Revelación general y especial."
+            },
+            "l3": {
+                "title": "Bibliología",
+                "desc": "La doctrina de las Escrituras."
+            },
+            "l4": {
+                "title": "Teología Propia",
+                "desc": "Los atributos de Dios."
+            },
+            "l5": {
+                "title": "La Trinidad",
+                "desc": "Padre, Hijo y Espíritu Santo."
+            },
+            "l6": {
+                "title": "Cristología I",
+                "desc": "La persona de Cristo."
+            },
+            "l7": {
+                "title": "Cristología II",
+                "desc": "La obra de Cristo."
+            },
+            "l8": {
+                "title": "Neumatología",
+                "desc": "La doctrina del Espíritu Santo."
+            },
+            "l9": {
+                "title": "Antropología Bíblica",
+                "desc": "La doctrina del hombre."
+            },
+            "l10": {
+                "title": "Hamartiología",
+                "desc": "La doctrina del pecado."
+            },
+            "l11": {
+                "title": "Soteriología",
+                "desc": "La doctrina de la salvación."
+            },
+            "l12": {
+                "title": "Eclesiología",
+                "desc": "La doctrina de la Iglesia."
+            },
+            "l13": {
+                "title": "Sacramentos",
+                "desc": "Bautismo y Santa Cena."
+            },
+            "l14": {
+                "title": "Angelología",
+                "desc": "Ángeles y demonios."
+            },
+            "l15": {
+                "title": "Escatología I",
+                "desc": "Los últimos tiempos."
+            },
+            "l16": {
+                "title": "Escatología II",
+                "desc": "Juicio final y cielo nuevo."
+            },
+            "l17": {
+                "title": "Hermenéutica",
+                "desc": "Interpretación bíblica."
+            },
+            "l18": {
+                "title": "Historia de la Iglesia",
+                "desc": "Desde Hechos hasta hoy."
+            },
+            "l19": {
+                "title": "Apologética",
+                "desc": "Defensa de la fe."
+            },
+            "l20": {
+                "title": "Teología Práctica",
+                "desc": "Teología en la vida diaria."
+            }
+        }
     },
     "media": {
         "photo": "Foto",

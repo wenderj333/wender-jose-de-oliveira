@@ -27,7 +27,7 @@ export default function LivePrayer() {
   const churchCount = demoMode && totalChurchesPraying === 0 ? DEMO_SESSIONS.length : totalChurchesPraying;
 
   const startPraying = () => {
-    send({ type: 'pastor_start_praying', pastorId: user.id, churchId: user.churchId, churchName: 'Minha Igreja', pastorName: user.full_name, prayerFocus });
+    send({ type: 'pastor_start_praying', pastorId: user.id, churchId: user.churchId, churchName: t('livePrayer.myChurch', 'Minha Igreja'), pastorName: user.full_name, prayerFocus });
     setIsPraying(true);
   };
 
@@ -56,15 +56,13 @@ export default function LivePrayer() {
         boxShadow: '0 4px 15px rgba(155,89,182,0.15)',
       }}>
         <h3 style={{ fontSize: '1.05rem', color: '#6a1b9a', margin: '0 0 0.6rem', textAlign: 'center' }}>
-          🙏 O que é a Oração ao Vivo?
+          🙏 {t('livePrayer.explainerTitle', 'O que é a Oração ao Vivo?')}
         </h3>
         <p style={{ fontSize: '0.88rem', color: '#444', lineHeight: 1.7, margin: '0 0 0.6rem' }}>
-          Aqui você pode participar de momentos de oração em tempo real com pastores de diversas igrejas. 
-          Quando um pastor inicia uma sessão de oração, você pode acompanhar, orar junto e sentir a presença 
-          de Deus com irmãos de todo o mundo.
+          {t('livePrayer.explainerDesc', 'Aqui você pode participar de momentos de oração em tempo real com pastores de diversas igrejas.')}
         </p>
         <p style={{ fontSize: '0.85rem', color: '#6a1b9a', fontStyle: 'italic', margin: 0, textAlign: 'center', fontWeight: 500 }}>
-          "Porque onde estiverem dois ou três reunidos em meu nome, aí estou eu no meio deles." — Mateus 18:20
+          {t('livePrayer.explainerVerse', '"Porque onde estiverem dois ou três reunidos em meu nome, aí estou eu no meio deles." — Mateus 18:20')}
         </p>
       </div>
 
@@ -132,7 +130,7 @@ export default function LivePrayer() {
                     {session.pastor_name || session.pastorName}
                   </div>
                   <div style={{ fontSize: '0.75rem', color: '#4caf50', fontWeight: 600 }}>
-                    🟢 En Vivo
+                    🟢 {t('livePrayer.liveStatus', 'En Vivo')}
                   </div>
                   <div style={{ fontSize: '0.7rem', color: '#666', marginTop: 2 }}>
                     {session.church_name || session.churchName}

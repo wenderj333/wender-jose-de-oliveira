@@ -158,7 +158,12 @@
         "endPrayer": "End Prayer",
         "pastorsPraying": "Pastors praying now:",
         "noPastors": "No pastors praying live at the moment.",
-        "comeBack": "Come back soon!"
+        "comeBack": "Come back soon!",
+        "explainerTitle": "What is Live Prayer?",
+        "explainerDesc": "Here you can participate in real-time prayer moments with pastors from various churches. When a pastor starts a prayer session, you can follow along, pray together, and feel God's presence with brothers and sisters worldwide.",
+        "explainerVerse": "\"For where two or three gather in my name, there am I with them.\" — Matthew 18:20",
+        "myChurch": "My Church",
+        "liveStatus": "Live"
     },
     "churchMap": {
         "title": "Church Map",
@@ -525,26 +530,26 @@
         "back": "Back"
     },
     "groups": {
-        "joinGroup": "+ Join Group",
-        "leaveGroup": "Leave Group",
-        "inputPlaceholder": "Write in the group...",
-        "noPosts": "No posts yet",
-        "private": "🔒 Private",
-        "public": "🌐 Public",
-        "communionTitle": "🤝 Fellowship Groups",
-        "communionDesc": "Join groups with brothers and sisters who share the same faith! Here you can create or join Bible study, prayer, praise, youth, couples groups and much more.",
-        "loading": "Loading...",
+        "title": "Groups",
+        "createGroup": "Create Group",
+        "newGroup": "Create New Group",
+        "groupName": "Group Name",
+        "description": "Description (optional)",
+        "public": "Public",
+        "private": "Private",
+        "creating": "Creating...",
+        "cancel": "Cancel",
         "noGroups": "No groups found",
-        "createFirst": "Create the first group!",
-        "createForm": {
-            "name": "Group Name",
-            "desc": "Description (optional)",
-            "submit": "Create Group",
-            "cancel": "Cancel"
-        },
-        "timeAgo": {
-            "now": "Now"
-        }
+        "createFirst": "Create the first community group!",
+        "members": "members",
+        "join": "Join Group",
+        "leave": "Leave Group",
+        "noPosts": "No posts yet",
+        "writePlaceholder": "Write in the group...",
+        "loading": "Loading groups...",
+        "communionTitle": "👥 Walk in Faith in Community",
+        "communionDesc": "Groups are spaces to share, learn, and grow together in faith. Create or join Bible study, prayer, worship, or any group that unites brothers and sisters in Christ.",
+        "communionVerse": "📖 \"Not giving up meeting together, as some are in the habit of doing, but encouraging one another.\" — Hebrews 10:25"
     },
     "consecration": {
         "title": "Consecration",
@@ -673,9 +678,102 @@
         "topics": "Tithes, Offerings, Savings, Investments, Debts, Prosperity"
     },
     "courseTheology": {
-        "title": "Theology Course",
-        "description": "Deepen your theological knowledge",
-        "topics": "Christology, Soteriology, Ecclesiology, Eschatology, Pneumatology, Hermeneutics"
+        "title": "Christian Theology",
+        "subtitle": "Deepen your theological knowledge and strengthen your faith with foundation",
+        "20lessons": "20 Lessons",
+        "certificate": "Certificate",
+        "lifetime": "Lifetime Access",
+        "buyFor": "Buy for",
+        "processing": "Processing...",
+        "securePayment": "Secure payment via Stripe • Immediate access",
+        "unlocked": "Course Unlocked!",
+        "content": "Course Content",
+        "lesson": "Lesson",
+        "emailPrompt": "Your email to receive the course:",
+        "paymentError": "Error starting payment.",
+        "connectionError": "Connection error.",
+        "lessons": {
+            "l1": {
+                "title": "Introduction to Theology",
+                "desc": "What theology is and why every Christian should study it."
+            },
+            "l2": {
+                "title": "Revelation of God",
+                "desc": "General and special revelation: how God reveals Himself to man."
+            },
+            "l3": {
+                "title": "Bibliology",
+                "desc": "The doctrine of Scripture: inspiration, inerrancy, and canon."
+            },
+            "l4": {
+                "title": "Theology Proper",
+                "desc": "The attributes of God: omniscience, omnipotence, omnipresence."
+            },
+            "l5": {
+                "title": "The Trinity",
+                "desc": "Father, Son, and Holy Spirit: one God in three persons."
+            },
+            "l6": {
+                "title": "Christology I",
+                "desc": "The person of Christ: divine and human nature."
+            },
+            "l7": {
+                "title": "Christology II",
+                "desc": "The work of Christ: life, death, resurrection, and ascension."
+            },
+            "l8": {
+                "title": "Pneumatology",
+                "desc": "The doctrine of the Holy Spirit: person, work, and gifts."
+            },
+            "l9": {
+                "title": "Biblical Anthropology",
+                "desc": "The doctrine of man: creation, fall, and image of God."
+            },
+            "l10": {
+                "title": "Hamartiology",
+                "desc": "The doctrine of sin: origin, nature, and consequences."
+            },
+            "l11": {
+                "title": "Soteriology",
+                "desc": "The doctrine of salvation: grace, faith, justification, and sanctification."
+            },
+            "l12": {
+                "title": "Ecclesiology",
+                "desc": "The doctrine of the Church: nature, mission, and government."
+            },
+            "l13": {
+                "title": "Sacraments",
+                "desc": "Baptism and Lord's Supper: meaning and practice."
+            },
+            "l14": {
+                "title": "Angelology",
+                "desc": "Angels, demons, and spiritual warfare."
+            },
+            "l15": {
+                "title": "Eschatology I",
+                "desc": "End times: signs, tribulation, and rapture."
+            },
+            "l16": {
+                "title": "Eschatology II",
+                "desc": "Millennium, final judgment, and new heavens and new earth."
+            },
+            "l17": {
+                "title": "Hermeneutics",
+                "desc": "How to interpret the Bible correctly: methods and principles."
+            },
+            "l18": {
+                "title": "Church History",
+                "desc": "From Acts to today: reformations, revivals, and movements."
+            },
+            "l19": {
+                "title": "Apologetics",
+                "desc": "Defending the faith with reason: answers to big questions."
+            },
+            "l20": {
+                "title": "Practical Theology",
+                "desc": "Applying theology in daily life, ministry, and missions."
+            }
+        }
     },
     "media": {
         "photo": "Photo",
