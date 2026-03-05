@@ -66,9 +66,17 @@ function MiniAudioPlayer({ src, isPlaying, onPlay, onPause }) {
   );
 }
 
+import { useNavigate } from 'react-router-dom';
+
 function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause }) {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const color = getCatColor(post.category || post.type);
+  
+  const goToProfile = () => {
+    const targetId = post.author_id || post.user_id;
+    if (targetId) navigate(`/perfil/${targetId}`);
+  };
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(post.comments || []);
@@ -117,14 +125,21 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
     <article className="modern-card post-card">
       <div style={{padding:'14px 16px 10px',display:'flex',alignItems:'center',gap:10}}>
         {authorAvatar ? (
-          <img src={authorAvatar} alt={authorName} style={{width:40,height:40,borderRadius:'50%',objectFit:'cover'}} />
+          <img 
+            src={authorAvatar} 
+            alt={authorName} 
+            onClick={goToProfile}
+            style={{width:40,height:40,borderRadius:'50%',objectFit:'cover',cursor:'pointer'}} 
+          />
         ) : (
-          <div style={{width:40,height:40,borderRadius:'50%',background:`linear-gradient(135deg,${color},${color}88)`,display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:700}}>
+          <div 
+            onClick={goToProfile}
+            style={{width:40,height:40,borderRadius:'50%',background:`linear-gradient(135deg,${color},${color}88)`,display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:700,cursor:'pointer'}}>
             {authorName.charAt(0)}
           </div>
         )}
         <div style={{flex:1}}>
-          <p style={{fontWeight:600,fontSize:'0.9rem',color:'var(--text)'}}>{authorName}</p>
+          <p onClick={goToProfile} style={{fontWeight:600,fontSize:'0.9rem',color:'var(--text)',cursor:'pointer'}}>{authorName}</p>
           <p style={{fontSize:'0.75rem',color:'var(--muted)'}}>{new Date(post.created_at).toLocaleDateString()} · {post.church || 'Sigo com Fé'}</p>
         </div>
         {isOwner && (
