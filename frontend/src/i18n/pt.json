@@ -9,6 +9,7 @@
         "kids": "Kids",
         "helpRequests": "Pedidos de Ajuda",
         "faithJourneys": "Jornadas de Fé",
+        "journeys": "Jornadas",
         "dashboard": "Dashboard",
         "hello": "Olá, {{name}}",
         "logout": "Sair",
@@ -25,6 +26,7 @@
         "offerings": "Ofertas",
         "notifications": "Notificações",
         "myProfile": "Meu Perfil",
+        "profile": "Perfil",
         "music": "Música",
         "courseFinance": "Finanças Bíblicas",
         "courseTheology": "Teologia",
@@ -41,6 +43,27 @@
             "registerBtn": "Registrar Grátis",
             "signInBtn": "Já tenho conta - Entrar"
         }
+    },
+    "roles": {
+        "pastor": "Pastor",
+        "member": "Membro",
+        "admin": "Administrador"
+    },
+    "journeys": {
+        "title": "Jornadas de Fé",
+        "challenge": "Desafio do Dia",
+        "yourResponse": "Sua Resposta",
+        "placeholder": "Escreva aqui sua resposta...",
+        "progress": "Progresso",
+        "completeDay": "Concluir Dia"
+    },
+    "events": {
+        "title": "Próximos Eventos"
+    },
+    "live": {
+        "none": "Nenhuma transmissão agora",
+        "be_first": "Seja o primeiro a partilhar!",
+        "start": "Iniciar Directo"
     },
     "footer": "© 2026 Sigo com Fé - Tecnologia a serviço do Reino",
     "home": {
@@ -94,13 +117,13 @@
         "registerBtn": "Cadastrar",
         "helpTitle": "Precisa de Ajuda?",
         "helpSubtitle": "Você não está sozinho. Uma igreja pode te ajudar.",
-        "helpSeeThings": "ðŸ‘ï¸ Vejo coisas",
+        "helpSeeThings": "ðŸ‘ ï¸  Vejo coisas",
         "helpHearThings": "ðŸ‘‚ Escuto barulhos",
         "helpFeelAlone": "ðŸ˜” Me sinto sozinho(a)",
-        "helpNeedPrayer": "ðŸ™ Preciso de oração",
+        "helpNeedPrayer": "ðŸ™  Preciso de oração",
         "helpAnxious": "ðŸ˜° Estou ansioso(a)",
         "helpDepressed": "ðŸ˜¢ Estou triste/deprimido(a)",
-        "helpSent": "âœ… Seu pedido foi enviado! Uma igreja próxima entrará em contato para te ajudar. Deus te abençoe! ðŸ™",
+        "helpSent": "âœ… Seu pedido foi enviado! Uma igreja próxima entrará em contato para te ajudar. Deus te abençoe! ðŸ™ ",
         "helpNamePlaceholder": "Seu nome (opcional)",
         "helpContactPlaceholder": "Telefone ou email para contato",
         "helpMessagePlaceholder": "Conte um pouco mais sobre o que está sentindo...",
@@ -353,7 +376,11 @@
         "newPost": "Novo Post",
         "yourUpload": "Seu upload",
         "musicLibrary": "Minha Música",
-        "myMusic": "Minha Música"
+        "myMusic": "Minha Música",
+        "dailyVerse": "Versículo do Dia",
+        "whatsOnMind": "Partilhe sua fé...",
+        "amen": "Amém",
+        "pray": "Orar"
     },
     "groups": {
         "title": "Grupos",
@@ -587,7 +614,7 @@
         "langEn": "English",
         "langEs": "EspaÃ±ol",
         "langDe": "Deutsch",
-        "autoTranslate": "ðŸŒ Tradução automática ativada",
+        "autoTranslate": "ðŸŒ  Tradução automática ativada",
         "introTitle": "🕊️ Um Pastor Está Pronto Para Ouvir Você",
         "introDesc": "Às vezes a vida nos traz fardos pesados demais para carregar sozinhos. Aqui você pode conversar de forma confidencial com um pastor que vai te ouvir, aconselhar com sabedoria bíblica e orar por você.",
         "introVerse1": "Vinde a mim, todos os que estais cansados e oprimidos, e eu vos aliviarei. — Mateus 11:28",
@@ -743,7 +770,13 @@
         "user": "Utilizador",
         "noText": "(Sem texto)",
         "deleteConfirm": "Tem certeza que deseja excluir esta publicação?",
-        "installApp": "Instalar App"
+        "installApp": "Instalar App",
+        "welcomeBack": "Bem-vindo de volta",
+        "public": "Público",
+        "private": "Privado",
+        "prevDay": "Dia Anterior",
+        "nextDay": "Próximo Dia",
+        "backHome": "Voltar para Home"
     },
     "offerings": {
         "title": "Ofertas e Dízimos",
@@ -1190,6 +1223,7 @@
         "creatingLyrics": "Criando...",
         "generatingAudio": "Gerando música...",
         "noContentError": "Escolha um tema ou escreva um versículo",
+
         "connectionError": "Erro de conexão:",
         "createAccountBtn": "Criar conta grátis",
         "total": "Total:",
