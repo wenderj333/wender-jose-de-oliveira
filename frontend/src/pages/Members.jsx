@@ -292,14 +292,15 @@ export default function Members() {
                             if(friendStatus[member.id] !== 'sent') handleAddFriend(member.id);
                         }} 
                         style={{
-                            padding: '0.4rem', borderRadius: '50%', border: 'none',
-                            background: friendStatus[member.id] === 'sent' ? '#e0e0e0' : 'rgba(218,165,32,0.15)', 
-                            color: friendStatus[member.id] === 'sent' ? '#888' : '#daa520', cursor: 'pointer',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            padding: '0.6rem 1rem', borderRadius: 20, border: 'none',
+                            background: friendStatus[member.id] === 'sent' ? '#e0e0e0' : 'linear-gradient(135deg, #F59E0B, #D97706)', 
+                            color: friendStatus[member.id] === 'sent' ? '#888' : '#fff', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '0.8rem', gap: 6,
+                            boxShadow: friendStatus[member.id] === 'sent' ? 'none' : '0 2px 8px rgba(245,158,11,0.4)'
                         }}
                         title={t('friends.addFriend', 'Adicionar Amigo')}
                       >
-                        {friendStatus[member.id] === 'sent' ? <Check size={16} /> : <UserPlus size={16} />}
+                        {friendStatus[member.id] === 'sent' ? <Check size={16} /> : <><UserPlus size={16} /> {t('friends.addFriend', 'Adicionar')}</>}
                       </button>
                   )}
 
