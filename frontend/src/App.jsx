@@ -14,7 +14,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Members from "./pages/Members";
-import BiblicalAI from "./pages/BiblicalAI";
+import BiblicalAI from "./pages/BibleAI";
 import PastorChat from "./pages/PastorChat";
 import HelpRequests from "./pages/HelpRequests";
 import Landing from "./pages/Landing";
