@@ -1,5 +1,8 @@
 {
     "brand": "Sigo com Fé",
+    "auth": {
+        "logout": "Sair"
+    },
     "nav": {
         "prayers": "Orações",
         "mural": "Mural",
@@ -33,6 +36,9 @@
         "courseFree": "Curso Bíblico Grátis",
         "pastorRoom": "Sala do Pastor",
         "createWorshipAI": "Louvor com IA",
+        "pastoral_chat": "Chat Pastoral",
+        "bible_ai": "IA Bíblica",
+        "help_requests": "Pedidos de Ajuda",
         "popup": {
             "verse": "Onde dois ou três estiverem reunidos em meu nome, ali estou eu no meio deles. Mateus 18:20",
             "joinCommunity": "Junte-se à nossa comunidade cristã!",
@@ -972,7 +978,7 @@
                 "desc": "A doutrina do pecado: origem, natureza e consequências."
             },
             "l11": {
-                "title": "Soteriologia",
+                "title": "Soteriologie",
                 "desc": "A doutrina da salvação: graça, fé, justificação e santificação."
             },
             "l12": {
