@@ -24,6 +24,7 @@ import FaithJourneys from "./pages/FaithJourneys";
 // Components
 import LanguageSelector from "./components/LanguageSelector";
 import ProtectedRoute from "./components/ProtectedRoute";
+import GlobalChat from "./components/GlobalChat";
 
 // Styles
 import "./styles/ModernTheme.css"; // The new look
@@ -274,6 +275,9 @@ export default function App() {
           .modern-layout { grid-template-columns: 1fr; }
         }
       `}</style>
+      
+      {/* Global Chat Widget */}
+      <GlobalChat />
     </div>
   );
 }
