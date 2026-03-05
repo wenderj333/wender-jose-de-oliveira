@@ -568,7 +568,8 @@
         "acceptFriend": "Accept",
         "rejectFriend": "Reject",
         "editCover": "Titelbild bearbeiten",
-        "saved": "Profile saved successfully!"
+        "saved": "Profile saved successfully!",
+        "addFriendToSee": "Füge als Freund hinzu, um Beiträge zu sehen."
     },
     "messages": {
         "title": "Messages",

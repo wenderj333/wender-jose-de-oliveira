@@ -682,7 +682,8 @@
         "acceptFriend": "Aceitar",
         "rejectFriend": "Recusar",
         "editCover": "Alterar capa",
-        "saved": "Perfil salvo com sucesso!"
+        "saved": "Perfil salvo com sucesso!",
+        "addFriendToSee": "Adicione aos amigos para ver as publicações."
     },
     "messages": {
         "title": "Mensagens",

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Lock, UserPlus, Check, UserMinus, MessageCircle } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
@@ -28,7 +29,7 @@ const typeColors = {
 };
 const typeIcons = { verse:"📖", testimony:"🙌", photo:"📸", prayer:"🙏" };
 
-export default function ProfilePage({ onFollow, onMessage }) {
+export default function ProfilePage() {
   const { t } = useTranslation();
   const { userId } = useParams();
   const { user: currentUser, token, updateProfilePhoto } = useAuth();
@@ -37,6 +38,7 @@ export default function ProfilePage({ onFollow, onMessage }) {
   const [profileUser, setProfileUser] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const [userStats, setUserStats] = useState({ posts: 0, friends: 0, prayers: 0 });
+  const [friendStatus, setFriendStatus] = useState(null); // 'none', 'pending', 'friends'
 
   const [isEditing,      setIsEditing]      = useState(false);
   const [editData,       setEditData]       = useState({ name: "", bio: "" });
@@ -60,6 +62,7 @@ export default function ProfilePage({ onFollow, onMessage }) {
       if (!targetUserId) return;
 
       try {
+        // Fetch User Info
         const userRes = await fetch(`${API}/profile/${targetUserId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -69,15 +72,24 @@ export default function ProfilePage({ onFollow, onMessage }) {
         setAvatarPreview(userData.user?.avatar_url || userData.user?.photoURL || null);
         setCoverPreview(userData.user?.cover_url || userData.user?.coverURL || null);
         setIsConsecrating(userData.user?.isConsecrating || false);
+        
+        // Determine friend status (mock logic for now based on available data, ideally API returns it)
+        // For now, assuming if we can see full profile in API, we are friends or public.
+        // But let's implement the UI logic:
+        setFriendStatus(userData.friendStatus || 'none'); // Backend should send this
 
-        const postsRes = await fetch(`${API}/feed/user/${targetUserId}?limit=50`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const postsData = await postsRes.json();
-        setUserPosts(postsData.posts || []);
+        // Fetch Posts ONLY if allowed (own profile or friends)
+        // Since backend might not enforce it yet, let's enforce in UI
+        if (isOwnProfile || userData.isFriend) { 
+             const postsRes = await fetch(`${API}/feed/user/${targetUserId}?limit=50`, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            const postsData = await postsRes.json();
+            setUserPosts(postsData.posts || []);
+        }
 
         setUserStats({
-          posts: postsData.posts?.length || 0,
+          posts: userData.user?.postsCount || 0,
           friends: userData.user?.friendsCount || 0,
           prayers: userData.user?.prayersCount || 0,
         });
@@ -89,6 +101,15 @@ export default function ProfilePage({ onFollow, onMessage }) {
 
     fetchProfileData();
   }, [userId, currentUser?.id, token]);
+
+  const handleFriendAction = async (action) => {
+      // Implement add/remove friend logic here
+      // For now, just UI toggle
+      if (action === 'add') {
+          setFriendStatus('pending');
+          // API call to add friend
+      }
+  };
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -109,25 +130,12 @@ export default function ProfilePage({ onFollow, onMessage }) {
   const handleSave = async () => {
     setSaving(true);
     try {
-      let newAvatarUrl = avatarPreview; // Keep existing unless changed
-      let newCoverUrl = coverPreview;   // Keep existing unless changed
+      let newAvatarUrl = avatarPreview;
+      let newCoverUrl = coverPreview;
 
-      // Upload Avatar if changed
-      if (avatarFile) {
-        console.log("Uploading avatar...");
-        newAvatarUrl = await uploadToCloudinary(avatarFile);
-        console.log("Avatar uploaded:", newAvatarUrl);
-      }
+      if (avatarFile) newAvatarUrl = await uploadToCloudinary(avatarFile);
+      if (coverFile) newCoverUrl = await uploadToCloudinary(coverFile);
 
-      // Upload Cover if changed
-      if (coverFile) {
-        console.log("Uploading cover...");
-        newCoverUrl = await uploadToCloudinary(coverFile);
-        console.log("Cover uploaded:", newCoverUrl);
-      }
-
-      // Save to Backend
-      console.log("Saving profile...");
       const res = await fetch(`${API}/profile`, {
         method: 'PATCH',
         headers: { 
@@ -137,23 +145,17 @@ export default function ProfilePage({ onFollow, onMessage }) {
         body: JSON.stringify({
           full_name: editData.name,
           bio: editData.bio,
-          avatar_url: newAvatarUrl, // Send the URL (new or old)
-          cover_url: newCoverUrl    // Send the URL (new or old)
+          avatar_url: newAvatarUrl,
+          cover_url: newCoverUrl
         })
       });
 
-      if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(`Erro no servidor: ${errorText}`);
-      }
+      if (!res.ok) throw new Error("Erro ao salvar");
       
       const updatedUser = await res.json();
       setProfileUser(prev => ({ ...prev, ...updatedUser.user }));
       
-      // Update context if it's own profile
-      if (isOwnProfile && updateProfilePhoto) {
-        updateProfilePhoto(newAvatarUrl); 
-      }
+      if (isOwnProfile && updateProfilePhoto) updateProfilePhoto(newAvatarUrl); 
 
       setAvatarFile(null);
       setCoverFile(null);
@@ -162,11 +164,15 @@ export default function ProfilePage({ onFollow, onMessage }) {
 
     } catch (err) {
       console.error(err);
-      alert("Erro ao salvar: " + err.message);
+      alert("Erro: " + err.message);
     } finally {
       setSaving(false);
     }
   };
+
+  const isFriend = profileUser?.isFriend || false; // Assuming backend sends this flag
+  // Fallback: if not implemented in backend yet, we treat as not friend for safety if not own profile
+  const showContent = isOwnProfile || isFriend;
 
   const S = {
     page: {
@@ -206,6 +212,9 @@ export default function ProfilePage({ onFollow, onMessage }) {
     divider:{ height:1, background:"linear-gradient(90deg,transparent,rgba(245,158,11,0.18),transparent)", margin:"20px 0" },
     tabs:{ display:"flex", borderBottom:"1px solid rgba(255,255,255,0.06)", marginBottom:20 },
     emptyState:{ textAlign:"center", padding:"48px 0", color:"rgba(255,255,255,0.22)" },
+    privateProfile: {
+        textAlign: 'center', padding: '40px 20px', background: 'rgba(255,255,255,0.05)', borderRadius: 16, marginTop: 20
+    }
   };
 
   return (
@@ -214,7 +223,7 @@ export default function ProfilePage({ onFollow, onMessage }) {
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
 
-        .pb{padding:10px 20px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .22s ease;letter-spacing:.2px}
+        .pb{padding:10px 20px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .22s ease;letter-spacing:.2px;display:flex;align-items:center;gap:6}
         .pb:hover{transform:translateY(-2px)} .pb:active{transform:translateY(0)}
         .pb-gold{background:linear-gradient(135deg,#F59E0B,#D97706);color:#060d20;box-shadow:0 4px 20px rgba(245,158,11,.35)}
         .pb-gold:hover{box-shadow:0 6px 28px rgba(245,158,11,.55)}
@@ -295,8 +304,20 @@ export default function ProfilePage({ onFollow, onMessage }) {
                   ✏️ {t("profile.editProfile","Editar")}
                 </button>
               </> : <>
-                {profileUser && <button className="pb pb-blue" onClick={onMessage}>💬 {t("messages.title","Mensagem")}</button>}
-                {profileUser && <button className="pb pb-gold" onClick={onFollow}>➕ {t("friends.addFriend","Seguir")}</button>}
+                {/* Friend Actions */}
+                {!isFriend && (
+                    <button className="pb pb-gold" onClick={()=>handleFriendAction('add')}>
+                        <UserPlus size={16}/> {t("friends.addFriend","Adicionar")}
+                    </button>
+                )}
+                {isFriend && (
+                    <button className="pb pb-ghost" onClick={()=>handleFriendAction('remove')}>
+                        <Check size={16}/> {t("friends.friendAdded","Amigos")}
+                    </button>
+                )}
+                <button className="pb pb-blue">
+                    <MessageCircle size={16}/>
+                </button>
               </>}
             </div>
           </div>
@@ -338,31 +359,61 @@ export default function ProfilePage({ onFollow, onMessage }) {
 
           <div style={S.divider}/>
 
-          {/* TABS */}
-          <div style={S.tabs}>
-            {[
-              {key:"posts",   lbl:`📝 ${t("profile.posts","Posts")}`},
-              {key:"prayers", lbl:`🙏 ${t("nav.prayers","Orações")}`},
-              {key:"friends", lbl:`👥 ${t("profile.friends","Amigos")}`},
-            ].map(tab => (
-              <button key={tab.key} className={`tab-b ${activeTab===tab.key?"act":""}`} onClick={()=>setActiveTab(tab.key)}>
-                {tab.lbl}
-              </button>
-            ))}
-          </div>
+          {/* PRIVATE PROFILE CHECK */}
+          {!showContent ? (
+              <div style={S.privateProfile}>
+                  <Lock size={48} color="rgba(255,255,255,0.3)" style={{marginBottom:16}}/>
+                  <h3 style={{fontSize:18, fontWeight:700, marginBottom:8}}>{t('common.private', 'Perfil Privado')}</h3>
+                  <p style={{fontSize:14, color:'rgba(255,255,255,0.6)'}}>
+                      {t('profile.addFriendToSee', 'Adicione aos amigos para ver as publicações.')}
+                  </p>
+              </div>
+          ) : (
+              <>
+                {/* TABS */}
+                <div style={S.tabs}>
+                    {[
+                    {key:"posts",   lbl:`📝 ${t("profile.posts","Posts")}`},
+                    {key:"prayers", lbl:`🙏 ${t("nav.prayers","Orações")}`},
+                    {key:"friends", lbl:`👥 ${t("profile.friends","Amigos")}`},
+                    ].map(tab => (
+                    <button key={tab.key} className={`tab-b ${activeTab===tab.key?"act":""}`} onClick={()=>setActiveTab(tab.key)}>
+                        {tab.lbl}
+                    </button>
+                    ))}
+                </div>
 
-          {/* POSTS */}
-          {activeTab==="posts" && (
-            <div style={S.emptyState}>
-              <div style={{fontSize:40,marginBottom:10}}>📝</div>
-              <p style={{fontSize:13}}>{t("common.noPostsYet","Nenhum post ainda")}</p>
-            </div>
-          )}
-          {(activeTab==="prayers"||activeTab==="friends") && (
-            <div style={S.emptyState}>
-              <div style={{fontSize:44,marginBottom:12}}>{activeTab==="prayers"?"🙏":"👥"}</div>
-              <p style={{fontSize:13}}>{t("common.noPostsYet","Nada por aqui ainda")}</p>
-            </div>
+                {/* POSTS */}
+                {activeTab==="posts" && (
+                    <div style={{display:"flex",flexDirection:"column",gap:12}}>
+                    {(userPosts||[]).length===0
+                        ? <div style={S.emptyState}><div style={{fontSize:40,marginBottom:10}}>📝</div><p style={{fontSize:13}}>{t("common.noPostsYet","Nenhum post ainda")}</p></div>
+                        : (userPosts||[]).map(p=>(
+                        <div key={p.id} className="pc">
+                            <div style={{marginBottom:10}}>
+                            <span style={{padding:"3px 10px",borderRadius:50,fontSize:11,fontWeight:600,
+                                background:`${typeColors[p.type]||"#F59E0B"}18`,color:typeColors[p.type]||"#F59E0B",
+                                border:`1px solid ${typeColors[p.type]||"#F59E0B"}33`}}>
+                                {typeIcons[p.type]} {p.type}
+                            </span>
+                            </div>
+                            <p style={{color:"rgba(255,255,255,.75)",fontSize:14,lineHeight:1.6,marginBottom:12}}>{p.content}</p>
+                            <div style={{display:"flex",gap:16}}>
+                            <span style={{color:"rgba(255,255,255,.28)",fontSize:12}}>❤️ {p.likes}</span>
+                            <span style={{color:"rgba(255,255,255,.28)",fontSize:12}}>💬 {p.comments}</span>
+                            </div>
+                        </div>
+                        ))
+                    }
+                    </div>
+                )}
+                {(activeTab==="prayers"||activeTab==="friends") && (
+                    <div style={S.emptyState}>
+                    <div style={{fontSize:44,marginBottom:12}}>{activeTab==="prayers"?"🙏":"👥"}</div>
+                    <p style={{fontSize:13}}>{t("common.noPostsYet","Nada por aqui ainda")}</p>
+                    </div>
+                )}
+              </>
           )}
         </div>
       </div>
@@ -404,11 +455,10 @@ export default function ProfilePage({ onFollow, onMessage }) {
               <button className="pb pb-gold" style={{flex:1}} onClick={()=>{
                 if(cropModal.type==="avatar") setAvatarPreview(cropModal.url);
                 setCropModal(null);
-                // NOTA: O arquivo real está em avatarFile, que será enviado no handleSave
               }}>✅ {t("profile.save","Usar esta foto")}</button>
               <button className="pb pb-ghost" onClick={()=>{
                 setCropModal(null);
-                setAvatarFile(null); // Limpar seleção se cancelar
+                setAvatarFile(null);
               }}>{t("profile.cancel","Cancelar")}</button>
             </div>
           </div>
