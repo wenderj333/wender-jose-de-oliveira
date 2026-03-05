@@ -109,15 +109,16 @@ export default function GlobalChat() {
         </button>
       )}
 
-      {/* Chat Window (Instagram Style) */}
+      {/* Chat Window (Instagram Style - FIXED SIZE) */}
       {isOpen && (
         <div style={{
-          width: 330, height: isMinimized ? 48 : 450,
+          width: '330px', height: isMinimized ? '48px' : '450px',
           background: 'white', borderRadius: '12px 12px 0 0',
           boxShadow: '0 0 20px rgba(0,0,0,0.15)',
           display: 'flex', flexDirection: 'column', overflow: 'hidden',
           border: '1px solid #ddd', borderBottom: 'none',
-          transition: 'height 0.3s ease'
+          transition: 'height 0.3s ease',
+          maxWidth: '100vw', maxHeight: '80vh' /* Prevent overflow on mobile */
         }}>
           
           {/* Header */}

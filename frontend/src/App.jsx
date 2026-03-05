@@ -142,7 +142,8 @@ export default function App() {
                  <span style={{fontSize:'1.8rem'}}>{user.full_name?.charAt(0)}</span>
                )}
             </div>
-            <p className="prof-name">{user.full_name || t('common.user')}</p>
+            {/* FORCE NAME TO "Sigo com Fé" as requested */}
+            <p className="prof-name">Sigo com Fé</p>
             <p className="prof-role" style={{fontSize:'0.85rem',opacity:0.9,marginBottom:16}}>
               {t('common.welcomeBack', 'Bem-vindo de volta')}
             </p>
@@ -193,11 +194,11 @@ export default function App() {
           {(user.role === 'pastor' || user.role === 'admin') && (
             <div className="menu-group">
               <p className="menu-title">Admin</p>
+              <Link to="/pastor-dashboard" className={isActive('/pastor-dashboard')}>
+                 <Shield size={18} /> {t('nav.pastorRoom', 'Sala do Pastor')}
+              </Link>
               <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}>
                 <Heart size={18} /> {t('nav.help_requests')}
-              </Link>
-              <Link to="/pastor-dashboard" className={isActive('/pastor-dashboard')}>
-                 <Shield size={18} /> Dashboard
               </Link>
             </div>
           )}
