@@ -75,7 +75,7 @@ export default function App() {
           <Link to="/ia-biblica" className={`nav-item ${location.pathname==='/ia-biblica'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'7px 11px',borderRadius:8,fontSize:'0.85rem',display:'flex',alignItems:'center',gap:6}}>
             <BookOpen size={16}/> {t('nav.bible_ai', 'Bíblia IA')}
           </Link>
-          <Link to="/membros" className={`nav-item ${location.pathname==='/membros'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'7px 11px',borderRadius:8,fontSize:'0.85rem',display:'flex',alignItems:'center',gap:6}}>
+          <Link to="/membros" className={`nav-item ${location.pathname.startsWith('/membros')?'active':''}`} style={{color:'white',textDecoration:'none',padding:'7px 11px',borderRadius:8,fontSize:'0.85rem',display:'flex',alignItems:'center',gap:6}}>
             <Users size={16}/> {t('nav.members', 'Membros')}
           </Link>
            <Link to="/journeys" className={`nav-item ${location.pathname==='/journeys'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'7px 11px',borderRadius:8,fontSize:'0.85rem',display:'flex',alignItems:'center',gap:6}}>

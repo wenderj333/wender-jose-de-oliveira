@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { Users, Send, ArrowLeft, User, Mail, Calendar, Shield, MessageCircle, Search, X } from 'lucide-react';
+import { Users, Send, ArrowLeft, User, Mail, Calendar, Shield, MessageCircle, Search, X, UserPlus, Check } from 'lucide-react';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
@@ -26,10 +26,10 @@ export default function Members() {
   const { t } = useTranslation();
   const { token, user } = useAuth();
   const ROLE_LABELS = {
-    member: t('members.roleMember', '👤 Membro'),
+    member: t('roles.member', '👤 Membro'),
     leader: t('members.roleLeader', '⭐ Líder'),
-    pastor: t('members.rolePastor', '🙏 Pastor'),
-    admin: t('members.roleAdmin', '👑 Admin')
+    pastor: t('roles.pastor', '🙏 Pastor'),
+    admin: t('roles.admin', '👑 Admin')
   };
   const navigate = useNavigate();
   const isAdmin = user?.id === ADMIN_ID;
@@ -41,8 +41,11 @@ export default function Members() {
   const [newMsg, setNewMsg] = useState('');
   const [sending, setSending] = useState(false);
   const [loadingMsgs, setLoadingMsgs] = useState(false);
-  const [lightboxImage, setLightboxImage] = useState(null); // State for lightbox
+  const [lightboxImage, setLightboxImage] = useState(null);
   const chatEndRef = useRef(null);
+
+  // Friend status tracking (simple local cache for UI feedback)
+  const [friendStatus, setFriendStatus] = useState({}); 
 
   useEffect(() => {
     fetchMembers();
@@ -101,6 +104,26 @@ export default function Members() {
       console.error('Error sending message:', err);
     } finally {
       setSending(false);
+    }
+  }
+
+  async function handleAddFriend(memberId) {
+    try {
+        const res = await fetch(`${API}/friends/request`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ friendId: memberId })
+        });
+        
+        if (res.ok) {
+            setFriendStatus(prev => ({...prev, [memberId]: 'sent'}));
+            alert(t('friends.requestSent', 'Pedido de amizade enviado!'));
+        }
+    } catch (error) {
+        console.error("Error adding friend:", error);
     }
   }
 
@@ -231,13 +254,9 @@ export default function Members() {
               background: '#fff', borderRadius: 12, border: '1px solid #eee',
               boxShadow: '0 1px 3px rgba(0,0,0,0.05)', cursor: 'pointer',
             }}>
-              {/* Avatar - Click to Lightbox */}
+              {/* Avatar - Click goes to profile (parent handles click) */}
               <div 
-                onClick={(e) => {
-                  e.stopPropagation(); // Stop navigation
-                  if(member.avatar_url) setLightboxImage(getAvatarUrl(member.avatar_url));
-                }}
-                style={{ width: 44, height: 44, borderRadius: '50%', background: '#daa520', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0, cursor: member.avatar_url ? 'zoom-in' : 'default' }}>
+                style={{ width: 44, height: 44, borderRadius: '50%', background: '#daa520', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
                 {member.avatar_url ? (
                   <img src={getAvatarUrl(member.avatar_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
@@ -255,7 +274,7 @@ export default function Members() {
                 )}
                 <div style={{ display: 'flex', gap: 8, marginTop: 3 }}>
                   <span style={{ fontSize: '0.7rem', color: ROLE_COLORS[member.role], fontWeight: 600 }}>
-                    {ROLE_LABELS[member.role]}
+                    {ROLE_LABELS[member.role] || member.role}
                   </span>
                   <span style={{ fontSize: '0.7rem', color: '#aaa' }}>
                     <Calendar size={10} style={{ verticalAlign: 'middle' }} /> {timeAgo(member.last_seen_at, t)}
@@ -263,14 +282,36 @@ export default function Members() {
                 </div>
               </div>
 
-              {/* Message button */}
-              <button onClick={(e) => { e.stopPropagation(); openChat(member); }} style={{
-                padding: '0.4rem 0.8rem', borderRadius: 20, border: 'none',
-                background: '#4caf50', color: '#fff', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', fontWeight: 600,
-              }}>
-                <MessageCircle size={14} /> Chat
-              </button>
+              {/* Actions */}
+              <div style={{display:'flex', gap:6}}>
+                  {/* Add Friend Button */}
+                  {user && user.id !== member.id && (
+                      <button 
+                        onClick={(e) => { 
+                            e.stopPropagation(); 
+                            if(friendStatus[member.id] !== 'sent') handleAddFriend(member.id);
+                        }} 
+                        style={{
+                            padding: '0.4rem', borderRadius: '50%', border: 'none',
+                            background: friendStatus[member.id] === 'sent' ? '#e0e0e0' : 'rgba(218,165,32,0.15)', 
+                            color: friendStatus[member.id] === 'sent' ? '#888' : '#daa520', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}
+                        title={t('friends.addFriend', 'Adicionar Amigo')}
+                      >
+                        {friendStatus[member.id] === 'sent' ? <Check size={16} /> : <UserPlus size={16} />}
+                      </button>
+                  )}
+
+                  {/* Message button */}
+                  <button onClick={(e) => { e.stopPropagation(); openChat(member); }} style={{
+                    padding: '0.4rem 0.8rem', borderRadius: 20, border: 'none',
+                    background: '#4caf50', color: '#fff', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', fontWeight: 600,
+                  }}>
+                    <MessageCircle size={14} />
+                  </button>
+              </div>
             </div>
           ))}
           {filtered.length === 0 && (
@@ -279,7 +320,7 @@ export default function Members() {
         </div>
       )}
 
-      {/* Lightbox Modal */}
+      {/* Lightbox Modal (Only for Chat View now, or if explicitly needed) */}
       {lightboxImage && (
         <div style={{
           position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 9999,
