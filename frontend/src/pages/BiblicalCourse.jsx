@@ -72,7 +72,7 @@ export default function CriadorLouvor() {
   async function handleGenerate() {
     if (!token) return navigate('/login');
     if (credits !== null && credits <= 0) { setError('no_credits'); return; }
-    if (!theme && !verse) { setError('Escolha um tema ou escreva um versículo'); return; }
+    if (!theme && !verse) { setError(t('criadorLouvor.noContentError', 'Escolha um tema ou escreva um versículo')); return; }
 
     setGenerating(true);
     setError('');
@@ -89,7 +89,7 @@ export default function CriadorLouvor() {
       const data = await res.json();
       if (!res.ok) {
         if (data.error === 'no_credits') setError('no_credits');
-        else setError(data.error || data.message || `Erro ${res.status}: Tente novamente em alguns segundos.`);
+        else setError(data.error || data.message || `Erro ${res.status}`);
         return;
       }
       setResult(data);
@@ -97,7 +97,7 @@ export default function CriadorLouvor() {
       setTotalGenerated(prev => prev + 1);
       fetchMySongs();
     } catch (err) {
-      setError(`Erro de conexão: ${err.message || 'Verifique sua internet.'}`);
+      setError(`${t('criadorLouvor.connectionError', 'Erro de conexão')}: ${err.message}`);
     } finally {
       setGenerating(false);
     }
@@ -122,19 +122,19 @@ export default function CriadorLouvor() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setAudioError(data.error || 'Erro ao gerar música. Tente novamente.');
+        setAudioError(data.error || t('criadorLouvor.saveError', 'Erro ao gerar música.'));
         return;
       }
       setAudioUrl(data.audioUrl);
     } catch (err) {
-      setAudioError(`Erro de conexão: ${err.message}`);
+      setAudioError(`${t('criadorLouvor.connectionError')}: ${err.message}`);
     } finally {
       setGeneratingAudio(false);
     }
   }
 
   async function handleDelete(songId) {
-    if (!confirm('Excluir esta música?')) return;
+    if (!confirm(t('common.deleteConfirm', 'Excluir esta música?'))) return;
     try {
       await fetch(`${API}/ai-louvor/song/${songId}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
       setMySongs(prev => prev.filter(s => s.id !== songId));
@@ -142,9 +142,9 @@ export default function CriadorLouvor() {
   }
 
   function handleShare(song) {
-    const text = `🎵 ${song.title}\n\n${song.lyrics?.slice(0, 300)}...\n\n🙏 Criado com IA no Sigo com Fé\nhttps://sigo-com-fe.vercel.app/criador-louvor`;
+    const text = `🎵 ${song.title}\n\n${song.lyrics?.slice(0, 300)}...\n\n🙏 ${t('criadorLouvor.heroSubtitle', 'Criado com IA no Sigo com Fé')}\nhttps://sigo-com-fe.vercel.app/criador-louvor`;
     if (navigator.share) navigator.share({ title: song.title, text }).catch(() => {});
-    else { navigator.clipboard?.writeText(text); alert('Copiado! ✅'); }
+    else { navigator.clipboard?.writeText(text); alert(t('common.linkCopied', 'Copiado! ✅')); }
   }
 
   function handleDownload(song) {
@@ -159,13 +159,13 @@ export default function CriadorLouvor() {
     return (
       <div style={{ maxWidth: 500, margin: '2rem auto', padding: '2rem 1rem', textAlign: 'center' }}>
         <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🎵</div>
-        <h1 style={{ fontSize: '1.5rem', color: '#1a0a3e', marginBottom: '0.5rem' }}>Criador de Louvor com IA</h1>
-        <p style={{ color: '#666', marginBottom: '1.5rem' }}>Crie letras de louvor inspiradas na Bíblia com inteligência artificial!</p>
+        <h1 style={{ fontSize: '1.5rem', color: '#1a0a3e', marginBottom: '0.5rem' }}>{t('criadorLouvor.title', 'Criador de Louvor com IA')}</h1>
+        <p style={{ color: '#666', marginBottom: '1.5rem' }}>{t('criadorLouvor.subtitle', 'Crie letras de louvor inspiradas na Bíblia!')}</p>
         <button onClick={() => navigate('/cadastro')} style={{
           padding: '0.8rem 2rem', borderRadius: 14, border: 'none', cursor: 'pointer',
           background: 'linear-gradient(135deg, #daa520, #f4c542)', color: '#1a0a3e',
           fontWeight: 700, fontSize: '1rem',
-        }}>Criar conta grátis — 4 músicas grátis!</button>
+        }}>{t('criadorLouvor.createAccountBtn', 'Criar conta grátis')}</button>
       </div>
     );
   }
@@ -180,10 +180,10 @@ export default function CriadorLouvor() {
       }}>
         <div style={{ position: 'absolute', top: -20, right: -20, fontSize: '8rem', opacity: 0.1 }}>🎵</div>
         <h1 style={{ margin: 0, fontSize: '1.4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <Sparkles size={24} /> Criador de Louvor com IA
+          <Sparkles size={24} /> {t('criadorLouvor.heroTitle', 'Criador de Louvor com IA')}
         </h1>
         <p style={{ margin: '0.5rem 0 0', fontSize: '0.85rem', opacity: 0.9 }}>
-          Crie letras e músicas de louvor inspiradas na Bíblia
+          {t('criadorLouvor.heroSubtitle', 'Crie letras e músicas de louvor')}
         </p>
         <div style={{
           marginTop: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -191,19 +191,19 @@ export default function CriadorLouvor() {
         }}>
           <Music size={16} />
           <span style={{ fontWeight: 700 }}>{credits !== null ? credits : '...'}</span>
-          <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>créditos restantes</span>
+          <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>{t('criadorLouvor.creditsRemaining', 'créditos restantes')}</span>
         </div>
         {credits !== null && credits <= 0 && (
           <div style={{
             marginTop: '0.75rem', background: 'linear-gradient(135deg, #f4c542, #daa520)',
             borderRadius: 14, padding: '0.6rem 1rem', color: '#1a0a3e',
           }}>
-            <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>🎵 Pacote 250 Músicas — €5</div>
-            <div style={{ fontSize: '0.75rem', marginTop: 2 }}>Apenas €0,02 por música!</div>
+            <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>🎵 {t('criadorLouvor.buyPackage', 'Pacote 250 Músicas — €5')}</div>
+            <div style={{ fontSize: '0.75rem', marginTop: 2 }}>{t('criadorLouvor.cheapPrice', 'Apenas €0,02 por música!')}</div>
             <button onClick={() => alert('💳 Integração de pagamento em breve!')} style={{
               marginTop: 8, padding: '0.5rem 1.5rem', borderRadius: 12, border: 'none',
               background: '#1a0a3e', color: '#fff', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem',
-            }}>Comprar agora</button>
+            }}>{t('criadorLouvor.buyNow', 'Comprar agora')}</button>
           </div>
         )}
       </div>
@@ -211,14 +211,14 @@ export default function CriadorLouvor() {
       {/* Tabs */}
       <div style={{ display: 'flex', gap: 0, marginBottom: '1rem', borderRadius: 12, overflow: 'hidden', border: '2px solid #9b59b6' }}>
         {[
-          { key: 'create', label: '✨ Criar Louvor' },
-          { key: 'songs', label: `🎵 Minhas Músicas (${mySongs.length})` },
-        ].map(t => (
-          <button key={t.key} onClick={() => setTab(t.key)} style={{
+          { key: 'create', label: t('criadorLouvor.createTab', '✨ Criar Louvor') },
+          { key: 'songs', label: `${t('criadorLouvor.songsTab', '🎵 Minhas Músicas')} (${mySongs.length})` },
+        ].map(tb => (
+          <button key={tb.key} onClick={() => setTab(tb.key)} style={{
             flex: 1, padding: '0.6rem', border: 'none', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600,
-            background: tab === t.key ? '#9b59b6' : '#fff',
-            color: tab === t.key ? '#fff' : '#9b59b6',
-          }}>{t.label}</button>
+            background: tab === tb.key ? '#9b59b6' : '#fff',
+            color: tab === tb.key ? '#fff' : '#9b59b6',
+          }}>{tb.label}</button>
         ))}
       </div>
 
@@ -230,18 +230,18 @@ export default function CriadorLouvor() {
             padding: '0.8rem 1rem', marginBottom: '1rem', border: '1px solid #d0c0ff',
           }}>
             <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#4a1a8e', marginBottom: 6 }}>
-              📋 Como criar teu louvor em 4 passos:
+              📋 {t('criadorLouvor.howToCreate', 'Como criar teu louvor:')}
             </div>
             <div style={{ fontSize: '0.8rem', color: '#555', lineHeight: 1.7 }}>
-              <div><strong>1️⃣</strong> Escolha um <strong>tema</strong></div>
-              <div><strong>2️⃣</strong> Selecione o <strong>estilo musical</strong> e a <strong>emoção</strong></div>
-              <div><strong>3️⃣</strong> Opcional: escolha um <strong>livro da Bíblia</strong> e/ou <strong>versículo</strong></div>
-              <div><strong>4️⃣</strong> Toque em <strong>"Gerar Louvor"</strong> e depois em <strong>"🎵 Gerar Música"</strong>!</div>
+              <div>{t('criadorLouvor.step1', '1️⃣ Escolha um tema')}</div>
+              <div>{t('criadorLouvor.step2', '2️⃣ Selecione o estilo e a emoção')}</div>
+              <div>{t('criadorLouvor.step3', '3️⃣ Opcional: livro da Bíblia e/ou versículo')}</div>
+              <div>{t('criadorLouvor.step4', '4️⃣ Clique "Gerar Louvor" depois "🎵 Gerar Música"!')}</div>
             </div>
           </div>
 
           {/* Theme */}
-          <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>🎯 Tema do Louvor</label>
+          <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>{t('criadorLouvor.themeLabel', '🎯 Tema')}</label>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1rem' }}>
             {t('biblicalCourse.themes', { returnObjects: true }).map(th => (
               <button key={th.value} onClick={() => setTheme(th.value)} style={{
@@ -254,7 +254,7 @@ export default function CriadorLouvor() {
           </div>
 
           {/* Style */}
-          <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>🎵 Estilo Musical</label>
+          <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>{t('criadorLouvor.styleLabel', '🎵 Estilo Musical')}</label>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1rem' }}>
             {t('biblicalCourse.styles', { returnObjects: true }).map(s => (
               <button key={s.value} onClick={() => setStyle(s.value)} style={{
@@ -267,7 +267,7 @@ export default function CriadorLouvor() {
           </div>
 
           {/* Emotion */}
-          <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>💫 Emoção</label>
+          <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>{t('criadorLouvor.emotionLabel', '💫 Emoção')}</label>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1rem' }}>
             {t('biblicalCourse.emotions', { returnObjects: true }).map(em => (
               <button key={em.value} onClick={() => setEmotion(em.value)} style={{
@@ -280,19 +280,19 @@ export default function CriadorLouvor() {
           </div>
 
           {/* Bible Book */}
-          <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>📖 Livro da Bíblia (opcional)</label>
+          <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>{t('criadorLouvor.bibleBookLabel', '📖 Livro da Bíblia (opcional)')}</label>
           <select value={bibleBook} onChange={e => setBibleBook(e.target.value)} style={{
             width: '100%', padding: '0.6rem', borderRadius: 10, border: '1px solid #ddd',
             fontSize: '0.85rem', marginBottom: '0.75rem', boxSizing: 'border-box',
           }}>
-            <option value="">Escolha um livro...</option>
+            <option value="">{t('criadorLouvor.chooseBook', 'Escolha um livro...')}</option>
             {t('biblicalCourse.bibleBooks', { returnObjects: true }).map(b => <option key={b} value={b}>{b}</option>)}
           </select>
 
           {/* Verse */}
-          <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>📜 Versículo específico (opcional)</label>
+          <label style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1a0a3e', display: 'block', marginBottom: 6 }}>{t('criadorLouvor.verseLabel', '📜 Versículo (opcional)')}</label>
           <input value={verse} onChange={e => setVerse(e.target.value)}
-            placeholder='Ex: "Porque Deus tanto amou o mundo..." João 3:16'
+            placeholder={t('criadorLouvor.versePlaceholder', 'Ex: João 3:16')}
             style={{
               width: '100%', padding: '0.6rem', borderRadius: 10, border: '1px solid #ddd',
               fontSize: '0.85rem', marginBottom: '0.75rem', boxSizing: 'border-box',
@@ -310,13 +310,13 @@ export default function CriadorLouvor() {
               marginBottom: '0.75rem', textAlign: 'center', border: '2px solid #daa520',
             }}>
               <div style={{ fontSize: '1.5rem', marginBottom: 4 }}>🎵</div>
-              <div style={{ fontWeight: 700, color: '#1a0a3e', fontSize: '0.95rem' }}>Seus créditos acabaram!</div>
-              <div style={{ fontSize: '0.82rem', color: '#666', margin: '4px 0 8px' }}>Adquira o pacote de 250 músicas por apenas €5</div>
+              <div style={{ fontWeight: 700, color: '#1a0a3e', fontSize: '0.95rem' }}>{t('criadorLouvor.noCredits', 'Seus créditos acabaram!')}</div>
+              <div style={{ fontSize: '0.82rem', color: '#666', margin: '4px 0 8px' }}>{t('criadorLouvor.buyPackage', 'Adquira o pacote...')}</div>
               <button onClick={() => alert('💳 Integração de pagamento em breve!')} style={{
                 padding: '0.5rem 1.5rem', borderRadius: 12, border: 'none',
                 background: 'linear-gradient(135deg, #daa520, #f4c542)', color: '#1a0a3e',
                 fontWeight: 700, cursor: 'pointer',
-              }}>Comprar €5 — 250 músicas</button>
+              }}>{t('criadorLouvor.buyNow', 'Comprar agora')}</button>
             </div>
           )}
 
@@ -332,10 +332,10 @@ export default function CriadorLouvor() {
             {generating ? (
               <>
                 <div style={{ width: 20, height: 20, border: '3px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                Criando louvor... pode demorar até 30s
+                {t('criadorLouvor.creatingLyrics', 'Criando...')}
               </>
             ) : (
-              <><Sparkles size={20} /> Gerar Louvor</>
+              <><Sparkles size={20} /> {t('criadorLouvor.generateBtn', 'Gerar Louvor com IA')}</>
             )}
           </button>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -372,10 +372,10 @@ export default function CriadorLouvor() {
                   {generatingAudio ? (
                     <>
                       <div style={{ width: 18, height: 18, border: '3px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                      Gerando música... pode demorar 1-2 minutos
+                      {t('criadorLouvor.generatingAudio', 'Gerando música...')}
                     </>
                   ) : (
-                    <>🎵 Gerar Música com IA</>
+                    <>{t('criadorLouvor.generateMusicBtn', '🎵 Gerar Música com IA')}</>
                   )}
                 </button>
               )}
@@ -393,7 +393,7 @@ export default function CriadorLouvor() {
                   marginTop: '1rem', background: 'linear-gradient(135deg, #e8f8f0, #d5f5e3)',
                   borderRadius: 14, padding: '1rem', border: '2px solid #27ae60', textAlign: 'center',
                 }}>
-                  <div style={{ fontWeight: 700, color: '#1e8449', marginBottom: '0.5rem' }}>🎵 Música Gerada!</div>
+                  <div style={{ fontWeight: 700, color: '#1e8449', marginBottom: '0.5rem' }}>{t('criadorLouvor.generatedMusic', '🎵 Música Gerada!')}</div>
                   <audio controls style={{ width: '100%', marginBottom: '0.5rem' }}>
                     <source src={audioUrl} type="audio/wav" />
                     <source src={audioUrl} type="audio/mpeg" />
@@ -403,12 +403,12 @@ export default function CriadorLouvor() {
                     display: 'inline-block', padding: '0.4rem 1rem', borderRadius: 10,
                     background: '#27ae60', color: '#fff', fontWeight: 600, fontSize: '0.8rem',
                     textDecoration: 'none',
-                  }}>⬇️ Baixar Música</a>
+                  }}>{t('criadorLouvor.downloadMusic', '⬇️ Baixar Música')}</a>
                 </div>
               )}
 
               <div style={{ marginTop: '0.75rem', textAlign: 'center', fontSize: '0.8rem', color: '#999' }}>
-                Créditos restantes: <strong style={{ color: '#9b59b6' }}>{result.creditsRemaining}</strong>
+                {t('criadorLouvor.creditsLeft', 'Créditos restantes:')} <strong style={{ color: '#9b59b6' }}>{result.creditsRemaining}</strong>
               </div>
             </div>
           )}
@@ -421,11 +421,11 @@ export default function CriadorLouvor() {
           {mySongs.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '3rem 1rem', color: '#999' }}>
               <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🎵</div>
-              <p>Nenhuma música criada ainda.</p>
+              <p>{t('criadorLouvor.noMusicYet', 'Nenhuma música criada ainda.')}</p>
               <button onClick={() => setTab('create')} style={{
                 padding: '0.6rem 1.5rem', borderRadius: 12, border: 'none',
                 background: '#9b59b6', color: '#fff', fontWeight: 600, cursor: 'pointer',
-              }}>Criar primeira música</button>
+              }}>{t('criadorLouvor.createFirst', 'Criar primeira música')}</button>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -473,7 +473,7 @@ export default function CriadorLouvor() {
                           flex: 1, padding: '0.5rem', borderRadius: 10, border: '1px solid #9b59b6',
                           background: '#fff', color: '#9b59b6', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem',
                           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-                        }}><Share2 size={14} /> Compartilhar</button>
+                        }}><Share2 size={14} /> {t('common.share', 'Compartilhar')}</button>
                         <button onClick={() => handleDownload(song)} style={{
                           flex: 1, padding: '0.5rem', borderRadius: 10, border: '1px solid #667eea',
                           background: '#fff', color: '#667eea', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem',
@@ -499,9 +499,9 @@ export default function CriadorLouvor() {
         borderRadius: 14, padding: '0.8rem 1rem', textAlign: 'center',
         fontSize: '0.8rem', color: '#666',
       }}>
-        🎵 Total de músicas criadas: <strong style={{ color: '#9b59b6' }}>{totalGenerated}</strong>
+        🎵 {t('criadorLouvor.total', 'Total:')} <strong style={{ color: '#9b59b6' }}>{totalGenerated}</strong>
         {credits !== null && credits > 0 && (
-          <span> · Créditos: <strong style={{ color: '#daa520' }}>{credits}</strong></span>
+          <span> · {t('criadorLouvor.creditsRemaining', 'créditos')}: <strong style={{ color: '#daa520' }}>{credits}</strong></span>
         )}
       </div>
     </div>

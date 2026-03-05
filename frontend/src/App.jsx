@@ -14,6 +14,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Members from "./pages/Members";
+import Groups from "./pages/Groups";
+import MusicLibrary from "./pages/MusicLibrary";
+import Consecration from "./pages/Consecration";
 import BiblicalAI from "./pages/BibleAI";
 import PastorChat from "./pages/PastorChat";
 import HelpRequests from "./pages/HelpRequests";
@@ -170,6 +173,15 @@ export default function App() {
             <Link to="/membros" className={isActive('/membros')}>
               <Users size={18} /> {t('nav.members')}
             </Link>
+            <Link to="/grupos" className={isActive('/grupos')}>
+              <Users size={18} /> {t('nav.groups', 'Grupos')}
+            </Link>
+            <Link to="/musica" className={isActive('/musica')}>
+              <Music size={18} /> {t('nav.music', 'Música')}
+            </Link>
+            <Link to="/consagracao" className={isActive('/consagracao')}>
+              <PlayCircle size={18} /> {t('nav.consecration', 'Consagração')}
+            </Link>
             <Link to="/curso-biblico" className={isActive('/curso-biblico')}>
               <BookOpen size={18} /> {t('course.title', 'Curso Bíblico')}
             </Link>
@@ -205,6 +217,9 @@ export default function App() {
             <Route path="/chat-pastoral" element={<PastorChat />} />
             <Route path="/curso-biblico" element={<BiblicalCourse />} />
             <Route path="/journeys" element={<FaithJourneys />} />
+            <Route path="/grupos" element={<Groups />} />
+            <Route path="/musica" element={<MusicLibrary />} />
+            <Route path="/consagracao" element={<Consecration />} />
             
             {/* Protected Admin Routes */}
             <Route path="/pedidos-ajuda" element={
