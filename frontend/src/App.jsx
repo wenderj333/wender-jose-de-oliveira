@@ -132,9 +132,9 @@ export default function App() {
                  <span style={{fontSize:'1.8rem'}}>{user.full_name?.charAt(0)}</span>
                )}
             </div>
-            <p className="prof-name">{user.full_name}</p>
-            <p className="prof-role">
-              {user.role === 'pastor' || user.role === 'admin' ? t('roles.pastor') : t('roles.member')}
+            <p className="prof-name">{user.full_name || t('common.user')}</p>
+            <p className="prof-role" style={{fontSize:'0.85rem',opacity:0.9,marginBottom:16}}>
+              {t('common.welcomeBack', 'Bem-vindo de volta')}
             </p>
             
             <div className="prof-stats">
