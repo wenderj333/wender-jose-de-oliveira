@@ -41,7 +41,13 @@ export default function App() {
     setMobileMenuOpen(false);
   }, [location]);
 
-  if (loading) return <div className="loading-screen">Loading...</div>;
+  if (loading) return (
+    <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'var(--bg)',color:'var(--fb2)',flexDirection:'column',gap:20}}>
+      <div style={{width:50,height:50,border:'4px solid #e2e8f0',borderTopColor:'var(--fb)',borderRadius:'50%',animation:'spin 1s linear infinite'}}/>
+      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.2rem',fontWeight:600}}>Carregando Sigo com Fé...</p>
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+    </div>
+  );
 
   // Public Routes (Landing, Auth)
   if (!user) {
