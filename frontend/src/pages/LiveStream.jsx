@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
+import { useTranslation } from 'react-i18next';
 import { Video, VideoOff, Mic, MicOff, Users, Heart, Send, X, Radio } from 'lucide-react';
 
 const ICE_SERVERS = [
@@ -10,6 +11,7 @@ const ICE_SERVERS = [
 
 export default function LiveStream() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { send, lastEvent } = useWebSocket();
   const [streams, setStreams] = useState([]); // active streams list
   const [mode, setMode] = useState('list'); // list | broadcasting | viewing
@@ -65,16 +67,13 @@ export default function LiveStream() {
         break;
 
       case 'live_reaction':
-        // Could show floating reactions - simple for now
         break;
 
-      // WebRTC signaling - BROADCASTER receives these
       case 'live_offer': {
         if (mode === 'broadcasting') handleViewerOffer(ev);
         break;
       }
 
-      // WebRTC signaling - VIEWER receives these
       case 'live_answer': {
         if (mode === 'viewing' && viewerPc.current) {
           viewerPc.current.setRemoteDescription(new RTCSessionDescription(ev.answer)).catch(console.error);
@@ -103,12 +102,10 @@ export default function LiveStream() {
     }
   }, [lastEvent]);
 
-  // Broadcaster: handle incoming viewer offer
   async function handleViewerOffer(ev) {
     const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
     peerConnections.current.set(ev.viewerId, pc);
 
-    // Add local tracks
     if (localStream) {
       localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
     }
@@ -126,7 +123,6 @@ export default function LiveStream() {
     send({ type: 'live_answer', streamId: currentStreamId, targetId: ev.viewerId, answer });
   }
 
-  // Start broadcasting
   async function startBroadcast() {
     if (!user) return;
     setCameraError(null);
@@ -144,11 +140,10 @@ export default function LiveStream() {
       send({ type: 'live_start', streamId, broadcasterName: user.full_name || user.username, broadcasterId: user.id });
     } catch (err) {
       console.error('Camera error:', err);
-      setCameraError('Não foi possível acessar a câmera. Verifique as permissões.');
+      setCameraError(t('liveStream.cameraError', 'Não foi possível acessar a câmera. Verifique as permissões.'));
     }
   }
 
-  // Stop broadcasting
   function stopBroadcast() {
     if (localStream) {
       localStream.getTracks().forEach(t => t.stop());
@@ -162,7 +157,6 @@ export default function LiveStream() {
     setChatMessages([]);
   }
 
-  // Join a stream as viewer
   async function joinStream(stream) {
     if (!user) return;
     setCurrentStreamId(stream.id);
@@ -172,7 +166,6 @@ export default function LiveStream() {
 
     send({ type: 'live_join', streamId: stream.id, viewerName: user.full_name || user.username, viewerId: user.id });
 
-    // Create PeerConnection and send offer to broadcaster
     const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
     viewerPc.current = pc;
 
@@ -188,7 +181,6 @@ export default function LiveStream() {
       }
     };
 
-    // Add transceiver to receive media
     pc.addTransceiver('video', { direction: 'recvonly' });
     pc.addTransceiver('audio', { direction: 'recvonly' });
 
@@ -202,7 +194,6 @@ export default function LiveStream() {
     if (viewerPc.current) { viewerPc.current.close(); viewerPc.current = null; }
   }
 
-  // Leave stream
   function leaveStream() {
     cleanupViewer();
     send({ type: 'live_leave', streamId: currentStreamId, viewerId: user?.id });
@@ -211,22 +202,19 @@ export default function LiveStream() {
     setChatMessages([]);
   }
 
-  // Send chat
   function sendChat(e) {
     e.preventDefault();
     if (!chatInput.trim() || !currentStreamId) return;
-    send({ type: 'live_chat', streamId: currentStreamId, name: user?.full_name || 'Anónimo', text: chatInput.trim() });
-    setChatMessages(prev => [...prev, { name: user?.full_name || 'Eu', text: chatInput.trim(), time: new Date().toISOString() }]);
+    send({ type: 'live_chat', streamId: currentStreamId, name: user?.full_name || t('common.anonymous', 'Anônimo'), text: chatInput.trim() });
+    setChatMessages(prev => [...prev, { name: user?.full_name || t('common.me', 'Eu'), text: chatInput.trim(), time: new Date().toISOString() }]);
     setChatInput('');
   }
 
-  // Send reaction
   function sendReaction(emoji) {
     if (!currentStreamId) return;
     send({ type: 'live_reaction', streamId: currentStreamId, emoji, name: user?.full_name });
   }
 
-  // Request streams list on mount
   useEffect(() => {
     send({ type: 'live_list' });
     return () => {
@@ -235,11 +223,9 @@ export default function LiveStream() {
     };
   }, []);
 
-  // Auto-scroll chat
   const chatEndRef = useRef(null);
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [chatMessages]);
 
-  // Attach local video
   useEffect(() => {
     if (localVideoRef.current && localStream) localVideoRef.current.srcObject = localStream;
   }, [localStream, mode]);
@@ -272,14 +258,14 @@ export default function LiveStream() {
     return (
       <div style={styles.container}>
         <div style={styles.header}>
-          <div style={styles.title}>🔴 Directo</div>
-          <div style={styles.subtitle}>Transmissões ao vivo da comunidade</div>
+          <div style={styles.title}>🔴 {t('liveStream.title', 'Directo')}</div>
+          <div style={styles.subtitle}>{t('liveStream.subtitle', 'Transmissões ao vivo da comunidade')}</div>
         </div>
 
         {user && (
           <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
             <button style={{ ...styles.btn, ...styles.btnPrimary }} onClick={startBroadcast}>
-              <Radio size={18} /> Iniciar Directo
+              <Radio size={18} /> {t('liveStream.start', 'Iniciar Directo')}
             </button>
             {cameraError && <p style={{ color: '#e74c3c', fontSize: '0.85rem', marginTop: 8 }}>{cameraError}</p>}
           </div>
@@ -288,8 +274,8 @@ export default function LiveStream() {
         {streams.length === 0 ? (
           <div style={styles.empty}>
             <div style={{ fontSize: '3rem', marginBottom: 12 }}>📡</div>
-            <p style={{ fontWeight: 600, fontSize: '1.1rem', color: '#fff' }}>Nenhuma transmissão ao vivo</p>
-            <p>Seja o primeiro a iniciar um directo!</p>
+            <p style={{ fontWeight: 600, fontSize: '1.1rem', color: '#fff' }}>{t('liveStream.noStreams', 'Nenhuma transmissão ao vivo')}</p>
+            <p>{t('liveStream.beFirst', 'Seja o primeiro a iniciar um directo!')}</p>
           </div>
         ) : (
           streams.map(s => (
@@ -297,9 +283,9 @@ export default function LiveStream() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '1.05rem' }}>{s.broadcasterName}</div>
-                  <div style={styles.viewerBadge}><Users size={14} /> {s.viewers || 0} a assistir</div>
+                  <div style={styles.viewerBadge}><Users size={14} /> {s.viewers || 0} {t('liveStream.watching', 'a assistir')}</div>
                 </div>
-                <span style={styles.badge}><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#ff0000', display: 'inline-block', animation: 'pulse 1.5s infinite' }} /> AO VIVO</span>
+                <span style={styles.badge}><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#ff0000', display: 'inline-block', animation: 'pulse 1.5s infinite' }} /> {t('liveStream.live', 'AO VIVO')}</span>
               </div>
             </div>
           ))
@@ -307,7 +293,7 @@ export default function LiveStream() {
 
         {!user && (
           <p style={{ textAlign: 'center', color: '#b8a9d4', fontSize: '0.85rem', marginTop: '1rem' }}>
-            Faça login para iniciar ou assistir transmissões.
+            {t('liveStream.loginRequired', 'Faça login para iniciar ou assistir transmissões.')}
           </p>
         )}
 
@@ -321,10 +307,10 @@ export default function LiveStream() {
     return (
       <div style={styles.container}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <span style={styles.badge}><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#ff0000', display: 'inline-block', animation: 'pulse 1.5s infinite' }} /> AO VIVO</span>
+          <span style={styles.badge}><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#ff0000', display: 'inline-block', animation: 'pulse 1.5s infinite' }} /> {t('liveStream.live', 'AO VIVO')}</span>
           <span style={styles.viewerBadge}><Users size={14} /> {viewerCount}</span>
           <button style={{ ...styles.btn, background: '#e74c3c', color: '#fff', padding: '0.5rem 1rem', fontSize: '0.85rem' }} onClick={stopBroadcast}>
-            <X size={16} /> Terminar
+            <X size={16} /> {t('liveStream.end', 'Terminar')}
           </button>
         </div>
 
@@ -338,7 +324,7 @@ export default function LiveStream() {
           <div ref={chatEndRef} />
         </div>
         <form onSubmit={sendChat} style={styles.chatForm}>
-          <input style={styles.chatInput} value={chatInput} onChange={e => setChatInput(e.target.value)} placeholder="Escrever mensagem..." />
+          <input style={styles.chatInput} value={chatInput} onChange={e => setChatInput(e.target.value)} placeholder={t('liveStream.writeMessage', 'Escrever mensagem...')} />
           <button type="submit" style={{ ...styles.btn, ...styles.btnGold, padding: '0.5rem 1rem' }}><Send size={16} /></button>
         </form>
 
@@ -352,10 +338,10 @@ export default function LiveStream() {
     return (
       <div style={styles.container}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <span style={styles.badge}><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#ff0000', display: 'inline-block', animation: 'pulse 1.5s infinite' }} /> AO VIVO</span>
+          <span style={styles.badge}><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#ff0000', display: 'inline-block', animation: 'pulse 1.5s infinite' }} /> {t('liveStream.live', 'AO VIVO')}</span>
           <span style={styles.viewerBadge}><Users size={14} /> {viewerCount}</span>
           <button style={{ ...styles.btn, ...styles.btnOutline, padding: '0.5rem 1rem', fontSize: '0.85rem' }} onClick={leaveStream}>
-            <X size={16} /> Sair
+            <X size={16} /> {t('liveStream.leave', 'Sair')}
           </button>
         </div>
 
@@ -378,7 +364,7 @@ export default function LiveStream() {
           <div ref={chatEndRef} />
         </div>
         <form onSubmit={sendChat} style={styles.chatForm}>
-          <input style={styles.chatInput} value={chatInput} onChange={e => setChatInput(e.target.value)} placeholder="Escrever mensagem..." />
+          <input style={styles.chatInput} value={chatInput} onChange={e => setChatInput(e.target.value)} placeholder={t('liveStream.writeMessage', 'Escrever mensagem...')} />
           <button type="submit" style={{ ...styles.btn, ...styles.btnGold, padding: '0.5rem 1rem' }}><Send size={16} /></button>
         </form>
 
