@@ -88,15 +88,16 @@ export default function GlobalChat() {
   if (!user) return null;
 
   return (
-    <div style={{ position: 'fixed', bottom: 0, right: 20, zIndex: 9999, fontFamily: "'Inter', sans-serif" }}>
+    <div className="global-chat-container" style={{ position: 'fixed', bottom: 0, right: 20, zIndex: 9999, fontFamily: "'Inter', sans-serif" }}>
       
       {/* Floating Button (Only when CLOSED) */}
       {!isOpen && (
         <button 
           onClick={() => setIsOpen(true)}
+          className="floating-chat-button"
           style={{
             marginBottom: 20,
-            width: 56, height: 56, borderRadius: '50%',
+            width: '56px', height: '56px', borderRadius: '50%',
             background: 'linear-gradient(135deg, #1E3A8A, #2563EB)',
             color: 'white', border: 'none', boxShadow: '0 4px 15px rgba(37,99,235,0.4)',
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -111,14 +112,14 @@ export default function GlobalChat() {
 
       {/* Chat Window (Instagram Style - FIXED SIZE) */}
       {isOpen && (
-        <div style={{
-          width: '330px', height: isMinimized ? '48px' : '450px',
+        <div className="global-chat-window" style={{
+          width: '330px !important', height: isMinimized ? '48px !important' : '450px !important',
           background: 'white', borderRadius: '12px 12px 0 0',
           boxShadow: '0 0 20px rgba(0,0,0,0.15)',
           display: 'flex', flexDirection: 'column', overflow: 'hidden',
           border: '1px solid #ddd', borderBottom: 'none',
           transition: 'height 0.3s ease',
-          maxWidth: '100vw', maxHeight: '80vh' /* Prevent overflow on mobile */
+          maxWidth: '100vw', maxHeight: '80vh' /* Fallback for mobile */
         }}>
           
           {/* Header */}

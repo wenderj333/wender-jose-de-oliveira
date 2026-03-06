@@ -18,6 +18,16 @@
   --card:  #FFFFFF;
 }
 
+html, body {
+  /* Força a remoção de barras de rolagem horizontais e garante 100% de largura */
+  overflow-x: hidden;
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box; /* Garante que padding e border não aumentem a largura */
+}
+
 body {
   font-family: 'Jost', sans-serif;
   background: var(--bg);
@@ -29,36 +39,37 @@ body {
 /* ── LAYOUT GRID ── */
 .modern-layout {
   display: grid;
-  grid-template-columns: 260px 1fr 290px;
-  gap: 24px; /* Espaço um pouco maior para respiro */
-  max-width: 1280px; /* Largura contida para leitura confortável */
-  margin: 0 auto;
-  padding-top: 24px;
-  padding-bottom: 40px;
+  grid-template-columns: 260px 1fr 290px; /* Desktop: Sidebars + Main */
+  gap: 24px;
+  max-width: 1280px; /* Largura máxima do conteúdo no desktop */
+  margin: 0 auto; /* Centraliza o layout inteiro */
+  padding: 24px 20px 40px 20px; /* Espaçamento geral */
   min-height: calc(100vh - 60px);
 }
 
-/* ── SIDEBARS ── */
-.sidebar-left {
-  position: sticky;
-  top: 80px;
-  height: calc(100vh - 100px);
-  overflow-y: auto;
-  scrollbar-width: none;
-}
+/* Desktop Only: Sidebars */
+@media (min-width: 1101px) {
+  .sidebar-left {
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
 
-.sidebar-right {
-  position: sticky;
-  top: 80px;
-  height: calc(100vh - 100px);
-  overflow-y: auto;
-  scrollbar-width: none;
+  .sidebar-right {
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
 }
 
 .main-content-area {
-  max-width: 680px;
-  margin: 0 auto;
   width: 100%;
+  max-width: 700px; /* Conteúdo principal não se expande demais */
+  margin: 0 auto; /* Centraliza o conteúdo principal */
 }
 
 /* ── TOPBAR (Suave e Elegante) ── */
