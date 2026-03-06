@@ -2,31 +2,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Jost:wght@300;400;500;600&display=swap');
 
 :root {
-  /* Cores Suaves e Espirituais - Tema "Divino" */
-  --fb:    #2563EB; /* Azul Royal Suave (base) */
-  --fb2:   #1E3A8A; /* Azul Noturno (detalhes escuros) */
+  /* CORES FACEBOOK + DOURADO */
+  --fb:    #1877F2; /* Azul Facebook Original */
+  --fb2:   #0D5FCC; /* Azul Facebook Escuro */
   
   --gold:  #D4AF37; /* Dourado Clássico */
-  --gold2: #F3E5AB; /* Dourado Baunilha (luz suave) */
-  --gold3: #FFF8E1; /* Dourado Quase Branco (brilho) */
-
-  --bg:    #F8FAFC; /* Fundo Cinza Azulado Muito Claro */
-  --white: #FFFFFF;
-  --text:  #334155; /* Texto Cinza Escuro Suave */
-  --muted: #64748B; /* Texto Secundário Suave */
-  --border:#E2E8F0; /* Bordas Sutis */
+  --gold2: #F3E5AB; /* Dourado Baunilha */
+  
+  --bg:    #F0F2F5; /* Fundo Cinza Claro Padrão FB */
+  --text:  #1A1A1A;
+  --muted: #65676B;
+  --border:#E4E6EB;
   --card:  #FFFFFF;
 }
 
 html, body {
-  /* Força a remoção de barras de rolagem horizontais e garante 100% de largura */
   overflow-x: hidden;
   width: 100%;
 }
 
-* {
-  box-sizing: border-box; /* Garante que padding e border não aumentem a largura */
-}
+* { box-sizing: border-box; }
 
 body {
   font-family: 'Jost', sans-serif;
@@ -36,276 +31,235 @@ body {
   margin: 0;
 }
 
-/* ── LAYOUT GRID ── */
+/* ── LAYOUT ── */
 .modern-layout {
   display: grid;
-  grid-template-columns: 260px 1fr 290px; /* Desktop: Sidebars + Main */
-  gap: 24px;
-  max-width: 1280px; /* Largura máxima do conteúdo no desktop */
-  margin: 0 auto; /* Centraliza o layout inteiro */
-  padding: 24px 20px 40px 20px; /* Espaçamento geral */
+  grid-template-columns: 260px 1fr 290px;
+  gap: 20px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
   min-height: calc(100vh - 60px);
-}
-
-/* Desktop Only: Sidebars */
-@media (min-width: 1101px) {
-  .sidebar-left {
-    position: sticky;
-    top: 80px;
-    height: calc(100vh - 100px);
-    overflow-y: auto;
-    scrollbar-width: none;
-  }
-
-  .sidebar-right {
-    position: sticky;
-    top: 80px;
-    height: calc(100vh - 100px);
-    overflow-y: auto;
-    scrollbar-width: none;
-  }
 }
 
 .main-content-area {
   width: 100%;
-  max-width: 700px; /* Conteúdo principal não se expande demais */
-  margin: 0 auto; /* Centraliza o conteúdo principal */
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-/* ── TOPBAR (Suave e Elegante) ── */
+/* ── SIDEBARS (Fundo Transparente/Branco - Como Antes) ── */
+@media (min-width: 1101px) {
+  .sidebar-left, .sidebar-right {
+    background: transparent; /* FUNDO CLARO para a sidebar */
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding-right: 0; /* Ajuste para espaçamento */
+    padding-left: 0;
+  }
+  .sidebar-right {
+    border-left: 1px solid var(--border);
+    border-right: none;
+  }
+}
+
+/* ── TOPBAR (Azul FB -> Dourado) ── */
 .topbar {
-  height: 60px; /* Altura confortável */
-  /* Degradê Suave: Azul Profundo -> Azul Real -> Transição Dourada */
-  background: linear-gradient(100deg, var(--fb2) 0%, var(--fb) 50%, #B49641 85%, var(--gold2) 100%);
+  height: 60px;
+  background: linear-gradient(90deg, var(--fb) 0%, var(--fb2) 60%, var(--gold) 100%);
   display: flex;
   align-items: center;
-  padding: 0 24px;
-  gap: 12px;
+  padding: 0 20px;
   position: sticky;
   top: 0;
   z-index: 300;
-  box-shadow: 0 4px 20px rgba(30,58,138,0.1); /* Sombra azulada bem leve */
-  backdrop-filter: blur(10px); /* Efeito vidro se o navegador suportar */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.topbar::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  /* Linha dourada bem sutil no fundo */
-  background: linear-gradient(to right, transparent, var(--gold), transparent);
-  opacity: 0.4;
-}
-
-/* ── CARDS & WIDGETS ── */
-.modern-card {
-  background: #fff;
-  border-radius: 20px; /* Cantos mais arredondados */
-  border: 1px solid rgba(226,232,240,0.8);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02); /* Sombra ultra suave */
-  overflow: hidden;
-  margin-bottom: 20px;
-  transition: box-shadow 0.3s ease;
-}
-
-.modern-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-}
-
+/* ── PERFIL CARD (Azul FB -> Dourado) ── */
 .profile-card-modern {
-  /* Cartão de Perfil: Azul Profundo com Toque Dourado no final */
-  background: linear-gradient(160deg, var(--fb2) 0%, var(--fb) 70%, var(--gold) 140%);
-  border-radius: 24px;
-  padding: 28px 20px;
+  background: linear-gradient(135deg, var(--fb) 0%, var(--fb2) 60%, var(--gold) 100%);
+  border-radius: 12px;
+  padding: 20px;
   text-align: center;
-  margin-bottom: 24px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.25); /* Sombra azul elegante */
-  color: white;
-}
-
-.prof-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: white;
-  padding: 3px; /* Borda branca interna */
-  margin: 0 auto 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.prof-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 4px 0;
-  letter-spacing: 0.02em;
-}
-
-.prof-role {
-  font-size: 0.8rem;
-  opacity: 0.85;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin: 0 0 20px 0;
-}
-
-.prof-stats {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  border-top: 1px solid rgba(255,255,255,0.15);
-  padding-top: 16px;
-}
-
-.prof-stat {
-  text-align: center;
-}
-
-.prof-stat-n {
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.prof-stat-l {
-  font-size: 0.7rem;
-  opacity: 0.7;
-  text-transform: uppercase;
-}
-
-/* ── MENU LINKS (Sidebar Left - Agora Azul Unificado) ── */
-.menu-group {
-  /* Mesmo estilo do profile-card-modern e widgets da direita */
-  background: linear-gradient(160deg, var(--fb2) 0%, var(--fb) 70%, var(--gold) 140%);
-  border-radius: 24px;
-  padding: 24px 20px;
   margin-bottom: 20px;
-  box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.25);
   color: white;
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.2);
+}
+
+/* ── MENU LINKS (Fundo CLARO, Texto ESCURO - Como Antes) ── */
+.menu-group {
+  background: white; /* FUNDO BRANCO para o grupo de links */
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .menu-title {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--gold2); /* Dourado claro para títulos */
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 0 8px;
-  margin-bottom: 12px;
-  opacity: 0.9;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
-  padding-bottom: 8px;
+  padding: 0 10px;
+  margin-bottom: 5px;
+  border-bottom: none;
 }
 
 .menu-link {
+  color: var(--text); /* TEXTO ESCURO */
+  font-weight: 500;
+  padding: 10px;
+  border-radius: 8px;
+  text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 0.95rem;
-  color: rgba(255,255,255,0.9); /* Texto branco suave */
-  text-decoration: none;
-  transition: all 0.2s ease;
-  margin-bottom: 4px;
-  font-weight: 500;
+  gap: 10px;
 }
 
 .menu-link:hover {
-  background: rgba(255,255,255,0.1); /* Efeito hover sutil */
-  color: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transform: translateX(4px);
+  background: rgba(0,0,0,0.05);
+  color: var(--text);
+  transform: none;
 }
 
 .menu-link.active {
-  background: linear-gradient(to right, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
-  color: white; /* Branco puro no ativo */
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border-left: 4px solid var(--gold); /* Detalhe dourado na esquerda */
+  background: rgba(24, 119, 242, 0.1); /* Fundo azul claro para ativo */
+  color: var(--fb); /* Azul Facebook para texto ativo */
+  font-weight: 600;
+  border-left: none;
+  box-shadow: none;
 }
 
-/* Ajuste para o botão de sair ficar dentro do estilo */
+/* Ajuste para o botão de sair ficar dentro do estilo do menu */
 .logout-btn {
-  color: #ffcccc !important; /* Vermelho claro para contraste no fundo azul */
+  color: var(--text) !important;
   margin-top: 10px;
+  padding: 10px !important;
+  text-align: left;
 }
 .logout-btn:hover {
-  background: rgba(220, 38, 38, 0.2) !important;
-  color: white !important;
+  background: rgba(0,0,0,0.05) !important;
+  color: var(--text) !important;
 }
 
-/* ── WIDGETS ── */
+/* ── WIDGETS (Direita) ── */
+/* Live Widget (Azul FB -> Dourado) */
 .live-widget {
-  background: linear-gradient(135deg, var(--fb2) 0%, #1E40AF 100%);
-  border-radius: 20px;
-  padding: 24px;
-  color: white;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.3);
-  margin-bottom: 24px;
-}
-
-.live-widget::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-  pointer-events: none;
-}
-
-.widget-card {
+  background: linear-gradient(135deg, var(--fb) 0%, var(--fb2) 60%, var(--gold) 100%);
+  border-radius: 12px;
   padding: 20px;
+  color: white;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.2);
+}
+
+/* Outros Widgets (Brancos) */
+.widget-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  color: var(--text);
+  border: 1px solid var(--border);
 }
 
 .widget-header {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem;
-  font-weight: 700;
   color: var(--text);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-.text-gold { color: var(--gold); }
+.widget-item .w-text, .widget-item .w-title-sm {
+  color: var(--text) !important;
+}
+
+.widget-item .w-sub {
+  color: var(--muted) !important;
+}
+
+.text-gold { color: var(--gold) !important; }
+
+/* ── CHAT GLOBAL (Blindado) ── */
+.global-chat-container {
+  font-family: 'Jost', sans-serif !important; /* Força a fonte */
+}
+
+.global-chat-window {
+  position: fixed !important;
+  bottom: 0px !important; /* Ajuste para não ter margem inferior */
+  right: 20px !important;
+  width: 330px !important;
+  max-width: 100vw !important; /* Limita para mobile */
+  height: 450px !important;
+  max-height: 80vh !important; /* Limita para mobile */
+  background: white !important;
+  border-radius: 12px 12px 0 0 !important;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.15) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  border: 1px solid var(--border) !important;
+  border-bottom: none !important;
+  z-index: 9999 !important;
+  transition: height 0.3s ease !important;
+}
+
+.global-chat-window.minimized {
+  height: 48px !important;
+}
+
+.floating-chat-button {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, var(--fb), var(--fb2)) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 9999 !important;
+}
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1100px) {
-  .modern-layout {
-    grid-template-columns: 240px 1fr;
-    gap: 20px;
-  }
-  .sidebar-right {
-    display: none;
-  }
+  .modern-layout { grid-template-columns: 240px 1fr; gap: 16px; padding: 16px; }
+  .sidebar-right { display: none; }
+  .sidebar-left { padding: 0; border-right: none; }
 }
 
 @media (max-width: 768px) {
-  .modern-layout {
-    grid-template-columns: 1fr;
-    padding-top: 0;
-    gap: 16px;
+  .modern-layout { 
+    grid-template-columns: 1fr; 
+    padding-top: 0; 
+    gap: 10px; 
+    padding: 10px; /* Reduz padding em mobile */
   }
-  .sidebar-left {
-    display: none; 
+  .sidebar-left { display: none; }
+  .main-content-area { padding: 0; /* Remove padding extra no mobile */ }
+  .topbar { padding: 0 16px; }
+  .global-chat-window {
+    right: 10px !important; /* Mais perto da borda em mobile */
+    width: calc(100vw - 20px) !important; /* Ocupa quase toda a largura */
+    max-width: none !important;
+    height: calc(100vh - 100px) !important; /* Altura maior para mobile */
+    bottom: 0px !important;
+    border-radius: 12px 12px 0 0 !important;
   }
-  .main-content-area {
-    padding: 16px;
-  }
-  .topbar {
-    padding: 0 16px;
+  .floating-chat-button {
+    right: 10px !important;
+    bottom: 10px !important;
   }
 }
