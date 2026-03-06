@@ -118,12 +118,29 @@ export default function App() {
 
       {/* ── MOBILE MENU OVERLAY ── */}
       {mobileMenuOpen && (
-        <div className="mobile-menu" style={{position:'fixed',inset:0,zIndex:299,background:'rgba(0,0,0,0.9)',padding:'80px 20px',display:'flex',flexDirection:'column',gap:20}}>
-          <Link to="/" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.mural')}</Link>
-          <Link to="/ia-biblica" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.bible_ai')}</Link>
-          <Link to="/membros" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.members')}</Link>
-          <Link to={`/perfil/${user.id}`} className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.profile')}</Link>
-          <button className="mobile-link logout" onClick={logout} style={{color:'red',fontSize:20,background:'none',border:'none',textAlign:'left'}}>{t('auth.logout')}</button>
+        <div className="mobile-menu" style={{position:'fixed',inset:0,zIndex:299,background:'rgba(0,0,0,0.95)',padding:'80px 20px',display:'flex',flexDirection:'column',gap:16,overflowY:'auto'}}>
+          <Link to="/" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><Home size={20}/> {t('nav.mural')}</Link>
+          <Link to="/ia-biblica" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><BookOpen size={20}/> {t('nav.bible_ai')}</Link>
+          <Link to="/journeys" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><Globe size={20}/> {t('nav.journeys', 'Jornadas')}</Link>
+          <Link to="/membros" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><Users size={20}/> {t('nav.members')}</Link>
+          <Link to="/grupos" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><Users size={20}/> {t('nav.groups', 'Grupos')}</Link>
+          <Link to="/musica" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><Music size={20}/> {t('nav.music', 'Música')}</Link>
+          <Link to="/consagracao" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><PlayCircle size={20}/> {t('nav.consecration', 'Consagração')}</Link>
+          <Link to="/curso-biblico" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><BookOpen size={20}/> {t('course.title', 'Curso Bíblico')}</Link>
+          <Link to="/chat-pastoral" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><MessageCircle size={20}/> {t('nav.pastoral_chat')}</Link>
+          
+          {(user.role === 'pastor' || user.role === 'admin') && (
+            <>
+              <div style={{height:1,background:'rgba(255,255,255,0.2)',margin:'10px 0'}}></div>
+              <p style={{color:'#daa520',fontSize:14,textTransform:'uppercase',letterSpacing:1,margin:0}}>Admin</p>
+              <Link to="/pastor-dashboard" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><Shield size={20}/> {t('nav.pastorRoom', 'Sala do Pastor')}</Link>
+              <Link to="/pedidos-ajuda" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><Heart size={20}/> {t('nav.help_requests')}</Link>
+            </>
+          )}
+
+          <div style={{height:1,background:'rgba(255,255,255,0.2)',margin:'10px 0'}}></div>
+          <Link to={`/perfil/${user.id}`} className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:18,textDecoration:'none',display:'flex',alignItems:'center',gap:10}}><User size={20}/> {t('nav.profile')}</Link>
+          <button className="mobile-link logout" onClick={logout} style={{color:'#ff6b6b',fontSize:18,background:'none',border:'none',textAlign:'left',display:'flex',alignItems:'center',gap:10,cursor:'pointer'}}><LogOut size={20}/> {t('auth.logout')}</button>
         </div>
       )}
 
