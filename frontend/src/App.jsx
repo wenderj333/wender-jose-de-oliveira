@@ -23,6 +23,7 @@ import HelpRequests from "./pages/HelpRequests";
 import Landing from "./pages/Landing";
 import BiblicalCourse from "./pages/BiblicalCourse";
 import FaithJourneys from "./pages/FaithJourneys";
+import Reflection from "./pages/Reflection";
 
 // Components
 import LanguageSelector from "./components/LanguageSelector";
@@ -206,6 +207,11 @@ export default function App() {
               <PlayCircle size={18} /> {t('nav.consecration')} <span style={{fontSize:'0.7em',opacity:0.7,marginLeft:'auto'}}>(12)</span>
             </Link>
 
+            {/* Reflexão com Deus - 3ª Posição */}
+            <Link to="/reflexao" className={isActive('/reflexao')}>
+              <span style={{fontSize:18, display:'flex', alignItems:'center', justifyContent:'center'}}>🌿</span> {t('nav.reflection', 'Reflexão com Deus')}
+            </Link>
+
             <Link to="/ia-biblica" className={isActive('/ia-biblica')}>
               <BookOpen size={18} /> {t('nav.bibleStudy', 'Bíblia & Estudo')}
             </Link>
@@ -249,6 +255,7 @@ export default function App() {
             <Route path="/grupos" element={<Groups />} />
             <Route path="/musica" element={<MusicLibrary />} />
             <Route path="/consagracao" element={<Consecration />} />
+            <Route path="/reflexao" element={<Reflection />} /> {/* New Route */}
             
             {/* Protected Admin Routes */}
             <Route path="/pedidos-ajuda" element={
