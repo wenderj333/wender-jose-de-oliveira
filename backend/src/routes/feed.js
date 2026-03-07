@@ -55,21 +55,31 @@ router.get('/cloudinary-signature', authenticate, (req, res) => {
   });
 });
 
-// GET /api/feed — list all posts (newest first, paginated)
+// GET /api/feed — list all posts (newest first, paginated, optional filter)
 router.get('/', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = Math.min(parseInt(req.query.limit) || 20, 50);
     const offset = (page - 1) * limit;
+    const category = req.query.category;
 
-    const posts = await db.prepare(
-      `SELECT fp.*, u.full_name AS author_name, u.display_name AS author_display_name, u.avatar_url AS author_avatar
-       FROM feed_posts fp
-       JOIN users u ON u.id = fp.author_id
-       WHERE fp.visibility = 'public'
-       ORDER BY fp.created_at DESC
-       LIMIT ? OFFSET ?`
-    ).all(limit, offset);
+    let query = `
+      SELECT fp.*, u.full_name AS author_name, u.display_name AS author_display_name, u.avatar_url AS author_avatar
+      FROM feed_posts fp
+      JOIN users u ON u.id = fp.author_id
+      WHERE fp.visibility = 'public'
+    `;
+    const params = [];
+
+    if (category) {
+      query += ` AND fp.category = ?`;
+      params.push(category);
+    }
+
+    query += ` ORDER BY fp.created_at DESC LIMIT ? OFFSET ?`;
+    params.push(limit, offset);
+
+    const posts = await db.prepare(query).all(...params);
 
     res.json({ posts, page, limit });
   } catch (err) {

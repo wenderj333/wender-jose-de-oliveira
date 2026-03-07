@@ -189,7 +189,7 @@ body {
 
 .text-gold { color: var(--gold) !important; }
 
-/* ── CHAT GLOBAL (Blindado) ── */
+/* ── CHAT GLOBAL ── */
 /* Container do botão flutuante e da janela do chat */
 .global-chat-container {
   position: fixed !important;
@@ -293,3 +293,4 @@ body {
     bottom: 10px !important;
   }
 }
+

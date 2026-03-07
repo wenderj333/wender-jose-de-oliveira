@@ -140,7 +140,8 @@ export default function GlobalChat() {
 
       {/* Chat Window (Instagram Style - FIXED SIZE) */}
       {isOpen && (
-        <div className={`global-chat-window ${isMinimized ? 'minimized' : ''}`}> 
+        <div className={`global-chat-container ${isOpen ? 'is-open' : ''} ${isMinimized ? 'is-minimized' : ''}`}> 
+          <div className="global-chat-window"> 
           {/* Header */}
           <div style={{
             padding: '10px 14px', background: 'white', borderBottom: '1px solid #eee',
@@ -290,10 +291,9 @@ export default function GlobalChat() {
                 </form>
               )}
             </>
-          )}
+          </div>
         </div>
       )}
     </>
   );
 }
-
