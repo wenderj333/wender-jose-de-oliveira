@@ -44,21 +44,24 @@ export default function Landing() {
 
       {/* Features */}
       <section style={{maxWidth:1100,margin:'0 auto',padding:'60px 20px',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:30}}>
-        <div style={{background:'rgba(255,255,255,0.05)',padding:30,borderRadius:20,border:'1px solid rgba(255,255,255,0.1)'}}>
-          <div style={{width:50,height:50,borderRadius:14,background:'linear-gradient(135deg,#3B82F6,#1E3A8A)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:20}}><Users color="white"/></div>
-          <h3 style={{fontSize:'1.3rem',fontWeight:600,marginBottom:10}}>{t('landing.globalCommunityTitle', 'Comunidade Cristã Global')}</h3>
-          <p style={{color:'rgba(255,255,255,0.6)',lineHeight:1.5}}>{t('landing.globalCommunityDesc', 'Conecte-se com irmãos e irmãs de fé ao redor do mundo.')}</p>
-        </div>
-        <div style={{background:'rgba(255,255,255,0.05)',padding:30,borderRadius:20,border:'1px solid rgba(255,255,255,0.1)'}}>
-          <div style={{width:50,height:50,borderRadius:14,background:'linear-gradient(135deg,#D4AF37,#F3E5AB)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:20}}><BookOpen color="#1A1A1A"/></div>
-          <h3 style={{fontSize:'1.3rem',fontWeight:600,marginBottom:10}}>{t('landing.bibleAITitle', 'Bíblia Inteligente')}</h3>
-          <p style={{color:'rgba(255,255,255,0.6)',lineHeight:1.5}}>{t('landing.bibleAIDesc', 'Tire dúvidas bíblicas e aprofunde seu estudo.')}</p>
-        </div>
-        <div style={{background:'rgba(255,255,255,0.05)',padding:30,borderRadius:20,border:'1px solid rgba(255,255,255,0.1)'}}>
-          <div style={{width:50,height:50,borderRadius:14,background:'linear-gradient(135deg,#3B82F6,#1E3A8A)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:20}}><Heart color="white"/></div>
-          <h3 style={{fontSize:'1.3rem',fontWeight:600,marginBottom:10}}>{t('landing.prayerRequestsTitle', 'Pedidos de Oração')}</h3>
-          <p style={{color:'rgba(255,255,255,0.6)',lineHeight:1.5}}>{t('landing.prayerRequestsDesc', 'Compartilhe suas necessidades e receba apoio espiritual.')}</p>
-        </div>
+              <div style={{background:'rgba(255,255,255,0.05)',padding:30,borderRadius:20,border:'1px solid rgba(255,255,255,0.1)'}}>
+                <div style={{width:50,height:50,borderRadius:14,background:'linear-gradient(135deg,#3B82F6,#1E3A8A)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:20}}><Users color="white"/></div>
+                {/* FORCE UPDATE: Hardcoded text to ensure visibility */}
+                <h3 style={{fontSize:'1.3rem',fontWeight:600,marginBottom:10}}>{t('landing.globalCommunityTitle', 'COMUNIDADE CRISTÃ GLOBAL')}</h3>
+                <p style={{color:'rgba(255,255,255,0.6)',lineHeight:1.5}}>{t('landing.globalCommunityDesc', 'Conecte-se com irmãos e irmãs de fé ao redor do mundo.')}</p>
+              </div>
+
+              <div style={{background:'rgba(255,255,255,0.05)',padding:30,borderRadius:20,border:'1px solid rgba(255,255,255,0.1)'}}>
+                <div style={{width:50,height:50,borderRadius:14,background:'linear-gradient(135deg,#D4AF37,#F3E5AB)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:20}}><BookOpen color="#1A1A1A"/></div>
+                <h3 style={{fontSize:'1.3rem',fontWeight:600,marginBottom:10}}>{t('landing.bibleAITitle', 'BÍBLIA INTELIGENTE')}</h3>
+                <p style={{color:'rgba(255,255,255,0.6)',lineHeight:1.5}}>{t('landing.bibleAIDesc', 'Tire dúvidas bíblicas e aprofunde seu estudo.')}</p>
+              </div>
+
+              <div style={{background:'rgba(255,255,255,0.05)',padding:30,borderRadius:20,border:'1px solid rgba(255,255,255,0.1)'}}>
+                <div style={{width:50,height:50,borderRadius:14,background:'linear-gradient(135deg,#3B82F6,#1E3A8A)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:20}}><Heart color="white"/></div>
+                <h3 style={{fontSize:'1.3rem',fontWeight:600,marginBottom:10}}>{t('landing.prayerRequestsTitle', 'PEDIDOS DE ORAÇÃO')}</h3>
+                <p style={{color:'rgba(255,255,255,0.6)',lineHeight:1.5}}>{t('landing.prayerRequestsDesc', 'Compartilhe suas necessidades e receba apoio espiritual.')}</p>
+              </div>
       </section>
 
       {/* Agora na Rede - NEW SECTION */}
