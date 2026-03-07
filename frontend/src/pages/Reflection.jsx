@@ -2,45 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BookOpen, Heart, Cloud, Sun, Moon, Share2 } from 'lucide-react';
 
-const ALL_QUESTIONS = [
-  "O que você fez hoje que alegrou o coração de Deus?",
-  "Existe alguém que você precisa perdoar hoje?",
-  "Você tem colocado Deus em primeiro lugar ou as preocupações do mundo?",
-  "Se Jesus voltasse agora, como Ele encontraria seu coração?",
-  "Qual foi a última vez que você ouviu a voz de Deus?",
-  "Sua fala hoje edificou ou feriu alguém?",
-  "O que você pode agradecer hoje, mesmo em meio às dificuldades?",
-  "Você confiou em Deus ou tentou resolver tudo com sua própria força?",
-  "Quem precisa da sua oração hoje?",
-  "Você tem sido um reflexo do amor de Cristo para os outros?",
-  "O que está impedindo você de se entregar totalmente a Deus?",
-  "Você leu a Bíblia hoje buscando conhecer a Deus ou apenas por obrigação?",
-  "Como você pode servir a alguém hoje sem esperar nada em troca?",
-  "Onde você viu a mão de Deus no seu dia?",
-  "Você tem guardado mágoa ou rancor no seu coração?",
-  "Se Deus te pedisse algo difícil hoje, você obedeceria?",
-  "Você tem sido grato pelo pão de cada dia?",
-  "Sua vida tem inspirado outras pessoas a buscar a Deus?",
-  "Você separou um tempo de qualidade para conversar com o Pai hoje?",
-  "O que você precisa deixar para trás para avançar com Deus?",
-  "Você tem amado o seu próximo como a si mesmo?",
-  "Sua fé está baseada em sentimentos ou na Palavra de Deus?",
-  "Você tem sido fiel no pouco que Deus te confiou?",
-  "O que você faria diferente hoje se soubesse que é seu último dia?",
-  "Você tem pedido sabedoria a Deus antes de tomar decisões?",
-  "Seu coração está em paz ou ansioso? Entregue a Ele.",
-  "Você tem cuidado do templo do Espírito Santo (seu corpo)?",
-  "Você tem compartilhado as boas novas do Evangelho?",
-  "O que Deus tem tentado te ensinar nesta temporada?",
-  "Você está disposto a perdoar como Cristo te perdoou?"
-];
-
 export default function Reflection() {
   const { t } = useTranslation();
   const [questions, setQuestions] = useState([]);
   const [reflectionText, setReflectionText] = useState('');
 
   useEffect(() => {
+    // Get questions from translation file (returns array)
+    // Fallback to empty array if not found
+    const allQuestions = t('reflection.questions', { returnObjects: true });
+    
+    if (!Array.isArray(allQuestions) || allQuestions.length === 0) return;
+
     // Get day of year (0-365)
     const now = new Date();
     const start = new Date(now.getFullYear(), 0, 0);
@@ -49,13 +22,12 @@ export default function Reflection() {
     const day = Math.floor(diff / oneDay);
 
     // Pick 3 questions based on day
-    // Simple hashing: (day * index) % length
-    const q1 = ALL_QUESTIONS[day % ALL_QUESTIONS.length];
-    const q2 = ALL_QUESTIONS[(day + 5) % ALL_QUESTIONS.length];
-    const q3 = ALL_QUESTIONS[(day + 10) % ALL_QUESTIONS.length];
+    const q1 = allQuestions[day % allQuestions.length];
+    const q2 = allQuestions[(day + 5) % allQuestions.length];
+    const q3 = allQuestions[(day + 10) % allQuestions.length];
 
     setQuestions([q1, q2, q3]);
-  }, []);
+  }, [t]); // Re-run when language changes
 
   return (
     <div className="page-container" style={{padding: '20px', maxWidth: '800px', margin: '0 auto'}}>
