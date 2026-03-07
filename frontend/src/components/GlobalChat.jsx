@@ -138,46 +138,50 @@ export default function GlobalChat() {
         </button>
       )}
 
-      {/* Chat Window (Instagram Style - FIXED SIZE) */}
+      {/* Chat Window Container */}
       {isOpen && (
         <div className={`global-chat-container ${isOpen ? 'is-open' : ''} ${isMinimized ? 'is-minimized' : ''}`}> 
-          <div className="global-chat-window"> 
-          {/* Header */}
-          <div style={{
-            padding: '10px 14px', background: 'white', borderBottom: '1px solid #eee',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
-          }} onClick={() => !isMinimized && setIsMinimized(!isMinimized)}>
-            
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, fontSize: '0.95rem', color: '#1a1a1a' }}>
-              {activeChat ? (
-                  <>
-                      <button onClick={(e) => { e.stopPropagation(); setActiveChat(null); }} style={{border:'none', background:'none', cursor:'pointer', padding:0, display:'flex'}}>
-                          <ArrowLeft size={18} />
-                      </button>
-                      <img src={activeChat.avatar_url || 'https://via.placeholder.com/30'} style={{width:24, height:24, borderRadius:'50%', objectFit:'cover'}} />
-                      {activeChat.full_name}
-                  </>
-              ) : (
-                  <>
-                    <MessageCircle size={20} color="var(--fb)"/> 
-                    {t('messages.title', 'Mensagens')}
-                  </>
-              )}
-            </div>
 
-            <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={(e) => { e.stopPropagation(); setIsMinimized(!isMinimized); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
-                <Minus size={18} />
-              </button>
-              <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
-                <X size={18} />
-              </button>
+          {isMinimized ? (
+            <div onClick={() => setIsMinimized(false)} style={{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>
+                <MessageCircle size={24} style={{marginRight:5}} /> {t('messages.title','Mensagens')}
             </div>
-          </div>
+          ) : (
+            <div className="global-chat-window-inner"> 
+              {/* Header */}
+              <div style={{
+                padding: '10px 14px', background: 'white', borderBottom: '1px solid #eee',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+              }} onClick={() => setIsMinimized(!isMinimized)}>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600, fontSize: '0.95rem', color: '#1a1a1a' }}>
+                  {activeChat ? (
+                      <>
+                          <button onClick={(e) => { e.stopPropagation(); setActiveChat(null); }} style={{border:'none', background:'none', cursor:'pointer', padding:0, display:'flex'}}>
+                              <ArrowLeft size={18} />
+                          </button>
+                          <img src={activeChat.avatar_url || 'https://via.placeholder.com/30'} style={{width:24, height:24, borderRadius:'50%', objectFit:'cover'}} />
+                          {activeChat.full_name}
+                      </>
+                  ) : (
+                      <>
+                        <MessageCircle size={20} color="var(--fb)"/> 
+                        {t('messages.title', 'Mensagens')}
+                      </>
+                  )}
+                </div>
 
-          {!isMinimized && (
-            <>
+                <div style={{ display: 'flex', gap: 12 }}>
+                  <button onClick={(e) => { e.stopPropagation(); setIsMinimized(!isMinimized); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
+                    <Minus size={18} />
+                  </button>
+                  <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
+                    <X size={18} />
+                  </button>
+                </div>
+              </div>
+
               {/* Content */}
               <div style={{ flex: 1, overflowY: 'auto', background: 'var(--bg)' }} ref={chatBodyRef}>
                 
@@ -290,8 +294,8 @@ export default function GlobalChat() {
                   )}
                 </form>
               )}
-            </>
-          </div>
+            </div>
+          )}
         </div>
       )}
     </>
