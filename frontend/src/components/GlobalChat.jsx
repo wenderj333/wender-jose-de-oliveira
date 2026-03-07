@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageCircle, X, Send, Minus, Maximize2, Minimize2, Image, Smile, ChevronDown } from 'lucide-react';
+import { MessageCircle, X, Send, Minus, Maximize2, Minimize2, ArrowLeft, Image as ImageIcon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
@@ -15,24 +15,27 @@ export default function GlobalChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const chatBodyRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const [uploadFile, setUploadFile] = useState(null);
+  const [uploadPreview, setUploadPreview] = useState(null);
 
   // Poll for conversations list
   useEffect(() => {
-    if (isOpen && !activeChat) {
+    if (isOpen && !activeChat && user) {
       fetchConversations();
       const interval = setInterval(fetchConversations, 10000);
       return () => clearInterval(interval);
     }
-  }, [isOpen, activeChat]);
+  }, [isOpen, activeChat, user]);
 
   // Poll for messages
   useEffect(() => {
-    if (activeChat) {
+    if (activeChat && user) {
       fetchMessages(activeChat.id);
       const interval = setInterval(() => fetchMessages(activeChat.id), 5000);
       return () => clearInterval(interval);
     }
-  }, [activeChat]);
+  }, [activeChat, user]);
 
   useEffect(() => {
     if (chatBodyRef.current) {
@@ -48,7 +51,7 @@ export default function GlobalChat() {
       });
       const data = await res.json();
       setConversations(data || []);
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error('Erro ao buscar conversas:', e); }
   };
 
   const fetchMessages = async (partnerId) => {
@@ -59,52 +62,77 @@ export default function GlobalChat() {
       });
       const data = await res.json();
       setMessages(data || []);
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error('Erro ao buscar mensagens:', e); }
   };
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim() || !activeChat) return;
+    if (!newMessage.trim() && !uploadFile) return; // Allow sending just a file
+    if (!activeChat) return;
     
+    let mediaUrl = null;
+    if (uploadFile) {
+        try {
+            const formData = new FormData();
+            formData.append('file', uploadFile);
+            formData.append('upload_preset', 'sigo_com_fe'); // Your Cloudinary upload preset
+            const resourceType = uploadFile.type.startsWith('image') ? 'image' : 'video';
+            const cloudinaryRes = await fetch(`https://api.cloudinary.com/v1_1/degxiuf43/${resourceType}/upload`, { method: 'POST', body: formData });
+            const cloudinaryData = await cloudinaryRes.json();
+            mediaUrl = cloudinaryData.secure_url;
+        } catch (e) {
+            console.error('Erro ao subir mídia:', e);
+            alert('Erro ao subir a mídia. Tente novamente.');
+            setUploadFile(null);
+            setUploadPreview(null);
+            return;
+        }
+    }
+
     const tempMsg = { 
         id: Date.now(), 
         sender_id: user.id, 
-        content: newMessage, 
+        content: newMessage || (mediaUrl ? '[Mídia]' : ''), // Show [Mídia] if only media
+        media_url: mediaUrl,
         created_at: new Date().toISOString() 
     };
-    setMessages([...messages, tempMsg]);
+    setMessages(prev => [...prev, tempMsg]);
     setNewMessage('');
+    setUploadFile(null);
+    setUploadPreview(null);
 
     try {
       await fetch(`${API}/messages`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ receiverId: activeChat.id, content: tempMsg.content })
+        body: JSON.stringify({ 
+            receiverId: activeChat.id, 
+            content: tempMsg.content, 
+            media_url: tempMsg.media_url
+        })
       });
       fetchMessages(activeChat.id); 
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error('Erro ao enviar mensagem:', e); }
+  };
+
+  const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+          setUploadFile(file);
+          setUploadPreview(URL.createObjectURL(file));
+          setNewMessage(''); // Clear text message if uploading file
+      }
   };
 
   if (!user) return null;
 
   return (
-    <div className="global-chat-container" style={{ position: 'fixed', bottom: 0, right: 20, zIndex: 9999, fontFamily: "'Inter', sans-serif" }}>
-      
+    <>
       {/* Floating Button (Only when CLOSED) */}
       {!isOpen && (
         <button 
           onClick={() => setIsOpen(true)}
           className="floating-chat-button"
-          style={{
-            marginBottom: 20,
-            width: '56px', height: '56px', borderRadius: '50%',
-            background: 'linear-gradient(135deg, #1E3A8A, #2563EB)',
-            color: 'white', border: 'none', boxShadow: '0 4px 15px rgba(37,99,235,0.4)',
-            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'transform 0.2s'
-          }}
-          onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
-          onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
         >
           <MessageCircle size={26} />
         </button>
@@ -112,16 +140,7 @@ export default function GlobalChat() {
 
       {/* Chat Window (Instagram Style - FIXED SIZE) */}
       {isOpen && (
-        <div className="global-chat-window" style={{
-          width: '330px !important', height: isMinimized ? '48px !important' : '450px !important',
-          background: 'white', borderRadius: '12px 12px 0 0',
-          boxShadow: '0 0 20px rgba(0,0,0,0.15)',
-          display: 'flex', flexDirection: 'column', overflow: 'hidden',
-          border: '1px solid #ddd', borderBottom: 'none',
-          transition: 'height 0.3s ease',
-          maxWidth: '100vw', maxHeight: '80vh' /* Fallback for mobile */
-        }}>
-          
+        <div className={`global-chat-window ${isMinimized ? 'minimized' : ''}`}> 
           {/* Header */}
           <div style={{
             padding: '10px 14px', background: 'white', borderBottom: '1px solid #eee',
@@ -140,17 +159,17 @@ export default function GlobalChat() {
                   </>
               ) : (
                   <>
-                    <MessageCircle size={20} color="#2563EB"/> 
+                    <MessageCircle size={20} color="var(--fb)"/> 
                     {t('messages.title', 'Mensagens')}
                   </>
               )}
             </div>
 
             <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={(e) => { e.stopPropagation(); setIsMinimized(!isMinimized); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}>
+              <button onClick={(e) => { e.stopPropagation(); setIsMinimized(!isMinimized); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
                 <Minus size={18} />
               </button>
-              <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}>
+              <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
                 <X size={18} />
               </button>
             </div>
@@ -159,31 +178,31 @@ export default function GlobalChat() {
           {!isMinimized && (
             <>
               {/* Content */}
-              <div style={{ flex: 1, overflowY: 'auto', background: '#fff' }} ref={chatBodyRef}>
+              <div style={{ flex: 1, overflowY: 'auto', background: 'var(--bg)' }} ref={chatBodyRef}>
                 
                 {/* Conversations List */}
                 {!activeChat && (
                   <div style={{ padding: 0 }}>
                     {conversations.length === 0 ? (
-                      <div style={{ padding: '40px 20px', textAlign: 'center', color: '#999', fontSize: '0.85rem' }}>
+                      <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--muted)', fontSize: '0.85rem' }}>
                         <MessageCircle size={32} style={{opacity:0.2, marginBottom:8}} />
-                        <p>Nenhuma conversa recente.</p>
+                        <p>{t('messages.noConversations', 'Nenhuma conversa recente.')}</p>
                       </div>
                     ) : conversations.map(c => (
                       <div key={c.id} onClick={() => setActiveChat(c)} style={{
                         padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 12,
-                        cursor: 'pointer', borderBottom: '1px solid #f9f9f9', transition: 'background 0.2s'
-                      }} onMouseEnter={e => e.currentTarget.style.background = '#f7f7f7'} onMouseLeave={e => e.currentTarget.style.background = 'white'}>
-                        <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#eee', overflow: 'hidden', flexShrink: 0 }}>
-                          {c.avatar_url ? <img src={c.avatar_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,color:'#999'}}>👤</div>}
+                        cursor: 'pointer', borderBottom: '1px solid var(--border)', transition: 'background 0.2s'
+                      }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.02)'} onMouseLeave={e => e.currentTarget.style.background = 'white'}>
+                        <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'var(--bg)', overflow: 'hidden', flexShrink: 0 }}>
+                          {c.avatar_url ? <img src={c.avatar_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,color:'var(--muted)'}}>👤</div>}
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1a1a1a' }}>{c.full_name}</div>
-                          <div style={{ fontSize: '0.8rem', color: '#888', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {c.last_message || 'Inicie uma conversa'}
+                          <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--text)' }}>{c.full_name}</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {c.last_message || t('messages.startConversation', 'Inicie uma conversa')}
                           </div>
                         </div>
-                        {c.unread && <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#2563EB' }} />}
+                        {c.unread && <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--fb)' }} />}
                       </div>
                     ))}
                   </div>
@@ -191,7 +210,7 @@ export default function GlobalChat() {
 
                 {/* Messages View */}
                 {activeChat && (
-                  <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {messages.map((msg, i) => {
                       const isMe = msg.sender_id === user.id;
                       const isLast = i === messages.length - 1;
@@ -199,15 +218,21 @@ export default function GlobalChat() {
                         <div key={i} style={{
                           alignSelf: isMe ? 'flex-end' : 'flex-start',
                           maxWidth: '75%',
-                          padding: '8px 12px',
+                          padding: '10px 14px',
                           borderRadius: isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                          background: isMe ? '#3797F0' : '#F1F1F1',
-                          color: isMe ? 'white' : '#1a1a1a',
+                          background: isMe ? 'var(--fb)' : 'var(--card)',
+                          color: isMe ? 'white' : 'var(--text)',
                           fontSize: '0.9rem',
-                          marginBottom: isLast ? 0 : 2,
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                         }}>
                           {msg.content}
+                          {msg.media_url && (
+                              msg.media_url.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
+                                  <video src={msg.media_url} controls style={{maxWidth: '100%', borderRadius: 8, marginTop: 5}} />
+                              ) : (
+                                  <img src={msg.media_url} alt="Mídia" style={{maxWidth: '100%', borderRadius: 8, marginTop: 5}} />
+                              )
+                          )}
                         </div>
                       );
                     })}
@@ -218,22 +243,49 @@ export default function GlobalChat() {
               {/* Input Area */}
               {activeChat && (
                 <form onSubmit={sendMessage} style={{
-                  padding: '8px 12px', borderTop: '1px solid #eee',
-                  display: 'flex', alignItems: 'center', gap: 8, background: 'white'
+                  padding: '8px 12px', borderTop: '1px solid var(--border)',
+                  display: 'flex', alignItems: 'center', gap: 8, background: 'var(--card)'
                 }}>
+                  <input 
+                    type="file"
+                    ref={fileInputRef}
+                    style={{display: 'none'}}
+                    onChange={handleFileChange}
+                    accept="image/*,video/*"
+                  />
+                  <button 
+                      type="button" 
+                      onClick={() => fileInputRef.current?.click()}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', display:'flex', alignItems:'center' }}
+                  >
+                    <ImageIcon size={20} />
+                  </button>
+                  
                   <input 
                     value={newMessage}
                     onChange={e => setNewMessage(e.target.value)}
-                    placeholder="Mensagem..."
+                    placeholder={t('messages.writePlaceholder', 'Escreva sua mensagem...')}
                     style={{
-                      flex: 1, border: '1px solid #eee', borderRadius: 20, fontSize: '0.9rem',
-                      padding: '8px 12px', background: '#f9f9f9', outline: 'none'
+                      flex: 1, border: '1px solid var(--border)', borderRadius: 20, fontSize: '0.9rem',
+                      padding: '8px 12px', background: 'var(--bg)', outline: 'none',
                     }}
                   />
-                  {newMessage.trim() ? (
-                    <button type="submit" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#3797F0', fontWeight: 600, fontSize:'0.9rem' }}>Enviar</button>
+                  {uploadPreview && (
+                      <div style={{position:'relative', display:'flex', alignItems:'center', justifyContent:'center', width:40, height:40, borderRadius:8, overflow:'hidden', border:'1px solid var(--border)'}}>
+                          <img src={uploadPreview} style={{maxWidth:'100%', maxHeight:'100%', objectFit:'cover'}} />
+                          <button 
+                              type="button" 
+                              onClick={() => {setUploadFile(null); setUploadPreview(null);}}
+                              style={{position:'absolute', top:2, right:2, background:'rgba(0,0,0,0.6)', color:'white', borderRadius:'50%', width:18, height:18, display:'flex', alignItems:'center', justifyContent:'center', fontSize:10, border:'none', cursor:'pointer'}}
+                          >
+                              <X size={10} />
+                          </button>
+                      </div>
+                  )}
+                  {newMessage.trim() || uploadFile ? (
+                    <button type="submit" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--fb)', fontWeight: 600, fontSize:'0.9rem' }}>{t('common.send', 'Enviar')}</button>
                   ) : (
-                    <div style={{width:40}}></div>
+                    <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}><ImageIcon size={20} /></button>
                   )}
                 </form>
               )}
@@ -241,7 +293,7 @@ export default function GlobalChat() {
           )}
         </div>
       )}
-    </div>
+    </>
   );
 }
 

@@ -2,18 +2,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Jost:wght@300;400;500;600&display=swap');
 
 :root {
-  /* CORES FACEBOOK + DOURADO */
-  --fb:    #1877F2; /* Azul Facebook Original */
-  --fb2:   #0D5FCC; /* Azul Facebook Escuro */
+  /* PALETA FIXA DE CORES */
+  --fb:    #3B82F6; /* Azul Principal (Brighter Blue) */
+  --fb2:   #1E3A8A; /* Azul Secundário (Deep Blue) */
   
   --gold:  #D4AF37; /* Dourado Clássico */
-  --gold2: #F3E5AB; /* Dourado Baunilha */
+  --white: #FFFFFF;
   
-  --bg:    #F0F2F5; /* Fundo Cinza Claro Padrão FB */
-  --text:  #1A1A1A;
-  --muted: #65676B;
-  --border:#E4E6EB;
-  --card:  #FFFFFF;
+  /* Cores baseadas na paleta para harmonia */
+  --bg:    #F0F2F5; /* Fundo Cinza Claro (tipo Facebook) */
+  --text:  #1A1A1A; /* Texto quase preto */
+  --muted: #65676B; /* Texto cinza secundário */
+  --border:#E4E6EB; /* Borda clara */
+  --card:  #FFFFFF; /* Fundo de card branco */
+  --gold2: #F3E5AB; /* Dourado Baunilha (para gradientes) */
+  --gold3: #FFF8E1; /* Dourado Quase Branco (para brilhos) */
 }
 
 html, body {
@@ -67,7 +70,7 @@ body {
   }
 }
 
-/* ── TOPBAR (Azul FB -> Dourado) ── */
+/* ── TOPBAR (Azul Principal -> Dourado) ── */
 .topbar {
   height: 60px;
   background: linear-gradient(90deg, var(--fb) 0%, var(--fb2) 60%, var(--gold) 100%);
@@ -80,7 +83,7 @@ body {
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-/* ── PERFIL CARD (Azul FB -> Dourado) ── */
+/* ── PERFIL CARD (Azul Principal -> Dourado) ── */
 .profile-card-modern {
   background: linear-gradient(135deg, var(--fb) 0%, var(--fb2) 60%, var(--gold) 100%);
   border-radius: 12px;
@@ -88,7 +91,7 @@ body {
   text-align: center;
   margin-bottom: 20px;
   color: white;
-  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.2);
+  box-shadow: 0 4px 12px rgba(var(--fb), 0.2);
 }
 
 /* ── MENU LINKS (Fundo CLARO, Texto ESCURO - Como Antes) ── */
@@ -128,8 +131,8 @@ body {
 }
 
 .menu-link.active {
-  background: rgba(24, 119, 242, 0.1); /* Fundo azul claro para ativo */
-  color: var(--fb); /* Azul Facebook para texto ativo */
+  background: rgba(var(--fb), 0.1); /* Fundo azul claro para ativo */
+  color: var(--fb); /* Azul Principal para texto ativo */
   font-weight: 600;
   border-left: none;
   box-shadow: none;
@@ -148,14 +151,14 @@ body {
 }
 
 /* ── WIDGETS (Direita) ── */
-/* Live Widget (Azul FB -> Dourado) */
+/* Live Widget (Azul Principal -> Dourado) */
 .live-widget {
   background: linear-gradient(135deg, var(--fb) 0%, var(--fb2) 60%, var(--gold) 100%);
   border-radius: 12px;
   padding: 20px;
   color: white;
   margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.2);
+  box-shadow: 0 4px 12px rgba(var(--fb), 0.2);
 }
 
 /* Outros Widgets (Brancos) */
@@ -187,18 +190,41 @@ body {
 .text-gold { color: var(--gold) !important; }
 
 /* ── CHAT GLOBAL (Blindado) ── */
+/* Container do botão flutuante e da janela do chat */
 .global-chat-container {
-  font-family: 'Jost', sans-serif !important; /* Força a fonte */
+  position: fixed !important;
+  bottom: 0px !important; 
+  right: 20px !important;
+  z-index: 9999 !important;
+  font-family: 'Jost', sans-serif !important; 
+  /* Estilos para o estado aberto/minimizado */
+  width: 330px !important;
+  max-width: 100vw !important; /* Limita em mobile */
+  height: 450px !important;
+  max-height: 80vh !important; /* Limita em mobile */
+  transition: all 0.3s ease-in-out !important;
+  
+  /* Inicialmente escondido, aparece via JS */
+  transform: translateY(100%) scale(0.8); /* Escondido e menor */
+  opacity: 0;
+  pointer-events: none; /* Não clicável quando escondido */
 }
 
+.global-chat-container.is-open {
+  transform: translateY(0%) scale(1); /* Posição normal, escala 1 */
+  opacity: 1;
+  pointer-events: auto; /* Clicável */
+}
+
+.global-chat-container.is-minimized {
+  height: 48px !important;
+  transform: translateY(0%) scale(1); /* Posição normal, escala 1 */
+  opacity: 1;
+  pointer-events: auto; 
+}
+
+/* Janela do chat (parte interna) */
 .global-chat-window {
-  position: fixed !important;
-  bottom: 0px !important; /* Ajuste para não ter margem inferior */
-  right: 20px !important;
-  width: 330px !important;
-  max-width: 100vw !important; /* Limita para mobile */
-  height: 450px !important;
-  max-height: 80vh !important; /* Limita para mobile */
   background: white !important;
   border-radius: 12px 12px 0 0 !important;
   box-shadow: 0 5px 20px rgba(0,0,0,0.15) !important;
@@ -207,14 +233,11 @@ body {
   overflow: hidden !important;
   border: 1px solid var(--border) !important;
   border-bottom: none !important;
-  z-index: 9999 !important;
-  transition: height 0.3s ease !important;
+  width: 100% !important; /* Ocupa a largura total do container */
+  height: 100% !important; /* Ocupa a altura total do container */
 }
 
-.global-chat-window.minimized {
-  height: 48px !important;
-}
-
+/* Botão flutuante (fora da janela do chat) */
 .floating-chat-button {
   position: fixed !important;
   bottom: 20px !important;
@@ -225,17 +248,22 @@ body {
   background: linear-gradient(135deg, var(--fb), var(--fb2)) !important;
   color: white !important;
   border: none !important;
-  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(var(--fb), 0.3) !important;
   cursor: pointer !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   z-index: 9999 !important;
+  transition: transform 0.2s !important; /* Animação de hover */
 }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1100px) {
-  .modern-layout { grid-template-columns: 240px 1fr; gap: 16px; padding: 16px; }
+  .modern-layout { 
+    grid-template-columns: 240px 1fr; 
+    gap: 16px; 
+    padding: 16px; 
+  }
   .sidebar-right { display: none; }
   .sidebar-left { padding: 0; border-right: none; }
 }
@@ -250,10 +278,12 @@ body {
   .sidebar-left { display: none; }
   .main-content-area { padding: 0; /* Remove padding extra no mobile */ }
   .topbar { padding: 0 16px; }
-  .global-chat-window {
-    right: 10px !important; /* Mais perto da borda em mobile */
+  
+  /* Ajustes para o chat em mobile */
+  .global-chat-container {
+    right: 10px !important;
     width: calc(100vw - 20px) !important; /* Ocupa quase toda a largura */
-    max-width: none !important;
+    max-width: none !important; /* Remove max-width do desktop */
     height: calc(100vh - 100px) !important; /* Altura maior para mobile */
     bottom: 0px !important;
     border-radius: 12px 12px 0 0 !important;

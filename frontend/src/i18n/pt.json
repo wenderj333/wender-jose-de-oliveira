@@ -183,7 +183,24 @@
         "codeSent": "Código enviado!",
         "codePlaceholder": "Código de 6 dígitos",
         "noAccount": "Não tem conta?",
-        "signUp": "Cadastre-se"
+        "signUp": "Cadastre-se",
+        "forgotPassword": "Esqueceu sua senha?"
+    },
+    "landing": {
+        "createAccount": "Criar Conta Gratuita",
+        "globalCommunityTitle": "Comunidade Cristã Global",
+        "globalCommunityDesc": "Conecte-se com irmãos e irmãs de fé ao redor do mundo.",
+        "bibleAITitle": "Bíblia Inteligente",
+        "bibleAIDesc": "Tire dúvidas bíblicas e aprofunde seu estudo.",
+        "prayerRequestsTitle": "Pedidos de Oração",
+        "prayerRequestsDesc": "Compartilhe suas necessidades e receba apoio espiritual.",
+        "nowOnNetwork": "Agora na Rede",
+        "activity1Title": "Maria pediu oração pela família",
+        "activity1Count": "{{count}} pessoas já oraram",
+        "activity2Title": "João compartilhou um testemunho",
+        "activity2Count": "{{count}} pessoas foram tocadas",
+        "spiritualQuote": "Onde dois ou três estiverem reunidos em meu nome, ali estou no meio deles.",
+        "spiritualQuoteRef": "Mateus 18:20"
     },
     "register": {
         "joinCommunity": "Entre na Rede Social Cristã!",
