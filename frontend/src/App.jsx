@@ -177,34 +177,45 @@ export default function App() {
             </div>
           </div>
 
+          {/* MENU PRINCIPAL (Social) */}
           <div className="menu-group">
-            <p className="menu-title">Menu</p>
+            <p className="menu-title">{t('nav.menu', 'MENU')}</p>
             <Link to="/" className={isActive('/')}>
               <Home size={18} /> {t('nav.mural')}
-            </Link>
-            <Link to="/ia-biblica" className={isActive('/ia-biblica')}>
-              <BookOpen size={18} /> {t('nav.bible_ai')}
-            </Link>
-             <Link to="/journeys" className={isActive('/journeys')}>
-              <Globe size={18} /> {t('nav.journeys', 'Jornadas')}
             </Link>
             <Link to="/membros" className={isActive('/membros')}>
               <Users size={18} /> {t('nav.members')}
             </Link>
             <Link to="/grupos" className={isActive('/grupos')}>
-              <Users size={18} /> {t('nav.groups', 'Grupos')}
+              <Users size={18} /> {t('nav.groups')} <span style={{fontSize:'0.7em',opacity:0.7,marginLeft:'auto'}}>(148)</span>
             </Link>
             <Link to="/musica" className={isActive('/musica')}>
-              <Music size={18} /> {t('nav.music', 'Música')}
+              <Music size={18} /> {t('nav.music')}
             </Link>
+          </div>
+
+          {/* VIDA ESPIRITUAL (New Section) */}
+          <div className="menu-group">
+            <p className="menu-title" style={{color:'var(--gold)'}}>{t('nav.spiritualLife', 'VIDA ESPIRITUAL')}</p>
+            
+            <Link to="/?filter=prayer" className={isActive('/?filter=prayer')}>
+              <Heart size={18} /> {t('nav.prayers')} <span style={{fontSize:'0.7em',opacity:0.7,marginLeft:'auto'}}>(32)</span>
+            </Link>
+            
             <Link to="/consagracao" className={isActive('/consagracao')}>
-              <PlayCircle size={18} /> {t('nav.consecration', 'Consagração')}
+              <PlayCircle size={18} /> {t('nav.consecration')} <span style={{fontSize:'0.7em',opacity:0.7,marginLeft:'auto'}}>(12)</span>
             </Link>
-            <Link to="/curso-biblico" className={isActive('/curso-biblico')}>
-              <BookOpen size={18} /> {t('course.title', 'Curso Bíblico')}
+
+            <Link to="/ia-biblica" className={isActive('/ia-biblica')}>
+              <BookOpen size={18} /> {t('nav.bibleStudy', 'Bíblia & Estudo')}
             </Link>
+
+            <Link to="/journeys" className={isActive('/journeys')}>
+              <Globe size={18} /> {t('nav.journeys', 'Jornadas de Fé')}
+            </Link>
+            
             <Link to="/chat-pastoral" className={isActive('/chat-pastoral')}>
-              <MessageCircle size={18} /> {t('nav.pastoral_chat')}
+              <MessageCircle size={18} /> {t('nav.talkToPastor', 'Fale com o Pastor')}
             </Link>
           </div>
 
