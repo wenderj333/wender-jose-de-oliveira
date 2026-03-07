@@ -24,6 +24,7 @@ import Landing from "./pages/Landing";
 import BiblicalCourse from "./pages/BiblicalCourse";
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
+import WorshipCreator from "./pages/WorshipCreator"; // New import
 
 // Components
 import LanguageSelector from "./components/LanguageSelector";
@@ -255,7 +256,8 @@ export default function App() {
             <Route path="/grupos" element={<Groups />} />
             <Route path="/musica" element={<MusicLibrary />} />
             <Route path="/consagracao" element={<Consecration />} />
-            <Route path="/reflexao" element={<Reflection />} /> {/* New Route */}
+            <Route path="/reflexao" element={<Reflection />} />
+            <Route path="/criador-louvor" element={<WorshipCreator />} />
             
             {/* Protected Admin Routes */}
             <Route path="/pedidos-ajuda" element={
