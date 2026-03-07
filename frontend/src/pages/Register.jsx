@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, UserPlus, Mail, Lock, User, LogIn, Phone, Camera } from 'lucide-react';
+import { BookOpen, UserPlus, Mail, Lock, User, LogIn, Phone, Camera, Eye, EyeOff } from 'lucide-react';
 
 // Google Analytics conversion events
 function trackSignUpEvent() {
@@ -14,14 +14,16 @@ function trackSignUpEvent() {
 }
 
 export default function Register() {
-  const { register, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
+  const { register, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  
   const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'member' });
   const [avatar, setAvatar] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const [googleLoading, setGoogleLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function handleAvatarSelect(e) {
     const file = e.target.files?.[0];
@@ -32,20 +34,21 @@ export default function Register() {
       reader.readAsDataURL(file);
     }
   }
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [countryCode, setCountryCode] = useState('+55');
-  const [confirmationResult, setConfirmationResult] = useState(null);
-  const [verificationCode, setVerificationCode] = useState('');
-  const [codeSent, setCodeSent] = useState(false);
-  const [phoneLoading, setPhoneLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (form.password.length < 6) return setError(t('register.passwordError'));
-    if (!avatar) return; // A validação visual já mostra o erro.
+    setLoading(true);
+
+    if (form.password.length < 6) {
+      setLoading(false);
+      return setError(t('register.passwordError'));
+    }
+
     try {
       let avatarUrl = null;
+      
+      // Upload avatar ONLY if selected (now optional)
       if (avatar) {
         try {
           const fd = new FormData();
@@ -55,13 +58,19 @@ export default function Register() {
           const uploadRes = await fetch('https://api.cloudinary.com/v1_1/degxiuf43/image/upload', { method: 'POST', body: fd });
           const uploadData = await uploadRes.json();
           if (uploadData.secure_url) avatarUrl = uploadData.secure_url;
-        } catch (uploadErr) { console.error('Avatar upload error:', uploadErr); }
+        } catch (uploadErr) { 
+          console.error('Avatar upload error:', uploadErr);
+          // Continue registration even if avatar fails
+        }
       }
+
       await register(form.email, form.password, form.full_name, form.role, avatarUrl);
       trackSignUpEvent();
-      navigate('/'); // Navegar para a página inicial após o registo
+      navigate('/'); 
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,15 +82,14 @@ export default function Register() {
           <h1>{t('brand')}</h1>
           <p>{t('register.joinCommunity')}</p>
         </div>
+        
         {error && <p className="form-error" style={{ textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
 
-        <button className="btn btn-google" type="button" style={{ width: '100%', marginBottom: '0.5rem' }} onClick={async () => {
+        <button className="btn btn-google" type="button" style={{ width: '100%', marginBottom: '1rem' }} onClick={async () => {
           setError('');
           try {
             const result = await loginWithGoogle();
-            // Track Google Analytics conversion event
             trackSignUpEvent();
-            // Only navigate if popup was used (returns data). Redirect navigates automatically.
             if (result) navigate('/');
           } catch (err) {
             if (err.code !== 'auth/popup-closed-by-user') setError(err.message);
@@ -91,85 +99,102 @@ export default function Register() {
           {t('register.google')}
         </button>
 
-        {/* Facebook login - desativado até configurar app no Meta
-        <button className="btn" type="button" style={{ width: '100%', marginBottom: '0.5rem', background: '#1877F2', color: '#fff', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.75rem', borderRadius: '8px', fontSize: '1rem', fontWeight: 600, cursor: 'pointer' }} onClick={async () => {
-          setError('');
-          try {
-            const result = await loginWithFacebook();
-            if (result) navigate('/');
-          } catch (err) {
-            if (err.code !== 'auth/popup-closed-by-user') setError(err.message);
-          }
-        }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-          {t('register.facebook')}
-        </button>
-        */}
-
         <div className="auth-divider">
           <span>{t('register.or')}</span>
         </div>
 
         <form onSubmit={handleSubmit}>
-          {/* Avatar */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1rem' }}>
+          {/* Avatar (Optional) */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1.5rem' }}>
             <label style={{ cursor: 'pointer', position: 'relative' }}>
               <div style={{
-                width: 100, height: 100, borderRadius: '50%',
-                background: avatarPreview ? 'none' : 'linear-gradient(135deg, #fff8e1, #fff3e0)',
-                border: avatarPreview ? '3px solid #4caf50' : '3px dashed #daa520',
+                width: 90, height: 90, borderRadius: '50%',
+                background: avatarPreview ? 'none' : 'var(--bg-secondary)',
+                border: avatarPreview ? '3px solid var(--green)' : '2px dashed var(--gray-400)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 overflow: 'hidden',
-                boxShadow: avatarPreview ? '0 4px 15px rgba(76,175,80,0.3)' : '0 4px 15px rgba(218,165,32,0.3)',
-                animation: !avatarPreview ? 'pulse 2s infinite' : 'none',
+                transition: 'all 0.3s ease'
               }}>
                 {avatarPreview ? (
-                  <>
-                    <img src={avatarPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    <div style={{
-                      position: 'absolute', bottom: 0, right: 0,
-                      background: '#4caf50', borderRadius: '50%', width: 28, height: 28,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      border: '2px solid #fff',
-                    }}>
-                      <span style={{ color: '#fff', fontSize: '0.85rem' }}>✓</span>
-                    </div>
-                  </>
+                  <img src={avatarPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
-                  <div style={{ textAlign: 'center' }}>
-                    <Camera size={36} color="#daa520" />
-                  </div>
+                  <Camera size={32} color="var(--gray-400)" />
                 )}
               </div>
               <input type="file" accept="image/*" onChange={handleAvatarSelect} style={{ display: 'none' }} />
+              
+              {!avatarPreview && (
+                <div style={{
+                  position: 'absolute', bottom: -5, right: -5,
+                  background: 'var(--gold)', borderRadius: '50%', width: 24, height: 24,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                }}>
+                  <span style={{ color: '#fff', fontSize: '1rem', fontWeight: 'bold' }}>+</span>
+                </div>
+              )}
             </label>
-            <div style={{
-              textAlign: 'center', fontSize: '0.85rem', marginTop: 6, fontWeight: 700,
-              color: avatarPreview ? '#4caf50' : '#daa520',
-            }}>
-              {avatarPreview ? '✅ Foto adicionada!' : '📷 Toque aqui para adicionar sua foto *'}
-            </div>
-            {!avatarPreview && (
-              <div style={{ fontSize: '0.72rem', color: '#e74c3c', marginTop: 2, fontWeight: 600 }}>
-                ⚠️ Obrigatório — sua foto aparece para outros membros
-              </div>
-            )}
+            <span style={{ fontSize: '0.8rem', color: 'var(--gray-500)', marginTop: 8 }}>
+              {avatarPreview ? '✅ Foto selecionada' : 'Adicionar foto (opcional)'}
+            </span>
           </div>
 
           <div className="form-group">
             <label><User size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.fullName')}</label>
-            <input value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} placeholder={t('register.fullNamePlaceholder')} required />
+            <input 
+              value={form.full_name} 
+              onChange={(e) => setForm({ ...form, full_name: e.target.value })} 
+              placeholder={t('register.fullNamePlaceholder')} 
+              required 
+            />
           </div>
+
           <div className="form-group">
             <label><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.email')}</label>
-            <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder={t('register.emailPlaceholder')} required />
+            <input 
+              type="email" 
+              value={form.email} 
+              onChange={(e) => setForm({ ...form, email: e.target.value })} 
+              placeholder={t('register.emailPlaceholder')} 
+              required 
+            />
           </div>
+
           <div className="form-group">
             <label><Lock size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.password')}</label>
-            <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder={t('register.passwordPlaceholder')} required />
+            <div style={{ position: 'relative' }}>
+              <input 
+                type={showPassword ? "text" : "password"} 
+                value={form.password} 
+                onChange={(e) => setForm({ ...form, password: e.target.value })} 
+                placeholder={t('register.passwordPlaceholder')} 
+                required 
+                style={{ paddingRight: '40px' }}
+              />
+              <button 
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: 'var(--gray-500)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: 0
+                }}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
-          <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
-            <UserPlus size={18} /> {t('register.submit')}
+
+          <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={loading}>
+            {loading ? t('common.loading') : <><UserPlus size={18} /> {t('register.submit')}</>}
           </button>
         </form>
 
