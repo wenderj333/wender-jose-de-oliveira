@@ -506,7 +506,7 @@ export default function CriadorLouvor() {
                         <button onClick={() => handleDownload(song)} style={{
                           flex: 1, padding: '0.5rem', borderRadius: 10, border: '1px solid #667eea',
                           background: '#fff', color: '#667eea', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4
                         }}><Download size={14} /> Download</button>
                         <button onClick={() => handleDelete(song.id)} style={{
                           padding: '0.5rem 0.8rem', borderRadius: 10, border: '1px solid #e74c3c',
