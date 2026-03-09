@@ -5,7 +5,7 @@ import { useAuth } from "./context/AuthContext";
 import { 
   Home, User, MessageCircle, Heart, Globe, Settings, LogOut, 
   Menu, X, Bell, Search, Video, Music, BookOpen, Users, 
-  Calendar, Gift, Shield, ChevronRight, PlayCircle
+  Calendar, Gift, Shield, ChevronRight, PlayCircle, Sun
 } from "lucide-react";
 
 // Pages
@@ -23,6 +23,7 @@ import HelpRequests from "./pages/HelpRequests";
 import Landing from "./pages/Landing";
 import BiblicalCourse from "./pages/BiblicalCourse";
 import FaithJourneys from "./pages/FaithJourneys";
+import Reflection from "./pages/Reflection";
 
 // Components
 import LanguageSelector from "./components/LanguageSelector";
@@ -160,15 +161,34 @@ export default function App() {
           </div>
 
           <div className="menu-group">
+            <p className="menu-title">{t('nav.spiritual_life', 'Vida Espiritual')}</p>
+            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}>
+              <Heart size={18} /> {t('nav.prayers', 'Pedidos de Oração')}
+            </Link>
+            <Link to="/consagracao" className={isActive('/consagracao')}>
+              <PlayCircle size={18} /> {t('nav.consecration', 'Consagração & Jejum')}
+            </Link>
+            <Link to="/reflexao" className={isActive('/reflexao')}>
+              <Sun size={18} /> {t('nav.reflection', 'Reflexão com Deus')}
+            </Link>
+            <Link to="/curso-biblico" className={isActive('/curso-biblico')}>
+              <BookOpen size={18} /> {t('course.title', 'Bíblia & Estudo')}
+            </Link>
+            <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}>
+              <Heart size={18} /> {t('nav.help_life', 'Ajuda uma Vida')}
+            </Link>
+            <Link to="/journeys" className={isActive('/journeys')}>
+              <Globe size={18} /> {t('nav.journeys', 'Jornadas de Fé')}
+            </Link>
+            <Link to="/chat-pastoral" className={isActive('/chat-pastoral')}>
+              <MessageCircle size={18} /> {t('nav.pastoral_chat', 'Fale com o Pastor')}
+            </Link>
+          </div>
+
+          <div className="menu-group">
             <p className="menu-title">Menu</p>
             <Link to="/" className={isActive('/')}>
               <Home size={18} /> {t('nav.mural')}
-            </Link>
-            <Link to="/ia-biblica" className={isActive('/ia-biblica')}>
-              <BookOpen size={18} /> {t('nav.bible_ai')}
-            </Link>
-             <Link to="/journeys" className={isActive('/journeys')}>
-              <Globe size={18} /> {t('nav.journeys', 'Jornadas')}
             </Link>
             <Link to="/membros" className={isActive('/membros')}>
               <Users size={18} /> {t('nav.members')}
@@ -178,15 +198,6 @@ export default function App() {
             </Link>
             <Link to="/musica" className={isActive('/musica')}>
               <Music size={18} /> {t('nav.music', 'Música')}
-            </Link>
-            <Link to="/consagracao" className={isActive('/consagracao')}>
-              <PlayCircle size={18} /> {t('nav.consecration', 'Consagração')}
-            </Link>
-            <Link to="/curso-biblico" className={isActive('/curso-biblico')}>
-              <BookOpen size={18} /> {t('course.title', 'Curso Bíblico')}
-            </Link>
-            <Link to="/chat-pastoral" className={isActive('/chat-pastoral')}>
-              <MessageCircle size={18} /> {t('nav.pastoral_chat')}
             </Link>
           </div>
 

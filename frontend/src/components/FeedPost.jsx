@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Heart, MessageCircle, Share2, Video, Image, BookOpen, Award, Play } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Video, Image, BookOpen, Award, Play, Volume2, VolumeX } from 'lucide-react';
 
 const TYPE_STYLES = {
   testemunho: { borderColor: 'var(--gold)', icon: Award, iconColor: 'var(--gold)' },
@@ -14,6 +14,8 @@ export default function FeedPost({ post }) {
   const { t } = useTranslation();
   const [amem, setAmem] = useState(false);
   const [amemCount, setAmemCount] = useState(post.amemCount || 0);
+  const [isMuted, setIsMuted] = useState(true); // Default: muted
+  const videoRef = useRef(null);
 
   const style = TYPE_STYLES[post.type] || TYPE_STYLES.reflexao;
   const TypeIcon = style.icon;
@@ -23,21 +25,73 @@ export default function FeedPost({ post }) {
     setAmemCount(prev => amem ? prev - 1 : prev + 1);
   };
 
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
+  useEffect(() => {
+    if (post.media_url && post.type === 'louvor') {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (videoRef.current) {
+            if (entry.isIntersecting) {
+              videoRef.current.play().catch(e => console.error("Video play failed:", e));
+            } else {
+              videoRef.current.pause();
+            }
+          }
+        },
+        { threshold: 0.7 } // Adjust as needed: 70% of video in view
+      );
+
+      if (videoRef.current) {
+        observer.observe(videoRef.current);
+      }
+
+      return () => {
+        if (videoRef.current) {
+          observer.unobserve(videoRef.current);
+        }
+      };
+    }
+  }, [post.media_url, post.type]); // Re-run if post or media changes
+
   const renderContent = () => {
     switch (post.type) {
       case 'louvor':
         return (
-          <div className="feed-post__video-placeholder">
-            <Play size={48} />
-            <span>{t('feedPost.tapToWatch')}</span>
+          <div className="feed-post__media-container">
+            <video
+              ref={videoRef}
+              src={post.media_url}
+              loop
+              muted={isMuted} // Controlled by state
+              playsInline
+              controls={false} // Custom controls
+              className="feed-post__video"
+            />
+            <button
+              onClick={toggleMute}
+              style={{
+                position: 'absolute', bottom: '10px', right: '10px',
+                background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: '50%',
+                width: '36px', height: '36px', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', cursor: 'pointer', zIndex: 10,
+                color: 'white',
+              }}
+            >
+              {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+            </button>
             {post.content && <p className="feed-post__text">{post.content}</p>}
           </div>
         );
       case 'foto':
         return (
-          <div className="feed-post__image-placeholder">
-            <Image size={48} />
-            <span>{t('feedPost.photo')}</span>
+          <div className="feed-post__media-container">
+            <img src={post.media_url} alt="Foto do post" className="feed-post__image" />
             {post.content && <p className="feed-post__text">{post.content}</p>}
           </div>
         );
