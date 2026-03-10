@@ -1,4 +1,4 @@
-const router = require('express').Router();
+﻿const router = require('express').Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
 
@@ -22,7 +22,7 @@ router.get('/:userId', authenticate, async (req, res) => {
 // Update profile fields (private, requires auth)
 router.patch('/', authenticate, async (req, res) => {
   try {
-    const { full_name, bio, location, church_name, cover_url } = req.body;
+    const { full_name, bio, location, church_name, cover_url, avatar_url } = req.body;
     const userId = req.user.id; // From auth middleware
 
     const updates = {};
@@ -31,6 +31,7 @@ router.patch('/', authenticate, async (req, res) => {
     if (location !== undefined) updates.location = location;
     if (church_name !== undefined) updates.church_name = church_name;
     if (cover_url !== undefined) updates.cover_url = cover_url;
+    if (avatar_url !== undefined) updates.avatar_url = avatar_url;
 
     const updateKeys = Object.keys(updates);
     if (updateKeys.length === 0) {
