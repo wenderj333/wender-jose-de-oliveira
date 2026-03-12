@@ -37,8 +37,6 @@ export default function ProfilePage({ onSave, onFollow, onMessage }) {
 
   useEffect(() => {
 
-  const API_BASE = import.meta.env.VITE_API_URL || '';
-  const API = `${API_BASE}/api`;
 
   useEffect(() => {
     const fetchProfileData = async () => {
