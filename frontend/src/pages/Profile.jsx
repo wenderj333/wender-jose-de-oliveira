@@ -37,8 +37,6 @@ export default function ProfilePage({ onSave, onFollow, onMessage }) {
 
   useEffect(() => {
 
-
-  useEffect(() => {
     const fetchProfileData = async () => {
       if (!currentUser && !userId) return; // Not logged in and no specific user ID
 
