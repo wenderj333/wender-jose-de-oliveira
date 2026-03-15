@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Music, Sparkles, BookOpen, Heart, Download, Share2, Trash2, ChevronDown, ArrowLeft } from 'lucide-react';
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api`;
+const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
 const THEME_COLORS = {
   fe: '#daa520',

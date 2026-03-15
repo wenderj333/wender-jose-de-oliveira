@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { Users, Plus, Lock, Globe, ArrowLeft, Send, Image, User } from 'lucide-react';
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api`;
+const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
 function timeAgo(d, t) {
   if (!d) return '';

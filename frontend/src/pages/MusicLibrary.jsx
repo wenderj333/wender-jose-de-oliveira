@@ -6,7 +6,7 @@ import { Music, Play, Pause, Heart, Mic2, Baby, BookOpen, Guitar, Upload, X, Use
 
 const CLOUD_NAME = 'degxiuf43';
 const UPLOAD_PRESET = 'sigo_com_fe';
-const API = (import.meta.env.VITE_API_URL || '') + '/api`;
+const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
 const CATEGORIES = [
   { id: 'worship', icon: <Mic2 size={18} />, gradient: 'linear-gradient(135deg, #667eea, #764ba2)' },

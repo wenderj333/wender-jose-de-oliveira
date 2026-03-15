@@ -5,7 +5,7 @@ import { useWebSocket } from '../context/WebSocketContext';
 import { playNotificationSound } from '../utils/notification-sound';
 import { Send, ArrowLeft, User, MessageCircle, Inbox } from 'lucide-react';
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api`;
+const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
 function timeAgo(d) {
   if (!d) return '';

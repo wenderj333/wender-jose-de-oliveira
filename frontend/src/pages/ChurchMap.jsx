@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapPin, Search, Church, Users, Phone, Globe } from 'lucide-react';
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api`;
+const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
 export default function ChurchMap() {
   const { t } = useTranslation();

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { Heart, DollarSign, CreditCard, Save, Copy, Check, Gift, TrendingUp, Calendar } from 'lucide-react';
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api`;
+const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
 export default function Offerings() {
   const { t } = useTranslation();
