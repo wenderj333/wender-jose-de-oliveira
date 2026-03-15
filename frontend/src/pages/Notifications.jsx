@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Bell, CheckCircle, XCircle, Info, Trash, MessageCircle } from 'lucide-react';
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api';
+const API = (import.meta.env.VITE_API_URL || '') + '/api`;
 const FRONTEND_URL = 'https://sigo-com-fe.vercel.app'; // Or wherever your frontend is deployed
 
 function timeAgo(dateStr) {

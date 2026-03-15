@@ -239,7 +239,7 @@ const journeysData = {
   },
 };
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api';
+const API = (import.meta.env.VITE_API_URL || '') + '/api`;
 
 export default function FaithJourneys() {
   const { t, i18n } = useTranslation();

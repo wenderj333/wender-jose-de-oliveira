@@ -7,7 +7,7 @@ import { getPrice, getPriceForBackend } from '../utils/regionPricing';
 import LessonReader from '../components/LessonReader';
 import FINANCE_CONTENT from '../data/financeContent';
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api';
+const API = (import.meta.env.VITE_API_URL || '') + '/api`;
 
 const FINANCE_LESSONS = [
   { id: 1, title: 'O Propósito do Dinheiro segundo Deus', desc: 'Descubra o que a Bíblia realmente ensina sobre riqueza e pobreza.', icon: '💰' },

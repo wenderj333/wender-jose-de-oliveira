@@ -6,7 +6,7 @@ import { getPrice, getPriceForBackend } from '../utils/regionPricing';
 import LessonReader from '../components/LessonReader';
 import THEOLOGY_CONTENT from '../data/theologyContent';
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api';
+const API = (import.meta.env.VITE_API_URL || '') + '/api`;
 
 const THEOLOGY_LESSONS = [
   { id: 1, title: 'Introdução à Teologia', desc: 'O que é teologia e por que todo cristão deveria estudá-la.', icon: '📚' },

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { Flame, ChevronDown, ChevronUp } from 'lucide-react';
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api';
+const API = (import.meta.env.VITE_API_URL || '') + '/api`;
 
 // BENEFITS is built inside the component now to use t() for i18n
 // This allows translation of benefit titles and descriptions

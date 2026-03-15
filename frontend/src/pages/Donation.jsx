@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useSearchParams } from 'react-router-dom';
 import { Heart, CreditCard, Euro, Gift, Check, AlertCircle, Loader } from 'lucide-react';
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api';
+const API = (import.meta.env.VITE_API_URL || '') + '/api`;
 
 export default function Donation() {
   const { t } = useTranslation();
