@@ -953,16 +953,93 @@
     "confirm": "Confirmer"
   },
   "reflection": {
-    "title": "Reflexion avec Dieu",
-    "subtitle": "Prenez quelques minutes pour reflechir",
-    "q1": "Si aujourd hui etait votre dernier jour, que diriez-vous a Dieu?",
-    "q1verse": "Car Dieu a tant aime le monde - Jean 3:16",
-    "q2": "Qu est-ce qui vous empeche de confier votre vie au Christ?",
-    "q2verse": "Venez a moi vous tous qui etes fatigues - Matthieu 11:28",
-    "q3": "Comment voulez-vous etre rappele dans l eternite?",
-    "q3verse": "Je suis la resurrection et la vie - Jean 11:25",
-    "placeholder": "Ecrivez votre reflexion ici...",
+    "title": "Réflexion avec Dieu",
+    "subtitle": "Prenez un moment. Respirez. Écoutez la voix de Dieu.",
+    "q1": "Si aujourd'hui était votre dernier jour, que diriez-vous à Dieu?",
+    "q1verse": "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle. — Jean 3:16",
+    "q2": "Qu'est-ce qui vous empêche de livrer entièrement votre vie au Christ?",
+    "q2verse": "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos. — Matthieu 11:28",
+    "q3": "Comment voulez-vous qu'on se souvienne de vous dans l'éternité?",
+    "q3verse": "Je suis la résurrection et la vie. Celui qui croit en moi vivra, même s'il meurt. — Jean 11:25",
+    "placeholder": "Écrivez votre réflexion ici...",
     "save": "Sauvegarder",
-    "saved": "Reflexion sauvegardee!"
+    "saved": "Réflexion partagée avec la communauté !",
+    "journal": "Votre Journal Spirituel (Optionnel)",
+    "saveBtn": "Partager la Réflexion",
+    "loginRequired": "Connectez-vous pour écrire et partager votre réflexion.",
+    "community": "Réflexions de la Communauté",
+    "noCommunity": "Soyez le premier à partager une réflexion aujourd'hui !"
+  },
+  "ajudaProximo": {
+    "title": "Aidez votre prochain",
+    "subtitle": "Notre communauté prend soin de vous et de votre frère.",
+    "needHelpBtn": "J'ai besoin d'aide",
+    "wantToHelpBtn": "Je veux aider",
+    "targetAudienceLabel": "Destiné à:",
+    "makeRequestBtn": "Faire une demande",
+    "offerHelpBtn": "Offrir de l'aide",
+    "requestRegistered": "Demande enregistrée avec succès pour",
+    "offerRegistered": "Offre enregistrée avec succès pour",
+    "messageLabel": "Message",
+    "describeRequest": "Décrivez ce dont vous avez besoin:",
+    "requestPlaceholder": "Ex: J'ai besoin d'un panier de nourriture pour ce mois-ci...",
+    "describeOffer": "Comment pouvez-vous aider?",
+    "offerPlaceholder": "Ex: Je peux donner des vêtements d'enfants...",
+    "submitBtn": "Envoyer",
+    "category": {
+      "spiritual": {
+        "title": "🙏 Spirituel",
+        "verse": "Confessez vos fautes les uns aux autres, et priez les uns pour les autres. — Jacques 5:16",
+        "types": [
+          "Demande de prière urgente",
+          "Accompagnement spirituel",
+          "Visite pastorale",
+          "Discipulat et mentorat"
+        ],
+        "targetAudience": "personnes en crise de foi, souffrance spirituelle, recherche de Dieu"
+      },
+      "diaconia": {
+        "title": "🍞 Diaconie",
+        "verse": "Que celui qui a deux tuniques en donne à celui qui n'en a point. — Luc 3:11",
+        "types": [
+          "Panier alimentaire et provisions",
+          "Vêtements et chaussures",
+          "Médicaments",
+          "Aide financière d'urgence"
+        ],
+        "targetAudience": "personnes dans le besoin matériel, faim, pauvreté"
+      },
+      "employment": {
+        "title": "💼 Emploi & Dignité",
+        "verse": "Tout ce que vous faites, faites-le de bon cœur, comme pour le Seigneur. — Colossiens 3:23",
+        "types": [
+          "Offres d'emploi entre frères",
+          "Cours et formations",
+          "Micro-entrepreneuriat"
+        ],
+        "targetAudience": "chômeurs, entrepreneurs débutants, ceux ayant besoin de formation"
+      },
+      "emotional": {
+        "title": "❤️ Soutien Émotionnel & Familial",
+        "verse": "L'Éternel est près de ceux qui ont le cœur brisé. — Psaume 34:18",
+        "types": [
+          "Deuil et perte",
+          "Restauration matrimoniale",
+          "Soutien aux mères célibataires",
+          "Dépendance chimique"
+        ],
+        "targetAudience": "personnes en deuil, divorce, dépendance chimique, solitude, mères célibataires"
+      },
+      "health": {
+        "title": "🏥 Santé",
+        "verse": "Il a pris nos infirmités et a porté nos maladies. — Matthieu 8:17",
+        "types": [
+          "Transport pour traitement médical",
+          "Compagnon hospitalier",
+          "Don de sang"
+        ],
+        "targetAudience": "malades, soignants, familles en traitement médical"
+      }
+    }
   }
 }

@@ -949,16 +949,93 @@
     "confirm": "Confirmați"
   },
   "reflection": {
-    "title": "Reflectie cu Dumnezeu",
-    "subtitle": "Petreceti cateva minute pentru a reflecta",
-    "q1": "Daca astazi ar fi ultima ta zi, ce i-ai spune lui Dumnezeu?",
-    "q1verse": "Fiindca atat de mult a iubit Dumnezeu lumea - Ioan 3:16",
-    "q2": "Ce te impiedica sa-ti predai viata lui Hristos?",
-    "q2verse": "Veniti la mine toti cei truditi - Matei 11:28",
-    "q3": "Cum vrei sa fii amintit in eternitate?",
-    "q3verse": "Eu sunt invierea si viata - Ioan 11:25",
-    "placeholder": "Scrie reflectia ta aici...",
+    "title": "Reflecție cu Dumnezeu",
+    "subtitle": "Fă-ți un moment. Respiră. Ascultă vocea lui Dumnezeu.",
+    "q1": "Dacă astăzi ar fi ultima ta zi, ce i-ai spune lui Dumnezeu?",
+    "q1verse": "Fiindcă atât de mult a iubit Dumnezeu lumea, că a dat pe singurul Lui Fiu, pentru ca oricine crede în El să nu piară, ci să aibă viața veșnică. — Ioan 3:16",
+    "q2": "Ce te împiedică să-ți predai complet viața lui Hristos?",
+    "q2verse": "Veniți la Mine, toți cei trudiți și împovărați, și Eu vă voi da odihnă. — Matei 11:28",
+    "q3": "Cum vrei să fii amintit în eternitate?",
+    "q3verse": "Eu sunt învierea și viața. Cine crede în Mine, chiar dacă moare, va trăi. — Ioan 11:25",
+    "placeholder": "Scrie-ți reflecția aici...",
     "save": "Salveaza",
-    "saved": "Reflectie salvata!"
+    "saved": "Reflecție partajată cu comunitatea!",
+    "journal": "Jurnalul tău spiritual (Opțional)",
+    "saveBtn": "Partajează Reflecția",
+    "loginRequired": "Autentifică-te pentru a scrie și a-ți partaja reflecția.",
+    "community": "Reflecții ale Comunității",
+    "noCommunity": "Fii primul care partajează o reflecție astăzi!"
+  },
+  "ajudaProximo": {
+    "title": "Ajută Aproapele",
+    "subtitle": "Comunitatea noastră are grijă de tine și de fratele tău.",
+    "needHelpBtn": "Am nevoie de ajutor",
+    "wantToHelpBtn": "Vreau să ajut",
+    "targetAudienceLabel": "Destinat pentru:",
+    "makeRequestBtn": "Faceți o cerere",
+    "offerHelpBtn": "Oferă ajutor",
+    "requestRegistered": "Cerere înregistrată cu succes pentru",
+    "offerRegistered": "Ofertă înregistrată cu succes pentru",
+    "messageLabel": "Mesaj",
+    "describeRequest": "Descrie ce ai nevoie:",
+    "requestPlaceholder": "Ex: Am nevoie de un coș cu alimente pentru această lună...",
+    "describeOffer": "Cum poți ajuta?",
+    "offerPlaceholder": "Ex: Pot dona haine pentru copii...",
+    "submitBtn": "Trimite",
+    "category": {
+      "spiritual": {
+        "title": "🙏 Spiritual",
+        "verse": "Mărturisiți-vă unii altora păcatele și rugați-vă unii pentru alții. — Iacov 5:16",
+        "types": [
+          "Cerere urgentă de rugăciune",
+          "Însoțire spirituală",
+          "Vizită pastorală",
+          "Discipolat și mentorat"
+        ],
+        "targetAudience": "persoane în criză de credință, suferință spirituală, căutarea lui Dumnezeu"
+      },
+      "diaconia": {
+        "title": "🍞 Diaconia",
+        "verse": "Cine are două haine, să-i dea celui ce n-are. — Luca 3:11",
+        "types": [
+          "Coș cu alimente și produse alimentare",
+          "Haine și încălțăminte",
+          "Medicamente",
+          "Ajutor financiar de urgență"
+        ],
+        "targetAudience": "persoane în nevoie materială, foamete, sărăcie"
+      },
+      "employment": {
+        "title": "💼 Angajare & Demnitate",
+        "verse": "Tot ce faceți, faceți din toată inima, ca pentru Domnul. — Coloseni 3:23",
+        "types": [
+          "Locuri de muncă între frați",
+          "Cursuri și instruire",
+          "Micro-antreprenoriat"
+        ],
+        "targetAudience": "șomeri, antreprenori la început de drum, cei care au nevoie de instruire"
+      },
+      "emotional": {
+        "title": "❤️ Sprijin Emoțional & Familial",
+        "verse": "Domnul este aproape de cei cu inima zdrobită. — Psalmul 34:18",
+        "types": [
+          "Doliu și pierdere",
+          "Restaurarea căsătoriei",
+          "Sprijin pentru mame singure",
+          "Dependență chimică"
+        ],
+        "targetAudience": "persoane în doliu, divorț, dependență chimică, singurătate, mame singure"
+      },
+      "health": {
+        "title": "🏥 Sănătate",
+        "verse": "El însuși a luat asupra Sa bolile noastre și a purtat suferințele noastre. — Matei 8:17",
+        "types": [
+          "Transport pentru tratament medical",
+          "Însoțitor spital",
+          "Donare de sânge"
+        ],
+        "targetAudience": "bolnavi, îngrijitori, familii în tratament medical"
+      }
+    }
   }
 }

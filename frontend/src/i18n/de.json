@@ -940,15 +940,92 @@
   },
   "reflection": {
     "title": "Besinnung mit Gott",
-    "subtitle": "Nimm dir Minuten zum Nachdenken",
-    "q1": "Was wuerdest du Gott sagen, wenn heute dein letzter Tag waere?",
-    "q1verse": "Denn so hat Gott die Welt geliebt - Johannes 3:16",
-    "q2": "Was hindert dich daran, dein Leben Christus zu uebergeben?",
-    "q2verse": "Kommt her zu mir alle Muehseligen - Matthaeus 11:28",
-    "q3": "Wie moechtest du in der Ewigkeit erinnert werden?",
-    "q3verse": "Ich bin die Auferstehung und das Leben - Johannes 11:25",
-    "placeholder": "Schreibe deine Besinnung hier...",
+    "subtitle": "Nimm dir einen Moment. Atme. Höre Gottes Stimme.",
+    "q1": "Wenn heute dein letzter Tag wäre, was würdest du Gott sagen?",
+    "q1verse": "Denn so sehr hat Gott die Welt geliebt, dass er seinen eingeborenen Sohn gab, damit jeder, der an ihn glaubt, nicht verloren geht, sondern ewiges Leben hat. — Johannes 3:16",
+    "q2": "Was hindert dich daran, dein Leben völlig Christus zu übergeben?",
+    "q2verse": "Kommt her zu mir, alle, die ihr mühselig und beladen seid; ich will euch erquicken. — Matthäus 11:28",
+    "q3": "Wie möchtest du in der Ewigkeit in Erinnerung bleiben?",
+    "q3verse": "Ich bin die Auferstehung und das Leben. Wer an mich glaubt, wird leben, auch wenn er stirbt. — Johannes 11:25",
+    "placeholder": "Schreibe hier deine Reflexion...",
     "save": "Besinnung speichern",
-    "saved": "Besinnung gespeichert!"
+    "saved": "Reflexion mit der Gemeinschaft geteilt!",
+    "journal": "Dein spirituelles Tagebuch (Optional)",
+    "saveBtn": "Reflexion teilen",
+    "loginRequired": "Melde dich an, um deine Reflexion zu schreiben und zu teilen.",
+    "community": "Gemeinschaftsreflexionen",
+    "noCommunity": "Sei der Erste, der heute eine Reflexion teilt!"
+  },
+  "ajudaProximo": {
+    "title": "Hilf deinem Nächsten",
+    "subtitle": "Unsere Gemeinschaft kümmert sich um dich und deinen Bruder.",
+    "needHelpBtn": "Ich brauche Hilfe",
+    "wantToHelpBtn": "Ich möchte helfen",
+    "targetAudienceLabel": "Gerichtet an:",
+    "makeRequestBtn": "Anfrage stellen",
+    "offerHelpBtn": "Hilfe anbieten",
+    "requestRegistered": "Anfrage erfolgreich registriert für",
+    "offerRegistered": "Angebot erfolgreich registriert für",
+    "messageLabel": "Nachricht",
+    "describeRequest": "Beschreibe, was du brauchst:",
+    "requestPlaceholder": "Bsp.: Ich brauche diesen Monat einen Lebensmittelkorb...",
+    "describeOffer": "Wie kannst du helfen?",
+    "offerPlaceholder": "Bsp.: Ich kann Kinderkleidung spenden...",
+    "submitBtn": "Senden",
+    "category": {
+      "spiritual": {
+        "title": "🙏 Spirituell",
+        "verse": "Bekennt einander eure Sünden und betet füreinander. — Jakobus 5:16",
+        "types": [
+          "Dringende Gebetsanfrage",
+          "Spirituelle Begleitung",
+          "Pastoraler Besuch",
+          "Jüngerschaft und Mentoring"
+        ],
+        "targetAudience": "Menschen in Glaubenskrisen, spirituellem Leid, Gottsuchende"
+      },
+      "diaconia": {
+        "title": "🍞 Diakonie",
+        "verse": "Wer zwei Gewänder hat, gebe dem, der keines hat. — Lukas 3:11",
+        "types": [
+          "Lebensmittelkorb und Lebensmittel",
+          "Kleidung und Schuhe",
+          "Medikamente",
+          "Finanzielle Nothilfe"
+        ],
+        "targetAudience": "Menschen in materieller Not, Hunger, Armut"
+      },
+      "employment": {
+        "title": "💼 Arbeit & Würde",
+        "verse": "Was immer ihr tut, tut es von Herzen, als für den Herrn. — Kolosser 3:23",
+        "types": [
+          "Stellenangebote unter Geschwistern",
+          "Kurse und Schulungen",
+          "Mikrounternehmertum"
+        ],
+        "targetAudience": "Arbeitslose, angehende Unternehmer, Schulungsbedürftige"
+      },
+      "emotional": {
+        "title": "❤️ Emotionale & Familiäre Unterstützung",
+        "verse": "Der HERR ist nahe denen, die zerbrochenen Herzens sind. — Psalm 34:18",
+        "types": [
+          "Trauer und Verlust",
+          "Ehe-Wiederherstellung",
+          "Unterstützung für alleinerziehende Mütter",
+          "Chemische Abhängigkeit"
+        ],
+        "targetAudience": "Menschen in Trauer, Scheidung, chemischer Abhängigkeit, Einsamkeit, alleinerziehende Mütter"
+      },
+      "health": {
+        "title": "🏥 Gesundheit",
+        "verse": "Er selbst nahm unsere Krankheiten und trug unsere Leiden. — Matthäus 8:17",
+        "types": [
+          "Transport für medizinische Behandlung",
+          "Krankenhausbegleitung",
+          "Blutspende"
+        ],
+        "targetAudience": "Kranke, Pflegende, Familien in medizinischer Behandlung"
+      }
+    }
   }
 }

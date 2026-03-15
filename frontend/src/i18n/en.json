@@ -954,15 +954,92 @@
   },
   "reflection": {
     "title": "Reflection with God",
-    "subtitle": "Take a few minutes to reflect deeply",
+    "subtitle": "Take a moment. Breathe. Listen to God's voice.",
     "q1": "If today were your last day, what would you say to God?",
-    "q1verse": "For God so loved the world - John 3:16",
-    "q2": "What prevents you from surrendering your life to Christ?",
-    "q2verse": "Come to me all who are weary - Matthew 11:28",
+    "q1verse": "For God so loved the world that He gave His only begotten Son, that whoever believes in Him should not perish but have everlasting life. — John 3:16",
+    "q2": "What keeps you from completely surrendering your life to Christ?",
+    "q2verse": "Come to Me, all you who labor and are heavy laden, and I will give you rest. — Matthew 11:28",
     "q3": "How do you want to be remembered in eternity?",
-    "q3verse": "I am the resurrection and the life - John 11:25",
+    "q3verse": "I am the resurrection and the life. He who believes in Me, though he may die, he shall live. — John 11:25",
     "placeholder": "Write your reflection here...",
     "save": "Save Reflection",
-    "saved": "Reflection saved!"
+    "saved": "Reflection shared with the community!",
+    "journal": "Your Spiritual Journal (Optional)",
+    "saveBtn": "Share Reflection",
+    "loginRequired": "Log in to write and share your reflection.",
+    "community": "Community Reflections",
+    "noCommunity": "Be the first to share a reflection today!"
+  },
+  "ajudaProximo": {
+    "title": "Help Your Neighbor",
+    "subtitle": "Our community cares for you and your brother.",
+    "needHelpBtn": "I Need Help",
+    "wantToHelpBtn": "I Want to Help",
+    "targetAudienceLabel": "Aimed at:",
+    "makeRequestBtn": "Make Request",
+    "offerHelpBtn": "Offer Help",
+    "requestRegistered": "Request successfully registered for",
+    "offerRegistered": "Offer successfully registered for",
+    "messageLabel": "Message",
+    "describeRequest": "Describe what you need:",
+    "requestPlaceholder": "Ex: I need a food basket for this month...",
+    "describeOffer": "How can you help?",
+    "offerPlaceholder": "Ex: I can donate children's clothes...",
+    "submitBtn": "Send",
+    "category": {
+      "spiritual": {
+        "title": "🙏 Spiritual",
+        "verse": "Confess your trespasses to one another, and pray for one another. — James 5:16",
+        "types": [
+          "Urgent prayer request",
+          "Spiritual accompaniment",
+          "Pastoral visit",
+          "Discipleship and mentoring"
+        ],
+        "targetAudience": "people in faith crisis, spiritual suffering, seeking God"
+      },
+      "diaconia": {
+        "title": "🍞 Diaconia",
+        "verse": "He who has two tunics, let him impart to him who has none. — Luke 3:11",
+        "types": [
+          "Food basket and groceries",
+          "Clothes and shoes",
+          "Medications",
+          "Emergency financial aid"
+        ],
+        "targetAudience": "people in material need, hunger, poverty"
+      },
+      "employment": {
+        "title": "💼 Employment & Dignity",
+        "verse": "Whatever you do, do it heartily, as to the Lord. — Colossians 3:23",
+        "types": [
+          "Job openings among brethren",
+          "Courses and training",
+          "Micro-entrepreneurship"
+        ],
+        "targetAudience": "unemployed, aspiring entrepreneurs, those needing training"
+      },
+      "emotional": {
+        "title": "❤️ Emotional & Family Support",
+        "verse": "The Lord is near to those who have a broken heart. — Psalm 34:18",
+        "types": [
+          "Grief and loss",
+          "Marriage restoration",
+          "Support for single mothers",
+          "Chemical dependency"
+        ],
+        "targetAudience": "people in grief, divorce, chemical dependency, loneliness, single mothers"
+      },
+      "health": {
+        "title": "🏥 Health",
+        "verse": "He Himself took our infirmities and bore our sicknesses. — Matthew 8:17",
+        "types": [
+          "Transport for medical treatment",
+          "Hospital companion",
+          "Blood donation"
+        ],
+        "targetAudience": "sick, caregivers, families in medical treatment"
+      }
+    }
   }
 }
