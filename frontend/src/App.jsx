@@ -1,3 +1,4 @@
+import './styles/main.css';
 ﻿import { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
