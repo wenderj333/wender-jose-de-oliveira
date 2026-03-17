@@ -24,7 +24,6 @@ import Landing from "./pages/Landing";
 import BiblicalCourse from "./pages/BiblicalCourse";
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
-import AjudaUmaVida from "./pages/AjudaUmaVida";
 
 // Components
 import LanguageSelector from "./components/LanguageSelector";
@@ -120,66 +119,12 @@ export default function App() {
 
       {/* ÔöÇÔöÇ MOBILE MENU OVERLAY ÔöÇÔöÇ */}
       {mobileMenuOpen && (
-        <div className="mobile-menu" style={{position:'fixed',inset:0,zIndex:299,background:'rgba(0,0,0,0.95)',padding:'60px 20px 20px',overflowY:'auto'}}>
-          {/* VIDA ESPIRITUAL */}
-          <div className="menu-group" style={{marginBottom:'25px'}}>
-            <p className="menu-title" style={{color:'var(--gold)', fontSize:'1rem', fontWeight:'bold', letterSpacing:'0.05em', textTransform:'uppercase', marginBottom:'10px', paddingLeft:'16px'}}>Vida Espiritual</p>
-            <Link to="/pedidos-ajuda" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <Heart size={20} /> Pedidos de Ajuda
-            </Link>
-            <Link to="/consagracao" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <PlayCircle size={20} /> Consagra├º├úo & Jejum
-            </Link>
-            <Link to="/reflexao" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <Sun size={20} /> Reflex├úo com Deus
-            </Link>
-            <Link to="/curso-biblico" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <BookOpen size={20} /> B├¡blia & Estudo
-            </Link>
-            <Link to="/ajuda-uma-vida" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <Heart size={20} /> Ajude o Pr├│ximo
-            </Link>
-            <Link to="/journeys" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <Globe size={20} /> Jornadas de F├®
-            </Link>
-            <Link to="/chat-pastoral" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <MessageCircle size={20} /> Fale com o Pastor
-            </Link>
-          </div>
-
-          {/* MENU GERAL */}
-          <div className="menu-group" style={{marginBottom:'25px'}}>
-            <p className="menu-title" style={{color:'rgba(255,255,255,0.6)', fontSize:'1rem', fontWeight:'bold', letterSpacing:'0.05em', textTransform:'uppercase', marginBottom:'10px', paddingLeft:'16px'}}>Menu</p>
-            <Link to="/" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <Home size={20} /> Mural
-            </Link>
-            <Link to="/membros" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <Users size={20} /> Membros
-            </Link>
-            <Link to="/grupos" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <Users size={20} /> Grupos
-            </Link>
-            <Link to="/musica" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <Music size={20} /> M├║sica
-            </Link>
-          </div>
-
-          {/* ADMIN (se for pastor/admin) */}
-          {(user.role === 'pastor' || user.role === 'admin') && (
-            <div className="menu-group" style={{marginBottom:'25px'}}>
-              <p className="menu-title" style={{color:'rgba(255,255,255,0.6)', fontSize:'1rem', fontWeight:'bold', letterSpacing:'0.05em', textTransform:'uppercase', marginBottom:'10px', paddingLeft:'16px'}}>Admin</p>
-              <Link to="/pedidos-ajuda" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-                <Heart size={20} /> Pedidos de Ajuda
-              </Link>
-              <Link to="/pastor-dashboard" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-                 <Shield size={20} /> Dashboard
-              </Link>
-            </div>
-          )}
-          
-          <button className="mobile-link logout" onClick={logout} style={{display:'flex', alignItems:'center', gap:'12px', color:'#ff6b6b', fontSize:'1.1rem', background:'none', border:'none', textAlign:'left', width:'100%', padding:'12px 16px', marginTop:'10px'}}>
-            <LogOut size={20} /> Sair
-          </button>
+        <div className="mobile-menu" style={{position:'fixed',inset:0,zIndex:299,background:'rgba(0,0,0,0.9)',padding:'80px 20px',display:'flex',flexDirection:'column',gap:20}}>
+          <Link to="/" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.mural')}</Link>
+          <Link to="/ia-biblica" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.bible_ai')}</Link>
+          <Link to="/membros" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.members')}</Link>
+          <Link to={`/perfil/${user.id}`} className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.profile')}</Link>
+          <button className="mobile-link logout" onClick={logout} style={{color:'red',fontSize:20,background:'none',border:'none',textAlign:'left'}}>{t('auth.logout')}</button>
         </div>
       )}
 
@@ -230,7 +175,7 @@ export default function App() {
               <BookOpen size={18} /> {t('course.title', 'B├¡blia & Estudo')}
             </Link>
             <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}>
-              <Heart size={18} /> Ajude o Pr├│ximo
+              <Heart size={18} /> {t('nav.help_life', 'Ajuda uma Vida')}
             </Link>
             <Link to="/journeys" className={isActive('/journeys')}>
               <Globe size={18} /> {t('nav.journeys', 'Jornadas de F├®')}
@@ -286,8 +231,6 @@ export default function App() {
             <Route path="/grupos" element={<Groups />} />
             <Route path="/musica" element={<MusicLibrary />} />
             <Route path="/consagracao" element={<Consecration />} />
-            <Route path="/reflexao" element={<Reflection />} />
-            <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
             
             {/* Protected Admin Routes */}
             <Route path="/pedidos-ajuda" element={
