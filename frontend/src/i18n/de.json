@@ -1053,8 +1053,36 @@
     "logout": "Abmelden"
   },
   "landing": {
-    "subtitle": "Das christliche soziale Netzwerk zum Wachsen im Glauben.",
+    "subtitle": "Wachse spirituell, bete mit Brüdern aus aller Welt, greife auf die Bibel mit KI zu und lebe das Evangelium — alles an einem Ort.",
     "register": "Kostenloses Konto erstellen",
-    "login": "Einloggen"
+    "login": "Einloggen",
+    "verse": "\"Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.\" — Mt 18:20",
+    "createFree": "✨ Kostenloses Konto erstellen",
+    "haveAccount": "Ich habe bereits ein Konto →",
+    "featuresTitle": "Alles, was Sie brauchen, um im Glauben zu wachsen",
+    "featuresSection": "FUNKTIONEN",
+    "testimoniesTitle": "Was unsere Geschwister sagen",
+    "testimoniesSection": "ZEUGNISSE",
+    "ctaTitle": "Treten Sie der christlichen Gemeinschaft bei, die in Gottes Liebe wächst",
+    "ctaSubtitle": "Registrieren Sie sich heute. Es ist kostenlos. Es ist christlich. Es ist für Sie.",
+    "ctaButton": "✨ Mein kostenloses Konto erstellen",
+    "ctaFree": "Keine Karte. Keine Gebühr. 100% kostenlos.",
+    "memberCount": "Aktive Mitglieder",
+    "languagesCount": "Verfügbare Sprachen",
+    "prayersCount": "Gebete gesendet",
+    "communityCount": "Gemeinschaft online",
+    "f1title": "Gebetsanliegen",
+    "f1desc": "Teilen und empfangen Sie Gebete aus der Gemeinschaft. Beten Sie nie allein.",
+    "f2title": "Bibel KI",
+    "f2desc": "Stellen Sie Fragen zur Bibel mit christlicher KI.",
+    "f3title": "Weihe & Fasten",
+    "f3desc": "Verpflichten Sie sich vor Gott. Fasten- und Gebetsprotokolle in der Gemeinschaft.",
+    "f4title": "Seelsorge-Chat",
+    "f4desc": "Sprechen Sie direkt mit einem Pastor. Beratung in Echtzeit.",
+    "f5title": "Christliche Musik",
+    "f5desc": "Lob-Bibliothek in mehreren Sprachen. Beten Sie überall an.",
+    "f6title": "Globale Gemeinschaft",
+    "f6desc": "Verbinden Sie sich mit Christen aus Brasilien, Europa, Afrika und der ganzen Welt.",
+    "tagline": "Das christliche soziale Netzwerk"
   }
 }

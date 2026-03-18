@@ -1067,8 +1067,36 @@
     "logout": "Déconnexion"
   },
   "landing": {
-    "subtitle": "Le réseau social chrétien pour grandir dans la foi.",
+    "subtitle": "Grandissez spirituellement, priez avec des frères du monde entier, accédez à la Bible avec l'IA, et vivez l'évangile — tout en un seul endroit.",
     "register": "Créer un compte gratuit",
-    "login": "Se connecter"
+    "login": "Se connecter",
+    "verse": "\"Car là où deux ou trois sont réunis en mon nom, je suis au milieu d'eux.\" — Mt 18:20",
+    "createFree": "✨ Créer un compte gratuit",
+    "haveAccount": "J'ai déjà un compte →",
+    "featuresTitle": "Tout ce dont vous avez besoin pour grandir dans la foi",
+    "featuresSection": "FONCTIONNALITÉS",
+    "testimoniesTitle": "Ce que disent nos frères et sœurs",
+    "testimoniesSection": "TÉMOIGNAGES",
+    "ctaTitle": "Rejoignez la communauté chrétienne qui grandit dans l'amour de Dieu",
+    "ctaSubtitle": "Inscrivez-vous aujourd'hui. C'est gratuit. C'est chrétien. C'est pour vous.",
+    "ctaButton": "✨ Créer mon compte gratuit",
+    "ctaFree": "Sans carte. Sans abonnement. 100% gratuit.",
+    "memberCount": "Membres actifs",
+    "languagesCount": "Langues disponibles",
+    "prayersCount": "Prières envoyées",
+    "communityCount": "Communauté en ligne",
+    "f1title": "Demandes de Prière",
+    "f1desc": "Partagez et recevez des prières de la communauté. Ne priez jamais seul.",
+    "f2title": "IA Biblique",
+    "f2desc": "Posez des questions sur la Bible avec l'IA chrétienne.",
+    "f3title": "Consécration & Jeûne",
+    "f3desc": "Engagez-vous envers Dieu. Registres de jeûne et de prière en communauté.",
+    "f4title": "Chat Pastoral",
+    "f4desc": "Parlez directement avec un pasteur. Conseil en temps réel.",
+    "f5title": "Musique Chrétienne",
+    "f5desc": "Bibliothèque de louange en plusieurs langues. Adorez où que vous soyez.",
+    "f6title": "Communauté Mondiale",
+    "f6desc": "Connectez-vous avec des chrétiens du Brésil, d'Europe, d'Afrique et du monde entier.",
+    "tagline": "Le réseau social chrétien"
   }
 }

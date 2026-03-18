@@ -1063,8 +1063,36 @@
     "logout": "Deconectare"
   },
   "landing": {
-    "subtitle": "Rețeaua socială creștină pentru a crește în credință.",
+    "subtitle": "Crești spiritual, te rogi cu frații din întreaga lume, accesezi Biblia cu IA și trăiești evanghelia — totul într-un singur loc.",
     "register": "Creează cont gratuit",
-    "login": "Autentificare"
+    "login": "Autentificare",
+    "verse": "\"Căci acolo unde doi sau trei sunt adunați în Numele Meu, sunt și Eu în mijlocul lor.\" — Mt 18:20",
+    "createFree": "✨ Creează cont gratuit",
+    "haveAccount": "Am deja un cont →",
+    "featuresTitle": "Tot ce ai nevoie pentru a crește în credință",
+    "featuresSection": "FUNCȚIONALITĂȚI",
+    "testimoniesTitle": "Ce spun frații noștri",
+    "testimoniesSection": "MĂRTURII",
+    "ctaTitle": "Alătură-te comunității creștine care crește în dragostea lui Dumnezeu",
+    "ctaSubtitle": "Înregistrează-te astăzi. Este gratuit. Este creștin. Este pentru tine.",
+    "ctaButton": "✨ Creează contul meu gratuit",
+    "ctaFree": "Fără card. Fără abonament. 100% gratuit.",
+    "memberCount": "Membri activi",
+    "languagesCount": "Limbi disponibile",
+    "prayersCount": "Rugăciuni trimise",
+    "communityCount": "Comunitate online",
+    "f1title": "Cereri de Rugăciune",
+    "f1desc": "Împărtășește și primește rugăciuni din comunitate. Nu te ruga niciodată singur.",
+    "f2title": "IA Biblică",
+    "f2desc": "Pune întrebări despre Biblie cu IA creștină.",
+    "f3title": "Consacrare și Post",
+    "f3desc": "Angajează-te față de Dumnezeu. Înregistrări de post și rugăciune în comunitate.",
+    "f4title": "Chat Pastoral",
+    "f4desc": "Vorbește direct cu un pastor. Consiliere în timp real.",
+    "f5title": "Muzică Creștină",
+    "f5desc": "Bibliotecă de laudă în mai multe limbi. Adoră oriunde te-ai afla.",
+    "f6title": "Comunitate Globală",
+    "f6desc": "Conectează-te cu creștini din Brazilia, Europa, Africa și din toată lumea.",
+    "tagline": "Rețeaua socială creștină"
   }
 }

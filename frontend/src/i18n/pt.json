@@ -1120,8 +1120,36 @@
     "logout": "Sair"
   },
   "landing": {
-    "subtitle": "A rede social cristã para crescer na fé, conectar com irmãos e viver o evangelho.",
+    "subtitle": "Cresça espiritualmente, ore com irmãos do mundo inteiro, acesse a Bíblia com IA, e viva o evangelho — tudo num só lugar.",
     "register": "Criar conta gratuita",
-    "login": "Entrar"
+    "login": "Entrar",
+    "verse": "\"Onde dois ou três estiverem reunidos em meu nome, ali estou no meio deles.\" — Mt 18:20",
+    "createFree": "✨ Criar conta gratuita",
+    "haveAccount": "Já tenho conta →",
+    "featuresTitle": "Tudo o que precisa para crescer na fé",
+    "featuresSection": "FUNCIONALIDADES",
+    "testimoniesTitle": "O que dizem os nossos irmãos",
+    "testimoniesSection": "TESTEMUNHOS",
+    "ctaTitle": "Junte-se à comunidade cristã que cresce no amor de Deus",
+    "ctaSubtitle": "Registe-se hoje. É grátis. É cristão. É para você.",
+    "ctaButton": "✨ Criar minha conta grátis",
+    "ctaFree": "Sem cartão. Sem mensalidade. 100% gratuito.",
+    "memberCount": "Membros ativos",
+    "languagesCount": "Idiomas disponíveis",
+    "prayersCount": "Orações enviadas",
+    "communityCount": "Comunidade online",
+    "f1title": "Pedidos de Oração",
+    "f1desc": "Partilhe e receba oração da comunidade. Nunca ore sozinho.",
+    "f2title": "IA Bíblica",
+    "f2desc": "Tire dúvidas sobre a Bíblia com inteligência artificial cristã.",
+    "f3title": "Consagração & Jejum",
+    "f3desc": "Comprometa-se com Deus. Registos de jejum e oração em comunidade.",
+    "f4title": "Chat Pastoral",
+    "f4desc": "Fale diretamente com um pastor. Aconselhamento em tempo real.",
+    "f5title": "Música Cristã",
+    "f5desc": "Biblioteca de louvor em vários idiomas. Adore onde estiver.",
+    "f6title": "Comunidade Global",
+    "f6desc": "Conecte com cristãos de Brasil, Europa, África e mundo todo.",
+    "tagline": "A rede social cristã"
   }
 }

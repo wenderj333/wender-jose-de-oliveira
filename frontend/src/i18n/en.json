@@ -1067,8 +1067,36 @@
     "logout": "Logout"
   },
   "landing": {
-    "subtitle": "The Christian social network to grow in faith, connect with brothers and sisters.",
+    "subtitle": "Grow spiritually, pray with brothers and sisters from around the world, access the Bible with AI, and live the gospel — all in one place.",
     "register": "Create free account",
-    "login": "Login"
+    "login": "Login",
+    "verse": "\"For where two or three gather in my name, there am I with them.\" — Mt 18:20",
+    "createFree": "✨ Create free account",
+    "haveAccount": "I already have an account →",
+    "featuresTitle": "Everything you need to grow in faith",
+    "featuresSection": "FEATURES",
+    "testimoniesTitle": "What our brothers and sisters say",
+    "testimoniesSection": "TESTIMONIALS",
+    "ctaTitle": "Join the Christian community that grows in God's love",
+    "ctaSubtitle": "Sign up today. It is free. It is Christian. It is for you.",
+    "ctaButton": "✨ Create my free account",
+    "ctaFree": "No card. No subscription. 100% free.",
+    "memberCount": "Active members",
+    "languagesCount": "Available languages",
+    "prayersCount": "Prayers sent",
+    "communityCount": "Community online",
+    "f1title": "Prayer Requests",
+    "f1desc": "Share and receive prayer from the community. Never pray alone.",
+    "f2title": "Bible AI",
+    "f2desc": "Ask questions about the Bible with Christian AI.",
+    "f3title": "Consecration & Fasting",
+    "f3desc": "Commit yourself to God. Fasting and prayer records in community.",
+    "f4title": "Pastoral Chat",
+    "f4desc": "Talk directly with a pastor. Real-time counseling.",
+    "f5title": "Christian Music",
+    "f5desc": "Worship library in multiple languages. Worship wherever you are.",
+    "f6title": "Global Community",
+    "f6desc": "Connect with Christians from Brazil, Europe, Africa and all over the world.",
+    "tagline": "The Christian social network"
   }
 }
