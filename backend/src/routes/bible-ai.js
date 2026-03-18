@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const { callLLM } = require('../services/llmFallback');
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-
-// ===== CACHE & RATE LIMITING =====
-const responseCache = new Map(); // key -> { reply, timestamp }
-const CACHE_TTL = 60 * 60 * 1000; // 1 hour
-const userRequests = new Map(); // ip -> [timestamps]
-const USER_LIMIT = 10; // per hour per user
-const GLOBAL_LIMIT = 30; // per hour total
+// ─── Cache & Rate Limiting ────────────────────────────────────────────────────
+const responseCache = new Map();
+const CACHE_TTL = 60 * 60 * 1000; // 1 hora
+const userRequests = new Map();
+const USER_LIMIT = 10;  // por hora por IP
+const GLOBAL_LIMIT = 50;
 let globalRequests = [];
 
 function cleanOldEntries(arr, windowMs = 60 * 60 * 1000) {
@@ -21,135 +19,101 @@ function getCacheKey(message, language, context) {
   return `${(message || '').trim().toLowerCase().slice(0, 200)}|${language || ''}|${context || ''}`;
 }
 
-const SYSTEM_PROMPT = `You are a warm, welcoming, and non-judgmental Bible AI assistant called "IA Bíblica" from the app "Sigo com Fé".
-You help anyone who wants to learn about the Bible and the Christian faith:
-- Answering questions about the Bible, its books, characters, and teachings
-- Explaining Scripture passages in clear, accessible language
-- Providing spiritual guidance grounded in biblical principles
-- Helping people understand Christianity and its core beliefs
-- Offering comfort, hope, and encouragement through God's Word
+// ─── System prompt da IA Bíblica ──────────────────────────────────────────────
+const SYSTEM_PROMPT = `Você é um assistente bíblico cristão do app "Sigo com Fé" chamado "IA Bíblica".
+Ajude qualquer pessoa que queira aprender sobre a Bíblia e a fé cristã:
+- Responda perguntas sobre a Bíblia, seus livros, personagens e ensinamentos
+- Explique passagens com linguagem clara e acessível
+- Ofereça orientação espiritual com fundamento bíblico
+- Dê conforto, esperança e encorajamento através da Palavra de Deus
 
-Guidelines:
-- Always respond in the user's language
-- Be warm, welcoming, patient, and non-judgmental — everyone is welcome
-- Always ground your answers in Scripture with specific verse references (book chapter:verse)
-- Explain context and meaning in simple, accessible terms
-- Respect all Christian denominations and traditions
-- Be encouraging and compassionate
-- You are NOT a pastor tool — do not help with sermon prep, church administration, or ministry tasks
-- Use emojis sparingly to keep a warm tone (📖, 🙏, ✝️, 💛, ✨)`;
+Diretrizes:
+- Responda sempre no idioma do usuário
+- Seja acolhedor, paciente e não julgador
+- Cite versículos específicos (livro capítulo:versículo)
+- Use emojis com moderação (📖, 🙏, ✝️, 💛)
+- Máximo 300 palavras por resposta`;
 
 const CONTEXT_PROMPTS = {
-  bible: 'The user wants to explore or understand a Bible passage, book, or character. Explain clearly with verse references and historical context.',
-  questions: 'The user has a question about Christianity, faith, or theology. Answer accessibly, grounding in Scripture.',
-  prayer: 'The user wants help with prayer. Offer heartfelt, biblical prayers or guidance on prayer life.',
-  guidance: 'The user is seeking spiritual guidance or comfort. Be compassionate, offer biblical wisdom and encouragement.',
+  bible: 'O usuário quer explorar uma passagem bíblica. Explique com contexto histórico e versículos.',
+  questions: 'O usuário tem uma pergunta sobre o Cristianismo ou teologia. Responda com base nas Escrituras.',
+  prayer: 'O usuário quer ajuda com oração. Ofereça orientação bíblica sobre vida de oração.',
+  guidance: 'O usuário busca orientação espiritual. Seja compassivo e ofereça sabedoria bíblica.',
 };
 
+// ─── Rota principal ───────────────────────────────────────────────────────────
 router.post('/chat', async (req, res) => {
   try {
     const { message, language, context } = req.body;
 
-    if (!message || !message.trim()) {
-      return res.status(400).json({ error: 'Message is required' });
+    if (!message?.trim()) {
+      return res.status(400).json({ error: 'Mensagem é obrigatória.' });
     }
 
-    if (!GEMINI_API_KEY) {
-      return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
-    }
-
-    // Check cache first
+    // Verificar cache
     const cacheKey = getCacheKey(message, language, context);
     const cached = responseCache.get(cacheKey);
     if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
-      console.log('Bible AI: returning cached response');
       return res.json({ reply: cached.reply, cached: true });
     }
 
-    // Rate limiting - per user (by IP)
+    // Rate limiting por IP
     const userIp = req.ip || req.headers['x-forwarded-for'] || 'unknown';
-    let userReqs = userRequests.get(userIp) || [];
-    userReqs = cleanOldEntries(userReqs);
+    let userReqs = cleanOldEntries(userRequests.get(userIp) || []);
     if (userReqs.length >= USER_LIMIT) {
       return res.status(429).json({
         error: 'A IA Bíblica está descansando um pouquinho. Tente novamente em alguns minutos! 🙏',
-        retryAfter: 60
+        retryAfter: 60,
       });
     }
 
-    // Rate limiting - global
+    // Rate limiting global
     globalRequests = cleanOldEntries(globalRequests);
     if (globalRequests.length >= GLOBAL_LIMIT) {
       return res.status(429).json({
-        error: 'A IA Bíblica está descansando um pouquinho. Tente novamente em alguns minutos! 🙏',
-        retryAfter: 60
+        error: 'Estamos com alta demanda no momento. Tente novamente em alguns instantes 🙏',
+        retryAfter: 60,
       });
     }
 
-    // Record request
     userReqs.push(Date.now());
     userRequests.set(userIp, userReqs);
     globalRequests.push(Date.now());
 
+    // Montar prompt completo
     const contextHint = CONTEXT_PROMPTS[context] || '';
-    const langHint = language ? `Respond in ${language}.` : '';
+    const langHint = language ? `Responda em ${language}.` : '';
+    const fullPrompt = [contextHint, langHint, `Pergunta do usuário: ${message}`]
+      .filter(Boolean).join('\n');
 
-    const requestBody = JSON.stringify({
-      contents: [
-        {
-          role: 'user',
-          parts: [{ text: `${SYSTEM_PROMPT}\n\n${contextHint}\n${langHint}\n\nUser message: ${message}` }],
-        },
-      ],
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 2048,
-      },
+    // ── Chamar IA com fallback automático ──────────────────────────────────
+    const result = await callLLM(fullPrompt, SYSTEM_PROMPT, {
+      models: ['gemini-flash', 'gemini-pro', 'claude-haiku', 'claude-sonnet'],
+      timeoutMs: 15000,
     });
 
-    // Retry with exponential backoff on 429
-    let response;
-    for (let attempt = 0; attempt < 3; attempt++) {
-      response = await fetch(GEMINI_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: requestBody,
-      });
-      if (response.status !== 429) break;
-      console.log(`Gemini 429 rate limit, retry ${attempt + 1}/3...`);
-      await new Promise(r => setTimeout(r, (attempt + 1) * 2000));
-    }
-
-    if (!response.ok) {
-      const errBody = await response.text();
-      console.error('Gemini API error:', response.status, errBody);
-      if (response.status === 429) {
-        return res.status(429).json({
-          error: 'A IA Bíblica está descansando um pouquinho. Tente novamente em alguns minutos! 🙏',
-          retryAfter: 120
-        });
-      }
-      return res.status(502).json({ error: 'Failed to get AI response' });
-    }
-
-    const data = await response.json();
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não consegui gerar uma resposta.';
-
-    // Store in cache
-    responseCache.set(cacheKey, { reply, timestamp: Date.now() });
-
-    // Cleanup old cache entries periodically
-    if (responseCache.size > 200) {
-      const cutoff = Date.now() - CACHE_TTL;
-      for (const [k, v] of responseCache) {
-        if (v.timestamp < cutoff) responseCache.delete(k);
+    // Guardar no cache (só se não foi mensagem de fallback)
+    if (!result.failed) {
+      responseCache.set(cacheKey, { reply: result.text, timestamp: Date.now() });
+      if (responseCache.size > 200) {
+        const cutoff = Date.now() - CACHE_TTL;
+        for (const [k, v] of responseCache) {
+          if (v.timestamp < cutoff) responseCache.delete(k);
+        }
       }
     }
 
-    res.json({ reply });
+    res.json({
+      reply: result.text,
+      model: result.model,       // qual modelo respondeu
+      cached: false,
+    });
+
   } catch (err) {
-    console.error('Bible AI error:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Bible AI route error:', err);
+    res.status(500).json({
+      error: 'Estamos com alta demanda no momento. Tente novamente em alguns instantes 🙏',
+    });
   }
 });
 
