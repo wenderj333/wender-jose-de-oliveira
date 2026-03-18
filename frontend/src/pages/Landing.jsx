@@ -58,7 +58,7 @@ export default function Landing() {
           <span style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:'1.2rem',fontWeight:700,color:'#3568b8',letterSpacing:'0.02em'}}>Sigo com Fé</span>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:12}}>
-          <LanguageSelector />
+          <LanguageSelector variant="light" />
           <Link to="/login" style={{padding:'7px 18px',borderRadius:9,background:'transparent',border:'1.5px solid #4a80d4',color:'#4a80d4',textDecoration:'none',fontWeight:600,fontSize:'0.88rem'}}>
             {t('landing.loginShort')}
           </Link>
