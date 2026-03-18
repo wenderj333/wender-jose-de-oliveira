@@ -634,7 +634,8 @@
     "hideTranslation": "Ocultar traducción",
     "installApp": "Instalar App",
     "user": "Usuario",
-    "welcomeBack": "Bienvenido de nuevo"
+    "welcomeBack": "Bienvenido de nuevo",
+    "cancel": "Cancelar"
   },
   "offerings": {
     "title": "Ofrendas y Diezmos",
@@ -1036,7 +1037,7 @@
           "Cesta básica y alimentos",
           "Ropa y calzado",
           "Medicamentos",
-          "Ayuda económica de emergencia"
+          "Ayuda financiera de emergencia"
         ],
         "targetAudience": "personas en necesidad material, hambre, pobreza"
       },
@@ -1044,7 +1045,7 @@
         "title": "💼 Empleo y Dignidad",
         "verse": "Todo lo que hagáis, hacedlo de corazón, como para el Señor. — Colosenses 3:23",
         "types": [
-          "Ofertas de trabajo entre hermanos",
+          "Vacantes de trabajo entre hermanos",
           "Cursos y capacitación",
           "Microemprendimiento"
         ],
@@ -1054,10 +1055,10 @@
         "title": "❤️ Apoyo Emocional y Familiar",
         "verse": "Cercano está Jehová a los quebrantados de corazón. — Salmos 34:18",
         "types": [
-          "Luto y pérdida",
+          "Duelo y pérdida",
           "Restauración matrimonial",
           "Apoyo a madres solteras",
-          "Adicción química"
+          "Dependencia química"
         ],
         "targetAudience": "personas en luto, divorcio, adicción química, soledad, madres solteras"
       },
@@ -1071,7 +1072,8 @@
         ],
         "targetAudience": "enfermos, cuidadores, familias en tratamiento médico"
       }
-    }
+    },
+    "headerVerse": "\"Sírvanse unos a otros con los dones que cada uno ha recibido.\" — 1 Pedro 4:10"
   },
   "course": {
     "title": "Biblia y Estudio"

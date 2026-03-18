@@ -634,7 +634,8 @@
     "hideTranslation": "Hide translation",
     "installApp": "Install App",
     "user": "User",
-    "welcomeBack": "Welcome back"
+    "welcomeBack": "Welcome back",
+    "cancel": "Cancel"
   },
   "offerings": {
     "title": "Offerings and Tithes",
@@ -1025,7 +1026,7 @@
           "Urgent prayer request",
           "Spiritual accompaniment",
           "Pastoral visit",
-          "Discipleship and mentoring"
+          "Discipleship & mentoring"
         ],
         "targetAudience": "people in faith crisis, spiritual suffering, seeking God"
       },
@@ -1033,8 +1034,8 @@
         "title": "🍞 Diaconia",
         "verse": "He who has two tunics, let him impart to him who has none. — Luke 3:11",
         "types": [
-          "Food basket and groceries",
-          "Clothes and shoes",
+          "Basic food basket",
+          "Clothes & shoes",
           "Medications",
           "Emergency financial aid"
         ],
@@ -1044,8 +1045,8 @@
         "title": "💼 Employment & Dignity",
         "verse": "Whatever you do, do it heartily, as to the Lord. — Colossians 3:23",
         "types": [
-          "Job openings among brethren",
-          "Courses and training",
+          "Job opportunities among brothers",
+          "Courses & training",
           "Micro-entrepreneurship"
         ],
         "targetAudience": "unemployed, aspiring entrepreneurs, those needing training"
@@ -1054,10 +1055,10 @@
         "title": "❤️ Emotional & Family Support",
         "verse": "The Lord is near to those who have a broken heart. — Psalm 34:18",
         "types": [
-          "Grief and loss",
+          "Grief & loss",
           "Marriage restoration",
           "Support for single mothers",
-          "Chemical dependency"
+          "Substance dependency"
         ],
         "targetAudience": "people in grief, divorce, chemical dependency, loneliness, single mothers"
       },
@@ -1065,13 +1066,14 @@
         "title": "🏥 Health",
         "verse": "He Himself took our infirmities and bore our sicknesses. — Matthew 8:17",
         "types": [
-          "Transport for medical treatment",
+          "Transport to medical treatment",
           "Hospital companion",
           "Blood donation"
         ],
         "targetAudience": "sick, caregivers, families in medical treatment"
       }
-    }
+    },
+    "headerVerse": "\"Each of you should use whatever gift you have received to serve others.\" — 1 Peter 4:10"
   },
   "course": {
     "title": "Bible & Study"

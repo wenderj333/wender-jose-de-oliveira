@@ -630,7 +630,8 @@
     "hideTranslation": "Ascunde traducerea",
     "installApp": "Instalează Aplicația",
     "user": "Utilizator",
-    "welcomeBack": "Bun venit înapoi"
+    "welcomeBack": "Bun venit înapoi",
+    "cancel": "Anulează"
   },
   "offerings": {
     "title": "Ofrande și Zeciuieli",
@@ -1021,7 +1022,7 @@
           "Cerere urgentă de rugăciune",
           "Însoțire spirituală",
           "Vizită pastorală",
-          "Discipolat și mentorat"
+          "Ucenicie & mentorat"
         ],
         "targetAudience": "persoane în criză de credință, suferință spirituală, căutarea lui Dumnezeu"
       },
@@ -1029,8 +1030,8 @@
         "title": "🍞 Diaconia",
         "verse": "Cine are două haine, să-i dea celui ce n-are. — Luca 3:11",
         "types": [
-          "Coș cu alimente și produse alimentare",
-          "Haine și încălțăminte",
+          "Coș alimentar de bază",
+          "Haine & încălțăminte",
           "Medicamente",
           "Ajutor financiar de urgență"
         ],
@@ -1041,8 +1042,8 @@
         "verse": "Tot ce faceți, faceți din toată inima, ca pentru Domnul. — Coloseni 3:23",
         "types": [
           "Locuri de muncă între frați",
-          "Cursuri și instruire",
-          "Micro-antreprenoriat"
+          "Cursuri & formare",
+          "Microîntreprinzătorism"
         ],
         "targetAudience": "șomeri, antreprenori la început de drum, cei care au nevoie de instruire"
       },
@@ -1050,10 +1051,10 @@
         "title": "❤️ Sprijin Emoțional & Familial",
         "verse": "Domnul este aproape de cei cu inima zdrobită. — Psalmul 34:18",
         "types": [
-          "Doliu și pierdere",
+          "Doliu & pierdere",
           "Restaurarea căsătoriei",
           "Sprijin pentru mame singure",
-          "Dependență chimică"
+          "Dependență de substanțe"
         ],
         "targetAudience": "persoane în doliu, divorț, dependență chimică, singurătate, mame singure"
       },
@@ -1062,12 +1063,13 @@
         "verse": "El însuși a luat asupra Sa bolile noastre și a purtat suferințele noastre. — Matei 8:17",
         "types": [
           "Transport pentru tratament medical",
-          "Însoțitor spital",
+          "Însoțitor la spital",
           "Donare de sânge"
         ],
         "targetAudience": "bolnavi, îngrijitori, familii în tratament medical"
       }
-    }
+    },
+    "headerVerse": "\"Slujiți-vă unii altora, fiecare după darul pe care l-a primit.\" — 1 Petru 4:10"
   },
   "course": {
     "title": "Biblie & Studiu"

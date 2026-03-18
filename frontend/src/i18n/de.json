@@ -617,7 +617,8 @@
     "hideTranslation": "Hide translation",
     "installApp": "Install App",
     "user": "Benutzer",
-    "welcomeBack": "Willkommen zurück"
+    "welcomeBack": "Willkommen zurück",
+    "cancel": "Abbrechen"
   },
   "offerings": {
     "title": "Offerings and Tithes",
@@ -1005,10 +1006,10 @@
         "title": "🙏 Spirituell",
         "verse": "Bekennt einander eure Sünden und betet füreinander. — Jakobus 5:16",
         "types": [
-          "Dringende Gebetsanfrage",
-          "Spirituelle Begleitung",
-          "Pastoraler Besuch",
-          "Jüngerschaft und Mentoring"
+          "Dringendes Gebetsanliegen",
+          "Geistliche Begleitung",
+          "Pastoralbesuch",
+          "Jüngerschaft & Mentoring"
         ],
         "targetAudience": "Menschen in Glaubenskrisen, spirituellem Leid, Gottsuchende"
       },
@@ -1016,10 +1017,10 @@
         "title": "🍞 Diakonie",
         "verse": "Wer zwei Gewänder hat, gebe dem, der keines hat. — Lukas 3:11",
         "types": [
-          "Lebensmittelkorb und Lebensmittel",
-          "Kleidung und Schuhe",
+          "Lebensmittelkorb & Nahrung",
+          "Kleidung & Schuhe",
           "Medikamente",
-          "Finanzielle Nothilfe"
+          "Finanzielle Notfallhilfe"
         ],
         "targetAudience": "Menschen in materieller Not, Hunger, Armut"
       },
@@ -1027,9 +1028,9 @@
         "title": "💼 Arbeit & Würde",
         "verse": "Was immer ihr tut, tut es von Herzen, als für den Herrn. — Kolosser 3:23",
         "types": [
-          "Stellenangebote unter Geschwistern",
-          "Kurse und Schulungen",
-          "Mikrounternehmertum"
+          "Jobangebote unter Geschwistern",
+          "Kurse & Ausbildung",
+          "Selbstständigkeit"
         ],
         "targetAudience": "Arbeitslose, angehende Unternehmer, Schulungsbedürftige"
       },
@@ -1037,10 +1038,10 @@
         "title": "❤️ Emotionale & Familiäre Unterstützung",
         "verse": "Der HERR ist nahe denen, die zerbrochenen Herzens sind. — Psalm 34:18",
         "types": [
-          "Trauer und Verlust",
-          "Ehe-Wiederherstellung",
-          "Unterstützung für alleinerziehende Mütter",
-          "Chemische Abhängigkeit"
+          "Trauer & Verlust",
+          "Ehewiederherstellung",
+          "Unterstützung für Alleinerziehende",
+          "Suchtmittelabhängigkeit"
         ],
         "targetAudience": "Menschen in Trauer, Scheidung, chemischer Abhängigkeit, Einsamkeit, alleinerziehende Mütter"
       },
@@ -1048,13 +1049,14 @@
         "title": "🏥 Gesundheit",
         "verse": "Er selbst nahm unsere Krankheiten und trug unsere Leiden. — Matthäus 8:17",
         "types": [
-          "Transport für medizinische Behandlung",
+          "Transport zur medizinischen Behandlung",
           "Krankenhausbegleitung",
           "Blutspende"
         ],
         "targetAudience": "Kranke, Pflegende, Familien in medizinischer Behandlung"
       }
-    }
+    },
+    "headerVerse": "\"Dient einander, jeder mit der Gabe, die er empfangen hat.\" — 1. Petrus 4:10"
   },
   "course": {
     "title": "Bibel & Studium"

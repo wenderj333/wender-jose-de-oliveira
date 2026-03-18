@@ -634,7 +634,8 @@
     "hideTranslation": "Masquer la traduction",
     "installApp": "Installer l'App",
     "user": "Utilisateur",
-    "welcomeBack": "Bon retour"
+    "welcomeBack": "Bon retour",
+    "cancel": "Annuler"
   },
   "offerings": {
     "title": "Offrandes et Dîmes",
@@ -1025,7 +1026,7 @@
           "Demande de prière urgente",
           "Accompagnement spirituel",
           "Visite pastorale",
-          "Discipulat et mentorat"
+          "Disciples & mentorat"
         ],
         "targetAudience": "personnes en crise de foi, souffrance spirituelle, recherche de Dieu"
       },
@@ -1033,8 +1034,8 @@
         "title": "🍞 Diaconie",
         "verse": "Que celui qui a deux tuniques en donne à celui qui n'en a point. — Luc 3:11",
         "types": [
-          "Panier alimentaire et provisions",
-          "Vêtements et chaussures",
+          "Panier alimentaire de base",
+          "Vêtements & chaussures",
           "Médicaments",
           "Aide financière d'urgence"
         ],
@@ -1045,7 +1046,7 @@
         "verse": "Tout ce que vous faites, faites-le de bon cœur, comme pour le Seigneur. — Colossiens 3:23",
         "types": [
           "Offres d'emploi entre frères",
-          "Cours et formations",
+          "Cours & formation",
           "Micro-entrepreneuriat"
         ],
         "targetAudience": "chômeurs, entrepreneurs débutants, ceux ayant besoin de formation"
@@ -1054,10 +1055,10 @@
         "title": "❤️ Soutien Émotionnel & Familial",
         "verse": "L'Éternel est près de ceux qui ont le cœur brisé. — Psaume 34:18",
         "types": [
-          "Deuil et perte",
-          "Restauration matrimoniale",
-          "Soutien aux mères célibataires",
-          "Dépendance chimique"
+          "Deuil & perte",
+          "Restauration du mariage",
+          "Soutien aux mères seules",
+          "Dépendance aux substances"
         ],
         "targetAudience": "personnes en deuil, divorce, dépendance chimique, solitude, mères célibataires"
       },
@@ -1066,12 +1067,13 @@
         "verse": "Il a pris nos infirmités et a porté nos maladies. — Matthieu 8:17",
         "types": [
           "Transport pour traitement médical",
-          "Compagnon hospitalier",
+          "Accompagnateur à l'hôpital",
           "Don de sang"
         ],
         "targetAudience": "malades, soignants, familles en traitement médical"
       }
-    }
+    },
+    "headerVerse": "\"Servez-vous les uns les autres, chacun selon le don qu'il a reçu.\" — 1 Pierre 4:10"
   },
   "course": {
     "title": "Bible & Étude"
