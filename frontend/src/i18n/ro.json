@@ -1,7 +1,7 @@
 {
   "brand": "Sigo com Fé",
   "nav": {
-    "prayers": "Rugăciuni",
+    "prayers": "Cereri de Rugăciune",
     "mural": "Perete",
     "live": "Live",
     "churches": "Biserici",
@@ -20,7 +20,7 @@
     "bibleAI": "IA Biblică",
     "messages": "Mesaje",
     "groups": "Grupuri",
-    "consecration": "Consacrare",
+    "consecration": "Consacrare & Post",
     "members": "Membri",
     "offerings": "Ofrandă",
     "notifications": "Notificări",
@@ -44,7 +44,10 @@
     "reflection": "Reflecție cu Dumnezeu",
     "help_life": "Ajută un Aproapele",
     "pastoral_chat": "Chat Pastoral",
-    "spiritual_life": "Viață Spirituală"
+    "spiritual_life": "Viață Spirituală",
+    "bible_ai": "IA Biblică",
+    "journeys": "Călătorii de Credință",
+    "help_requests": "Cereri de Ajutor"
   },
   "footer": "© 2026 Sigo com Fé - Tehnologie în slujba Împărăției",
   "home": {
@@ -239,7 +242,8 @@
     "subtitle": "Distribuie mărturii, laudă și versete biblice cu comunitatea creștină",
     "newPost": "Nou Mesaj",
     "cancel": "Anulare",
-    "messagePlaceholder": "Scrie-ți mărturia, reflecția sau versatul biblic..."
+    "messagePlaceholder": "Scrie-ți mărturia, reflecția sau versatul biblic...",
+    "pray": "Roagă-te"
   },
   "kids": {
     "title": "Școala Duminicală Digitală",
@@ -603,7 +607,9 @@
     "translate": "Traduce",
     "translation": "Traducere",
     "hideTranslation": "Ascunde traducerea",
-    "installApp": "Instalează Aplicația"
+    "installApp": "Instalează Aplicația",
+    "user": "Utilizator",
+    "welcomeBack": "Bun venit înapoi"
   },
   "offerings": {
     "title": "Ofrande și Zeciuieli",
@@ -1041,5 +1047,24 @@
         "targetAudience": "bolnavi, îngrijitori, familii în tratament medical"
       }
     }
+  },
+  "course": {
+    "title": "Biblie & Studiu"
+  },
+  "events": {
+    "title": "Evenimente Viitoare"
+  },
+  "live": {
+    "none": "Nicio transmisie",
+    "be_first": "Fii primul!",
+    "start": "Pornește Live"
+  },
+  "auth": {
+    "logout": "Deconectare"
+  },
+  "landing": {
+    "subtitle": "Rețeaua socială creștină pentru a crește în credință.",
+    "register": "Creează cont gratuit",
+    "login": "Autentificare"
   }
 }

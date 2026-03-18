@@ -1,7 +1,7 @@
 {
   "brand": "Sigo com Fe",
   "nav": {
-    "prayers": "Gebete",
+    "prayers": "Gebetsanliegen",
     "mural": "Pinnwand",
     "live": "Live",
     "churches": "Churches",
@@ -19,13 +19,13 @@
     "friends": "Friends",
     "bibleAI": "Bibel-KI",
     "messages": "Messages",
-    "groups": "Groups",
-    "consecration": "Consecration",
-    "members": "Members",
+    "groups": "Gruppen",
+    "consecration": "Weihe & Fasten",
+    "members": "Mitglieder",
     "offerings": "Offerings",
     "notifications": "Notifications",
     "myProfile": "My Profile",
-    "music": "Music",
+    "music": "Musik",
     "courseFinance": "Biblical Finance",
     "courseTheology": "Theology",
     "courseFree": "Free Bible Course",
@@ -44,7 +44,10 @@
     "reflection": "Reflexion mit Gott",
     "help_life": "Hilf deinem Nächsten",
     "pastoral_chat": "Seelsorge-Chat",
-    "spiritual_life": "Geistliches Leben"
+    "spiritual_life": "Geistliches Leben",
+    "bible_ai": "Bibel KI",
+    "journeys": "Glaubensreisen",
+    "help_requests": "Hilfeanfragen"
   },
   "footer": "© 2026 Sigo com Fé - Technology serving the Kingdom",
   "home": {
@@ -229,7 +232,8 @@
       "reflexao": "Biblische Reflexion",
       "versiculo": "Bibelvers",
       "foto": "Foto"
-    }
+    },
+    "pray": "Beten"
   },
   "kids": {
     "title": "Digital Sunday School",
@@ -472,7 +476,7 @@
     "editProfile": "Edit Profile",
     "prayers": "Prayers",
     "posts": "Posts",
-    "friends": "Friends",
+    "friends": "Freunde",
     "bio": "About",
     "noBio": "No bio yet",
     "save": "Save",
@@ -593,7 +597,9 @@
     "translate": "Translate",
     "translation": "Translation",
     "hideTranslation": "Hide translation",
-    "installApp": "Install App"
+    "installApp": "Install App",
+    "user": "Benutzer",
+    "welcomeBack": "Willkommen zurück"
   },
   "offerings": {
     "title": "Offerings and Tithes",
@@ -1031,5 +1037,24 @@
         "targetAudience": "Kranke, Pflegende, Familien in medizinischer Behandlung"
       }
     }
+  },
+  "course": {
+    "title": "Bibel & Studium"
+  },
+  "events": {
+    "title": "Nächste Ereignisse"
+  },
+  "live": {
+    "none": "Keine Übertragung",
+    "be_first": "Sei der Erste!",
+    "start": "Live starten"
+  },
+  "auth": {
+    "logout": "Abmelden"
+  },
+  "landing": {
+    "subtitle": "Das christliche soziale Netzwerk zum Wachsen im Glauben.",
+    "register": "Kostenloses Konto erstellen",
+    "login": "Einloggen"
   }
 }

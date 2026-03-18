@@ -1,7 +1,7 @@
 {
   "brand": "Sigo com Fé",
   "nav": {
-    "prayers": "Orações",
+    "prayers": "Pedidos de Oração",
     "mural": "Mural",
     "live": "Ao Vivo",
     "churches": "Igrejas",
@@ -20,7 +20,7 @@
     "bibleAI": "IA Bíblica",
     "messages": "Mensagens",
     "groups": "Grupos",
-    "consecration": "Consagração",
+    "consecration": "Consagração & Jejum",
     "members": "Membros",
     "offerings": "Ofertas",
     "notifications": "Notificações",
@@ -44,7 +44,10 @@
     "reflection": "Reflexão com Deus",
     "help_life": "Ajude o Próximo",
     "pastoral_chat": "Fale com o Pastor",
-    "spiritual_life": "Vida Espiritual"
+    "spiritual_life": "Vida Espiritual",
+    "bible_ai": "IA Bíblica",
+    "journeys": "Jornadas de Fé",
+    "help_requests": "Pedidos de Ajuda"
   },
   "footer": "© 2026 Sigo com Fé - Tecnologia a serviço do Reino",
   "home": {
@@ -290,7 +293,8 @@
     "noPosts": "Nenhum post ainda. Seja o primeiro a publicar! 📸",
     "commentPlaceholder": "Escreva um comentário...",
     "confirmDelete": "Tem a certeza que quer deletar este post?",
-    "delete": "Deletar post"
+    "delete": "Deletar post",
+    "pray": "Orar"
   },
   "groups": {
     "title": "Grupos",
@@ -675,7 +679,8 @@
     "user": "Utilizador",
     "noText": "(Sem texto)",
     "deleteConfirm": "Tem certeza que deseja excluir esta publicação?",
-    "installApp": "Instalar App"
+    "installApp": "Instalar App",
+    "welcomeBack": "Bem-vindo de volta"
   },
   "offerings": {
     "title": "Ofertas e Dízimos",
@@ -1099,5 +1104,24 @@
         "targetAudience": "doentes, cuidadores, famílias em tratamento médico"
       }
     }
+  },
+  "course": {
+    "title": "Bíblia & Estudo"
+  },
+  "events": {
+    "title": "Próximos Eventos"
+  },
+  "live": {
+    "none": "Nenhuma transmissão",
+    "be_first": "Seja o primeiro!",
+    "start": "Iniciar Directo"
+  },
+  "auth": {
+    "logout": "Sair"
+  },
+  "landing": {
+    "subtitle": "A rede social cristã para crescer na fé, conectar com irmãos e viver o evangelho.",
+    "register": "Criar conta gratuita",
+    "login": "Entrar"
   }
 }

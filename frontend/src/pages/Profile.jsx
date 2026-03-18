@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -30,43 +30,52 @@ export default function Profile() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Edit state
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState('');
   const [editBio, setEditBio] = useState('');
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
 
+  const applyUser = (u) => {
+    setProfile(u);
+    setEditName(u.full_name || '');
+    setEditBio(u.bio || '');
+  };
+
   useEffect(() => {
     if (!targetId) return;
     setLoading(true);
     setError(null);
-    fetch(`${API}/profile/${targetId}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(r => r.json())
-      .then(data => {
-        if (data.user) {
-          setProfile(data.user);
-          setEditName(data.user.full_name || '');
-          setEditBio(data.user.bio || '');
+
+    const headers = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    fetch(`${API}/profile/${targetId}`, { headers })
+      .then(async r => {
+        const data = await r.json().catch(() => ({}));
+        if (r.ok && data.user) {
+          applyUser(data.user);
+        } else if (isOwn && currentUser) {
+          applyUser(currentUser);
         } else {
-          setError('Perfil nÃ£o encontrado.');
+          setError('Perfil nao encontrado.');
         }
         setLoading(false);
       })
       .catch(() => {
-        setError('Erro ao carregar o perfil.');
+        if (isOwn && currentUser) {
+          applyUser(currentUser);
+        } else {
+          setError('Erro ao carregar o perfil.');
+        }
         setLoading(false);
       });
   }, [targetId, token]);
 
   useEffect(() => {
     if (!targetId) return;
-    fetch(`${API}/feed/user/${targetId}?limit=20`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    fetch(`${API}/feed/user/${targetId}?limit=20`, { headers })
       .then(r => r.ok ? r.json() : { posts: [] })
       .then(data => setPosts(data.posts || []))
       .catch(() => setPosts([]));
@@ -81,13 +90,12 @@ export default function Profile() {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ full_name: editName, bio: editBio }),
       });
-      const data = await res.json();
       if (res.ok) {
         setProfile(p => ({ ...p, full_name: editName, bio: editBio }));
         setEditing(false);
         setSaveMsg('Perfil atualizado!');
       } else {
-        setSaveMsg(data.error || 'Erro ao guardar.');
+        setSaveMsg('Erro ao guardar.');
       }
     } catch {
       setSaveMsg('Erro ao guardar.');
@@ -121,7 +129,7 @@ export default function Profile() {
 
   if (error) return (
     <div style={{padding:40,textAlign:'center',color:'#ff6b6b'}}>
-      <p style={{fontSize:'2rem',marginBottom:12}}>ðŸ˜”</p>
+      <p style={{fontSize:'2rem',marginBottom:12}}>😔</p>
       <p>{error}</p>
     </div>
   );
@@ -129,67 +137,76 @@ export default function Profile() {
   if (!profile) return null;
 
   return (
-    <div style={{maxWidth:680,margin:'0 auto',padding:'0 0 40px'}}>
+    <div style={{maxWidth:680,margin:'0 auto',paddingBottom:40}}>
 
       {/* Cover */}
-      <div style={{height:160,background:profile.cover_url ? `url(${profile.cover_url}) center/cover` : 'linear-gradient(135deg,var(--fb2),var(--fb))',borderRadius:'0 0 16px 16px',marginBottom:0,position:'relative'}}>
-      </div>
+      <div style={{
+        height:160,
+        background: profile.cover_url
+          ? `url(${profile.cover_url}) center/cover`
+          : 'linear-gradient(135deg,var(--fb2),var(--fb))',
+        borderRadius:'0 0 16px 16px'
+      }}/>
 
       {/* Avatar + Name */}
       <div style={{display:'flex',alignItems:'flex-end',gap:16,padding:'0 20px',marginTop:-40,marginBottom:16}}>
         <div style={{position:'relative'}}>
-          <div style={{width:80,height:80,borderRadius:'50%',border:'3px solid var(--bg)',overflow:'hidden',background:'var(--card)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'2rem'}}>
+          <div style={{width:80,height:80,borderRadius:'50%',border:'3px solid var(--bg, #0b1120)',overflow:'hidden',background:'var(--card, #131d2e)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'2rem'}}>
             {profile.avatar_url
               ? <img src={profile.avatar_url} alt={profile.full_name} style={{width:'100%',height:'100%',objectFit:'cover'}}/>
-              : <span>{profile.full_name?.charAt(0) || '?'}</span>
+              : <span>{(profile.full_name || '?').charAt(0).toUpperCase()}</span>
             }
           </div>
           {isOwn && (
-            <label style={{position:'absolute',bottom:0,right:0,width:24,height:24,borderRadius:'50%',background:'var(--fb)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',border:'2px solid var(--bg)'}}>
-              <span style={{color:'white',fontSize:'0.7rem'}}>ðŸ“·</span>
+            <label style={{position:'absolute',bottom:0,right:0,width:26,height:26,borderRadius:'50%',background:'var(--fb)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',border:'2px solid var(--bg, #0b1120)'}}>
+              <span style={{color:'white',fontSize:'0.75rem'}}>📷</span>
               <input type="file" accept="image/*" onChange={handleAvatarChange} style={{display:'none'}}/>
             </label>
           )}
         </div>
         <div style={{flex:1,paddingBottom:4}}>
-          <h2 style={{color:'var(--text)',fontFamily:"'Cormorant Garamond',serif",fontSize:'1.3rem',fontWeight:700,margin:0}}>{profile.full_name}</h2>
-          <p style={{color:'var(--muted)',fontSize:'0.8rem',margin:0}}>{profile.role === 'pastor' ? 'ðŸ•Šï¸ Pastor' : 'ðŸ™ Membro'}</p>
+          <h2 style={{color:'var(--text, #e8eaf0)',fontFamily:"'Cormorant Garamond',serif",fontSize:'1.3rem',fontWeight:700,margin:0}}>
+            {profile.full_name || 'Utilizador'}
+          </h2>
+          <p style={{color:'var(--muted, #8892a4)',fontSize:'0.8rem',margin:0}}>
+            {profile.role === 'pastor' ? 'Pastor' : 'Membro'}
+          </p>
         </div>
         {isOwn && !editing && (
-          <button onClick={() => setEditing(true)} style={{padding:'7px 16px',borderRadius:9,background:'rgba(255,255,255,0.08)',border:'1px solid var(--border)',color:'var(--text)',fontSize:'0.82rem',cursor:'pointer'}}>
+          <button onClick={() => setEditing(true)} style={{padding:'7px 16px',borderRadius:9,background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.15)',color:'var(--text, #e8eaf0)',fontSize:'0.82rem',cursor:'pointer'}}>
             Editar perfil
           </button>
         )}
       </div>
 
-      {/* Bio */}
+      {/* Info / Edit Form */}
       {!editing ? (
         <div style={{padding:'0 20px',marginBottom:20}}>
-          {profile.bio && <p style={{color:'var(--text)',fontSize:'0.9rem',lineHeight:1.6}}>{profile.bio}</p>}
-          {profile.location && <p style={{color:'var(--muted)',fontSize:'0.8rem',marginTop:6}}>ðŸ“ {profile.location}</p>}
-          {profile.church_name && <p style={{color:'var(--muted)',fontSize:'0.8rem'}}>â›ª {profile.church_name}</p>}
-          {saveMsg && <p style={{color:'var(--gold)',fontSize:'0.82rem',marginTop:8}}>{saveMsg}</p>}
+          {profile.bio && <p style={{color:'var(--text, #e8eaf0)',fontSize:'0.9rem',lineHeight:1.6}}>{profile.bio}</p>}
+          {profile.location && <p style={{color:'var(--muted, #8892a4)',fontSize:'0.8rem',marginTop:6}}>📍 {profile.location}</p>}
+          {profile.church_name && <p style={{color:'var(--muted, #8892a4)',fontSize:'0.8rem'}}>⛪ {profile.church_name}</p>}
+          {saveMsg && <p style={{color:'var(--gold, #c9a84c)',fontSize:'0.82rem',marginTop:8}}>{saveMsg}</p>}
         </div>
       ) : (
-        <div style={{background:'var(--card)',borderRadius:12,margin:'0 20px 20px',padding:16,border:'1px solid var(--border)'}}>
-          <label style={{display:'block',marginBottom:6,fontSize:'0.82rem',color:'var(--muted)'}}>Nome</label>
+        <div style={{background:'var(--card, #131d2e)',borderRadius:12,margin:'0 20px 20px',padding:16,border:'1px solid var(--border, rgba(255,255,255,0.08))'}}>
+          <label style={{display:'block',marginBottom:6,fontSize:'0.82rem',color:'var(--muted, #8892a4)'}}>Nome</label>
           <input
             value={editName}
-            onChange={e=>setEditName(e.target.value)}
-            style={{width:'100%',background:'rgba(255,255,255,0.06)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--text)',fontSize:'0.9rem',marginBottom:12,outline:'none'}}
+            onChange={e => setEditName(e.target.value)}
+            style={{width:'100%',background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:8,padding:'8px 12px',color:'var(--text, #e8eaf0)',fontSize:'0.9rem',marginBottom:12,outline:'none'}}
           />
-          <label style={{display:'block',marginBottom:6,fontSize:'0.82rem',color:'var(--muted)'}}>Bio</label>
+          <label style={{display:'block',marginBottom:6,fontSize:'0.82rem',color:'var(--muted, #8892a4)'}}>Bio</label>
           <textarea
             value={editBio}
-            onChange={e=>setEditBio(e.target.value)}
+            onChange={e => setEditBio(e.target.value)}
             rows={3}
-            style={{width:'100%',background:'rgba(255,255,255,0.06)',border:'1px solid var(--border)',borderRadius:8,padding:'8px 12px',color:'var(--text)',fontSize:'0.9rem',resize:'vertical',outline:'none',marginBottom:12}}
+            style={{width:'100%',background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:8,padding:'8px 12px',color:'var(--text, #e8eaf0)',fontSize:'0.9rem',resize:'vertical',outline:'none',marginBottom:12}}
           />
           <div style={{display:'flex',gap:8}}>
-            <button onClick={handleSave} disabled={saving} style={{flex:1,padding:'9px',borderRadius:9,background:'linear-gradient(135deg,var(--fb),var(--fb2))',border:'none',color:'white',fontWeight:600,cursor:'pointer',fontSize:'0.88rem'}}>
+            <button onClick={handleSave} disabled={saving} style={{flex:1,padding:'9px',borderRadius:9,background:'linear-gradient(135deg,#1e50c8,#1440a8)',border:'none',color:'white',fontWeight:600,cursor:'pointer',fontSize:'0.88rem'}}>
               {saving ? 'A guardar...' : 'Guardar'}
             </button>
-            <button onClick={()=>setEditing(false)} style={{padding:'9px 16px',borderRadius:9,background:'rgba(255,255,255,0.07)',border:'1px solid var(--border)',color:'var(--text)',cursor:'pointer',fontSize:'0.88rem'}}>
+            <button onClick={() => setEditing(false)} style={{padding:'9px 16px',borderRadius:9,background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.15)',color:'var(--text, #e8eaf0)',cursor:'pointer',fontSize:'0.88rem'}}>
               Cancelar
             </button>
           </div>
@@ -197,33 +214,39 @@ export default function Profile() {
       )}
 
       {/* Stats */}
-      <div style={{display:'flex',gap:0,borderTop:'1px solid var(--border)',borderBottom:'1px solid var(--border)',margin:'0 0 20px'}}>
+      <div style={{display:'flex',borderTop:'1px solid rgba(255,255,255,0.08)',borderBottom:'1px solid rgba(255,255,255,0.08)',marginBottom:20}}>
         {[
-          { label: 'PublicaÃ§Ãµes', val: posts.length },
-          { label: 'Amigos', val: profile.stats?.friends || 0 },
-          { label: 'OraÃ§Ãµes', val: profile.stats?.prayers || 0 },
+          { label: 'Publ.', val: posts.length },
+          { label: t('profile.friends'), val: profile.stats?.friends || 0 },
+          { label: t('nav.prayers'), val: profile.stats?.prayers || 0 },
         ].map(s => (
           <div key={s.label} style={{flex:1,textAlign:'center',padding:'14px 0'}}>
-            <div style={{fontSize:'1.2rem',fontWeight:700,color:'var(--text)'}}>{s.val}</div>
-            <div style={{fontSize:'0.7rem',color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.05em'}}>{s.label}</div>
+            <div style={{fontSize:'1.2rem',fontWeight:700,color:'var(--text, #e8eaf0)'}}>{s.val}</div>
+            <div style={{fontSize:'0.7rem',color:'var(--muted, #8892a4)',textTransform:'uppercase',letterSpacing:'0.05em'}}>{s.label}</div>
           </div>
         ))}
       </div>
 
       {/* Posts */}
       <div style={{padding:'0 16px'}}>
-        <h3 style={{color:'var(--text)',fontSize:'0.9rem',fontWeight:700,marginBottom:14,textTransform:'uppercase',letterSpacing:'0.05em',opacity:0.7}}>PublicaÃ§Ãµes</h3>
+        <h3 style={{color:'var(--muted, #8892a4)',fontSize:'0.75rem',fontWeight:700,marginBottom:14,textTransform:'uppercase',letterSpacing:'0.08em'}}>
+          Publicacoes
+        </h3>
         {posts.length === 0 ? (
-          <p style={{color:'var(--muted)',textAlign:'center',padding:24,fontSize:'0.9rem'}}>Nenhuma publicaÃ§Ã£o ainda.</p>
+          <p style={{color:'var(--muted, #8892a4)',textAlign:'center',padding:24,fontSize:'0.9rem'}}>
+            Nenhuma publicacao ainda.
+          </p>
         ) : (
           <div style={{display:'flex',flexDirection:'column',gap:12}}>
             {posts.map(post => (
-              <div key={post.id} style={{background:'var(--card)',borderRadius:12,padding:16,border:'1px solid var(--border)'}}>
+              <div key={post.id} style={{background:'var(--card, #131d2e)',borderRadius:12,padding:16,border:'1px solid rgba(255,255,255,0.08)'}}>
                 {post.media_url && (
                   <img src={post.media_url} alt="" style={{width:'100%',borderRadius:8,marginBottom:10,maxHeight:300,objectFit:'cover'}}/>
                 )}
-                {post.content && <p style={{color:'var(--text)',fontSize:'0.9rem',lineHeight:1.6}}>{post.content}</p>}
-                <p style={{color:'var(--muted)',fontSize:'0.72rem',marginTop:8}}>{new Date(post.created_at).toLocaleDateString('pt-PT')}</p>
+                {post.content && <p style={{color:'var(--text, #e8eaf0)',fontSize:'0.9rem',lineHeight:1.6}}>{post.content}</p>}
+                <p style={{color:'var(--muted, #8892a4)',fontSize:'0.72rem',marginTop:8}}>
+                  {new Date(post.created_at).toLocaleDateString('pt-PT')}
+                </p>
               </div>
             ))}
           </div>
@@ -232,4 +255,3 @@ export default function Profile() {
     </div>
   );
 }
-

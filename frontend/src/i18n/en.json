@@ -1,8 +1,8 @@
 {
   "brand": "Sigo com Fé",
   "nav": {
-    "prayers": "Prayers",
-    "mural": "Wall",
+    "prayers": "Prayer Requests",
+    "mural": "Feed",
     "live": "Live",
     "churches": "Churches",
     "registerChurch": "Register Church",
@@ -20,7 +20,7 @@
     "bibleAI": "Bible AI",
     "messages": "Messages",
     "groups": "Groups",
-    "consecration": "Consecration",
+    "consecration": "Consecration & Fasting",
     "members": "Members",
     "offerings": "Offerings",
     "notifications": "Notifications",
@@ -44,7 +44,10 @@
     "reflection": "Reflection with God",
     "help_life": "Help Your Neighbor",
     "pastoral_chat": "Pastoral Chat",
-    "spiritual_life": "Spiritual Life"
+    "spiritual_life": "Spiritual Life",
+    "bible_ai": "Bible AI",
+    "journeys": "Faith Journeys",
+    "help_requests": "Help Requests"
   },
   "footer": "© 2026 Sigo com Fé - Technology serving the Kingdom",
   "home": {
@@ -243,7 +246,8 @@
     "subtitle": "Share testimonies, praise and Bible verses with the Christian community",
     "newPost": "New Post",
     "cancel": "Cancel",
-    "messagePlaceholder": "Write your testimony, reflection or Bible verse..."
+    "messagePlaceholder": "Write your testimony, reflection or Bible verse...",
+    "pray": "Pray"
   },
   "kids": {
     "title": "Digital Sunday School",
@@ -607,7 +611,9 @@
     "translate": "Translate",
     "translation": "Translation",
     "hideTranslation": "Hide translation",
-    "installApp": "Install App"
+    "installApp": "Install App",
+    "user": "User",
+    "welcomeBack": "Welcome back"
   },
   "offerings": {
     "title": "Offerings and Tithes",
@@ -1045,5 +1051,24 @@
         "targetAudience": "sick, caregivers, families in medical treatment"
       }
     }
+  },
+  "course": {
+    "title": "Bible & Study"
+  },
+  "events": {
+    "title": "Upcoming Events"
+  },
+  "live": {
+    "none": "No broadcast",
+    "be_first": "Be the first!",
+    "start": "Start Live"
+  },
+  "auth": {
+    "logout": "Logout"
+  },
+  "landing": {
+    "subtitle": "The Christian social network to grow in faith, connect with brothers and sisters.",
+    "register": "Create free account",
+    "login": "Login"
   }
 }

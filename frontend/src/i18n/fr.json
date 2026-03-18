@@ -1,8 +1,8 @@
 {
   "brand": "Sigo com Fé",
   "nav": {
-    "prayers": "Prières",
-    "mural": "Mur",
+    "prayers": "Demandes de Prière",
+    "mural": "Fil d'actualité",
     "live": "En Direct",
     "churches": "Églises",
     "registerChurch": "Inscrire une Église",
@@ -20,7 +20,7 @@
     "bibleAI": "IA Biblique",
     "messages": "Messages",
     "groups": "Groupes",
-    "consecration": "Consécration",
+    "consecration": "Consécration & Jeûne",
     "members": "Membres",
     "offerings": "Offrandes",
     "notifications": "Notifications",
@@ -44,7 +44,10 @@
     "reflection": "Réflexion avec Dieu",
     "help_life": "Aidez votre Prochain",
     "pastoral_chat": "Chat Pastoral",
-    "spiritual_life": "Vie Spirituelle"
+    "spiritual_life": "Vie Spirituelle",
+    "bible_ai": "IA Biblique",
+    "journeys": "Parcours de Foi",
+    "help_requests": "Demandes d'aide"
   },
   "footer": "© 2026 Sigo com Fé - La technologie au service du Royaume",
   "home": {
@@ -243,7 +246,8 @@
     "subtitle": "Partagez des témoignages, des louanges et des versets bibliques avec la communauté chrétienne",
     "newPost": "Nouveau Message",
     "cancel": "Annuler",
-    "messagePlaceholder": "Écrivez votre témoignage, votre réflexion ou un verset biblique..."
+    "messagePlaceholder": "Écrivez votre témoignage, votre réflexion ou un verset biblique...",
+    "pray": "Prier"
   },
   "kids": {
     "title": "École du Dimanche Numérique",
@@ -607,7 +611,9 @@
     "translate": "Traduire",
     "translation": "Traduction",
     "hideTranslation": "Masquer la traduction",
-    "installApp": "Installer l'App"
+    "installApp": "Installer l'App",
+    "user": "Utilisateur",
+    "welcomeBack": "Bon retour"
   },
   "offerings": {
     "title": "Offrandes et Dîmes",
@@ -1045,5 +1051,24 @@
         "targetAudience": "malades, soignants, familles en traitement médical"
       }
     }
+  },
+  "course": {
+    "title": "Bible & Étude"
+  },
+  "events": {
+    "title": "Prochains Événements"
+  },
+  "live": {
+    "none": "Aucune diffusion",
+    "be_first": "Soyez le premier !",
+    "start": "Démarrer en Direct"
+  },
+  "auth": {
+    "logout": "Déconnexion"
+  },
+  "landing": {
+    "subtitle": "Le réseau social chrétien pour grandir dans la foi.",
+    "register": "Créer un compte gratuit",
+    "login": "Se connecter"
   }
 }

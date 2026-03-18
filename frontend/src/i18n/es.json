@@ -1,7 +1,7 @@
 {
   "brand": "Sigo com Fé",
   "nav": {
-    "prayers": "Oraciones",
+    "prayers": "Peticiones de Oración",
     "mural": "Mural",
     "live": "En Vivo",
     "churches": "Iglesias",
@@ -20,7 +20,7 @@
     "bibleAI": "IA Bíblica",
     "messages": "Mensajes",
     "groups": "Grupos",
-    "consecration": "Consagración",
+    "consecration": "Consagración y Ayuno",
     "members": "Miembros",
     "offerings": "Ofrendas",
     "notifications": "Notificaciones",
@@ -44,7 +44,10 @@
     "reflection": "Reflexión con Dios",
     "help_life": "Ayuda al Prójimo",
     "pastoral_chat": "Chat Pastoral",
-    "spiritual_life": "Vida Espiritual"
+    "spiritual_life": "Vida Espiritual",
+    "bible_ai": "IA Bíblica",
+    "journeys": "Jornadas de Fe",
+    "help_requests": "Solicitudes de Ayuda"
   },
   "footer": "© 2026 Sigo com Fé - Tecnología al servicio del Reino",
   "home": {
@@ -243,7 +246,8 @@
     "subtitle": "Comparte testimonios, alabanzas y versículos bíblicos con la comunidad cristiana",
     "newPost": "Nueva Publicación",
     "cancel": "Cancelar",
-    "messagePlaceholder": "Escribe tu testimonio, reflexión o versículo bíblico..."
+    "messagePlaceholder": "Escribe tu testimonio, reflexión o versículo bíblico...",
+    "pray": "Orar"
   },
   "kids": {
     "title": "Escuela Dominical Digital",
@@ -607,7 +611,9 @@
     "translate": "Traducir",
     "translation": "Traducción",
     "hideTranslation": "Ocultar traducción",
-    "installApp": "Instalar App"
+    "installApp": "Instalar App",
+    "user": "Usuario",
+    "welcomeBack": "Bienvenido de nuevo"
   },
   "offerings": {
     "title": "Ofrendas y Diezmos",
@@ -1045,5 +1051,24 @@
         "targetAudience": "enfermos, cuidadores, familias en tratamiento médico"
       }
     }
+  },
+  "course": {
+    "title": "Biblia y Estudio"
+  },
+  "events": {
+    "title": "Próximos Eventos"
+  },
+  "live": {
+    "none": "Sin transmisión",
+    "be_first": "¡Sé el primero!",
+    "start": "Iniciar Directo"
+  },
+  "auth": {
+    "logout": "Salir"
+  },
+  "landing": {
+    "subtitle": "La red social cristiana para crecer en la fe.",
+    "register": "Crear cuenta gratuita",
+    "login": "Entrar"
   }
 }
