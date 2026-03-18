@@ -40,7 +40,11 @@
       "bullet4": "Conectează-te cu frații și surorile din credință",
       "registerBtn": "Înregistrare Gratuită",
       "signInBtn": "Am deja cont - Conectare"
-    }
+    },
+    "reflection": "Reflecție cu Dumnezeu",
+    "help_life": "Ajută un Aproapele",
+    "pastoral_chat": "Chat Pastoral",
+    "spiritual_life": "Viață Spirituală"
   },
   "footer": "© 2026 Sigo com Fé - Tehnologie în slujba Împărăției",
   "home": {
@@ -950,16 +954,16 @@
   },
   "reflection": {
     "title": "Reflecție cu Dumnezeu",
-    "subtitle": "Fă-ți un moment. Respiră. Ascultă vocea lui Dumnezeu.",
+    "subtitle": "Alocă câteva minute pentru a reflecta profund",
     "q1": "Dacă astăzi ar fi ultima ta zi, ce i-ai spune lui Dumnezeu?",
-    "q1verse": "Fiindcă atât de mult a iubit Dumnezeu lumea, că a dat pe singurul Lui Fiu, pentru ca oricine crede în El să nu piară, ci să aibă viața veșnică. — Ioan 3:16",
-    "q2": "Ce te împiedică să-ți predai complet viața lui Hristos?",
-    "q2verse": "Veniți la Mine, toți cei trudiți și împovărați, și Eu vă voi da odihnă. — Matei 11:28",
+    "q1verse": "Fiindcă Dumnezeu a iubit lumea atât de mult - Ioan 3:16",
+    "q2": "Ce te împiedică să-ți predai viața lui Hristos?",
+    "q2verse": "Veniți la Mine, toți cei trudiți - Matei 11:28",
     "q3": "Cum vrei să fii amintit în eternitate?",
-    "q3verse": "Eu sunt învierea și viața. Cine crede în Mine, chiar dacă moare, va trăi. — Ioan 11:25",
+    "q3verse": "Eu sunt învierea și viața - Ioan 11:25",
     "placeholder": "Scrie-ți reflecția aici...",
-    "save": "Salveaza",
-    "saved": "Reflecție partajată cu comunitatea!",
+    "save": "Salvează Reflecția",
+    "saved": "Reflecție salvată!",
     "journal": "Jurnalul tău spiritual (Opțional)",
     "saveBtn": "Partajează Reflecția",
     "loginRequired": "Autentifică-te pentru a scrie și a-ți partaja reflecția.",

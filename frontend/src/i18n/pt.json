@@ -40,7 +40,11 @@
       "bullet4": "Conectar com irmãos de fé",
       "registerBtn": "Registrar Grátis",
       "signInBtn": "Já tenho conta - Entrar"
-    }
+    },
+    "reflection": "Reflexão com Deus",
+    "help_life": "Ajude o Próximo",
+    "pastoral_chat": "Fale com o Pastor",
+    "spiritual_life": "Vida Espiritual"
   },
   "footer": "© 2026 Sigo com Fé - Tecnologia a serviço do Reino",
   "home": {
@@ -1008,16 +1012,16 @@
   },
   "reflection": {
     "title": "Reflexão com Deus",
-    "subtitle": "Pare um momento. Respire. Ouça a voz de Deus.",
+    "subtitle": "Dedica alguns minutos para refletir profundamente",
     "q1": "Se hoje fosse o seu último dia, o que diria a Deus?",
-    "q1verse": "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna. — João 3:16",
+    "q1verse": "Porque Deus amou o mundo de tal maneira - João 3:16",
     "q2": "O que impede você de entregar completamente a sua vida a Cristo?",
-    "q2verse": "Vinde a mim, todos os que estais cansados e oprimidos, e eu vos aliviarei. — Mateus 11:28",
+    "q2verse": "Vinde a mim todos os cansados - Mateus 11:28",
     "q3": "Como você quer ser lembrado na eternidade?",
-    "q3verse": "Eu sou a ressurreição e a vida. Quem crê em mim, ainda que morra, viverá. — João 11:25",
-    "placeholder": "Escreva aqui sua reflexão...",
-    "save": "Guardar Reflexao",
-    "saved": "Reflexão compartilhada com a comunidade!",
+    "q3verse": "Eu sou a ressurreição e a vida - João 11:25",
+    "placeholder": "Escreve a tua reflexão aqui...",
+    "save": "Guardar Reflexão",
+    "saved": "Reflexão guardada!",
     "journal": "Seu Diário Espiritual (Opcional)",
     "saveBtn": "Partilhar Reflexão",
     "loginRequired": "Faça login para escrever e compartilhar sua reflexão.",

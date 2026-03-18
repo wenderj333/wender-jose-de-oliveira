@@ -40,7 +40,11 @@
       "bullet4": "Connect with brothers and sisters in faith",
       "registerBtn": "Register Free",
       "signInBtn": "I have an account - Sign In"
-    }
+    },
+    "reflection": "Reflexion mit Gott",
+    "help_life": "Hilf deinem Nächsten",
+    "pastoral_chat": "Seelsorge-Chat",
+    "spiritual_life": "Geistliches Leben"
   },
   "footer": "© 2026 Sigo com Fé - Technology serving the Kingdom",
   "home": {
@@ -940,16 +944,16 @@
   },
   "reflection": {
     "title": "Besinnung mit Gott",
-    "subtitle": "Nimm dir einen Moment. Atme. Höre Gottes Stimme.",
-    "q1": "Wenn heute dein letzter Tag wäre, was würdest du Gott sagen?",
-    "q1verse": "Denn so sehr hat Gott die Welt geliebt, dass er seinen eingeborenen Sohn gab, damit jeder, der an ihn glaubt, nicht verloren geht, sondern ewiges Leben hat. — Johannes 3:16",
-    "q2": "Was hindert dich daran, dein Leben völlig Christus zu übergeben?",
-    "q2verse": "Kommt her zu mir, alle, die ihr mühselig und beladen seid; ich will euch erquicken. — Matthäus 11:28",
-    "q3": "Wie möchtest du in der Ewigkeit in Erinnerung bleiben?",
-    "q3verse": "Ich bin die Auferstehung und das Leben. Wer an mich glaubt, wird leben, auch wenn er stirbt. — Johannes 11:25",
-    "placeholder": "Schreibe hier deine Reflexion...",
+    "subtitle": "Nimm dir Minuten zum Nachdenken",
+    "q1": "Was würdest du Gott sagen, wenn heute dein letzter Tag wäre?",
+    "q1verse": "Denn so hat Gott die Welt geliebt - Johannes 3:16",
+    "q2": "Was hindert dich, dein Leben Christus zu übergeben?",
+    "q2verse": "Kommt her zu mir alle Mühseligen - Matthäus 11:28",
+    "q3": "Wie möchtest du in der Ewigkeit erinnert werden?",
+    "q3verse": "Ich bin die Auferstehung und das Leben - Johannes 11:25",
+    "placeholder": "Schreibe deine Besinnung hier...",
     "save": "Besinnung speichern",
-    "saved": "Reflexion mit der Gemeinschaft geteilt!",
+    "saved": "Besinnung gespeichert!",
     "journal": "Dein spirituelles Tagebuch (Optional)",
     "saveBtn": "Reflexion teilen",
     "loginRequired": "Melde dich an, um deine Reflexion zu schreiben und zu teilen.",

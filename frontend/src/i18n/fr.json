@@ -40,7 +40,11 @@
       "bullet4": "Se connecter avec des frères et sœurs dans la foi",
       "registerBtn": "S'inscrire Gratuitement",
       "signInBtn": "J'ai un compte - Se connecter"
-    }
+    },
+    "reflection": "Réflexion avec Dieu",
+    "help_life": "Aidez votre Prochain",
+    "pastoral_chat": "Chat Pastoral",
+    "spiritual_life": "Vie Spirituelle"
   },
   "footer": "© 2026 Sigo com Fé - La technologie au service du Royaume",
   "home": {
@@ -954,16 +958,16 @@
   },
   "reflection": {
     "title": "Réflexion avec Dieu",
-    "subtitle": "Prenez un moment. Respirez. Écoutez la voix de Dieu.",
+    "subtitle": "Prenez quelques minutes pour réfléchir profondément",
     "q1": "Si aujourd'hui était votre dernier jour, que diriez-vous à Dieu?",
-    "q1verse": "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle. — Jean 3:16",
-    "q2": "Qu'est-ce qui vous empêche de livrer entièrement votre vie au Christ?",
-    "q2verse": "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos. — Matthieu 11:28",
-    "q3": "Comment voulez-vous qu'on se souvienne de vous dans l'éternité?",
-    "q3verse": "Je suis la résurrection et la vie. Celui qui croit en moi vivra, même s'il meurt. — Jean 11:25",
+    "q1verse": "Car Dieu a tant aimé le monde - Jean 3:16",
+    "q2": "Qu'est-ce qui vous empêche de livrer votre vie au Christ?",
+    "q2verse": "Venez à moi, vous tous qui êtes fatigués - Matthieu 11:28",
+    "q3": "Comment voulez-vous être rappelé dans l'éternité?",
+    "q3verse": "Je suis la résurrection et la vie - Jean 11:25",
     "placeholder": "Écrivez votre réflexion ici...",
-    "save": "Sauvegarder",
-    "saved": "Réflexion partagée avec la communauté !",
+    "save": "Enregistrer la Réflexion",
+    "saved": "Réflexion enregistrée !",
     "journal": "Votre Journal Spirituel (Optionnel)",
     "saveBtn": "Partager la Réflexion",
     "loginRequired": "Connectez-vous pour écrire et partager votre réflexion.",

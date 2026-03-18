@@ -40,7 +40,11 @@
       "bullet4": "Connect with brothers and sisters in faith",
       "registerBtn": "Register Free",
       "signInBtn": "I have an account - Sign In"
-    }
+    },
+    "reflection": "Reflection with God",
+    "help_life": "Help Your Neighbor",
+    "pastoral_chat": "Pastoral Chat",
+    "spiritual_life": "Spiritual Life"
   },
   "footer": "© 2026 Sigo com Fé - Technology serving the Kingdom",
   "home": {
@@ -954,16 +958,16 @@
   },
   "reflection": {
     "title": "Reflection with God",
-    "subtitle": "Take a moment. Breathe. Listen to God's voice.",
+    "subtitle": "Take a few minutes to reflect deeply",
     "q1": "If today were your last day, what would you say to God?",
-    "q1verse": "For God so loved the world that He gave His only begotten Son, that whoever believes in Him should not perish but have everlasting life. — John 3:16",
-    "q2": "What keeps you from completely surrendering your life to Christ?",
-    "q2verse": "Come to Me, all you who labor and are heavy laden, and I will give you rest. — Matthew 11:28",
+    "q1verse": "For God so loved the world - John 3:16",
+    "q2": "What prevents you from surrendering your life to Christ?",
+    "q2verse": "Come to me all who are weary - Matthew 11:28",
     "q3": "How do you want to be remembered in eternity?",
-    "q3verse": "I am the resurrection and the life. He who believes in Me, though he may die, he shall live. — John 11:25",
+    "q3verse": "I am the resurrection and the life - John 11:25",
     "placeholder": "Write your reflection here...",
     "save": "Save Reflection",
-    "saved": "Reflection shared with the community!",
+    "saved": "Reflection saved!",
     "journal": "Your Spiritual Journal (Optional)",
     "saveBtn": "Share Reflection",
     "loginRequired": "Log in to write and share your reflection.",
