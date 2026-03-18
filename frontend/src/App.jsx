@@ -1,5 +1,4 @@
-import './styles/main.css';
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "./context/AuthContext";
@@ -21,13 +20,19 @@ import Consecration from "./pages/Consecration";
 import BiblicalAI from "./pages/BibleAI";
 import PastorChat from "./pages/PastorChat";
 import HelpRequests from "./pages/HelpRequests";
+import Landing from "./pages/Landing";
 import BiblicalCourse from "./pages/BiblicalCourse";
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
+import AjudaUmaVida from "./pages/AjudaUmaVida";
 
 // Components
+import LanguageSelector from "./components/LanguageSelector";
+import ProtectedRoute from "./components/ProtectedRoute";
+import GlobalChat from "./components/GlobalChat";
 
 // Styles
+import "./styles/ModernTheme.css"; // The new look
 
 export default function App() {
   const { t } = useTranslation();
@@ -44,16 +49,19 @@ export default function App() {
   if (loading) return (
     <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'var(--bg)',color:'var(--fb2)',flexDirection:'column',gap:20}}>
       <div style={{width:50,height:50,border:'4px solid #e2e8f0',borderTopColor:'var(--fb)',borderRadius:'50%',animation:'spin 1s linear infinite'}}/>
-      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.2rem',fontWeight:600}}>Carregando Sigo com F├®...</p>
+      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.2rem',fontWeight:600}}>Carregando Sigo com Fé...</p>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </div>
   );
 
+  // Public Routes (Landing, Auth)
   if (!user) {
     return (
       <Routes>
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="*" element={<Landing />} />
       </Routes>
     );
   }
@@ -64,11 +72,11 @@ export default function App() {
   return (
     <div className="app-container">
       
-      {/* ÔöÇÔöÇ TOPBAR ÔöÇÔöÇ */}
+      {/* ── TOPBAR ── */}
       <header className="topbar">
         <Link to="/" className="logo-area" style={{display:'flex',alignItems:'center',gap:'9px',textDecoration:'none'}}>
-          <div className="logo-icon" style={{width:36,height:36,borderRadius:'50%',background:'linear-gradient(135deg,#fff 0%,var(--gold3) 100%)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.2rem',boxShadow:'0 2px 8px rgba(0,0,0,0.2)'}}>­ƒôû</div>
-          <span className="logo-text" style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.15rem',fontWeight:700,color:'#fff',letterSpacing:'0.03em'}}>Sigo com F├®</span>
+          <div className="logo-icon" style={{width:36,height:36,borderRadius:'50%',background:'linear-gradient(135deg,#fff 0%,var(--gold3) 100%)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.2rem',boxShadow:'0 2px 8px rgba(0,0,0,0.2)'}}>📖</div>
+          <span className="logo-text" style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.15rem',fontWeight:700,color:'#fff',letterSpacing:'0.03em'}}>Sigo com Fé</span>
         </Link>
 
         {/* Desktop Nav Scroll (Quick Links) */}
@@ -77,7 +85,7 @@ export default function App() {
             <Home size={16}/> {t('nav.mural', 'Mural')}
           </Link>
           <Link to="/ia-biblica" className={`nav-item ${location.pathname==='/ia-biblica'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'7px 11px',borderRadius:8,fontSize:'0.85rem',display:'flex',alignItems:'center',gap:6}}>
-            <BookOpen size={16}/> {t('nav.bible_ai', 'B├¡blia IA')}
+            <BookOpen size={16}/> {t('nav.bible_ai', 'Bíblia IA')}
           </Link>
           <Link to="/membros" className={`nav-item ${location.pathname.startsWith('/membros')?'active':''}`} style={{color:'white',textDecoration:'none',padding:'7px 11px',borderRadius:8,fontSize:'0.85rem',display:'flex',alignItems:'center',gap:6}}>
             <Users size={16}/> {t('nav.members', 'Membros')}
@@ -88,6 +96,7 @@ export default function App() {
         </nav>
 
         <div className="topbar-right" style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8}}>
+          <LanguageSelector />
           
           <button className="icon-btn" style={{background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',position:'relative'}}>
             <Bell size={18} />
@@ -109,18 +118,72 @@ export default function App() {
         </div>
       </header>
 
-      {/* ÔöÇÔöÇ MOBILE MENU OVERLAY ÔöÇÔöÇ */}
+      {/* ── MOBILE MENU OVERLAY ── */}
       {mobileMenuOpen && (
-        <div className="mobile-menu" style={{position:'fixed',inset:0,zIndex:299,background:'rgba(0,0,0,0.9)',padding:'80px 20px',display:'flex',flexDirection:'column',gap:20}}>
-          <Link to="/" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.mural')}</Link>
-          <Link to="/ia-biblica" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.bible_ai')}</Link>
-          <Link to="/membros" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.members')}</Link>
-          <Link to={`/perfil/${user.id}`} className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{color:'white',fontSize:20,textDecoration:'none'}}>{t('nav.profile')}</Link>
-          <button className="mobile-link logout" onClick={logout} style={{color:'red',fontSize:20,background:'none',border:'none',textAlign:'left'}}>{t('auth.logout')}</button>
+        <div className="mobile-menu" style={{position:'fixed',inset:0,zIndex:299,background:'rgba(0,0,0,0.95)',padding:'60px 20px 20px',overflowY:'auto'}}>
+          {/* VIDA ESPIRITUAL */}
+          <div className="menu-group" style={{marginBottom:'25px'}}>
+            <p className="menu-title" style={{color:'var(--gold)', fontSize:'1rem', fontWeight:'bold', letterSpacing:'0.05em', textTransform:'uppercase', marginBottom:'10px', paddingLeft:'16px'}}>Vida Espiritual</p>
+            <Link to="/pedidos-ajuda" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <Heart size={20} /> Pedidos de Ajuda
+            </Link>
+            <Link to="/consagracao" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <PlayCircle size={20} /> Consagração & Jejum
+            </Link>
+            <Link to="/reflexao" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <Sun size={20} /> Reflexão com Deus
+            </Link>
+            <Link to="/curso-biblico" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <BookOpen size={20} /> Bíblia & Estudo
+            </Link>
+            <Link to="/ajuda-uma-vida" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <Heart size={20} /> Ajude o Próximo
+            </Link>
+            <Link to="/journeys" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <Globe size={20} /> Jornadas de Fé
+            </Link>
+            <Link to="/chat-pastoral" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <MessageCircle size={20} /> Fale com o Pastor
+            </Link>
+          </div>
+
+          {/* MENU GERAL */}
+          <div className="menu-group" style={{marginBottom:'25px'}}>
+            <p className="menu-title" style={{color:'rgba(255,255,255,0.6)', fontSize:'1rem', fontWeight:'bold', letterSpacing:'0.05em', textTransform:'uppercase', marginBottom:'10px', paddingLeft:'16px'}}>Menu</p>
+            <Link to="/" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <Home size={20} /> Mural
+            </Link>
+            <Link to="/membros" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <Users size={20} /> Membros
+            </Link>
+            <Link to="/grupos" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <Users size={20} /> Grupos
+            </Link>
+            <Link to="/musica" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <Music size={20} /> Música
+            </Link>
+          </div>
+
+          {/* ADMIN (se for pastor/admin) */}
+          {(user.role === 'pastor' || user.role === 'admin') && (
+            <div className="menu-group" style={{marginBottom:'25px'}}>
+              <p className="menu-title" style={{color:'rgba(255,255,255,0.6)', fontSize:'1rem', fontWeight:'bold', letterSpacing:'0.05em', textTransform:'uppercase', marginBottom:'10px', paddingLeft:'16px'}}>Admin</p>
+              <Link to="/pedidos-ajuda" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+                <Heart size={20} /> Pedidos de Ajuda
+              </Link>
+              <Link to="/pastor-dashboard" className="mobile-link" onClick={()=>setMobileMenuOpen(false)} style={{display:'flex', alignItems:'center', gap:'12px', color:'white', fontSize:'1.1rem', textDecoration:'none', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+                 <Shield size={20} /> Dashboard
+              </Link>
+            </div>
+          )}
+          
+          <button className="mobile-link logout" onClick={logout} style={{display:'flex', alignItems:'center', gap:'12px', color:'#ff6b6b', fontSize:'1.1rem', background:'none', border:'none', textAlign:'left', width:'100%', padding:'12px 16px', marginTop:'10px'}}>
+            <LogOut size={20} /> Sair
+          </button>
         </div>
       )}
 
-      {/* ÔöÇÔöÇ MAIN LAYOUT ÔöÇÔöÇ */}
+      {/* ── MAIN LAYOUT ── */}
       <div className="modern-layout">
 
         {/* LEFT SIDEBAR (Desktop) */}
@@ -155,22 +218,22 @@ export default function App() {
           <div className="menu-group">
             <p className="menu-title">{t('nav.spiritual_life', 'Vida Espiritual')}</p>
             <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}>
-              <Heart size={18} /> {t('nav.prayers', 'Pedidos de Ora├º├úo')}
+              <Heart size={18} /> {t('nav.prayers', 'Pedidos de Oração')}
             </Link>
             <Link to="/consagracao" className={isActive('/consagracao')}>
-              <PlayCircle size={18} /> {t('nav.consecration', 'Consagra├º├úo & Jejum')}
+              <PlayCircle size={18} /> {t('nav.consecration', 'Consagração & Jejum')}
             </Link>
             <Link to="/reflexao" className={isActive('/reflexao')}>
-              <Sun size={18} /> {t('nav.reflection', 'Reflex├úo com Deus')}
+              <Sun size={18} /> {t('nav.reflection', 'Reflexão com Deus')}
             </Link>
             <Link to="/curso-biblico" className={isActive('/curso-biblico')}>
-              <BookOpen size={18} /> {t('course.title', 'B├¡blia & Estudo')}
+              <BookOpen size={18} /> {t('course.title', 'Bíblia & Estudo')}
             </Link>
             <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}>
-              <Heart size={18} /> {t('nav.help_life', 'Ajuda uma Vida')}
+              <Heart size={18} /> Ajude o Próximo
             </Link>
             <Link to="/journeys" className={isActive('/journeys')}>
-              <Globe size={18} /> {t('nav.journeys', 'Jornadas de F├®')}
+              <Globe size={18} /> {t('nav.journeys', 'Jornadas de Fé')}
             </Link>
             <Link to="/chat-pastoral" className={isActive('/chat-pastoral')}>
               <MessageCircle size={18} /> {t('nav.pastoral_chat', 'Fale com o Pastor')}
@@ -189,7 +252,7 @@ export default function App() {
               <Users size={18} /> {t('nav.groups', 'Grupos')}
             </Link>
             <Link to="/musica" className={isActive('/musica')}>
-              <Music size={18} /> {t('nav.music', 'M├║sica')}
+              <Music size={18} /> {t('nav.music', 'Música')}
             </Link>
           </div>
 
@@ -223,10 +286,16 @@ export default function App() {
             <Route path="/grupos" element={<Groups />} />
             <Route path="/musica" element={<MusicLibrary />} />
             <Route path="/consagracao" element={<Consecration />} />
+            <Route path="/reflexao" element={<Reflection />} />
+            <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
             
             {/* Protected Admin Routes */}
-            <Route path="/pedidos-ajuda" element={<HelpRequests />} />
-            <Route path="/pastor-dashboard" element={<PastorChat />} />
+            <Route path="/pedidos-ajuda" element={
+              <ProtectedRoute role="pastor"><HelpRequests /></ProtectedRoute>
+            } />
+            <Route path="/pastor-dashboard" element={
+              <ProtectedRoute role="pastor"><div style={{padding:20}}>Dashboard em construção...</div></ProtectedRoute>
+            } />
           </Routes>
         </main>
 
@@ -238,7 +307,7 @@ export default function App() {
             <div className="live-header" style={{display:'flex',alignItems:'center',gap:5,fontSize:'0.62rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:'#FF6B6B',marginBottom:8}}>
                <span className="live-dot" style={{width:7,height:7,borderRadius:'50%',background:'#FF4444'}}></span> DIRECTO
             </div>
-            <p className="live-title" style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1rem',fontWeight:600,marginBottom:4}}>{t('live.none', 'Nenhuma transmiss├úo')}</p>
+            <p className="live-title" style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1rem',fontWeight:600,marginBottom:4}}>{t('live.none', 'Nenhuma transmissão')}</p>
             <p className="live-sub" style={{fontSize:'0.72rem',color:'rgba(255,255,255,0.5)',marginBottom:14}}>{t('live.be_first', 'Seja o primeiro!')}</p>
             <button className="live-btn" style={{width:'100%',padding:10,borderRadius:10,background:'linear-gradient(135deg,#FF4444,#CC2222)',color:'white',fontSize:'0.78rem',fontWeight:600,border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:6}}>
                <PlayCircle size={16}/> {t('live.start', 'Iniciar Directo')}
@@ -248,18 +317,18 @@ export default function App() {
           {/* Prayers Widget */}
           <div className="modern-card widget-card">
             <div className="widget-header" style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'0.98rem',fontWeight:700,color:'var(--text)',marginBottom:14,display:'flex',alignItems:'center',gap:8}}>
-              <Heart size={16} className="text-gold" style={{color:'var(--gold)'}}/> {t('nav.prayers', 'Pedidos de Ora├º├úo')}
+              <Heart size={16} className="text-gold" style={{color:'var(--gold)'}}/> {t('nav.prayers', 'Pedidos de Oração')}
             </div>
             
             <div className="widget-item" style={{display:'flex',gap:9,padding:'9px 0',borderBottom:'1px solid var(--border)'}}>
-              <div className="w-avatar" style={{width:32,height:32,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,var(--fb),#3AAAD4)'}}>­ƒÖÅ</div>
+              <div className="w-avatar" style={{width:32,height:32,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,var(--fb),#3AAAD4)'}}>🙏</div>
               <div className="w-content">
-                <p className="w-text" style={{fontSize:'0.78rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb2)'}}>Ana Costa</b> pede sa├║de</p>
+                <p className="w-text" style={{fontSize:'0.78rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb2)'}}>Ana Costa</b> pede saúde</p>
                 <button className="w-btn" style={{marginTop:5,padding:'4px 11px',borderRadius:10,fontSize:'0.68rem',fontWeight:600,border:'1px solid rgba(201,168,76,0.3)',background:'rgba(201,168,76,0.07)',color:'var(--gold)',cursor:'pointer'}}>{t('mural.pray', 'Orar')}</button>
               </div>
             </div>
              <div className="widget-item" style={{display:'flex',gap:9,padding:'9px 0',borderBottom:'none'}}>
-              <div className="w-avatar" style={{width:32,height:32,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,var(--gold),#8B6914)'}}>­ƒòè´©Å</div>
+              <div className="w-avatar" style={{width:32,height:32,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,var(--gold),#8B6914)'}}>🕊️</div>
               <div className="w-content">
                 <p className="w-text" style={{fontSize:'0.78rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb2)'}}>Carlos</b> pede paz</p>
                 <button className="w-btn" style={{marginTop:5,padding:'4px 11px',borderRadius:10,fontSize:'0.68rem',fontWeight:600,border:'1px solid rgba(201,168,76,0.3)',background:'rgba(201,168,76,0.07)',color:'var(--gold)',cursor:'pointer'}}>{t('mural.pray', 'Orar')}</button>
@@ -270,7 +339,7 @@ export default function App() {
           {/* Events Widget */}
           <div className="modern-card widget-card">
             <div className="widget-header" style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'0.98rem',fontWeight:700,color:'var(--text)',marginBottom:14,display:'flex',alignItems:'center',gap:8}}>
-              <Calendar size={16} className="text-gold" style={{color:'var(--gold)'}}/> {t('events.title', 'Pr├│ximos Eventos')}
+              <Calendar size={16} className="text-gold" style={{color:'var(--gold)'}}/> {t('events.title', 'Próximos Eventos')}
             </div>
             <div className="widget-item" style={{display:'flex',alignItems:'center',gap:10,padding:'9px 0'}}>
                <div className="w-date" style={{width:40,height:40,borderRadius:10,background:'linear-gradient(135deg,var(--fb2),var(--fb))',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:'white'}}>
@@ -279,7 +348,7 @@ export default function App() {
                </div>
                <div className="w-content">
                  <p className="w-title-sm" style={{fontSize:'0.8rem',fontWeight:600,color:'var(--text)'}}>Culto Dominical</p>
-                 <p className="w-sub" style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h ┬À Online</p>
+                 <p className="w-sub" style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h · Online</p>
                </div>
             </div>
           </div>
@@ -297,6 +366,7 @@ export default function App() {
       `}</style>
       
       {/* Global Chat Widget */}
+      <GlobalChat />
     </div>
   );
 }
