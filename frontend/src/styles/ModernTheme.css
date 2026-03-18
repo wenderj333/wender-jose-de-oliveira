@@ -1,38 +1,39 @@
 /* =============================================
-   SIGO COM FÉ — Tema Claro (Azul + Dourado)
-   Estilo: Instagram/Facebook cristão
+   SIGO COM FÉ — Tema Claro Suave (Azul Fraco + Dourado)
    ============================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Background */
-  --bg:       #f0f4ff;
-  --bg2:      #e8eeff;
+  /* Backgrounds */
+  --bg:       #f5f7ff;
+  --bg2:      #eef1fb;
   --bg3:      #ffffff;
 
-  /* Brand blues */
-  --fb:       #1a73e8;
-  --fb2:      #1557b0;
-  --fb-light: #e8f0fe;
+  /* Azul suave (não tão intenso) */
+  --fb:       #4a80d4;
+  --fb2:      #3568b8;
+  --fb-light: #edf2fc;
+  --fb-pale:  #f0f5ff;
 
-  /* Gold */
-  --gold:     #b8860b;
-  --gold2:    #d4a017;
-  --gold3:    #f0c040;
-  --gold-bg:  #fffbec;
+  /* Dourado */
+  --gold:     #a07820;
+  --gold2:    #c49a28;
+  --gold3:    #e8c040;
+  --gold-bg:  #fdf8ec;
+  --gold-border: #e8c04040;
 
-  /* Text */
-  --text:     #1a1a2e;
-  --text2:    #374151;
-  --muted:    #6b7280;
+  /* Texto */
+  --text:     #1e2240;
+  --text2:    #3d4466;
+  --muted:    #7b83a6;
 
   /* UI */
-  --border:   #dde3f0;
+  --border:   #e0e6f5;
   --card:     #ffffff;
   --card2:    #f7f9ff;
-  --shadow:   0 2px 12px rgba(26,115,232,0.08);
-  --shadow-lg:0 8px 32px rgba(26,115,232,0.14);
+  --shadow:   0 2px 12px rgba(74,128,212,0.08);
+  --shadow-lg:0 8px 28px rgba(74,128,212,0.14);
   --radius:   14px;
 }
 
@@ -52,21 +53,21 @@ body {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: 56px;
-  background: linear-gradient(135deg, var(--fb2) 0%, var(--fb) 55%, #2196f3 100%);
+  background: linear-gradient(135deg, var(--fb2) 0%, var(--fb) 60%, #6a9ade 100%);
   display: flex;
   align-items: center;
   padding: 0 20px;
   z-index: 200;
-  box-shadow: 0 2px 12px rgba(21,87,176,0.25);
+  box-shadow: 0 2px 16px rgba(53,104,184,0.2);
 }
 
 .nav-item {
-  color: rgba(255,255,255,0.9) !important;
+  color: rgba(255,255,255,0.92) !important;
   transition: background 0.18s;
   border-radius: 9px;
 }
 .nav-item:hover, .nav-item.active {
-  background: rgba(255,255,255,0.2) !important;
+  background: rgba(255,255,255,0.18) !important;
   color: white !important;
 }
 
@@ -74,7 +75,7 @@ body {
   transition: opacity 0.2s, transform 0.15s;
   cursor: pointer;
 }
-.icon-btn:hover { opacity: 0.85; transform: scale(1.05); }
+.icon-btn:hover { opacity: 0.85; }
 
 /* ── LAYOUT ── */
 .app-container {
@@ -85,11 +86,11 @@ body {
 
 .modern-layout {
   display: grid;
-  grid-template-columns: 260px 1fr 260px;
+  grid-template-columns: 255px 1fr 255px;
   gap: 0;
-  max-width: 1200px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 18px 14px;
+  padding: 16px 12px;
   min-height: calc(100vh - 56px);
   align-items: start;
 }
@@ -97,8 +98,8 @@ body {
 .sidebar-left,
 .sidebar-right {
   position: sticky;
-  top: 72px;
-  max-height: calc(100vh - 82px);
+  top: 70px;
+  max-height: calc(100vh - 80px);
   overflow-y: auto;
   scrollbar-width: none;
 }
@@ -110,46 +111,47 @@ body {
 
 .main-content-area {
   min-width: 0;
-  padding: 0 10px;
+  padding: 0 8px;
 }
 
 /* ── PROFILE CARD ── */
 .profile-card-modern {
-  background: linear-gradient(150deg, var(--fb2) 0%, var(--fb) 50%, #42a5f5 100%);
+  background: linear-gradient(150deg, var(--fb2) 0%, var(--fb) 55%, #6a9ade 100%);
   border-radius: var(--radius);
-  padding: 22px 18px;
+  padding: 20px 16px;
   text-align: center;
   margin-bottom: 12px;
   box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
 }
-.profile-card-modern::before {
+.profile-card-modern::after {
   content: '';
   position: absolute;
-  bottom: -20px; right: -20px;
-  width: 80px; height: 80px;
+  top: -10px; right: -10px;
+  width: 60px; height: 60px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.12);
+  pointer-events: none;
 }
 
 .prof-avatar {
-  width: 64px;
-  height: 64px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 10px;
-  border: 3px solid rgba(255,255,255,0.5);
+  border: 3px solid rgba(255,255,255,0.45);
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
 }
 
 .prof-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: white;
   margin-bottom: 2px;
@@ -158,23 +160,23 @@ body {
 .prof-stats {
   display: flex;
   justify-content: center;
-  gap: 24px;
+  gap: 22px;
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,0.2);
+  border-top: 1px solid rgba(255,255,255,0.18);
 }
 
 .prof-stat-n {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--gold3);
 }
 
 .prof-stat-l {
-  font-size: 0.62rem;
-  color: rgba(255,255,255,0.7);
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.65);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
 }
 
 /* ── MENU GROUPS ── */
@@ -188,7 +190,7 @@ body {
 }
 
 .menu-title {
-  font-size: 0.66rem;
+  font-size: 0.65rem;
   font-weight: 700;
   color: var(--gold);
   text-transform: uppercase;
@@ -200,14 +202,18 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 12px;
+  padding: 8px 12px;
   border-radius: 10px;
   color: var(--text2);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 0.865rem;
   font-weight: 500;
   transition: all 0.18s;
   cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
 }
 
 .menu-link:hover {
@@ -223,13 +229,12 @@ body {
 }
 
 .logout-btn {
-  width: 100%;
-  background: none;
-  border: none;
-  text-align: left;
-  color: #e53e3e !important;
+  color: #dc2626 !important;
 }
-.logout-btn:hover { background: #fff5f5 !important; color: #c53030 !important; }
+.logout-btn:hover {
+  background: #fff5f5 !important;
+  color: #b91c1c !important;
+}
 
 /* ── CARDS ── */
 .modern-card {
@@ -244,15 +249,6 @@ body {
   margin-bottom: 12px;
 }
 
-/* ── LIVE WIDGET (override for light) ── */
-.live-widget {
-  background: linear-gradient(135deg, var(--fb2) 0%, var(--fb) 60%, #2196f3 100%) !important;
-  border-radius: var(--radius) !important;
-}
-
-/* ── BUTTONS (global override for light theme) ── */
-button { font-family: inherit; }
-
 /* ── MOBILE ── */
 .mobile-only { display: none !important; }
 .desktop-only { display: block; }
@@ -265,26 +261,4 @@ button { font-family: inherit; }
 
 @media (max-width: 900px) {
   .nav-scroll { display: none !important; }
-}
-
-/* ── FEED POSTS (light overrides) ── */
-.feed-post, .feed-card, .post-card {
-  background: var(--card) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--text) !important;
-  border-radius: var(--radius) !important;
-  box-shadow: var(--shadow) !important;
-}
-
-/* ── MURAL INPUT AREA ── */
-.mural-input, .post-input, .create-post {
-  background: var(--card) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  box-shadow: var(--shadow) !important;
-}
-
-/* ── INPUTS & TEXTAREAS ── */
-input, textarea, select {
-  font-family: inherit;
 }
