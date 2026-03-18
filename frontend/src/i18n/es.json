@@ -1088,7 +1088,7 @@
     "logout": "Salir"
   },
   "landing": {
-    "subtitle": "Crece espiritualmente, ora con hermanos de todo el mundo, accede a la Biblia con IA, y vive el evangelio — todo en un solo lugar.",
+    "subtitle": "Conéctate con cristianos de verdad, ora, crece en la fe y encuentra una comunidad que edifica — no distrae.",
     "register": "Crear cuenta gratuita",
     "login": "Entrar",
     "verse": "\"Porque donde dos o tres se reúnen en mi nombre, allí estoy yo en medio de ellos.\" — Mt 18:20",
@@ -1100,7 +1100,7 @@
     "testimoniesSection": "TESTIMONIOS",
     "ctaTitle": "Únete a la comunidad cristiana que crece en el amor de Dios",
     "ctaSubtitle": "Regístrate hoy. Es gratis. Es cristiano. Es para ti.",
-    "ctaButton": "✨ Crear mi cuenta gratis",
+    "ctaButton": "🙏 Comenzar mi camino",
     "ctaFree": "Sin tarjeta. Sin mensualidad. 100% gratuito.",
     "memberCount": "Miembros activos",
     "languagesCount": "Idiomas disponibles",
@@ -1118,7 +1118,26 @@
     "f5desc": "Biblioteca de alabanza en varios idiomas. Adora donde estés.",
     "f6title": "Comunidad Global",
     "f6desc": "Conéctate con cristianos de Brasil, Europa, África y todo el mundo.",
-    "tagline": "La red social cristiana"
+    "tagline": "La red social cristiana",
+    "loginShort": "Entrar",
+    "joinNow": "Quiero unirme",
+    "headline1": "La red social cristiana",
+    "headline2": "sin contenido tóxico.",
+    "trust1": "Sin contenido inapropiado",
+    "trust2": "Comunidad cristiana de verdad",
+    "trust3": "Peticiones de oración reales",
+    "trust4": "Contenido que edifica",
+    "whyTitle": "¿Por qué Sigo com Fé en vez de Instagram?",
+    "whySubtitle": "¿Intentaste usar Instagram o WhatsApp para crecer espiritualmente? Sigo com Fé fue creado específicamente para cristianos que quieren fortalecer su fe cada día.",
+    "why1title": "Cero contenido tóxico",
+    "why1desc": "Sin memes, sin política, sin contenido inapropiado. Solo lo que edifica.",
+    "why2title": "Oración en comunidad",
+    "why2desc": "Peticiones de oración reales, respondidas por cristianos de verdad — en tiempo real.",
+    "why3title": "Consejería pastoral",
+    "why3desc": "Habla con un pastor de forma privada y gratuita. No estás solo.",
+    "why4title": "Comunidad global",
+    "why4desc": "Cristianos de Brasil, Portugal, Alemania, África y más — unidos en la fe.",
+    "ctaJoin": "✨ Entrar a la comunidad ahora"
   },
   "locale": "es-ES"
 }

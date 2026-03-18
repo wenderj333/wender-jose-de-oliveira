@@ -1071,7 +1071,7 @@
     "logout": "Abmelden"
   },
   "landing": {
-    "subtitle": "Wachse spirituell, bete mit Brüdern aus aller Welt, greife auf die Bibel mit KI zu und lebe das Evangelium — alles an einem Ort.",
+    "subtitle": "Verbinde dich mit echten Christen, bete, wachse im Glauben und finde eine Gemeinschaft, die aufbaut — nicht ablenkt.",
     "register": "Kostenloses Konto erstellen",
     "login": "Einloggen",
     "verse": "\"Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.\" — Mt 18:20",
@@ -1083,7 +1083,7 @@
     "testimoniesSection": "ZEUGNISSE",
     "ctaTitle": "Treten Sie der christlichen Gemeinschaft bei, die in Gottes Liebe wächst",
     "ctaSubtitle": "Registrieren Sie sich heute. Es ist kostenlos. Es ist christlich. Es ist für Sie.",
-    "ctaButton": "✨ Mein kostenloses Konto erstellen",
+    "ctaButton": "🙏 Meine Reise beginnen",
     "ctaFree": "Keine Karte. Keine Gebühr. 100% kostenlos.",
     "memberCount": "Aktive Mitglieder",
     "languagesCount": "Verfügbare Sprachen",
@@ -1101,7 +1101,26 @@
     "f5desc": "Lob-Bibliothek in mehreren Sprachen. Beten Sie überall an.",
     "f6title": "Globale Gemeinschaft",
     "f6desc": "Verbinden Sie sich mit Christen aus Brasilien, Europa, Afrika und der ganzen Welt.",
-    "tagline": "Das christliche soziale Netzwerk"
+    "tagline": "Das christliche soziale Netzwerk",
+    "loginShort": "Anmelden",
+    "joinNow": "Ich möchte dabei sein",
+    "headline1": "Das christliche Netzwerk",
+    "headline2": "ohne toxische Inhalte.",
+    "trust1": "Keine unangemessenen Inhalte",
+    "trust2": "Echte christliche Gemeinschaft",
+    "trust3": "Echte Gebetsanliegen",
+    "trust4": "Inhalte, die aufbauen",
+    "whyTitle": "Warum Sigo com Fé statt Instagram?",
+    "whySubtitle": "Versuchen Sie, Instagram oder WhatsApp für spirituelles Wachstum zu nutzen? Sigo com Fé wurde speziell für Christen entwickelt, die ihren Glauben täglich stärken möchten.",
+    "why1title": "Null toxische Inhalte",
+    "why1desc": "Keine Memes, keine Politik, keine unangemessenen Inhalte. Nur was aufbaut.",
+    "why2title": "Gemeinschaftsgebet",
+    "why2desc": "Echte Gebetsanliegen, von echten Christen beantwortet — in Echtzeit.",
+    "why3title": "Seelsorgliche Beratung",
+    "why3desc": "Sprechen Sie privat und kostenlos mit einem Pastor. Sie sind nicht allein.",
+    "why4title": "Globale Gemeinschaft",
+    "why4desc": "Christen aus Brasilien, Portugal, Deutschland, Afrika und mehr — vereint im Glauben.",
+    "ctaJoin": "✨ Jetzt der Gemeinschaft beitreten"
   },
   "locale": "de-DE"
 }

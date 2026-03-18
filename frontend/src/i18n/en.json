@@ -1088,7 +1088,7 @@
     "logout": "Logout"
   },
   "landing": {
-    "subtitle": "Grow spiritually, pray with brothers and sisters from around the world, access the Bible with AI, and live the gospel — all in one place.",
+    "subtitle": "Connect with real Christians, pray, grow in faith and find a community that builds you up — not distract you.",
     "register": "Create free account",
     "login": "Login",
     "verse": "\"For where two or three gather in my name, there am I with them.\" — Mt 18:20",
@@ -1100,7 +1100,7 @@
     "testimoniesSection": "TESTIMONIALS",
     "ctaTitle": "Join the Christian community that grows in God's love",
     "ctaSubtitle": "Sign up today. It is free. It is Christian. It is for you.",
-    "ctaButton": "✨ Create my free account",
+    "ctaButton": "🙏 Begin my journey",
     "ctaFree": "No card. No subscription. 100% free.",
     "memberCount": "Active members",
     "languagesCount": "Available languages",
@@ -1118,7 +1118,26 @@
     "f5desc": "Worship library in multiple languages. Worship wherever you are.",
     "f6title": "Global Community",
     "f6desc": "Connect with Christians from Brazil, Europe, Africa and all over the world.",
-    "tagline": "The Christian social network"
+    "tagline": "The Christian social network",
+    "loginShort": "Login",
+    "joinNow": "I want to join",
+    "headline1": "The Christian social network",
+    "headline2": "without toxic content.",
+    "trust1": "No inappropriate content",
+    "trust2": "Genuine Christian community",
+    "trust3": "Real prayer requests",
+    "trust4": "Content that builds faith",
+    "whyTitle": "Why Sigo com Fé instead of Instagram?",
+    "whySubtitle": "Ever tried using Instagram or WhatsApp to grow spiritually? Sigo com Fé was built specifically for Christians who want to strengthen their faith every day.",
+    "why1title": "Zero toxic content",
+    "why1desc": "No memes, no politics, no inappropriate content. Only what builds you up.",
+    "why2title": "Community prayer",
+    "why2desc": "Real prayer requests, answered by real Christians — in real time.",
+    "why3title": "Pastoral counseling",
+    "why3desc": "Talk to a pastor privately and for free. You are not alone.",
+    "why4title": "Global community",
+    "why4desc": "Christians from Brazil, Portugal, Germany, Africa and more — united in faith.",
+    "ctaJoin": "✨ Join the community now"
   },
   "locale": "en-GB"
 }

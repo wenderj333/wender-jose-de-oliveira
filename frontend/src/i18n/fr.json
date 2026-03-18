@@ -1088,7 +1088,7 @@
     "logout": "Déconnexion"
   },
   "landing": {
-    "subtitle": "Grandissez spirituellement, priez avec des frères du monde entier, accédez à la Bible avec l'IA, et vivez l'évangile — tout en un seul endroit.",
+    "subtitle": "Connectez-vous avec de vrais chrétiens, priez, grandissez dans la foi et trouvez une communauté qui vous édifie — pas qui vous distrait.",
     "register": "Créer un compte gratuit",
     "login": "Se connecter",
     "verse": "\"Car là où deux ou trois sont réunis en mon nom, je suis au milieu d'eux.\" — Mt 18:20",
@@ -1100,7 +1100,7 @@
     "testimoniesSection": "TÉMOIGNAGES",
     "ctaTitle": "Rejoignez la communauté chrétienne qui grandit dans l'amour de Dieu",
     "ctaSubtitle": "Inscrivez-vous aujourd'hui. C'est gratuit. C'est chrétien. C'est pour vous.",
-    "ctaButton": "✨ Créer mon compte gratuit",
+    "ctaButton": "🙏 Commencer mon chemin",
     "ctaFree": "Sans carte. Sans abonnement. 100% gratuit.",
     "memberCount": "Membres actifs",
     "languagesCount": "Langues disponibles",
@@ -1118,7 +1118,26 @@
     "f5desc": "Bibliothèque de louange en plusieurs langues. Adorez où que vous soyez.",
     "f6title": "Communauté Mondiale",
     "f6desc": "Connectez-vous avec des chrétiens du Brésil, d'Europe, d'Afrique et du monde entier.",
-    "tagline": "Le réseau social chrétien"
+    "tagline": "Le réseau social chrétien",
+    "loginShort": "Se connecter",
+    "joinNow": "Je veux rejoindre",
+    "headline1": "Le réseau social chrétien",
+    "headline2": "sans contenu toxique.",
+    "trust1": "Sans contenu inapproprié",
+    "trust2": "Vraie communauté chrétienne",
+    "trust3": "Vraies demandes de prière",
+    "trust4": "Contenu qui édifie",
+    "whyTitle": "Pourquoi Sigo com Fé plutôt qu'Instagram?",
+    "whySubtitle": "Avez-vous essayé d'utiliser Instagram ou WhatsApp pour grandir spirituellement? Sigo com Fé a été créé spécifiquement pour les chrétiens qui veulent renforcer leur foi chaque jour.",
+    "why1title": "Zéro contenu toxique",
+    "why1desc": "Pas de mèmes, pas de politique, pas de contenu inapproprié. Seulement ce qui édifie.",
+    "why2title": "Prière en communauté",
+    "why2desc": "De vraies demandes de prière, répondues par de vrais chrétiens — en temps réel.",
+    "why3title": "Accompagnement pastoral",
+    "why3desc": "Parlez à un pasteur en privé et gratuitement. Vous n'êtes pas seul.",
+    "why4title": "Communauté mondiale",
+    "why4desc": "Des chrétiens du Brésil, du Portugal, d'Allemagne, d'Afrique et plus — unis dans la foi.",
+    "ctaJoin": "✨ Rejoindre la communauté maintenant"
   },
   "locale": "fr-FR"
 }

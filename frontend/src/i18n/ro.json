@@ -1084,7 +1084,7 @@
     "logout": "Deconectare"
   },
   "landing": {
-    "subtitle": "Crești spiritual, te rogi cu frații din întreaga lume, accesezi Biblia cu IA și trăiești evanghelia — totul într-un singur loc.",
+    "subtitle": "Conectează-te cu creștini adevărați, roagă-te, crește în credință și găsește o comunitate care te zidește — nu te distrage.",
     "register": "Creează cont gratuit",
     "login": "Autentificare",
     "verse": "\"Căci acolo unde doi sau trei sunt adunați în Numele Meu, sunt și Eu în mijlocul lor.\" — Mt 18:20",
@@ -1096,7 +1096,7 @@
     "testimoniesSection": "MĂRTURII",
     "ctaTitle": "Alătură-te comunității creștine care crește în dragostea lui Dumnezeu",
     "ctaSubtitle": "Înregistrează-te astăzi. Este gratuit. Este creștin. Este pentru tine.",
-    "ctaButton": "✨ Creează contul meu gratuit",
+    "ctaButton": "🙏 Începe călătoria mea",
     "ctaFree": "Fără card. Fără abonament. 100% gratuit.",
     "memberCount": "Membri activi",
     "languagesCount": "Limbi disponibile",
@@ -1114,7 +1114,26 @@
     "f5desc": "Bibliotecă de laudă în mai multe limbi. Adoră oriunde te-ai afla.",
     "f6title": "Comunitate Globală",
     "f6desc": "Conectează-te cu creștini din Brazilia, Europa, Africa și din toată lumea.",
-    "tagline": "Rețeaua socială creștină"
+    "tagline": "Rețeaua socială creștină",
+    "loginShort": "Autentificare",
+    "joinNow": "Vreau să fac parte",
+    "headline1": "Rețeaua socială creștină",
+    "headline2": "fără conținut toxic.",
+    "trust1": "Fără conținut inadecvat",
+    "trust2": "Comunitate creștină adevărată",
+    "trust3": "Cereri de rugăciune reale",
+    "trust4": "Conținut care zidește",
+    "whyTitle": "De ce Sigo com Fé în loc de Instagram?",
+    "whySubtitle": "Ai încercat să folosești Instagram sau WhatsApp pentru creștere spirituală? Sigo com Fé a fost creat special pentru creștinii care vor să-și întărească credința în fiecare zi.",
+    "why1title": "Zero conținut toxic",
+    "why1desc": "Fără meme-uri, fără politică, fără conținut inadecvat. Doar ce zidește.",
+    "why2title": "Rugăciune în comunitate",
+    "why2desc": "Cereri de rugăciune reale, la care răspund creștini adevărați — în timp real.",
+    "why3title": "Îndrumare pastorală",
+    "why3desc": "Vorbește cu un pastor privat și gratuit. Nu ești singur.",
+    "why4title": "Comunitate globală",
+    "why4desc": "Creștini din Brazilia, Portugalia, Germania, Africa și mai mult — uniți în credință.",
+    "ctaJoin": "✨ Intră în comunitate acum"
   },
   "locale": "ro-RO"
 }

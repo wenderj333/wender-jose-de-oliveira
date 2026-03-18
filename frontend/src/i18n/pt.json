@@ -1147,7 +1147,7 @@
     "logout": "Sair"
   },
   "landing": {
-    "subtitle": "Cresça espiritualmente, ore com irmãos do mundo inteiro, acesse a Bíblia com IA, e viva o evangelho — tudo num só lugar.",
+    "subtitle": "Conecte-se com cristãos de verdade, ore, cresça na fé e encontre uma comunidade que edifica — não distrai.",
     "register": "Criar conta gratuita",
     "login": "Entrar",
     "verse": "\"Onde dois ou três estiverem reunidos em meu nome, ali estou no meio deles.\" — Mt 18:20",
@@ -1159,7 +1159,7 @@
     "testimoniesSection": "TESTEMUNHOS",
     "ctaTitle": "Junte-se à comunidade cristã que cresce no amor de Deus",
     "ctaSubtitle": "Registe-se hoje. É grátis. É cristão. É para você.",
-    "ctaButton": "✨ Criar minha conta grátis",
+    "ctaButton": "🙏 Começar minha caminhada",
     "ctaFree": "Sem cartão. Sem mensalidade. 100% gratuito.",
     "memberCount": "Membros ativos",
     "languagesCount": "Idiomas disponíveis",
@@ -1177,7 +1177,26 @@
     "f5desc": "Biblioteca de louvor em vários idiomas. Adore onde estiver.",
     "f6title": "Comunidade Global",
     "f6desc": "Conecte com cristãos de Brasil, Europa, África e mundo todo.",
-    "tagline": "A rede social cristã"
+    "tagline": "A rede social cristã",
+    "loginShort": "Entrar",
+    "joinNow": "Quero fazer parte",
+    "headline1": "A rede social cristã",
+    "headline2": "sem conteúdo tóxico.",
+    "trust1": "Sem conteúdo impróprio",
+    "trust2": "Comunidade cristã de verdade",
+    "trust3": "Pedidos de oração reais",
+    "trust4": "Conteúdo que edifica",
+    "whyTitle": "Por que o Sigo com Fé e não o Instagram?",
+    "whySubtitle": "Já tentou usar o Instagram ou WhatsApp para crescer espiritualmente? O Sigo com Fé foi criado especificamente para cristãos que querem fortalecer a fé todos os dias.",
+    "why1title": "Zero conteúdo tóxico",
+    "why1desc": "Sem memes, sem política, sem conteúdo impróprio. Só o que edifica.",
+    "why2title": "Oração em comunidade",
+    "why2desc": "Pedidos de oração reais, respondidos por cristãos de verdade — em tempo real.",
+    "why3title": "Aconselhamento pastoral",
+    "why3desc": "Fale com um pastor de forma privada e gratuita. Não fica sozinho.",
+    "why4title": "Comunidade global",
+    "why4desc": "Cristãos do Brasil, Portugal, Alemanha, África e mais — unidos na fé.",
+    "ctaJoin": "✨ Entrar na comunidade agora"
   },
   "locale": "pt-PT"
 }
