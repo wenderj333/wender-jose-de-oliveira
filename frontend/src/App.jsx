@@ -20,19 +20,14 @@ import Consecration from "./pages/Consecration";
 import BiblicalAI from "./pages/BibleAI";
 import PastorChat from "./pages/PastorChat";
 import HelpRequests from "./pages/HelpRequests";
-import Landing from "./pages/Landing";
 import BiblicalCourse from "./pages/BiblicalCourse";
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
 import AjudaUmaVida from "./pages/AjudaUmaVida";
 
 // Components
-import LanguageSelector from "./components/LanguageSelector";
-import ProtectedRoute from "./components/ProtectedRoute";
-import GlobalChat from "./components/GlobalChat";
 
 // Styles
-import "./styles/ModernTheme.css"; // The new look
 
 export default function App() {
   const { t } = useTranslation();
@@ -54,14 +49,11 @@ export default function App() {
     </div>
   );
 
-  // Public Routes (Landing, Auth)
   if (!user) {
     return (
       <Routes>
-        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="*" element={<Landing />} />
       </Routes>
     );
   }
@@ -96,7 +88,6 @@ export default function App() {
         </nav>
 
         <div className="topbar-right" style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8}}>
-          <LanguageSelector />
           
           <button className="icon-btn" style={{background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',position:'relative'}}>
             <Bell size={18} />
@@ -291,10 +282,8 @@ export default function App() {
             
             {/* Protected Admin Routes */}
             <Route path="/pedidos-ajuda" element={
-              <ProtectedRoute role="pastor"><HelpRequests /></ProtectedRoute>
             } />
             <Route path="/pastor-dashboard" element={
-              <ProtectedRoute role="pastor"><div style={{padding:20}}>Dashboard em construção...</div></ProtectedRoute>
             } />
           </Routes>
         </main>
@@ -366,7 +355,6 @@ export default function App() {
       `}</style>
       
       {/* Global Chat Widget */}
-      <GlobalChat />
     </div>
   );
 }
