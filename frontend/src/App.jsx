@@ -228,6 +228,9 @@ export default function App() {
 
           <div className="menu-group">
             <p className="menu-title">Menu</p>
+            <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)}>
+              <User size={18}/> Meu Perfil
+            </Link>
             <Link to="/" className={isActive('/')}>
               <Home size={18}/> {t('nav.mural')}
             </Link>
