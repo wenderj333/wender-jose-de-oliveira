@@ -221,19 +221,37 @@
     "noUsers": "No users found."
   },
   "mural": {
-    "title": "Gemeinde-Pinnwand",
-    "subtitle": "Teile Zeugnisse, Lobpreis und Bibelverse mit der christlichen Gemeinschaft",
-    "newPost": "Neuer Beitrag",
+    "title": "Gemeinschafts-Pinnwand",
+    "subtitle": "Teilen Sie Ihren Glauben, Zeugnisse und Lobpreisungen",
+    "newPost": "+ Neuer Beitrag",
     "cancel": "Abbrechen",
-    "messagePlaceholder": "Schreibe dein Zeugnis, deine Reflexion oder einen Bibelvers...",
+    "messagePlaceholder": "Teilen Sie etwas mit der Gemeinschaft...",
     "categories": {
       "testemunho": "Zeugnis",
-      "louvor": "Lobpreis / Video",
-      "reflexao": "Biblische Reflexion",
+      "louvor": "Lobpreis",
+      "reflexao": "Besinnung",
       "versiculo": "Bibelvers",
       "foto": "Foto"
     },
-    "pray": "Beten"
+    "pray": "Beten",
+    "publish": "Veröffentlichen",
+    "publishing": "Wird veröffentlicht...",
+    "commentPlaceholder": "Kommentar schreiben...",
+    "amen": "Amen",
+    "noPostsFound": "Keine Beiträge gefunden.",
+    "loginRequired": "Melde dich an, um Beiträge zu sehen und zu veröffentlichen.",
+    "confirmDelete": "Möchten Sie diesen Beitrag wirklich löschen?",
+    "uploadError": "Upload-Fehler.",
+    "uploadConnectionError": "Verbindungsfehler beim Upload.",
+    "musicLabel": "Musik",
+    "filters": {
+      "all": "Alle",
+      "testimonies": "Zeugnisse",
+      "worship": "Lobpreis",
+      "verses": "Bibelverse",
+      "reflections": "Besinnung",
+      "photos": "Fotos"
+    }
   },
   "kids": {
     "title": "Digital Sunday School",
@@ -573,8 +591,8 @@
     "flaggedPost": "Flagged Post"
   },
   "common": {
-    "loading": "Loading...",
-    "send": "Send",
+    "loading": "Wird geladen...",
+    "send": "Senden",
     "save": "Save",
     "delete": "Delete",
     "edit": "Edit",
@@ -583,8 +601,8 @@
     "loginToLike": "Log in to like!",
     "loginToComment": "Log in to comment!",
     "linkCopied": "Link copied!",
-    "share": "Share",
-    "comment": "Comment",
+    "share": "Teilen",
+    "comment": "Kommentar",
     "report": "Report",
     "reportConfirm": "Report this post as inappropriate?",
     "reported": "Post reported! Moderators will review it.",
@@ -653,7 +671,7 @@
     "topics": "Christology, Soteriology, Ecclesiology, Eschatology, Pneumatology, Hermeneutics"
   },
   "media": {
-    "photo": "Photo",
+    "photo": "Foto",
     "video": "Video",
     "audio": "Audio",
     "url": "URL",
@@ -663,7 +681,7 @@
     "youtubePreview": "YouTube (preview unavailable)"
   },
   "time": {
-    "now": "Now",
+    "now": "Jetzt",
     "minAgo": "{{count}}min ago",
     "hoursAgo": "{{count}}h ago",
     "daysAgo": "{{count}}d ago"
@@ -1084,5 +1102,6 @@
     "f6title": "Globale Gemeinschaft",
     "f6desc": "Verbinden Sie sich mit Christen aus Brasilien, Europa, Afrika und der ganzen Welt.",
     "tagline": "Das christliche soziale Netzwerk"
-  }
+  },
+  "locale": "de-DE"
 }

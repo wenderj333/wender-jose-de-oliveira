@@ -228,7 +228,7 @@
     "commentPlaceholder": "Scrie un comentariu...",
     "confirmDelete": "Ești sigur că vrei să ștergi această postare?",
     "delete": "Șterge postarea",
-    "loginRequired": "Vă rugăm să vă conectați pentru a publica",
+    "loginRequired": "Autentifică-te pentru a vedea și a posta.",
     "addContent": "Vă rugăm adăugați text sau media",
     "fileTooLarge": "Fișier prea mare! Maximum {{maxSize}} MB.",
     "uploading": "📤 Se trimite {{filename}}...",
@@ -239,11 +239,32 @@
     "loading": "Se încarcă...",
     "noMusicUploaded": "Nicio muzică încărcată încă",
     "title": "Peretele Comunității",
-    "subtitle": "Distribuie mărturii, laudă și versete biblice cu comunitatea creștină",
-    "newPost": "Nou Mesaj",
-    "cancel": "Anulare",
-    "messagePlaceholder": "Scrie-ți mărturia, reflecția sau versatul biblic...",
-    "pray": "Roagă-te"
+    "subtitle": "Împărtășește-ți credința, mărturiile și laudele",
+    "newPost": "+ Postare Nouă",
+    "cancel": "Anulează",
+    "messagePlaceholder": "Împărtășește ceva cu comunitatea...",
+    "pray": "Roagă-te",
+    "publishing": "Se publică...",
+    "amen": "Amin",
+    "noPostsFound": "Nu s-au găsit postări.",
+    "uploadError": "Eroare la încărcare.",
+    "uploadConnectionError": "Eroare de conexiune la încărcare.",
+    "musicLabel": "Muzică",
+    "filters": {
+      "all": "Toate",
+      "testimonies": "Mărturii",
+      "worship": "Laudă",
+      "verses": "Versete",
+      "reflections": "Reflecții",
+      "photos": "Fotografii"
+    },
+    "categories": {
+      "testemunho": "Mărturie",
+      "louvor": "Laudă",
+      "reflexao": "Reflecție",
+      "versiculo": "Verset",
+      "foto": "Fotografie"
+    }
   },
   "kids": {
     "title": "Școala Duminicală Digitală",
@@ -594,7 +615,7 @@
     "loginToComment": "Conectează-te pentru a comenta!",
     "linkCopied": "Link copiat!",
     "share": "Distribuie",
-    "comment": "Comentează",
+    "comment": "Comentariu",
     "report": "Raportează",
     "reportConfirm": "Raportezi această postare ca inadecvată?",
     "reported": "Postare raportată! Moderatorii o vor evalua.",
@@ -1094,5 +1115,6 @@
     "f6title": "Comunitate Globală",
     "f6desc": "Conectează-te cu creștini din Brazilia, Europa, Africa și din toată lumea.",
     "tagline": "Rețeaua socială creștină"
-  }
+  },
+  "locale": "ro-RO"
 }

@@ -229,10 +229,10 @@
     "placeholder": "Partagez quelque chose avec la communauté...",
     "publish": "Publier",
     "noPosts": "Aucune publication pour le moment. Soyez le premier à publier! 📸",
-    "commentPlaceholder": "Écrivez un commentaire...",
-    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce post?",
+    "commentPlaceholder": "Écrire un commentaire...",
+    "confirmDelete": "Voulez-vous vraiment supprimer cette publication?",
     "delete": "Supprimer le post",
-    "loginRequired": "Veuillez vous connecter pour publier",
+    "loginRequired": "Connectez-vous pour voir et publier.",
     "addContent": "Veuillez ajouter du texte ou des médias",
     "fileTooLarge": "Fichier trop volumineux ! Maximum {{maxSize}} MB.",
     "uploading": "📤 Envoi de {{filename}}...",
@@ -242,12 +242,33 @@
     "doNotClose": "Veuillez ne pas fermer ou rafraîchir la page !",
     "loading": "Chargement...",
     "noMusicUploaded": "Aucune musique téléchargée pour l'instant",
-    "title": "Mur Communautaire",
-    "subtitle": "Partagez des témoignages, des louanges et des versets bibliques avec la communauté chrétienne",
-    "newPost": "Nouveau Message",
+    "title": "Fil de la Communauté",
+    "subtitle": "Partagez votre foi, témoignages et louanges",
+    "newPost": "+ Nouvelle Publication",
     "cancel": "Annuler",
-    "messagePlaceholder": "Écrivez votre témoignage, votre réflexion ou un verset biblique...",
-    "pray": "Prier"
+    "messagePlaceholder": "Partagez quelque chose avec la communauté...",
+    "pray": "Prier",
+    "publishing": "Publication...",
+    "amen": "Amen",
+    "noPostsFound": "Aucune publication trouvée.",
+    "uploadError": "Erreur d'upload.",
+    "uploadConnectionError": "Erreur de connexion lors de l'upload.",
+    "musicLabel": "Musique",
+    "filters": {
+      "all": "Toutes",
+      "testimonies": "Témoignages",
+      "worship": "Louange",
+      "verses": "Versets",
+      "reflections": "Réflexions",
+      "photos": "Photos"
+    },
+    "categories": {
+      "testemunho": "Témoignage",
+      "louvor": "Louange",
+      "reflexao": "Réflexion",
+      "versiculo": "Verset",
+      "foto": "Photo"
+    }
   },
   "kids": {
     "title": "École du Dimanche Numérique",
@@ -598,7 +619,7 @@
     "loginToComment": "Connectez-vous pour commenter !",
     "linkCopied": "Lien copié !",
     "share": "Partager",
-    "comment": "Commenter",
+    "comment": "Commentaire",
     "report": "Signaler",
     "reportConfirm": "Signaler cette publication comme inappropriée ?",
     "reported": "Publication signalée ! Les modérateurs l'examineront.",
@@ -1098,5 +1119,6 @@
     "f6title": "Communauté Mondiale",
     "f6desc": "Connectez-vous avec des chrétiens du Brésil, d'Europe, d'Afrique et du monde entier.",
     "tagline": "Le réseau social chrétien"
-  }
+  },
+  "locale": "fr-FR"
 }

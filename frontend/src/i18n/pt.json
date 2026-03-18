@@ -292,9 +292,36 @@
     "publish": "Publicar",
     "noPosts": "Nenhum post ainda. Seja o primeiro a publicar! 📸",
     "commentPlaceholder": "Escreva um comentário...",
-    "confirmDelete": "Tem a certeza que quer deletar este post?",
+    "confirmDelete": "Tem certeza que deseja eliminar esta publicação?",
     "delete": "Deletar post",
-    "pray": "Orar"
+    "pray": "Orar",
+    "title": "Mural da Comunidade",
+    "subtitle": "Compartilhe sua fé, testemunhos e louvores",
+    "newPost": "+ Nova Publicação",
+    "cancel": "Cancelar",
+    "publishing": "Publicando...",
+    "messagePlaceholder": "Compartilhe algo com a comunidade...",
+    "amen": "Amém",
+    "noPostsFound": "Nenhuma publicação encontrada.",
+    "loginRequired": "Faça login para ver e publicar.",
+    "uploadError": "Erro ao fazer upload.",
+    "uploadConnectionError": "Erro de conexão ao fazer upload.",
+    "musicLabel": "Música",
+    "filters": {
+      "all": "Todas",
+      "testimonies": "Testemunhos",
+      "worship": "Louvor",
+      "verses": "Versículos",
+      "reflections": "Reflexões",
+      "photos": "Fotos"
+    },
+    "categories": {
+      "testemunho": "Testemunho",
+      "louvor": "Louvor",
+      "reflexao": "Reflexão",
+      "versiculo": "Versículo",
+      "foto": "Foto"
+    }
   },
   "groups": {
     "title": "Grupos",
@@ -650,7 +677,7 @@
     "flaggedPost": "Post Denunciado"
   },
   "common": {
-    "loading": "Carregando...",
+    "loading": "A carregar...",
     "send": "Enviar",
     "save": "Salvar",
     "delete": "Excluir",
@@ -660,8 +687,8 @@
     "loginToLike": "Faça login para curtir!",
     "loginToComment": "Faça login para comentar!",
     "linkCopied": "Link copiado!",
-    "share": "Compartilhar",
-    "comment": "Comentar",
+    "share": "Partilhar",
+    "comment": "Comentário",
     "report": "Denunciar",
     "reportConfirm": "Denunciar este post como inadequado?",
     "reported": "Post denunciado! Os moderadores irão avaliar.",
@@ -1151,5 +1178,6 @@
     "f6title": "Comunidade Global",
     "f6desc": "Conecte com cristãos de Brasil, Europa, África e mundo todo.",
     "tagline": "A rede social cristã"
-  }
+  },
+  "locale": "pt-PT"
 }

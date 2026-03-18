@@ -229,10 +229,10 @@
     "placeholder": "Comparte algo con la comunidad...",
     "publish": "Publicar",
     "noPosts": "Ninguna publicación aún. ¡Sé el primero en publicar! 📸",
-    "commentPlaceholder": "Escribe un comentario...",
-    "confirmDelete": "¿Estás seguro de que quieres eliminar este post?",
+    "commentPlaceholder": "Escribir un comentario...",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar esta publicación?",
     "delete": "Eliminar post",
-    "loginRequired": "Por favor, inicia sesión para publicar",
+    "loginRequired": "Inicia sesión para ver y publicar.",
     "addContent": "Por favor, añade texto o media",
     "fileTooLarge": "¡Archivo muy grande! Máximo {{maxSize}} MB.",
     "uploading": "📤 Subiendo {{filename}}...",
@@ -242,12 +242,33 @@
     "doNotClose": "¡Por favor no cierres ni recargues la página!",
     "loading": "Cargando...",
     "noMusicUploaded": "Ninguna música subida aún",
-    "title": "Muro Comunitario",
-    "subtitle": "Comparte testimonios, alabanzas y versículos bíblicos con la comunidad cristiana",
-    "newPost": "Nueva Publicación",
+    "title": "Mural de la Comunidad",
+    "subtitle": "Comparta su fe, testimonios y alabanzas",
+    "newPost": "+ Nueva Publicación",
     "cancel": "Cancelar",
-    "messagePlaceholder": "Escribe tu testimonio, reflexión o versículo bíblico...",
-    "pray": "Orar"
+    "messagePlaceholder": "Comparte algo con la comunidad...",
+    "pray": "Orar",
+    "publishing": "Publicando...",
+    "amen": "Amén",
+    "noPostsFound": "No se encontraron publicaciones.",
+    "uploadError": "Error al subir.",
+    "uploadConnectionError": "Error de conexión al subir.",
+    "musicLabel": "Música",
+    "filters": {
+      "all": "Todas",
+      "testimonies": "Testimonios",
+      "worship": "Alabanza",
+      "verses": "Versículos",
+      "reflections": "Reflexiones",
+      "photos": "Fotos"
+    },
+    "categories": {
+      "testemunho": "Testimonio",
+      "louvor": "Alabanza",
+      "reflexao": "Reflexión",
+      "versiculo": "Versículo",
+      "foto": "Foto"
+    }
   },
   "kids": {
     "title": "Escuela Dominical Digital",
@@ -598,7 +619,7 @@
     "loginToComment": "¡Inicia sesión para comentar!",
     "linkCopied": "¡Enlace copiado!",
     "share": "Compartir",
-    "comment": "Comentar",
+    "comment": "Comentario",
     "report": "Denunciar",
     "reportConfirm": "¿Denunciar este post como inadecuado?",
     "reported": "¡Post denunciado! Los moderadores lo evaluarán.",
@@ -668,7 +689,7 @@
   },
   "media": {
     "photo": "Foto",
-    "video": "Vídeo",
+    "video": "Video",
     "audio": "Audio",
     "url": "URL",
     "urlPrompt": "Pega la URL (YouTube, Vimeo, etc):",
@@ -1098,5 +1119,6 @@
     "f6title": "Comunidad Global",
     "f6desc": "Conéctate con cristianos de Brasil, Europa, África y todo el mundo.",
     "tagline": "La red social cristiana"
-  }
+  },
+  "locale": "es-ES"
 }

@@ -232,7 +232,7 @@
     "commentPlaceholder": "Write a comment...",
     "confirmDelete": "Are you sure you want to delete this post?",
     "delete": "Delete post",
-    "loginRequired": "Please log in to post",
+    "loginRequired": "Log in to see and post.",
     "addContent": "Please add text or media",
     "fileTooLarge": "File too large! Maximum {{maxSize}} MB.",
     "uploading": "📤 Uploading {{filename}}...",
@@ -242,12 +242,33 @@
     "doNotClose": "Please don't close or refresh the page!",
     "loading": "Loading...",
     "noMusicUploaded": "No music uploaded yet",
-    "title": "Community Wall",
-    "subtitle": "Share testimonies, praise and Bible verses with the Christian community",
-    "newPost": "New Post",
+    "title": "Community Feed",
+    "subtitle": "Share your faith, testimonies and worship",
+    "newPost": "+ New Post",
     "cancel": "Cancel",
-    "messagePlaceholder": "Write your testimony, reflection or Bible verse...",
-    "pray": "Pray"
+    "messagePlaceholder": "Share something with the community...",
+    "pray": "Pray",
+    "publishing": "Publishing...",
+    "amen": "Amen",
+    "noPostsFound": "No posts found.",
+    "uploadError": "Upload error.",
+    "uploadConnectionError": "Connection error while uploading.",
+    "musicLabel": "Music",
+    "filters": {
+      "all": "All",
+      "testimonies": "Testimonies",
+      "worship": "Worship",
+      "verses": "Verses",
+      "reflections": "Reflections",
+      "photos": "Photos"
+    },
+    "categories": {
+      "testemunho": "Testimony",
+      "louvor": "Worship",
+      "reflexao": "Reflection",
+      "versiculo": "Verse",
+      "foto": "Photo"
+    }
   },
   "kids": {
     "title": "Digital Sunday School",
@@ -1098,5 +1119,6 @@
     "f6title": "Global Community",
     "f6desc": "Connect with Christians from Brazil, Europe, Africa and all over the world.",
     "tagline": "The Christian social network"
-  }
+  },
+  "locale": "en-GB"
 }
