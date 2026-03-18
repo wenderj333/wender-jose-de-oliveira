@@ -1,84 +1,104 @@
 /* =============================================
-   SIGO COM FÉ — Modern Theme (Azul Real & Dourado)
+   SIGO COM FÉ — Tema Claro (Azul + Dourado)
+   Estilo: Instagram/Facebook cristão
    ============================================= */
 
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
-  --bg: #0b1120;
-  --bg2: #111827;
-  --bg3: #1a2233;
-  --fb: #1e50c8;
-  --fb2: #1440a8;
-  --gold: #c9a84c;
-  --gold2: #e4c56a;
-  --gold3: #f0d080;
-  --text: #e8eaf0;
-  --muted: #8892a4;
-  --border: rgba(255,255,255,0.08);
-  --card: #131d2e;
-  --card2: #172035;
-  --shadow: 0 4px 24px rgba(0,0,0,0.4);
-  --radius: 14px;
+  /* Background */
+  --bg:       #f0f4ff;
+  --bg2:      #e8eeff;
+  --bg3:      #ffffff;
+
+  /* Brand blues */
+  --fb:       #1a73e8;
+  --fb2:      #1557b0;
+  --fb-light: #e8f0fe;
+
+  /* Gold */
+  --gold:     #b8860b;
+  --gold2:    #d4a017;
+  --gold3:    #f0c040;
+  --gold-bg:  #fffbec;
+
+  /* Text */
+  --text:     #1a1a2e;
+  --text2:    #374151;
+  --muted:    #6b7280;
+
+  /* UI */
+  --border:   #dde3f0;
+  --card:     #ffffff;
+  --card2:    #f7f9ff;
+  --shadow:   0 2px 12px rgba(26,115,232,0.08);
+  --shadow-lg:0 8px 32px rgba(26,115,232,0.14);
+  --radius:   14px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ── TOPBAR ── */
 .topbar {
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 54px;
-  background: linear-gradient(135deg, var(--fb2) 0%, var(--fb) 60%, #1a60e0 100%);
+  height: 56px;
+  background: linear-gradient(135deg, var(--fb2) 0%, var(--fb) 55%, #2196f3 100%);
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 20px;
   z-index: 200;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 12px rgba(21,87,176,0.25);
 }
 
 .nav-item {
-  transition: background 0.2s;
+  color: rgba(255,255,255,0.9) !important;
+  transition: background 0.18s;
+  border-radius: 9px;
 }
 .nav-item:hover, .nav-item.active {
-  background: rgba(255,255,255,0.15) !important;
-  border-radius: 8px;
+  background: rgba(255,255,255,0.2) !important;
+  color: white !important;
 }
 
 .icon-btn {
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.15s;
   cursor: pointer;
 }
-.icon-btn:hover { opacity: 0.8; }
+.icon-btn:hover { opacity: 0.85; transform: scale(1.05); }
 
 /* ── LAYOUT ── */
 .app-container {
-  padding-top: 54px;
+  padding-top: 56px;
   min-height: 100vh;
   background: var(--bg);
 }
 
 .modern-layout {
   display: grid;
-  grid-template-columns: 240px 1fr 240px;
+  grid-template-columns: 260px 1fr 260px;
   gap: 0;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px 12px;
-  min-height: calc(100vh - 54px);
+  padding: 18px 14px;
+  min-height: calc(100vh - 56px);
   align-items: start;
 }
 
 .sidebar-left,
 .sidebar-right {
   position: sticky;
-  top: 70px;
-  max-height: calc(100vh - 80px);
+  top: 72px;
+  max-height: calc(100vh - 82px);
   overflow-y: auto;
   scrollbar-width: none;
 }
@@ -90,35 +110,46 @@ body {
 
 .main-content-area {
   min-width: 0;
-  padding: 0 8px;
+  padding: 0 10px;
 }
 
 /* ── PROFILE CARD ── */
 .profile-card-modern {
-  background: linear-gradient(135deg, var(--fb2) 0%, var(--fb) 60%, #1a5ed8 100%);
+  background: linear-gradient(150deg, var(--fb2) 0%, var(--fb) 50%, #42a5f5 100%);
   border-radius: var(--radius);
-  padding: 20px 16px;
+  padding: 22px 18px;
   text-align: center;
-  margin-bottom: 14px;
-  box-shadow: var(--shadow);
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+.profile-card-modern::before {
+  content: '';
+  position: absolute;
+  bottom: -20px; right: -20px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
 }
 
 .prof-avatar {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.25);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 10px;
-  border: 3px solid rgba(255,255,255,0.3);
+  border: 3px solid rgba(255,255,255,0.5);
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .prof-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: white;
   margin-bottom: 2px;
@@ -127,14 +158,10 @@ body {
 .prof-stats {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 24px;
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,0.15);
-}
-
-.prof-stat {
-  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.2);
 }
 
 .prof-stat-n {
@@ -144,54 +171,55 @@ body {
 }
 
 .prof-stat-l {
-  font-size: 0.65rem;
-  color: rgba(255,255,255,0.6);
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.7);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
 }
 
 /* ── MENU GROUPS ── */
 .menu-group {
   background: var(--card);
   border-radius: var(--radius);
-  padding: 12px 8px;
+  padding: 10px 8px;
   margin-bottom: 10px;
   border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 .menu-title {
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   font-weight: 700;
   color: var(--gold);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 4px 8px 8px;
-  opacity: 0.9;
+  letter-spacing: 0.12em;
+  padding: 4px 10px 8px;
 }
 
 .menu-link {
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 8px 10px;
-  border-radius: 9px;
-  color: var(--muted);
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  color: var(--text2);
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  transition: all 0.2s;
+  transition: all 0.18s;
   cursor: pointer;
 }
 
 .menu-link:hover {
-  background: rgba(255,255,255,0.06);
-  color: var(--text);
+  background: var(--fb-light);
+  color: var(--fb);
 }
 
 .menu-link.active {
-  background: linear-gradient(135deg, rgba(30,80,200,0.3), rgba(30,80,200,0.15));
-  color: var(--gold2);
-  border-left: 3px solid var(--gold);
+  background: var(--fb-light);
+  color: var(--fb);
+  font-weight: 600;
+  border-left: 3px solid var(--fb);
 }
 
 .logout-btn {
@@ -199,7 +227,9 @@ body {
   background: none;
   border: none;
   text-align: left;
+  color: #e53e3e !important;
 }
+.logout-btn:hover { background: #fff5f5 !important; color: #c53030 !important; }
 
 /* ── CARDS ── */
 .modern-card {
@@ -214,11 +244,14 @@ body {
   margin-bottom: 12px;
 }
 
-.widget-header {
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 10px;
-  margin-bottom: 12px;
+/* ── LIVE WIDGET (override for light) ── */
+.live-widget {
+  background: linear-gradient(135deg, var(--fb2) 0%, var(--fb) 60%, #2196f3 100%) !important;
+  border-radius: var(--radius) !important;
 }
+
+/* ── BUTTONS (global override for light theme) ── */
+button { font-family: inherit; }
 
 /* ── MOBILE ── */
 .mobile-only { display: none !important; }
@@ -227,21 +260,31 @@ body {
 @media (max-width: 1100px) {
   .desktop-only { display: none !important; }
   .mobile-only { display: flex !important; }
-  .modern-layout {
-    grid-template-columns: 1fr;
-  }
+  .modern-layout { grid-template-columns: 1fr; padding: 10px 8px; }
 }
 
-@media (max-width: 768px) {
-  .modern-layout {
-    padding: 10px 8px;
-  }
-  .main-content-area {
-    padding: 0;
-  }
-}
-
-/* ── TOPBAR NAV SCROLL DESKTOP ── */
 @media (max-width: 900px) {
   .nav-scroll { display: none !important; }
+}
+
+/* ── FEED POSTS (light overrides) ── */
+.feed-post, .feed-card, .post-card {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+/* ── MURAL INPUT AREA ── */
+.mural-input, .post-input, .create-post {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+/* ── INPUTS & TEXTAREAS ── */
+input, textarea, select {
+  font-family: inherit;
 }
