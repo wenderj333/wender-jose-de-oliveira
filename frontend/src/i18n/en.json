@@ -1000,7 +1000,66 @@
     "saveBtn": "Share Reflection",
     "loginRequired": "Log in to write and share your reflection.",
     "community": "Community Reflections",
-    "noCommunity": "Be the first to share a reflection today!"
+    "noCommunity": "Be the first to share a reflection today!",
+    "days": [
+      {
+        "q1": "If today were your last day, what would you say to God?",
+        "q1verse": "For God so loved the world that he gave his one and only Son — John 3:16",
+        "q2": "What is keeping you from fully surrendering your life to Christ?",
+        "q2verse": "Come to me, all you who are weary and burdened — Matthew 11:28",
+        "q3": "How have you shown love to others this week?",
+        "q3verse": "Love one another as I have loved you — John 13:34"
+      },
+      {
+        "q1": "What are you truly grateful for today?",
+        "q1verse": "Give thanks in all circumstances, for this is God's will — 1 Thessalonians 5:18",
+        "q2": "Where do you feel God's presence in your life right now?",
+        "q2verse": "Where two or three gather in my name, there am I — Matthew 18:20",
+        "q3": "What sin do you need to place in God's hands today?",
+        "q3verse": "If we confess our sins, he is faithful and just — 1 John 1:9"
+      },
+      {
+        "q1": "How can you be a light today in your environment?",
+        "q1verse": "You are the light of the world — Matthew 5:14",
+        "q2": "What has the Bible been speaking to your heart lately?",
+        "q2verse": "Your word is a lamp for my feet, a light on my path — Psalm 119:105",
+        "q3": "Is there someone you need to forgive today?",
+        "q3verse": "Forgive one another, just as in Christ God forgave you — Ephesians 4:32"
+      },
+      {
+        "q1": "Which promise of God do you need to hold onto today?",
+        "q1verse": "I know the plans I have for you, declares the Lord — Jeremiah 29:11",
+        "q2": "What is God calling you to do that you haven't done yet?",
+        "q2verse": "I can do all this through him who gives me strength — Philippians 4:13",
+        "q3": "How is your quiet time with God going this week?",
+        "q3verse": "But when you pray, go into your room, close the door — Matthew 6:6"
+      },
+      {
+        "q1": "What do you need to let go and trust to God?",
+        "q1verse": "Commit your way to the Lord; trust in him — Psalm 37:5",
+        "q2": "How has your faith grown in the past month?",
+        "q2verse": "Faith is confidence in what we hope for — Hebrews 11:1",
+        "q3": "Are you using your gifts to serve others?",
+        "q3verse": "Each of you should use whatever gift you have received to serve others — 1 Peter 4:10"
+      },
+      {
+        "q1": "What stole your peace this week? How can God restore it?",
+        "q1verse": "And the peace of God, which transcends all understanding — Philippians 4:7",
+        "q2": "How have you witnessed Christ to people around you?",
+        "q2verse": "Go into all the world and preach the gospel — Mark 16:15",
+        "q3": "In what area of your life do you still need transformation?",
+        "q3verse": "Do not conform to the pattern of this world, but be transformed — Romans 12:2"
+      },
+      {
+        "q1": "What has God revealed about himself to you this week?",
+        "q1verse": "Then you will know the truth, and the truth will set you free — John 8:32",
+        "q2": "How can you strengthen your family in faith?",
+        "q2verse": "As for me and my household, we will serve the Lord — Joshua 24:15",
+        "q3": "In what area do you need God's grace the most?",
+        "q3verse": "My grace is sufficient for you, for my power is made perfect in weakness — 2 Corinthians 12:9"
+      }
+    ],
+    "rotateNote": "Questions change automatically every day 🙏"
   },
   "ajudaProximo": {
     "title": "Help Your Neighbor",

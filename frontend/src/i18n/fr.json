@@ -1000,7 +1000,66 @@
     "saveBtn": "Partager la Réflexion",
     "loginRequired": "Connectez-vous pour écrire et partager votre réflexion.",
     "community": "Réflexions de la Communauté",
-    "noCommunity": "Soyez le premier à partager une réflexion aujourd'hui !"
+    "noCommunity": "Soyez le premier à partager une réflexion aujourd'hui !",
+    "days": [
+      {
+        "q1": "Si aujourd'hui était votre dernier jour, que diriez-vous à Dieu?",
+        "q1verse": "Car Dieu a tant aimé le monde qu'il a donné son Fils unique — Jean 3:16",
+        "q2": "Qu'est-ce qui vous empêche de remettre entièrement votre vie à Christ?",
+        "q2verse": "Venez à moi, vous tous qui êtes fatigués et chargés — Matthieu 11:28",
+        "q3": "Comment avez-vous vécu l'amour du prochain cette semaine?",
+        "q3verse": "Aimez-vous les uns les autres comme je vous ai aimés — Jean 13:34"
+      },
+      {
+        "q1": "Pour quoi êtes-vous vraiment reconnaissant aujourd'hui?",
+        "q1verse": "Rendez grâces en toutes choses, car c'est la volonté de Dieu — 1 Thessaloniciens 5:18",
+        "q2": "Où sentez-vous la présence de Dieu dans votre vie en ce moment?",
+        "q2verse": "Car là où deux ou trois sont réunis en mon nom — Matthieu 18:20",
+        "q3": "Quel péché devez-vous remettre entre les mains de Dieu aujourd'hui?",
+        "q3verse": "Si nous confessons nos péchés, il est fidèle et juste — 1 Jean 1:9"
+      },
+      {
+        "q1": "Comment pouvez-vous être une lumière aujourd'hui dans votre environnement?",
+        "q1verse": "Vous êtes la lumière du monde — Matthieu 5:14",
+        "q2": "Qu'est-ce que la Bible vous a dit dernièrement?",
+        "q2verse": "Ta parole est une lampe à mes pieds — Psaume 119:105",
+        "q3": "Y a-t-il quelqu'un que vous devez pardonner aujourd'hui?",
+        "q3verse": "Pardonnez-vous les uns aux autres, comme Dieu vous a pardonnés en Christ — Éphésiens 4:32"
+      },
+      {
+        "q1": "Quelle promesse de Dieu avez-vous besoin de vous rappeler aujourd'hui?",
+        "q1verse": "Car je connais les projets que j'ai sur vous, dit l'Éternel — Jérémie 29:11",
+        "q2": "À quoi Dieu vous appelle-t-il et vous n'avez pas encore agi?",
+        "q2verse": "Je puis tout par celui qui me fortifie — Philippiens 4:13",
+        "q3": "Comment se passe votre temps seul avec Dieu cette semaine?",
+        "q3verse": "Mais toi, quand tu pries, entre dans ta chambre — Matthieu 6:6"
+      },
+      {
+        "q1": "Que devez-vous lâcher et confier à Dieu?",
+        "q1verse": "Recommande ton sort à l'Éternel, mets en lui ta confiance — Psaume 37:5",
+        "q2": "Comment votre foi a-t-elle grandi le mois dernier?",
+        "q2verse": "La foi est la ferme assurance des choses qu'on espère — Hébreux 11:1",
+        "q3": "Utilisez-vous vos dons pour servir les autres?",
+        "q3verse": "Servez-vous les uns les autres, chacun selon le don qu'il a reçu — 1 Pierre 4:10"
+      },
+      {
+        "q1": "Qu'est-ce qui a volé votre paix cette semaine? Comment Dieu peut-il la restaurer?",
+        "q1verse": "Et la paix de Dieu, qui surpasse toute intelligence — Philippiens 4:7",
+        "q2": "Comment avez-vous témoigné de Christ aux personnes autour de vous?",
+        "q2verse": "Allez dans le monde entier et prêchez la bonne nouvelle — Marc 16:15",
+        "q3": "Dans quel domaine de votre vie avez-vous encore besoin de transformation?",
+        "q3verse": "Ne vous conformez pas au siècle présent, mais soyez transformés — Romains 12:2"
+      },
+      {
+        "q1": "Qu'est-ce que Dieu vous a révélé sur lui-même cette semaine?",
+        "q1verse": "Vous connaîtrez la vérité, et la vérité vous affranchira — Jean 8:32",
+        "q2": "Comment pouvez-vous fortifier votre famille dans la foi?",
+        "q2verse": "Moi et ma maison, nous servirons l'Éternel — Josué 24:15",
+        "q3": "Dans quel domaine avez-vous le plus besoin de la grâce de Dieu?",
+        "q3verse": "Ma grâce te suffit, car ma puissance s'accomplit dans la faiblesse — 2 Corinthiens 12:9"
+      }
+    ],
+    "rotateNote": "Les questions changent automatiquement chaque jour 🙏"
   },
   "ajudaProximo": {
     "title": "Aidez votre prochain",

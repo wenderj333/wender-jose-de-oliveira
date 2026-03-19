@@ -1058,7 +1058,66 @@
     "saveBtn": "Partilhar Reflexão",
     "loginRequired": "Faça login para escrever e compartilhar sua reflexão.",
     "community": "Reflexões da Comunidade",
-    "noCommunity": "Seja o primeiro a compartilhar uma reflexão hoje!"
+    "noCommunity": "Seja o primeiro a compartilhar uma reflexão hoje!",
+    "days": [
+      {
+        "q1": "Se hoje fosse seu último dia, o que diria a Deus?",
+        "q1verse": "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito — João 3:16",
+        "q2": "O que te impede de entregar completamente sua vida a Cristo?",
+        "q2verse": "Vinde a mim todos os que estais cansados e sobrecarregados — Mateus 11:28",
+        "q3": "Como você tem vivido o amor ao próximo esta semana?",
+        "q3verse": "Amai-vos uns aos outros como eu vos amei — João 13:34"
+      },
+      {
+        "q1": "Pelo que você é verdadeiramente grato hoje?",
+        "q1verse": "Em tudo dai graças, porque esta é a vontade de Deus — 1 Tessalonicenses 5:18",
+        "q2": "Onde você sente a presença de Deus na sua vida agora?",
+        "q2verse": "Onde dois ou três estiverem reunidos em meu nome, ali estou — Mateus 18:20",
+        "q3": "Qual pecado você precisa deixar nas mãos de Deus hoje?",
+        "q3verse": "Se confessarmos os nossos pecados, ele é fiel e justo — 1 João 1:9"
+      },
+      {
+        "q1": "Como você pode ser luz hoje no seu ambiente?",
+        "q1verse": "Vós sois a luz do mundo. Não se pode esconder uma cidade... — Mateus 5:14",
+        "q2": "O que a Bíblia tem falado ao seu coração ultimamente?",
+        "q2verse": "A tua palavra é lâmpada que ilumina os meus passos — Salmos 119:105",
+        "q3": "Há alguém que você precisa perdoar hoje?",
+        "q3verse": "Perdoai-vos uns aos outros, como Deus em Cristo vos perdoou — Efésios 4:32"
+      },
+      {
+        "q1": "Qual promessa de Deus você precisa lembrar hoje?",
+        "q1verse": "Porque eu sei os planos que tenho para vocês, diz o Senhor — Jeremias 29:11",
+        "q2": "O que Deus tem te chamado a fazer e você ainda não agiu?",
+        "q2verse": "Tudo posso naquele que me fortalece — Filipenses 4:13",
+        "q3": "Como está seu tempo a sós com Deus esta semana?",
+        "q3verse": "Mas tu, quando orares, entra no teu quarto e fecha a porta — Mateus 6:6"
+      },
+      {
+        "q1": "O que você precisa soltar e confiar a Deus?",
+        "q1verse": "Entrega o teu caminho ao Senhor, confia nele — Salmos 37:5",
+        "q2": "Como sua fé tem crescido no último mês?",
+        "q2verse": "A fé é o firme fundamento das coisas que se esperam — Hebreus 11:1",
+        "q3": "Você está usando seus dons para servir aos outros?",
+        "q3verse": "Cada um coloque ao serviço dos outros o dom que recebeu — 1 Pedro 4:10"
+      },
+      {
+        "q1": "O que roubou sua paz esta semana? Como Deus pode restaurá-la?",
+        "q1verse": "A paz de Deus, que excede todo entendimento, guardará — Filipenses 4:7",
+        "q2": "Como você tem testemunhado Cristo para as pessoas ao redor?",
+        "q2verse": "Ide por todo o mundo e pregai o evangelho — Marcos 16:15",
+        "q3": "Qual área da sua vida ainda precisa de transformação?",
+        "q3verse": "Não vos conformeis com este século, mas transformai-vos — Romanos 12:2"
+      },
+      {
+        "q1": "O que Deus revelou sobre Si mesmo para você esta semana?",
+        "q1verse": "Conhecereis a verdade, e a verdade vos libertará — João 8:32",
+        "q2": "Como você pode fortalecer sua família na fé?",
+        "q2verse": "Quanto a mim e à minha casa, serviremos ao Senhor — Josué 24:15",
+        "q3": "Em que área você mais precisa da graça de Deus?",
+        "q3verse": "Basta-te a minha graça, porque o meu poder se aperfeiçoa — 2 Coríntios 12:9"
+      }
+    ],
+    "rotateNote": "As perguntas mudam automaticamente a cada dia 🙏"
   },
   "ajudaProximo": {
     "title": "Ajude o Próximo",

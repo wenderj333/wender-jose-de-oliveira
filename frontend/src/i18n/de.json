@@ -983,7 +983,66 @@
     "saveBtn": "Reflexion teilen",
     "loginRequired": "Melde dich an, um deine Reflexion zu schreiben und zu teilen.",
     "community": "Gemeinschaftsreflexionen",
-    "noCommunity": "Sei der Erste, der heute eine Reflexion teilt!"
+    "noCommunity": "Sei der Erste, der heute eine Reflexion teilt!",
+    "days": [
+      {
+        "q1": "Wenn heute dein letzter Tag wäre, was würdest du Gott sagen?",
+        "q1verse": "Denn also hat Gott die Welt geliebt, dass er seinen eingeborenen Sohn gab — Johannes 3:16",
+        "q2": "Was hindert dich daran, dein Leben vollständig Christus zu übergeben?",
+        "q2verse": "Kommt her zu mir alle, die ihr mühselig und beladen seid — Matthäus 11:28",
+        "q3": "Wie hast du diese Woche die Nächstenliebe gelebt?",
+        "q3verse": "Liebet einander, wie ich euch geliebt habe — Johannes 13:34"
+      },
+      {
+        "q1": "Wofür bist du heute wirklich dankbar?",
+        "q1verse": "Seid dankbar in allen Dingen, denn das ist Gottes Wille — 1. Thessalonicher 5:18",
+        "q2": "Wo spürst du gerade Gottes Gegenwart in deinem Leben?",
+        "q2verse": "Wo zwei oder drei in meinem Namen versammelt sind — Matthäus 18:20",
+        "q3": "Welche Sünde musst du heute in Gottes Hände legen?",
+        "q3verse": "Wenn wir unsere Sünden bekennen, ist er treu und gerecht — 1. Johannes 1:9"
+      },
+      {
+        "q1": "Wie kannst du heute in deinem Umfeld ein Licht sein?",
+        "q1verse": "Ihr seid das Licht der Welt — Matthäus 5:14",
+        "q2": "Was hat die Bibel zuletzt zu deinem Herzen gesprochen?",
+        "q2verse": "Dein Wort ist meines Fußes Leuchte — Psalm 119:105",
+        "q3": "Gibt es jemanden, dem du heute vergeben musst?",
+        "q3verse": "Vergebt einander, wie Gott euch in Christus vergeben hat — Epheser 4:32"
+      },
+      {
+        "q1": "Welches Versprechen Gottes brauchst du heute?",
+        "q1verse": "Ich weiß, was für Gedanken ich über euch habe, spricht der Herr — Jeremia 29:11",
+        "q2": "Wozu ruft Gott dich und du hast noch nicht gehandelt?",
+        "q2verse": "Ich vermag alles durch den, der mich stark macht — Philipper 4:13",
+        "q3": "Wie ist deine stille Zeit mit Gott diese Woche?",
+        "q3verse": "Wenn du betest, geh in dein Kämmerlein — Matthäus 6:6"
+      },
+      {
+        "q1": "Was musst du loslassen und Gott anvertrauen?",
+        "q1verse": "Befiehl dem HERRN deinen Weg und vertraue auf ihn — Psalm 37:5",
+        "q2": "Wie ist dein Glaube im letzten Monat gewachsen?",
+        "q2verse": "Der Glaube ist die Grundlage der Dinge, die man hofft — Hebräer 11:1",
+        "q3": "Setzt du deine Gaben ein, um anderen zu dienen?",
+        "q3verse": "Dienet einander, jeder mit der Gabe, die er empfangen hat — 1. Petrus 4:10"
+      },
+      {
+        "q1": "Was hat deinen Frieden gestohlen? Wie kann Gott ihn wiederherstellen?",
+        "q1verse": "Der Friede Gottes, der allen Verstand übersteigt — Philipper 4:7",
+        "q2": "Wie hast du Christus den Menschen um dich herum bezeugt?",
+        "q2verse": "Geht hin in alle Welt und predigt das Evangelium — Markus 16:15",
+        "q3": "In welchem Bereich deines Lebens brauchst du noch Veränderung?",
+        "q3verse": "Stellt euch nicht dieser Welt gleich, sondern verwandelt euch — Römer 12:2"
+      },
+      {
+        "q1": "Was hat Gott dir diese Woche über sich selbst offenbart?",
+        "q1verse": "Ihr werdet die Wahrheit erkennen, und die Wahrheit wird euch frei machen — Johannes 8:32",
+        "q2": "Wie kannst du deine Familie im Glauben stärken?",
+        "q2verse": "Ich und mein Haus wollen dem HERRN dienen — Josua 24:15",
+        "q3": "In welchem Bereich brauchst du Gottes Gnade am meisten?",
+        "q3verse": "Meine Gnade genügt dir, denn meine Kraft wird in Schwachheit vollkommen — 2. Korinther 12:9"
+      }
+    ],
+    "rotateNote": "Die Fragen ändern sich täglich automatisch 🙏"
   },
   "ajudaProximo": {
     "title": "Hilf deinem Nächsten",

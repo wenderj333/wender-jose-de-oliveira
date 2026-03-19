@@ -1000,7 +1000,66 @@
     "saveBtn": "Compartir Reflexión",
     "loginRequired": "Inicia sesión para escribir y compartir tu reflexión.",
     "community": "Reflexiones de la Comunidad",
-    "noCommunity": "¡Sé el primero en compartir una reflexión hoy!"
+    "noCommunity": "¡Sé el primero en compartir una reflexión hoy!",
+    "days": [
+      {
+        "q1": "Si hoy fuera tu último día, ¿qué le dirías a Dios?",
+        "q1verse": "Porque de tal manera amó Dios al mundo que dio a su Hijo unigénito — Juan 3:16",
+        "q2": "¿Qué te impide entregar completamente tu vida a Cristo?",
+        "q2verse": "Venid a mí todos los que estáis trabajados y cargados — Mateo 11:28",
+        "q3": "¿Cómo has vivido el amor al prójimo esta semana?",
+        "q3verse": "Amaos los unos a los otros como yo os he amado — Juan 13:34"
+      },
+      {
+        "q1": "¿Por qué estás verdaderamente agradecido hoy?",
+        "q1verse": "En todo dad gracias, porque esta es la voluntad de Dios — 1 Tesalonicenses 5:18",
+        "q2": "¿Dónde sientes la presencia de Dios en tu vida ahora?",
+        "q2verse": "Donde dos o tres estén reunidos en mi nombre, allí estoy — Mateo 18:20",
+        "q3": "¿Qué pecado necesitas dejar en manos de Dios hoy?",
+        "q3verse": "Si confesamos nuestros pecados, él es fiel y justo — 1 Juan 1:9"
+      },
+      {
+        "q1": "¿Cómo puedes ser luz hoy en tu entorno?",
+        "q1verse": "Vosotros sois la luz del mundo — Mateo 5:14",
+        "q2": "¿Qué te ha estado hablando la Biblia últimamente?",
+        "q2verse": "Lámpara es a mis pies tu palabra — Salmo 119:105",
+        "q3": "¿Hay alguien a quien necesitas perdonar hoy?",
+        "q3verse": "Perdonaos los unos a los otros, como Dios os perdonó en Cristo — Efesios 4:32"
+      },
+      {
+        "q1": "¿Qué promesa de Dios necesitas recordar hoy?",
+        "q1verse": "Porque yo sé los pensamientos que tengo acerca de vosotros, dice el Señor — Jeremías 29:11",
+        "q2": "¿A qué te llama Dios y aún no has actuado?",
+        "q2verse": "Todo lo puedo en Cristo que me fortalece — Filipenses 4:13",
+        "q3": "¿Cómo está tu tiempo a solas con Dios esta semana?",
+        "q3verse": "Pero tú, cuando ores, entra en tu aposento — Mateo 6:6"
+      },
+      {
+        "q1": "¿Qué necesitas soltar y confiar a Dios?",
+        "q1verse": "Encomienda al Señor tu camino y confía en él — Salmo 37:5",
+        "q2": "¿Cómo ha crecido tu fe en el último mes?",
+        "q2verse": "La fe es la certeza de lo que se espera — Hebreos 11:1",
+        "q3": "¿Estás usando tus dones para servir a los demás?",
+        "q3verse": "Cada uno según el don que ha recibido, minístrelo a los otros — 1 Pedro 4:10"
+      },
+      {
+        "q1": "¿Qué robó tu paz esta semana? ¿Cómo puede Dios restaurarla?",
+        "q1verse": "Y la paz de Dios, que sobrepasa todo entendimiento — Filipenses 4:7",
+        "q2": "¿Cómo has testificado de Cristo a las personas a tu alrededor?",
+        "q2verse": "Id por todo el mundo y predicad el evangelio — Marcos 16:15",
+        "q3": "¿En qué área de tu vida aún necesitas transformación?",
+        "q3verse": "No os conforméis a este siglo, sino transformaos — Romanos 12:2"
+      },
+      {
+        "q1": "¿Qué te ha revelado Dios acerca de sí mismo esta semana?",
+        "q1verse": "Y conoceréis la verdad, y la verdad os hará libres — Juan 8:32",
+        "q2": "¿Cómo puedes fortalecer a tu familia en la fe?",
+        "q2verse": "Yo y mi casa serviremos al Señor — Josué 24:15",
+        "q3": "¿En qué área necesitas más la gracia de Dios?",
+        "q3verse": "Bástate mi gracia, porque mi poder se perfecciona en la debilidad — 2 Corintios 12:9"
+      }
+    ],
+    "rotateNote": "Las preguntas cambian automáticamente cada día 🙏"
   },
   "ajudaProximo": {
     "title": "Ayuda al Prójimo",

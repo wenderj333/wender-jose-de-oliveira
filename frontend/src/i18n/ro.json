@@ -996,7 +996,66 @@
     "saveBtn": "Partajează Reflecția",
     "loginRequired": "Autentifică-te pentru a scrie și a-ți partaja reflecția.",
     "community": "Reflecții ale Comunității",
-    "noCommunity": "Fii primul care partajează o reflecție astăzi!"
+    "noCommunity": "Fii primul care partajează o reflecție astăzi!",
+    "days": [
+      {
+        "q1": "Dacă astăzi ar fi ultima ta zi, ce i-ai spune lui Dumnezeu?",
+        "q1verse": "Fiindcă atât de mult a iubit Dumnezeu lumea, că a dat pe singurul Lui Fiu — Ioan 3:16",
+        "q2": "Ce te împiedică să-ți predai complet viața lui Cristos?",
+        "q2verse": "Veniți la Mine toți cei trudiți și împovărați — Matei 11:28",
+        "q3": "Cum ai trăit dragostea față de aproapele tău în această săptămână?",
+        "q3verse": "Iubiți-vă unii pe alții cum v-am iubit Eu — Ioan 13:34"
+      },
+      {
+        "q1": "Pentru ce ești cu adevărat recunoscător astăzi?",
+        "q1verse": "Mulțumiți lui Dumnezeu pentru toate lucrurile — 1 Tesaloniceni 5:18",
+        "q2": "Unde simți prezența lui Dumnezeu în viața ta acum?",
+        "q2verse": "Căci acolo unde sunt doi sau trei adunați în Numele Meu — Matei 18:20",
+        "q3": "Ce păcat trebuie să lași în mâinile lui Dumnezeu astăzi?",
+        "q3verse": "Dacă ne mărturisim păcatele, El este credincios și drept — 1 Ioan 1:9"
+      },
+      {
+        "q1": "Cum poți fi o lumină astăzi în mediul tău?",
+        "q1verse": "Voi sunteți lumina lumii — Matei 5:14",
+        "q2": "Ce ți-a vorbit Biblia la inimă recent?",
+        "q2verse": "Cuvântul Tău este o candelă pentru picioarele mele — Psalm 119:105",
+        "q3": "Există cineva pe care trebuie să-l ierți astăzi?",
+        "q3verse": "Iertați-vă unii pe alții, cum v-a iertat și Dumnezeu în Cristos — Efeseni 4:32"
+      },
+      {
+        "q1": "Ce promisiune a lui Dumnezeu ai nevoie să-ți amintești astăzi?",
+        "q1verse": "Eu știu gândurile pe care le am cu privire la voi, zice Domnul — Ieremia 29:11",
+        "q2": "La ce te cheamă Dumnezeu și tu nu ai acționat încă?",
+        "q2verse": "Pot totul prin Cristos care mă întărește — Filipeni 4:13",
+        "q3": "Cum este timpul tău singur cu Dumnezeu în această săptămână?",
+        "q3verse": "Dar tu, când te rogi, intră în odăița ta — Matei 6:6"
+      },
+      {
+        "q1": "Ce trebuie să eliberezi și să încredințezi lui Dumnezeu?",
+        "q1verse": "Încredințează-ți soarta Domnului și ai încredere în El — Psalm 37:5",
+        "q2": "Cum a crescut credința ta în ultima lună?",
+        "q2verse": "Credința este o încredere neclintită în lucrurile nădăjduite — Evrei 11:1",
+        "q3": "Folosești darurile tale pentru a-i sluji pe alții?",
+        "q3verse": "Fiecare să pună în slujba altora darul pe care l-a primit — 1 Petru 4:10"
+      },
+      {
+        "q1": "Ce ți-a furat pacea această săptămână? Cum o poate restaura Dumnezeu?",
+        "q1verse": "Și pacea lui Dumnezeu, care întrece orice pricepere — Filipeni 4:7",
+        "q2": "Cum ai mărturisit despre Cristos oamenilor din jurul tău?",
+        "q2verse": "Duceți-vă în toată lumea și predicați Evanghelia — Marcu 16:15",
+        "q3": "În ce domeniu al vieții tale mai ai nevoie de transformare?",
+        "q3verse": "Nu vă potriviți chipului veacului acestuia, ci să vă transformați — Romani 12:2"
+      },
+      {
+        "q1": "Ce ți-a revelat Dumnezeu despre Sine în această săptămână?",
+        "q1verse": "Veți cunoaște adevărul, și adevărul vă va face liberi — Ioan 8:32",
+        "q2": "Cum poți să-ți întărești familia în credință?",
+        "q2verse": "Cât despre mine și casa mea, vom sluji Domnului — Iosua 24:15",
+        "q3": "În ce domeniu ai cel mai mult nevoie de harul lui Dumnezeu?",
+        "q3verse": "Harul Meu îți este de ajuns, pentru că puterea Mea se desăvârșește în slăbiciune — 2 Corinteni 12:9"
+      }
+    ],
+    "rotateNote": "Întrebările se schimbă automat în fiecare zi 🙏"
   },
   "ajudaProximo": {
     "title": "Ajută Aproapele",
