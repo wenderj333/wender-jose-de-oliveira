@@ -350,8 +350,8 @@ export default function MusicLibrary() {
   const [currentIdx, setCurrentIdx] = useState(null);
   const [playing, setPlaying] = useState(false);
 
-  // YouTube
-  const [ytPlaying, setYtPlaying] = useState(null);
+  // YouTube — open in new tab (no embed, no blocked videos)
+  const openYoutube = (videoId) => window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
 
   useEffect(() => {
     fetchSongs();
@@ -525,48 +525,49 @@ export default function MusicLibrary() {
             ▶️ {t('music.youtubeSection')}
           </h2>
 
-          {/* YouTube player */}
-          {ytPlaying && (
-            <div style={{ borderRadius: 16, overflow: 'hidden', aspectRatio: '16/9', marginBottom: '1rem' }}>
-              <iframe
-                width="100%" height="100%"
-                src={`https://www.youtube.com/embed/${ytPlaying}?autoplay=1`}
-                allow="autoplay; encrypted-media"
-                allowFullScreen style={{ border: 'none' }}
-              />
-            </div>
-          )}
+          {/* Info: opens YouTube in new tab */}
+          <div style={{ marginBottom: 14, padding: '9px 14px', background: '#f0f5ff', borderRadius: 10, border: '1px solid #dde8fa', fontSize: '0.8rem', color: '#4a80d4', display: 'flex', alignItems: 'center', gap: 7 }}>
+            ▶️ {t('music.youtubeNote') || 'Clica numa música para abrir no YouTube'}
+          </div>
 
-          {/* YouTube section tabs */}
-          {Object.entries(PLAYLISTS).map(([catKey, ytSongs]) => {
-            const catLabel = t(`music.${catKey}`);
-            return (
-              <div key={catKey} style={{ marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--fb, #4a80d4)', marginBottom: 8 }}>{catLabel}</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  {ytSongs.map(song => (
-                    <div key={song.id} onClick={() => setYtPlaying(song.id)} style={{
-                      display: 'flex', alignItems: 'center', gap: 12, padding: '8px 10px', borderRadius: 10,
-                      cursor: 'pointer', background: ytPlaying === song.id ? 'rgba(74,128,212,0.08)' : 'transparent',
-                      border: ytPlaying === song.id ? '1px solid rgba(74,128,212,0.2)' : '1px solid transparent',
-                    }}>
+          {/* YouTube cards — click opens YouTube in new tab (no broken embeds) */}
+          {Object.entries(PLAYLISTS).map(([catKey, ytSongs]) => (
+            <div key={catKey} style={{ marginBottom: '1.5rem' }}>
+              <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--fb, #4a80d4)', marginBottom: 8 }}>{t(`music.${catKey}`)}</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+                {ytSongs.map(song => (
+                  <div
+                    key={song.id}
+                    onClick={() => openYoutube(song.id)}
+                    style={{ borderRadius: 10, overflow: 'hidden', cursor: 'pointer', background: 'var(--card)', border: '1px solid var(--border)', transition: 'transform 0.15s,box-shadow 0.15s' }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(74,128,212,0.15)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
+                  >
+                    {/* Thumbnail with play overlay */}
+                    <div style={{ position: 'relative', aspectRatio: '16/9', background: '#111' }}>
                       <img
-                        src={`https://img.youtube.com/vi/${song.id}/default.jpg`}
+                        src={`https://img.youtube.com/vi/${song.id}/mqdefault.jpg`}
                         alt={song.title}
-                        style={{ width: 52, height: 36, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                         loading="lazy"
+                        onError={e => { e.target.style.display = 'none'; }}
                       />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text, #1a1a2e)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</div>
-                        <div style={{ fontSize: 11, color: '#888' }}>{song.artist}</div>
+                      {/* Red YouTube play button overlay */}
+                      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.25)' }}>
+                        <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#ff0000', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
+                          <Play size={16} color="white" fill="white" style={{ marginLeft: 2 }} />
+                        </div>
                       </div>
-                      <Play size={16} color={ytPlaying === song.id ? 'var(--fb, #4a80d4)' : '#ccc'} />
                     </div>
-                  ))}
-                </div>
+                    <div style={{ padding: '8px 10px' }}>
+                      <p style={{ margin: 0, fontWeight: 600, fontSize: '0.78rem', color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</p>
+                      <p style={{ margin: '2px 0 0', fontSize: '0.7rem', color: 'var(--muted,#888)' }}>{song.artist}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
 
