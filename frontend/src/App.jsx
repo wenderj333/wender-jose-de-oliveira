@@ -25,6 +25,7 @@ import BiblicalCourse from "./pages/BiblicalCourse";
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
 import AjudaUmaVida from "./pages/AjudaUmaVida";
+import Chat from "./pages/Chat";
 
 // Components
 import LanguageSelector from "./components/LanguageSwitcher";
@@ -198,6 +199,7 @@ export default function App() {
             <p className="menu-title">Menu</p>
             <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)}><User size={17}/> Meu Perfil</Link>
             <Link to="/" className={isActive('/')}><Home size={17}/> {t('nav.mural')}</Link>
+            <Link to="/mensagens" className={location.pathname.startsWith('/mensagens') ? 'menu-link active' : 'menu-link'}><MessageCircle size={17}/> {t('nav.messages')}</Link>
             <Link to="/membros" className={isActive('/membros')}><Users size={17}/> {t('nav.members')}</Link>
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/> {t('nav.groups')}</Link>
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/> {t('nav.music')}</Link>
@@ -231,6 +233,8 @@ export default function App() {
             <Route path="/consagracao" element={<Consecration />} />
             <Route path="/reflexao" element={<Reflection />} />
             <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
+            <Route path="/mensagens" element={<Chat />} />
+            <Route path="/mensagens/:userId" element={<Chat />} />
             <Route path="/pedidos-ajuda" element={<ProtectedRoute role="pastor"><HelpRequests /></ProtectedRoute>} />
             <Route path="/pastor-dashboard" element={<ProtectedRoute role="pastor"><div style={{padding:20}}>Dashboard em construção...</div></ProtectedRoute>} />
           </Routes>
