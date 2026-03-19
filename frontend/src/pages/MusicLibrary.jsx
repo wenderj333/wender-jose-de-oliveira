@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   Music, Play, Pause, Heart, Mic2, Baby, BookOpen, Guitar,
   Upload, X, ChevronLeft, ChevronRight, Volume2, Search,
+  LayoutGrid, List, Image,
 } from 'lucide-react';
 
 const CLOUD_NAME = 'degxiuf43';
@@ -143,6 +144,8 @@ const iconBtn = {
 function UploadModal({ onClose, onUploaded, token }) {
   const { t } = useTranslation();
   const [file, setFile] = useState(null);
+  const [coverFile, setCoverFile] = useState(null);
+  const [coverPreview, setCoverPreview] = useState(null);
   const [title, setTitle] = useState('');
   const [artist, setArtist] = useState('');
   const [genre, setGenre] = useState('louvor');
@@ -150,6 +153,15 @@ function UploadModal({ onClose, onUploaded, token }) {
   const [progress, setProgress] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const fileRef = useRef();
+  const coverRef = useRef();
+
+  const handleCoverChange = (f) => {
+    if (!f || !f.type.startsWith('image')) return;
+    setCoverFile(f);
+    const reader = new FileReader();
+    reader.onload = (e) => setCoverPreview(e.target.result);
+    reader.readAsDataURL(f);
+  };
 
   const handleDrop = (e) => {
     e.preventDefault(); setDragOver(false);
@@ -171,6 +183,19 @@ function UploadModal({ onClose, onUploaded, token }) {
       const cloudData = await cloudRes.json();
       if (!cloudData.secure_url) throw new Error(t('music.uploadError'));
 
+      // Upload cover if provided
+      let coverUrl = null;
+      if (coverFile) {
+        const coverFd = new FormData();
+        coverFd.append('file', coverFile);
+        coverFd.append('upload_preset', UPLOAD_PRESET);
+        coverFd.append('folder', 'sigo-com-fe/music-covers');
+        const coverRes = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: coverFd });
+        const coverData = await coverRes.json();
+        coverUrl = coverData.secure_url || null;
+      }
+      setProgress(80);
+
       const saveRes = await fetch(`${API}/music`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -179,6 +204,7 @@ function UploadModal({ onClose, onUploaded, token }) {
           artist: artist.trim() || undefined,
           genre,
           url: cloudData.secure_url,
+          cover_url: coverUrl,
           duration: cloudData.duration ? Math.round(cloudData.duration) : undefined,
         }),
       });
@@ -236,6 +262,24 @@ function UploadModal({ onClose, onUploaded, token }) {
         <input value={artist} onChange={e => setArtist(e.target.value)}
           placeholder={t('music.uploadArtist')}
           style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border, #e2e8f0)', marginBottom: 10, fontSize: 14, outline: 'none', boxSizing: 'border-box', background: 'var(--bg, #fff)', color: 'var(--text, #333)' }} />
+
+        {/* Cover image upload */}
+        <input ref={coverRef} type="file" accept="image/*" style={{ display: 'none' }}
+          onChange={e => handleCoverChange(e.target.files?.[0])} />
+        <div onClick={() => coverRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 10, border: '1px dashed var(--border, #e2e8f0)', marginBottom: 10, cursor: 'pointer', background: 'var(--bg, #f8f9fa)' }}>
+          {coverPreview ? (
+            <img src={coverPreview} alt="cover" style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', flexShrink: 0 }} />
+          ) : (
+            <div style={{ width: 48, height: 48, borderRadius: 8, background: 'linear-gradient(135deg,#4a80d4,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Image size={20} color="white" />
+            </div>
+          )}
+          <div>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: 'var(--text, #333)' }}>{t('music.uploadCover') || 'Capa da música'}</p>
+            <p style={{ margin: 0, fontSize: 11, color: '#888' }}>{coverFile ? coverFile.name : t('music.uploadCoverHint') || 'Clica para adicionar uma imagem de capa'}</p>
+          </div>
+        </div>
+
         <select value={genre} onChange={e => setGenre(e.target.value)}
           style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border, #e2e8f0)', marginBottom: 16, fontSize: 14, outline: 'none', background: 'var(--bg, #fff)', color: 'var(--text, #333)' }}>
           {GENRE_KEYS.map(g => (
@@ -311,10 +355,10 @@ function SongCard({ song, isPlaying, onPlay, onLike, token, user, t }) {
       </div>
       <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{song.artist || song.user_name}</div>
 
-      {/* Genre badge */}
+      {/* Genre badge — safe fallback if genre is undefined */}
       <div style={{ marginBottom: 10 }}>
         <span style={{ fontSize: 10, fontWeight: 600, padding: '3px 8px', borderRadius: 20, background: 'rgba(74,128,212,0.12)', color: 'var(--fb, #4a80d4)', border: '1px solid rgba(74,128,212,0.2)' }}>
-          {t(`music.genre.${song.genre}`) || song.genre}
+          {song.genre ? t(`music.genre.${song.genre}`, song.genre) : t('music.genre.louvor')}
         </span>
       </div>
 
@@ -344,6 +388,7 @@ export default function MusicLibrary() {
   const [activeGenre, setActiveGenre] = useState('all');
   const [search, setSearch] = useState('');
   const [showUpload, setShowUpload] = useState(false);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
 
   // Audio player
   const audioRef = useRef(new Audio());
@@ -476,8 +521,8 @@ export default function MusicLibrary() {
               }}
             />
           </div>
-          {/* Genre chips */}
-          <div style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', paddingBottom: 4 }}>
+          {/* Genre chips + view toggle */}
+          <div style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', paddingBottom: 4, alignItems: 'center' }}>
             {genre_chips.map(chip => (
               <button key={chip.key} onClick={() => setActiveGenre(chip.key)} style={{
                 flexShrink: 0, padding: '7px 14px', borderRadius: 20, cursor: 'pointer', fontSize: 12, fontWeight: 600,
@@ -489,6 +534,15 @@ export default function MusicLibrary() {
                 {chip.label}
               </button>
             ))}
+            {/* View toggle */}
+            <div style={{ marginLeft: 'auto', flexShrink: 0, display: 'flex', gap: 4, background: 'var(--card,#fff)', border: '1px solid var(--border)', borderRadius: 10, padding: 3 }}>
+              <button onClick={() => setViewMode('grid')} style={{ padding: '5px 8px', borderRadius: 8, border: 'none', cursor: 'pointer', background: viewMode === 'grid' ? 'var(--fb,#4a80d4)' : 'transparent', color: viewMode === 'grid' ? 'white' : '#888' }}>
+                <LayoutGrid size={14} />
+              </button>
+              <button onClick={() => setViewMode('list')} style={{ padding: '5px 8px', borderRadius: 8, border: 'none', cursor: 'pointer', background: viewMode === 'list' ? 'var(--fb,#4a80d4)' : 'transparent', color: viewMode === 'list' ? 'white' : '#888' }}>
+                <List size={14} />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -501,20 +555,36 @@ export default function MusicLibrary() {
               <Music size={48} style={{ opacity: 0.2, marginBottom: 12 }} />
               <p style={{ margin: 0 }}>{t('music.noSongs')}</p>
             </div>
-          ) : (
+          ) : viewMode === 'grid' ? (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
               {filteredSongs.map((song, idx) => (
-                <SongCard
-                  key={song.id}
-                  song={song}
-                  isPlaying={currentIdx === idx && playing}
-                  onPlay={handlePlay}
-                  onLike={() => {}}
-                  token={token}
-                  user={user}
-                  t={t}
-                />
+                <SongCard key={song.id} song={song} isPlaying={currentIdx === idx && playing} onPlay={handlePlay} onLike={() => {}} token={token} user={user} t={t} />
               ))}
+            </div>
+          ) : (
+            /* LIST VIEW */
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {filteredSongs.map((song, idx) => {
+                const isActive = currentIdx === idx && playing;
+                return (
+                  <div key={song.id} onClick={() => handlePlay(song)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 12, cursor: 'pointer', background: isActive ? 'rgba(74,128,212,0.08)' : 'var(--card,#fff)', border: isActive ? '1.5px solid var(--fb,#4a80d4)' : '1px solid var(--border,#e2e8f0)', transition: 'all 0.15s' }}>
+                    {/* Cover */}
+                    <div style={{ width: 48, height: 48, borderRadius: 10, flexShrink: 0, overflow: 'hidden', background: 'linear-gradient(135deg,#4a80d4,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
+                      {song.cover_url ? <img src={song.cover_url} alt={song.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '🎵'}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ margin: 0, fontWeight: 600, fontSize: '0.88rem', color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</p>
+                      <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#888' }}>{song.artist || song.user_name} · {song.genre ? t(`music.genre.${song.genre}`, song.genre) : ''}</p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: '0.72rem', color: '#888', flexShrink: 0 }}>
+                      <Heart size={12} /> {song.like_count || 0}
+                    </div>
+                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: isActive ? 'var(--fb,#4a80d4)' : 'var(--bg,#f0f4ff)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      {isActive ? <Pause size={14} color="white" /> : <Play size={14} color="var(--fb,#4a80d4)" />}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
