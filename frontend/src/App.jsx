@@ -21,7 +21,7 @@ import BiblicalAI from "./pages/BibleAI";
 import PastorChat from "./pages/PastorChat";
 import HelpRequests from "./pages/HelpRequests";
 import Landing from "./pages/Landing";
-import BiblicalCourse from "./pages/BiblicalCourse";
+import BiblicalCourse from "./pages/TheologyCourse";
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
 import AjudaUmaVida from "./pages/AjudaUmaVida";
