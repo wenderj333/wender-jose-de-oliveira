@@ -59,6 +59,11 @@ const db = {
   pragma() {
     // no-op for PostgreSQL
   },
+
+  // Direct PostgreSQL query method (for routes using $N placeholders)
+  query(sql, params = []) {
+    return pool.query(sql, params);
+  },
 };
 
 module.exports = db;

@@ -131,7 +131,9 @@
       "reflexao": "Размышление",
       "versiculo": "Стих",
       "foto": "Фото"
-    }
+    },
+    "addMusic": "Добавить музыку",
+    "pickMusic": "Выбрать музыку из библиотеки"
   },
   "groups": {
     "joinGroup": "+ Присоединиться к группе",
@@ -747,5 +749,37 @@
   "time": {
     "now": "Сейчас"
   },
-  "locale": "ru-RU"
+  "locale": "ru-RU",
+  "music": {
+    "title": "Музыкальная Библиотека",
+    "subtitle": "Открывайте и делитесь христианской музыкой",
+    "upload": "Загрузить музыку",
+    "uploadTitle": "Название песни",
+    "uploadArtist": "Исполнитель",
+    "uploadGenre": "Жанр",
+    "uploading": "Загрузка...",
+    "uploadSuccess": "Музыка успешно загружена! 🎵",
+    "uploadError": "Ошибка загрузки. Попробуйте снова.",
+    "searchPlaceholder": "Поиск музыки...",
+    "allGenres": "Все",
+    "noSongs": "Песен пока нет. Будьте первым!",
+    "play": "Воспроизвести",
+    "pause": "Пауза",
+    "likes": "лайков",
+    "youtubeSection": "Музыка на YouTube",
+    "worship": "Хвала и Поклонение",
+    "hymns": "Классические Гимны",
+    "instrumental": "Инструментальная",
+    "kids": "Детское Евангелие",
+    "prayer": "Музыка для Молитвы",
+    "community": "Сообщество",
+    "loginToLike": "Войдите чтобы поставить лайк",
+    "loginToUpload": "Войдите чтобы загрузить музыку",
+    "genre.louvor": "Хвала",
+    "genre.adoracao": "Поклонение",
+    "genre.hinos": "Гимны",
+    "genre.instrumental": "Инструментальная",
+    "genre.kids": "Дети",
+    "genre.oracao": "Молитва"
+  }
 }
