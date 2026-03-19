@@ -5,7 +5,7 @@ const { authenticate } = require('../middleware/auth');
 
 // Ensure tables exist
 async function ensureTables() {
-  await db.exec(`
+  await db.query(`
     CREATE TABLE IF NOT EXISTS music (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       user_id UUID REFERENCES users(id) ON DELETE CASCADE,
@@ -17,17 +17,20 @@ async function ensureTables() {
       duration INTEGER,
       play_count INTEGER DEFAULT 0,
       like_count INTEGER DEFAULT 0,
+      is_public BOOLEAN DEFAULT true,
       user_name VARCHAR(200),
       created_at TIMESTAMP DEFAULT NOW()
     )
-  `);
-  await db.exec(`
+  `, []);
+  await db.query(`
     CREATE TABLE IF NOT EXISTS music_likes (
       user_id UUID REFERENCES users(id) ON DELETE CASCADE,
       music_id UUID REFERENCES music(id) ON DELETE CASCADE,
       PRIMARY KEY (user_id, music_id)
     )
-  `);
+  `, []);
+  // Schema migration: add is_public if not exists
+  await db.query(`ALTER TABLE music ADD COLUMN IF NOT EXISTS is_public BOOLEAN DEFAULT true`, []);
 }
 
 ensureTables().catch(err => console.error('music tables init error:', err));
@@ -46,31 +49,69 @@ router.get('/genres', async (req, res) => {
   }
 });
 
-// GET /api/music?search=&genre= — list all public songs
+// GET /api/music?search=&genre=&userId= — list songs (public + own private)
 router.get('/', async (req, res) => {
   try {
-    const { search, genre, limit } = req.query;
+    const { search, genre, limit, userId } = req.query;
+    // Try to get authenticated user from Authorization header
+    let authUserId = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const decoded = jwt.verify(authHeader.slice(7), process.env.JWT_SECRET || 'sigocomfe-secret-key-2026-mudar-em-producao');
+        authUserId = decoded.id || decoded.userId || decoded.sub;
+      } catch (e) { /* not authenticated */ }
+    }
+
     const params = [];
-    let sql = `SELECT * FROM music WHERE 1=1`;
+    // Show public songs + own private songs (if authenticated)
+    const viewerUserId = authUserId;
+    if (viewerUserId) {
+      params.push(viewerUserId);
+      let sql = `SELECT * FROM music WHERE (is_public = true OR user_id = $${params.length})`;
 
-    if (search) {
-      params.push(`%${search}%`);
-      sql += ` AND (title ILIKE $${params.length} OR artist ILIKE $${params.length})`;
+      if (userId) {
+        params.push(userId);
+        sql += ` AND user_id = $${params.length}`;
+      }
+      if (search) {
+        params.push(`%${search}%`);
+        sql += ` AND (title ILIKE $${params.length} OR artist ILIKE $${params.length})`;
+      }
+      if (genre && genre !== 'all') {
+        params.push(genre);
+        sql += ` AND genre = $${params.length}`;
+      }
+      sql += ` ORDER BY created_at DESC`;
+      if (limit) {
+        params.push(parseInt(limit, 10));
+        sql += ` LIMIT $${params.length}`;
+      }
+      const result = await db.query(sql, params);
+      return res.json({ songs: result.rows });
+    } else {
+      let sql = `SELECT * FROM music WHERE is_public = true`;
+      if (userId) {
+        params.push(userId);
+        sql += ` AND user_id = $${params.length}`;
+      }
+      if (search) {
+        params.push(`%${search}%`);
+        sql += ` AND (title ILIKE $${params.length} OR artist ILIKE $${params.length})`;
+      }
+      if (genre && genre !== 'all') {
+        params.push(genre);
+        sql += ` AND genre = $${params.length}`;
+      }
+      sql += ` ORDER BY created_at DESC`;
+      if (limit) {
+        params.push(parseInt(limit, 10));
+        sql += ` LIMIT $${params.length}`;
+      }
+      const result = await db.query(sql, params);
+      return res.json({ songs: result.rows });
     }
-    if (genre && genre !== 'all') {
-      params.push(genre);
-      sql += ` AND genre = $${params.length}`;
-    }
-
-    sql += ` ORDER BY created_at DESC`;
-
-    if (limit) {
-      params.push(parseInt(limit, 10));
-      sql += ` LIMIT $${params.length}`;
-    }
-
-    const result = await db.query(sql, params);
-    res.json({ songs: result.rows });
   } catch (err) {
     console.error('Error fetching music:', err);
     res.status(500).json({ error: 'Erro ao buscar músicas' });
@@ -80,12 +121,14 @@ router.get('/', async (req, res) => {
 // POST /api/music — save song (auth required)
 router.post('/', authenticate, async (req, res) => {
   try {
-    const { title, artist, genre, url, cover_url, duration } = req.body;
+    const { title, artist, genre, url, cover_url, duration, is_public } = req.body;
     if (!title || !url) return res.status(400).json({ error: 'Título e URL obrigatórios' });
 
+    const isPublicVal = is_public === false || is_public === 'false' ? false : true;
+
     const result = await db.query(
-      `INSERT INTO music (user_id, title, artist, genre, url, cover_url, duration, user_name)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      `INSERT INTO music (user_id, title, artist, genre, url, cover_url, duration, is_public, user_name)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        RETURNING *`,
       [
         req.user.id,
@@ -95,6 +138,7 @@ router.post('/', authenticate, async (req, res) => {
         url,
         cover_url || null,
         duration ? parseInt(duration, 10) : null,
+        isPublicVal,
         req.user.full_name || 'Anónimo',
       ]
     );

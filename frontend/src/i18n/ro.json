@@ -698,7 +698,16 @@
     "noFavorites": "Niciun favorit încă",
     "tapHeart": "Atinge ❤️ pentru a salva melodii",
     "freeSources": "Mai multă muzică gratuită",
-    "youtubeNote": "Apasa pe o melodie pentru a deschide pe YouTube"
+    "youtubeNote": "Apasa pe o melodie pentru a deschide pe YouTube",
+    "tooLong": "Video/audio nu poate depăși 5 minute",
+    "uploadPublic": "Public — toți pot vedea",
+    "uploadPrivate": "Privat — doar eu",
+    "visibility": "Vizibilitate",
+    "video": "Videoclip Muzical",
+    "audio": "Audio",
+    "uploadHint": "MP3, WAV, MP4, MOV · max 5 min",
+    "uploadCover": "Coperta melodiei",
+    "uploadCoverHint": "Click pentru a adăuga o imagine de copertă"
   },
   "courseFinance": {
     "title": "Finanțe Biblice",
@@ -1222,5 +1231,18 @@
     "why4desc": "Creștini din Brazilia, Portugalia, Germania, Africa și mai mult — uniți în credință.",
     "ctaJoin": "✨ Intră în comunitate acum"
   },
-  "locale": "ro-RO"
+  "locale": "ro-RO",
+  "report": {
+    "title": "Raportează",
+    "subtitle": "Ajută-ne să menținem comunitatea sigură și respectuoasă",
+    "inappropriate": "Conținut inadecvat",
+    "disrespectful": "Insultă sau lipsă de respect",
+    "spam": "Spam sau publicitate",
+    "harassment": "Hărțuire sau amenințare",
+    "other": "Alt motiv",
+    "descPlaceholder": "Descrie ce s-a întâmplat (opțional)...",
+    "send": "Trimite Raport",
+    "sent": "Raport trimis. Mulțumim că ajuți la menținerea siguranței comunității!",
+    "cancel": "Anulează"
+  }
 }

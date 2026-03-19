@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import ReportModal from '../components/ReportModal';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
@@ -40,6 +41,9 @@ export default function Profile() {
   const [dmOpen, setDmOpen] = useState(false);
   const [dmText, setDmText] = useState('');
   const [dmSent, setDmSent] = useState(false);
+
+  // Report modal
+  const [reportOpen, setReportOpen] = useState(false);
 
   const applyUser = (u) => {
     setProfile(u);
@@ -201,10 +205,13 @@ export default function Profile() {
           {!isOwn && (
             <>
               <button onClick={() => setDmOpen(true)} style={{padding:'8px 16px',borderRadius:9,background:'linear-gradient(135deg,var(--fb2,#3568b8),var(--fb,#4a80d4))',border:'none',color:'white',fontSize:'0.83rem',fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',gap:6}}>
-                💬 Mensagem
+                💬 {t('profile.message', 'Mensagem')}
               </button>
               <button style={{padding:'8px 14px',borderRadius:9,background:'var(--fb-light,#edf2fc)',border:'1px solid var(--border,#e0e6f5)',color:'var(--fb,#4a80d4)',fontSize:'0.83rem',fontWeight:600,cursor:'pointer'}}>
-                ➕ Seguir
+                ➕ {t('profile.follow', 'Seguir')}
+              </button>
+              <button onClick={() => setReportOpen(true)} style={{padding:'8px 10px',borderRadius:9,background:'none',border:'none',color:'#aaa',fontSize:'0.8rem',cursor:'pointer',display:'flex',alignItems:'center',gap:4}} title={t('report.title')}>
+                🚩
               </button>
             </>
           )}
@@ -284,6 +291,16 @@ export default function Profile() {
           </div>
         )}
       </div>
+
+      {/* Report Modal */}
+      {reportOpen && (
+        <ReportModal
+          type="user"
+          targetId={targetId}
+          targetName={profile?.full_name}
+          onClose={() => setReportOpen(false)}
+        />
+      )}
 
       {/* DM Modal (Instagram-style) */}
       {dmOpen && (

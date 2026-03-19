@@ -702,7 +702,16 @@
     "noFavorites": "Pas encore de favoris",
     "tapHeart": "Appuyez sur ❤️ pour sauvegarder des chansons",
     "freeSources": "Plus de musique gratuite",
-    "youtubeNote": "Cliquez sur une chanson pour ouvrir sur YouTube"
+    "youtubeNote": "Cliquez sur une chanson pour ouvrir sur YouTube",
+    "tooLong": "La vidéo/audio ne peut pas dépasser 5 minutes",
+    "uploadPublic": "Publique — tout le monde peut voir",
+    "uploadPrivate": "Privée — seulement moi",
+    "visibility": "Visibilité",
+    "video": "Clip Musical",
+    "audio": "Audio",
+    "uploadHint": "MP3, WAV, MP4, MOV · max 5 min",
+    "uploadCover": "Pochette de la chanson",
+    "uploadCoverHint": "Cliquez pour ajouter une image de pochette"
   },
   "courseFinance": {
     "title": "Finances Bibliques",
@@ -1226,5 +1235,18 @@
     "why4desc": "Des chrétiens du Brésil, du Portugal, d'Allemagne, d'Afrique et plus — unis dans la foi.",
     "ctaJoin": "✨ Rejoindre la communauté maintenant"
   },
-  "locale": "fr-FR"
+  "locale": "fr-FR",
+  "report": {
+    "title": "Signaler",
+    "subtitle": "Aidez-nous à maintenir la communauté sûre et respectueuse",
+    "inappropriate": "Contenu inapproprié",
+    "disrespectful": "Insulte ou manque de respect",
+    "spam": "Spam ou publicité",
+    "harassment": "Harcèlement ou menace",
+    "other": "Autre raison",
+    "descPlaceholder": "Décrivez ce qui s'est passé (facultatif)...",
+    "send": "Envoyer le signalement",
+    "sent": "Signalement envoyé. Merci d'aider à maintenir la communauté en sécurité!",
+    "cancel": "Annuler"
+  }
 }

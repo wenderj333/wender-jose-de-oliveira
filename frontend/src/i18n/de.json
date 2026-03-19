@@ -685,7 +685,16 @@
     "noFavorites": "No favorites yet",
     "tapHeart": "Tap ❤️ to save songs",
     "freeSources": "More free music",
-    "youtubeNote": "Klicke auf ein Lied, um es auf YouTube zu offnen"
+    "youtubeNote": "Klicke auf ein Lied, um es auf YouTube zu offnen",
+    "tooLong": "Das Video/Audio darf nicht länger als 5 Minuten sein",
+    "uploadPublic": "Öffentlich — alle können sehen",
+    "uploadPrivate": "Privat — nur ich",
+    "visibility": "Sichtbarkeit",
+    "video": "Musikvideo",
+    "audio": "Audio",
+    "uploadHint": "MP3, WAV, MP4, MOV · max 5 Min",
+    "uploadCover": "Song-Cover",
+    "uploadCoverHint": "Klicken, um ein Cover-Bild hinzuzufügen"
   },
   "courseFinance": {
     "title": "Biblical Finance",
@@ -1209,5 +1218,18 @@
     "why4desc": "Christen aus Brasilien, Portugal, Deutschland, Afrika und mehr — vereint im Glauben.",
     "ctaJoin": "✨ Jetzt der Gemeinschaft beitreten"
   },
-  "locale": "de-DE"
+  "locale": "de-DE",
+  "report": {
+    "title": "Melden",
+    "subtitle": "Hilf uns, die Gemeinschaft sicher und respektvoll zu halten",
+    "inappropriate": "Unangemessener Inhalt",
+    "disrespectful": "Beleidigung oder Respektlosigkeit",
+    "spam": "Spam oder Werbung",
+    "harassment": "Belästigung oder Bedrohung",
+    "other": "Anderer Grund",
+    "descPlaceholder": "Beschreibe, was passiert ist (optional)...",
+    "send": "Meldung senden",
+    "sent": "Meldung gesendet. Danke, dass du dazu beiträgst, die Gemeinschaft sicher zu halten!",
+    "cancel": "Abbrechen"
+  }
 }

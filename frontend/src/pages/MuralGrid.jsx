@@ -1,7 +1,8 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Grid, List, Volume2, VolumeX, Search } from 'lucide-react';
+import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Grid, List, Volume2, VolumeX, Search, Flag } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import ReportModal from '../components/ReportModal';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
@@ -168,6 +169,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(post.comments || []);
+  const [reportOpen, setReportOpen] = useState(false);
   const authorName = post.full_name || post.author_name || post.authorName || t('common.user');
   const authorInitials = authorName.slice(0, 2).toUpperCase();
   const mediaUrl = post.media_url || post.mediaUrl;
@@ -335,7 +337,16 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
           <MessageCircle size={18} /> {post.comment_count || post.commentCount || comments.length} {t('common.comment')}
         </button>
         <button style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, marginLeft: 'auto', padding: '6px 10px', borderRadius: 8 }}><Share2 size={18} /> {t('common.share')}</button>
+        {user && !isOwner && (
+          <button onClick={() => setReportOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', padding: '6px 8px', borderRadius: 8, display: 'flex', alignItems: 'center' }} title={t('report.title')}
+            onMouseEnter={e => e.currentTarget.style.color = '#e11d48'} onMouseLeave={e => e.currentTarget.style.color = '#ccc'}>
+            <Flag size={15} />
+          </button>
+        )}
       </div>
+      {reportOpen && (
+        <ReportModal type="post" targetId={post.id} targetName={null} onClose={() => setReportOpen(false)} />
+      )}
 
       {showComments && (
         <div style={{ padding: '0 16px 14px', borderTop: '1px solid #f0f0f0' }}>

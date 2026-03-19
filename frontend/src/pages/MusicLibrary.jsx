@@ -2,9 +2,8 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import {
-  Music, Play, Pause, Heart, Mic2, Baby, BookOpen, Guitar,
-  Upload, X, ChevronLeft, ChevronRight, Volume2, Search,
-  LayoutGrid, List, Image,
+  Music, Play, Pause, Heart, Upload, X, ChevronLeft, ChevronRight,
+  Volume2, Search, LayoutGrid, List, Image, Lock,
 } from 'lucide-react';
 
 const CLOUD_NAME = 'degxiuf43';
@@ -13,45 +12,15 @@ const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
 const GENRE_KEYS = ['louvor', 'adoracao', 'hinos', 'instrumental', 'kids', 'oracao'];
 
-const PLAYLISTS = {
-  worship: [
-    { id: 'hMrJLbPsTjA', title: 'Eu Navegarei', artist: 'Nivea Soares' },
-    { id: 'rgzRZQ1mOEo', title: 'Quao Grande E o Meu Deus', artist: 'Soraya Moraes' },
-    { id: 'HcYTm8QBjHk', title: 'Deus e Deus', artist: 'Delino Marcal' },
-    { id: 'tKr-mfTfgCQ', title: 'Ninguem Explica Deus', artist: 'Preto no Branco' },
-    { id: 'oMKGHOoByMQ', title: 'Raridade', artist: 'Anderson Freire' },
-    { id: 'DL7YkJFpkHo', title: 'Oceanos (Portugues)', artist: 'Hillsong' },
-    { id: 'KVQnWr4YUZA', title: 'Sou Feliz', artist: 'Fernandinho' },
-    { id: 'OJfRVL3Rs_A', title: 'Lugar Secreto', artist: 'Gabriela Rocha' },
-    { id: '3F1kR6PBEsg', title: 'Bondade de Deus', artist: 'Isaias Saad' },
-  ],
-  hymns: [
-    { id: 'kkPGZfJjlyY', title: 'Amazing Grace', artist: 'Hino Classico' },
-    { id: 'H3x6x3GCDsE', title: 'Castelo Forte', artist: 'Martinho Lutero' },
-    { id: 'sb3C9kZMqKE', title: 'Grandioso Es Tu', artist: 'Hino Classico' },
-    { id: 'gHdB2TKQOZE', title: 'Rude Cruz', artist: 'Hino Classico' },
-    { id: 'ZqBdyAhRCEU', title: 'Quao Bondoso Amigo', artist: 'Hino Classico' },
-  ],
-  instrumental: [
-    { id: 'fnCGsPaGbzM', title: '3 Horas de Piano Instrumental', artist: 'Worship Piano' },
-    { id: 'JjPF0h6t458', title: 'Musica para Oracao - Piano', artist: 'Instrumental' },
-    { id: 'XQu8TTBmGhA', title: 'Louvor Instrumental Relaxante', artist: 'Instrumental' },
-  ],
-  kids: [
-    { id: '9sX6P7kPJvQ', title: 'Deus e Bom pra Mim', artist: 'Kids' },
-    { id: 'FNNl-EE_czk', title: '3 Palavrinhas', artist: 'DT Kids' },
-    { id: 'zD81qe5MNMY', title: 'Meu Barquinho', artist: 'Aline Barros Kids' },
-  ],
-  prayer: [
-    { id: 'Dp3jda7JKZY', title: 'Fundo Musical para Oracao - 1h', artist: 'Prayer Music' },
-    { id: 'PBz_JkwM880', title: 'Musica Calma para Orar', artist: 'Prayer Music' },
-    { id: 'B1pHcaMRBk0', title: 'Atmosfera de Adoracao', artist: 'Worship' },
-  ],
+const isVideoUrl = (url) => url && /\.(mp4|mov|webm)(\?|$)/i.test(url);
+
+const iconBtn = {
+  background: 'none', border: '1px solid var(--border, #e2e8f0)',
+  borderRadius: 8, padding: '6px 8px', cursor: 'pointer', display: 'flex',
+  alignItems: 'center', justifyContent: 'center', color: 'var(--text, #333)',
 };
 
-const ALL_YOUTUBE = Object.values(PLAYLISTS).flat();
-
-// ─── Mini Audio Player (fixed bottom bar) ───────────────────────────────────
+// ─── Mini Audio Player (fixed bottom bar) ────────────────────────────────────
 function MiniPlayer({ songs, currentIdx, setCurrentIdx, audioRef, playing, setPlaying }) {
   const { t } = useTranslation();
   const [progress, setProgress] = useState(0);
@@ -59,7 +28,7 @@ function MiniPlayer({ songs, currentIdx, setCurrentIdx, audioRef, playing, setPl
   const song = songs[currentIdx];
 
   useEffect(() => {
-    if (!audioRef.current || !song) return;
+    if (!audioRef.current || !song || isVideoUrl(song.url)) return;
     audioRef.current.src = song.url;
     audioRef.current.volume = volume;
     if (playing) audioRef.current.play().catch(() => {});
@@ -97,7 +66,8 @@ function MiniPlayer({ songs, currentIdx, setCurrentIdx, audioRef, playing, setPl
     if (audioRef.current) audioRef.current.volume = v;
   };
 
-  if (!song) return null;
+  // Don't show mini player for video songs (they have inline player)
+  if (!song || isVideoUrl(song.url)) return null;
 
   return (
     <div style={{
@@ -134,21 +104,18 @@ function MiniPlayer({ songs, currentIdx, setCurrentIdx, audioRef, playing, setPl
   );
 }
 
-const iconBtn = {
-  background: 'none', border: '1px solid var(--border, #e2e8f0)',
-  borderRadius: 8, padding: '6px 8px', cursor: 'pointer', display: 'flex',
-  alignItems: 'center', justifyContent: 'center', color: 'var(--text, #333)',
-};
-
-// ─── Upload Modal ────────────────────────────────────────────────────────────
+// ─── Upload Modal ─────────────────────────────────────────────────────────────
 function UploadModal({ onClose, onUploaded, token }) {
   const { t } = useTranslation();
   const [file, setFile] = useState(null);
+  const [fileDuration, setFileDuration] = useState(null);
+  const [durationError, setDurationError] = useState(false);
   const [coverFile, setCoverFile] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
   const [title, setTitle] = useState('');
   const [artist, setArtist] = useState('');
   const [genre, setGenre] = useState('louvor');
+  const [isPublic, setIsPublic] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [dragOver, setDragOver] = useState(false);
@@ -163,14 +130,35 @@ function UploadModal({ onClose, onUploaded, token }) {
     reader.readAsDataURL(f);
   };
 
+  const handleFileSelect = (f) => {
+    if (!f) return;
+    const isAudio = f.type.startsWith('audio');
+    const isVideo = f.type.startsWith('video');
+    if (!isAudio && !isVideo) return;
+    setFile(f);
+    setDurationError(false);
+    setFileDuration(null);
+    // Try to get duration client-side
+    const url = URL.createObjectURL(f);
+    const media = isVideo ? document.createElement('video') : document.createElement('audio');
+    media.preload = 'metadata';
+    media.src = url;
+    media.onloadedmetadata = () => {
+      URL.revokeObjectURL(url);
+      const dur = Math.round(media.duration);
+      setFileDuration(dur);
+      if (dur > 300) setDurationError(true);
+    };
+  };
+
   const handleDrop = (e) => {
     e.preventDefault(); setDragOver(false);
     const f = e.dataTransfer.files[0];
-    if (f && f.type.startsWith('audio')) setFile(f);
+    handleFileSelect(f);
   };
 
   const handleSubmit = async () => {
-    if (!file || !title.trim()) return;
+    if (!file || !title.trim() || durationError) return;
     setUploading(true); setProgress(10);
     try {
       const fd = new FormData();
@@ -183,7 +171,6 @@ function UploadModal({ onClose, onUploaded, token }) {
       const cloudData = await cloudRes.json();
       if (!cloudData.secure_url) throw new Error(t('music.uploadError'));
 
-      // Upload cover if provided
       let coverUrl = null;
       if (coverFile) {
         const coverFd = new FormData();
@@ -206,6 +193,7 @@ function UploadModal({ onClose, onUploaded, token }) {
           url: cloudData.secure_url,
           cover_url: coverUrl,
           duration: cloudData.duration ? Math.round(cloudData.duration) : undefined,
+          is_public: isPublic,
         }),
       });
       setProgress(90);
@@ -220,12 +208,19 @@ function UploadModal({ onClose, onUploaded, token }) {
     } finally { setUploading(false); }
   };
 
+  const formatDuration = (secs) => {
+    if (!secs) return '';
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
+
   return (
     <div style={{
       position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, padding: 16,
     }} onClick={e => e.target === e.currentTarget && onClose()}>
-      <div style={{ background: 'var(--card, #fff)', borderRadius: 20, padding: 24, width: '100%', maxWidth: 440, boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
+      <div style={{ background: 'var(--card, #fff)', borderRadius: 20, padding: 24, width: '100%', maxWidth: 440, boxShadow: '0 20px 60px rgba(0,0,0,0.2)', maxHeight: '90vh', overflowY: 'auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <h2 style={{ margin: 0, fontSize: 18, color: 'var(--text, #1a1a2e)', fontWeight: 700 }}>{t('music.upload')}</h2>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}><X size={20} /></button>
@@ -238,22 +233,34 @@ function UploadModal({ onClose, onUploaded, token }) {
           onDragLeave={() => setDragOver(false)}
           onClick={() => fileRef.current?.click()}
           style={{
-            border: `2px dashed ${dragOver ? 'var(--fb, #4a80d4)' : 'var(--border, #e2e8f0)'}`,
-            borderRadius: 12, padding: '28px 16px', textAlign: 'center', cursor: 'pointer',
+            border: `2px dashed ${durationError ? '#e11d48' : dragOver ? 'var(--fb, #4a80d4)' : 'var(--border, #e2e8f0)'}`,
+            borderRadius: 12, padding: '24px 16px', textAlign: 'center', cursor: 'pointer',
             background: dragOver ? 'rgba(74,128,212,0.06)' : 'var(--bg, #f8f9fa)',
-            marginBottom: 16, transition: 'all 0.2s',
+            marginBottom: 8, transition: 'all 0.2s',
           }}>
-          <input ref={fileRef} type="file" accept=".mp3,.wav,.ogg,.m4a,audio/*" style={{ display: 'none' }}
-            onChange={e => setFile(e.target.files?.[0] || null)} />
+          <input ref={fileRef} type="file" accept="audio/*,video/*,.mp3,.wav,.ogg,.m4a,.mp4,.mov,.webm" style={{ display: 'none' }}
+            onChange={e => handleFileSelect(e.target.files?.[0] || null)} />
           {file ? (
-            <p style={{ margin: 0, fontWeight: 600, color: '#2e7d32' }}>🎵 {file.name}</p>
+            <div>
+              <p style={{ margin: 0, fontWeight: 600, color: durationError ? '#e11d48' : '#2e7d32', fontSize: 14 }}>
+                {file.type.startsWith('video') ? '🎬' : '🎵'} {file.name}
+              </p>
+              {fileDuration && (
+                <p style={{ margin: '4px 0 0', fontSize: 12, color: durationError ? '#e11d48' : '#888' }}>
+                  {formatDuration(fileDuration)} {durationError ? `— ${t('music.tooLong')}` : ''}
+                </p>
+              )}
+            </div>
           ) : (
             <>
               <Upload size={32} color="var(--fb, #4a80d4)" style={{ marginBottom: 8 }} />
-              <p style={{ margin: 0, color: '#666', fontSize: 14 }}>Drag & drop ou clique • MP3/WAV/OGG/M4A</p>
+              <p style={{ margin: 0, color: '#666', fontSize: 14 }}>{t('music.uploadHint')}</p>
             </>
           )}
         </div>
+        {durationError && (
+          <p style={{ color: '#e11d48', fontSize: 12, marginBottom: 10, marginTop: 0 }}>{t('music.tooLong')}</p>
+        )}
 
         {/* Fields */}
         <input value={title} onChange={e => setTitle(e.target.value)}
@@ -275,17 +282,34 @@ function UploadModal({ onClose, onUploaded, token }) {
             </div>
           )}
           <div>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: 'var(--text, #333)' }}>{t('music.uploadCover') || 'Capa da música'}</p>
-            <p style={{ margin: 0, fontSize: 11, color: '#888' }}>{coverFile ? coverFile.name : t('music.uploadCoverHint') || 'Clica para adicionar uma imagem de capa'}</p>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: 'var(--text, #333)' }}>{t('music.uploadCover')}</p>
+            <p style={{ margin: 0, fontSize: 11, color: '#888' }}>{coverFile ? coverFile.name : t('music.uploadCoverHint')}</p>
           </div>
         </div>
 
         <select value={genre} onChange={e => setGenre(e.target.value)}
-          style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border, #e2e8f0)', marginBottom: 16, fontSize: 14, outline: 'none', background: 'var(--bg, #fff)', color: 'var(--text, #333)' }}>
+          style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border, #e2e8f0)', marginBottom: 12, fontSize: 14, outline: 'none', background: 'var(--bg, #fff)', color: 'var(--text, #333)' }}>
           {GENRE_KEYS.map(g => (
             <option key={g} value={g}>{t(`music.genre.${g}`)}</option>
           ))}
         </select>
+
+        {/* Visibility toggle */}
+        <div style={{ marginBottom: 16, padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border, #e2e8f0)', background: 'var(--bg, #f8f9fa)' }}>
+          <p style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 600, color: 'var(--text, #333)' }}>{t('music.visibility')}</p>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', marginBottom: 6 }}>
+            <input type="radio" name="visibility" value="public" checked={isPublic} onChange={() => setIsPublic(true)} style={{ accentColor: 'var(--fb, #4a80d4)' }} />
+            <span style={{ fontSize: 13, color: isPublic ? 'var(--fb, #4a80d4)' : 'var(--text, #555)', fontWeight: isPublic ? 600 : 400 }}>
+              🌍 {t('music.uploadPublic')}
+            </span>
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
+            <input type="radio" name="visibility" value="private" checked={!isPublic} onChange={() => setIsPublic(false)} style={{ accentColor: 'var(--fb, #4a80d4)' }} />
+            <span style={{ fontSize: 13, color: !isPublic ? 'var(--fb, #4a80d4)' : 'var(--text, #555)', fontWeight: !isPublic ? 600 : 400 }}>
+              🔒 {t('music.uploadPrivate')}
+            </span>
+          </label>
+        </div>
 
         {uploading && (
           <div style={{ marginBottom: 12 }}>
@@ -296,10 +320,10 @@ function UploadModal({ onClose, onUploaded, token }) {
           </div>
         )}
 
-        <button onClick={handleSubmit} disabled={uploading || !file || !title.trim()} style={{
+        <button onClick={handleSubmit} disabled={uploading || !file || !title.trim() || durationError} style={{
           width: '100%', padding: 12, borderRadius: 12, border: 'none',
-          background: (file && title.trim() && !uploading) ? 'var(--fb, #4a80d4)' : '#ccc',
-          color: '#fff', fontWeight: 700, fontSize: 15, cursor: (file && title.trim() && !uploading) ? 'pointer' : 'not-allowed',
+          background: (file && title.trim() && !uploading && !durationError) ? 'var(--fb, #4a80d4)' : '#ccc',
+          color: '#fff', fontWeight: 700, fontSize: 15, cursor: (file && title.trim() && !uploading && !durationError) ? 'pointer' : 'not-allowed',
         }}>
           {uploading ? t('music.uploading') : t('music.upload')}
         </button>
@@ -308,10 +332,12 @@ function UploadModal({ onClose, onUploaded, token }) {
   );
 }
 
-// ─── Song Card ───────────────────────────────────────────────────────────────
+// ─── Song Card ────────────────────────────────────────────────────────────────
 function SongCard({ song, isPlaying, onPlay, onLike, token, user, t }) {
   const [likeCount, setLikeCount] = useState(song.like_count || 0);
   const [liked, setLiked] = useState(false);
+  const isVideo = isVideoUrl(song.url);
+  const isPrivate = !song.is_public;
 
   const handleLike = async (e) => {
     e.stopPropagation();
@@ -328,75 +354,106 @@ function SongCard({ song, isPlaying, onPlay, onLike, token, user, t }) {
   };
 
   return (
-    <div onClick={() => onPlay(song)} style={{
+    <div style={{
       background: 'var(--card, #fff)',
       border: isPlaying ? '2px solid var(--fb, #4a80d4)' : '1px solid var(--border, #e2e8f0)',
       borderRadius: 16,
       padding: 14,
       cursor: 'pointer',
       boxShadow: isPlaying ? '0 0 0 4px rgba(74,128,212,0.15)' : '0 2px 8px rgba(0,0,0,0.04)',
-      animation: isPlaying ? 'pulse-border 2s infinite' : 'none',
+      animation: isPlaying && !isVideo ? 'pulse-border 2s infinite' : 'none',
       transition: 'all 0.2s',
+      position: 'relative',
     }}>
-      {/* Cover */}
-      <div style={{
-        width: '100%', aspectRatio: '1/1', borderRadius: 12,
-        background: song.cover_url ? undefined : 'linear-gradient(135deg, var(--fb, #4a80d4), #764ba2)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        marginBottom: 10, overflow: 'hidden', fontSize: 40,
-      }}>
-        {song.cover_url ? (
-          <img src={song.cover_url} alt={song.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        ) : '🎵'}
-      </div>
+      {/* Private badge */}
+      {isPrivate && (
+        <div style={{
+          position: 'absolute', top: 10, right: 10, zIndex: 2,
+          background: 'rgba(0,0,0,0.55)', borderRadius: 8, padding: '3px 7px',
+          display: 'flex', alignItems: 'center', gap: 4,
+        }}>
+          <Lock size={11} color="#fff" />
+          <span style={{ fontSize: 10, color: '#fff', fontWeight: 600 }}>🔒</span>
+        </div>
+      )}
 
-      <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text, #1a1a2e)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: 2 }}>
-        {song.title}
+      {/* Cover / Video */}
+      {isVideo ? (
+        <div style={{ width: '100%', borderRadius: 12, overflow: 'hidden', marginBottom: 10, background: '#000' }}>
+          <video
+            src={song.url}
+            poster={song.cover_url || undefined}
+            controls
+            playsInline
+            onClick={e => e.stopPropagation()}
+            style={{ width: '100%', maxHeight: 180, objectFit: 'contain', display: 'block' }}
+          />
+        </div>
+      ) : (
+        <div style={{
+          width: '100%', aspectRatio: '1/1', borderRadius: 12,
+          background: song.cover_url ? undefined : 'linear-gradient(135deg, var(--fb, #4a80d4), #764ba2)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: 10, overflow: 'hidden', fontSize: 40,
+        }}>
+          {song.cover_url ? (
+            <img src={song.cover_url} alt={song.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          ) : '🎵'}
+        </div>
+      )}
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+        <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text, #1a1a2e)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
+          {song.title}
+        </div>
+        {isVideo && (
+          <span style={{ fontSize: 10, background: 'rgba(118,75,162,0.15)', color: '#764ba2', borderRadius: 6, padding: '2px 6px', flexShrink: 0, fontWeight: 600 }}>
+            {t('music.video')}
+          </span>
+        )}
       </div>
       <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{song.artist || song.user_name}</div>
 
-      {/* Genre badge — safe fallback if genre is undefined */}
+      {/* Genre badge */}
       <div style={{ marginBottom: 10 }}>
         <span style={{ fontSize: 10, fontWeight: 600, padding: '3px 8px', borderRadius: 20, background: 'rgba(74,128,212,0.12)', color: 'var(--fb, #4a80d4)', border: '1px solid rgba(74,128,212,0.2)' }}>
           {song.genre ? t(`music.genre.${song.genre}`, song.genre) : t('music.genre.louvor')}
         </span>
       </div>
 
-      {/* Actions */}
+      {/* Actions — only show play button for audio */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <button onClick={handleLike} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'none', border: 'none', cursor: 'pointer', color: liked ? '#e11d48' : '#888', fontSize: 12, padding: 0 }}>
           <Heart size={14} fill={liked ? '#e11d48' : 'none'} color={liked ? '#e11d48' : '#888'} />
           {likeCount} {t('music.likes')}
         </button>
-        <button onClick={(e) => { e.stopPropagation(); onPlay(song); }} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'var(--fb, #4a80d4)', border: 'none', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: '#fff', fontSize: 12, fontWeight: 600 }}>
-          {isPlaying ? <Pause size={13} /> : <Play size={13} />}
-          {isPlaying ? t('music.pause') : t('music.play')}
-        </button>
+        {!isVideo && (
+          <button onClick={(e) => { e.stopPropagation(); onPlay(song); }} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'var(--fb, #4a80d4)', border: 'none', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: '#fff', fontSize: 12, fontWeight: 600 }}>
+            {isPlaying ? <Pause size={13} /> : <Play size={13} />}
+            {isPlaying ? t('music.pause') : t('music.play')}
+          </button>
+        )}
       </div>
     </div>
   );
 }
 
-// ─── Main Component ──────────────────────────────────────────────────────────
+// ─── Main Component ───────────────────────────────────────────────────────────
 export default function MusicLibrary() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
 
-  // Community songs
   const [songs, setSongs] = useState([]);
   const [loadingSongs, setLoadingSongs] = useState(false);
   const [activeGenre, setActiveGenre] = useState('all');
   const [search, setSearch] = useState('');
   const [showUpload, setShowUpload] = useState(false);
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
+  const [viewMode, setViewMode] = useState('grid');
 
   // Audio player
   const audioRef = useRef(new Audio());
   const [currentIdx, setCurrentIdx] = useState(null);
   const [playing, setPlaying] = useState(false);
-
-  // YouTube — open in new tab (no embed, no blocked videos)
-  const openYoutube = (videoId) => window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
 
   useEffect(() => {
     fetchSongs();
@@ -405,23 +462,25 @@ export default function MusicLibrary() {
   const fetchSongs = useCallback(async () => {
     setLoadingSongs(true);
     try {
-      const res = await fetch(`${API}/music`);
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch(`${API}/music`, { headers });
       const data = await res.json();
       setSongs(Array.isArray(data.songs) ? data.songs : []);
     } catch (err) { console.error(err); }
     finally { setLoadingSongs(false); }
-  }, []);
+  }, [token]);
 
-  // Filtered songs
+  // Filter songs — hide private songs from other users
   const filteredSongs = songs.filter(s => {
+    // Hide private songs that don't belong to current user
+    if (!s.is_public && s.user_id !== user?.id) return false;
     const matchGenre = activeGenre === 'all' || s.genre === activeGenre;
     const matchSearch = !search || s.title.toLowerCase().includes(search.toLowerCase()) || (s.artist || '').toLowerCase().includes(search.toLowerCase());
     return matchGenre && matchSearch;
   });
 
   const handlePlay = (song) => {
-    // Stop YouTube if playing
-    setYtPlaying(null);
+    if (isVideoUrl(song.url)) return; // videos are inline
     const idx = filteredSongs.findIndex(s => s.id === song.id);
     if (idx === currentIdx) {
       if (playing) { audioRef.current.pause(); setPlaying(false); }
@@ -439,7 +498,7 @@ export default function MusicLibrary() {
     setSongs(prev => [newSong, ...prev]);
   };
 
-  // Auto-advance
+  // Auto-advance (audio only)
   useEffect(() => {
     const audio = audioRef.current;
     const onEnded = () => {
@@ -475,7 +534,7 @@ export default function MusicLibrary() {
 
       <div style={{ maxWidth: 600, margin: '0 auto', padding: '0 0 5rem' }}>
 
-        {/* ── Section A: Hero ── */}
+        {/* ── Hero ── */}
         <div style={{
           background: 'linear-gradient(135deg, var(--fb, #4a80d4) 0%, #764ba2 60%, var(--gold, #a07820) 100%)',
           padding: '2rem 1.5rem 1.5rem',
@@ -506,9 +565,8 @@ export default function MusicLibrary() {
           </div>
         </div>
 
-        {/* ── Section B: Filter bar ── */}
+        {/* ── Filter bar ── */}
         <div style={{ padding: '0 1rem', marginBottom: '1rem' }}>
-          {/* Search input */}
           <div style={{ position: 'relative', marginBottom: 12 }}>
             <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#999' }} />
             <input
@@ -521,7 +579,6 @@ export default function MusicLibrary() {
               }}
             />
           </div>
-          {/* Genre chips + view toggle */}
           <div style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', paddingBottom: 4, alignItems: 'center' }}>
             {genre_chips.map(chip => (
               <button key={chip.key} onClick={() => setActiveGenre(chip.key)} style={{
@@ -546,7 +603,7 @@ export default function MusicLibrary() {
           </div>
         </div>
 
-        {/* ── Section C: Community songs grid ── */}
+        {/* ── Songs ── */}
         <div style={{ padding: '0 1rem', marginBottom: '1.5rem' }}>
           {loadingSongs ? (
             <div style={{ textAlign: 'center', padding: '3rem', color: '#888' }}>🎵</div>
@@ -558,7 +615,7 @@ export default function MusicLibrary() {
           ) : viewMode === 'grid' ? (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
               {filteredSongs.map((song, idx) => (
-                <SongCard key={song.id} song={song} isPlaying={currentIdx === idx && playing} onPlay={handlePlay} onLike={() => {}} token={token} user={user} t={t} />
+                <SongCard key={song.id} song={song} isPlaying={currentIdx === idx && playing && !isVideoUrl(song.url)} onPlay={handlePlay} onLike={() => {}} token={token} user={user} t={t} />
               ))}
             </div>
           ) : (
@@ -566,78 +623,48 @@ export default function MusicLibrary() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {filteredSongs.map((song, idx) => {
                 const isActive = currentIdx === idx && playing;
+                const isVid = isVideoUrl(song.url);
+                const isPrivate = !song.is_public;
                 return (
-                  <div key={song.id} onClick={() => handlePlay(song)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 12, cursor: 'pointer', background: isActive ? 'rgba(74,128,212,0.08)' : 'var(--card,#fff)', border: isActive ? '1.5px solid var(--fb,#4a80d4)' : '1px solid var(--border,#e2e8f0)', transition: 'all 0.15s' }}>
-                    {/* Cover */}
-                    <div style={{ width: 48, height: 48, borderRadius: 10, flexShrink: 0, overflow: 'hidden', background: 'linear-gradient(135deg,#4a80d4,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
-                      {song.cover_url ? <img src={song.cover_url} alt={song.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '🎵'}
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ margin: 0, fontWeight: 600, fontSize: '0.88rem', color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</p>
-                      <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#888' }}>{song.artist || song.user_name} · {song.genre ? t(`music.genre.${song.genre}`, song.genre) : ''}</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: '0.72rem', color: '#888', flexShrink: 0 }}>
-                      <Heart size={12} /> {song.like_count || 0}
-                    </div>
-                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: isActive ? 'var(--fb,#4a80d4)' : 'var(--bg,#f0f4ff)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      {isActive ? <Pause size={14} color="white" /> : <Play size={14} color="var(--fb,#4a80d4)" />}
-                    </div>
+                  <div key={song.id} style={{ borderRadius: 12, overflow: 'hidden', background: isActive ? 'rgba(74,128,212,0.08)' : 'var(--card,#fff)', border: isActive ? '1.5px solid var(--fb,#4a80d4)' : '1px solid var(--border,#e2e8f0)', transition: 'all 0.15s' }}>
+                    {isVid ? (
+                      /* Inline video for list mode */
+                      <div>
+                        <video src={song.url} poster={song.cover_url || undefined} controls playsInline
+                          style={{ width: '100%', maxHeight: 200, objectFit: 'contain', display: 'block', background: '#000' }} />
+                        <div style={{ padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <p style={{ margin: 0, fontWeight: 600, fontSize: '0.88rem', color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</p>
+                            <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#888' }}>{song.artist || song.user_name}</p>
+                          </div>
+                          {isPrivate && <Lock size={14} color="#888" />}
+                        </div>
+                      </div>
+                    ) : (
+                      <div onClick={() => handlePlay(song)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', cursor: 'pointer' }}>
+                        <div style={{ width: 48, height: 48, borderRadius: 10, flexShrink: 0, overflow: 'hidden', background: 'linear-gradient(135deg,#4a80d4,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
+                          {song.cover_url ? <img src={song.cover_url} alt={song.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '🎵'}
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p style={{ margin: 0, fontWeight: 600, fontSize: '0.88rem', color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</p>
+                          <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#888' }}>{song.artist || song.user_name} · {song.genre ? t(`music.genre.${song.genre}`, song.genre) : ''}</p>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                          {isPrivate && <Lock size={13} color="#888" />}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: '0.72rem', color: '#888' }}>
+                            <Heart size={12} /> {song.like_count || 0}
+                          </div>
+                          <div style={{ width: 32, height: 32, borderRadius: '50%', background: isActive ? 'var(--fb,#4a80d4)' : 'var(--bg,#f0f4ff)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            {isActive ? <Pause size={14} color="white" /> : <Play size={14} color="var(--fb,#4a80d4)" />}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
             </div>
           )}
-        </div>
-
-        {/* ── Section D: YouTube Playlists ── */}
-        <div style={{ padding: '0 1rem' }}>
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text, #1a1a2e)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: 8 }}>
-            ▶️ {t('music.youtubeSection')}
-          </h2>
-
-          {/* Info: opens YouTube in new tab */}
-          <div style={{ marginBottom: 14, padding: '9px 14px', background: '#f0f5ff', borderRadius: 10, border: '1px solid #dde8fa', fontSize: '0.8rem', color: '#4a80d4', display: 'flex', alignItems: 'center', gap: 7 }}>
-            ▶️ {t('music.youtubeNote') || 'Clica numa música para abrir no YouTube'}
-          </div>
-
-          {/* YouTube cards — click opens YouTube in new tab (no broken embeds) */}
-          {Object.entries(PLAYLISTS).map(([catKey, ytSongs]) => (
-            <div key={catKey} style={{ marginBottom: '1.5rem' }}>
-              <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--fb, #4a80d4)', marginBottom: 8 }}>{t(`music.${catKey}`)}</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
-                {ytSongs.map(song => (
-                  <div
-                    key={song.id}
-                    onClick={() => openYoutube(song.id)}
-                    style={{ borderRadius: 10, overflow: 'hidden', cursor: 'pointer', background: 'var(--card)', border: '1px solid var(--border)', transition: 'transform 0.15s,box-shadow 0.15s' }}
-                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(74,128,212,0.15)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
-                  >
-                    {/* Thumbnail with play overlay */}
-                    <div style={{ position: 'relative', aspectRatio: '16/9', background: '#111' }}>
-                      <img
-                        src={`https://img.youtube.com/vi/${song.id}/mqdefault.jpg`}
-                        alt={song.title}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                        loading="lazy"
-                        onError={e => { e.target.style.display = 'none'; }}
-                      />
-                      {/* Red YouTube play button overlay */}
-                      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.25)' }}>
-                        <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#ff0000', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
-                          <Play size={16} color="white" fill="white" style={{ marginLeft: 2 }} />
-                        </div>
-                      </div>
-                    </div>
-                    <div style={{ padding: '8px 10px' }}>
-                      <p style={{ margin: 0, fontWeight: 600, fontSize: '0.78rem', color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</p>
-                      <p style={{ margin: '2px 0 0', fontSize: '0.7rem', color: 'var(--muted,#888)' }}>{song.artist}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
         </div>
       </div>
 
@@ -647,13 +674,13 @@ export default function MusicLibrary() {
       )}
 
       {/* Mini Audio Player */}
-      {playerSong && (
+      {playerSong && !isVideoUrl(playerSong.url) && (
         <MiniPlayer
           songs={playerSongs}
           currentIdx={currentIdx}
           setCurrentIdx={(idx) => {
             setCurrentIdx(idx);
-            if (playing && playerSongs[idx]) {
+            if (playing && playerSongs[idx] && !isVideoUrl(playerSongs[idx].url)) {
               audioRef.current.src = playerSongs[idx].url;
               audioRef.current.play().catch(() => {});
             }

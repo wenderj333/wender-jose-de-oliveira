@@ -702,7 +702,16 @@
     "noFavorites": "No favorites yet",
     "tapHeart": "Tap ❤️ to save songs",
     "freeSources": "More free music",
-    "youtubeNote": "Click a song to open on YouTube"
+    "youtubeNote": "Click a song to open on YouTube",
+    "tooLong": "Video/audio cannot be longer than 5 minutes",
+    "uploadPublic": "Public — everyone can see",
+    "uploadPrivate": "Private — only me",
+    "visibility": "Visibility",
+    "video": "Music Video",
+    "audio": "Audio",
+    "uploadHint": "MP3, WAV, MP4, MOV · max 5 min",
+    "uploadCover": "Song cover",
+    "uploadCoverHint": "Click to add a cover image"
   },
   "courseFinance": {
     "title": "Biblical Finance",
@@ -1226,5 +1235,18 @@
     "why4desc": "Christians from Brazil, Portugal, Germany, Africa and more — united in faith.",
     "ctaJoin": "✨ Join the community now"
   },
-  "locale": "en-GB"
+  "locale": "en-GB",
+  "report": {
+    "title": "Report",
+    "subtitle": "Help us keep the community safe and respectful",
+    "inappropriate": "Inappropriate content",
+    "disrespectful": "Insult or disrespect",
+    "spam": "Spam or advertising",
+    "harassment": "Harassment or threat",
+    "other": "Other reason",
+    "descPlaceholder": "Describe what happened (optional)...",
+    "send": "Send Report",
+    "sent": "Report sent. Thank you for helping keep the community safe!",
+    "cancel": "Cancel"
+  }
 }

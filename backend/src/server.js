@@ -432,6 +432,7 @@ app.use('/api/course', require('./routes/course'));
 app.use('/api/stripe', require('./routes/stripe'));
 app.use('/api/ai-louvor', require('./routes/ai-louvor'));
 app.use('/api/openclaw', require('./routes/openclaw'));
+app.use('/api/reports', require('./routes/reports'));
 
 // Log OpenClaw routes for debugging
 console.log('✅ OpenClaw routes registered: /api/openclaw/health, /api/openclaw/users/new');
