@@ -135,16 +135,25 @@ export default function App() {
           <div style={{marginBottom:'20px'}}>
             <p style={{color:'rgba(255,255,255,0.5)',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'10px',paddingLeft:'16px'}}>Menu</p>
             {[
-              [`/perfil/${user.id}`, <User size={20}/>, 'Meu Perfil'],
+              [`/perfil/${user?.id}`, <User size={20}/>, 'Meu Perfil'],
               ['/', <Home size={20}/>, t('nav.mural')],
+              ['/mensagens', <MessageCircle size={20}/>, t('nav.messages', 'Mensagens')],
+              ['/amigos', <Users size={20}/>, t('nav.friends', 'Amigos')],
               ['/membros', <Users size={20}/>, t('nav.members')],
-              ['/grupos', <Users size={20}/>, t('nav.groups')],
+              ['/igrejas', <Globe size={20}/>, t('churches.title', 'Igrejas')],
               ['/musica', <Music size={20}/>, t('nav.music')],
+              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA Bíblica')],
+              ['/grupos', <Users size={20}/>, t('nav.groups')],
             ].map(([to, icon, label]) => (
               <Link key={to} to={to} onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'white',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
                 {icon} {label}
               </Link>
             ))}
+            {user?.role === 'pastor' && (
+              <Link to="/sala-pastor" onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'#c9a84c',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)',fontWeight:600}}>
+                <BookOpen size={20}/> 🕊️ Sala do Pastor
+              </Link>
+            )}
           </div>
           <button onClick={logout} style={{display:'flex',alignItems:'center',gap:'12px',color:'#ff6b6b',fontSize:'1rem',background:'none',border:'none',textAlign:'left',width:'100%',padding:'11px 16px',cursor:'pointer'}}>
             <LogOut size={20}/> {t('auth.logout')}
