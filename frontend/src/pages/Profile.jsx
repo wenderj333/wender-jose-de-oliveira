@@ -19,6 +19,46 @@ async function uploadToCloudinary(file) {
   return data.secure_url;
 }
 
+const EFFECTS = [
+  { id: 'none', label: 'Normal', filter: 'none' },
+  { id: 'sepia', label: 'Sépia', filter: 'sepia(100%)' },
+  { id: 'bw', label: 'P&B', filter: 'grayscale(100%)' },
+  { id: 'vintage', label: 'Vintage', filter: 'sepia(60%) contrast(110%) brightness(95%)' },
+  { id: 'warm', label: 'Quente', filter: 'sepia(40%) saturate(160%) brightness(108%)' },
+  { id: 'cold', label: 'Frio', filter: 'hue-rotate(200deg) saturate(130%) brightness(105%)' },
+  { id: 'vivid', label: 'Vívido', filter: 'saturate(220%) contrast(115%)' },
+  { id: 'fade', label: 'Desbotado', filter: 'brightness(130%) contrast(75%) saturate(70%)' },
+  { id: 'dramatic', label: 'Dramático', filter: 'contrast(160%) grayscale(25%) brightness(90%)' },
+];
+
+async function applyFilterAndUpload(file, cssFilter) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (cssFilter !== 'none') ctx.filter = cssFilter;
+      ctx.drawImage(img, 0, 0);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(async (blob) => {
+        try {
+          const form = new FormData();
+          form.append('file', blob, 'avatar.jpg');
+          form.append('upload_preset', UPLOAD_PRESET);
+          const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: form });
+          const data = await res.json();
+          resolve(data.secure_url);
+        } catch(e) { reject(e); }
+      }, 'image/jpeg', 0.92);
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
 export default function Profile() {
   const { t } = useTranslation();
   const { userId } = useParams();
@@ -44,6 +84,13 @@ export default function Profile() {
 
   // Report modal
   const [reportOpen, setReportOpen] = useState(false);
+
+  // Photo effects modal
+  const [effectsOpen, setEffectsOpen] = useState(false);
+  const [effectsFile, setEffectsFile] = useState(null);
+  const [effectsPreviewUrl, setEffectsPreviewUrl] = useState(null);
+  const [selectedEffect, setSelectedEffect] = useState('none');
+  const [applyingEffect, setApplyingEffect] = useState(false);
 
   const applyUser = (u) => {
     setProfile(u);
@@ -109,20 +156,43 @@ export default function Profile() {
     setSaving(false);
   };
 
-  const handleAvatarChange = async (e) => {
+  const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    const previewUrl = URL.createObjectURL(file);
+    setEffectsFile(file);
+    setEffectsPreviewUrl(previewUrl);
+    setSelectedEffect('none');
+    setEffectsOpen(true);
+    // reset input so same file can be picked again
+    e.target.value = '';
+  };
+
+  const handleEffectsCancel = () => {
+    if (effectsPreviewUrl) URL.revokeObjectURL(effectsPreviewUrl);
+    setEffectsOpen(false);
+    setEffectsFile(null);
+    setEffectsPreviewUrl(null);
+    setSelectedEffect('none');
+  };
+
+  const handleEffectsApply = async () => {
+    if (!effectsFile) return;
+    setApplyingEffect(true);
     try {
-      const url = await uploadToCloudinary(file);
+      const cssFilter = EFFECTS.find(e => e.id === selectedEffect)?.filter || 'none';
+      const url = await applyFilterAndUpload(effectsFile, cssFilter);
       await fetch(`${API}/profile`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ avatar_url: url }),
       });
       setProfile(p => ({ ...p, avatar_url: url }));
+      handleEffectsCancel();
     } catch {
-      alert('Erro ao fazer upload da foto.');
+      alert('Erro ao aplicar o efeito.');
     }
+    setApplyingEffect(false);
   };
 
   const sendDM = async () => {
@@ -337,6 +407,132 @@ export default function Profile() {
                 </button>
               </>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Photo Effects Modal */}
+      {effectsOpen && effectsPreviewUrl && (
+        <div
+          style={{position:'fixed',inset:0,zIndex:600,background:'rgba(0,0,0,0.7)',display:'flex',alignItems:'center',justifyContent:'center',padding:16}}
+          onClick={handleEffectsCancel}
+        >
+          <div
+            style={{background:'white',borderRadius:16,width:'100%',maxWidth:420,overflow:'hidden',boxShadow:'0 12px 48px rgba(0,0,0,0.35)'}}
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div style={{padding:'16px 20px',borderBottom:'1px solid #e0e6f5',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+              <span style={{fontWeight:700,color:'#1e2240',fontSize:'0.95rem'}}>Efeitos de foto</span>
+              <button onClick={handleEffectsCancel} style={{background:'none',border:'none',cursor:'pointer',color:'#7b83a6',fontSize:'1.2rem',lineHeight:1,padding:0}}>✕</button>
+            </div>
+
+            {/* Big preview */}
+            <div style={{display:'flex',alignItems:'center',justifyContent:'center',background:'#000',padding:8}}>
+              <img
+                src={effectsPreviewUrl}
+                alt="Preview"
+                style={{
+                  width:300,
+                  height:300,
+                  objectFit:'cover',
+                  borderRadius:8,
+                  filter: EFFECTS.find(e => e.id === selectedEffect)?.filter || 'none',
+                  transition:'filter 0.2s ease',
+                }}
+              />
+            </div>
+
+            {/* Effects grid */}
+            <div style={{padding:'12px 16px'}}>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8}}>
+                {EFFECTS.map(effect => (
+                  <div
+                    key={effect.id}
+                    onClick={() => setSelectedEffect(effect.id)}
+                    style={{
+                      cursor:'pointer',
+                      display:'flex',
+                      flexDirection:'column',
+                      alignItems:'center',
+                      gap:4,
+                      padding:4,
+                      borderRadius:10,
+                      border: selectedEffect === effect.id ? '2px solid #4a80d4' : '2px solid transparent',
+                      background: selectedEffect === effect.id ? '#edf2fc' : 'transparent',
+                      transition:'border-color 0.15s, background 0.15s',
+                    }}
+                  >
+                    <div style={{width:80,height:80,borderRadius:8,overflow:'hidden',flexShrink:0}}>
+                      <img
+                        src={effectsPreviewUrl}
+                        alt={effect.label}
+                        style={{
+                          width:'100%',
+                          height:'100%',
+                          objectFit:'cover',
+                          filter: effect.filter,
+                          display:'block',
+                        }}
+                      />
+                    </div>
+                    <span style={{
+                      fontSize:'0.68rem',
+                      fontWeight: selectedEffect === effect.id ? 700 : 500,
+                      color: selectedEffect === effect.id ? '#4a80d4' : '#7b83a6',
+                      textAlign:'center',
+                      lineHeight:1.2,
+                    }}>
+                      {effect.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div style={{padding:'12px 16px 20px',display:'flex',gap:10}}>
+              <button
+                onClick={handleEffectsCancel}
+                disabled={applyingEffect}
+                style={{flex:1,padding:'11px',borderRadius:10,background:'#f0f2f8',border:'none',color:'#3d4466',fontWeight:600,fontSize:'0.9rem',cursor:'pointer'}}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleEffectsApply}
+                disabled={applyingEffect}
+                style={{
+                  flex:2,
+                  padding:'11px',
+                  borderRadius:10,
+                  background: applyingEffect ? '#a0b8e8' : 'linear-gradient(135deg,#3568b8,#4a80d4)',
+                  border:'none',
+                  color:'white',
+                  fontWeight:700,
+                  fontSize:'0.9rem',
+                  cursor: applyingEffect ? 'not-allowed' : 'pointer',
+                  display:'flex',
+                  alignItems:'center',
+                  justifyContent:'center',
+                  gap:8,
+                }}
+              >
+                {applyingEffect ? (
+                  <>
+                    <span style={{
+                      width:14,height:14,
+                      border:'2px solid rgba(255,255,255,0.4)',
+                      borderTopColor:'white',
+                      borderRadius:'50%',
+                      display:'inline-block',
+                      animation:'spin 0.8s linear infinite',
+                    }}/>
+                    A aplicar...
+                  </>
+                ) : 'Aplicar'}
+              </button>
+            </div>
           </div>
         </div>
       )}
