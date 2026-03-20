@@ -417,7 +417,6 @@ app.use('/api/help-requests', require('./routes/help'));
 app.use('/api/chat', require('./routes/chat'));
 app.use('/api/pastoral-ai', require('./routes/pastoral-ai'));
 app.use('/api/bible-ai', require('./routes/bible-ai'));
-app.use('/api/debug', require('./routes/debug-ai'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/music', require('./routes/music'));
 app.use('/api/friends', require('./routes/friends'));
