@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
-function timeAgo(dateStr) {
+function timeAgo(dateStr, t) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'agora mesmo';
-  if (mins < 60) return `há ${mins}m`;
+  if (mins < 1) return t('ajudaProximo.justNow');
+  if (mins < 60) return t('ajudaProximo.minutesAgo', { count: mins });
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `há ${hours}h`;
-  return `há ${Math.floor(hours / 24)}d`;
+  if (hours < 24) return t('ajudaProximo.hoursAgo', { count: hours });
+  return t('ajudaProximo.daysAgo', { count: Math.floor(hours / 24) });
 }
 
 const TYPE_CONFIG = {
@@ -20,43 +21,44 @@ const TYPE_CONFIG = {
   offer:     { label: '❤️ Ajuda',      color: '#d44747', bg: '#fff0f0' },
 };
 
-const ACTION_CARDS = [
-  {
-    emoji: '😔',
-    label: 'Preciso de ajuda',
-    desc: 'Compartilhe seu pedido de oração',
-    type: 'request',
-    action: 'create',
-    borderColor: '#6c47d4',
-  },
-  {
-    emoji: '🙏',
-    label: 'Quero orar',
-    desc: 'Ore pelos pedidos da comunidade',
-    type: null,
-    action: 'scroll',
-    borderColor: '#1e6ab5',
-  },
-  {
-    emoji: '❤️',
-    label: 'Quero ajudar',
-    desc: 'Ofereça sua ajuda a alguém',
-    type: 'offer',
-    action: 'create',
-    borderColor: '#d44747',
-  },
-  {
-    emoji: '📖',
-    label: 'Testemunho',
-    desc: 'Compartilhe uma vitória de fé',
-    type: 'testimony',
-    action: 'create',
-    borderColor: '#c9a84c',
-  },
-];
-
 export default function AjudaUmaVida() {
+  const { t } = useTranslation();
   const { user, token } = useAuth();
+
+  const ACTION_CARDS = [
+    {
+      emoji: '😔',
+      label: t('ajudaProximo.needHelp'),
+      desc: t('ajudaProximo.needHelpDesc'),
+      type: 'request',
+      action: 'create',
+      borderColor: '#6c47d4',
+    },
+    {
+      emoji: '🙏',
+      label: t('ajudaProximo.wantToPray'),
+      desc: t('ajudaProximo.wantToPrayDesc'),
+      type: null,
+      action: 'scroll',
+      borderColor: '#1e6ab5',
+    },
+    {
+      emoji: '❤️',
+      label: t('ajudaProximo.wantToHelp'),
+      desc: t('ajudaProximo.wantToHelpDesc'),
+      type: 'offer',
+      action: 'create',
+      borderColor: '#d44747',
+    },
+    {
+      emoji: '📖',
+      label: t('ajudaProximo.testimony'),
+      desc: t('ajudaProximo.testimonyDesc'),
+      type: 'testimony',
+      action: 'create',
+      borderColor: '#c9a84c',
+    },
+  ];
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -101,7 +103,7 @@ export default function AjudaUmaVida() {
   // ── Create post ────────────────────────────────────────────────────────────
   async function handleCreate(e) {
     e.preventDefault();
-    if (!user) { alert('Faça login para publicar'); return; }
+    if (!user) { alert(t('ajudaProximo.loginToPost')); return; }
     if (!createContent.trim()) { alert('Escreva algo antes de publicar'); return; }
     setSubmitting(true);
     try {
@@ -133,7 +135,7 @@ export default function AjudaUmaVida() {
 
   // ── Pray toggle ────────────────────────────────────────────────────────────
   async function handlePray(postId) {
-    if (!user) { alert('Faça login para orar'); return; }
+    if (!user) { alert(t('ajudaProximo.loginToPray')); return; }
     if (prayingIds.has(postId)) return; // debounce
     setPrayingIds(prev => new Set([...prev, postId]));
     try {
@@ -176,7 +178,7 @@ export default function AjudaUmaVida() {
 
   async function handleComment(postId) {
     const text = commentInputs[postId] || '';
-    if (!user) { alert('Faça login para comentar'); return; }
+    if (!user) { alert(t('ajudaProximo.loginToPost')); return; }
     if (!text.trim()) return;
     try {
       const res = await fetch(`${API}/help-posts/${postId}/comments`, {
@@ -201,7 +203,7 @@ export default function AjudaUmaVida() {
   }
 
   function openCreate(type) {
-    if (!user) { alert('Faça login para publicar'); return; }
+    if (!user) { alert(t('ajudaProximo.loginToPost')); return; }
     setCreateType(type || 'request');
     setCreating(true);
   }
@@ -554,7 +556,7 @@ export default function AjudaUmaVida() {
 
       <div style={styles.section}>
         {/* ── COMO VOCÊ ESTÁ? ─────────────────────────────────────────────── */}
-        <p style={styles.sectionTitle}>Como você está hoje?</p>
+        <p style={styles.sectionTitle}>{t('ajudaProximo.howAreYou')}</p>
         <div style={styles.actionGrid}>
           {ACTION_CARDS.map((card) => (
             <div
@@ -579,14 +581,14 @@ export default function AjudaUmaVida() {
 
         {/* ── FEED ────────────────────────────────────────────────────────── */}
         <div ref={feedRef}>
-          <p style={styles.sectionTitle}>🕊️ Pedidos de Oração &amp; Testemunhos</p>
+          <p style={styles.sectionTitle}>🕊️ {t('ajudaProximo.feedTitle')}</p>
 
           {loading ? (
             <div style={styles.loadingSpinner}>🙏</div>
           ) : posts.length === 0 ? (
             <div style={styles.emptyState}>
               <div style={{ fontSize: '2.5rem', marginBottom: 8 }}>🕊️</div>
-              <div>Seja o primeiro a compartilhar um pedido ou testemunho!</div>
+              <div>{t('ajudaProximo.noPosts')}</div>
             </div>
           ) : (
             posts.map(post => {
@@ -616,8 +618,8 @@ export default function AjudaUmaVida() {
                       )}
                     </div>
                     <div>
-                      <div style={styles.authorName}>{post.author_name || 'Anónimo'}</div>
-                      <div style={styles.timeAgo}>{timeAgo(post.created_at)}</div>
+                      <div style={styles.authorName}>{post.author_name || t('ajudaProximo.anonymous')}</div>
+                      <div style={styles.timeAgo}>{timeAgo(post.created_at, t)}</div>
                     </div>
                     <div style={styles.badge(typeCfg)}>{typeCfg.label}</div>
                   </div>
@@ -646,11 +648,13 @@ export default function AjudaUmaVida() {
                       onClick={() => handlePray(post.id)}
                       disabled={prayingIds.has(post.id)}
                     >
-                      {post.user_prayed ? '✓ Orei por você' : '🙏 Orar por você'}
+                      {post.user_prayed
+                        ? `✓ ${t('ajudaProximo.prayed')}`
+                        : `🙏 ${t('ajudaProximo.prayForYou')}`}
                     </button>
                     {post.prayer_count > 0 && (
                       <span style={styles.prayCount}>
-                        {post.prayer_count} {post.prayer_count === 1 ? 'pessoa orou' : 'pessoas oraram'}
+                        {post.prayer_count} {t('ajudaProximo.peoplePreyed')}
                       </span>
                     )}
                     <button
@@ -683,7 +687,7 @@ export default function AjudaUmaVida() {
                             )}
                           </div>
                           <div style={styles.commentBubble}>
-                            <div style={styles.commentAuthor}>{c.author_name || 'Anónimo'}</div>
+                            <div style={styles.commentAuthor}>{c.author_name || t('ajudaProximo.anonymous')}</div>
                             <div>{c.content}</div>
                           </div>
                         </div>
@@ -692,7 +696,7 @@ export default function AjudaUmaVida() {
                         <div>
                           <input
                             style={styles.commentInput}
-                            placeholder="Escreva uma mensagem de encorajamento…"
+                            placeholder={t('ajudaProximo.commentPlaceholder')}
                             value={commentInputs[post.id] || ''}
                             onChange={e => setCommentInputs(prev => ({ ...prev, [post.id]: e.target.value }))}
                             onKeyDown={e => e.key === 'Enter' && handleComment(post.id)}
@@ -701,13 +705,13 @@ export default function AjudaUmaVida() {
                             style={styles.sendCommentBtn}
                             onClick={() => handleComment(post.id)}
                           >
-                            Enviar 🕊️
+                            {t('ajudaProximo.send')} 🕊️
                           </button>
                         </div>
                       )}
                       {!user && (
                         <div style={{ color: '#aaa', fontSize: '0.82rem', marginTop: 6 }}>
-                          Faça login para comentar
+                          {t('ajudaProximo.loginToPost')}
                         </div>
                       )}
                     </div>
@@ -727,33 +731,31 @@ export default function AjudaUmaVida() {
 
             <textarea
               style={styles.textarea}
-              placeholder={
-                createType === 'request' ? 'Escreva seu pedido de oração…' :
-                createType === 'testimony' ? 'Compartilhe sua vitória de fé…' :
-                createType === 'offer' ? 'Como você pode ajudar alguém?' :
-                'Escreva uma mensagem de gratidão…'
-              }
+              placeholder={t('ajudaProximo.postPlaceholder')}
               value={createContent}
               onChange={e => setCreateContent(e.target.value)}
               autoFocus
             />
 
             {/* Tipo selector */}
+            <div style={{ fontSize: '0.8rem', color: '#888', marginTop: 10, marginBottom: 4 }}>
+              {t('ajudaProximo.postTypeLabel')}
+            </div>
             <div style={styles.typeSelector}>
               {[
-                { key: 'request',   label: '🙏 Oração' },
-                { key: 'testimony', label: '💛 Testemunho' },
+                { key: 'request',   label: `🙏 ${t('ajudaProximo.typeRequest')}` },
+                { key: 'testimony', label: `💛 ${t('ajudaProximo.typeTestimony')}` },
                 { key: 'gratitude', label: '✨ Gratidão' },
-                { key: 'offer',     label: '❤️ Ajuda' },
-              ].map(t => {
-                const cfg = TYPE_CONFIG[t.key];
+                { key: 'offer',     label: `❤️ ${t('ajudaProximo.typeOffer')}` },
+              ].map(tp => {
+                const cfg = TYPE_CONFIG[tp.key];
                 return (
                   <button
-                    key={t.key}
-                    style={styles.typeBtn(createType === t.key, cfg)}
-                    onClick={() => setCreateType(t.key)}
+                    key={tp.key}
+                    style={styles.typeBtn(createType === tp.key, cfg)}
+                    onClick={() => setCreateType(tp.key)}
                   >
-                    {t.label}
+                    {tp.label}
                   </button>
                 );
               })}
@@ -768,7 +770,7 @@ export default function AjudaUmaVida() {
                 <div style={styles.toggleDot(createAnon)} />
               </div>
               <span style={{ fontSize: '0.9rem', color: '#555' }}>
-                Publicar anonimamente
+                {t('ajudaProximo.postAnon')}
               </span>
             </div>
 
@@ -777,7 +779,7 @@ export default function AjudaUmaVida() {
               onClick={handleCreate}
               disabled={submitting || !createContent.trim()}
             >
-              {submitting ? 'Publicando…' : 'Publicar 🕊️'}
+              {submitting ? 'Publicando…' : `${t('ajudaProximo.publish')} 🕊️`}
             </button>
             <button
               style={styles.cancelBtn}

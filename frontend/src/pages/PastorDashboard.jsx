@@ -100,6 +100,7 @@ function PastorDashboard() {
   const verse = verses[Math.floor(Math.random() * verses.length)];
 
   const sections = [
+    { id: 'minha-igreja', icon: '🏛️', label: 'Minha Igreja', Ico: ShieldCheck },
     { id: 'membros', icon: '👥', label: 'Membros', Ico: Users },
     { id: 'dizimos', icon: '💰', label: 'Dízimos', Ico: DollarSign },
     { id: 'oracoes', icon: '🙏', label: 'Orações', Ico: Heart },
@@ -170,6 +171,7 @@ function PastorDashboard() {
         {section && (
           <>
             <button style={styles.backBtn} onClick={() => setSection(null)}><ArrowLeft size={16} /> Voltar</button>
+            {section === 'minha-igreja' && <MinhaIgrejaSection apiFetch={apiFetch} headers={headers} token={token} />}
             {section === 'membros' && <MembrosSection apiFetch={apiFetch} />}
             {section === 'dizimos' && <DizimosSection apiFetch={apiFetch} headers={headers} />}
             {section === 'despesas' && <DespesasSection apiFetch={apiFetch} headers={headers} />}

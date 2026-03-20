@@ -395,6 +395,35 @@ const { Pool: MigratePool } = require('pg');
       );
     `);
 
+    // ── Fase 1 Sala do Pastor: church_members, church_events, novas colunas ──
+    await mp.query(`ALTER TABLE churches ADD COLUMN IF NOT EXISTS pastor_name VARCHAR(200)`);
+    await mp.query(`ALTER TABLE churches ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'active'`);
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS church_members (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        church_id UUID REFERENCES churches(id) ON DELETE CASCADE,
+        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        status VARCHAR(20) DEFAULT 'pending',
+        member_tag VARCHAR(30) DEFAULT 'member',
+        joined_at TIMESTAMPTZ,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        UNIQUE(church_id, user_id)
+      );
+    `);
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS church_events (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        church_id UUID REFERENCES churches(id) ON DELETE CASCADE,
+        created_by UUID REFERENCES users(id),
+        title VARCHAR(200) NOT NULL,
+        description TEXT,
+        event_type VARCHAR(30) DEFAULT 'culto',
+        event_date DATE NOT NULL,
+        event_time TIME,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+
     console.log('✅ Auto-migração concluída!');
   } catch (err) {
     console.error('⚠️  Erro na auto-migração (continuando):', err.message);

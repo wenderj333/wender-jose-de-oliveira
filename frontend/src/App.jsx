@@ -26,6 +26,9 @@ import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
 import AjudaUmaVida from "./pages/AjudaUmaVida";
 import Chat from "./pages/Chat";
+import Churches from "./pages/Churches";
+import ChurchProfile from "./pages/ChurchProfile";
+import PastorDashboard from "./pages/PastorDashboard";
 
 // Components
 import LanguageSelector from "./components/LanguageSwitcher";
@@ -203,6 +206,7 @@ export default function App() {
             <Link to="/membros" className={isActive('/membros')}><Users size={17}/> {t('nav.members')}</Link>
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/> {t('nav.groups')}</Link>
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/> {t('nav.music')}</Link>
+            <Link to="/igrejas" className={location.pathname.startsWith('/igrejas') ? 'menu-link active' : 'menu-link'}>⛪ {t('nav.churches', 'Igrejas')}</Link>
           </div>
 
           {(user.role === 'pastor' || user.role === 'admin') && (
@@ -210,6 +214,7 @@ export default function App() {
               <p className="menu-title">Admin</p>
               <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/> {t('nav.help_requests')}</Link>
               <Link to="/pastor-dashboard" className={isActive('/pastor-dashboard')}><Shield size={17}/> Dashboard</Link>
+              <Link to="/sala-pastor" className={isActive('/sala-pastor')}><Shield size={17}/> Sala do Pastor</Link>
             </div>
           )}
 
@@ -236,7 +241,10 @@ export default function App() {
             <Route path="/mensagens" element={<Chat />} />
             <Route path="/mensagens/:userId" element={<Chat />} />
             <Route path="/pedidos-ajuda" element={<ProtectedRoute role="pastor"><HelpRequests /></ProtectedRoute>} />
-            <Route path="/pastor-dashboard" element={<ProtectedRoute role="pastor"><div style={{padding:20}}>Dashboard em construção...</div></ProtectedRoute>} />
+            <Route path="/pastor-dashboard" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
+            <Route path="/igrejas" element={<Churches />} />
+            <Route path="/igrejas/:id" element={<ChurchProfile />} />
+            <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
           </Routes>
         </main>
 
