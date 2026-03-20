@@ -104,20 +104,7 @@ router.post('/', authenticate, async (req, res) => {
       return res.status(400).json({ error: 'receiverId e content são obrigatórios' });
     }
 
-    // ✅ Verificação de amizade obrigatória
-    const friendship = await db.query(`
-      SELECT status FROM friendships
-      WHERE ((requester_id = $1 AND addressee_id = $2)
-          OR (requester_id = $2 AND addressee_id = $1))
-    `, [me, targetId]);
-
-    const status = friendship.rows[0]?.status;
-    if (status !== 'accepted') {
-      return res.status(403).json({
-        error: 'not_friends',
-        message: 'Vocês precisam ser amigos para enviar mensagens.',
-      });
-    }
+    // Mensagens abertas — qualquer utilizador pode enviar mensagem a qualquer outro
 
     const result = await db.query(`
       INSERT INTO direct_messages (sender_id, receiver_id, content)
