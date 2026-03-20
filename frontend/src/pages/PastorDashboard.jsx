@@ -178,6 +178,7 @@ function PastorDashboard() {
             {section === 'estudos' && <EstudosSection apiFetch={apiFetch} headers={headers} />}
             {section === 'comunicados' && <ComunicadosSection apiFetch={apiFetch} headers={headers} />}
             {section === 'agenda' && <AgendaSection apiFetch={apiFetch} headers={headers} />}
+            {section === 'oracoes' && <OracoesSection apiFetch={apiFetch} />}
             {section === 'relatorios' && <RelatoriosSection apiFetch={apiFetch} />}
           </>
         )}
@@ -454,8 +455,65 @@ function DespesasSection({ apiFetch, headers }) {
   );
 }
 
+/* =================== ORAÇÕES =================== */
+function OracoesSection({ apiFetch }) {
+  const { t } = useTranslation();
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    apiFetch('/api/help-posts?limit=50')
+      .then(d => setPosts(d.posts || []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const formatDate = (d) => {
+    if (!d) return '';
+    return new Date(d).toLocaleDateString();
+  };
+
+  return (
+    <div>
+      <div style={styles.sectionTitle}>🙏 {t('pastorDashboard.prayerRequests', 'Pedidos de Oração')}</div>
+      <SectionHelp title={t('pastorDashboard.prayerHelpTitle', '❓ Pedidos de oração da comunidade')} steps={[
+        t('pastorDashboard.prayerHelp1', 'Veja os pedidos de oração enviados pelos membros.'),
+        t('pastorDashboard.prayerHelp2', 'Clique em "Orar" para registar que orou por alguém.'),
+        t('pastorDashboard.prayerHelp3', 'Acompanhe as necessidades espirituais da sua comunidade.'),
+      ]} />
+
+      {loading ? (
+        <div style={styles.loading}>{t('common.loading', 'Carregando...')}</div>
+      ) : !posts.length ? (
+        <div style={styles.empty}>🕊️ {t('pastorDashboard.noPrayerRequests', 'Nenhum pedido de oração ainda.')}</div>
+      ) : (
+        <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {posts.map((p, i) => (
+            <div key={p.id || i} style={{ ...styles.listItem, borderLeft: '4px solid #6c47d4' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                <span style={{ fontWeight: 600, fontSize: 13, color: '#6c47d4' }}>
+                  {p.post_type === 'testimony' ? '💛 Testemunho' : p.post_type === 'offer' ? '❤️ Ajuda' : '🙏 Pedido'}
+                </span>
+                <span style={{ fontSize: 11, color: '#aaa' }}>{formatDate(p.created_at)}</span>
+              </div>
+              <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 2 }}>
+                {p.is_anonymous ? t('ajudaProximo.anonymous', 'Anónimo') : (p.author_name || 'Membro')}
+              </div>
+              <div style={{ fontSize: 13, color: '#555', lineHeight: 1.5 }}>{p.content}</div>
+              <div style={{ marginTop: 6, fontSize: 12, color: '#888' }}>
+                🙏 {p.prayer_count || 0} {t('ajudaProximo.peoplePreyed', 'pessoas oraram')}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* =================== ESTUDOS =================== */
 function EstudosSection({ apiFetch, headers }) {
+  const { t } = useTranslation();
   const [studies, setStudies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ title: '', content: '', bible_references: '' });
@@ -483,28 +541,28 @@ function EstudosSection({ apiFetch, headers }) {
 
   return (
     <div>
-      <div style={styles.sectionTitle}>📖 Estudos Bíblicos</div>
-      <SectionHelp title="❓ Como funciona Estúdos Bíblicos?" steps={[
-        'Crie estudos bíblicos para compartilhar com seus membros.',
-        'Clique em "+ Novo Estudo" e preencha título e conteúdo.',
-        'Os estudos ficam disponíveis para todos os membros da sua igreja.',
-        'Use para preparar cultos, células e momentos de ensino.',
+      <div style={styles.sectionTitle}>📖 {t('pastorDashboard.biblicalStudies', 'Estudos Bíblicos')}</div>
+      <SectionHelp title={t('pastorDashboard.studiesHelpTitle', '❓ Como funcionam os Estudos Bíblicos?')} steps={[
+        t('pastorDashboard.studiesHelp1', 'Crie estudos bíblicos para compartilhar com seus membros.'),
+        t('pastorDashboard.studiesHelp2', 'Clique em "+ Novo Estudo" e preencha título e conteúdo.'),
+        t('pastorDashboard.studiesHelp3', 'Os estudos ficam disponíveis para todos os membros da sua igreja.'),
+        t('pastorDashboard.studiesHelp4', 'Use para preparar cultos, células e momentos de ensino.'),
       ]} />
-      <button style={styles.btn(PURPLE)} onClick={() => setShowForm(!showForm)}><Plus size={16} /> {showForm ? 'Fechar' : 'Novo Estudo'}</button>
+      <button style={styles.btn(PURPLE)} onClick={() => setShowForm(!showForm)}><Plus size={16} /> {showForm ? t('common.close', 'Fechar') : t('pastorDashboard.newStudy', 'Novo Estudo')}</button>
 
       {showForm && (
         <form onSubmit={submit} style={{ marginTop: 12, background: '#fff', borderRadius: 14, padding: 16, boxShadow: '0 2px 6px rgba(0,0,0,0.06)' }}>
-          <label style={styles.label}>Título</label>
-          <input style={styles.input} placeholder="Título do estudo" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} required />
-          <label style={styles.label}>Conteúdo</label>
-          <textarea style={styles.textarea} placeholder="Escreva o conteúdo do estudo..." value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} required />
-          <label style={styles.label}>Referências Bíblicas</label>
+          <label style={styles.label}>{t('pastorDashboard.studyTitle', 'Título')}</label>
+          <input style={styles.input} placeholder={t('pastorDashboard.studyTitlePlaceholder', 'Título do estudo')} value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} required />
+          <label style={styles.label}>{t('pastorDashboard.studyContent', 'Conteúdo')}</label>
+          <textarea style={styles.textarea} placeholder={t('pastorDashboard.studyContentPlaceholder', 'Escreva o conteúdo do estudo...')} value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} required />
+          <label style={styles.label}>{t('pastorDashboard.studyReferences', 'Referências Bíblicas')}</label>
           <input style={styles.input} placeholder="Ex: João 3:16, Salmos 23" value={form.bible_references} onChange={e => setForm({ ...form, bible_references: e.target.value })} />
-          <button type="submit" style={styles.btn(PURPLE)} disabled={submitting}><Send size={14} /> {submitting ? 'Salvando...' : 'Publicar'}</button>
+          <button type="submit" style={styles.btn(PURPLE)} disabled={submitting}><Send size={14} /> {submitting ? t('common.saving', 'Salvando...') : t('pastorDashboard.publish', 'Publicar')}</button>
         </form>
       )}
 
-      {loading ? <div style={styles.loading}>Carregando...</div> : !studies.length ? <div style={styles.empty}>Nenhum estudo publicado ainda. Compartilhe a Palavra! 📖</div> : (
+      {loading ? <div style={styles.loading}>{t('common.loading', 'Carregando...')}</div> : !studies.length ? <div style={styles.empty}>{t('pastorDashboard.noStudies', 'Nenhum estudo publicado ainda. Compartilhe a Palavra!')} 📖</div> : (
         <div style={{ marginTop: 16 }}>
           {studies.map((s, i) => (
             <div key={s.id || i} style={styles.listItem}>
