@@ -7,7 +7,7 @@ const responseCache = new Map(); // key -> { reply, timestamp }
 const CACHE_TTL = 60 * 60 * 1000; // 1 hour
 const userRequests = new Map(); // ip -> [timestamps]
 const USER_LIMIT = 10; // per hour per user
-const GLOBAL_LIMIT = 30; // per hour total
+const GLOBAL_LIMIT = 100; // per hour total
 let globalRequests = [];
 
 function cleanOldEntries(arr, windowMs = 60 * 60 * 1000) {
