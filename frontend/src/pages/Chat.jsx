@@ -21,8 +21,28 @@ export default function Chat() {
   const [search, setSearch] = useState('');
   const [loadingConvs, setLoadingConvs] = useState(true);
   const [requestSent, setRequestSent] = useState(false);
+  const [translations, setTranslations] = useState({}); // msgId -> translated text
+  const [translating, setTranslating] = useState({}); // msgId -> bool
   const messagesEndRef = useRef(null);
   const pollRef = useRef(null);
+
+  const translateMessage = async (msgId, content) => {
+    if (translations[msgId]) {
+      setTranslations(prev => { const n = {...prev}; delete n[msgId]; return n; });
+      return;
+    }
+    setTranslating(prev => ({ ...prev, [msgId]: true }));
+    try {
+      const targetLang = navigator.language?.split('-')[0] || 'pt';
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(content)}&langpair=auto|${targetLang}`);
+      const data = await res.json();
+      const translated = data?.responseData?.translatedText;
+      if (translated && translated !== content) {
+        setTranslations(prev => ({ ...prev, [msgId]: translated }));
+      }
+    } catch {}
+    setTranslating(prev => ({ ...prev, [msgId]: false }));
+  };
 
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
@@ -255,7 +275,34 @@ export default function Chat() {
             )}
           </div>
 
-          {friendStatus === 'loading' ? (
+          {/* NOT FRIENDS — show friend request prompt */}
+          {friendStatus !== 'loading' && friendStatus !== 'accepted' ? (
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 14, padding: 32, textAlign: 'center' }}>
+              <div style={{ fontSize: '3rem' }}>🤝</div>
+              {otherUser && <Avatar url={otherUser.avatar_url} name={otherUser.full_name} size={64} />}
+              <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1.3rem', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
+                {otherUser?.full_name}
+              </h3>
+              <p style={{ color: 'var(--muted)', fontSize: '0.9rem', maxWidth: 300 }}>
+                {friendStatus === 'pending' || requestSent
+                  ? 'Pedido de amizade enviado! Quando aceitar, poderão conversar. ✝️'
+                  : 'Para enviar mensagens, precisam ser amigos primeiro.'}
+              </p>
+              {friendStatus === 'none' && !requestSent && (
+                <button
+                  onClick={sendFriendRequest}
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '11px 28px', borderRadius: 12, background: 'linear-gradient(135deg,#3568b8,#4a80d4)', color: 'white', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: '0.95rem', boxShadow: '0 4px 14px rgba(74,128,212,0.3)' }}
+                >
+                  <UserPlus size={17} /> Enviar pedido de amizade
+                </button>
+              )}
+              {(friendStatus === 'pending' || requestSent) && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 22px', borderRadius: 12, background: '#f0f5ff', color: 'var(--fb)', fontSize: '0.88rem', fontWeight: 600, border: '1px solid #dde8fa' }}>
+                  <Check size={15} /> Pedido enviado — aguardando aprovação
+                </div>
+              )}
+            </div>
+          ) : friendStatus === 'loading' ? (
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted)' }}>
               A carregar...
             </div>
@@ -296,7 +343,21 @@ export default function Chat() {
                           boxShadow: isMe ? '0 2px 8px rgba(53,104,184,0.25)' : '0 1px 4px rgba(0,0,0,0.06)',
                         }}>
                           {msg.content}
+                          {translations[msg.id] && (
+                            <div style={{ marginTop: 6, paddingTop: 6, borderTop: isMe ? '1px solid rgba(255,255,255,0.3)' : '1px solid var(--border)', fontSize: '0.8rem', fontStyle: 'italic', opacity: 0.85 }}>
+                              🌐 {translations[msg.id]}
+                            </div>
+                          )}
                         </div>
+                        {!isMe && (
+                          <button
+                            onClick={() => translateMessage(msg.id, msg.content)}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.7rem', color: 'var(--muted)', padding: '2px 4px', marginTop: 1, display: 'flex', alignItems: 'center', gap: 3 }}
+                            title="Traduzir mensagem"
+                          >
+                            {translating[msg.id] ? '⏳' : translations[msg.id] ? '✕ ocultar' : '🌐 traduzir'}
+                          </button>
+                        )}
                         {showTime && (
                           <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginTop: 2, justifyContent: isMe ? 'flex-end' : 'flex-start' }}>
                             <span style={{ fontSize: '0.65rem', color: 'var(--muted)' }}>{formatTime(msg.created_at)}</span>
