@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../context/AuthContext';
 
-// Nomes dos dias da semana (0=Dom ... 6=Sáb) para exibição
+const API = import.meta.env.VITE_API_URL || '';
+
 const DAY_NAMES = {
   pt: ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'],
   de: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
@@ -14,22 +16,22 @@ const DAY_NAMES = {
 
 export default function Reflection() {
   const { t, i18n } = useTranslation();
+  const { user, token } = useAuth();
   const [answers, setAnswers] = useState(['', '', '']);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [isPublic, setIsPublic] = useState(false);
+  const [error, setError] = useState('');
 
-  // Escolhe o conjunto de perguntas com base no dia da semana (0=Dom ... 6=Sáb)
   const dayIndex = new Date().getDay();
   const lang = i18n.language?.substring(0, 2) || 'pt';
 
-  // Busca o array de 7 conjuntos do i18n
   const allDays = t('reflection.days', { returnObjects: true });
   const today = Array.isArray(allDays) && allDays[dayIndex] ? allDays[dayIndex] : null;
 
-  // Nome do dia atual
   const dayNames = DAY_NAMES[lang] || DAY_NAMES['en'];
   const todayName = dayNames[dayIndex];
 
-  // Monta as 3 perguntas do dia
   const questions = today
     ? [
         { q: today.q1, verse: today.q1verse },
@@ -37,15 +39,74 @@ export default function Reflection() {
         { q: today.q3, verse: today.q3verse },
       ]
     : [
-        // Fallback para as chaves antigas se algo falhar
         { q: t('reflection.q1'), verse: t('reflection.q1verse') },
         { q: t('reflection.q2'), verse: t('reflection.q2verse') },
         { q: t('reflection.q3'), verse: t('reflection.q3verse') },
       ];
 
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+  const hasAnswers = answers.some(a => a.trim().length > 0);
+
+  const handleSave = async () => {
+    if (!hasAnswers) return;
+    if (!token) {
+      setError(t('reflection.loginRequired', 'Faça login para guardar a reflexão.'));
+      return;
+    }
+
+    setSaving(true);
+    setError('');
+
+    try {
+      // Montar conteúdo da reflexão
+      const lines = [`🕊️ ${t('reflection.title', 'Reflexão com Deus')} — ${todayName}\n`];
+      questions.forEach((item, idx) => {
+        if (answers[idx].trim()) {
+          lines.push(`❓ ${item.q}`);
+          if (item.verse) lines.push(`📖 ${item.verse}`);
+          lines.push(`✍️ ${answers[idx].trim()}`);
+          lines.push('');
+        }
+      });
+      const content = lines.join('\n');
+
+      if (isPublic) {
+        // Publicar no Mural
+        const res = await fetch(`${API}/api/feed`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            content,
+            category: 'reflexao',
+            visibility: 'public',
+          }),
+        });
+        if (!res.ok) throw new Error('Erro ao publicar no Mural');
+      } else {
+        // Guardar privado nas jornadas de fé
+        await fetch(`${API}/api/journeys`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            title: `${t('reflection.title', 'Reflexão')} — ${todayName}`,
+            content,
+            is_public: false,
+          }),
+        }).catch(() => {}); // falha silenciosa se endpoint não existir
+      }
+
+      setSaved(true);
+      setTimeout(() => setSaved(false), 4000);
+    } catch (e) {
+      setError(e.message || 'Erro ao guardar. Tente novamente.');
+    }
+
+    setSaving(false);
   };
 
   return (
@@ -59,11 +120,9 @@ export default function Reflection() {
         <p style={{color:'var(--muted)',fontSize:'0.95rem',marginBottom:8}}>
           {t('reflection.subtitle')}
         </p>
-        {/* Indicador do dia */}
-        <div style={{display:'inline-flex',alignItems:'center',gap:8,background:'var(--fb, #4a80d4)',color:'white',borderRadius:20,padding:'5px 16px',fontSize:'0.78rem',fontWeight:600,letterSpacing:'0.04em'}}>
+        <div style={{display:'inline-flex',alignItems:'center',gap:8,background:'var(--fb,#4a80d4)',color:'white',borderRadius:20,padding:'5px 16px',fontSize:'0.78rem',fontWeight:600,letterSpacing:'0.04em'}}>
           <span>📅</span>
           <span>{todayName}</span>
-          {/* Dots de progresso dos 7 dias */}
           <div style={{display:'flex',gap:3,marginLeft:4}}>
             {Array.from({length:7}).map((_,i) => (
               <div key={i} style={{width:6,height:6,borderRadius:'50%',background: i === dayIndex ? 'white' : 'rgba(255,255,255,0.3)'}}/>
@@ -116,10 +175,56 @@ export default function Reflection() {
         ))}
       </div>
 
+      {/* Visibility toggle */}
+      <div style={{marginTop:20,background:'var(--card)',border:'1px solid var(--border)',borderRadius:12,padding:'14px 18px'}}>
+        <p style={{fontWeight:600,fontSize:'0.85rem',color:'var(--text)',marginBottom:12}}>
+          {t('reflection.shareLabel', 'Onde guardar a reflexão?')}
+        </p>
+        <div style={{display:'flex',gap:10}}>
+          <button
+            onClick={() => setIsPublic(false)}
+            style={{
+              flex:1,padding:'10px 12px',borderRadius:10,cursor:'pointer',fontWeight:600,fontSize:'0.82rem',
+              background: !isPublic ? 'var(--fb-light,#edf2fc)' : 'transparent',
+              border: !isPublic ? '2px solid var(--fb,#4a80d4)' : '1px solid var(--border)',
+              color: !isPublic ? 'var(--fb,#4a80d4)' : 'var(--muted)',
+            }}
+          >
+            🔒 {t('reflection.privateOption', 'Privado')}
+            <div style={{fontSize:'0.72rem',fontWeight:400,marginTop:2,opacity:0.75}}>
+              {t('reflection.privateDesc', 'Só você vê')}
+            </div>
+          </button>
+          <button
+            onClick={() => setIsPublic(true)}
+            style={{
+              flex:1,padding:'10px 12px',borderRadius:10,cursor:'pointer',fontWeight:600,fontSize:'0.82rem',
+              background: isPublic ? 'var(--fb-light,#edf2fc)' : 'transparent',
+              border: isPublic ? '2px solid var(--fb,#4a80d4)' : '1px solid var(--border)',
+              color: isPublic ? 'var(--fb,#4a80d4)' : 'var(--muted)',
+            }}
+          >
+            🌍 {t('reflection.publicOption', 'Público')}
+            <div style={{fontSize:'0.72rem',fontWeight:400,marginTop:2,opacity:0.75}}>
+              {t('reflection.publicDesc', 'Aparece no Mural')}
+            </div>
+          </button>
+        </div>
+        {isPublic && (
+          <p style={{marginTop:8,fontSize:'0.75rem',color:'#6c47d4',fontStyle:'italic'}}>
+            ✨ {t('reflection.publicNote', 'A tua reflexão vai inspirar outros membros!')}
+          </p>
+        )}
+      </div>
+
+      {/* Error */}
+      {error && <p style={{color:'#dc2626',fontSize:'0.82rem',textAlign:'center',marginTop:10}}>{error}</p>}
+
       {/* Save button */}
-      <div style={{textAlign:'center',marginTop:24}}>
+      <div style={{textAlign:'center',marginTop:20}}>
         <button
           onClick={handleSave}
+          disabled={saving || !hasAnswers}
           style={{
             padding:'11px 40px',
             borderRadius:12,
@@ -130,12 +235,15 @@ export default function Reflection() {
             fontSize:'0.95rem',
             fontWeight:700,
             border:'none',
-            cursor:'pointer',
+            cursor: hasAnswers ? 'pointer' : 'not-allowed',
+            opacity: hasAnswers ? 1 : 0.6,
             transition:'all 0.3s',
             boxShadow:'0 4px 14px rgba(74,128,212,0.3)',
           }}
         >
-          {saved ? `✓ ${t('reflection.saved')}` : t('reflection.save')}
+          {saving ? '⏳ ...' : saved
+            ? (isPublic ? `✓ ${t('reflection.sharedMural', 'Publicado no Mural!')}` : `✓ ${t('reflection.saved')}`)
+            : (isPublic ? `🌍 ${t('reflection.shareInMural', 'Publicar no Mural')}` : t('reflection.save'))}
         </button>
         <p style={{marginTop:10,fontSize:'0.75rem',color:'var(--muted)'}}>
           🔄 {t('reflection.rotateNote') || 'As perguntas mudam automaticamente a cada dia'}
