@@ -25,7 +25,7 @@ router.get('/test-llm', async (req, res) => {
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-haiku-20240307',
+          model: 'claude-3-haiku-20240307',
           max_tokens: 50,
           system: 'You are a test assistant.',
           messages: [{ role: 'user', content: 'Say hello in one word.' }],
