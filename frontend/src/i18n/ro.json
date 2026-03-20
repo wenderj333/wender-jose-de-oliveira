@@ -1,4 +1,4 @@
-{
+﻿{
   "brand": "Sigo com Fé",
   "nav": {
     "prayers": "Cereri de Rugăciune",
@@ -1274,5 +1274,30 @@
     "send": "Trimite Raport",
     "sent": "Raport trimis. Mulțumim că ajuți la menținerea siguranței comunității!",
     "cancel": "Anulează"
+  }
+,
+  "churches": {
+    "title": "Găsește o Biserică",
+    "subtitle": "Conectează-te cu comunitatea ta de credință",
+    "searchName": "Caută după nume...",
+    "searchCity": "Oraș...",
+    "viewChurch": "Vezi Biserica",
+    "joinChurch": "Intră în Biserică",
+    "leaveChurch": "Ieși din Biserică",
+    "requestSent": "Cerere trimisă! Așteaptă aprobarea.",
+    "members": "membri",
+    "pending": "În așteptare",
+    "active": "Activă",
+    "myChurch": "Biserica Mea",
+    "createChurch": "Creează Biserică",
+    "noChurch": "Nu ai încă o biserică înregistrată.",
+    "events": "Agendă",
+    "addEvent": "Creează Eveniment",
+    "noEvents": "Niciun eveniment programat.",
+    "approve": "Aprobă",
+    "reject": "Respinge",
+    "remove": "Elimină",
+    "pendingMembers": "Cereri în așteptare",
+    "activeMembers": "Membri activi"
   }
 }

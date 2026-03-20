@@ -1278,5 +1278,29 @@
     "send": "Send Report",
     "sent": "Report sent. Thank you for helping keep the community safe!",
     "cancel": "Cancel"
+  },
+  "churches": {
+    "title": "Find a Church",
+    "subtitle": "Connect with your faith community",
+    "searchName": "Search by name...",
+    "searchCity": "City...",
+    "viewChurch": "View Church",
+    "joinChurch": "Join Church",
+    "leaveChurch": "Leave Church",
+    "requestSent": "Request sent! Awaiting approval.",
+    "members": "members",
+    "pending": "Pending",
+    "active": "Active",
+    "myChurch": "My Church",
+    "createChurch": "Create Church",
+    "noChurch": "You don't have a registered church yet.",
+    "events": "Events",
+    "addEvent": "Create Event",
+    "noEvents": "No events scheduled.",
+    "approve": "Approve",
+    "reject": "Reject",
+    "remove": "Remove",
+    "pendingMembers": "Pending requests",
+    "activeMembers": "Active members"
   }
 }

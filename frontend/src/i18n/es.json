@@ -1,4 +1,4 @@
-{
+﻿{
   "brand": "Sigo com Fé",
   "nav": {
     "prayers": "Peticiones de Oración",
@@ -1278,5 +1278,30 @@
     "send": "Enviar Denuncia",
     "sent": "¡Denuncia enviada. Gracias por ayudar a mantener la comunidad segura!",
     "cancel": "Cancelar"
+  }
+,
+  "churches": {
+    "title": "Encontrar una Iglesia",
+    "subtitle": "Conéctate con tu comunidad de fe",
+    "searchName": "Buscar por nombre...",
+    "searchCity": "Ciudad...",
+    "viewChurch": "Ver Iglesia",
+    "joinChurch": "Unirse a la Iglesia",
+    "leaveChurch": "Salir de la Iglesia",
+    "requestSent": "¡Solicitud enviada! Esperando aprobación.",
+    "members": "miembros",
+    "pending": "Pendiente",
+    "active": "Activa",
+    "myChurch": "Mi Iglesia",
+    "createChurch": "Crear Iglesia",
+    "noChurch": "Aún no tienes una iglesia registrada.",
+    "events": "Agenda",
+    "addEvent": "Crear Evento",
+    "noEvents": "Sin eventos programados.",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "remove": "Eliminar",
+    "pendingMembers": "Solicitudes pendientes",
+    "activeMembers": "Miembros activos"
   }
 }

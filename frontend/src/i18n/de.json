@@ -1,4 +1,4 @@
-{
+﻿{
   "brand": "Sigo com Fe",
   "nav": {
     "prayers": "Gebetsanliegen",
@@ -1261,5 +1261,30 @@
     "send": "Meldung senden",
     "sent": "Meldung gesendet. Danke, dass du dazu beiträgst, die Gemeinschaft sicher zu halten!",
     "cancel": "Abbrechen"
+  }
+,
+  "churches": {
+    "title": "Eine Kirche finden",
+    "subtitle": "Verbinde dich mit deiner Glaubensgemeinschaft",
+    "searchName": "Nach Name suchen...",
+    "searchCity": "Stadt...",
+    "viewChurch": "Kirche ansehen",
+    "joinChurch": "Kirche beitreten",
+    "leaveChurch": "Kirche verlassen",
+    "requestSent": "Anfrage gesendet! Warte auf Genehmigung.",
+    "members": "Mitglieder",
+    "pending": "Ausstehend",
+    "active": "Aktiv",
+    "myChurch": "Meine Kirche",
+    "createChurch": "Kirche erstellen",
+    "noChurch": "Du hast noch keine registrierte Kirche.",
+    "events": "Veranstaltungen",
+    "addEvent": "Veranstaltung erstellen",
+    "noEvents": "Keine Veranstaltungen geplant.",
+    "approve": "Genehmigen",
+    "reject": "Ablehnen",
+    "remove": "Entfernen",
+    "pendingMembers": "Ausstehende Anfragen",
+    "activeMembers": "Aktive Mitglieder"
   }
 }

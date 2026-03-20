@@ -1,4 +1,4 @@
-{
+﻿{
   "brand": "Sigo com Fé",
   "nav": {
     "prayers": "Demandes de Prière",
@@ -1278,5 +1278,30 @@
     "send": "Envoyer le signalement",
     "sent": "Signalement envoyé. Merci d'aider à maintenir la communauté en sécurité!",
     "cancel": "Annuler"
+  }
+,
+  "churches": {
+    "title": "Trouver une Église",
+    "subtitle": "Connectez-vous à votre communauté de foi",
+    "searchName": "Rechercher par nom...",
+    "searchCity": "Ville...",
+    "viewChurch": "Voir l'Église",
+    "joinChurch": "Rejoindre l'Église",
+    "leaveChurch": "Quitter l'Église",
+    "requestSent": "Demande envoyée ! En attente d'approbation.",
+    "members": "membres",
+    "pending": "En attente",
+    "active": "Active",
+    "myChurch": "Mon Église",
+    "createChurch": "Créer une Église",
+    "noChurch": "Vous n'avez pas encore d'église enregistrée.",
+    "events": "Agenda",
+    "addEvent": "Créer un Événement",
+    "noEvents": "Aucun événement programmé.",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "remove": "Supprimer",
+    "pendingMembers": "Demandes en attente",
+    "activeMembers": "Membres actifs"
   }
 }

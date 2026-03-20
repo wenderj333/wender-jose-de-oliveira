@@ -1336,5 +1336,29 @@
     "send": "Enviar Denúncia",
     "sent": "Denúncia enviada. Obrigado por ajudar a manter a comunidade segura!",
     "cancel": "Cancelar"
+  },
+  "churches": {
+    "title": "Encontrar uma Igreja",
+    "subtitle": "Conecte-se à sua comunidade de fé",
+    "searchName": "Buscar por nome...",
+    "searchCity": "Cidade...",
+    "viewChurch": "Ver Igreja",
+    "joinChurch": "Entrar na Igreja",
+    "leaveChurch": "Sair da Igreja",
+    "requestSent": "Pedido enviado! Aguarda aprovação.",
+    "members": "membros",
+    "pending": "Pendente",
+    "active": "Ativa",
+    "myChurch": "Minha Igreja",
+    "createChurch": "Criar Igreja",
+    "noChurch": "Ainda não tens uma igreja registada.",
+    "events": "Agenda",
+    "addEvent": "Criar Evento",
+    "noEvents": "Sem eventos programados.",
+    "approve": "Aprovar",
+    "reject": "Recusar",
+    "remove": "Remover",
+    "pendingMembers": "Pedidos pendentes",
+    "activeMembers": "Membros ativos"
   }
 }
