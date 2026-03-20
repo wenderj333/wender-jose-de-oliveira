@@ -165,8 +165,7 @@ function UploadModal({ onClose, onUploaded, token }) {
       fd.append('file', file);
       fd.append('upload_preset', UPLOAD_PRESET);
       fd.append('folder', 'sigo-com-fe/music');
-      fd.append('resource_type', 'video');
-      const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`, { method: 'POST', body: fd });
+      const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, { method: 'POST', body: fd });
       setProgress(70);
       const cloudData = await cloudRes.json();
       if (!cloudData.secure_url) throw new Error(t('music.uploadError'));
