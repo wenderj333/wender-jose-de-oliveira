@@ -52,7 +52,7 @@ async function callAnthropic(systemPrompt, userMessage) {
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-haiku-20240307',
+      model: 'claude-3-haiku-20240307',
       max_tokens: 2048,
       system: systemPrompt,
       messages: [{ role: 'user', content: userMessage }],
