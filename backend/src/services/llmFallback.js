@@ -79,19 +79,7 @@ async function callAnthropic(systemPrompt, userMessage) {
 async function generateReply(systemPrompt, userMessage) {
   const errors = [];
 
-  // 1. Try Gemini first
-  if (GEMINI_API_KEY) {
-    try {
-      const reply = await callGemini(systemPrompt, userMessage);
-      console.log('[LLM] Used: Gemini');
-      return reply;
-    } catch (err) {
-      console.warn('[LLM] Gemini failed:', err.message);
-      errors.push(`Gemini: ${err.message}`);
-    }
-  }
-
-  // 2. Fallback to Anthropic Claude
+  // 1. Try Anthropic Claude first
   if (ANTHROPIC_API_KEY) {
     try {
       const reply = await callAnthropic(systemPrompt, userMessage);
@@ -100,6 +88,18 @@ async function generateReply(systemPrompt, userMessage) {
     } catch (err) {
       console.warn('[LLM] Anthropic failed:', err.message);
       errors.push(`Anthropic: ${err.message}`);
+    }
+  }
+
+  // 2. Fallback to Gemini
+  if (GEMINI_API_KEY) {
+    try {
+      const reply = await callGemini(systemPrompt, userMessage);
+      console.log('[LLM] Used: Gemini (fallback)');
+      return reply;
+    } catch (err) {
+      console.warn('[LLM] Gemini failed:', err.message);
+      errors.push(`Gemini: ${err.message}`);
     }
   }
 
