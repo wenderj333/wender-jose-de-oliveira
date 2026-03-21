@@ -6,8 +6,9 @@ import { useAuth } from '../context/AuthContext';
 // =============================================
 // CLOUDINARY CONFIG
 // =============================================
-const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'SEU_CLOUD_NAME';
-const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'SEU_UPLOAD_PRESET';
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'degxiuf43';
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'sigo_com_fe';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 async function uploadToCloudinary(file) {
   const formData = new FormData();
@@ -373,7 +374,8 @@ export default function Mural() {
   const { user, token } = useAuth();
   const [activeFilter, setActiveFilter] = useState('todas');
   const [showForm, setShowForm] = useState(false);
-  const [posts, setPosts] = useState(DEMO_POSTS);
+  const [posts, setPosts] = useState([]);
+  const [loadingPosts, setLoadingPosts] = useState(true);
 
   // Form state
   const [postText, setPostText] = useState('');
@@ -418,6 +420,40 @@ export default function Mural() {
     setMediaPreview(URL.createObjectURL(file));
   };
 
+  // Função para mapear post do backend para o formato do frontend
+  const mapPost = (p) => ({
+    id: p.id,
+    type: p.category || p.type || 'testemunho',
+    authorInitials: (p.author_name || p.authorName || '?').slice(0, 2).toUpperCase(),
+    authorName: p.author_name || p.authorName || 'Membro',
+    authorAvatar: p.author_avatar || p.authorAvatar || null,
+    authorId: p.author_id || p.authorId || null,
+    church: p.church_name || 'Sigo com Fé',
+    time: p.created_at ? new Date(p.created_at).toLocaleDateString() : 'Agora',
+    content: p.content || '',
+    amemCount: p.likes_count || p.amemCount || 0,
+    commentCount: p.comment_count || p.commentCount || 0,
+    liked: p.liked || false,
+    mediaUrl: p.media_url || p.mediaUrl || null,
+    mediaType: p.media_type || p.mediaType || null,
+    musicUrl: p.audio_url || p.musicUrl || null,
+    verseReference: p.verse_reference || p.verseReference || null,
+    campaignLink: p.campaign_link || null,
+  });
+
+  // Carregar posts da API
+  useEffect(() => {
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    fetch(`${API_BASE}/api/feed`, { headers })
+      .then(r => r.ok ? r.json() : { posts: [] })
+      .then(data => {
+        const fetched = (data.posts || []).map(mapPost);
+        setPosts(fetched);
+      })
+      .catch(() => setPosts([]))
+      .finally(() => setLoadingPosts(false));
+  }, [token]);
+
   const handleMusicSelect = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -458,12 +494,36 @@ export default function Mural() {
         musicUrl = await uploadToCloudinary(musicFile);
       }
 
-      const newPost = {
+      // Salvar na API
+      const fd = new FormData();
+      fd.append('content', postText || '📸');
+      fd.append('category', postCategory);
+      fd.append('visibility', 'public');
+      if (mediaUrl) fd.append('media_url', mediaUrl);
+      if (mediaType) fd.append('media_type', mediaType);
+      if (musicUrl) fd.append('audio_url', musicUrl);
+
+      let savedPost = null;
+      if (token) {
+        try {
+          const apiRes = await fetch(`${API_BASE}/api/feed`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+            body: fd,
+          });
+          if (apiRes.ok) {
+            const apiData = await apiRes.json();
+            savedPost = apiData.post ? mapPost(apiData.post) : null;
+          }
+        } catch {}
+      }
+
+      const newPost = savedPost || {
         id: Date.now(),
         type: postCategory,
         authorInitials: user ? user.full_name?.slice(0, 2).toUpperCase() : 'EU',
         authorName: user ? user.full_name : 'Você',
-        church: user?.church || 'Sua Igreja',
+        church: 'Sigo com Fé',
         time: 'Agora',
         content: postText,
         amemCount: 0,
