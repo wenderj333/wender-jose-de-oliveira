@@ -288,12 +288,22 @@ function PostCard({ post, onLike, onDelete }) {
           <MessageCircle size={18} />
           {post.commentCount + comments.length}
         </button>
-        <button style={{
-          display: 'flex', alignItems: 'center', gap: '6px',
-          background: 'none', border: 'none', cursor: 'pointer',
-          color: '#888', fontSize: '13px', fontWeight: '600',
-          padding: '6px 10px', borderRadius: '8px', marginLeft: 'auto',
-        }}>
+        <button
+          onClick={() => {
+            const url = window.location.origin + '/mural';
+            const text = post.content ? post.content.slice(0, 100) + '...' : 'Partilha da fé 🙏';
+            if (navigator.share) {
+              navigator.share({ title: 'Sigo com Fé', text, url }).catch(() => {});
+            } else {
+              navigator.clipboard.writeText(url).then(() => alert('Link copiado! 📋')).catch(() => alert('Link: ' + url));
+            }
+          }}
+          style={{
+            display: 'flex', alignItems: 'center', gap: '6px',
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: '#888', fontSize: '13px', fontWeight: '600',
+            padding: '6px 10px', borderRadius: '8px', marginLeft: 'auto',
+          }}>
           <Share2 size={18} />
         </button>
       </div>
@@ -350,6 +360,10 @@ export default function Mural() {
   const [mediaType, setMediaType] = useState(null);
   const [musicFile, setMusicFile] = useState(null);
   const [musicName, setMusicName] = useState(null);
+  const [showMusicPicker, setShowMusicPicker] = useState(false);
+  const [libraryTracks, setLibraryTracks] = useState([]);
+  const [selectedTrack, setSelectedTrack] = useState(null); // { title, artist, file_url }
+  const [loadingTracks, setLoadingTracks] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
 
@@ -422,6 +436,18 @@ export default function Mural() {
       .finally(() => setLoadingPosts(false));
   }, [token]);
 
+  // Carregar biblioteca quando o picker abrir
+  useEffect(() => {
+    if (!showMusicPicker) return;
+    setLoadingTracks(true);
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    fetch(`${API_BASE}/api/music`, { headers })
+      .then(r => r.json())
+      .then(d => setLibraryTracks(d.songs || d.tracks || []))
+      .catch(() => setLibraryTracks([]))
+      .finally(() => setLoadingTracks(false));
+  }, [showMusicPicker]);
+
   const handleMusicSelect = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -462,6 +488,8 @@ export default function Mural() {
         musicUrl = await uploadToCloudinary(musicFile);
       }
 
+      const finalMusicUrl = selectedTrack?.file_url || musicUrl;
+
       // Salvar na API
       const fd = new FormData();
       fd.append('content', postText || '📸');
@@ -469,7 +497,7 @@ export default function Mural() {
       fd.append('visibility', 'public');
       if (mediaUrl) fd.append('media_url', mediaUrl);
       if (mediaType) fd.append('media_type', mediaType);
-      if (musicUrl) fd.append('audio_url', musicUrl);
+      if (finalMusicUrl) fd.append('audio_url', finalMusicUrl);
 
       let savedPost = null;
       if (token) {
@@ -499,7 +527,7 @@ export default function Mural() {
         liked: false,
         mediaUrl,
         mediaType,
-        musicUrl,
+        musicUrl: finalMusicUrl,
       };
 
       setPosts([newPost, ...posts]);
@@ -507,6 +535,8 @@ export default function Mural() {
       setPostCategory('testemunho');
       clearMedia();
       clearMusic();
+      setSelectedTrack(null);
+      setShowMusicPicker(false);
       setShowForm(false);
     } catch (err) {
       setUploadError('Erro no upload. Verifica a tua ligação e tenta novamente.');
@@ -516,17 +546,35 @@ export default function Mural() {
     }
   };
 
-  const handleLike = (postId) => {
+  const handleLike = async (postId) => {
+    // Atualizar UI imediatamente (optimistic)
     setPosts(posts.map(p =>
       p.id === postId
         ? { ...p, liked: !p.liked, amemCount: p.liked ? p.amemCount - 1 : p.amemCount + 1 }
         : p
     ));
+    // Sincronizar com API
+    if (token) {
+      try {
+        await fetch(`${API_BASE}/api/feed/${postId}/like`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch {}
+    }
   };
 
-  const handleDelete = (postId) => {
+  const handleDelete = async (postId) => {
     if (window.confirm('Tens a certeza que queres apagar esta publicação?')) {
       setPosts(posts.filter(p => p.id !== postId));
+      if (token) {
+        try {
+          await fetch(`${API_BASE}/api/feed/${postId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        } catch {}
+      }
     }
   };
 
@@ -675,6 +723,27 @@ export default function Mural() {
             </button>
           </div>
 
+          {/* Botão Música da Biblioteca — só quando há foto/vídeo */}
+          {mediaFile && (
+            <div style={{ marginTop: 8, marginBottom: 14 }}>
+              {selectedTrack ? (
+                <div style={{ display:'flex', alignItems:'center', gap:8, background:'#f0f4ff', borderRadius:8, padding:'8px 12px' }}>
+                  <span>🎵</span>
+                  <span style={{ flex:1, fontSize:13, color:'#333' }}>{selectedTrack.title} — {selectedTrack.artist}</span>
+                  <button onClick={() => setSelectedTrack(null)} style={{ background:'none', border:'none', cursor:'pointer', color:'#999' }}>✕</button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowMusicPicker(true)}
+                  style={{ width:'100%', padding:'8px', borderRadius:8, border:'1px dashed #a78bfa', background:'#faf5ff', color:'#7c3aed', fontSize:13, cursor:'pointer' }}
+                >
+                  🎵 Adicionar música de fundo
+                </button>
+              )}
+            </div>
+          )}
+
           {/* Erro */}
           {uploadError && (
             <div style={{
@@ -748,6 +817,43 @@ export default function Mural() {
           <BookOpen size={40} style={{ opacity: 0.3, marginBottom: '12px' }} />
           <p style={{ margin: 0, fontSize: '15px' }}>Nenhuma publicação encontrada.</p>
           <p style={{ margin: '4px 0 0', fontSize: '13px' }}>Sê o primeiro a partilhar!</p>
+        </div>
+      )}
+
+      {/* Music Picker Modal */}
+      {showMusicPicker && (
+        <div style={{ position:'fixed', top:0, left:0, width:'100%', height:'100%', background:'rgba(0,0,0,0.5)', zIndex:1000, display:'flex', alignItems:'flex-end' }}
+          onClick={e => { if (e.target === e.currentTarget) setShowMusicPicker(false); }}
+        >
+          <div style={{ background:'white', borderRadius:'16px 16px 0 0', padding:16, maxHeight:'70vh', overflowY:'auto', width:'100%' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:12 }}>
+              <h3 style={{ margin:0, fontSize:16, color:'#1a1a2e' }}>🎵 Biblioteca de Músicas</h3>
+              <button onClick={() => setShowMusicPicker(false)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:20, color:'#888' }}>❌</button>
+            </div>
+            {loadingTracks ? (
+              <p style={{ textAlign:'center', color:'#888', padding:20 }}>A carregar...</p>
+            ) : libraryTracks.length === 0 ? (
+              <p style={{ textAlign:'center', color:'#888', padding:20 }}>Nenhuma música na biblioteca.</p>
+            ) : (
+              libraryTracks.map(track => (
+                <div
+                  key={track.id}
+                  onClick={() => { setSelectedTrack(track); setShowMusicPicker(false); }}
+                  style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 0', borderBottom:'1px solid #f0f0f0', cursor:'pointer' }}
+                >
+                  {track.cover_url ? (
+                    <img src={track.cover_url} alt={track.title} style={{ width:44, height:44, borderRadius:8, objectFit:'cover', background:'#f0f0f0' }} />
+                  ) : (
+                    <div style={{ width:44, height:44, borderRadius:8, background:'#f0f0f0', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>🎵</div>
+                  )}
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontWeight:600, fontSize:14, color:'#1a1a2e' }}>{track.title}</div>
+                    <div style={{ fontSize:12, color:'#888' }}>{track.artist}</div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       )}
 
