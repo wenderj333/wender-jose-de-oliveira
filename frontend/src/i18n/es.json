@@ -1303,5 +1303,32 @@
     "remove": "Eliminar",
     "pendingMembers": "Solicitudes pendientes",
     "activeMembers": "Miembros activos"
+  },
+  "prayers": {
+    "title": "Peticiones de Oración",
+    "verse": "\"Orad unos por otros, para que seáis sanados.\" — Santiago 5:16",
+    "whereToSend": "¿A dónde enviar tu petición?",
+    "publicTitle": "Público",
+    "publicDesc": "Aparece en el Mural para todos",
+    "groupTitle": "Grupo de Oración",
+    "groupDesc": "Visible para la comunidad de fe",
+    "pastorTitle": "Al Pastor",
+    "pastorDesc": "Privado — solo el pastor lo ve",
+    "placeholder": "Describe tu petición de oración...",
+    "sendAnon": "Enviar anónimamente",
+    "submitBtn": "Enviar Petición 🙏",
+    "sending": "Enviando...",
+    "successPublic": "¡Tu petición fue publicada en el Mural! 🙏",
+    "successGroup": "¡Tu petición fue enviada a la comunidad! 🙏",
+    "successPastor": "¡Tu petición fue enviada al pastor! 🕊️",
+    "loginRequired": "Inicia sesión para enviar una petición.",
+    "pastorPanel": "Panel del Pastor",
+    "noPending": "Sin peticiones de oración en este momento.",
+    "statusPending": "Pendiente",
+    "statusInProgress": "En Curso",
+    "statusResolved": "Resuelto",
+    "filterAll": "Todos",
+    "markInProgress": "En Curso",
+    "markResolved": "Resuelto"
   }
 }

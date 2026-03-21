@@ -1303,5 +1303,32 @@
     "remove": "Supprimer",
     "pendingMembers": "Demandes en attente",
     "activeMembers": "Membres actifs"
+  },
+  "prayers": {
+    "title": "Demandes de Priere",
+    "verse": "\"Priez les uns pour les autres afin que vous soyez gueris.\" — Jacques 5:16",
+    "whereToSend": "Ou envoyer ta demande?",
+    "publicTitle": "Public",
+    "publicDesc": "Apparait dans le Fil pour tous",
+    "groupTitle": "Groupe de Priere",
+    "groupDesc": "Visible pour la communaute de foi",
+    "pastorTitle": "Au Pasteur",
+    "pastorDesc": "Prive — seul le pasteur le voit",
+    "placeholder": "Decris ta demande de priere...",
+    "sendAnon": "Envoyer anonymement",
+    "submitBtn": "Envoyer la Demande 🙏",
+    "sending": "Envoi en cours...",
+    "successPublic": "Ta demande a ete publiee dans le Fil! 🙏",
+    "successGroup": "Ta demande a ete envoyee a la communaute! 🙏",
+    "successPastor": "Ta demande a ete envoyee au pasteur! 🕊️",
+    "loginRequired": "Connecte-toi pour envoyer une demande.",
+    "pastorPanel": "Espace Pasteur",
+    "noPending": "Aucune demande de priere pour le moment.",
+    "statusPending": "En attente",
+    "statusInProgress": "En cours",
+    "statusResolved": "Resolu",
+    "filterAll": "Tous",
+    "markInProgress": "En cours",
+    "markResolved": "Resolu"
   }
 }

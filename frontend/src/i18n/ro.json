@@ -1,4 +1,4 @@
-﻿{
+{
   "brand": "Sigo com Fé",
   "nav": {
     "prayers": "Cereri de Rugăciune",
@@ -1299,5 +1299,33 @@
     "remove": "Elimină",
     "pendingMembers": "Cereri în așteptare",
     "activeMembers": "Membri activi"
+  }
+,
+  "prayers": {
+    "title": "Cereri de Rugaciune",
+    "verse": "\"Rugati-va unii pentru altii ca sa fiti vindecati.\" — Iacov 5:16",
+    "whereToSend": "Unde sa trimitem cererea ta?",
+    "publicTitle": "Public",
+    "publicDesc": "Apare in Feed pentru toti",
+    "groupTitle": "Grup de Rugaciune",
+    "groupDesc": "Vizibil pentru comunitatea de credinta",
+    "pastorTitle": "Catre Pastor",
+    "pastorDesc": "Privat — doar pastorul vede",
+    "placeholder": "Descrie cererea ta de rugaciune...",
+    "sendAnon": "Trimite anonim",
+    "submitBtn": "Trimite Cererea 🙏",
+    "sending": "Se trimite...",
+    "successPublic": "Cererea ta a fost publicata in Feed! 🙏",
+    "successGroup": "Cererea ta a fost trimisa comunitatii! 🙏",
+    "successPastor": "Cererea ta a fost trimisa pastorului! 🕊️",
+    "loginRequired": "Conecteaza-te pentru a trimite o cerere.",
+    "pastorPanel": "Panou Pastor",
+    "noPending": "Nicio cerere de rugaciune in acest moment.",
+    "statusPending": "In asteptare",
+    "statusInProgress": "In curs",
+    "statusResolved": "Rezolvat",
+    "filterAll": "Toate",
+    "markInProgress": "In curs",
+    "markResolved": "Rezolvat"
   }
 }

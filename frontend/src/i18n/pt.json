@@ -1360,5 +1360,32 @@
     "remove": "Remover",
     "pendingMembers": "Pedidos pendentes",
     "activeMembers": "Membros ativos"
+  },
+  "prayers": {
+    "title": "Pedidos de Oração",
+    "verse": "\"Orai uns pelos outros, para serdes curados.\" — Tiago 5:16",
+    "whereToSend": "Para onde enviar o teu pedido?",
+    "publicTitle": "Público",
+    "publicDesc": "Aparece no Mural para todos",
+    "groupTitle": "Grupo de Oração",
+    "groupDesc": "Visível à comunidade de fé",
+    "pastorTitle": "Para o Pastor",
+    "pastorDesc": "Privado — só o pastor vê",
+    "placeholder": "Descreve o teu pedido de oração...",
+    "sendAnon": "Enviar anonimamente",
+    "submitBtn": "Enviar Pedido 🙏",
+    "sending": "A enviar...",
+    "successPublic": "O teu pedido foi publicado no Mural! 🙏",
+    "successGroup": "O teu pedido foi enviado para a comunidade! 🙏",
+    "successPastor": "O teu pedido foi enviado ao pastor! 🕊️",
+    "loginRequired": "Faz login para enviar um pedido de oração.",
+    "pastorPanel": "Painel do Pastor",
+    "noPending": "Nenhum pedido de oração neste momento.",
+    "statusPending": "Pendente",
+    "statusInProgress": "Em Curso",
+    "statusResolved": "Resolvido",
+    "filterAll": "Todos",
+    "markInProgress": "Em Curso",
+    "markResolved": "Resolvido"
   }
 }

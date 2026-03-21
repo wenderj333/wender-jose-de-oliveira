@@ -249,7 +249,7 @@ export default function App() {
             <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
             <Route path="/mensagens" element={<Chat />} />
             <Route path="/mensagens/:userId" element={<Chat />} />
-            <Route path="/pedidos-ajuda" element={<ProtectedRoute role="pastor"><HelpRequests /></ProtectedRoute>} />
+            <Route path="/pedidos-ajuda" element={<HelpRequests />} />
             <Route path="/pastor-dashboard" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
             <Route path="/igrejas" element={<Churches />} />
             <Route path="/igrejas/:id" element={<ChurchProfile />} />

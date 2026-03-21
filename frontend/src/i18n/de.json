@@ -1286,5 +1286,32 @@
     "remove": "Entfernen",
     "pendingMembers": "Ausstehende Anfragen",
     "activeMembers": "Aktive Mitglieder"
+  },
+  "prayers": {
+    "title": "Gebetsanliegen",
+    "verse": "\"Betet füreinander, damit ihr geheilt werdet.\" — Jakobus 5:16",
+    "whereToSend": "Wohin soll dein Anliegen gesendet werden?",
+    "publicTitle": "Öffentlich",
+    "publicDesc": "Erscheint im Feed für alle",
+    "groupTitle": "Gebetsgruppe",
+    "groupDesc": "Sichtbar für die Glaubensgemeinschaft",
+    "pastorTitle": "An den Pastor",
+    "pastorDesc": "Privat — nur der Pastor sieht es",
+    "placeholder": "Beschreibe dein Gebetsanliegen...",
+    "sendAnon": "Anonym senden",
+    "submitBtn": "Anliegen senden 🙏",
+    "sending": "Wird gesendet...",
+    "successPublic": "Dein Anliegen wurde im Feed veröffentlicht! 🙏",
+    "successGroup": "Dein Anliegen wurde an die Gemeinschaft gesendet! 🙏",
+    "successPastor": "Dein Anliegen wurde an den Pastor gesendet! 🕊️",
+    "loginRequired": "Melde dich an, um ein Gebetsanliegen zu senden.",
+    "pastorPanel": "Pastor-Bereich",
+    "noPending": "Keine Gebetsanliegen im Moment.",
+    "statusPending": "Ausstehend",
+    "statusInProgress": "In Bearbeitung",
+    "statusResolved": "Gelöst",
+    "filterAll": "Alle",
+    "markInProgress": "In Bearbeitung",
+    "markResolved": "Gelöst"
   }
 }

@@ -1302,5 +1302,32 @@
     "remove": "Remove",
     "pendingMembers": "Pending requests",
     "activeMembers": "Active members"
+  },
+  "prayers": {
+    "title": "Prayer Requests",
+    "verse": "\"Pray for each other so that you may be healed.\" — James 5:16",
+    "whereToSend": "Where should we send your request?",
+    "publicTitle": "Public",
+    "publicDesc": "Appears in the Feed for everyone",
+    "groupTitle": "Prayer Group",
+    "groupDesc": "Visible to the faith community",
+    "pastorTitle": "To the Pastor",
+    "pastorDesc": "Private — only the pastor sees it",
+    "placeholder": "Describe your prayer request...",
+    "sendAnon": "Send anonymously",
+    "submitBtn": "Send Request 🙏",
+    "sending": "Sending...",
+    "successPublic": "Your request was published in the Feed! 🙏",
+    "successGroup": "Your request was sent to the community! 🙏",
+    "successPastor": "Your request was sent to the pastor! 🕊️",
+    "loginRequired": "Log in to send a prayer request.",
+    "pastorPanel": "Pastor Panel",
+    "noPending": "No prayer requests at this time.",
+    "statusPending": "Pending",
+    "statusInProgress": "In Progress",
+    "statusResolved": "Resolved",
+    "filterAll": "All",
+    "markInProgress": "In Progress",
+    "markResolved": "Resolved"
   }
 }
