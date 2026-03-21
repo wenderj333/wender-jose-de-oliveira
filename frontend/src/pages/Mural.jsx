@@ -27,42 +27,7 @@ async function uploadToCloudinary(file) {
 // =============================================
 // DEMO POSTS
 // =============================================
-const DEMO_POSTS = [
-  {
-    id: 1, type: 'testemunho',
-    authorInitials: 'MC', authorName: 'Maria Clara',
-    church: 'Igreja Batista Central', time: 'Há 2 horas',
-    content: 'Glória a Deus! Depois de 3 anos desempregada, o Senhor abriu as portas e fui aprovada no concurso público. Nunca desistam de orar, irmãos! Deus é fiel.',
-    amemCount: 47, commentCount: 12, liked: false,
-    mediaUrl: null, mediaType: null, musicUrl: null,
-  },
-  {
-    id: 2, type: 'louvor',
-    authorInitials: 'PR', authorName: 'Paulo Ricardo',
-    church: 'Comunidade Graça e Paz', time: 'Há 4 horas',
-    content: 'Novo louvor do ministério de adoração da nossa igreja. Que o Espírito Santo toque cada coração!',
-    amemCount: 31, commentCount: 8, liked: false,
-    mediaUrl: 'https://images.unsplash.com/photo-1478147427282-58a87a433968?w=600&q=80',
-    mediaType: 'foto', musicUrl: null,
-  },
-  {
-    id: 3, type: 'versiculo',
-    authorInitials: 'DF', authorName: 'Daniela Ferreira',
-    church: 'Assembleia de Deus', time: 'Há 10 horas',
-    content: 'Porque eu bem sei os pensamentos que penso de vós, diz o Senhor; pensamentos de paz e não de mal, para vos dar o fim que esperais.',
-    reference: 'Jeremias 29:11',
-    amemCount: 112, commentCount: 5, liked: false,
-    mediaUrl: null, mediaType: null, musicUrl: null,
-  },
-  {
-    id: 4, type: 'reflexao',
-    authorInitials: 'JL', authorName: 'Pastor João Lucas',
-    church: 'Igreja Presbiteriana do Centro', time: 'Há 8 horas',
-    content: 'Muitas vezes queremos que Deus mude as circunstâncias, mas Ele quer mudar o nosso coração primeiro. Confie no processo de Deus para a sua vida.',
-    amemCount: 65, commentCount: 18, liked: false,
-    mediaUrl: null, mediaType: null, musicUrl: null,
-  },
-];
+// Demo posts removidos — Mural carrega da API
 
 // =============================================
 // CATEGORY CONFIG
@@ -398,6 +363,7 @@ export default function Mural() {
     { key: 'louvor', label: '🎵 Louvores' },
     { key: 'versiculo', label: '✨ Versículos' },
     { key: 'reflexao', label: '📖 Reflexões' },
+    { key: 'foto', label: '📸 Fotos & Vídeos' },
   ];
 
   const CATEGORIES = [
@@ -410,7 +376,9 @@ export default function Mural() {
 
   const filteredPosts = activeFilter === 'todas'
     ? posts
-    : posts.filter(p => p.type === activeFilter);
+    : activeFilter === 'foto'
+      ? posts.filter(p => p.mediaUrl && (p.type === 'foto' || p.mediaType === 'video' || p.mediaUrl))
+      : posts.filter(p => p.type === activeFilter);
 
   const handleMediaSelect = (e, type) => {
     const file = e.target.files[0];

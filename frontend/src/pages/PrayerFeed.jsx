@@ -7,11 +7,7 @@ import { Link } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
-const DEMO_PRAYERS = [
-  { id: 'demo-1', author_name: 'Maria Silva', church_name: 'Igreja Batista', category: 'health', title: 'Oracao pela saude do meu pai', content: 'Meu pai foi diagnosticado com uma doenca grave. Peco oracoes para que Deus traga cura completa!', is_urgent: true, is_answered: false, prayer_count: 47, created_at: new Date(Date.now() - 2*3600000).toISOString() },
-  { id: 'demo-2', author_name: 'Joao Santos', church_name: 'Assembleia de Deus', category: 'work_finance', title: 'Novo emprego', content: 'Estou desempregado ha 3 meses. Oro para que Deus abra portas para sustentar minha familia.', is_urgent: false, is_answered: false, prayer_count: 23, created_at: new Date(Date.now() - 5*3600000).toISOString() },
-  { id: 'demo-3', author_name: 'Ana Oliveira', church_name: 'Comunidade da Graca', category: 'family', title: 'Restauracao do meu casamento', content: 'Estamos passando por momento muito dificil. Deus e fiel e pode restaurar todas as coisas.', is_urgent: false, is_answered: false, prayer_count: 35, created_at: new Date(Date.now() - 12*3600000).toISOString() },
-];
+// Demo prayers removidos
 
 const CATEGORY_CONFIG = {
   health:       { label: 'Saude',     color: '#e74c3c' },
@@ -44,7 +40,7 @@ export default function PrayerFeed() {
       let result = data.prayers || [];
       if (user && !isPastor) result = result.filter(p => p.author_id === user.id);
       setPrayers(result);
-    } catch { setPrayers(tab === 'answered' ? [] : (user ? [] : DEMO_PRAYERS)); }
+    } catch { setPrayers([]); }
     setLoading(false);
   };
 

@@ -6,11 +6,7 @@ import PrayerBubbles from '../components/PrayerBubbles';
 import PastorPrayingOverlay from '../components/PastorPrayingOverlay';
 import { Radio, HandHeart, Church, Eye, EyeOff } from 'lucide-react';
 
-const DEMO_SESSIONS = [
-  { id: 'demo-1', church_name: 'Igreja Batista Central', pastor_name: 'Roberto Almeida', prayer_focus: 'Orando pelas famílias da comunidade' },
-  { id: 'demo-2', church_name: 'Assembleia de Deus - Madureira', pastor_name: 'Carlos Eduardo', prayer_focus: 'Orando pelos enfermos' },
-  { id: 'demo-3', church_name: 'Comunidade da Graça', pastor_name: 'André Mendes', prayer_focus: 'Intercessão pela nação' },
-];
+// Demo sessions removidas
 
 export default function LivePrayer() {
   const { user } = useAuth();
@@ -20,11 +16,9 @@ export default function LivePrayer() {
   const [sessionId, setSessionId] = useState(null);
   const [showOverlay, setShowOverlay] = useState(false);
   const [prayerFocus, setPrayerFocus] = useState('');
-  const [demoMode, setDemoMode] = useState(true);
-
   const isPastor = user?.role === 'pastor' || user?.role === 'admin';
-  const liveSessions = demoMode && wsSessions.length === 0 ? DEMO_SESSIONS : wsSessions;
-  const churchCount = demoMode && totalChurchesPraying === 0 ? DEMO_SESSIONS.length : totalChurchesPraying;
+  const liveSessions = wsSessions;
+  const churchCount = totalChurchesPraying;
 
   const startPraying = () => {
     send({ type: 'pastor_start_praying', pastorId: user.id, churchId: user.churchId, churchName: 'Minha Igreja', pastorName: user.full_name, prayerFocus });
