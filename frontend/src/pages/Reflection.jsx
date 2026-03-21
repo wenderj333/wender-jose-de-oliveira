@@ -70,18 +70,15 @@ export default function Reflection() {
       const content = lines.join('\n');
 
       if (isPublic) {
-        // Publicar no Mural
+        // Publicar no Mural (usar FormData para compatibilidade com multer)
+        const fd = new FormData();
+        fd.append('content', content);
+        fd.append('category', 'reflexao');
+        fd.append('visibility', 'public');
         const res = await fetch(`${API}/api/feed`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            content,
-            category: 'reflexao',
-            visibility: 'public',
-          }),
+          headers: { Authorization: `Bearer ${token}` },
+          body: fd,
         });
         if (!res.ok) throw new Error('Erro ao publicar no Mural');
       } else {
