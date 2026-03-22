@@ -293,8 +293,7 @@ function PostCard({ post, onLike, onDelete }) {
             e.stopPropagation();
             const url = window.location.origin + '/mural';
             const text = (post.content ? post.content.slice(0, 100) : 'Partilha da fe') + ' | Sigo com Fe';
-            const waUrl = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + url);
-            window.open(waUrl, '_blank');
+            window.location.href = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + url);
           }}
           style={{
             display: 'flex', alignItems: 'center', gap: '6px',
