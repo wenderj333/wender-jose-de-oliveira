@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { authenticate, requireRole } = require('../middleware/auth');
+const { generateReply } = require('../services/llmFallback');
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-
-const SYSTEM_PROMPT = `You are a warm, biblical, and practical pastoral AI assistant called "IA Pastoral" from the app "Sigo com Fé".
+const SYSTEM_PROMPT = `You are a warm, biblical, and practical pastoral AI assistant called "IA Pastoral" from the app "Sigo com Fe".
 You help pastors and church leaders with:
 - Preparing sermons (outlines, illustrations, applications)
 - Suggesting relevant Bible verses for any topic or situation
@@ -20,7 +18,7 @@ Guidelines:
 - Be practical and actionable
 - Respect all Christian denominations
 - When giving counseling advice, remind that professional help may also be needed for serious issues
-- Use emojis sparingly to keep a warm tone (📖, 🙏, ✝️, 💛)`;
+- Use emojis sparingly to keep a warm tone`;
 
 const CONTEXT_PROMPTS = {
   sermon: 'The user wants help preparing a sermon. Focus on sermon structure, key points, illustrations, and biblical references.',
@@ -38,43 +36,16 @@ router.post('/chat', authenticate, requireRole('pastor'), async (req, res) => {
       return res.status(400).json({ error: 'Message is required' });
     }
 
-    if (!GEMINI_API_KEY) {
-      return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
-    }
-
     const contextHint = CONTEXT_PROMPTS[context] || '';
     const langHint = language ? `Respond in ${language}.` : '';
+    const fullSystem = `${SYSTEM_PROMPT}\n\n${contextHint}\n${langHint}`;
 
-    const response = await fetch(GEMINI_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: `${SYSTEM_PROMPT}\n\n${contextHint}\n${langHint}\n\nUser message: ${message}` }],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 2048,
-        },
-      }),
-    });
-
-    if (!response.ok) {
-      const errBody = await response.text();
-      console.error('Gemini API error:', response.status, errBody);
-      return res.status(502).json({ error: 'Failed to get AI response' });
-    }
-
-    const data = await response.json();
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não consegui gerar uma resposta.';
+    const reply = await generateReply(fullSystem, message);
 
     res.json({ reply });
   } catch (err) {
     console.error('Pastoral AI error:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Failed to get AI response' });
   }
 });
 

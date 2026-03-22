@@ -1,7 +1,8 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Grid, List, Volume2, VolumeX } from 'lucide-react'; // Import Volume2 and VolumeX
+import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Grid, List, Volume2, VolumeX, Search, Flag } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import ReportModal from '../components/ReportModal';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
@@ -104,12 +105,71 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
   );
 }
 
+// ─── Music Picker Modal ───────────────────────────────────────────────────────
+function MusicPickerModal({ onClose, onSelect }) {
+  const { t } = useTranslation();
+  const [songs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    fetch(`${API}/music?limit=20`)
+      .then(r => r.json())
+      .then(d => setSongs(Array.isArray(d.songs) ? d.songs : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = songs.filter(s =>
+    !query || s.title.toLowerCase().includes(query.toLowerCase()) || (s.artist || '').toLowerCase().includes(query.toLowerCase())
+  );
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 3000 }}
+      onClick={e => e.target === e.currentTarget && onClose()}>
+      <div style={{ background: 'white', borderRadius: '20px 20px 0 0', width: '100%', maxWidth: 600, maxHeight: '70vh', display: 'flex', flexDirection: 'column', padding: 20, boxSizing: 'border-box' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>🎵 {t('mural.pickMusic')}</h3>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}><X size={20} /></button>
+        </div>
+        <div style={{ position: 'relative', marginBottom: 12 }}>
+          <Search size={14} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#999' }} />
+          <input value={query} onChange={e => setQuery(e.target.value)} placeholder={t('music.searchPlaceholder')}
+            style={{ width: '100%', padding: '8px 10px 8px 30px', borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none', boxSizing: 'border-box' }} />
+        </div>
+        <div style={{ flex: 1, overflowY: 'auto' }}>
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: 24, color: '#888' }}>🎵</div>
+          ) : filtered.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: 24, color: '#888', fontSize: 14 }}>{t('music.noSongs')}</div>
+          ) : filtered.map(song => (
+            <div key={song.id} onClick={() => { onSelect(song); onClose(); }} style={{
+              display: 'flex', alignItems: 'center', gap: 12, padding: '10px 8px', borderRadius: 10, cursor: 'pointer',
+              borderBottom: '1px solid #f0f0f0',
+            }}
+              onMouseEnter={e => e.currentTarget.style.background = '#f5f5f5'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+              <div style={{ width: 36, height: 36, borderRadius: 8, background: 'linear-gradient(135deg,#4a80d4,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 18 }}>🎵</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</div>
+                <div style={{ fontSize: 11, color: '#888' }}>{song.artist}</div>
+              </div>
+              <Play size={14} color="#4a80d4" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause }) {
   const { t } = useTranslation(); // Add useTranslation
   const color = getCatColor(post.category || post.type);
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(post.comments || []);
+  const [reportOpen, setReportOpen] = useState(false);
   const authorName = post.full_name || post.author_name || post.authorName || t('common.user');
   const authorInitials = authorName.slice(0, 2).toUpperCase();
   const mediaUrl = post.media_url || post.mediaUrl;
@@ -277,7 +337,16 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
           <MessageCircle size={18} /> {post.comment_count || post.commentCount || comments.length} {t('common.comment')}
         </button>
         <button style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, marginLeft: 'auto', padding: '6px 10px', borderRadius: 8 }}><Share2 size={18} /> {t('common.share')}</button>
+        {user && !isOwner && (
+          <button onClick={() => setReportOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', padding: '6px 8px', borderRadius: 8, display: 'flex', alignItems: 'center' }} title={t('report.title')}
+            onMouseEnter={e => e.currentTarget.style.color = '#e11d48'} onMouseLeave={e => e.currentTarget.style.color = '#ccc'}>
+            <Flag size={15} />
+          </button>
+        )}
       </div>
+      {reportOpen && (
+        <ReportModal type="post" targetId={post.id} targetName={null} onClose={() => setReportOpen(false)} />
+      )}
 
       {showComments && (
         <div style={{ padding: '0 16px 14px', borderTop: '1px solid #f0f0f0' }}>
@@ -314,6 +383,8 @@ export default function MuralGrid() {
   const [mediaType, setMediaType] = useState(null);
   const [musicFile, setMusicFile] = useState(null);
   const [musicName, setMusicName] = useState(null);
+  const [selectedMusicSong, setSelectedMusicSong] = useState(null);
+  const [showMusicPicker, setShowMusicPicker] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
   const photoRef = useRef(null);
@@ -431,6 +502,7 @@ export default function MuralGrid() {
       let mediaUrl = null, audioUrl = null;
       if (mediaFile) mediaUrl = await uploadToCloudinary(mediaFile);
       if (musicFile) audioUrl = await uploadToCloudinary(musicFile);
+      if (!audioUrl && selectedMusicSong) audioUrl = selectedMusicSong.url;
 
       const res = await fetch(`${API}/feed`, {
         method: 'POST',
@@ -449,7 +521,7 @@ export default function MuralGrid() {
       const newPost = { ...(data.post || {}), liked: false, full_name: user?.full_name, like_count: 0, comment_count: 0 };
       setPosts([newPost, ...posts]);
       setPostText(''); setPostCategory('testemunho');
-      clearMedia(); setMusicFile(null); setMusicName(null);
+      clearMedia(); setMusicFile(null); setMusicName(null); setSelectedMusicSong(null);
       if (musicRef.current) musicRef.current.value = '';
       setShowForm(false);
     } catch (err) {
@@ -517,10 +589,23 @@ export default function MuralGrid() {
           <input ref={videoRef} type="file" accept="video/*" style={{ display: 'none' }} onChange={e => handleMediaSelect(e, 'video')} />
           <input ref={musicRef} type="file" accept="audio/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files[0]; if (f) { setMusicFile(f); setMusicName(f.name); } }} />
 
+          {/* Selected music from library */}
+          {selectedMusicSong && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, background: '#f0f5ff', border: '1px solid #4a80d444', borderRadius: 10, padding: '10px 14px' }}>
+              <span style={{ fontSize: 20 }}>🎵</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedMusicSong.title}</div>
+                <div style={{ fontSize: 11, color: '#888' }}>{selectedMusicSong.artist}</div>
+              </div>
+              <button onClick={() => setSelectedMusicSong(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}><X size={14} /></button>
+            </div>
+          )}
+
           <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
             <button onClick={() => photoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Image size={16} style={{ color: '#f43f5e' }} /> {t('media.photo')}</button>
             <button onClick={() => videoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Video size={16} style={{ color: '#3b82f6' }} /> {t('media.video')}</button>
             <button onClick={() => musicRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Music size={16} style={{ color: '#a855f7' }} /> {t('media.audio')}</button>
+            <button onClick={() => setShowMusicPicker(true)} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #4a80d444', background: '#f0f5ff', cursor: 'pointer', fontSize: 13, color: '#4a80d4', fontWeight: 600 }}>🎵 {t('mural.addMusic')}</button>
           </div>
 
           {uploadError && <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#e11d48' }}>⚠️ {uploadError}</div>}
@@ -588,6 +673,14 @@ export default function MuralGrid() {
           <p style={{ margin: 0 }}>{t('mural.noPostsFound')}</p>
           {!user && <p style={{ margin: '8px 0 0', fontSize: 13 }}>{t('mural.loginRequired')}</p>}
         </div>
+      )}
+
+      {/* Music Picker Modal */}
+      {showMusicPicker && (
+        <MusicPickerModal
+          onClose={() => setShowMusicPicker(false)}
+          onSelect={(song) => { setSelectedMusicSong(song); setMusicFile(null); setMusicName(null); if (musicRef.current) musicRef.current.value = ''; }}
+        />
       )}
     </div>
   );

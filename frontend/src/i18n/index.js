@@ -38,24 +38,19 @@ i18n
       'fr-FR': { translation: fr },
       'fr-CA': { translation: fr },
     },
-    lng: 'pt',
-    fallbackLng: 'pt',
+    // ⚠️ NÃO definir 'lng' aqui — deixa o LanguageDetector detectar automaticamente
+    fallbackLng: 'pt', // só fallback se o idioma do browser não for suportado
     interpolation: {
       escapeValue: false,
     },
     detection: {
+      // Ordem: primeiro verifica localStorage (escolha salva), depois browser, depois HTML
       order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
-      // Normalize language codes to support regional variants
       lookupLocalStorage: 'i18nextLng',
-      lookupFromPathIndex: 0,
-      lookupFromSubdomainIndex: 0,
     },
-    // Force explicit language code normalization
     nonExplicitSupportedLngs: true,
-    // Ensure German loads properly
     preload: ['pt', 'en', 'es', 'de', 'fr', 'ro', 'ru'],
   });
 
 export default i18n;
-

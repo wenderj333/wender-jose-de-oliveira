@@ -1,7 +1,7 @@
-{
+﻿{
   "brand": "Sigo com Fe",
   "nav": {
-    "prayers": "Gebete",
+    "prayers": "Gebetsanliegen",
     "mural": "Pinnwand",
     "live": "Live",
     "churches": "Churches",
@@ -18,14 +18,14 @@
     "pastoralAI": "Pastoral AI",
     "friends": "Friends",
     "bibleAI": "Bibel-KI",
-    "messages": "Messages",
-    "groups": "Groups",
-    "consecration": "Consecration",
-    "members": "Members",
+    "messages": "Nachrichten",
+    "groups": "Gruppen",
+    "consecration": "Weihe & Fasten",
+    "members": "Mitglieder",
     "offerings": "Offerings",
     "notifications": "Notifications",
     "myProfile": "My Profile",
-    "music": "Music",
+    "music": "Musik",
     "courseFinance": "Biblical Finance",
     "courseTheology": "Theology",
     "courseFree": "Free Bible Course",
@@ -40,7 +40,14 @@
       "bullet4": "Connect with brothers and sisters in faith",
       "registerBtn": "Register Free",
       "signInBtn": "I have an account - Sign In"
-    }
+    },
+    "reflection": "Reflexion mit Gott",
+    "help_life": "Hilf deinem Nächsten",
+    "pastoral_chat": "Seelsorge-Chat",
+    "spiritual_life": "Geistliches Leben",
+    "bible_ai": "Bibel KI",
+    "journeys": "Glaubensreisen",
+    "help_requests": "Hilfeanfragen"
   },
   "footer": "© 2026 Sigo com Fé - Technology serving the Kingdom",
   "home": {
@@ -214,18 +221,39 @@
     "noUsers": "No users found."
   },
   "mural": {
-    "title": "Gemeinde-Pinnwand",
-    "subtitle": "Teile Zeugnisse, Lobpreis und Bibelverse mit der christlichen Gemeinschaft",
-    "newPost": "Neuer Beitrag",
+    "title": "Gemeinschafts-Pinnwand",
+    "subtitle": "Teilen Sie Ihren Glauben, Zeugnisse und Lobpreisungen",
+    "newPost": "+ Neuer Beitrag",
     "cancel": "Abbrechen",
-    "messagePlaceholder": "Schreibe dein Zeugnis, deine Reflexion oder einen Bibelvers...",
+    "messagePlaceholder": "Teilen Sie etwas mit der Gemeinschaft...",
     "categories": {
       "testemunho": "Zeugnis",
-      "louvor": "Lobpreis / Video",
-      "reflexao": "Biblische Reflexion",
+      "louvor": "Lobpreis",
+      "reflexao": "Besinnung",
       "versiculo": "Bibelvers",
       "foto": "Foto"
-    }
+    },
+    "pray": "Beten",
+    "publish": "Veröffentlichen",
+    "publishing": "Wird veröffentlicht...",
+    "commentPlaceholder": "Kommentar schreiben...",
+    "amen": "Amen",
+    "noPostsFound": "Keine Beiträge gefunden.",
+    "loginRequired": "Melde dich an, um Beiträge zu sehen und zu veröffentlichen.",
+    "confirmDelete": "Möchten Sie diesen Beitrag wirklich löschen?",
+    "uploadError": "Upload-Fehler.",
+    "uploadConnectionError": "Verbindungsfehler beim Upload.",
+    "musicLabel": "Musik",
+    "filters": {
+      "all": "Alle",
+      "testimonies": "Zeugnisse",
+      "worship": "Lobpreis",
+      "verses": "Bibelverse",
+      "reflections": "Besinnung",
+      "photos": "Fotos"
+    },
+    "addMusic": "Musik hinzufügen",
+    "pickMusic": "Musik aus der Bibliothek wählen"
   },
   "kids": {
     "title": "Digital Sunday School",
@@ -468,7 +496,7 @@
     "editProfile": "Edit Profile",
     "prayers": "Prayers",
     "posts": "Posts",
-    "friends": "Friends",
+    "friends": "Freunde",
     "bio": "About",
     "noBio": "No bio yet",
     "save": "Save",
@@ -565,8 +593,8 @@
     "flaggedPost": "Flagged Post"
   },
   "common": {
-    "loading": "Loading...",
-    "send": "Send",
+    "loading": "Wird geladen...",
+    "send": "Senden",
     "save": "Save",
     "delete": "Delete",
     "edit": "Edit",
@@ -575,8 +603,8 @@
     "loginToLike": "Log in to like!",
     "loginToComment": "Log in to comment!",
     "linkCopied": "Link copied!",
-    "share": "Share",
-    "comment": "Comment",
+    "share": "Teilen",
+    "comment": "Kommentar",
     "report": "Report",
     "reportConfirm": "Report this post as inappropriate?",
     "reported": "Post reported! Moderators will review it.",
@@ -589,7 +617,10 @@
     "translate": "Translate",
     "translation": "Translation",
     "hideTranslation": "Hide translation",
-    "installApp": "Install App"
+    "installApp": "Install App",
+    "user": "Benutzer",
+    "welcomeBack": "Willkommen zurück",
+    "cancel": "Abbrechen"
   },
   "offerings": {
     "title": "Offerings and Tithes",
@@ -622,15 +653,48 @@
   "music": {
     "title": "Gospel Music",
     "subtitle": "Worship and praise 100% free",
+    "upload": "Musik hochladen",
+    "uploadTitle": "Songtitel",
+    "uploadArtist": "Künstler",
+    "uploadGenre": "Genre",
+    "uploading": "Wird hochgeladen...",
+    "uploadSuccess": "Musik erfolgreich hochgeladen! 🎵",
+    "uploadError": "Fehler beim Hochladen. Bitte erneut versuchen.",
+    "searchPlaceholder": "Musik suchen...",
+    "allGenres": "Alle",
+    "noSongs": "Noch keine Songs. Sei der Erste!",
+    "play": "Abspielen",
+    "pause": "Pausieren",
+    "likes": "Likes",
+    "youtubeSection": "Musik auf YouTube",
     "worship": "Worship & Praise",
     "hymns": "Classic Hymns",
     "instrumental": "Instrumental",
     "kids": "Kids Gospel",
     "prayer": "Prayer Music",
+    "community": "Gemeinschaft",
+    "loginToLike": "Einloggen um zu liken",
+    "loginToUpload": "Einloggen um Musik hochzuladen",
+    "genre.louvor": "Lobpreis",
+    "genre.adoracao": "Anbetung",
+    "genre.hinos": "Hymnen",
+    "genre.instrumental": "Instrumental",
+    "genre.kids": "Kids",
+    "genre.oracao": "Gebet",
     "favorites": "Favorites",
     "noFavorites": "No favorites yet",
     "tapHeart": "Tap ❤️ to save songs",
-    "freeSources": "More free music"
+    "freeSources": "More free music",
+    "youtubeNote": "Klicke auf ein Lied, um es auf YouTube zu offnen",
+    "tooLong": "Das Video/Audio darf nicht länger als 5 Minuten sein",
+    "uploadPublic": "Öffentlich — alle können sehen",
+    "uploadPrivate": "Privat — nur ich",
+    "visibility": "Sichtbarkeit",
+    "video": "Musikvideo",
+    "audio": "Audio",
+    "uploadHint": "MP3, WAV, MP4, MOV · max 5 Min",
+    "uploadCover": "Song-Cover",
+    "uploadCoverHint": "Klicken, um ein Cover-Bild hinzuzufügen"
   },
   "courseFinance": {
     "title": "Biblical Finance",
@@ -643,7 +707,7 @@
     "topics": "Christology, Soteriology, Ecclesiology, Eschatology, Pneumatology, Hermeneutics"
   },
   "media": {
-    "photo": "Photo",
+    "photo": "Foto",
     "video": "Video",
     "audio": "Audio",
     "url": "URL",
@@ -653,7 +717,7 @@
     "youtubePreview": "YouTube (preview unavailable)"
   },
   "time": {
-    "now": "Now",
+    "now": "Jetzt",
     "minAgo": "{{count}}min ago",
     "hoursAgo": "{{count}}h ago",
     "daysAgo": "{{count}}d ago"
@@ -941,14 +1005,313 @@
   "reflection": {
     "title": "Besinnung mit Gott",
     "subtitle": "Nimm dir Minuten zum Nachdenken",
-    "q1": "Was wuerdest du Gott sagen, wenn heute dein letzter Tag waere?",
+    "q1": "Was würdest du Gott sagen, wenn heute dein letzter Tag wäre?",
     "q1verse": "Denn so hat Gott die Welt geliebt - Johannes 3:16",
-    "q2": "Was hindert dich daran, dein Leben Christus zu uebergeben?",
-    "q2verse": "Kommt her zu mir alle Muehseligen - Matthaeus 11:28",
-    "q3": "Wie moechtest du in der Ewigkeit erinnert werden?",
+    "q2": "Was hindert dich, dein Leben Christus zu übergeben?",
+    "q2verse": "Kommt her zu mir alle Mühseligen - Matthäus 11:28",
+    "q3": "Wie möchtest du in der Ewigkeit erinnert werden?",
     "q3verse": "Ich bin die Auferstehung und das Leben - Johannes 11:25",
     "placeholder": "Schreibe deine Besinnung hier...",
     "save": "Besinnung speichern",
-    "saved": "Besinnung gespeichert!"
+    "saved": "Besinnung gespeichert!",
+    "journal": "Dein spirituelles Tagebuch (Optional)",
+    "saveBtn": "Reflexion teilen",
+    "loginRequired": "Melde dich an, um deine Reflexion zu schreiben und zu teilen.",
+    "community": "Gemeinschaftsreflexionen",
+    "noCommunity": "Sei der Erste, der heute eine Reflexion teilt!",
+    "days": [
+      {
+        "q1": "Wenn heute dein letzter Tag wäre, was würdest du Gott sagen?",
+        "q1verse": "Denn also hat Gott die Welt geliebt, dass er seinen eingeborenen Sohn gab — Johannes 3:16",
+        "q2": "Was hindert dich daran, dein Leben vollständig Christus zu übergeben?",
+        "q2verse": "Kommt her zu mir alle, die ihr mühselig und beladen seid — Matthäus 11:28",
+        "q3": "Wie hast du diese Woche die Nächstenliebe gelebt?",
+        "q3verse": "Liebet einander, wie ich euch geliebt habe — Johannes 13:34"
+      },
+      {
+        "q1": "Wofür bist du heute wirklich dankbar?",
+        "q1verse": "Seid dankbar in allen Dingen, denn das ist Gottes Wille — 1. Thessalonicher 5:18",
+        "q2": "Wo spürst du gerade Gottes Gegenwart in deinem Leben?",
+        "q2verse": "Wo zwei oder drei in meinem Namen versammelt sind — Matthäus 18:20",
+        "q3": "Welche Sünde musst du heute in Gottes Hände legen?",
+        "q3verse": "Wenn wir unsere Sünden bekennen, ist er treu und gerecht — 1. Johannes 1:9"
+      },
+      {
+        "q1": "Wie kannst du heute in deinem Umfeld ein Licht sein?",
+        "q1verse": "Ihr seid das Licht der Welt — Matthäus 5:14",
+        "q2": "Was hat die Bibel zuletzt zu deinem Herzen gesprochen?",
+        "q2verse": "Dein Wort ist meines Fußes Leuchte — Psalm 119:105",
+        "q3": "Gibt es jemanden, dem du heute vergeben musst?",
+        "q3verse": "Vergebt einander, wie Gott euch in Christus vergeben hat — Epheser 4:32"
+      },
+      {
+        "q1": "Welches Versprechen Gottes brauchst du heute?",
+        "q1verse": "Ich weiß, was für Gedanken ich über euch habe, spricht der Herr — Jeremia 29:11",
+        "q2": "Wozu ruft Gott dich und du hast noch nicht gehandelt?",
+        "q2verse": "Ich vermag alles durch den, der mich stark macht — Philipper 4:13",
+        "q3": "Wie ist deine stille Zeit mit Gott diese Woche?",
+        "q3verse": "Wenn du betest, geh in dein Kämmerlein — Matthäus 6:6"
+      },
+      {
+        "q1": "Was musst du loslassen und Gott anvertrauen?",
+        "q1verse": "Befiehl dem HERRN deinen Weg und vertraue auf ihn — Psalm 37:5",
+        "q2": "Wie ist dein Glaube im letzten Monat gewachsen?",
+        "q2verse": "Der Glaube ist die Grundlage der Dinge, die man hofft — Hebräer 11:1",
+        "q3": "Setzt du deine Gaben ein, um anderen zu dienen?",
+        "q3verse": "Dienet einander, jeder mit der Gabe, die er empfangen hat — 1. Petrus 4:10"
+      },
+      {
+        "q1": "Was hat deinen Frieden gestohlen? Wie kann Gott ihn wiederherstellen?",
+        "q1verse": "Der Friede Gottes, der allen Verstand übersteigt — Philipper 4:7",
+        "q2": "Wie hast du Christus den Menschen um dich herum bezeugt?",
+        "q2verse": "Geht hin in alle Welt und predigt das Evangelium — Markus 16:15",
+        "q3": "In welchem Bereich deines Lebens brauchst du noch Veränderung?",
+        "q3verse": "Stellt euch nicht dieser Welt gleich, sondern verwandelt euch — Römer 12:2"
+      },
+      {
+        "q1": "Was hat Gott dir diese Woche über sich selbst offenbart?",
+        "q1verse": "Ihr werdet die Wahrheit erkennen, und die Wahrheit wird euch frei machen — Johannes 8:32",
+        "q2": "Wie kannst du deine Familie im Glauben stärken?",
+        "q2verse": "Ich und mein Haus wollen dem HERRN dienen — Josua 24:15",
+        "q3": "In welchem Bereich brauchst du Gottes Gnade am meisten?",
+        "q3verse": "Meine Gnade genügt dir, denn meine Kraft wird in Schwachheit vollkommen — 2. Korinther 12:9"
+      }
+    ],
+    "rotateNote": "Die Fragen ändern sich täglich automatisch 🙏"
+  },
+  "ajudaProximo": {
+    "title": "Hilf deinem Nächsten",
+    "subtitle": "Unsere Gemeinschaft kümmert sich um dich und deinen Bruder.",
+    "needHelpBtn": "Ich brauche Hilfe",
+    "wantToHelpBtn": "Ich möchte helfen",
+    "targetAudienceLabel": "Gerichtet an:",
+    "makeRequestBtn": "Anfrage stellen",
+    "offerHelpBtn": "Hilfe anbieten",
+    "requestRegistered": "Anfrage erfolgreich registriert für",
+    "offerRegistered": "Angebot erfolgreich registriert für",
+    "messageLabel": "Nachricht",
+    "describeRequest": "Beschreibe, was du brauchst:",
+    "requestPlaceholder": "Bsp.: Ich brauche diesen Monat einen Lebensmittelkorb...",
+    "describeOffer": "Wie kannst du helfen?",
+    "offerPlaceholder": "Bsp.: Ich kann Kinderkleidung spenden...",
+    "submitBtn": "Senden",
+    "category": {
+      "spiritual": {
+        "title": "🙏 Spirituell",
+        "verse": "Bekennt einander eure Sünden und betet füreinander. — Jakobus 5:16",
+        "types": [
+          "Dringendes Gebetsanliegen",
+          "Geistliche Begleitung",
+          "Pastoralbesuch",
+          "Jüngerschaft & Mentoring"
+        ],
+        "targetAudience": "Menschen in Glaubenskrisen, spirituellem Leid, Gottsuchende"
+      },
+      "diaconia": {
+        "title": "🍞 Diakonie",
+        "verse": "Wer zwei Gewänder hat, gebe dem, der keines hat. — Lukas 3:11",
+        "types": [
+          "Lebensmittelkorb & Nahrung",
+          "Kleidung & Schuhe",
+          "Medikamente",
+          "Finanzielle Notfallhilfe"
+        ],
+        "targetAudience": "Menschen in materieller Not, Hunger, Armut"
+      },
+      "employment": {
+        "title": "💼 Arbeit & Würde",
+        "verse": "Was immer ihr tut, tut es von Herzen, als für den Herrn. — Kolosser 3:23",
+        "types": [
+          "Jobangebote unter Geschwistern",
+          "Kurse & Ausbildung",
+          "Selbstständigkeit"
+        ],
+        "targetAudience": "Arbeitslose, angehende Unternehmer, Schulungsbedürftige"
+      },
+      "emotional": {
+        "title": "❤️ Emotionale & Familiäre Unterstützung",
+        "verse": "Der HERR ist nahe denen, die zerbrochenen Herzens sind. — Psalm 34:18",
+        "types": [
+          "Trauer & Verlust",
+          "Ehewiederherstellung",
+          "Unterstützung für Alleinerziehende",
+          "Suchtmittelabhängigkeit"
+        ],
+        "targetAudience": "Menschen in Trauer, Scheidung, chemischer Abhängigkeit, Einsamkeit, alleinerziehende Mütter"
+      },
+      "health": {
+        "title": "🏥 Gesundheit",
+        "verse": "Er selbst nahm unsere Krankheiten und trug unsere Leiden. — Matthäus 8:17",
+        "types": [
+          "Krankenhausbegleitung",
+          "Blutspende"
+        ],
+        "targetAudience": "Kranke, Pflegende, Familien in medizinischer Behandlung"
+      }
+    },
+    "headerVerse": "\"Dient einander, jeder mit der Gabe, die er empfangen hat.\" — 1. Petrus 4:10",
+    "howAreYou": "Wie geht es dir heute?",
+    "needHelp": "Ich brauche Hilfe",
+    "needHelpDesc": "Teile dein Gebetsanliegen",
+    "wantToPray": "Ich möchte beten",
+    "wantToPrayDesc": "Bete für die Anliegen der Gemeinschaft",
+    "wantToHelp": "Ich möchte helfen",
+    "wantToHelpDesc": "Biete jemandem deine Hilfe an",
+    "testimony": "Zeugnis",
+    "testimonyDesc": "Teile eine Glaubensgeschichte",
+    "feedTitle": "Gebetsanliegen & Zeugnisse",
+    "postAnon": "Anonym veröffentlichen",
+    "postPlaceholder": "Schreib deine Nachricht...",
+    "publish": "Veröffentlichen",
+    "prayForYou": "Für dich beten",
+    "prayed": "Ich habe für dich gebetet",
+    "peoplePreyed": "Personen haben gebetet",
+    "comments": "Kommentare",
+    "commentPlaceholder": "Schreib einen Kommentar...",
+    "send": "Senden",
+    "anonymous": "Anonym",
+    "typeRequest": "Anliegen",
+    "typeTestimony": "Zeugnis",
+    "typeOffer": "Hilfe",
+    "justNow": "gerade eben",
+    "minutesAgo": "vor {{count}}m",
+    "hoursAgo": "vor {{count}}h",
+    "daysAgo": "vor {{count}}d",
+    "loginToPost": "Anmelden zum Posten",
+    "loginToPray": "Anmelden zum Beten",
+    "noPosts": "Sei der Erste, der etwas teilt! 🙏",
+    "postTypeLabel": "Beitragstyp"
+  },
+  "course": {
+    "title": "Bibel & Studium"
+  },
+  "events": {
+    "title": "Nächste Ereignisse"
+  },
+  "live": {
+    "none": "Keine Übertragung",
+    "be_first": "Sei der Erste!",
+    "start": "Live starten"
+  },
+  "auth": {
+    "logout": "Abmelden"
+  },
+  "landing": {
+    "subtitle": "Verbinde dich mit echten Christen, bete, wachse im Glauben und finde eine Gemeinschaft, die aufbaut — nicht ablenkt.",
+    "register": "Kostenloses Konto erstellen",
+    "login": "Einloggen",
+    "verse": "\"Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.\" — Mt 18:20",
+    "createFree": "✨ Kostenloses Konto erstellen",
+    "haveAccount": "Ich habe bereits ein Konto →",
+    "featuresTitle": "Alles, was Sie brauchen, um im Glauben zu wachsen",
+    "featuresSection": "FUNKTIONEN",
+    "testimoniesTitle": "Was unsere Geschwister sagen",
+    "testimoniesSection": "ZEUGNISSE",
+    "ctaTitle": "Treten Sie der christlichen Gemeinschaft bei, die in Gottes Liebe wächst",
+    "ctaSubtitle": "Registrieren Sie sich heute. Es ist kostenlos. Es ist christlich. Es ist für Sie.",
+    "ctaButton": "🙏 Meine Reise beginnen",
+    "ctaFree": "Keine Karte. Keine Gebühr. 100% kostenlos.",
+    "memberCount": "Aktive Mitglieder",
+    "languagesCount": "Verfügbare Sprachen",
+    "prayersCount": "Gebete gesendet",
+    "communityCount": "Gemeinschaft online",
+    "f1title": "Gebetsanliegen",
+    "f1desc": "Teilen und empfangen Sie Gebete aus der Gemeinschaft. Beten Sie nie allein.",
+    "f2title": "Bibel KI",
+    "f2desc": "Stellen Sie Fragen zur Bibel mit christlicher KI.",
+    "f3title": "Weihe & Fasten",
+    "f3desc": "Verpflichten Sie sich vor Gott. Fasten- und Gebetsprotokolle in der Gemeinschaft.",
+    "f4title": "Seelsorge-Chat",
+    "f4desc": "Sprechen Sie direkt mit einem Pastor. Beratung in Echtzeit.",
+    "f5title": "Christliche Musik",
+    "f5desc": "Lob-Bibliothek in mehreren Sprachen. Beten Sie überall an.",
+    "f6title": "Globale Gemeinschaft",
+    "f6desc": "Verbinden Sie sich mit Christen aus Brasilien, Europa, Afrika und der ganzen Welt.",
+    "tagline": "Das christliche soziale Netzwerk",
+    "loginShort": "Anmelden",
+    "joinNow": "Ich möchte dabei sein",
+    "headline1": "Das christliche Netzwerk",
+    "headline2": "ohne toxische Inhalte.",
+    "trust1": "Keine unangemessenen Inhalte",
+    "trust2": "Echte christliche Gemeinschaft",
+    "trust3": "Echte Gebetsanliegen",
+    "trust4": "Inhalte, die aufbauen",
+    "whyTitle": "Warum Sigo com Fé statt Instagram?",
+    "whySubtitle": "Versuchen Sie, Instagram oder WhatsApp für spirituelles Wachstum zu nutzen? Sigo com Fé wurde speziell für Christen entwickelt, die ihren Glauben täglich stärken möchten.",
+    "why1title": "Null toxische Inhalte",
+    "why1desc": "Keine Memes, keine Politik, keine unangemessenen Inhalte. Nur was aufbaut.",
+    "why2title": "Gemeinschaftsgebet",
+    "why2desc": "Echte Gebetsanliegen, von echten Christen beantwortet — in Echtzeit.",
+    "why3title": "Seelsorgliche Beratung",
+    "why3desc": "Sprechen Sie privat und kostenlos mit einem Pastor. Sie sind nicht allein.",
+    "why4title": "Globale Gemeinschaft",
+    "why4desc": "Christen aus Brasilien, Portugal, Deutschland, Afrika und mehr — vereint im Glauben.",
+    "ctaJoin": "✨ Jetzt der Gemeinschaft beitreten"
+  },
+  "locale": "de-DE",
+  "report": {
+    "title": "Melden",
+    "subtitle": "Hilf uns, die Gemeinschaft sicher und respektvoll zu halten",
+    "inappropriate": "Unangemessener Inhalt",
+    "disrespectful": "Beleidigung oder Respektlosigkeit",
+    "spam": "Spam oder Werbung",
+    "harassment": "Belästigung oder Bedrohung",
+    "other": "Anderer Grund",
+    "descPlaceholder": "Beschreibe, was passiert ist (optional)...",
+    "send": "Meldung senden",
+    "sent": "Meldung gesendet. Danke, dass du dazu beiträgst, die Gemeinschaft sicher zu halten!",
+    "cancel": "Abbrechen"
+  }
+,
+  "churches": {
+    "title": "Eine Kirche finden",
+    "subtitle": "Verbinde dich mit deiner Glaubensgemeinschaft",
+    "searchName": "Nach Name suchen...",
+    "searchCity": "Stadt...",
+    "viewChurch": "Kirche ansehen",
+    "joinChurch": "Kirche beitreten",
+    "leaveChurch": "Kirche verlassen",
+    "requestSent": "Anfrage gesendet! Warte auf Genehmigung.",
+    "members": "Mitglieder",
+    "pending": "Ausstehend",
+    "active": "Aktiv",
+    "myChurch": "Meine Kirche",
+    "createChurch": "Kirche erstellen",
+    "noChurch": "Du hast noch keine registrierte Kirche.",
+    "events": "Veranstaltungen",
+    "addEvent": "Veranstaltung erstellen",
+    "noEvents": "Keine Veranstaltungen geplant.",
+    "approve": "Genehmigen",
+    "reject": "Ablehnen",
+    "remove": "Entfernen",
+    "pendingMembers": "Ausstehende Anfragen",
+    "activeMembers": "Aktive Mitglieder"
+  },
+  "prayers": {
+    "title": "Gebetsanliegen",
+    "verse": "\"Betet füreinander, damit ihr geheilt werdet.\" — Jakobus 5:16",
+    "whereToSend": "Wohin soll dein Anliegen gesendet werden?",
+    "publicTitle": "Öffentlich",
+    "publicDesc": "Erscheint im Feed für alle",
+    "groupTitle": "Gebetsgruppe",
+    "groupDesc": "Sichtbar für die Glaubensgemeinschaft",
+    "pastorTitle": "An den Pastor",
+    "pastorDesc": "Privat — nur der Pastor sieht es",
+    "placeholder": "Beschreibe dein Gebetsanliegen...",
+    "sendAnon": "Anonym senden",
+    "submitBtn": "Anliegen senden 🙏",
+    "sending": "Wird gesendet...",
+    "successPublic": "Dein Anliegen wurde im Feed veröffentlicht! 🙏",
+    "successGroup": "Dein Anliegen wurde an die Gemeinschaft gesendet! 🙏",
+    "successPastor": "Dein Anliegen wurde an den Pastor gesendet! 🕊️",
+    "loginRequired": "Melde dich an, um ein Gebetsanliegen zu senden.",
+    "pastorPanel": "Pastor-Bereich",
+    "noPending": "Keine Gebetsanliegen im Moment.",
+    "statusPending": "Ausstehend",
+    "statusInProgress": "In Bearbeitung",
+    "statusResolved": "Gelöst",
+    "filterAll": "Alle",
+    "markInProgress": "In Bearbeitung",
+    "markResolved": "Gelöst"
   }
 }

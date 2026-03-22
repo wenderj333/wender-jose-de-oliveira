@@ -1,356 +1,539 @@
-import { useState, useRef, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
+import ReportModal from '../components/ReportModal';
 
-const typeColors = {
-  verse: "#F59E0B",
-  testimony: "#10B981",
-  photo: "#3B82F6",
-  prayer: "#8B5CF6",
-};
-const typeIcons = { verse:"📖", testimony:"🙌", photo:"📸", prayer:"🙏" };
+const API_BASE = import.meta.env.VITE_API_URL || '';
+const API = `${API_BASE}/api`;
 
-export default function ProfilePage({ onSave, onFollow, onMessage }) {
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'degxiuf43';
+const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'sigo_com_fe';
+
+async function uploadToCloudinary(file) {
+  const form = new FormData();
+  form.append('file', file);
+  form.append('upload_preset', UPLOAD_PRESET);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: form });
+  const data = await res.json();
+  return data.secure_url;
+}
+
+const EFFECTS = [
+  { id: 'none', label: 'Normal', filter: 'none' },
+  { id: 'sepia', label: 'Sépia', filter: 'sepia(100%)' },
+  { id: 'bw', label: 'P&B', filter: 'grayscale(100%)' },
+  { id: 'vintage', label: 'Vintage', filter: 'sepia(60%) contrast(110%) brightness(95%)' },
+  { id: 'warm', label: 'Quente', filter: 'sepia(40%) saturate(160%) brightness(108%)' },
+  { id: 'cold', label: 'Frio', filter: 'hue-rotate(200deg) saturate(130%) brightness(105%)' },
+  { id: 'vivid', label: 'Vívido', filter: 'saturate(220%) contrast(115%)' },
+  { id: 'fade', label: 'Desbotado', filter: 'brightness(130%) contrast(75%) saturate(70%)' },
+  { id: 'dramatic', label: 'Dramático', filter: 'contrast(160%) grayscale(25%) brightness(90%)' },
+];
+
+async function applyFilterAndUpload(file, cssFilter) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (cssFilter !== 'none') ctx.filter = cssFilter;
+      ctx.drawImage(img, 0, 0);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(async (blob) => {
+        try {
+          const form = new FormData();
+          form.append('file', blob, 'avatar.jpg');
+          form.append('upload_preset', UPLOAD_PRESET);
+          const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: form });
+          const data = await res.json();
+          resolve(data.secure_url);
+        } catch(e) { reject(e); }
+      }, 'image/jpeg', 0.92);
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+export default function Profile() {
   const { t } = useTranslation();
   const { userId } = useParams();
   const { user: currentUser, token } = useAuth();
 
-  const isOwnProfile = !userId || userId === currentUser?.id;
-  const [profileUser, setProfileUser] = useState(null);
-  const [userPosts, setUserPosts] = useState([]);
-  const [userStats, setUserStats] = useState({ posts: 0, friends: 0, prayers: 0 });
+  const targetId = userId || currentUser?.id;
+  const isOwn = !userId || userId === currentUser?.id;
 
-  const [isEditing,      setIsEditing]      = useState(false);
-  const [editData,       setEditData]       = useState({ name: profileUser?.name || "", bio: profileUser?.bio || "" });
-  const [avatarPreview,  setAvatarPreview]  = useState(profileUser?.photoURL  || null);
-  const [coverPreview,   setCoverPreview]   = useState(profileUser?.coverURL  || null);
-  const [cropModal,      setCropModal]      = useState(null);
-  const [isConsecrating, setIsConsecrating] = useState(profileUser?.isConsecrating || false);
-  const [activeTab,      setActiveTab]      = useState("posts");
-  const [lightbox,       setLightbox]       = useState(null);
-  const avatarRef = useRef();
-  const coverRef  = useRef();
+  const [profile, setProfile] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [editBio, setEditBio] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState('');
 
-  const API_BASE = import.meta.env.VITE_API_URL || '';
-  const API = `${API_BASE}/api`;
+  // Instagram-style DM modal
+  const [dmOpen, setDmOpen] = useState(false);
+  const [dmText, setDmText] = useState('');
+  const [dmSent, setDmSent] = useState(false);
+
+  // Report modal
+  const [reportOpen, setReportOpen] = useState(false);
+
+  // Photo effects modal
+  const [effectsOpen, setEffectsOpen] = useState(false);
+  const [effectsFile, setEffectsFile] = useState(null);
+  const [effectsPreviewUrl, setEffectsPreviewUrl] = useState(null);
+  const [selectedEffect, setSelectedEffect] = useState('none');
+  const [applyingEffect, setApplyingEffect] = useState(false);
+
+  const applyUser = (u) => {
+    setProfile(u);
+    setEditName(u.full_name || '');
+    setEditBio(u.bio || '');
+  };
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      if (!currentUser && !userId) return; // Not logged in and no specific user ID
+    if (!targetId) return;
+    setLoading(true);
+    setError(null);
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    fetch(`${API}/profile/${targetId}`, { headers })
+      .then(async r => {
+        const data = await r.json().catch(() => ({}));
+        if (r.ok && data.user) {
+          applyUser(data.user);
+        } else if (isOwn && currentUser) {
+          applyUser(currentUser);
+        } else {
+          setError('Perfil nao encontrado.');
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        if (isOwn && currentUser) {
+          applyUser(currentUser);
+        } else {
+          setError('Erro ao carregar o perfil.');
+        }
+        setLoading(false);
+      });
+  }, [targetId, token]);
 
-      const targetUserId = userId || currentUser?.id;
-      if (!targetUserId) return;
+  useEffect(() => {
+    if (!targetId) return;
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    fetch(`${API}/feed/user/${targetId}?limit=20`, { headers })
+      .then(r => r.ok ? r.json() : { posts: [] })
+      .then(data => setPosts(data.posts || []))
+      .catch(() => setPosts([]));
+  }, [targetId, token]);
 
-      try {
-        // Fetch profile user data
-        const userRes = await fetch(`${API}/profile/${targetUserId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const userData = await userRes.json();
-        setProfileUser(userData.user);
-        setEditData({ name: userData.user?.name || "", bio: userData.user?.bio || "" });
-        setAvatarPreview(userData.user?.photoURL || null);
-        setCoverPreview(userData.user?.coverURL || null);
-        setIsConsecrating(userData.user?.isConsecrating || false);
-
-        // Fetch user posts
-        const postsRes = await fetch(`${API}/feed/user/${targetUserId}?limit=50`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const postsData = await postsRes.json();
-        setUserPosts(postsData.posts || []);
-
-        // Fetch user stats (assuming stats are part of profile data for now, or fetch separately)
-        // For simplicity, let's assume basic stats are part of the user object or derived from posts/friends
-        setUserStats({ // Placeholder, real stats would come from backend
-          posts: postsData.posts?.length || 0,
-          friends: userData.user?.friendsCount || 0, // Assuming a field on user object
-          prayers: userData.user?.prayersCount || 0, // Assuming a field on user object
-        });
-
-      } catch (error) {
-        console.error("Failed to fetch profile data:", error);
-        // Handle error, e.g., show an error message
+  const handleSave = async () => {
+    setSaving(true);
+    setSaveMsg('');
+    try {
+      const res = await fetch(`${API}/profile`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ full_name: editName, bio: editBio }),
+      });
+      if (res.ok) {
+        setProfile(p => ({ ...p, full_name: editName, bio: editBio }));
+        setEditing(false);
+        setSaveMsg('Perfil atualizado!');
+      } else {
+        setSaveMsg('Erro ao guardar.');
       }
-    };
-
-    fetchProfileData();
-  }, [userId, currentUser?.id, token]);
+    } catch {
+      setSaveMsg('Erro ao guardar.');
+    }
+    setSaving(false);
+  };
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
-    if (file) setCropModal({ type:"avatar", url: URL.createObjectURL(file) });
+    if (!file) return;
+    const previewUrl = URL.createObjectURL(file);
+    setEffectsFile(file);
+    setEffectsPreviewUrl(previewUrl);
+    setSelectedEffect('none');
+    setEffectsOpen(true);
+    // reset input so same file can be picked again
+    e.target.value = '';
   };
-  const handleCoverChange = (e) => {
-    const file = e.target.files[0];
-    if (file) setCoverPreview(URL.createObjectURL(file));
-  };
-  const handleSave = () => { if (onSave) onSave(editData); setIsEditing(false); };
 
-  const S = {
-    page: {
-      minHeight:"100vh",
-      background:"linear-gradient(160deg,#060d20 0%,#0a1833 45%,#0d2410 100%)",
-      fontFamily:"'Plus Jakarta Sans','Segoe UI',sans-serif",
-      color:"#fff",
-    },
-    wrap:  { maxWidth:680, margin:"0 auto", paddingBottom:64 },
-    cover: {
-      position:"relative", height:210,
-      borderRadius:"0 0 28px 28px", overflow:"hidden",
-      background: coverPreview
-        ? `url(${coverPreview}) center/cover no-repeat`
-        : "linear-gradient(135deg,#060d20 0%,#0a1e50 40%,#1a4060 70%,#0d2410 100%)",
-    },
-    coverGlow: {
-      position:"absolute", inset:0,
-      background:"linear-gradient(135deg,transparent 30%,rgba(245,158,11,0.05) 55%,transparent 75%)",
-      pointerEvents:"none",
-    },
-    coverFade: {
-      position:"absolute", bottom:0, left:0, right:0, height:70,
-      background:"linear-gradient(to top,rgba(6,13,32,0.7),transparent)",
-      pointerEvents:"none",
-    },
-    body:  { padding:"0 20px" },
-    topRow:{ display:"flex", alignItems:"flex-end", justifyContent:"space-between", marginTop:-52, marginBottom:16 },
-    actions:{ display:"flex", gap:8, paddingBottom:6, flexWrap:"wrap", justifyContent:"flex-end" },
-    nameLine:{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap", marginBottom:3 },
-    h1:  { fontSize:22, fontWeight:800, letterSpacing:"-0.4px" },
-    handle:{ color:"rgba(255,255,255,0.32)", fontSize:12, marginBottom:8 },
-    bio: { color:"rgba(255,255,255,0.68)", fontSize:14, lineHeight:1.65, marginBottom:14 },
-    meta:{ display:"flex", flexWrap:"wrap", gap:14, marginBottom:20 },
-    metaItem:{ display:"flex", alignItems:"center", gap:5, color:"rgba(255,255,255,0.35)", fontSize:12 },
-    stats:{ display:"flex", gap:10, marginBottom:20 },
-    divider:{ height:1, background:"linear-gradient(90deg,transparent,rgba(245,158,11,0.18),transparent)", margin:"20px 0" },
-    tabs:{ display:"flex", borderBottom:"1px solid rgba(255,255,255,0.06)", marginBottom:20 },
-    emptyState:{ textAlign:"center", padding:"48px 0", color:"rgba(255,255,255,0.22)" },
+  const handleEffectsCancel = () => {
+    if (effectsPreviewUrl) URL.revokeObjectURL(effectsPreviewUrl);
+    setEffectsOpen(false);
+    setEffectsFile(null);
+    setEffectsPreviewUrl(null);
+    setSelectedEffect('none');
   };
+
+  const handleEffectsApply = async () => {
+    if (!effectsFile) return;
+    setApplyingEffect(true);
+    try {
+      const cssFilter = EFFECTS.find(e => e.id === selectedEffect)?.filter || 'none';
+      const url = await applyFilterAndUpload(effectsFile, cssFilter);
+      await fetch(`${API}/profile`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ avatar_url: url }),
+      });
+      setProfile(p => ({ ...p, avatar_url: url }));
+      handleEffectsCancel();
+    } catch {
+      alert('Erro ao aplicar o efeito.');
+    }
+    setApplyingEffect(false);
+  };
+
+  const sendDM = async () => {
+    if (!dmText.trim()) return;
+    try {
+      await fetch(`${API}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ to_user_id: targetId, content: dmText }),
+      });
+    } catch {}
+    setDmSent(true);
+    setTimeout(() => { setDmOpen(false); setDmSent(false); setDmText(''); }, 2000);
+  };
+
+  if (loading) return (
+    <div style={{padding:40,textAlign:'center',color:'var(--muted,#7b83a6)'}}>
+      <div style={{width:36,height:36,border:'3px solid #dde3f0',borderTopColor:'var(--fb,#4a80d4)',borderRadius:'50%',animation:'spin 1s linear infinite',margin:'0 auto 16px'}}/>
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+      <p>A carregar perfil...</p>
+    </div>
+  );
+
+  if (error) return (
+    <div style={{padding:40,textAlign:'center',color:'#dc2626'}}>
+      <p style={{fontSize:'2rem',marginBottom:12}}>😔</p>
+      <p>{error}</p>
+    </div>
+  );
+
+  if (!profile) return null;
 
   return (
-    <div style={S.page}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        *{box-sizing:border-box;margin:0;padding:0}
+    <div style={{maxWidth:680,margin:'0 auto',paddingBottom:40}}>
 
-        .pb{padding:10px 20px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .22s ease;letter-spacing:.2px}
-        .pb:hover{transform:translateY(-2px)} .pb:active{transform:translateY(0)}
-        .pb-gold{background:linear-gradient(135deg,#F59E0B,#D97706);color:#060d20;box-shadow:0 4px 20px rgba(245,158,11,.35)}
-        .pb-gold:hover{box-shadow:0 6px 28px rgba(245,158,11,.55)}
-        .pb-blue{background:linear-gradient(135deg,#1D4ED8,#1E40AF);color:#fff;box-shadow:0 4px 18px rgba(29,78,216,.3)}
-        .pb-ghost{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.11);backdrop-filter:blur(8px)}
-        .pb-ghost:hover{background:rgba(255,255,255,.12)}
-        .pb-fire{background:${isConsecrating?"linear-gradient(135deg,#374151,#1F2937)":"linear-gradient(135deg,#F97316,#DC2626)"};color:#fff;
-          box-shadow:${isConsecrating?"none":"0 4px 20px rgba(249,115,22,.4)"};
-          animation:${isConsecrating?"fireGlow 2s ease-in-out infinite":"none"}}
-        @keyframes fireGlow{0%,100%{box-shadow:0 4px 20px rgba(249,115,22,.5)}50%{box-shadow:0 4px 36px rgba(249,115,22,.9)}}
+      {/* Cover */}
+      <div style={{
+        height:160,
+        background: profile.cover_url
+          ? `url(${profile.cover_url}) center/cover`
+          : 'linear-gradient(135deg,var(--fb2,#3568b8),var(--fb,#4a80d4))',
+        borderRadius:'0 0 16px 16px'
+      }}/>
 
-        .tab-b{padding:12px 18px;background:transparent;border:none;color:rgba(255,255,255,.38);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
-        .tab-b.act{color:#F59E0B;border-bottom-color:#F59E0B}
-        .tab-b:hover:not(.act){color:rgba(255,255,255,.7)}
-
-        .pc{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:18px;transition:all .22s;cursor:pointer}
-        .pc:hover{background:rgba(245,158,11,.04);border-color:rgba(245,158,11,.18);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
-
-        .sb{text-align:center;padding:16px 8px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:18px;flex:1;transition:all .22s;cursor:default}
-        .sb:hover{background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.22);transform:translateY(-2px)}
-
-        .av-ring{width:104px;height:104px;border-radius:50%;padding:3px;background:linear-gradient(135deg,#1D4ED8,#F59E0B);cursor:pointer;transition:transform .2s;flex-shrink:0}
-        .av-ring:hover{transform:scale(1.04)}
-        .av-inner{width:100%;height:100%;border-radius:50%;background:#0a1833;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:800;color:#F59E0B;position:relative}
-        .av-overlay{position:absolute;inset:0;background:rgba(0,0,0,.65);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;opacity:0;transition:opacity .2s}
-        .av-inner:hover .av-overlay{opacity:1}
-
-        .cov-btn{position:absolute;bottom:12px;right:12px;padding:7px 14px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);border-radius:50px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;backdrop-filter:blur(8px);transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif}
-        .cov-btn:hover{background:rgba(0,0,0,.8)}
-
-        .badge-fire{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:50px;font-size:11px;font-weight:700;background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.35);color:#FB923C;animation:bp 2s infinite}
-        @keyframes bp{0%,100%{opacity:1}50%{opacity:.6}}
-        .badge-ch{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:50px;font-size:11px;font-weight:600;background:rgba(29,78,216,.15);border:1px solid rgba(29,78,216,.28);color:#60A5FA}
-
-        .inp{width:100%;padding:12px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
-        .inp:focus{border-color:#F59E0B} .inp::placeholder{color:rgba(255,255,255,.22)}
-
-        .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(12px)}
-        .modal-box{background:linear-gradient(160deg,#0a1833,#060d20);border:1px solid rgba(245,158,11,.15);border-radius:24px;padding:32px;width:90%;max-width:420px;box-shadow:0 32px 64px rgba(0,0,0,.7),0 0 0 1px rgba(245,158,11,.08)}
-      `}</style>
-
-      <div style={S.wrap}>
-
-        {/* COVER */}
-        <div style={S.cover}>
-          {!coverPreview && <><div style={S.coverGlow}/><div style={S.coverFade}/></>}
-          {isOwnProfile && (
-            <button className="cov-btn" onClick={() => coverRef.current?.click()}>
-              📷 {t("profile.editCover","Alterar capa")}
-            </button>
+      {/* Avatar + Name + Buttons */}
+      <div style={{display:'flex',alignItems:'flex-end',gap:14,padding:'0 20px',marginTop:-44,marginBottom:16,flexWrap:'wrap'}}>
+        {/* Avatar */}
+        <div style={{position:'relative',flexShrink:0}}>
+          <div style={{width:82,height:82,borderRadius:'50%',border:'3px solid white',overflow:'hidden',background:'var(--bg,#f5f7ff)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'2rem',boxShadow:'0 2px 10px rgba(74,128,212,0.2)'}}>
+            {profile.avatar_url
+              ? <img src={profile.avatar_url} alt={profile.full_name} style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+              : <span>{(profile.full_name || '?').charAt(0).toUpperCase()}</span>
+            }
+          </div>
+          {isOwn && (
+            <label style={{position:'absolute',bottom:0,right:0,width:26,height:26,borderRadius:'50%',background:'var(--fb,#4a80d4)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',border:'2px solid white'}}>
+              <span style={{color:'white',fontSize:'0.75rem'}}>📷</span>
+              <input type="file" accept="image/*" onChange={handleAvatarChange} style={{display:'none'}}/>
+            </label>
           )}
-          <input ref={coverRef} type="file" accept="image/*" style={{display:"none"}} onChange={handleCoverChange}/>
         </div>
 
-        <div style={S.body}>
+        {/* Name + role */}
+        <div style={{flex:1,minWidth:120,paddingBottom:4}}>
+          <h2 style={{color:'var(--text,#1e2240)',fontFamily:"'Cormorant Garamond',serif",fontSize:'1.35rem',fontWeight:700,margin:0,lineHeight:1.2}}>
+            {profile.full_name || 'Utilizador'}
+          </h2>
+          <p style={{color:'var(--muted,#7b83a6)',fontSize:'0.8rem',margin:'2px 0 0'}}>
+            {profile.role === 'pastor' ? '🕊️ Pastor' : '🙏 Membro'}
+          </p>
+        </div>
 
-          {/* AVATAR + ACTIONS */}
-          <div style={S.topRow}>
-            <div className="av-ring" onClick={() => {
-              if (avatarPreview) setLightbox(avatarPreview);
-              else if (isOwnProfile) avatarRef.current?.click();
-            }}>
-              <div className="av-inner">
-                {avatarPreview
-                  ? <img src={avatarPreview} alt="avatar" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                  : (user?.name?.charAt(0) || "?")}
-                {isOwnProfile && <div className="av-overlay">✏️</div>}
-              </div>
-            </div>
-            <input ref={avatarRef} type="file" accept="image/*" style={{display:"none"}} onChange={handleAvatarChange}/>
-
-            <div style={S.actions}>
-              {isOwnProfile ? <>
-                <button className="pb pb-fire" onClick={() => setIsConsecrating(!isConsecrating)}>
-                  {isConsecrating ? `🔥 ${t("consecration.consecrating","Consagrando...")}` : `🔥 ${t("profile.consecrate","Consagrar")}`}
-                </button>
-                <button className="pb pb-ghost" onClick={() => setIsEditing(true)}>
-                  ✏️ {t("profile.editProfile","Editar")}
-                </button>
-              </> : <>
-                {profileUser && <button className="pb pb-blue" onClick={onMessage}>💬 {t("messages.title","Mensagem")}</button>}
-                {profileUser && <button className="pb pb-gold" onClick={onFollow}>➕ {t("friends.addFriend","Seguir")}</button>}
-              </>}
-            </div>
-          </div>
-
-          {/* NAME */}
-          <div style={S.nameLine}>
-            <h1 style={S.h1}>{profileUser?.name || t("common.user","Utilizador")}</h1>
-            {isConsecrating && <span className="badge-fire">🔥 {t("consecration.consecrating","Em Consagração")}</span>}
-            {profileUser?.church && <span className="badge-ch">⛪ {profileUser.church}</span>}
-          </div>
-          {profileUser?.handle && <p style={S.handle}>{profileUser.handle}</p>}
-          {profileUser?.bio    && <p style={S.bio}>{profileUser.bio}</p>}
-
-          {/* META */}
-          <div style={S.meta}>
-            {[
-              profileUser?.church   && { icon:"⛪", text: profileUser.church },
-              profileUser?.location && { icon:"📍", text: profileUser.location },
-              profileUser?.joinDate && { icon:"📅", text:`${t("profile.memberSince","Desde")} ${profileUser.joinDate}` },
-            ].filter(Boolean).map((m,i) => (
-              <span key={i} style={S.metaItem}><span>{m.icon}</span><span>{m.text}</span></span>
-            ))}
-          </div>
-
-          {/* STATS */}
-          <div style={S.stats}>
-            {[
-              { label:t("profile.posts","Posts"),          value:userStats.posts   ||0, icon:"📝" },
-              { label:t("profile.friends","Amigos"),       value:userStats.friends ||0, icon:"👥" },
-              { label:t("nav.prayers","Orações"),          value:userStats.prayers ||0, icon:"🙏" },
-            ].map((s,i) => (
-              <div key={i} className="sb">
-                <div style={{fontSize:18,marginBottom:4}}>{s.icon}</div>
-                <div style={{fontSize:22,fontWeight:800,color:"#F59E0B",lineHeight:1}}>{s.value}</div>
-                <div style={{fontSize:10,color:"rgba(255,255,255,.32)",fontWeight:500,marginTop:4,textTransform:"uppercase",letterSpacing:".5px"}}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-
-          <div style={S.divider}/>
-
-          {/* TABS */}
-          <div style={S.tabs}>
-            {[
-              {key:"posts",   lbl:`📝 ${t("profile.posts","Posts")}`},
-              {key:"prayers", lbl:`🙏 ${t("nav.prayers","Orações")}`},
-              {key:"friends", lbl:`👥 ${t("profile.friends","Amigos")}`},
-            ].map(tab => (
-              <button key={tab.key} className={`tab-b ${activeTab===tab.key?"act":""}`} onClick={()=>setActiveTab(tab.key)}>
-                {tab.lbl}
-              </button>
-            ))}
-          </div>
-
-          {/* POSTS */}
-          {activeTab==="posts" && (
-            <div style={{display:"flex",flexDirection:"column",gap:12}}>
-              {(userPosts||[]).length===0
-                ? <div style={S.emptyState}><div style={{fontSize:40,marginBottom:10}}>📝</div><p style={{fontSize:13}}>{t("common.noPostsYet","Nenhum post ainda")}</p></div>
-                : (userPosts||[]).map(p=>(
-                  <div key={p.id} className="pc">
-                    <div style={{marginBottom:10}}>
-                      <span style={{padding:"3px 10px",borderRadius:50,fontSize:11,fontWeight:600,
-                        background:`${typeColors[p.type]||"#F59E0B"}18`,color:typeColors[p.type]||"#F59E0B",
-                        border:`1px solid ${typeColors[p.type]||"#F59E0B"}33`}}>
-                        {typeIcons[p.type]} {p.type}
-                      </span>
-                    </div>
-                    <p style={{color:"rgba(255,255,255,.75)",fontSize:14,lineHeight:1.6,marginBottom:12}}>{p.content}</p>
-                    <div style={{display:"flex",gap:16}}>
-                      <span style={{color:"rgba(255,255,255,.28)",fontSize:12}}>❤️ {p.likes}</span>
-                      <span style={{color:"rgba(255,255,255,.28)",fontSize:12}}>💬 {p.comments}</span>
-                    </div>
-                  </div>
-                ))
-              }
-            </div>
+        {/* Action buttons */}
+        <div style={{display:'flex',gap:8,paddingBottom:4,flexShrink:0}}>
+          {isOwn && !editing && (
+            <button onClick={() => setEditing(true)} style={{padding:'8px 16px',borderRadius:9,background:'var(--fb-light,#edf2fc)',border:'1px solid var(--border,#e0e6f5)',color:'var(--fb,#4a80d4)',fontSize:'0.83rem',fontWeight:600,cursor:'pointer'}}>
+              Editar perfil
+            </button>
           )}
-          {(activeTab==="prayers"||activeTab==="friends") && (
-            <div style={S.emptyState}>
-              <div style={{fontSize:44,marginBottom:12}}>{activeTab==="prayers"?"🙏":"👥"}</div>
-              <p style={{fontSize:13}}>{t("common.noPostsYet","Nada por aqui ainda")}</p>
-            </div>
+          {!isOwn && (
+            <>
+              <button onClick={() => setDmOpen(true)} style={{padding:'8px 16px',borderRadius:9,background:'linear-gradient(135deg,var(--fb2,#3568b8),var(--fb,#4a80d4))',border:'none',color:'white',fontSize:'0.83rem',fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',gap:6}}>
+                💬 {t('profile.message', 'Mensagem')}
+              </button>
+              <button style={{padding:'8px 14px',borderRadius:9,background:'var(--fb-light,#edf2fc)',border:'1px solid var(--border,#e0e6f5)',color:'var(--fb,#4a80d4)',fontSize:'0.83rem',fontWeight:600,cursor:'pointer'}}>
+                ➕ {t('profile.follow', 'Seguir')}
+              </button>
+              <button onClick={() => setReportOpen(true)} style={{padding:'8px 10px',borderRadius:9,background:'none',border:'none',color:'#aaa',fontSize:'0.8rem',cursor:'pointer',display:'flex',alignItems:'center',gap:4}} title={t('report.title')}>
+                🚩
+              </button>
+            </>
           )}
         </div>
       </div>
 
-      {/* EDIT MODAL */}
-      {isEditing && (
-        <div className="modal-bg" onClick={()=>setIsEditing(false)}>
-          <div className="modal-box" onClick={e=>e.stopPropagation()}>
-            <h2 style={{fontSize:18,fontWeight:700,marginBottom:6}}>✏️ {t("profile.editProfile","Editar Perfil")}</h2>
-            <p style={{fontSize:12,color:"rgba(255,255,255,.32)",marginBottom:24}}>{t("profile.addPhotoDesc","Atualize suas informações")}</p>
-            <div style={{marginBottom:14}}>
-              <label style={{fontSize:11,color:"rgba(255,255,255,.32)",marginBottom:6,display:"block",textTransform:"uppercase",letterSpacing:".5px"}}>{t("register.fullName","Nome")}</label>
-              <input className="inp" value={editData.name} onChange={e=>setEditData({...editData,name:e.target.value})} placeholder={t("register.fullNamePlaceholder","Seu nome")}/>
-            </div>
-            <div style={{marginBottom:24}}>
-              <label style={{fontSize:11,color:"rgba(255,255,255,.32)",marginBottom:6,display:"block",textTransform:"uppercase",letterSpacing:".5px"}}>{t("profile.bio","Bio")}</label>
-              <textarea className="inp" value={editData.bio} onChange={e=>setEditData({...editData,bio:e.target.value})} placeholder={t("profile.noBio","Conte algo sobre você...")} rows={3} style={{resize:"none"}}/>
-            </div>
-            <div style={{display:"flex",gap:10}}>
-              <button className="pb pb-gold" style={{flex:1}} onClick={handleSave}>✅ {t("profile.save","Salvar")}</button>
-              <button className="pb pb-ghost" onClick={()=>setIsEditing(false)}>{t("profile.cancel","Cancelar")}</button>
-            </div>
+      {/* Bio / Edit Form */}
+      {!editing ? (
+        <div style={{padding:'0 20px',marginBottom:20}}>
+          {profile.bio && <p style={{color:'var(--text2,#3d4466)',fontSize:'0.9rem',lineHeight:1.6}}>{profile.bio}</p>}
+          {profile.location && <p style={{color:'var(--muted,#7b83a6)',fontSize:'0.8rem',marginTop:6}}>📍 {profile.location}</p>}
+          {profile.church_name && <p style={{color:'var(--muted,#7b83a6)',fontSize:'0.8rem'}}>⛪ {profile.church_name}</p>}
+          {saveMsg && <p style={{color:'var(--gold,#a07820)',fontSize:'0.82rem',marginTop:8,fontWeight:600}}>{saveMsg}</p>}
+        </div>
+      ) : (
+        <div style={{background:'white',borderRadius:12,margin:'0 20px 20px',padding:16,border:'1px solid var(--border,#e0e6f5)',boxShadow:'0 2px 8px rgba(74,128,212,0.06)'}}>
+          <label style={{display:'block',marginBottom:6,fontSize:'0.82rem',color:'var(--muted,#7b83a6)',fontWeight:600}}>Nome</label>
+          <input
+            value={editName}
+            onChange={e => setEditName(e.target.value)}
+            style={{width:'100%',background:'var(--bg,#f5f7ff)',border:'1px solid var(--border,#e0e6f5)',borderRadius:8,padding:'9px 12px',color:'var(--text,#1e2240)',fontSize:'0.9rem',marginBottom:12,outline:'none'}}
+          />
+          <label style={{display:'block',marginBottom:6,fontSize:'0.82rem',color:'var(--muted,#7b83a6)',fontWeight:600}}>Bio</label>
+          <textarea
+            value={editBio}
+            onChange={e => setEditBio(e.target.value)}
+            rows={3}
+            style={{width:'100%',background:'var(--bg,#f5f7ff)',border:'1px solid var(--border,#e0e6f5)',borderRadius:8,padding:'9px 12px',color:'var(--text,#1e2240)',fontSize:'0.9rem',resize:'vertical',outline:'none',marginBottom:12}}
+          />
+          <div style={{display:'flex',gap:8}}>
+            <button onClick={handleSave} disabled={saving} style={{flex:1,padding:'10px',borderRadius:9,background:'linear-gradient(135deg,#3568b8,#4a80d4)',border:'none',color:'white',fontWeight:600,cursor:'pointer',fontSize:'0.88rem'}}>
+              {saving ? 'A guardar...' : 'Guardar'}
+            </button>
+            <button onClick={() => setEditing(false)} style={{padding:'10px 16px',borderRadius:9,background:'var(--bg,#f5f7ff)',border:'1px solid var(--border,#e0e6f5)',color:'var(--text2,#3d4466)',cursor:'pointer',fontSize:'0.88rem'}}>
+              Cancelar
+            </button>
           </div>
         </div>
       )}
 
-      {/* CROP MODAL */}
-      {cropModal && (
-        <div className="modal-bg">
-          <div className="modal-box" style={{textAlign:"center"}}>
-            <h2 style={{fontSize:17,fontWeight:700,marginBottom:6}}>📸 {t("profile.addPhotoPrompt","Pré-visualizar foto")}</h2>
-            <p style={{fontSize:12,color:"rgba(255,255,255,.32)",marginBottom:20}}>{t("profile.addPhotoDesc","Esta será sua foto de perfil")}</p>
-            <div style={{width:150,height:150,borderRadius:"50%",margin:"0 auto 24px",
-              background:`url(${cropModal.url}) center/cover`,
-              boxShadow:"0 0 0 3px #F59E0B,0 8px 32px rgba(245,158,11,.3)"}}/>
-            <div style={{display:"flex",gap:10}}>
-              <button className="pb pb-gold" style={{flex:1}} onClick={()=>{
-                if(cropModal.type==="avatar") setAvatarPreview(cropModal.url);
-                setCropModal(null);
-              }}>✅ {t("profile.save","Usar esta foto")}</button>
-              <button className="pb pb-ghost" onClick={()=>setCropModal(null)}>{t("profile.cancel","Cancelar")}</button>
+      {/* Stats */}
+      <div style={{display:'flex',borderTop:'1px solid var(--border,#e0e6f5)',borderBottom:'1px solid var(--border,#e0e6f5)',marginBottom:20}}>
+        {[
+          { label: 'Publicacoes', val: posts.length },
+          { label: t('profile.friends'), val: profile.stats?.friends || 0 },
+          { label: t('nav.prayers'), val: profile.stats?.prayers || 0 },
+        ].map(s => (
+          <div key={s.label} style={{flex:1,textAlign:'center',padding:'14px 0',cursor:'pointer'}}>
+            <div style={{fontSize:'1.2rem',fontWeight:700,color:'var(--fb,#4a80d4)'}}>{s.val}</div>
+            <div style={{fontSize:'0.68rem',color:'var(--muted,#7b83a6)',textTransform:'uppercase',letterSpacing:'0.06em',marginTop:2}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Posts Grid */}
+      <div style={{padding:'0 16px'}}>
+        <h3 style={{color:'var(--muted,#7b83a6)',fontSize:'0.72rem',fontWeight:700,marginBottom:14,textTransform:'uppercase',letterSpacing:'0.1em'}}>
+          Publicacoes
+        </h3>
+        {posts.length === 0 ? (
+          <p style={{color:'var(--muted,#7b83a6)',textAlign:'center',padding:32,fontSize:'0.9rem'}}>
+            Nenhuma publicacao ainda.
+          </p>
+        ) : (
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:3}}>
+            {posts.filter(p => p.media_url).map(post => (
+              <div key={post.id} style={{aspectRatio:'1',borderRadius:4,overflow:'hidden',background:'var(--bg2,#eef1fb)',cursor:'pointer'}}>
+                <img src={post.media_url} alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+              </div>
+            ))}
+            {posts.filter(p => !p.media_url).map(post => (
+              <div key={post.id} style={{background:'var(--card,#ffffff)',borderRadius:10,padding:12,border:'1px solid var(--border,#e0e6f5)',gridColumn:'span 3',marginBottom:8}}>
+                <p style={{color:'var(--text,#1e2240)',fontSize:'0.88rem',lineHeight:1.6}}>{post.content}</p>
+                <p style={{color:'var(--muted,#7b83a6)',fontSize:'0.7rem',marginTop:6}}>{new Date(post.created_at).toLocaleDateString('pt-PT')}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Report Modal */}
+      {reportOpen && (
+        <ReportModal
+          type="user"
+          targetId={targetId}
+          targetName={profile?.full_name}
+          onClose={() => setReportOpen(false)}
+        />
+      )}
+
+      {/* DM Modal (Instagram-style) */}
+      {dmOpen && (
+        <div style={{position:'fixed',inset:0,zIndex:500,background:'rgba(0,0,0,0.5)',display:'flex',alignItems:'flex-end',justifyContent:'center',padding:'0 0 0 0'}} onClick={() => setDmOpen(false)}>
+          <div style={{background:'white',borderRadius:'20px 20px 0 0',width:'100%',maxWidth:500,padding:24,boxShadow:'0 -8px 32px rgba(0,0,0,0.15)'}} onClick={e => e.stopPropagation()}>
+            {/* Handle */}
+            <div style={{width:40,height:4,background:'#dde3f0',borderRadius:2,margin:'0 auto 20px'}}/>
+            <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:20}}>
+              <div style={{width:40,height:40,borderRadius:'50%',background:'linear-gradient(135deg,#3568b8,#4a80d4)',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontSize:'1rem',flexShrink:0}}>
+                {(profile.full_name||'?').charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <p style={{fontWeight:600,color:'#1e2240',fontSize:'0.9rem',margin:0}}>{profile.full_name}</p>
+                <p style={{color:'#7b83a6',fontSize:'0.75rem',margin:0}}>Enviar mensagem privada</p>
+              </div>
             </div>
+            {dmSent ? (
+              <div style={{textAlign:'center',padding:20}}>
+                <p style={{fontSize:'1.5rem',marginBottom:8}}>✅</p>
+                <p style={{color:'#1e2240',fontWeight:600}}>Mensagem enviada!</p>
+              </div>
+            ) : (
+              <>
+                <textarea
+                  value={dmText}
+                  onChange={e => setDmText(e.target.value)}
+                  placeholder={`Escreva uma mensagem para ${profile.full_name}...`}
+                  rows={4}
+                  autoFocus
+                  style={{width:'100%',background:'#f5f7ff',border:'1px solid #e0e6f5',borderRadius:12,padding:'12px 14px',color:'#1e2240',fontSize:'0.9rem',resize:'none',outline:'none',marginBottom:14,fontFamily:'inherit'}}
+                />
+                <button onClick={sendDM} disabled={!dmText.trim()} style={{width:'100%',padding:13,borderRadius:12,background:'linear-gradient(135deg,#3568b8,#4a80d4)',border:'none',color:'white',fontWeight:700,fontSize:'0.95rem',cursor:'pointer',opacity:dmText.trim()?1:0.6}}>
+                  Enviar Mensagem
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
 
-      {/* LIGHTBOX */}
-      {lightbox && (
-        <div className="modal-bg" onClick={()=>setLightbox(null)}>
-          <img src={lightbox} alt="profile" style={{maxWidth:"88vw",maxHeight:"88vh",borderRadius:20,
-            boxShadow:"0 0 0 2px rgba(245,158,11,.3),0 32px 64px rgba(0,0,0,.8)"}}/>
+      {/* Photo Effects Modal */}
+      {effectsOpen && effectsPreviewUrl && (
+        <div
+          style={{position:'fixed',inset:0,zIndex:600,background:'rgba(0,0,0,0.7)',display:'flex',alignItems:'center',justifyContent:'center',padding:16}}
+          onClick={handleEffectsCancel}
+        >
+          <div
+            style={{background:'white',borderRadius:16,width:'100%',maxWidth:420,overflow:'hidden',boxShadow:'0 12px 48px rgba(0,0,0,0.35)'}}
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div style={{padding:'16px 20px',borderBottom:'1px solid #e0e6f5',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+              <span style={{fontWeight:700,color:'#1e2240',fontSize:'0.95rem'}}>Efeitos de foto</span>
+              <button onClick={handleEffectsCancel} style={{background:'none',border:'none',cursor:'pointer',color:'#7b83a6',fontSize:'1.2rem',lineHeight:1,padding:0}}>✕</button>
+            </div>
+
+            {/* Big preview */}
+            <div style={{display:'flex',alignItems:'center',justifyContent:'center',background:'#000',padding:8}}>
+              <img
+                src={effectsPreviewUrl}
+                alt="Preview"
+                style={{
+                  width:300,
+                  height:300,
+                  objectFit:'cover',
+                  borderRadius:8,
+                  filter: EFFECTS.find(e => e.id === selectedEffect)?.filter || 'none',
+                  transition:'filter 0.2s ease',
+                }}
+              />
+            </div>
+
+            {/* Effects grid */}
+            <div style={{padding:'12px 16px'}}>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8}}>
+                {EFFECTS.map(effect => (
+                  <div
+                    key={effect.id}
+                    onClick={() => setSelectedEffect(effect.id)}
+                    style={{
+                      cursor:'pointer',
+                      display:'flex',
+                      flexDirection:'column',
+                      alignItems:'center',
+                      gap:4,
+                      padding:4,
+                      borderRadius:10,
+                      border: selectedEffect === effect.id ? '2px solid #4a80d4' : '2px solid transparent',
+                      background: selectedEffect === effect.id ? '#edf2fc' : 'transparent',
+                      transition:'border-color 0.15s, background 0.15s',
+                    }}
+                  >
+                    <div style={{width:80,height:80,borderRadius:8,overflow:'hidden',flexShrink:0}}>
+                      <img
+                        src={effectsPreviewUrl}
+                        alt={effect.label}
+                        style={{
+                          width:'100%',
+                          height:'100%',
+                          objectFit:'cover',
+                          filter: effect.filter,
+                          display:'block',
+                        }}
+                      />
+                    </div>
+                    <span style={{
+                      fontSize:'0.68rem',
+                      fontWeight: selectedEffect === effect.id ? 700 : 500,
+                      color: selectedEffect === effect.id ? '#4a80d4' : '#7b83a6',
+                      textAlign:'center',
+                      lineHeight:1.2,
+                    }}>
+                      {effect.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div style={{padding:'12px 16px 20px',display:'flex',gap:10}}>
+              <button
+                onClick={handleEffectsCancel}
+                disabled={applyingEffect}
+                style={{flex:1,padding:'11px',borderRadius:10,background:'#f0f2f8',border:'none',color:'#3d4466',fontWeight:600,fontSize:'0.9rem',cursor:'pointer'}}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleEffectsApply}
+                disabled={applyingEffect}
+                style={{
+                  flex:2,
+                  padding:'11px',
+                  borderRadius:10,
+                  background: applyingEffect ? '#a0b8e8' : 'linear-gradient(135deg,#3568b8,#4a80d4)',
+                  border:'none',
+                  color:'white',
+                  fontWeight:700,
+                  fontSize:'0.9rem',
+                  cursor: applyingEffect ? 'not-allowed' : 'pointer',
+                  display:'flex',
+                  alignItems:'center',
+                  justifyContent:'center',
+                  gap:8,
+                }}
+              >
+                {applyingEffect ? (
+                  <>
+                    <span style={{
+                      width:14,height:14,
+                      border:'2px solid rgba(255,255,255,0.4)',
+                      borderTopColor:'white',
+                      borderRadius:'50%',
+                      display:'inline-block',
+                      animation:'spin 0.8s linear infinite',
+                    }}/>
+                    A aplicar...
+                  </>
+                ) : 'Aplicar'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

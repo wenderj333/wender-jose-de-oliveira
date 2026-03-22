@@ -6,8 +6,9 @@ import { useAuth } from '../context/AuthContext';
 // =============================================
 // CLOUDINARY CONFIG
 // =============================================
-const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'SEU_CLOUD_NAME';
-const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'SEU_UPLOAD_PRESET';
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'degxiuf43';
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'sigo_com_fe';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 async function uploadToCloudinary(file) {
   const formData = new FormData();
@@ -26,42 +27,7 @@ async function uploadToCloudinary(file) {
 // =============================================
 // DEMO POSTS
 // =============================================
-const DEMO_POSTS = [
-  {
-    id: 1, type: 'testemunho',
-    authorInitials: 'MC', authorName: 'Maria Clara',
-    church: 'Igreja Batista Central', time: 'Há 2 horas',
-    content: 'Glória a Deus! Depois de 3 anos desempregada, o Senhor abriu as portas e fui aprovada no concurso público. Nunca desistam de orar, irmãos! Deus é fiel.',
-    amemCount: 47, commentCount: 12, liked: false,
-    mediaUrl: null, mediaType: null, musicUrl: null,
-  },
-  {
-    id: 2, type: 'louvor',
-    authorInitials: 'PR', authorName: 'Paulo Ricardo',
-    church: 'Comunidade Graça e Paz', time: 'Há 4 horas',
-    content: 'Novo louvor do ministério de adoração da nossa igreja. Que o Espírito Santo toque cada coração!',
-    amemCount: 31, commentCount: 8, liked: false,
-    mediaUrl: 'https://images.unsplash.com/photo-1478147427282-58a87a433968?w=600&q=80',
-    mediaType: 'foto', musicUrl: null,
-  },
-  {
-    id: 3, type: 'versiculo',
-    authorInitials: 'DF', authorName: 'Daniela Ferreira',
-    church: 'Assembleia de Deus', time: 'Há 10 horas',
-    content: 'Porque eu bem sei os pensamentos que penso de vós, diz o Senhor; pensamentos de paz e não de mal, para vos dar o fim que esperais.',
-    reference: 'Jeremias 29:11',
-    amemCount: 112, commentCount: 5, liked: false,
-    mediaUrl: null, mediaType: null, musicUrl: null,
-  },
-  {
-    id: 4, type: 'reflexao',
-    authorInitials: 'JL', authorName: 'Pastor João Lucas',
-    church: 'Igreja Presbiteriana do Centro', time: 'Há 8 horas',
-    content: 'Muitas vezes queremos que Deus mude as circunstâncias, mas Ele quer mudar o nosso coração primeiro. Confie no processo de Deus para a sua vida.',
-    amemCount: 65, commentCount: 18, liked: false,
-    mediaUrl: null, mediaType: null, musicUrl: null,
-  },
-];
+// Demo posts removidos — Mural carrega da API
 
 // =============================================
 // CATEGORY CONFIG
@@ -322,12 +288,22 @@ function PostCard({ post, onLike, onDelete }) {
           <MessageCircle size={18} />
           {post.commentCount + comments.length}
         </button>
-        <button style={{
-          display: 'flex', alignItems: 'center', gap: '6px',
-          background: 'none', border: 'none', cursor: 'pointer',
-          color: '#888', fontSize: '13px', fontWeight: '600',
-          padding: '6px 10px', borderRadius: '8px', marginLeft: 'auto',
-        }}>
+        <button
+          onClick={() => {
+            const url = window.location.origin + '/mural';
+            const text = post.content ? post.content.slice(0, 100) + '...' : 'Partilha da fé 🙏';
+            if (navigator.share) {
+              navigator.share({ title: 'Sigo com Fé', text, url }).catch(() => {});
+            } else {
+              navigator.clipboard.writeText(url).then(() => alert('Link copiado! 📋')).catch(() => alert('Link: ' + url));
+            }
+          }}
+          style={{
+            display: 'flex', alignItems: 'center', gap: '6px',
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: '#888', fontSize: '13px', fontWeight: '600',
+            padding: '6px 10px', borderRadius: '8px', marginLeft: 'auto',
+          }}>
           <Share2 size={18} />
         </button>
       </div>
@@ -373,7 +349,8 @@ export default function Mural() {
   const { user, token } = useAuth();
   const [activeFilter, setActiveFilter] = useState('todas');
   const [showForm, setShowForm] = useState(false);
-  const [posts, setPosts] = useState(DEMO_POSTS);
+  const [posts, setPosts] = useState([]);
+  const [loadingPosts, setLoadingPosts] = useState(true);
 
   // Form state
   const [postText, setPostText] = useState('');
@@ -383,6 +360,10 @@ export default function Mural() {
   const [mediaType, setMediaType] = useState(null);
   const [musicFile, setMusicFile] = useState(null);
   const [musicName, setMusicName] = useState(null);
+  const [showMusicPicker, setShowMusicPicker] = useState(false);
+  const [libraryTracks, setLibraryTracks] = useState([]);
+  const [selectedTrack, setSelectedTrack] = useState(null); // { title, artist, file_url }
+  const [loadingTracks, setLoadingTracks] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
 
@@ -396,6 +377,7 @@ export default function Mural() {
     { key: 'louvor', label: '🎵 Louvores' },
     { key: 'versiculo', label: '✨ Versículos' },
     { key: 'reflexao', label: '📖 Reflexões' },
+    { key: 'foto', label: '📸 Fotos & Vídeos' },
   ];
 
   const CATEGORIES = [
@@ -408,7 +390,9 @@ export default function Mural() {
 
   const filteredPosts = activeFilter === 'todas'
     ? posts
-    : posts.filter(p => p.type === activeFilter);
+    : activeFilter === 'foto'
+      ? posts.filter(p => p.mediaUrl && (p.type === 'foto' || p.mediaType === 'video' || p.mediaUrl))
+      : posts.filter(p => p.type === activeFilter);
 
   const handleMediaSelect = (e, type) => {
     const file = e.target.files[0];
@@ -417,6 +401,52 @@ export default function Mural() {
     setMediaType(type);
     setMediaPreview(URL.createObjectURL(file));
   };
+
+  // Função para mapear post do backend para o formato do frontend
+  const mapPost = (p) => ({
+    id: p.id,
+    type: p.category || p.type || 'testemunho',
+    authorInitials: (p.author_name || p.authorName || '?').slice(0, 2).toUpperCase(),
+    authorName: p.author_name || p.authorName || 'Membro',
+    authorAvatar: p.author_avatar || p.authorAvatar || null,
+    authorId: p.author_id || p.authorId || null,
+    church: p.church_name || 'Sigo com Fé',
+    time: p.created_at ? new Date(p.created_at).toLocaleDateString() : 'Agora',
+    content: p.content || '',
+    amemCount: p.likes_count || p.amemCount || 0,
+    commentCount: p.comment_count || p.commentCount || 0,
+    liked: p.liked || false,
+    mediaUrl: p.media_url || p.mediaUrl || null,
+    mediaType: p.media_type || p.mediaType || null,
+    musicUrl: p.audio_url || p.musicUrl || null,
+    verseReference: p.verse_reference || p.verseReference || null,
+    campaignLink: p.campaign_link || null,
+  });
+
+  // Carregar posts da API
+  useEffect(() => {
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    fetch(`${API_BASE}/api/feed`, { headers })
+      .then(r => r.ok ? r.json() : { posts: [] })
+      .then(data => {
+        const fetched = (data.posts || []).map(mapPost);
+        setPosts(fetched);
+      })
+      .catch(() => setPosts([]))
+      .finally(() => setLoadingPosts(false));
+  }, [token]);
+
+  // Carregar biblioteca quando o picker abrir
+  useEffect(() => {
+    if (!showMusicPicker) return;
+    setLoadingTracks(true);
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    fetch(`${API_BASE}/api/music`, { headers })
+      .then(r => r.json())
+      .then(d => setLibraryTracks(d.songs || d.tracks || []))
+      .catch(() => setLibraryTracks([]))
+      .finally(() => setLoadingTracks(false));
+  }, [showMusicPicker]);
 
   const handleMusicSelect = (e) => {
     const file = e.target.files[0];
@@ -458,12 +488,38 @@ export default function Mural() {
         musicUrl = await uploadToCloudinary(musicFile);
       }
 
-      const newPost = {
+      const finalMusicUrl = selectedTrack?.file_url || musicUrl;
+
+      // Salvar na API
+      const fd = new FormData();
+      fd.append('content', postText || '📸');
+      fd.append('category', postCategory);
+      fd.append('visibility', 'public');
+      if (mediaUrl) fd.append('media_url', mediaUrl);
+      if (mediaType) fd.append('media_type', mediaType);
+      if (finalMusicUrl) fd.append('audio_url', finalMusicUrl);
+
+      let savedPost = null;
+      if (token) {
+        try {
+          const apiRes = await fetch(`${API_BASE}/api/feed`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+            body: fd,
+          });
+          if (apiRes.ok) {
+            const apiData = await apiRes.json();
+            savedPost = apiData.post ? mapPost(apiData.post) : null;
+          }
+        } catch {}
+      }
+
+      const newPost = savedPost || {
         id: Date.now(),
         type: postCategory,
         authorInitials: user ? user.full_name?.slice(0, 2).toUpperCase() : 'EU',
         authorName: user ? user.full_name : 'Você',
-        church: user?.church || 'Sua Igreja',
+        church: 'Sigo com Fé',
         time: 'Agora',
         content: postText,
         amemCount: 0,
@@ -471,7 +527,7 @@ export default function Mural() {
         liked: false,
         mediaUrl,
         mediaType,
-        musicUrl,
+        musicUrl: finalMusicUrl,
       };
 
       setPosts([newPost, ...posts]);
@@ -479,6 +535,8 @@ export default function Mural() {
       setPostCategory('testemunho');
       clearMedia();
       clearMusic();
+      setSelectedTrack(null);
+      setShowMusicPicker(false);
       setShowForm(false);
     } catch (err) {
       setUploadError('Erro no upload. Verifica a tua ligação e tenta novamente.');
@@ -488,17 +546,35 @@ export default function Mural() {
     }
   };
 
-  const handleLike = (postId) => {
+  const handleLike = async (postId) => {
+    // Atualizar UI imediatamente (optimistic)
     setPosts(posts.map(p =>
       p.id === postId
         ? { ...p, liked: !p.liked, amemCount: p.liked ? p.amemCount - 1 : p.amemCount + 1 }
         : p
     ));
+    // Sincronizar com API
+    if (token) {
+      try {
+        await fetch(`${API_BASE}/api/feed/${postId}/like`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch {}
+    }
   };
 
-  const handleDelete = (postId) => {
+  const handleDelete = async (postId) => {
     if (window.confirm('Tens a certeza que queres apagar esta publicação?')) {
       setPosts(posts.filter(p => p.id !== postId));
+      if (token) {
+        try {
+          await fetch(`${API_BASE}/api/feed/${postId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        } catch {}
+      }
     }
   };
 
@@ -647,6 +723,27 @@ export default function Mural() {
             </button>
           </div>
 
+          {/* Botão Música da Biblioteca — só quando há foto/vídeo */}
+          {mediaFile && (
+            <div style={{ marginTop: 8, marginBottom: 14 }}>
+              {selectedTrack ? (
+                <div style={{ display:'flex', alignItems:'center', gap:8, background:'#f0f4ff', borderRadius:8, padding:'8px 12px' }}>
+                  <span>🎵</span>
+                  <span style={{ flex:1, fontSize:13, color:'#333' }}>{selectedTrack.title} — {selectedTrack.artist}</span>
+                  <button onClick={() => setSelectedTrack(null)} style={{ background:'none', border:'none', cursor:'pointer', color:'#999' }}>✕</button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowMusicPicker(true)}
+                  style={{ width:'100%', padding:'8px', borderRadius:8, border:'1px dashed #a78bfa', background:'#faf5ff', color:'#7c3aed', fontSize:13, cursor:'pointer' }}
+                >
+                  🎵 Adicionar música de fundo
+                </button>
+              )}
+            </div>
+          )}
+
           {/* Erro */}
           {uploadError && (
             <div style={{
@@ -720,6 +817,43 @@ export default function Mural() {
           <BookOpen size={40} style={{ opacity: 0.3, marginBottom: '12px' }} />
           <p style={{ margin: 0, fontSize: '15px' }}>Nenhuma publicação encontrada.</p>
           <p style={{ margin: '4px 0 0', fontSize: '13px' }}>Sê o primeiro a partilhar!</p>
+        </div>
+      )}
+
+      {/* Music Picker Modal */}
+      {showMusicPicker && (
+        <div style={{ position:'fixed', top:0, left:0, width:'100%', height:'100%', background:'rgba(0,0,0,0.5)', zIndex:1000, display:'flex', alignItems:'flex-end' }}
+          onClick={e => { if (e.target === e.currentTarget) setShowMusicPicker(false); }}
+        >
+          <div style={{ background:'white', borderRadius:'16px 16px 0 0', padding:16, maxHeight:'70vh', overflowY:'auto', width:'100%' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:12 }}>
+              <h3 style={{ margin:0, fontSize:16, color:'#1a1a2e' }}>🎵 Biblioteca de Músicas</h3>
+              <button onClick={() => setShowMusicPicker(false)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:20, color:'#888' }}>❌</button>
+            </div>
+            {loadingTracks ? (
+              <p style={{ textAlign:'center', color:'#888', padding:20 }}>A carregar...</p>
+            ) : libraryTracks.length === 0 ? (
+              <p style={{ textAlign:'center', color:'#888', padding:20 }}>Nenhuma música na biblioteca.</p>
+            ) : (
+              libraryTracks.map(track => (
+                <div
+                  key={track.id}
+                  onClick={() => { setSelectedTrack(track); setShowMusicPicker(false); }}
+                  style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 0', borderBottom:'1px solid #f0f0f0', cursor:'pointer' }}
+                >
+                  {track.cover_url ? (
+                    <img src={track.cover_url} alt={track.title} style={{ width:44, height:44, borderRadius:8, objectFit:'cover', background:'#f0f0f0' }} />
+                  ) : (
+                    <div style={{ width:44, height:44, borderRadius:8, background:'#f0f0f0', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>🎵</div>
+                  )}
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontWeight:600, fontSize:14, color:'#1a1a2e' }}>{track.title}</div>
+                    <div style={{ fontSize:12, color:'#888' }}>{track.artist}</div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       )}
 
