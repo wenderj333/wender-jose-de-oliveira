@@ -288,22 +288,19 @@ function PostCard({ post, onLike, onDelete }) {
           <MessageCircle size={18} />
           {post.commentCount + comments.length}
         </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            const url = window.location.origin + '/mural';
-            const text = (post.content ? post.content.slice(0, 100) : 'Partilha da fe') + ' | Sigo com Fe';
-            window.location.href = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + url);
-          }}
+        
+          href={"https://wa.me/?text=" + encodeURIComponent((post.content ? post.content.slice(0, 100) : 'Partilha da fe') + ' | Sigo com Fe ' + window.location.origin + '/mural')}
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             display: 'flex', alignItems: 'center', gap: '6px',
             background: 'none', border: 'none', cursor: 'pointer',
             color: '#888', fontSize: '13px', fontWeight: '600',
             padding: '6px 10px', borderRadius: '8px', marginLeft: 'auto',
+            textDecoration: 'none',
           }}>
           <Share2 size={18} />
-        </button>
-      </div>
+        </a>
 
       {/* Comments */}
       {showComments && (
