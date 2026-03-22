@@ -290,14 +290,26 @@ function PostCard({ post, onLike, onDelete }) {
         </button>
         <button
           onClick={(e) => {
+            e.stopPropagation();
             const url = window.location.origin + '/mural';
             const text = (post.content ? post.content.slice(0, 100) : 'Partilha da fe') + ' | Sigo com Fe';
+            const existing = document.getElementById('share-menu');
+            if (existing) existing.remove();
             const m = document.createElement('div');
-            m.style.cssText = 'position:fixed;z-index:9999;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.2);padding:8px;min-width:200px;left:' + e.clientX + 'px;top:' + (e.clientY - 120) + 'px';
-            const opts = [['Copiar link', () => { navigator.clipboard.writeText(url); alert('Link copiado!'); }],['WhatsApp', () => window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + url))],['Telegram', () => window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text))]];
-            opts.forEach(([label, action]) => { const b = document.createElement('button'); b.textContent = label; b.style.cssText = 'display:block;width:100%;text-align:left;padding:8px 12px;border:none;background:none;cursor:pointer;font-size:13px;border-radius:8px'; b.onmouseover = () => b.style.background = '#f0f0f0'; b.onmouseout = () => b.style.background = 'none'; b.onclick = () => { action(); document.body.removeChild(m); }; m.appendChild(b); });
+            m.id = 'share-menu';
+            m.style.cssText = 'position:fixed;z-index:9999;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.2);padding:8px;min-width:200px;left:' + e.clientX + 'px;top:' + (e.clientY - 130) + 'px';
+            const opts = [['📋 Copiar link', () => { navigator.clipboard.writeText(url).then(()=>alert('Link copiado!')); }],['💬 WhatsApp', () => window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + url))],['✈️ Telegram', () => window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text))]];
+            opts.forEach(([label, action]) => {
+              const b = document.createElement('button');
+              b.textContent = label;
+              b.style.cssText = 'display:block;width:100%;text-align:left;padding:10px 14px;border:none;background:none;cursor:pointer;font-size:14px;border-radius:8px';
+              b.onmouseover = () => b.style.background = '#f0f0f0';
+              b.onmouseout = () => b.style.background = 'none';
+              b.addEventListener('click', (ev) => { ev.stopPropagation(); action(); m.remove(); });
+              m.appendChild(b);
+            });
             document.body.appendChild(m);
-            setTimeout(() => document.addEventListener('click', () => { if(document.body.contains(m)) document.body.removeChild(m); }, { once: true }), 100);
+            setTimeout(() => document.addEventListener('click', () => m.remove(), { once: true }), 200);
           }}
           style={{
             display: 'flex', alignItems: 'center', gap: '6px',
