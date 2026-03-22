@@ -312,14 +312,14 @@ export default function App() {
             <div className="widget-item" style={{display:'flex',gap:9,padding:'9px 0',borderBottom:'1px solid var(--border)'}}>
               <div className="w-avatar" style={{width:32,height:32,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,var(--fb),#3AAAD4)'}}>🙏</div>
               <div className="w-content">
-                <p className="w-text" style={{fontSize:'0.78rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb2)'}}>Ana Costa</b> pede saúde</p>
+                <p className="w-text" style={{fontSize:'0.78rem',color:'var(--text)',lineHeight:1.4}}><b >Ana Costa</b> pede saúde</p>
                 <button className="w-btn" style={{marginTop:5,padding:'4px 11px',borderRadius:10,fontSize:'0.68rem',fontWeight:600,border:'1px solid rgba(201,168,76,0.3)',background:'rgba(201,168,76,0.07)',color:'var(--gold)',cursor:'pointer'}}>{t('mural.pray', 'Orar')}</button>
               </div>
             </div>
              <div className="widget-item" style={{display:'flex',gap:9,padding:'9px 0',borderBottom:'none'}}>
               <div className="w-avatar" style={{width:32,height:32,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,var(--gold),#8B6914)'}}>🕊️</div>
               <div className="w-content">
-                <p className="w-text" style={{fontSize:'0.78rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb2)'}}>Carlos</b> pede paz</p>
+                <p className="w-text" style={{fontSize:'0.78rem',color:'var(--text)',lineHeight:1.4}}><b >Carlos</b> pede paz</p>
                 <button className="w-btn" style={{marginTop:5,padding:'4px 11px',borderRadius:10,fontSize:'0.68rem',fontWeight:600,border:'1px solid rgba(201,168,76,0.3)',background:'rgba(201,168,76,0.07)',color:'var(--gold)',cursor:'pointer'}}>{t('mural.pray', 'Orar')}</button>
               </div>
             </div>
