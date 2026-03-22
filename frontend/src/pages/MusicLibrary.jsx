@@ -432,6 +432,23 @@ function SongCard({ song, isPlaying, onPlay, onLike, token, user, t }) {
             {isPlaying ? t('music.pause') : t('music.play')}
           </button>
         )}
+          <button onClick={(e) => {
+            e.stopPropagation();
+            const url = window.location.origin + '/musica?id=' + song.id;
+            const text = song.title + ' - ' + (song.artist || song.user_name) + ' | Sigo com Fe';
+            if (navigator.share) {
+              navigator.share({ title: song.title, text: text, url: url });
+            } else {
+              const opts = [['Copiar link', () => { navigator.clipboard.writeText(url); alert('Link copiado!'); }],['WhatsApp', () => window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + url))],['Telegram', () => window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text))]];
+              const m = document.createElement('div');
+              m.style.cssText = 'position:fixed;z-index:9999;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.2);padding:8px;min-width:180px;left:' + e.clientX + 'px;top:' + e.clientY + 'px';
+              opts.forEach(([label, action]) => { const b = document.createElement('button'); b.textContent = label; b.style.cssText = 'display:block;width:100%;text-align:left;padding:8px 12px;border:none;background:none;cursor:pointer;font-size:13px;border-radius:8px'; b.onclick = () => { action(); document.body.removeChild(m); }; m.appendChild(b); });
+              document.body.appendChild(m);
+              setTimeout(() => document.addEventListener('click', () => { if(document.body.contains(m)) document.body.removeChild(m); }, { once: true }), 100);
+            }
+          }} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'none', border: '1px solid #e2e8f0', borderRadius: 8, padding: '6px 8px', cursor: 'pointer', color: '#888', fontSize: 12 }}>
+            🔗
+          </button>
       </div>
     </div>
   );
