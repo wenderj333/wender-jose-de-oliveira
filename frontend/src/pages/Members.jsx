@@ -257,14 +257,22 @@ export default function Members() {
                   </span>
                 </div>
               </div>
-
-              {/* Message button */}
-              <button onClick={() => openChat(member)} style={{
-                padding: '0.4rem 0.8rem', borderRadius: 20, border: 'none',
-                background: '#4caf50', color: '#fff', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', fontWeight: 600,
-              }}>
-                <MessageCircle size={14} /> Chat
+              <div style={{ display: "flex", gap: 6 }}>
+                {member.id !== user?.id && (
+                  <button onClick={(e) => sendFriendRequest(e, member.id)} style={{
+                    padding: "0.4rem 0.8rem", borderRadius: 20, border: "none",
+                    background: "#1a0a3e", color: "#fff", cursor: "pointer",
+                    display: "flex", alignItems: "center", gap: 4, fontSize: "0.8rem", fontWeight: 600,
+                  }}>+ Amigo</button>
+                )}
+                <button onClick={(e) => { e.stopPropagation(); openChat(member); }} style={{
+                  padding: "0.4rem 0.8rem", borderRadius: 20, border: "none",
+                  background: "#4caf50", color: "#fff", cursor: "pointer",
+                  display: "flex", alignItems: "center", gap: 4, fontSize: "0.8rem", fontWeight: 600,
+                }}>
+                  <MessageCircle size={14} /> Chat
+                </button>
+              </div>
               </button>
             </div>
           ))}
