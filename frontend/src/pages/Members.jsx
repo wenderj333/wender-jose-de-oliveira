@@ -65,6 +65,22 @@ export default function Members() {
     }
   }
 
+
+  async function sendFriendRequest(e, memberId) {
+    e.stopPropagation();
+    try {
+      const res = await fetch(`${API}/friends/request`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ addressee_id: memberId }),
+      });
+      const data = await res.json();
+      alert(data.message || data.error);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async function openChat(member) {
     setSelectedMember(member);
     setLoadingMsgs(true);
