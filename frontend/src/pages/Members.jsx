@@ -271,7 +271,6 @@ export default function Members() {
                   display: "flex", alignItems: "center", gap: 4, fontSize: "0.8rem", fontWeight: 600,
                 }}>
                   <MessageCircle size={14} /> Chat
-                </button>
               </button>
             </div>
           ))}
