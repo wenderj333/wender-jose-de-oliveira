@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "./context/AuthContext";
@@ -40,7 +40,7 @@ import "./styles/ModernTheme.css";
 
 export default function App() {
   const { t } = useTranslation();
-  const { user, logout, loading } = useAuth();
+  const { user, logout, loading, token } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -97,8 +97,9 @@ export default function App() {
 
         <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8}}>
           <LanguageSelector />
-          <button className="icon-btn" style={{background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer'}}>
+          <button className="icon-btn" onClick={() => navigate("/notificacoes")} style={{background:"rgba(255,255,255,0.2)",border:"none",borderRadius:"50%",width:34,height:34,display:"flex",alignItems:"center",justifyContent:"center",color:"white",cursor:"pointer",position:"relative"}}>
             <Bell size={17}/>
+            {unreadCount > 0 && <span style={{position:"absolute",top:-4,right:-4,background:"#e74c3c",color:"#fff",borderRadius:"50%",width:18,height:18,fontSize:11,fontWeight:"bold",display:"flex",alignItems:"center",justifyContent:"center",border:"2px solid white"}}>{unreadCount > 9 ? "9+" : unreadCount}</span>}
           </button>
           <Link to={`/perfil/${user.id}`} style={{background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',overflow:'hidden',textDecoration:'none'}}>
             {user.avatar_url ? (
@@ -329,3 +330,24 @@ export default function App() {
     </div>
   );
 }
+  const [unreadCount, setUnreadCount] = useState(0);
+  const prevCountRef = useRef(0);
+  useEffect(() => {
+    if (!token) return;
+    const fetchUnread = async () => {
+      try {
+        const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/notifications", { headers: { Authorization: `Bearer ${token}` } });
+        const data = await res.json();
+        const count = (data.notifications || []).filter(n => !n.read_at).length;
+        if (count > prevCountRef.current) {
+          try { const ctx = new (window.AudioContext || window.webkitAudioContext)(); const o = ctx.createOscillator(); const g = ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value = 880; g.gain.setValueAtTime(0.3, ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3); o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.3); } catch(e) {}
+        }
+        prevCountRef.current = count;
+        setUnreadCount(count);
+      } catch(e) {}
+    };
+    fetchUnread();
+    const iv = setInterval(fetchUnread, 30000);
+    return () => clearInterval(iv);
+  }, [token]);
+
