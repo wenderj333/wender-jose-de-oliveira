@@ -272,7 +272,6 @@ export default function Members() {
                 }}>
                   <MessageCircle size={14} /> Chat
                 </button>
-              </div>
               </button>
             </div>
           ))}
