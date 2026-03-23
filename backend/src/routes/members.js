@@ -1,4 +1,4 @@
-const express = require('express');
+﻿const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
@@ -11,8 +11,8 @@ function pastorOnly(req, res, next) {
   next();
 }
 
-// GET /api/members — list all members (pastor only)
-router.get('/', authenticate, pastorOnly, async (req, res) => {
+// GET /api/members â€” list all members (pastor only)
+router.get('/', authenticate, async (req, res) => {
   try {
     const members = await db.prepare(
       `SELECT id, email, full_name, display_name, avatar_url, role, is_active, last_seen_at, created_at
@@ -25,7 +25,7 @@ router.get('/', authenticate, pastorOnly, async (req, res) => {
   }
 });
 
-// GET /api/members/pastors — list all pastors for donations (authenticated users only)
+// GET /api/members/pastors â€” list all pastors for donations (authenticated users only)
 router.get('/pastors', authenticate, async (req, res) => {
   try {
     const pastors = await db.prepare(
@@ -42,7 +42,7 @@ router.get('/pastors', authenticate, async (req, res) => {
   }
 });
 
-// GET /api/members/messages/:userId — get direct messages with a user
+// GET /api/members/messages/:userId â€” get direct messages with a user
 router.get('/messages/:userId', authenticate, pastorOnly, async (req, res) => {
   try {
     const messages = await db.prepare(
@@ -57,12 +57,12 @@ router.get('/messages/:userId', authenticate, pastorOnly, async (req, res) => {
   }
 });
 
-// POST /api/members/messages — send direct message
+// POST /api/members/messages â€” send direct message
 router.post('/messages', authenticate, pastorOnly, async (req, res) => {
   try {
     const { receiverId, content } = req.body;
     if (!receiverId || !content?.trim()) {
-      return res.status(400).json({ error: 'receiverId e content são obrigatórios' });
+      return res.status(400).json({ error: 'receiverId e content sÃ£o obrigatÃ³rios' });
     }
     const msg = await db.prepare(
       `INSERT INTO direct_messages (sender_id, receiver_id, content)
@@ -76,3 +76,4 @@ router.post('/messages', authenticate, pastorOnly, async (req, res) => {
 });
 
 module.exports = router;
+
