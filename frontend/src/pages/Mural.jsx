@@ -315,8 +315,40 @@ function PostCard({ post, onLike, onDelete }) {
           <p style={{ color: '#333', fontSize: '14px', lineHeight: '1.65', margin: 0 }}>{post.content}</p>
         )}
 
-        {/* Música */}
-        {post.musicUrl && <MiniAudioPlayer src={post.musicUrl} />}
+        {/* Música — card especial para louvores, player simples para outros */}
+        {post.musicUrl && post.type === 'louvor' ? (
+          <div style={{
+            marginTop: '12px',
+            background: 'linear-gradient(135deg, #fdf4ff, #eff6ff)',
+            border: '1.5px solid rgba(168,85,247,0.25)',
+            borderRadius: '14px',
+            padding: '14px 16px',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
+              <div style={{ width: 48, height: 48, borderRadius: 12, background: 'linear-gradient(135deg, #a855f7, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>
+                🎵
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                {(() => {
+                  const match = (post.content || '').match(/🎵\s*(.+?)(?:\s*—\s*(.+))?$/);
+                  return (
+                    <>
+                      <div style={{ fontWeight: 700, fontSize: 14, color: '#1a1a2e', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {match ? match[1] : post.content}
+                      </div>
+                      {match && match[2] && (
+                        <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>{match[2]}</div>
+                      )}
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
+            <MiniAudioPlayer src={post.musicUrl} />
+          </div>
+        ) : post.musicUrl ? (
+          <MiniAudioPlayer src={post.musicUrl} />
+        ) : null}
       </div>
 
       {/* Actions */}
