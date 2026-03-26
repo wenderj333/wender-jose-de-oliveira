@@ -4,6 +4,12 @@ import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import ReportModal from '../components/ReportModal';
 
+// Add Cloudinary transformation to ensure 500x500 crop for avatars
+function cloudinaryTransform(url, transforms = 'w_500,h_500,c_fill,q_auto,f_auto') {
+  if (!url || !url.includes('cloudinary.com')) return url;
+  return url.replace('/upload/', `/upload/${transforms}/`);
+}
+
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
 
@@ -84,6 +90,9 @@ export default function Profile() {
 
   // Report modal
   const [reportOpen, setReportOpen] = useState(false);
+
+  // Lightbox modal for viewing photos full size
+  const [lightboxUrl, setLightboxUrl] = useState(null);
 
   // Photo effects modal
   const [effectsOpen, setEffectsOpen] = useState(false);
@@ -229,21 +238,33 @@ export default function Profile() {
     <div style={{maxWidth:680,margin:'0 auto',paddingBottom:40}}>
 
       {/* Cover */}
-      <div style={{
-        height:160,
-        background: profile.cover_url
-          ? `url(${profile.cover_url}) center/cover`
-          : 'linear-gradient(135deg,var(--fb2,#3568b8),var(--fb,#4a80d4))',
-        borderRadius:'0 0 16px 16px'
-      }}/>
+      <div
+        onClick={() => profile.cover_url && setLightboxUrl(profile.cover_url)}
+        style={{
+          height:160,
+          background: profile.cover_url
+            ? `url(${profile.cover_url}) center/cover`
+            : 'linear-gradient(135deg,var(--fb2,#3568b8),var(--fb,#4a80d4))',
+          borderRadius:'0 0 16px 16px',
+          cursor: profile.cover_url ? 'zoom-in' : 'default',
+          position:'relative',
+        }}
+      >
+        {profile.cover_url && (
+          <span style={{position:'absolute',bottom:8,right:10,fontSize:'0.65rem',background:'rgba(0,0,0,0.45)',color:'white',padding:'2px 7px',borderRadius:8,pointerEvents:'none'}}>🔍 Ver foto</span>
+        )}
+      </div>
 
       {/* Avatar + Name + Buttons */}
       <div style={{display:'flex',alignItems:'flex-end',gap:14,padding:'0 20px',marginTop:-44,marginBottom:16,flexWrap:'wrap'}}>
         {/* Avatar */}
         <div style={{position:'relative',flexShrink:0}}>
-          <div style={{width:82,height:82,borderRadius:'50%',border:'3px solid white',overflow:'hidden',background:'var(--bg,#f5f7ff)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'2rem',boxShadow:'0 2px 10px rgba(74,128,212,0.2)'}}>
+          <div
+            onClick={() => profile.avatar_url && setLightboxUrl(cloudinaryTransform(profile.avatar_url, 'w_800,h_800,c_fill,q_auto,f_auto'))}
+            style={{width:82,height:82,borderRadius:'50%',border:'3px solid white',overflow:'hidden',background:'var(--bg,#f5f7ff)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'2rem',boxShadow:'0 2px 10px rgba(74,128,212,0.2)',cursor:profile.avatar_url?'zoom-in':'default'}}
+          >
             {profile.avatar_url
-              ? <img src={profile.avatar_url} alt={profile.full_name} style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+              ? <img src={cloudinaryTransform(profile.avatar_url)} alt={profile.full_name} style={{width:'100%',height:'100%',objectFit:'cover'}}/>
               : <span>{(profile.full_name || '?').charAt(0).toUpperCase()}</span>
             }
           </div>
@@ -361,6 +382,26 @@ export default function Profile() {
           </div>
         )}
       </div>
+
+      {/* Lightbox Modal */}
+      {lightboxUrl && (
+        <div
+          onClick={() => setLightboxUrl(null)}
+          style={{position:'fixed',inset:0,zIndex:700,background:'rgba(0,0,0,0.88)',display:'flex',alignItems:'center',justifyContent:'center',padding:16}}
+        >
+          <div style={{position:'relative',maxWidth:'90vw',maxHeight:'90vh'}} onClick={e => e.stopPropagation()}>
+            <img
+              src={lightboxUrl}
+              alt="Foto"
+              style={{maxWidth:'100%',maxHeight:'85vh',objectFit:'contain',borderRadius:10,boxShadow:'0 8px 40px rgba(0,0,0,0.6)'}}
+            />
+            <button
+              onClick={() => setLightboxUrl(null)}
+              style={{position:'absolute',top:-14,right:-14,width:34,height:34,borderRadius:'50%',background:'white',border:'none',cursor:'pointer',fontSize:'1.1rem',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 2px 8px rgba(0,0,0,0.3)',lineHeight:1}}
+            >✕</button>
+          </div>
+        </div>
+      )}
 
       {/* Report Modal */}
       {reportOpen && (

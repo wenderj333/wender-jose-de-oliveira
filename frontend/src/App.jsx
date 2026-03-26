@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "./context/AuthContext";
+import { useWebSocket } from "./context/WebSocketContext";
 import {
   Home, User, MessageCircle, Heart, Globe, LogOut,
   Menu, X, Bell, Music, BookOpen, Users,
@@ -29,6 +30,8 @@ import Chat from "./pages/Chat";
 import Churches from "./pages/Churches";
 import ChurchProfile from "./pages/ChurchProfile";
 import PastorDashboard from "./pages/PastorDashboard";
+import Friends from "./pages/Friends";
+import Notifications from "./pages/Notifications";
 
 // Components
 import LanguageSelector from "./components/LanguageSwitcher";
@@ -44,8 +47,22 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
+  const wsCtx = useWebSocket();
+  const lastEvent = wsCtx?.lastEvent;
 
   useEffect(() => {
+    if (lastEvent?.type === 'direct_message' && lastEvent.senderId !== user?.id) {
+      if (!location.pathname.startsWith('/mensagens')) {
+        setUnreadMessages(prev => prev + 1);
+      }
+    }
+  }, [lastEvent]);
+
+  useEffect(() => {
+    if (location.pathname.startsWith('/mensagens')) {
+      setUnreadMessages(0);
+    }
     setMobileMenuOpen(false);
   }, [location]);
 
@@ -219,6 +236,7 @@ export default function App() {
                 </span>
               )}
             </Link>
+            <Link to="/amigos" className={isActive('/amigos')}><Users size={17}/> {t('nav.friends', 'Amigos')}</Link>
             <Link to="/membros" className={isActive('/membros')}><Users size={17}/> {t('nav.members')}</Link>
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/> {t('nav.groups')}</Link>
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/> {t('nav.music')}</Link>

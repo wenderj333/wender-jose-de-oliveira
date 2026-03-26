@@ -32,16 +32,26 @@ export default function BibleAI() {
     setInput('');
     setLoading(true);
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 90000); // 90s timeout
+
     try {
       const res = await fetch(`${API}/api/bible-ai/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, language: lang, context }),
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
       const data = await res.json();
       setMessages((prev) => [...prev, { role: 'ai', text: data.reply || t('bibleAI.error') }]);
-    } catch {
-      setMessages((prev) => [...prev, { role: 'ai', text: t('bibleAI.error') }]);
+    } catch (err) {
+      clearTimeout(timeoutId);
+      if (err.name === 'AbortError') {
+        setMessages((prev) => [...prev, { role: 'ai', text: '😅 O servidor demorou muito. Tenta novamente!' }]);
+      } else {
+        setMessages((prev) => [...prev, { role: 'ai', text: t('bibleAI.error') }]);
+      }
     } finally {
       setLoading(false);
     }
@@ -113,7 +123,7 @@ export default function BibleAI() {
         {messages.map((msg, i) => (
           <div key={i} style={styles.bubble(msg.role === 'user')}>{msg.text}</div>
         ))}
-        {loading && <div style={styles.loadingBubble}>💭 {t('bibleAI.thinking')}</div>}
+        {loading && <div style={styles.loadingBubble}>⏳ A IA está a acordar... pode demorar até 60 segundos na primeira vez</div>}
         <div ref={bottomRef} />
       </div>
 
