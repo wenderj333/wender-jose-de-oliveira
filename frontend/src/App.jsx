@@ -97,9 +97,9 @@ export default function App() {
 
         <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8}}>
           <LanguageSelector />
-          <button className="icon-btn" style={{background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer'}}>
+          <Link to="/notificacoes" style={{position:'relative',background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',textDecoration:'none'}}>
             <Bell size={17}/>
-          </button>
+          </Link>
           <Link to={`/perfil/${user.id}`} style={{background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',overflow:'hidden',textDecoration:'none'}}>
             {user.avatar_url ? (
               <img src={user.avatar_url} alt="Me" style={{width:'100%',height:'100%',objectFit:'cover'}} />
@@ -211,7 +211,14 @@ export default function App() {
             <p className="menu-title">Menu</p>
             <Link to="/" className={isActive('/')}><Home size={17}/> {t('nav.mural')}</Link>
             <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)}><User size={17}/> Meu Perfil</Link>
-            <Link to="/mensagens" className={location.pathname.startsWith('/mensagens') ? 'menu-link active' : 'menu-link'}><MessageCircle size={17}/> {t('nav.messages')}</Link>
+            <Link to="/mensagens" className={location.pathname.startsWith('/mensagens') ? 'menu-link active' : 'menu-link'} style={{position:'relative'}}>
+              <MessageCircle size={17}/> {t('nav.messages')}
+              {unreadMessages > 0 && (
+                <span style={{marginLeft:'auto',background:'#e74c3c',color:'white',borderRadius:'50%',minWidth:18,height:18,fontSize:'0.68rem',fontWeight:700,display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'0 4px',lineHeight:1}}>
+                  {unreadMessages > 99 ? '99+' : unreadMessages}
+                </span>
+              )}
+            </Link>
             <Link to="/membros" className={isActive('/membros')}><Users size={17}/> {t('nav.members')}</Link>
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/> {t('nav.groups')}</Link>
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/> {t('nav.music')}</Link>
@@ -249,6 +256,8 @@ export default function App() {
             <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
             <Route path="/mensagens" element={<Chat />} />
             <Route path="/mensagens/:userId" element={<Chat />} />
+            <Route path="/amigos" element={<Friends />} />
+            <Route path="/notificacoes" element={<Notifications />} />
             <Route path="/pedidos-ajuda" element={<HelpRequests />} />
             <Route path="/pastor-dashboard" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
             <Route path="/igrejas" element={<Churches />} />
