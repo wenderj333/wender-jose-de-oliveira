@@ -169,15 +169,62 @@ function AmenButton({ count, liked, onLike }) {
 // =============================================
 function PostCard({ post, onLike, onDelete }) {
   const cat = CATEGORY_COLORS[post.type] || CATEGORY_COLORS.reflexao;
+  const { token } = useAuth();
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const [loadingComments, setLoadingComments] = useState(false);
+  const [showLikers, setShowLikers] = useState(false);
+  const [likers, setLikers] = useState([]);
+  const [loadingLikers, setLoadingLikers] = useState(false);
 
-  const submitComment = (e) => {
+  const toggleComments = async () => {
+    const next = !showComments;
+    setShowComments(next);
+    if (next && comments.length === 0) {
+      setLoadingComments(true);
+      try {
+        const res = await fetch(`${API_BASE}/api/feed/${post.id}/comments`);
+        const data = await res.json();
+        setComments((data.comments || []).map(c => ({
+          id: c.id,
+          text: c.content,
+          author: c.author_name || 'Membro',
+          time: new Date(c.created_at).toLocaleDateString(),
+        })));
+      } catch (e) { console.error(e); }
+      finally { setLoadingComments(false); }
+    }
+  };
+
+  const openLikers = async () => {
+    setShowLikers(true);
+    if (likers.length > 0) return;
+    setLoadingLikers(true);
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch(`${API_BASE}/api/feed/${post.id}/likes`, { headers });
+      const data = await res.json();
+      setLikers(data.likes || []);
+    } catch (e) { console.error(e); }
+    finally { setLoadingLikers(false); }
+  };
+
+  const submitComment = async (e) => {
     e.preventDefault();
     if (!comment.trim()) return;
-    setComments([...comments, { id: Date.now(), text: comment, author: 'Você', time: 'Agora' }]);
+    const text = comment;
+    setComments(prev => [...prev, { id: Date.now(), text, author: 'Você', time: 'Agora' }]);
     setComment('');
+    if (token) {
+      try {
+        await fetch(`${API_BASE}/api/feed/${post.id}/comments`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: text }),
+        });
+      } catch (e) { console.error(e); }
+    }
   };
 
   return (
@@ -279,7 +326,7 @@ function PostCard({ post, onLike, onDelete }) {
         display: 'flex', gap: '8px', alignItems: 'center',
       }}>
         <AmenButton count={post.amemCount} liked={post.liked} onLike={() => onLike(post.id)} />
-        <button onClick={() => setShowComments(!showComments)} style={{
+        <button onClick={toggleComments} style={{
           display: 'flex', alignItems: 'center', gap: '6px',
           background: 'none', border: 'none', cursor: 'pointer',
           color: '#888', fontSize: '13px', fontWeight: '600',
@@ -287,6 +334,13 @@ function PostCard({ post, onLike, onDelete }) {
         }}>
           <MessageCircle size={18} />
           {post.commentCount + comments.length}
+        </button>
+        <button onClick={openLikers} style={{
+          display: 'flex', alignItems: 'center', gap: '4px',
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: '#aaa', fontSize: '12px', padding: '6px 8px', borderRadius: '8px',
+        }} title="Ver quem deu Amén">
+          👥 {post.amemCount}
         </button>
         
           href={"https://wa.me/?text=" + encodeURIComponent((post.content ? post.content.slice(0, 100) : 'Partilha da fe') + ' | Sigo com Fe ' + window.location.origin + '/mural')}
@@ -302,9 +356,39 @@ function PostCard({ post, onLike, onDelete }) {
           <Share2 size={18} />
         </a>
 
+      {/* Likers Modal */}
+      {showLikers && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'flex-end' }}
+          onClick={e => { if (e.target === e.currentTarget) setShowLikers(false); }}
+        >
+          <div style={{ background: 'white', borderRadius: '16px 16px 0 0', padding: 16, maxHeight: '60vh', overflowY: 'auto', width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <h3 style={{ margin: 0, fontSize: 16, color: '#1a1a2e' }}>🙏 Amén ({post.amemCount})</h3>
+              <button onClick={() => setShowLikers(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#888' }}>❌</button>
+            </div>
+            {loadingLikers ? (
+              <p style={{ textAlign: 'center', color: '#888', padding: 20 }}>A carregar...</p>
+            ) : likers.length === 0 ? (
+              <p style={{ textAlign: 'center', color: '#888', padding: 20 }}>Nenhum Amén ainda.</p>
+            ) : likers.map((u, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '1px solid #f0f0f0' }}>
+                {u.avatar_url
+                  ? <img src={u.avatar_url} alt="" style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover' }} />
+                  : <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#667eea,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 'bold', fontSize: 13 }}>
+                      {(u.full_name || '?').slice(0, 2).toUpperCase()}
+                    </div>
+                }
+                <span style={{ fontSize: 14, fontWeight: 500, color: '#1a1a2e' }}>{u.full_name || 'Membro'}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Comments */}
       {showComments && (
         <div style={{ padding: '0 16px 14px', borderTop: '1px solid #f0f0f0' }}>
+          {loadingComments && <p style={{ fontSize: 13, color: '#888', textAlign: 'center', padding: '8px 0' }}>A carregar comentários...</p>}
           {comments.map(c => (
             <div key={c.id} style={{ padding: '8px 0', borderBottom: '1px solid #f8f8f8', fontSize: '13px' }}>
               <span style={{ fontWeight: '600', color: '#333' }}>{c.author}</span>

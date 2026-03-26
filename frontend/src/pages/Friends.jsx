@@ -36,9 +36,11 @@ export default function Friends() {
   };
 
   useEffect(() => {
-    fetchFriends();
-    fetchRequests();
-  }, []);
+    if (token) {
+      fetchFriends();
+      fetchRequests();
+    }
+  }, [token]);
 
   const handleSearch = async () => {
     if (searchQuery.length < 2) return;

@@ -261,6 +261,23 @@ router.post('/:id/like', authenticate, async (req, res) => {
   }
 });
 
+// GET /api/feed/:id/likes — list who liked a post
+router.get('/:id/likes', async (req, res) => {
+  try {
+    const likes = await db.prepare(
+      `SELECT u.full_name, u.avatar_url
+       FROM post_likes pl
+       JOIN users u ON u.id = pl.user_id
+       WHERE pl.post_id = ?
+       ORDER BY pl.created_at DESC`
+    ).all(req.params.id);
+    res.json({ likes });
+  } catch (err) {
+    console.error('Erro ao buscar likes:', err);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
 // GET /api/feed/:id/liked — check if current user liked
 router.get('/:id/liked', authenticate, async (req, res) => {
   try {
