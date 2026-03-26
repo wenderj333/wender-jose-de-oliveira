@@ -10,6 +10,22 @@ const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 
+
+async function callOllama(systemPrompt, userMessage) {
+  const response = await fetch('http://127.0.0.1:11434/api/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'deepseek-r1:8b',
+      prompt: systemPrompt + '\n\nUser: ' + userMessage + '\nAssistant:',
+      stream: false,
+    }),
+  });
+  if (!response.ok) throw new Error('Ollama failed: ' + response.status);
+  const data = await response.json();
+  return data.response;
+}
+
 async function callGemini(systemPrompt, userMessage) {
   if (!GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not set');
 
