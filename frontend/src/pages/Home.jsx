@@ -305,7 +305,7 @@ export default function Home() {
                 }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
                   <img
-                    src={testimony.author_avatar || `https://i.pravatar.cc/100?u=${testimony.author_name}`}
+                    src={testimony.author_avatar || testimony.avatar_url || '/avatar1.jpg'}
                     alt=""
                     style={{ width: 40, height: 40, borderRadius: '50%', marginRight: '0.75rem', objectFit: 'cover', background: '#daa520' }}
                   />
