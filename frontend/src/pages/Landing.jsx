@@ -89,8 +89,8 @@ export default function Landing() {
 
           <div style={{ position: 'relative', width: 380, height: 430 }}>
             <div onClick={() => bibleInputRef.current?.click()} style={{ position: 'absolute', left: 60, top: 20, width: 220, height: 300, borderRadius: 16, background: biblePhoto ? 'transparent' : 'linear-gradient(135deg, #e8f0fe, #c8d8f8)', border: biblePhoto ? 'none' : '3px dashed #1877F2', overflow: 'hidden', cursor: 'pointer', boxShadow: '0 8px 30px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', zIndex: 2 }}>
-              {biblePhoto
-                ? <img src={biblePhoto} alt="Biblia" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              {true
+                ? <img src={'/avatar2.jpg'} alt='Biblia' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 : <><div style={{ fontSize: '3rem', marginBottom: 8 }}>B</div><div style={{ fontSize: '0.8rem', color: '#1877F2', fontWeight: 700, textAlign: 'center', padding: '0 16px' }}>Clica para adicionar foto da Biblia</div></>
               }
               <div style={{ position: 'absolute', bottom: 8, right: 8, background: 'rgba(0,0,0,0.6)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>C</div>
