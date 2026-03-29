@@ -26,25 +26,11 @@ async function uploadToCloudinary(file) {
   formData.append("file", file);
   formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
   const resourceType = file.type.startsWith("video") ? "video" : file.type.startsWith("audio") ? "video" : "auto";
-  const url = https://api.cloudinary.com/v1_1///upload;
+  const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
   const res = await fetch(url, { method: "POST", body: formData });
   if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error?.message || "Erro no upload"); }
   const data = await res.json();
   return data.secure_url;
-}
-    const duration = await getVideoDuration(file);
-    if (duration > 180) throw new Error("Video muito longo. Maximo 3 minutos.");
-  }
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-  const resourceType = file.type.startsWith("video") ? "video" : file.type.startsWith("audio") ? "video" : "auto";
-  const url = https://api.cloudinary.com/v1_1///upload;
-  const res = await fetch(url, { method: "POST", body: formData });
-  if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error?.message || "Erro no upload"); }
-  const data = await res.json();
-  return data.secure_url;
-}
 }
 
 const CATEGORIES_CONFIG = [
@@ -198,8 +184,8 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const loadComments = async () => {
     try {
       const API = (import.meta.env.VITE_API_URL || '') + '/api';
-      const res = await fetch(${API}/feed//comments, {
-        headers: token ? { Authorization: Bearer  } : {}
+        const res = await fetch(`/feed//comments`, {
+          headers: token ? { Authorization: `Bearer ` } : {}
       });
       if (res.ok) {
         const data = await res.json();
@@ -420,6 +406,10 @@ export default function MuralGrid() {
   const [postCategory, setPostCategory] = useState('testemunho');
   const [mediaFile, setMediaFile] = useState(null);
   const [mediaPreview, setMediaPreview] = useState(null);
+  const [trimStart, setTrimStart] = useState(0);
+  const [trimEnd, setTrimEnd] = useState(0);
+  const [mediaDuration, setMediaDuration] = useState(0);
+  const [showTrimmer, setShowTrimmer] = useState(false);
   const [mediaType, setMediaType] = useState(null);
   const [musicFile, setMusicFile] = useState(null);
   const [musicName, setMusicName] = useState(null);
