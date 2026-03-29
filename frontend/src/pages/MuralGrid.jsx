@@ -364,7 +364,8 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         ) : (
           <p style={{ color: '#333', fontSize: 14, lineHeight: 1.65, margin: 0 }}>{post.content}</p>
         )}
-        {musicUrl && <MiniAudioPlayer src={musicUrl} isPlaying={isMusicPlaying} />}
+        {musicUrl && isVideo && <div style={{ position: "absolute", bottom: 8, left: 8, right: 8, zIndex: 10 }}><MiniAudioPlayer src={musicUrl} isPlaying={isMusicPlaying} /></div>}
+        {musicUrl && !isVideo && <MiniAudioPlayer src={musicUrl} isPlaying={isMusicPlaying} />}
       </div>
 
       <div style={{ padding: '8px 16px 12px', borderTop: '1px solid #f0f0f0', display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -375,7 +376,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         <button onClick={() => { if (!showComments) loadComments(); setShowComments(!showComments); }} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, fontWeight: 600, padding: '6px 10px', borderRadius: 8 }}>
           <MessageCircle size={18} /> {post.comment_count || post.commentCount || comments.length} {t('common.comment')}
         </button>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, marginLeft: 'auto', padding: '6px 10px', borderRadius: 8 }}><Share2 size={18} /> {t('common.share')}</button>
+        <button onClick={() => { const url = window.location.origin + "/mural?post=" + post.id; if (navigator.share) { navigator.share({ title: "Sigo com Fe", text: post.content, url }); } else { navigator.clipboard.writeText(url); alert("Link copiado!"); } }} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", color: "#888", fontSize: 13, marginLeft: "auto", padding: "6px 10px", borderRadius: 8 }}><Share2 size={18} /> {t("common.share")}</button>
         {user && !isOwner && (
           <button onClick={() => setReportOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', padding: '6px 8px', borderRadius: 8, display: 'flex', alignItems: 'center' }} title={t('report.title')}
             onMouseEnter={e => e.currentTarget.style.color = '#e11d48'} onMouseLeave={e => e.currentTarget.style.color = '#ccc'}>
