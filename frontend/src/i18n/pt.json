@@ -1306,7 +1306,7 @@
     "loginShort": "Entrar",
     "joinNow": "Quero fazer parte",
     "headline1": "A rede social cristã",
-    "headline2": "sem conteúdo tóxico.",
+    "headline2": "Talvez nao seja por acaso que voce chegou aqui.",
     "trust1": "Sem conteúdo impróprio",
     "trust2": "Comunidade cristã de verdade",
     "trust3": "Pedidos de oração reais",
@@ -1321,7 +1321,14 @@
     "why3desc": "Fale com um pastor de forma privada e gratuita. Não fica sozinho.",
     "why4title": "Comunidade global",
     "why4desc": "Cristãos do Brasil, Portugal, Alemanha, África e mais — unidos na fé.",
-    "ctaJoin": "✨ Entrar na comunidade agora"
+    "ctaJoin": "✨ Entrar na comunidade agora",
+    "email": "Email",
+    "password": "Senha",
+    "or": "ou",
+    "googleLogin": "Entrar com Google",
+    "msg1": "Se voce se sente sozinho, esse lugar e para voce. Deus nao esqueceu de voce.",
+    "msg2": "Talvez nao seja por acaso que voce chegou aqui.",
+    "msg3": "Aqui sua fe cresce todos os dias."
   },
   "locale": "pt-PT",
   "report": {

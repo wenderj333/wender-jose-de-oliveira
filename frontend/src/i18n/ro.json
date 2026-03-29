@@ -1244,7 +1244,7 @@
     "loginShort": "Autentificare",
     "joinNow": "Vreau să fac parte",
     "headline1": "Rețeaua socială creștină",
-    "headline2": "fără conținut toxic.",
+    "headline2": "Poate ca nu este o coincidenta ca ai ajuns aici.",
     "trust1": "Fără conținut inadecvat",
     "trust2": "Comunitate creștină adevărată",
     "trust3": "Cereri de rugăciune reale",
@@ -1259,7 +1259,14 @@
     "why3desc": "Vorbește cu un pastor privat și gratuit. Nu ești singur.",
     "why4title": "Comunitate globală",
     "why4desc": "Creștini din Brazilia, Portugalia, Germania, Africa și mai mult — uniți în credință.",
-    "ctaJoin": "✨ Intră în comunitate acum"
+    "ctaJoin": "✨ Intră în comunitate acum",
+    "email": "Email",
+    "password": "Parola",
+    "or": "sau",
+    "googleLogin": "Conectati-va cu Google",
+    "msg1": "Daca te simti singur acest loc este pentru tine. Dumnezeu nu te-a uitat.",
+    "msg2": "Poate ca nu este o coincidenta ca ai ajuns aici.",
+    "msg3": "Aici credinta ta creste in fiecare zi."
   },
   "locale": "ro-RO",
   "report": {
@@ -1274,8 +1281,7 @@
     "send": "Trimite Raport",
     "sent": "Raport trimis. Mulțumim că ajuți la menținerea siguranței comunității!",
     "cancel": "Anulează"
-  }
-,
+  },
   "churches": {
     "title": "Găsește o Biserică",
     "subtitle": "Conectează-te cu comunitatea ta de credință",
@@ -1299,8 +1305,7 @@
     "remove": "Elimină",
     "pendingMembers": "Cereri în așteptare",
     "activeMembers": "Membri activi"
-  }
-,
+  },
   "prayers": {
     "title": "Cereri de Rugaciune",
     "verse": "\"Rugati-va unii pentru altii ca sa fiti vindecati.\" — Iacov 5:16",

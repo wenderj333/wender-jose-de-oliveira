@@ -1248,7 +1248,7 @@
     "loginShort": "Login",
     "joinNow": "I want to join",
     "headline1": "The Christian social network",
-    "headline2": "without toxic content.",
+    "headline2": "Maybe it is not by chance that you arrived here.",
     "trust1": "No inappropriate content",
     "trust2": "Genuine Christian community",
     "trust3": "Real prayer requests",
@@ -1263,7 +1263,14 @@
     "why3desc": "Talk to a pastor privately and for free. You are not alone.",
     "why4title": "Global community",
     "why4desc": "Christians from Brazil, Portugal, Germany, Africa and more — united in faith.",
-    "ctaJoin": "✨ Join the community now"
+    "ctaJoin": "✨ Join the community now",
+    "email": "Email",
+    "password": "Password",
+    "or": "or",
+    "googleLogin": "Sign in with Google",
+    "msg1": "If you feel lonely, this place is for you. God has not forgotten you.",
+    "msg2": "Maybe it is not by chance that you arrived here.",
+    "msg3": "Here your faith grows every day."
   },
   "locale": "en-GB",
   "report": {

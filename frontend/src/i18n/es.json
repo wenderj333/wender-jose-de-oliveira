@@ -1248,7 +1248,7 @@
     "loginShort": "Entrar",
     "joinNow": "Quiero unirme",
     "headline1": "La red social cristiana",
-    "headline2": "sin contenido tóxico.",
+    "headline2": "Quizas no es casualidad que hayas llegado aqui.",
     "trust1": "Sin contenido inapropiado",
     "trust2": "Comunidad cristiana de verdad",
     "trust3": "Peticiones de oración reales",
@@ -1263,7 +1263,14 @@
     "why3desc": "Habla con un pastor de forma privada y gratuita. No estás solo.",
     "why4title": "Comunidad global",
     "why4desc": "Cristianos de Brasil, Portugal, Alemania, África y más — unidos en la fe.",
-    "ctaJoin": "✨ Entrar a la comunidad ahora"
+    "ctaJoin": "✨ Entrar a la comunidad ahora",
+    "email": "Correo",
+    "password": "Contrasena",
+    "or": "o",
+    "googleLogin": "Iniciar sesion con Google",
+    "msg1": "Si te sientes solo, este lugar es para ti. Dios no te ha olvidado.",
+    "msg2": "Quizas no sea casualidad que hayas llegado aqui.",
+    "msg3": "Aqui tu fe crece cada dia."
   },
   "locale": "es-ES",
   "report": {
@@ -1278,8 +1285,7 @@
     "send": "Enviar Denuncia",
     "sent": "¡Denuncia enviada. Gracias por ayudar a mantener la comunidad segura!",
     "cancel": "Cancelar"
-  }
-,
+  },
   "churches": {
     "title": "Encontrar una Iglesia",
     "subtitle": "Conéctate con tu comunidad de fe",

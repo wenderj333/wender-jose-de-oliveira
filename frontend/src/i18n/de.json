@@ -1231,7 +1231,7 @@
     "loginShort": "Anmelden",
     "joinNow": "Ich möchte dabei sein",
     "headline1": "Das christliche Netzwerk",
-    "headline2": "ohne toxische Inhalte.",
+    "headline2": "Vielleicht ist es kein Zufall dass Sie hier angekommen sind.",
     "trust1": "Keine unangemessenen Inhalte",
     "trust2": "Echte christliche Gemeinschaft",
     "trust3": "Echte Gebetsanliegen",
@@ -1246,7 +1246,14 @@
     "why3desc": "Sprechen Sie privat und kostenlos mit einem Pastor. Sie sind nicht allein.",
     "why4title": "Globale Gemeinschaft",
     "why4desc": "Christen aus Brasilien, Portugal, Deutschland, Afrika und mehr — vereint im Glauben.",
-    "ctaJoin": "✨ Jetzt der Gemeinschaft beitreten"
+    "ctaJoin": "✨ Jetzt der Gemeinschaft beitreten",
+    "email": "Email",
+    "password": "Passwort",
+    "or": "oder",
+    "googleLogin": "Mit Google anmelden",
+    "msg1": "Wenn du einsam bist ist dieser Ort fur dich. Gott hat dich nicht vergessen.",
+    "msg2": "Vielleicht ist es kein Zufall dass Sie hier sind.",
+    "msg3": "Hier wachst dein Glaube jeden Tag."
   },
   "locale": "de-DE",
   "report": {
@@ -1261,8 +1268,7 @@
     "send": "Meldung senden",
     "sent": "Meldung gesendet. Danke, dass du dazu beiträgst, die Gemeinschaft sicher zu halten!",
     "cancel": "Abbrechen"
-  }
-,
+  },
   "churches": {
     "title": "Eine Kirche finden",
     "subtitle": "Verbinde dich mit deiner Glaubensgemeinschaft",
