@@ -8,17 +8,43 @@ const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
 const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'degxiuf43';
 const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'sigo_com_fe';
+async function getVideoDuration(file) {
+  return new Promise((resolve) => {
+    const video = document.createElement("video");
+    video.preload = "metadata";
+    video.onloadedmetadata = () => { window.URL.revokeObjectURL(video.src); resolve(video.duration); };
+    video.src = URL.createObjectURL(file);
+  });
+}
 
 async function uploadToCloudinary(file) {
+  if (file.type.startsWith("video")) {
+    const duration = await getVideoDuration(file);
+    if (duration > 180) throw new Error("Video muito longo. Maximo 3 minutos.");
+  }
   const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-  const resourceType = file.type.startsWith('video') ? 'video' : file.type.startsWith('audio') ? 'video' : 'auto';
-  const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
-  const res = await fetch(url, { method: 'POST', body: formData });
-  if (!res.ok) throw new Error('mural.uploadErrorCloudinary');
+  formData.append("file", file);
+  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+  const resourceType = file.type.startsWith("video") ? "video" : file.type.startsWith("audio") ? "video" : "auto";
+  const url = https://api.cloudinary.com/v1_1///upload;
+  const res = await fetch(url, { method: "POST", body: formData });
+  if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error?.message || "Erro no upload"); }
   const data = await res.json();
   return data.secure_url;
+}
+    const duration = await getVideoDuration(file);
+    if (duration > 180) throw new Error("Video muito longo. Maximo 3 minutos.");
+  }
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+  const resourceType = file.type.startsWith("video") ? "video" : file.type.startsWith("audio") ? "video" : "auto";
+  const url = https://api.cloudinary.com/v1_1///upload;
+  const res = await fetch(url, { method: "POST", body: formData });
+  if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error?.message || "Erro no upload"); }
+  const data = await res.json();
+  return data.secure_url;
+}
 }
 
 const CATEGORIES_CONFIG = [
@@ -169,6 +195,19 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(post.comments || []);
+  const loadComments = async () => {
+    try {
+      const API = (import.meta.env.VITE_API_URL || '') + '/api';
+      const res = await fetch(${API}/feed//comments, {
+        headers: token ? { Authorization: Bearer  } : {}
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setComments(data.comments || data || []);
+      }
+    } catch (e) { console.error('Error loading comments:', e); }
+  };
+
   const [reportOpen, setReportOpen] = useState(false);
   const authorName = post.full_name || post.author_name || post.authorName || t('common.user');
   const authorInitials = authorName.slice(0, 2).toUpperCase();
@@ -333,7 +372,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
           <Heart size={18} fill={post.liked ? '#e11d48' : 'none'} />
           {post.like_count || post.amemCount || 0} {t('mural.amen')}
         </button>
-        <button onClick={() => setShowComments(!showComments)} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, fontWeight: 600, padding: '6px 10px', borderRadius: 8 }}>
+        <button onClick={() => { if (!showComments) loadComments(); setShowComments(!showComments); }} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, fontWeight: 600, padding: '6px 10px', borderRadius: 8 }}>
           <MessageCircle size={18} /> {post.comment_count || post.commentCount || comments.length} {t('common.comment')}
         </button>
         <button style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, marginLeft: 'auto', padding: '6px 10px', borderRadius: 8 }}><Share2 size={18} /> {t('common.share')}</button>
