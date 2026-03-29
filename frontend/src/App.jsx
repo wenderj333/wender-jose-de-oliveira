@@ -47,41 +47,9 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-<<<<<<< Updated upstream
   const [unreadMessages, setUnreadMessages] = useState(0);
   const wsCtx = useWebSocket();
   const lastEvent = wsCtx?.lastEvent;
-=======
-  const [unreadCount, setUnreadCount] = useState(0);
-  const prevCountRef = useRef(0);
-
-  useEffect(() => {
-    if (!token) return;
-    const fetchUnread = async () => {
-      try {
-        const res = await fetch('/api/notifications', { headers: { Authorization: `Bearer ${token}` } });
-        const data = await res.json();
-        const count = (data.notifications || []).filter(n => !n.read_at).length;
-        if (count > prevCountRef.current) {
-          try {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const o = ctx.createOscillator(); const g = ctx.createGain();
-            o.connect(g); g.connect(ctx.destination);
-            o.frequency.value = 880;
-            g.gain.setValueAtTime(0.3, ctx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-            o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.3);
-          } catch(e) {}
-        }
-        prevCountRef.current = count;
-        setUnreadCount(count);
-      } catch(e) {}
-    };
-    fetchUnread();
-    const iv = setInterval(fetchUnread, 30000);
-    return () => clearInterval(iv);
-  }, [token]);
->>>>>>> Stashed changes
 
   useEffect(() => {
     if (lastEvent?.type === 'direct_message' && lastEvent.senderId !== user?.id) {
