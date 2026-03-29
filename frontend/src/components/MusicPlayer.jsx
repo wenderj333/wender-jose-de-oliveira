@@ -14,13 +14,13 @@ export default function MusicPlayer() {
         position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9990,
         background: 'linear-gradient(135deg, #1e1e3f, #2d1569)',
         borderTop: '1px solid rgba(102,126,234,0.3)',
-        padding: '0.5rem 1rem',
+        padding: '0.3rem 0.8rem',
         display: 'flex', alignItems: 'center', gap: 10,
         boxShadow: '0 -4px 20px rgba(0,0,0,0.4)',
       }}>
         {/* Thumbnail */}
         <div style={{
-          width: 40, height: 40, borderRadius: 8, overflow: 'hidden', flexShrink: 0,
+          width: 32, height: 32, borderRadius: 8, overflow: 'hidden', flexShrink: 0,
           background: '#000',
         }}>
           <img src={`https://img.youtube.com/vi/${currentSong.id}/mqdefault.jpg`}
