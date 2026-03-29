@@ -5,8 +5,7 @@ const { authenticate } = require('../middleware/auth');
 router.get('/:userId', authenticate, async (req, res) => {
   try {
     const { userId } = req.params;
-    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, location, join_date FROM users WHERE id = $1', [userId]);
-    const user = result.rows[0];
+    const user = db.prepare('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, location, join_date FROM users WHERE id = ?').get(userId);
 
     if (!user) return res.status(404).json({ error: 'User not found' });
 
@@ -43,7 +42,7 @@ router.patch('/', authenticate, async (req, res) => {
 
     await db.query(`UPDATE users SET ${setClause} WHERE id = $${updateKeys.length + 1}`, updateValues);
 
-    const updatedUser = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, location, join_date FROM users WHERE id = $1', [userId]);
+    const user = db.prepare('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, location, join_date FROM users WHERE id = ?').get(userId);
 
     res.json({ success: true, user: updatedUser.rows[0] });
   } catch (err) {
