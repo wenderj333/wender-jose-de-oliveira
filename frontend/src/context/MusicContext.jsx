@@ -4,7 +4,7 @@ const MusicContext = createContext();
 
 export function MusicProvider({ children }) {
   const [currentSong, setCurrentSong] = useState(null);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
 
   function playSong(song) {
