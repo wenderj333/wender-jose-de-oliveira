@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Camera, Edit2, Grid, List, Heart, MessageCircle, UserPlus, UserCheck, Send, X, Settings, MapPin, Church, Link as LinkIcon } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
-const API = `/api`;
+const API = `${API_BASE}/api`;
 const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'degxiuf43';
 const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'sigo_com_fe';
 
@@ -13,7 +13,7 @@ async function uploadPhoto(file) {
   const form = new FormData();
   form.append('file', file);
   form.append('upload_preset', UPLOAD_PRESET);
-  const res = await fetch(`https://api.cloudinary.com/v1_1//image/upload`, { method: 'POST', body: form });
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: form });
   const data = await res.json();
   return data.secure_url;
 }
