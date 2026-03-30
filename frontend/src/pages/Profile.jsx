@@ -40,7 +40,7 @@ export default function Profile() {
   const [uploading, setUploading] = useState(false);
   const [activeTab, setActiveTab] = useState('posts');
 
-  const headers = { Authorization: `Bearer ` };
+  const headers = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
     if (!targetId) return;
