@@ -150,8 +150,8 @@ export default function Register() {
               {avatarPreview ? '✅ Foto adicionada!' : '📷 Toque aqui para adicionar sua foto *'}
             </div>
             {!avatarPreview && (
-              <div style={{ fontSize: '0.72rem', color: '#e74c3c', marginTop: 2, fontWeight: 600 }}>
-                ⚠️ Obrigatório — sua foto aparece para outros membros
+              <div style={{ fontSize: '0.72rem ', color: '#888 ', marginTop: 2 }}>
+                Opcional — podes adicionar a foto depois
               </div>
             )}
           </div>
