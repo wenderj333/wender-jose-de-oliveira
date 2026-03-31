@@ -340,6 +340,12 @@ export default function App() {
             </div>
           </div>
 
+          <div style={{marginTop:16,background:'linear-gradient(135deg,#667eea,#764ba2)',borderRadius:12,padding:'14px 16px',textAlign:'center'}}>
+            <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>📲 Instalar App</p>
+            <p style={{color:'rgba(255,255,255,0.8)',fontSize:'0.75rem',margin:'0 0 10px'}}>Acede mais rapido no teu telemovel</p>
+            <a href='https://sigo-com-fe.vercel.app' target='_blank' style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',textDecoration:'none'}}>⬇️ Instalar</a>
+          </div>
+
         </aside>
 
       </div>
