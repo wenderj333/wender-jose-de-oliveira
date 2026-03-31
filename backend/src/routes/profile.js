@@ -2,7 +2,7 @@ const router = require('express').Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
 
-router.get('/:userId', authenticate, async (req, res) => {
+router.get('/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, location, join_date FROM users WHERE id = $1', [userId]);
