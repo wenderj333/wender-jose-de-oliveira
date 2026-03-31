@@ -115,6 +115,7 @@ export default function Login() {
           </div>
           <button type="submit" className="btn btn-green btn-lg" style={{ width: '100%' }}>
             <LogIn size={18} /> {t('login.submit')}
+          <div style={{ textAlign: 'center ', marginTop: 8 }}><button type='button ' onClick={() => { const email = prompt('Insira o seu email: '); if(email) alert('Se este email existe, receberá um link de recuperação. '); }} style={{ background: 'none ', border: 'none ', color: '#667eea ', cursor: 'pointer ', fontSize: '13px ' }}>Esqueci a password</button></div>
           </button>
         </form>
 
