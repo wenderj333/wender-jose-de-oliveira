@@ -352,7 +352,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         )}
       </div>
 
-      <div style={{ padding: '8px 16px 12px', borderTop: '1px solid #f0f0f0', display: 'flex', gap: 8, alignItems: 'center' }}>
+      <div style={{ padding: '8px 16px 12px', borderTop: '1px solid #f0f0f0', display: 'flex', gap: 8, alignItems: 'center', justifyContent: 'space-around' }}>
         <button onClick={() => onLike(post.id)} style={{ display: 'flex', alignItems: 'center', gap: 6, background: post.liked ? '#fff0f3' : 'none', border: post.liked ? '1px solid #fecdd3' : 'none', cursor: 'pointer', color: post.liked ? '#e11d48' : '#888', fontSize: 13, fontWeight: 700, padding: '6px 12px', borderRadius: 20, transition: 'all 0.2s' }}>
           <Heart size={18} fill={post.liked ? '#e11d48' : 'none'} />
           {post.like_count || post.amemCount || 0} {t('mural.amen')}
