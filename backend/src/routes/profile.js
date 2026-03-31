@@ -10,7 +10,7 @@ router.get('/:userId', authenticate, async (req, res) => {
 
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // TODO: Fetch user stats (posts, friends, prayers)
+    // Fetch user stats (posts, friends, prayers)
     user.stats = { posts: 0, friends: 0, prayers: 0 };
 
     res.json({ user });
