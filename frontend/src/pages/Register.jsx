@@ -43,7 +43,7 @@ export default function Register() {
     e.preventDefault();
     setError('');
     if (form.password.length < 6) return setError(t('register.passwordError'));
-    if (!avatar) return; // A validação visual já mostra o erro.
+    // avatar optional - user can add later
     try {
       let avatarUrl = null;
       if (avatar) {
