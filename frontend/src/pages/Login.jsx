@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import { BookOpen, LogIn, Mail, Lock, Phone } from 'lucide-react';
 
 // Google Analytics conversion events
@@ -19,6 +20,8 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [countryCode, setCountryCode] = useState('+55');
@@ -95,6 +98,17 @@ export default function Login() {
     }
   };
 
+  async function handleForgotPassword() {
+    const email = form.email;
+    if (!email) { setError('Insira o email primeiro'); return; }
+    try {
+      const auth = getAuth();
+      await sendPasswordResetEmail(auth, email);
+      setResetSent(true);
+      setError('');
+    } catch(e) { setError('Email nao encontrado'); }
+  }
+
   return (
     <div className="form-page">
       <div className="card auth-card">
@@ -111,11 +125,11 @@ export default function Login() {
           </div>
           <div className="form-group">
             <label><Lock size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('login.password')}</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t('login.passwordPlaceholder')} required />
+            <div style={{ position: 'relative' }}><input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t('login.passwordPlaceholder')} required style={{ width: '100%', paddingRight: 40 }} /><button type='button' onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}>{showPassword ? '🙈' : '👁️'}</button></div>
           </div>
           <button type="submit" className="btn btn-green btn-lg" style={{ width: '100%' }}>
             <LogIn size={18} /> {t('login.submit')}
-          <div style={{ textAlign: 'center ', marginTop: 8 }}><button type='button ' onClick={() => { const email = prompt('Insira o seu email: '); if(email) alert('Se este email existe, receberá um link de recuperação. '); }} style={{ background: 'none ', border: 'none ', color: '#667eea ', cursor: 'pointer ', fontSize: '13px ' }}>Esqueci a password</button></div>
+          <div style={{ textAlign: 'center', marginTop: 8 }}>{resetSent ? <span style={{ color: 'green', fontSize: 13 }}>✅ Email enviado! Verifica a caixa de entrada.</span> : <button type='button' onClick={handleForgotPassword} style={{ background: 'none', border: 'none', color: '#667eea', cursor: 'pointer', fontSize: 13 }}>Esqueci a password</button>}</div>
           </button>
         </form>
 
