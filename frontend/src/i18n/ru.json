@@ -721,7 +721,10 @@
     "changeCover": "Изменить обложку",
     "editProfile": "Редактировать",
     "message": "Сообщение",
-    "follow": "Подписаться"
+    "follow": "Подписаться",
+    "copyLink": "Kopirovat link",
+    "changeAvatar": "Izmenit foto",
+    "deleteCover": "Udalit oblozhku"
   },
   "landing": {
     "subtitle": "Общайтесь с настоящими христианами, молитесь, растите в вере и найдите сообщество, которое укрепляет — а не отвлекает.",

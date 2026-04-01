@@ -34,6 +34,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid');
   const [editMode, setEditMode] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [editData, setEditData] = useState({ full_name: '', bio: '', location: '', church_name: '' });
@@ -167,6 +168,17 @@ export default function Profile() {
                 <button onClick={() => setEditMode(true)} style={{ padding: '8px 20px', borderRadius: 8, border: '1px solid #dbdbdb', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Edit2 size={16} /> {t('profile.editProfile')}
                 </button>
+                <div style={{ position: 'relative' }}>
+                  <button onClick={() => setShowMenu(!showMenu)} style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid #dbdbdb', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 18 }}>⋮</button>
+                  {showMenu && (
+                    <div style={{ position: 'absolute', top: 40, right: 0, background: '#fff', borderRadius: 12, boxShadow: '0 4px 20px rgba(0,0,0,0.15)', zIndex: 100, minWidth: 200, overflow: 'hidden' }}>
+                      <button onClick={() => { navigator.clipboard.writeText(window.location.href); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>🔗 {t('profile.copyLink')}</button>
+                      <button onClick={() => { coverRef.current?.click(); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>📷 {t('profile.changeCover')}</button>
+                      <button onClick={() => { avatarRef.current?.click(); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>🖼️ {t('profile.changeAvatar')}</button>
+                      <button onClick={() => { setProfile(prev => ({...prev, cover_url: null})); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, color: '#e11d48', display: 'flex', alignItems: 'center', gap: 8 }}>🗑️ {t('profile.deleteCover')}</button>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <>
                   <button onClick={() => navigate('/mensagens')} style={{ padding: '8px 20px', borderRadius: 8, border: 'none', background: 'linear-gradient(135deg,#667eea,#764ba2)', color: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14, display: 'flex', alignItems: 'center', gap: 6 }}>

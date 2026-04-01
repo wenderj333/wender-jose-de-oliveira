@@ -526,7 +526,10 @@
     "rejectFriend": "Rechazar",
     "changeCover": "Cambiar portada",
     "message": "Mensaje",
-    "follow": "Seguir"
+    "follow": "Seguir",
+    "copyLink": "Copiar enlace",
+    "changeAvatar": "Cambiar foto",
+    "deleteCover": "Eliminar portada"
   },
   "messages": {
     "title": "Mensajes",

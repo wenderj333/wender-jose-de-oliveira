@@ -509,7 +509,10 @@
     "rejectFriend": "Reject",
     "changeCover": "Cover aendern",
     "message": "Nachricht",
-    "follow": "Folgen"
+    "follow": "Folgen",
+    "copyLink": "Link kopieren",
+    "changeAvatar": "Foto aendern",
+    "deleteCover": "Cover loeschen"
   },
   "messages": {
     "title": "Messages",

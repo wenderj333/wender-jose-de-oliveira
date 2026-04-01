@@ -617,7 +617,10 @@
     "rejectFriend": "Recusar",
     "changeCover": "Mudar capa",
     "message": "Mensagem",
-    "follow": "Seguir"
+    "follow": "Seguir",
+    "copyLink": "Copiar link",
+    "changeAvatar": "Mudar foto",
+    "deleteCover": "Apagar capa"
   },
   "messages": {
     "title": "Mensagens",

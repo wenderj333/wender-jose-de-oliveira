@@ -522,7 +522,10 @@
     "rejectFriend": "Refuză",
     "changeCover": "Schimba coperta",
     "message": "Mesaj",
-    "follow": "Urmareste"
+    "follow": "Urmareste",
+    "copyLink": "Copiaza link",
+    "changeAvatar": "Schimba poza",
+    "deleteCover": "Sterge coperta"
   },
   "messages": {
     "title": "Mesaje",
