@@ -46,7 +46,7 @@ router.patch('/', authenticate, async (req, res) => {
     const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name FROM users WHERE id = $1', [userId]);
     const user = result.rows[0];
 
-    res.json({ success: true, user: updatedUser.rows[0] });
+    res.json({ success: true, user });
   } catch (err) {
     console.error('Error updating profile:', err);
     res.status(500).json({ error: 'Internal server error' });
