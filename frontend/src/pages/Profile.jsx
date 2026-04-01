@@ -314,7 +314,7 @@ export default function Profile() {
               </div>
               <button onClick={() => setSelectedPost(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={24} /></button>
             </div>
-            {selectedPost.media_url && <img src={selectedPost.media_url} alt="" style={{ width: '100%', maxHeight: 500, objectFit: 'contain', background: '#000' }} />}
+            {selectedPost.media_url && selectedPost.media_url.match(/\.(mp4|webm|mov)/i) ? <video src={selectedPost.media_url} controls style={{ width: '100%', maxHeight: 500, background: '#000' }} /> : selectedPost.media_url ? <img src={selectedPost.media_url} alt='' style={{ width: '100%', maxHeight: 500, objectFit: 'contain', background: '#000' }} /> : null}
             <div style={{ padding: 20 }}>
               <p style={{ fontSize: 14, lineHeight: 1.6, margin: '0 0 12px' }}>{selectedPost.content}</p>
               <div style={{ display: 'flex', gap: 16, color: '#888', fontSize: 13 }}>
