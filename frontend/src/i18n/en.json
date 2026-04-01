@@ -523,7 +523,10 @@
     "addFriend": "Add",
     "pendingFriend": "Pending",
     "acceptFriend": "Accept",
-    "rejectFriend": "Reject"
+    "rejectFriend": "Reject",
+    "changeCover": "Change cover",
+    "message": "Message",
+    "follow": "Follow"
   },
   "messages": {
     "title": "Messages",

@@ -1,4 +1,4 @@
-﻿{
+{
   "brand": "Sigo com Fé",
   "nav": {
     "prayers": "Peticiones de Oración",
@@ -523,7 +523,10 @@
     "addFriend": "Añadir",
     "pendingFriend": "Pendiente",
     "acceptFriend": "Aceptar",
-    "rejectFriend": "Rechazar"
+    "rejectFriend": "Rechazar",
+    "changeCover": "Cambiar portada",
+    "message": "Mensaje",
+    "follow": "Seguir"
   },
   "messages": {
     "title": "Mensajes",

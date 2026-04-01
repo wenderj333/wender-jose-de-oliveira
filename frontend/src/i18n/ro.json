@@ -506,7 +506,7 @@
   "profile": {
     "title": "Profil",
     "memberSince": "Membru din",
-    "editProfile": "Editează Profilul",
+    "editProfile": "Editeaza profilul",
     "prayers": "Rugăciuni",
     "posts": "Postări",
     "friends": "Prieteni",
@@ -519,7 +519,10 @@
     "addFriend": "Adaugă",
     "pendingFriend": "În așteptare",
     "acceptFriend": "Acceptă",
-    "rejectFriend": "Refuză"
+    "rejectFriend": "Refuză",
+    "changeCover": "Schimba coperta",
+    "message": "Mesaj",
+    "follow": "Urmareste"
   },
   "messages": {
     "title": "Mesaje",

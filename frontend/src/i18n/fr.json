@@ -1,4 +1,4 @@
-﻿{
+{
   "brand": "Sigo com Fé",
   "nav": {
     "prayers": "Demandes de Prière",
@@ -510,7 +510,7 @@
   "profile": {
     "title": "Profil",
     "memberSince": "Membre depuis",
-    "editProfile": "Modifier le Profil",
+    "editProfile": "Modifier profil",
     "prayers": "Prières",
     "posts": "Publications",
     "friends": "Amis",
@@ -523,7 +523,10 @@
     "addFriend": "Ajouter",
     "pendingFriend": "En attente",
     "acceptFriend": "Accepter",
-    "rejectFriend": "Refuser"
+    "rejectFriend": "Refuser",
+    "changeCover": "Changer couverture",
+    "message": "Message",
+    "follow": "Suivre"
   },
   "messages": {
     "title": "Messages",
