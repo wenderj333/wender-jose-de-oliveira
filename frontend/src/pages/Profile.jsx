@@ -179,6 +179,7 @@ export default function Profile() {
                       <button onClick={() => { setProfile(prev => ({...prev, cover_url: null})); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, color: '#e11d48', display: 'flex', alignItems: 'center', gap: 8 }}>🗑️ {t('profile.deleteCover')}</button>
                     </div>
                   )}
+                </div>
                 </>
               ) : (
                 <>
