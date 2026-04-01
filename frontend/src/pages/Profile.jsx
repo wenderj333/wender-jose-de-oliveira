@@ -108,10 +108,10 @@ export default function Profile() {
   return (
     <div style={{ maxWidth: 935, margin: '0 auto', padding: '0 0 40px' }}>
       {/* COVER PHOTO */}
-        <div style={{ position: 'relative', height: 200, background: profile.cover_url ? `url(${profile.cover_url}) center/cover` : 'linear-gradient(135deg, #1a0a3e, #4a1a8e, #daa520)', borderRadius: '0 0 12px 12px', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', height: 200, background: profile.cover_url ? `url(${profile.cover_url}) center/cover` : 'linear-gradient(135deg, #1a0a3e, #4a1a8e, #daa520)', borderRadius: '0 0 12px 12px' }}>
         {isOwn && (
           <>
-            <button onClick={() => coverRef.current?.click()} style={{ position: 'absolute', bottom: 12, right: 12, background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: 8, padding: '8px 12px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600 }}>
+            <button onClick={() => coverRef.current?.click()} style={{ position: 'absolute', bottom: 12, right: 12, background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: 8, padding: '8px 12px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, zIndex: 10 }}>
               <Camera size={16} /> {t('profile.changeCover')}
             </button>
             <input ref={coverRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleCoverChange} />
