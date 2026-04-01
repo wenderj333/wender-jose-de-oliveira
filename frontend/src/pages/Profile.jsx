@@ -165,6 +165,7 @@ export default function Profile() {
             {/* ACTIONS */}
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {isOwn ? (
+                <>
                 <button onClick={() => setEditMode(true)} style={{ padding: '8px 20px', borderRadius: 8, border: '1px solid #dbdbdb', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Edit2 size={16} /> {t('profile.editProfile')}
                 </button>
@@ -178,7 +179,7 @@ export default function Profile() {
                       <button onClick={() => { setProfile(prev => ({...prev, cover_url: null})); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, color: '#e11d48', display: 'flex', alignItems: 'center', gap: 8 }}>🗑️ {t('profile.deleteCover')}</button>
                     </div>
                   )}
-                </div>
+                </>
               ) : (
                 <>
                   <button onClick={() => navigate('/mensagens')} style={{ padding: '8px 20px', borderRadius: 8, border: 'none', background: 'linear-gradient(135deg,#667eea,#764ba2)', color: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
