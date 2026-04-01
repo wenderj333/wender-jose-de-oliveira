@@ -112,7 +112,7 @@ export default function Profile() {
         {isOwn && (
           <>
             <button onClick={() => coverRef.current?.click()} style={{ position: 'absolute', bottom: 12, right: 12, background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: 8, padding: '8px 12px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600 }}>
-              <Camera size={16} /> Mudar capa
+              <Camera size={16} /> {t('profile.changeCover')}
             </button>
             <input ref={coverRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleCoverChange} />
           </>
