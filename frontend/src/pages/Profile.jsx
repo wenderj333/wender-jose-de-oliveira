@@ -45,6 +45,7 @@ export default function Profile() {
   useEffect(() => {
     if (!targetId) return;
     setLoading(true);
+    Promise.all([
         fetch(`${API}/profile/${targetId}`, { headers }).then(r => r.json()),
         fetch(`${API}/feed/user/${targetId}?limit=30`, { headers }).then(r => r.json()),
     ]).then(([profileData, feedData]) => {
