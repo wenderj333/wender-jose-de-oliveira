@@ -47,7 +47,6 @@ export default function Profile() {
     setLoading(true);
         fetch(`${API}/profile/${targetId}`, { headers }).then(r => r.json()),
         fetch(`${API}/feed/user/${targetId}?limit=30`, { headers }).then(r => r.json()),
-        fetch(`/feed/user/?limit=30`, { headers }).then(r => r.json()),
     ]).then(([profileData, feedData]) => {
       const u = profileData.user || profileData;
       setProfile(u);
