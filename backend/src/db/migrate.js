@@ -7,6 +7,7 @@ const pool = new Pool({
 });
 
 async function migrate() {
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS cover_url TEXT`);
   console.log('🔄 Executando migração do banco de dados (PostgreSQL/Neon)...');
 
   await pool.query(`
