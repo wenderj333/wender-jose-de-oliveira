@@ -15,7 +15,7 @@ const MEMBERS = [
 
 export default function Landing() {
   const { t } = useTranslation();
-  const [biblePhoto, setBiblePhoto] = useState(() => localStorage.getItem('scf_bible') || null);
+  const [biblePhoto, setBiblePhoto] = useState('/avatar2.jpg');
   const [memberPhotos, setMemberPhotos] = useState(() => {
     try { return JSON.parse(localStorage.getItem('scf_members') || '{}'); } catch { return {}; }
   });
@@ -69,7 +69,7 @@ export default function Landing() {
     <div style={{ minHeight: '100vh', background: '#f0f2f5', fontFamily: 'Nunito, Segoe UI, sans-serif', cursor: 'url(data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="5" cy="5" r="4" fill="gray"/></svg>) 5 5, auto' }}>
       <nav style={{ background: 'white', height: 56, display: 'flex', alignItems: 'center', padding: '0 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.1)', position: 'sticky', top: 0, zIndex: 100, justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 8, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><img src='/logo.jpg' style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>
+          <div style={{ width: 48, height: 48, borderRadius: 8, overflowX:'hidden', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><img src='/logo.jpg' style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>
           <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1877F2', fontFamily: 'Georgia, serif' }}>Sigo com Fé</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -88,7 +88,7 @@ export default function Landing() {
           <p style={{ fontSize: '1rem', color: '#555', marginBottom: 32, lineHeight: 1.6, maxWidth: 420 }}>{t('landing.subtitle')}</p>
 
           <div style={{ position: 'relative', width: 380, height: 430 }}>
-            <div onClick={() => bibleInputRef.current?.click()} style={{ position: 'absolute', left: 60, top: 20, width: 220, height: 300, borderRadius: 16, background: biblePhoto ? 'transparent' : 'linear-gradient(135deg, #e8f0fe, #c8d8f8)', border: biblePhoto ? 'none' : '3px dashed #1877F2', overflow: 'hidden', cursor: 'pointer', boxShadow: '0 8px 30px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', zIndex: 2 }}>
+            <div onClick={() => bibleInputRef.current?.click()} style={{ position: 'absolute', left: 60, top: 20, width: 220, height: 300, borderRadius: 16, background: biblePhoto ? 'transparent' : 'linear-gradient(135deg, #e8f0fe, #c8d8f8)', border: biblePhoto ? 'none' : '3px dashed #1877F2', overflowX:'hidden', overflow: 'hidden', cursor: 'pointer', boxShadow: '0 8px 30px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', zIndex: 2 }}>
               {true
                 ? <img src={'/avatar2.jpg'} alt='Biblia' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 : <><div style={{ fontSize: '3rem', marginBottom: 8 }}>B</div><div style={{ fontSize: '0.8rem', color: '#1877F2', fontWeight: 700, textAlign: 'center', padding: '0 16px' }}>Clica para adicionar foto da Biblia</div></>
@@ -110,7 +110,7 @@ export default function Landing() {
 
             {MEMBERS.map((m, i) => (
               <div key={i} style={{ position: 'absolute', top: positions[i].top, left: positions[i].left, zIndex: 3 }} onMouseEnter={() => setActiveTooltip(i)} onMouseLeave={() => setActiveTooltip(null)}>
-                <div onClick={() => openMemberUpload(i)} style={{ width: 64, height: 64, borderRadius: '50%', border: '3px solid ' + m.color, background: memberPhotos[i] ? 'transparent' : m.color, overflow: 'hidden', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.2)', position: 'relative' }}>
+                <div onClick={() => openMemberUpload(i)} style={{ width: 64, height: 64, borderRadius: '50%', border: '3px solid ' + m.color, background: memberPhotos[i] ? 'transparent' : m.color, overflowX:'hidden', overflow: 'hidden', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.2)', position: 'relative' }}>
                   {memberPhotos[i]
                     ? <img src={memberPhotos[i]} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     : <span style={{ color: 'white', fontSize: '1.4rem', fontWeight: 700 }}>{m.name.charAt(0)}</span>
