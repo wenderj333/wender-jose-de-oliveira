@@ -151,7 +151,7 @@ export default function Landing() {
         </div>
       </div>
 
-      <style>{@media(max-width:700px){.landing-right{display:none!important}}}</style>
+      <style dangerouslySetInnerHTML={{__html: "@media(max-width:700px){.landing-right{display:none!important}}"}} />
       <footer style={{ background: 'white', padding: '1.5rem', textAlign: 'center', borderTop: '1px solid #e4e6eb', fontSize: '0.78rem', color: '#888' }}>
         <strong style={{ color: '#1877F2' }}>Sigo com Fé</strong> - {t('landing.tagline')} - {new Date().getFullYear()}
       </footer>
