@@ -126,7 +126,7 @@ export default function Landing() {
           </div>
         </div>
 
-        <div style={{ width: 400, flexShrink: 0, paddingTop: 40, paddingBottom: 40 }} className='landing-right'>
+        <div style={{ width: 400, flexShrink: 0, paddingTop: 40, paddingBottom: 40 }}>
           <div style={{ background: 'white', borderRadius: 8, padding: '1.5rem', boxShadow: '0 2px 12px rgba(0,0,0,0.1)', marginBottom: 16 }}>
             <input type="email" placeholder={t('landing.email') || 'Email'} style={{ width: '100%', padding: '0.9rem 1rem', border: '1px solid #ccc', borderRadius: 6, fontSize: '1rem', fontFamily: 'inherit', marginBottom: '0.7rem', outline: 'none' }} onFocus={e => e.target.style.borderColor = '#1877F2'} onBlur={e => e.target.style.borderColor = '#ccc'} />
             <input type="password" placeholder={t('landing.password') || 'Senha'} style={{ width: '100%', padding: '0.9rem 1rem', border: '1px solid #ccc', borderRadius: 6, fontSize: '1rem', fontFamily: 'inherit', marginBottom: '0.7rem', outline: 'none' }} onFocus={e => e.target.style.borderColor = '#1877F2'} onBlur={e => e.target.style.borderColor = '#ccc'} />
@@ -151,7 +151,6 @@ export default function Landing() {
         </div>
       </div>
 
-      <style>{@media(max-width:700px){.landing-right{display:none!important}}}</style>
       <footer style={{ background: 'white', padding: '1.5rem', textAlign: 'center', borderTop: '1px solid #e4e6eb', fontSize: '0.78rem', color: '#888' }}>
         <strong style={{ color: '#1877F2' }}>Sigo com Fé</strong> - {t('landing.tagline')} - {new Date().getFullYear()}
       </footer>
