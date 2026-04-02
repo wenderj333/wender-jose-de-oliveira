@@ -85,20 +85,20 @@ router.get('/user/:userId', async (req, res) => {
     const limit = Math.min(parseInt(req.query.limit) || 20, 50);
     const offset = (page - 1) * limit;
 
-    const posts = await db.prepare(
+    const result = await db.query(
       `SELECT fp.*, u.full_name AS author_name, u.display_name AS author_display_name, u.avatar_url AS author_avatar
        FROM feed_posts fp
        JOIN users u ON u.id = fp.author_id
-       WHERE fp.author_id = ?
+       WHERE fp.author_id = $1
        ORDER BY fp.created_at DESC
-       LIMIT ? OFFSET ?`
-    ).all(req.params.userId, limit, offset);
+       LIMIT $2 OFFSET $3`,
+      [req.params.userId, limit, offset]);
 
-    const countRow = await db.prepare(
-      'SELECT COUNT(*) AS total FROM feed_posts WHERE author_id = ?'
-    ).get(req.params.userId);
+    const posts = result.rows;
+    const countResult = await db.query('SELECT COUNT(*) AS total FROM feed_posts WHERE author_id = $1', [req.params.userId]);
 
-    res.json({ posts, total: parseInt(countRow?.total || 0), page, limit });
+
+    res.json({ posts, total: parseInt(countResult.rows[0]?.total || 0), page, limit });
   } catch (err) {
     console.error('Erro ao buscar posts do usuário:', err);
     res.status(500).json({ error: 'Erro interno do servidor' });
