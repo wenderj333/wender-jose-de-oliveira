@@ -23,6 +23,8 @@ import PastorChat from "./pages/PastorChat";
 import HelpRequests from "./pages/HelpRequests";
 import Landing from "./pages/Landing";
 import BiblicalCourse from "./pages/TheologyCourse";
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfUse from './pages/TermsOfUse';
 import DiarioComDeus from './pages/DiarioComDeus';
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
@@ -285,6 +287,8 @@ export default function App() {
             <Route path="/igrejas/:id" element={<ChurchProfile />} />
             <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
                     <Route path='/diario-com-deus' element={<DiarioComDeus />} />
+          <Route path='/privacidade' element={<PrivacyPolicy />} />
+          <Route path='/termos' element={<TermsOfUse />} />
 </Routes>
         </main>
 
