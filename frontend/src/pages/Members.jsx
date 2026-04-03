@@ -41,6 +41,7 @@ export default function Members() {
   const [sending, setSending] = useState(false);
   const [loadingMsgs, setLoadingMsgs] = useState(false);
   const [friendMsg, setFriendMsg] = useState('');
+  const [sentRequests, setSentRequests] = useState(new Set());
   const chatEndRef = useRef(null);
 
   useEffect(() => { fetchMembers(); }, []);
@@ -64,7 +65,7 @@ export default function Members() {
         body: JSON.stringify({ addressee_id: memberId }),
       });
       const data = await res.json();
-      setFriendMsg(data.message || data.error || 'Pedido enviado!');
+      setFriendMsg(data.message || data.error || 'Pedido enviado!'); setSentRequests(prev => new Set([...prev, memberId]));
       setTimeout(() => setFriendMsg(''), 3000);
     } catch (err) { console.error(err); }
   }
@@ -199,8 +200,8 @@ export default function Members() {
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
                 {member.id !== user?.id && (
-                  <button onClick={(e) => sendFriendRequest(e, member.id)} style={{ padding: '0.4rem 0.8rem', borderRadius: 20, border: 'none', background: '#1a0a3e', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', fontWeight: 600 }}>
-                    <UserPlus size={14} /> Amigo
+                  <button onClick={(e) => !sentRequests.has(member.id) && sendFriendRequest(e, member.id)} style={{ padding: '0.4rem 0.8rem', borderRadius: 20, border: 'none', background: sentRequests.has(member.id) ? '#888' : '#1a0a3e', color: '#fff', cursor: sentRequests.has(member.id) ? 'default' : 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', fontWeight: 600 }}>
+                    <UserPlus size={14} /> {sentRequests.has(member.id) ? 'Pendente' : 'Amigo'}
                   </button>
                 )}
                 <button onClick={(e) => openChat(e, member)} style={{ padding: '0.4rem 0.8rem', borderRadius: 20, border: 'none', background: '#4caf50', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', fontWeight: 600 }}>
