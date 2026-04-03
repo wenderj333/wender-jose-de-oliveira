@@ -1339,5 +1339,10 @@
     "filterAll": "Toate",
     "markInProgress": "In curs",
     "markResolved": "Rezolvat"
+  },
+  "chat": {
+    "yourMessages": "Mesajele tale",
+    "selectConvo": "Selecteaza o conversatie sau mergi la profilul unui prieten pentru a incepe sa vorbesti!",
+    "search": "Cauta conversatie..."
   }
 }

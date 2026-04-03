@@ -187,7 +187,7 @@ export default function Chat() {
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                placeholder="Procurar conversa..."
+                placeholder="{t('chat.search', 'Procurar conversa...')}"
                 style={{ background: 'none', border: 'none', outline: 'none', fontSize: '0.85rem', color: 'var(--text)', width: '100%' }}
               />
             </div>
@@ -404,10 +404,10 @@ export default function Chat() {
             <MessageCircle size={34} style={{ color: 'var(--fb,#4a80d4)' }} />
           </div>
           <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1.2rem', color: 'var(--text)', fontWeight: 600 }}>
-            As tuas mensagens
+            {t('chat.yourMessages', 'As tuas mensagens')}
           </h3>
           <p style={{ fontSize: '0.85rem', textAlign: 'center', maxWidth: 240 }}>
-            Seleciona uma conversa ou vai ao perfil de um amigo para começar a conversar!
+            {t('chat.selectConvo', 'Seleciona uma conversa')}
           </p>
         </div>
       )}

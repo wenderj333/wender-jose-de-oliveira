@@ -1343,5 +1343,10 @@
     "filterAll": "All",
     "markInProgress": "In Progress",
     "markResolved": "Resolved"
+  },
+  "chat": {
+    "yourMessages": "Your messages",
+    "selectConvo": "Select a conversation or go to a friend profile to start chatting!",
+    "search": "Search conversation..."
   }
 }

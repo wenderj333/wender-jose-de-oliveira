@@ -1326,5 +1326,10 @@
     "filterAll": "Alle",
     "markInProgress": "In Bearbeitung",
     "markResolved": "Gelöst"
+  },
+  "chat": {
+    "yourMessages": "Deine Nachrichten",
+    "selectConvo": "Wahle ein Gesprach aus oder gehe zum Profil eines Freundes!",
+    "search": "Gesprach suchen..."
   }
 }
