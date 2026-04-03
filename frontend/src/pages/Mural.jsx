@@ -291,8 +291,7 @@ function PostCard({ post, onLike, onDelete }) {
             controls
             playsInline
             style={{ width: '100%', maxHeight: '400px', objectFit: 'contain', display: 'block' }}
-            controlsList="nodownload nofullscreen noremoteplayback"
-            disablePictureInPicture
+            preload="metadata"
           />
         </div>
       )}
