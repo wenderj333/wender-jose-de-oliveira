@@ -1,12 +1,28 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-
-
 const API_BASE = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
-const FEELINGS = [
-  { key: 'sad', emoji: 'Triste' },
-  { key: 'peace', emoji: 'Em paz' },
-  { key: 'grateful', emoji: 'Grato' },
-  { key: 'strong', emoji: 'Fortalecido' },
-];
+const FEELINGS = [{ key: 'sad', label: 'Triste' },{ key: 'peace', label: 'Em paz' },{ key: 'grateful', label: 'Grato' },{ key: 'strong', label: 'Fortalecido' },{ key: 'anxious', label: 'Ansioso' }];
+const VERSES = ['O Senhor e o meu pastor - Sl 23:1','Tudo posso naquele que me fortalece - Fp 4:13','Nao temas, porque eu sou contigo - Is 41:10'];
+export default function DiarioComDeus() {
+const { t } = useTranslation(); const { token } = useAuth();
+const [entries, setEntries] = useState([]);
+const [showForm, setShowForm] = useState(false);
+const [loading, setLoading] = useState(false);
+const [toast, setToast] = useState(false);
+const [streak] = useState(5);
+const [form, setForm] = useState({ title: '', content: '', feeling: '', prayer: '', verse: '', isPrivate: true });
+const verse = VERSES[Math.floor(Math.random() * VERSES.length)];
+const days = ['S','T','Q','Q','S','S','D'];
+useEffect(() => { if (!token) return; fetch(API_BASE + '/api/diary', { headers: { Authorization: 'Bearer ' + token } }).then(r => r.ok ? r.json() : { entries: [] }).then(d => setEntries(d.entries || [])).catch(() => {}); }, [token]);
+const handleSubmit = async () => { if (!form.content.trim()) return; setLoading(true); try { const res = await fetch(API_BASE + '/api/diary', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify(form) }); if (res.ok) { const data = await res.json(); setEntries(prev => [data.entry || { ...form, id: Date.now(), created_at: new Date().toISOString() }, ...prev]); setForm({ title: '', content: '', feeling: '', prayer: '', verse: '', isPrivate: true }); setShowForm(false); setToast(true); setTimeout(() => setToast(false), 3000); } } catch (e) {} setLoading(false); };
+const handleDelete = async (id) => { if (!window.confirm('Apagar?')) return; try { await fetch(API_BASE + '/api/diary/' + id, { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } }); setEntries(prev => prev.filter(e => e.id !== id)); } catch (e) {} };
+return (<div style={{ maxWidth: 680, margin: '0 auto', padding: '24px 16px' }}>
+<div style={{ background: '#6a5af9', borderRadius: 16, padding: '24px 20px', marginBottom: 16, color: 'white', textAlign: 'center' }}><h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 700 }}>Diario com Deus</h1><p style={{ margin: '6px 0 0', opacity: .85 }}>Aqui e entre voce e Deus</p><p style={{ margin: '8px 0 0', fontSize: '0.75rem', fontStyle: 'italic', opacity: .7 }}>'{verse}'</p></div>
+<div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'white', borderRadius: 10, padding: '10px 14px', marginBottom: 14, boxShadow: '0 1px 6px rgba(0,0,0,0.07)' }}><span>Fogo</span><div><div style={{ fontWeight: 700, fontSize: 13 }}>{streak} dias com Deus</div><div style={{ fontSize: 11, color: '#888' }}>Continue assim!</div></div><div style={{ display: 'flex', gap: 4, marginLeft: 'auto' }}>{days.map((d, i) => (<div key={i} style={{ width: 22, height: 22, borderRadius: '50%', background: i < streak % 7 ? '#6a5af9' : '#f0f0f0', color: i < streak % 7 ? 'white' : '#aaa', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10 }}>{d}</div>))}</div></div>
+{toast && <div style={{ background: '#6a5af9', color: 'white', borderRadius: 10, padding: '10px 16px', fontSize: 13, fontWeight: 700, textAlign: 'center', marginBottom: 12 }}>O teu momento com Deus foi guardado!</div>}
+{!showForm && <button onClick={() => setShowForm(true)} style={{ width: '100%', padding: 12, borderRadius: 10, background: '#6a5af9', color: 'white', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 700, marginBottom: 12 }}>Escrever para Deus</button>}
+{showForm && (<div style={{ background: 'white', borderRadius: 12, padding: 16, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', marginBottom: 16 }}><input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder='Titulo (opcional)' style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid #ddd', marginBottom: 10, fontSize: 13, boxSizing: 'border-box' }} /><textarea value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))} placeholder='Hoje eu quero falar com Deus sobre...' rows={5} style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid #ddd', marginBottom: 10, fontSize: 13, resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' }} /><input value={form.prayer} onChange={e => setForm(f => ({ ...f, prayer: e.target.value }))} placeholder='Hoje eu oro por...' style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid #ddd', marginBottom: 10, fontSize: 13, boxSizing: 'border-box' }} /><input value={form.verse} onChange={e => setForm(f => ({ ...f, verse: e.target.value }))} placeholder='Adicionar versiculo' style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid #ddd', marginBottom: 12, fontSize: 13, boxSizing: 'border-box' }} /><div style={{ display: 'flex', gap: 8 }}><button onClick={() => setShowForm(false)} style={{ flex: 1, padding: 10, borderRadius: 8, border: '1px solid #ddd', background: 'white', cursor: 'pointer', color: '#888' }}>Cancelar</button><button onClick={handleSubmit} disabled={loading} style={{ flex: 2, padding: 10, borderRadius: 8, border: 'none', background: '#6a5af9', color: 'white', cursor: 'pointer', fontWeight: 700 }}>{loading ? 'Guardando...' : 'Guardar no meu Diario com Deus'}</button></div></div>)}
+<button style={{ width: '100%', padding: 11, borderRadius: 10, border: '1.5px solid #e11d48', background: 'white', color: '#9f1239', fontSize: 13, fontWeight: 700, cursor: 'pointer', marginBottom: 16 }}>Preciso de oracao</button>
+{entries.map(entry => (<div key={entry.id} style={{ background: 'white', borderLeft: '3px solid #6a5af9', padding: 14, marginBottom: 12, borderRadius: '0 10px 10px 0', boxShadow: '0 1px 6px rgba(0,0,0,0.05)' }}><div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}><div style={{ fontWeight: 700, fontSize: 13 }}>{entry.title || 'Sem titulo'}</div><button onClick={() => handleDelete(entry.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ddd' }}>X</button></div><p style={{ fontSize: 13, color: '#333', lineHeight: 1.6, margin: 0 }}>{entry.content}</p>{entry.prayer && <p style={{ fontSize: 11, color: '#888', fontStyle: 'italic', margin: '4px 0 0' }}>{entry.prayer}</p>}{entry.verse && <p style={{ fontSize: 11, color: '#1877F2', fontStyle: 'italic', margin: '4px 0 0' }}>{entry.verse}</p>}</div>))}
+</div>); }
