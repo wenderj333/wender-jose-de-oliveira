@@ -1346,6 +1346,16 @@
     "p5title": "Ihre Rechte",
     "p5text": "Sie koennen Ihre Daten loeschen.",
     "contact": "Kontakt",
-    "lastUpdate": "Letzte Aktualisierung"
+    "lastUpdate": "Letzte Aktualisierung",
+    "t1title": "Annahme der Bedingungen",
+    "t1text": "Durch die Nutzung stimmen Sie zu.",
+    "t2title": "Akzeptable Nutzung",
+    "t2text": "Anstossige Inhalte sind verboten.",
+    "t3title": "Konto",
+    "t3text": "Sie sind fuer Ihr Konto verantwortlich.",
+    "t4title": "Inhalte",
+    "t4text": "Sie behalten die Rechte an Ihren Inhalten.",
+    "t5title": "Kontoloeschung",
+    "t5text": "Sie koennen Ihr Konto jederzeit loeschen."
   }
 }

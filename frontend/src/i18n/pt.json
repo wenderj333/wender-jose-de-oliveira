@@ -1421,6 +1421,16 @@
     "p5title": "Seus direitos",
     "p5text": "Voce pode excluir seus dados.",
     "contact": "Contato",
-    "lastUpdate": "Ultima atualizacao"
+    "lastUpdate": "Ultima atualizacao",
+    "t1title": "Aceitacao dos Termos",
+    "t1text": "Ao usar a Sigo com Fe voce concorda com estes termos.",
+    "t2title": "Uso Aceitavel",
+    "t2text": "E proibido publicar conteudo ofensivo.",
+    "t3title": "Conta",
+    "t3text": "Voce e responsavel pela seguranca da sua conta.",
+    "t4title": "Conteudo",
+    "t4text": "Voce mantem os direitos do conteudo.",
+    "t5title": "Encerramento",
+    "t5text": "Voce pode apagar sua conta a qualquer momento."
   }
 }

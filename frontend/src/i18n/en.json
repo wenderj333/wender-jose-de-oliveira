@@ -1363,6 +1363,16 @@
     "p5title": "Your rights",
     "p5text": "You can delete your data.",
     "contact": "Contact",
-    "lastUpdate": "Last updated"
+    "lastUpdate": "Last updated",
+    "t1title": "Acceptance of Terms",
+    "t1text": "By using Sigo com Fe you agree to these terms.",
+    "t2title": "Acceptable Use",
+    "t2text": "Offensive content is forbidden.",
+    "t3title": "Account",
+    "t3text": "You are responsible for your account security.",
+    "t4title": "Content",
+    "t4text": "You retain rights to your content.",
+    "t5title": "Termination",
+    "t5text": "You can delete your account anytime."
   }
 }
