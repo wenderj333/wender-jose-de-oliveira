@@ -221,6 +221,7 @@ export default function App() {
             <Link to="/curso-biblico" className={isActive('/curso-biblico')}><BookOpen size={17}/> {t('course.title')}</Link>
             <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}><Heart size={17}/> {t('nav.help_life')}</Link>
             <Link to="/journeys" className={isActive('/journeys')}><Globe size={17}/> {t('nav.journeys')}</Link>
+            <Link to="/diario-com-deus" className={isActive('/diario-com-deus')}><BookOpen size={17}/> {t('nav.diary')}</Link>
             <Link to="/chat-pastoral" className={isActive('/chat-pastoral')}><MessageCircle size={17}/> {t('nav.pastoral_chat')}</Link>
           </div>
 
