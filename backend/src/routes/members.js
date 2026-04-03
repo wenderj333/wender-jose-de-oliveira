@@ -15,8 +15,8 @@ function pastorOnly(req, res, next) {
 router.get('/', authenticate, async (req, res) => {
   try {
     const members = await db.prepare(
-      `SELECT u.id, u.email, u.full_name, u.display_name, u.avatar_url, u.role, u.is_active, u.last_seen_at, u.created_at, f.status AS friendship_status FROM users u LEFT JOIN friendships f ON (f.requester_id = ? AND f.addressee_id = u.id) OR (f.addressee_id = ? AND f.requester_id = u.id) ORDER BY u.created_at DESC
-    ).all(req.user.id, req.user.id); express = require('express');
+      `SELECT u.id, u.email, u.full_name, u.display_name, u.avatar_url, u.role, u.is_active, u.last_seen_at, u.created_at, f.status AS friendship_status FROM users u LEFT JOIN friendships f ON (f.requester_id = $1 AND f.addressee_id = u.id) OR (f.addressee_id = $1 AND f.requester_id = u.id) ORDER BY u.created_at DESC`
+    ).all(req.user.id);; express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
