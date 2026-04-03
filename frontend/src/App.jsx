@@ -110,7 +110,6 @@ export default function App() {
           </Link>
           <Link to="/journeys" className={`nav-item ${location.pathname==='/journeys'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'6px 11px',borderRadius:8,fontSize:'0.84rem',display:'flex',alignItems:'center',gap:6}}>
             <Globe size={15}/> {t('nav.journeys')}
-            <Link to='/diario-com-deus' className={isActive('/diario-com-deus')}><BookOpen size={17}/> {t('nav.diary')}</Link>
           </Link>
         </nav>
 
@@ -145,6 +144,7 @@ export default function App() {
               ['/ajuda-uma-vida', <Heart size={20}/>, t('nav.help_life')],
               ['/journeys', <Globe size={20}/>, t('nav.journeys')],
               ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
+              ['/diario-com-deus', <BookOpen size={20}/>, t('nav.diary')],
             ].map(([to, icon, label]) => (
               <Link key={to} to={to} onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'white',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
                 {icon} {label}
