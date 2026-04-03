@@ -189,6 +189,7 @@ export default function Profile() {
                   <button style={{ padding: '8px 20px', borderRadius: 8, border: '1px solid #dbdbdb', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
                     <UserPlus size={16} /> {t('nav.friends')}
                   </button>
+                  <button onClick={() => { if(window.confirm(t('profile.blockConfirm', 'Bloquear este utilizador?'))) { fetch(API_BASE+'/api/users/'+profile.id+'/block',{method:'POST',headers:{Authorization:'Bearer '+token}}).then(()=>alert(t('profile.blocked', 'Utilizador bloqueado!'))); }}} style={{padding:'8px 20px',borderRadius:8,border:'1px solid #e74c3c',background:'#fff',color:'#e74c3c',cursor:'pointer',fontWeight:600,fontSize:14}}>Bloquear</button>
                 </>
               )}
             </div>
