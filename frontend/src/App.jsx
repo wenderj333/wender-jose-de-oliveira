@@ -282,7 +282,8 @@ export default function App() {
             <Route path="/igrejas" element={<Churches />} />
             <Route path="/igrejas/:id" element={<ChurchProfile />} />
             <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
-          </Routes>
+                    <Route path='/diario-com-deus' element={<DiarioComDeus />} />
+</Routes>
         </main>
 
         {/* RIGHT SIDEBAR */}
@@ -363,4 +364,3 @@ export default function App() {
     </div>
   );
 }
-        <Route path='/diario-com-deus' element={<DiarioComDeus />} />
