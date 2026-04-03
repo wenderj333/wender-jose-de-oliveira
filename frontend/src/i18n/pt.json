@@ -1406,5 +1406,9 @@
     "yourMessages": "As tuas mensagens",
     "selectConvo": "Seleciona uma conversa ou vai ao perfil de um amigo para comecar a conversar!",
     "search": "Procurar conversa..."
+  },
+  "legal": {
+    "privacy": "Politica de Privacidade",
+    "terms": "Termos de Uso"
   }
 }

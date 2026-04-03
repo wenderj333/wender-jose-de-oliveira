@@ -1331,5 +1331,9 @@
     "yourMessages": "Deine Nachrichten",
     "selectConvo": "Wahle ein Gesprach aus oder gehe zum Profil eines Freundes!",
     "search": "Gesprach suchen..."
+  },
+  "legal": {
+    "privacy": "Datenschutzrichtlinie",
+    "terms": "Nutzungsbedingungen"
   }
 }

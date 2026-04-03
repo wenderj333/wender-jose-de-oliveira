@@ -1348,5 +1348,9 @@
     "yourMessages": "Vos messages",
     "selectConvo": "Selectionnez une conversation ou allez au profil d un ami pour commencer a chatter!",
     "search": "Rechercher une conversation..."
+  },
+  "legal": {
+    "privacy": "Politique de Confidentialite",
+    "terms": "Conditions utilisation"
   }
 }

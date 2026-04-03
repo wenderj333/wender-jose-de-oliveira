@@ -1344,5 +1344,9 @@
     "yourMessages": "Mesajele tale",
     "selectConvo": "Selecteaza o conversatie sau mergi la profilul unui prieten pentru a incepe sa vorbesti!",
     "search": "Cauta conversatie..."
+  },
+  "legal": {
+    "privacy": "Politica Confidentialitate",
+    "terms": "Termeni Utilizare"
   }
 }
