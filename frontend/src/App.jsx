@@ -110,6 +110,7 @@ export default function App() {
           </Link>
           <Link to="/journeys" className={`nav-item ${location.pathname==='/journeys'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'6px 11px',borderRadius:8,fontSize:'0.84rem',display:'flex',alignItems:'center',gap:6}}>
             <Globe size={15}/> {t('nav.journeys')}
+            <Link to='/diario-com-deus' className={isActive('/diario-com-deus')}><BookOpen size={17}/> {t('nav.diary')}</Link>
           </Link>
         </nav>
 
