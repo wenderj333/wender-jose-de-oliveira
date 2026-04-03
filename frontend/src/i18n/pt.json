@@ -183,7 +183,8 @@
     "phone": "Cadastrar com Telefone",
     "hasAccount": "Já tem conta?",
     "signIn": "Entrar",
-    "addPhoto": "Adicionar foto"
+    "addPhoto": "Adicionar foto",
+    "emailVerify": "Apos o registo recebes um email de confirmacao. Verifica a tua caixa de entrada."
   },
   "prayerFeed": {
     "victoryWall": "Mural de Vitórias",

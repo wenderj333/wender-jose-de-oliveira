@@ -121,7 +121,8 @@
     "phone": "S'inscrire avec Téléphone",
     "hasAccount": "Vous avez déjà un compte ?",
     "signIn": "Se connecter",
-    "addPhoto": "Ajouter une photo"
+    "addPhoto": "Ajouter une photo",
+    "emailVerify": "Apres inscription vous recevrez un email de confirmation. Verifiez votre boite de reception."
   },
   "prayerFeed": {
     "victoryWall": "Mur des Victoires",

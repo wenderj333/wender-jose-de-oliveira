@@ -121,7 +121,8 @@
     "phone": "Înregistrare cu Telefonul",
     "hasAccount": "Ai deja cont?",
     "signIn": "Conectare",
-    "addPhoto": "Adaugă foto"
+    "addPhoto": "Adaugă foto",
+    "emailVerify": "Dupa inregistrare veti primi un email de confirmare. Verificati casuta postala."
   },
   "prayerFeed": {
     "victoryWall": "Peretele Victoriilor",

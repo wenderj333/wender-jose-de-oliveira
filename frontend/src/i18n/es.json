@@ -121,7 +121,8 @@
     "phone": "Registrarse con Teléfono",
     "hasAccount": "¿Ya tienes cuenta?",
     "signIn": "Iniciar Sesión",
-    "addPhoto": "Añadir foto"
+    "addPhoto": "Añadir foto",
+    "emailVerify": "Despues del registro recibiras un email de confirmacion. Revisa tu bandeja de entrada."
   },
   "prayerFeed": {
     "victoryWall": "Mural de Victorias",

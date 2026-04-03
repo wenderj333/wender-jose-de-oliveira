@@ -174,7 +174,10 @@ export default function Register() {
         </form>
 
         <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--gray-500)' }}>
-          {t('register.hasAccount')} <Link to="/login" style={{ color: 'var(--green)', fontWeight: 600 }}>{t('register.signIn')}</Link>
+          <div style={{background:'#f0f9ff',border:'1px solid #bae6fd',borderRadius:8,padding:'12px 16px',marginTop:16,marginBottom:8,fontSize:13,color:'#0369a1',display:'flex',alignItems:'center',gap:8}}>
+          ✉ {t('register.emailVerify', 'Apos o registo recebes um email de confirmacao. Verifica a tua caixa de entrada.')}
+        </div>
+        {t('register.hasAccount')} <Link to="/login" style={{ color: 'var(--green)', fontWeight: 600 }}>{t('register.signIn')}</Link>
         </p>
       </div>
     </div>

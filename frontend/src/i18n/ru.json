@@ -910,5 +910,8 @@
   "legal": {
     "privacy": "Politika",
     "terms": "Usloviya"
+  },
+  "register": {
+    "emailVerify": "Posle registracii vy poluchite pismo s podtverzhdeniem. Proverite vashу pochtu."
   }
 }

@@ -121,7 +121,8 @@
     "phone": "Sign up with Phone",
     "hasAccount": "Already have an account?",
     "signIn": "Log In",
-    "addPhoto": "Add photo"
+    "addPhoto": "Add photo",
+    "emailVerify": "After registration you will receive a confirmation email. Check your inbox."
   },
   "prayerFeed": {
     "victoryWall": "Victory Wall",

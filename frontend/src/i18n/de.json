@@ -122,7 +122,8 @@
     "phone": "Sign up with Phone",
     "hasAccount": "Already have an account?",
     "signIn": "Log In",
-    "addPhoto": "Add photo"
+    "addPhoto": "Add photo",
+    "emailVerify": "Nach der Registrierung erhalten Sie eine Bestatigungsmail. Bitte prufen Sie Ihren Posteingang."
   },
   "prayerFeed": {
     "victoryWall": "Victory Wall",
