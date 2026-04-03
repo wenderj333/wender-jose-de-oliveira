@@ -15,9 +15,27 @@ function pastorOnly(req, res, next) {
 router.get('/', authenticate, async (req, res) => {
   try {
     const members = await db.prepare(
+      `SELECT u.id, u.email, u.full_name, u.display_name, u.avatar_url, u.role, u.is_active, u.last_seen_at, u.created_at, f.status AS friendship_status FROM users u LEFT JOIN friendships f ON (f.requester_id = ? AND f.addressee_id = u.id) OR (f.addressee_id = ? AND f.requester_id = u.id) ORDER BY u.created_at DESC
+    ).all(req.user.id, req.user.id); express = require('express');
+const router = express.Router();
+const db = require('../db/connection');
+const { authenticate } = require('../middleware/auth');
+
+// Middleware: only pastors/admins
+function pastorOnly(req, res, next) {
+  if (req.user.role !== 'pastor' && req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Acesso restrito a pastores' });
+  }
+  next();
+}
+
+// GET /api/members â€” list all members (pastor only)
+router.get('/', authenticate, async (req, res) => {
+  try {
+    const members = await db.prepare(
       `SELECT id, email, full_name, display_name, avatar_url, role, is_active, last_seen_at, created_at
        FROM users ORDER BY created_at DESC`
-    ).all();
+    )  .all(req.user.id, req.user.id);
     res.json({ members });
   } catch (err) {
     console.error('Error listing members:', err);
@@ -34,7 +52,7 @@ router.get('/pastors', authenticate, async (req, res) => {
        LEFT JOIN churches c ON c.pastor_id = u.id
        WHERE u.role = 'pastor' AND u.is_active = true
        ORDER BY u.full_name ASC`
-    ).all();
+    )  .all(req.user.id, req.user.id);
     res.json({ pastors });
   } catch (err) {
     console.error('Error listing pastors:', err);
