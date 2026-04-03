@@ -530,7 +530,8 @@
     "follow": "Follow",
     "copyLink": "Copy link",
     "changeAvatar": "Change photo",
-    "deleteCover": "Delete cover"
+    "deleteCover": "Delete cover",
+    "deleteAccount": "Delete Account"
   },
   "messages": {
     "title": "Messages",

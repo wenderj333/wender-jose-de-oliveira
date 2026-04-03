@@ -530,7 +530,8 @@
     "follow": "Seguir",
     "copyLink": "Copiar enlace",
     "changeAvatar": "Cambiar foto",
-    "deleteCover": "Eliminar portada"
+    "deleteCover": "Eliminar portada",
+    "deleteAccount": "Eliminar Cuenta"
   },
   "messages": {
     "title": "Mensajes",

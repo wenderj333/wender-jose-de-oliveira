@@ -621,7 +621,8 @@
     "follow": "Seguir",
     "copyLink": "Copiar link",
     "changeAvatar": "Mudar foto",
-    "deleteCover": "Apagar capa"
+    "deleteCover": "Apagar capa",
+    "deleteAccount": "Apagar Conta"
   },
   "messages": {
     "title": "Mensagens",

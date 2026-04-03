@@ -526,7 +526,8 @@
     "follow": "Urmareste",
     "copyLink": "Copiaza link",
     "changeAvatar": "Schimba poza",
-    "deleteCover": "Sterge coperta"
+    "deleteCover": "Sterge coperta",
+    "deleteAccount": "Sterge contul"
   },
   "messages": {
     "title": "Mesaje",
