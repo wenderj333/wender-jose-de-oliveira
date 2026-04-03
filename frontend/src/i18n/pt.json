@@ -1409,6 +1409,18 @@
   },
   "legal": {
     "privacy": "Politica de Privacidade",
-    "terms": "Termos de Uso"
+    "terms": "Termos de Uso",
+    "p1title": "Informacoes coletadas",
+    "p1text": "Coletamos informacoes que voce fornece.",
+    "p2title": "Como usamos os dados",
+    "p2text": "Usamos para melhorar nossos servicos.",
+    "p3title": "Compartilhamento",
+    "p3text": "Nao vendemos seus dados.",
+    "p4title": "Seguranca",
+    "p4text": "Protegemos suas informacoes.",
+    "p5title": "Seus direitos",
+    "p5text": "Voce pode excluir seus dados.",
+    "contact": "Contato",
+    "lastUpdate": "Ultima atualizacao"
   }
 }

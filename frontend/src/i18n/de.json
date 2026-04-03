@@ -1334,6 +1334,18 @@
   },
   "legal": {
     "privacy": "Datenschutzrichtlinie",
-    "terms": "Nutzungsbedingungen"
+    "terms": "Nutzungsbedingungen",
+    "p1title": "Informationen",
+    "p1text": "Wir sammeln Informationen die Sie uns mitteilen.",
+    "p2title": "Wie wir Daten verwenden",
+    "p2text": "Wir verbessern unsere Dienste.",
+    "p3title": "Datenweitergabe",
+    "p3text": "Wir verkaufen keine Daten.",
+    "p4title": "Sicherheit",
+    "p4text": "Wir schuetzen Ihre Daten.",
+    "p5title": "Ihre Rechte",
+    "p5text": "Sie koennen Ihre Daten loeschen.",
+    "contact": "Kontakt",
+    "lastUpdate": "Letzte Aktualisierung"
   }
 }

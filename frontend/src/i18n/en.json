@@ -1351,6 +1351,18 @@
   },
   "legal": {
     "privacy": "Privacy Policy",
-    "terms": "Terms of Use"
+    "terms": "Terms of Use",
+    "p1title": "Information we collect",
+    "p1text": "We collect information you provide.",
+    "p2title": "How we use information",
+    "p2text": "We use information to improve services.",
+    "p3title": "Data sharing",
+    "p3text": "We do not sell your data.",
+    "p4title": "Security",
+    "p4text": "We protect your information.",
+    "p5title": "Your rights",
+    "p5text": "You can delete your data.",
+    "contact": "Contact",
+    "lastUpdate": "Last updated"
   }
 }
