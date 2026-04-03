@@ -54,7 +54,6 @@ export default function App() {
 
   useEffect(() => {
     if (lastEvent?.type === 'direct_message' && lastEvent.senderId !== user?.id) {
-      try{const a=new AudioContext();const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=880;g.gain.setValueAtTime(0.3,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.3);o.start();o.stop(a.currentTime+0.3);}catch(e){}
       if (!location.pathname.startsWith('/mensagens')) {
         setUnreadMessages(prev => prev + 1);
       }
@@ -117,7 +116,7 @@ export default function App() {
         <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8}}>
           <LanguageSelector />
           <Link to="/notificacoes" style={{position:'relative',background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',textDecoration:'none'}}>
-            <Bell size={17}/>{unreadNotif>0&&<span style={{position:'absolute',top:-4,right:-4,background:'#e74c3c',color:'white',borderRadius:'50%',minWidth:16,height:16,fontSize:'0.65rem',fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center'}}>{unreadNotif}</span>}
+            <Bell size={17}/>
           </Link>
           <Link to={`/perfil/${user.id}`} style={{background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',overflow:'hidden',textDecoration:'none'}}>
             {user.avatar_url ? (
