@@ -373,6 +373,7 @@ function PostCard({ post, onLike, onDelete }) {
         }} title="Ver quem deu Amén">
           👥 {post.amemCount}
         </button>
+        <button onClick={() => { if(window.confirm('Denunciar este post?')) { fetch(API_BASE+'/api/feed/'+post.id+'/report',{method:'POST',headers:{Authorization:'Bearer '+token}}).then(()=>alert('Post denunciado!')); }}} style={{background:'none',border:'none',cursor:'pointer',color:'#e74c3c',fontSize:'12px',padding:'6px 8px',borderRadius:'8px'}}>Denunciar</button>
         
           href={"https://wa.me/?text=" + encodeURIComponent((post.content ? post.content.slice(0, 100) : 'Partilha da fe') + ' | Sigo com Fe ' + window.location.origin + '/mural')}
           target="_blank"
