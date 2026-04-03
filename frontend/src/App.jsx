@@ -23,6 +23,7 @@ import PastorChat from "./pages/PastorChat";
 import HelpRequests from "./pages/HelpRequests";
 import BiblicalCourse from "./pages/BiblicalCourse";
 import DiarioComDeus from './pages/DiarioComDeus';
+import DiarioComDeus from './pages/DiarioComDeus';
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
 import AjudaUmaVida from "./pages/AjudaUmaVida";
@@ -85,6 +86,7 @@ export default function App() {
             <Users size={16}/> {t('nav.members', 'Membros')}
           </Link>
            <Link to="/journeys" className={`nav-item ${location.pathname==='/journeys'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'7px 11px',borderRadius:8,fontSize:'0.85rem',display:'flex',alignItems:'center',gap:6}}>
+        <Route path='/diario-com-deus' element={<DiarioComDeus />} />
             <Globe size={16}/> {t('nav.journeys', 'Jornadas')}
           </Link>
         </nav>
