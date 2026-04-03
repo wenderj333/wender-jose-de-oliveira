@@ -43,7 +43,7 @@ router.get('/pastors', authenticate, async (req, res) => {
 });
 
 // GET /api/members/messages/:userId â€” get direct messages with a user
-router.get('/messages/:userId', authenticate, pastorOnly, async (req, res) => {
+router.get('/messages/:userId', authenticate, async (req, res) => {
   try {
     const messages = await db.prepare(
       `SELECT * FROM direct_messages
@@ -58,7 +58,7 @@ router.get('/messages/:userId', authenticate, pastorOnly, async (req, res) => {
 });
 
 // POST /api/members/messages â€” send direct message
-router.post('/messages', authenticate, pastorOnly, async (req, res) => {
+router.post('/messages', authenticate, async (req, res) => {
   try {
     const { receiverId, content } = req.body;
     if (!receiverId || !content?.trim()) {
