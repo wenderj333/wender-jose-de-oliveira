@@ -1,385 +1,274 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { Flame, ChevronDown, ChevronUp } from 'lucide-react';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
-// BENEFITS is built inside the component now to use t() for i18n
-// This allows translation of benefit titles and descriptions
+function FireScene({ isActive, activeFasting }) {
+  const canvasRef = useRef(null);
+  const cloudRef = useRef(null);
+  const labelRef = useRef(null);
+  const animRef = useRef(null);
+  const personsRef = useRef([]);
+  const personIdRef = useRef(0);
 
-export default function Consecration() {
+  function lerpC(a,b,t){t=Math.max(0,Math.min(1,t));return[Math.round(a[0]+(b[0]-a[0])*t),Math.round(a[1]+(b[1]-a[1])*t),Math.round(a[2]+(b[2]-a[2])*t)];}
+  function fromStops(s,r){var sg=r*(s.length-1);var i=Math.min(Math.floor(sg),s.length-2);return lerpC(s[i],s[i+1],sg-i);}
+  function getFlameColor(r,days){
+    var warm=fromStops([[200,20,0],[240,90,20],[255,150,40],[255,210,60],[255,245,180]],r);
+    if(days>=3){var epic=fromStops([[100,20,0],[0,200,80],[0,160,60],[80,255,140],[210,255,220]],r);return lerpC(warm,epic,Math.min((days-2)/2,1));}
+    if(days>=1){var grn=fromStops([[180,30,0],[60,160,40],[30,130,40],[100,230,90],[200,255,190]],r);return lerpC(warm,grn,Math.min(days*0.45,1));}
+    return warm;
+  }
+
+  function makePerson(W, H, days, name) {
+    var x = 40 + Math.random()*(W-80);
+    var y = (0.18 + Math.random()*0.55)*H;
+    var sz = 0.4 + Math.min(days*0.35, 1.2);
+    var p = {id: personIdRef.current++, x:x, y:y, name:name||null, days:days, particles:[]};
+    for(var i=0;i<Math.round(22*sz);i++){
+      p.particles.push({x:x,y:y,vx:(Math.random()-0.5)*0.8,vy:-(0.7+Math.random()*1.9)*sz,life:Math.random()*50,maxLife:40+Math.random()*35,sz:(2+Math.random()*5)*sz,seed:Math.random()*100});
+    }
+    return p;
+  }
+
+  useEffect(() => {
+    var canvas = canvasRef.current;
+    var cloudCanvas = cloudRef.current;
+    var labelCanvas = labelRef.current;
+    if(!canvas) return;
+    var W = canvas.offsetWidth || 500;
+    var H = canvas.offsetHeight || 500;
+    canvas.width = W; canvas.height = H;
+    cloudCanvas.width = W; cloudCanvas.height = H;
+    labelCanvas.width = W; labelCanvas.height = H;
+    var ctx = canvas.getContext('2d');
+    var cCtx = cloudCanvas.getContext('2d');
+    var lCtx = labelCanvas.getContext('2d');
+
+    var clouds = [{x:0,y:H*0.25,w:W*0.5,h:50,s:0.12},{x:W*0.4,y:H*0.35,w:W*0.55,h:60,s:0.08},{x:W*0.7,y:H*0.2,w:W*0.45,h:45,s:0.14},{x:-80,y:H*0.45,w:W*0.4,h:40,s:0.09}];
+
+    var NAMES = ['Ana Costa','Carlos M.','Maria S.','Joao P.','Rita L.','Pedro A.','Sofia B.','Luis C.'];
+    personsRef.current = [];
+    for(var i=0;i<5;i++){
+      var days = Math.floor(Math.random()*5);
+      var name = Math.random()<0.65 ? NAMES[Math.floor(Math.random()*NAMES.length)] : null;
+      personsRef.current.push(makePerson(W,H,days,name));
+    }
+
+    function loop(){
+      ctx.clearRect(0,0,W,H);
+      lCtx.clearRect(0,0,W,H);
+      personsRef.current.forEach(function(p){
+        var sz = 0.4+Math.min(p.days*0.35,1.2);
+        p.particles.forEach(function(pt){
+          pt.life++; pt.x+=pt.vx+Math.sin(pt.life*0.18+pt.seed)*0.5; pt.y+=pt.vy; pt.vy*=0.984; pt.sz*=0.976;
+          if(pt.life>=pt.maxLife||pt.sz<0.3){pt.x=p.x+(Math.random()-0.5)*14*sz;pt.y=p.y;pt.vy=-(0.7+Math.random()*1.9)*sz;pt.vx=(Math.random()-0.5)*0.8;pt.life=0;pt.maxLife=40+Math.random()*35;pt.sz=(2+Math.random()*5)*sz;}
+          var r=1-(pt.life/pt.maxLife); var col=getFlameColor(r,p.days); var alpha=Math.min(r*2.8,1)*0.92; var rad=pt.sz*1.8;
+          var g=ctx.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,rad);
+          g.addColorStop(0,'rgba('+col[0]+','+col[1]+','+col[2]+','+alpha+')');
+          g.addColorStop(0.4,'rgba('+col[0]+','+col[1]+','+col[2]+','+(alpha*0.45)+')');
+          g.addColorStop(1,'rgba('+col[0]+','+col[1]+','+col[2]+',0)');
+          ctx.beginPath();ctx.arc(pt.x,pt.y,rad,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+        });
+        if(p.name){lCtx.font='bold 10px sans-serif';lCtx.fillStyle='rgba(255,255,255,0.85)';lCtx.textAlign='center';lCtx.fillText(p.name,p.x,p.y+20);}
+        var dot=p.days>=3?'#44ff88':p.days>=1?'#88dd55':'#ff8844';
+        lCtx.beginPath();lCtx.arc(p.x,p.y,3,0,Math.PI*2);lCtx.fillStyle=dot;lCtx.fill();
+      });
+      cCtx.clearRect(0,0,W,H);
+      clouds.forEach(function(c){
+        c.x+=c.s;if(c.x>W+c.w)c.x=-c.w;
+        var grd=cCtx.createRadialGradient(c.x+c.w/2,c.y+c.h/2,0,c.x+c.w/2,c.y+c.h/2,c.w/2);
+        grd.addColorStop(0,'rgba(20,60,120,0.07)');grd.addColorStop(1,'rgba(10,30,80,0)');
+        cCtx.beginPath();cCtx.ellipse(c.x+c.w/2,c.y+c.h/2,c.w/2,c.h/2,0,0,Math.PI*2);cCtx.fillStyle=grd;cCtx.fill();
+      });
+      animRef.current = requestAnimationFrame(loop);
+    }
+    loop();
+    return () => cancelAnimationFrame(animRef.current);
+  }, []);
+
+  return (
+    <div style={{position:'relative',width:'100%',height:'100%'}}>
+      <canvas ref={canvasRef} style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',zIndex:2}} />
+      <canvas ref={cloudRef} style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',zIndex:3}} />
+      <canvas ref={labelRef} style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',zIndex:4}} />
+    </div>
+  );
+}
+﻿export default function Consecration() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
   const [stats, setStats] = useState({ totalConsecrations: 0, activeFasting: 0 });
   const [isActive, setIsActive] = useState(false);
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState(false);
-  const [showBenefits, setShowBenefits] = useState(true);
-  const [expandedSection, setExpandedSection] = useState(null);
+  const [showWarning, setShowWarning] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [showPrayer, setShowPrayer] = useState(false);
+  const [prayerText, setPrayerText] = useState('');
+  const [prayerVis, setPrayerVis] = useState('public');
+  const [prayerSent, setPrayerSent] = useState(false);
 
-  // Build BENEFITS array using i18n keys
-  const BENEFITS = [
-    {
-      title: '🕊️ ' + t('consecration.spiritualBenefits'),
-      items: [
-        { icon: '🔥', text: t('consecration.spiritualStrength'), verse: '"Mas esmurro o meu corpo e o reduzo à servidão." — 1 Coríntios 9:27' },
-        { icon: '🧭', text: t('consecration.godDirection'), verse: '"Jejuamos, pois, e pedimos isso ao nosso Deus, e Ele nos ouviu." — Esdras 8:23' },
-        { icon: '🛡️', text: t('consecration.breakOppression'), verse: '"Porventura não é este o jejum que escolhi?" — Isaías 58:6' },
-        { icon: '🙏', text: t('consecration.intimacy'), verse: '"Quando jejuares… teu Pai, que vê em secreto, te recompensará." — Mateus 6:17–18' },
-      ],
-    },
-    {
-      title: '🧠 ' + t('consecration.mentalBenefits'),
-      items: [
-        { icon: '🧘', text: t('consecration.mentalHumility'), verse: '"Humilhei a minha alma com o jejum." — Salmos 35:13' },
-        { icon: '🎯', text: t('consecration.selfControl'), verse: '"Melhor é o que domina o seu espírito do que o que conquista uma cidade." — Provérbios 16:32' },
-        { icon: '🧠', text: t('consecration.mindRenewal'), verse: '"Transformai-vos pela renovação do vosso entendimento." — Romanos 12:2' },
-      ],
-    },
-    {
-      title: '💪 ' + t('consecration.physicalBenefits'),
-      items: [
-        { icon: '♻️', text: t('consecration.purification'), verse: '"Purifiquemo-nos de toda impureza da carne e do espírito." — 2 Coríntios 7:1' },
-        { icon: '🛡️', text: t('consecration.templeBody'), verse: '"Vosso corpo é templo do Espírito Santo." — 1 Coríntios 6:19' },
-        { icon: '🔥', text: t('consecration.disciplineFaith'), verse: '"O exercício físico é de pouco proveito, mas a piedade é proveitosa para tudo." — 1 Timóteo 4:8' },
-      ],
-    },
-    {
-      title: '🍞 ' + t('consecration.breakFasting'),
-      items: [
-        { icon: '🥣', text: t('consecration.breakSimplicity'), verse: '"E, tomando o pão, deu graças." — Lucas 22:19' },
-        { icon: '📖', text: t('consecration.breakGlory'), verse: '"Quer comais, quer bebais, fazei tudo para a glória de Deus." — 1 Coríntios 10:31' },
-      ],
-    },
-  ];
-
-  useEffect(() => {
-    fetchStats();
-    if (token) fetchStatus();
-  }, [token]);
+  useEffect(() => { fetchStats(); if(token) fetchStatus(); }, [token]);
 
   async function fetchStats() {
-    try {
-      const res = await fetch(`${API}/consecration/stats`);
-      if (res.ok) {
-        const data = await res.json();
-        if (data && !data.error) setStats(data);
-      }
-    } catch (err) { console.error(err); }
+    try { const res = await fetch(API+'/consecration/stats'); if(res.ok){const d=await res.json();if(d&&!d.error)setStats(d);} } catch(e){}
     finally { setLoading(false); }
   }
-
   async function fetchStatus() {
-    try {
-      const res = await fetch(`${API}/consecration/status`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setIsActive(data.active);
-      }
-    } catch (err) { console.error(err); }
+    try { const res = await fetch(API+'/consecration/status',{headers:{Authorization:'Bearer '+token}}); if(res.ok){const d=await res.json();setIsActive(d.active);} } catch(e){}
   }
 
-  async function handleToggle() {
-    if (!user) { alert(t('consecration.loginRequired')); return; }
-    if (toggling) return;
-    setToggling(true);
-    try {
-      const res = await fetch(`${API}/consecration/toggle`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setIsActive(data.active);
-        fetchStats();
-      }
-    } catch (err) { console.error(err); }
-    finally { setTimeout(() => setToggling(false), 500); }
+  function handleStartClick() {
+    if(!user){alert(t('consecration.loginRequired'));return;}
+    if(isActive){ doToggle(); } else { setShowWarning(true); }
   }
 
-  // Each person consecrating = 1 flame! More people = more fire!
-  const bubbleCount = Math.min(Math.max(stats.activeFasting * 5, 8), 60);
+  async function doToggle() {
+    if(toggling)return; setToggling(true);
+    try { const res=await fetch(API+'/consecration/toggle',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'}}); if(res.ok){const d=await res.json();setIsActive(d.active);fetchStats();} } catch(e){}
+    finally { setTimeout(()=>setToggling(false),500); }
+  }
+
+  async function confirmStart() {
+    setShowWarning(false);
+    await doToggle();
+  }
+
+  async function sendPrayer() {
+    if(!prayerText.trim())return;
+    try {
+      await fetch(API+'/prayer-requests',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({text:prayerText,visibility:prayerVis})});
+    } catch(e){}
+    setPrayerSent(true);
+    setTimeout(()=>{setShowPrayer(false);setPrayerText('');setPrayerSent(false);},2000);
+  }
+
+  const sceneStyle = {
+    position:'relative', width:'100%', height:'85vh', minHeight:500, maxHeight:700,
+    overflow:'hidden', borderRadius:16,
+    background: isActive
+      ? 'linear-gradient(180deg,#000a14 0%,#000e1e 35%,#001428 65%,#000e1e 100%)'
+      : 'linear-gradient(180deg,#010a18 0%,#021428 35%,#031e3e 65%,#042450 100%)',
+    transition:'background 1s ease',
+  };
 
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem', minHeight: '80vh', position: 'relative', overflow: 'hidden' }}>
-
-      {/* Animated fire bubbles background */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none', zIndex: 0 }}>
-        {[...Array(bubbleCount)].map((_, i) => {
-          const w = 12 + (i % 6) * 6;
-          const speed = 8 + (i % 5) * 1.5; // faster flames
-          const colors = [
-            'radial-gradient(ellipse at bottom, #fff700 0%, #ff9500 25%, #ff4500 55%, #cc0000aa 100%)',
-            'radial-gradient(ellipse at bottom, #ffe066 0%, #ffaa00 25%, #ff6600 55%, #dd3300aa 100%)',
-            'radial-gradient(ellipse at bottom, #ffcc33 0%, #ff7700 25%, #ff3300 55%, #aa0000aa 100%)',
-            'radial-gradient(ellipse at bottom, #ffdd44 0%, #ffbb00 25%, #ff5500 55%, #cc2200aa 100%)',
-            'radial-gradient(ellipse at bottom, #ffffff 0%, #ffee00 20%, #ff8800 50%, #ff3300aa 100%)',
-          ];
-          return (
-            <span key={i} style={{
-              position: 'absolute',
-              bottom: '-20px',
-              left: `${3 + (i * 94 / bubbleCount) % 94}%`,
-              width: `${w}px`,
-              height: `${w * 1.6}px`,
-              borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
-              background: colors[i % colors.length],
-              opacity: 0.95,
-              animation: `fireBubbleRise ${speed}s ease-in-out infinite, flicker ${1.5 + (i % 3) * 0.5}s ease-in-out infinite`,
-              animationDelay: `${(i * 0.5) % speed}s`,
-              boxShadow: `0 0 ${10 + (i % 5) * 6}px ${i % 2 === 0 ? '#ffaa00' : '#ff6600'}, 0 0 ${15 + (i % 4) * 8}px ${i % 2 === 0 ? '#ff660088' : '#ffcc0088'}`,
-              filter: 'brightness(1.4)',
-            }} />
-          );
-        })}
-      </div>
+    <div style={{maxWidth:700,margin:'0 auto',padding:'0.5rem',position:'relative'}}>
 
       <style>{`
-        @keyframes fireBubbleRise {
-          0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0; }
-          5% { opacity: 0.9; }
-          25% { opacity: 0.8; transform: translateY(-20vh) scale(0.95) rotate(5deg); }
-          50% { opacity: 0.6; transform: translateY(-45vh) scale(0.7) rotate(-3deg); }
-          75% { opacity: 0.3; transform: translateY(-70vh) scale(0.5) rotate(4deg); }
-          100% { transform: translateY(-95vh) scale(0.2) rotate(0deg); opacity: 0; }
-        }
-        @keyframes pulseBtn { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
-        @keyframes flicker { 0%,100% { opacity: 0.85; } 50% { opacity: 1; } }
-        @keyframes innerFlame {
-          0% { transform: translateX(-50%) scaleX(1) scaleY(1); opacity: 0.4; }
-          30% { transform: translateX(-48%) scaleX(1.1) scaleY(1.05); opacity: 0.6; }
-          60% { transform: translateX(-52%) scaleX(0.9) scaleY(1.1); opacity: 0.5; }
-          100% { transform: translateX(-50%) scaleX(1.05) scaleY(0.95); opacity: 0.55; }
-        }
+        @keyframes fadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+        .warning-anim{animation:fadeIn 0.3s ease;}
+        .sidebar-slide{transition:transform 0.35s ease;}
       `}</style>
 
-      {/* Content (above bubbles) */}
-      <div style={{ position: 'relative', zIndex: 1 }}>
+      <div style={sceneStyle}>
+        <FireScene isActive={isActive} activeFasting={stats.activeFasting} />
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
-          <h1 style={{ fontSize: '1.4rem', color: '#1a0a3e', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-            <Flame size={24} color="#ff6600" /> {t('consecration.title')}
-          </h1>
-          <p style={{ color: '#666', fontSize: '0.8rem', margin: '0.4rem 0 0' }}>
-            {t('consecration.subtitle')}
-          </p>
-        </div>
+        <div style={{position:'absolute',inset:0,zIndex:10,pointerEvents:'none',
+          background: isActive ? 'rgba(0,5,15,0.35)' : 'transparent',
+          transition:'background 1s ease'}} />
 
-        {/* Texto explicativo sobre o jejum */}
-        <div style={{
-          background: 'linear-gradient(135deg, rgba(26,10,62,0.04), rgba(218,165,32,0.08))',
-          borderRadius: 16, padding: '1.2rem', marginBottom: '1.5rem',
-          border: '1px solid rgba(218,165,32,0.2)',
-        }}>
-          <h3 style={{ fontSize: '1rem', color: '#1a0a3e', margin: '0 0 0.5rem', textAlign: 'center' }}>
-            🔥 {t('consecration.powerOfFasting')}
-          </h3>
-          <p style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.6, margin: '0 0 0.5rem' }}>
-            {t('consecration.powerDesc')}
-          </p>
-          <p style={{ fontSize: '0.82rem', color: '#555', fontStyle: 'italic', margin: '0 0 0.4rem', textAlign: 'center' }}>
-            📖 "Quando jejuares, unge a tua cabeça e lava o teu rosto, para não pareceres aos homens que jejuas... 
-            e teu Pai, que vê em secreto, te recompensará." — Mateus 6:17-18
-          </p>
-          <p style={{ fontSize: '0.82rem', color: '#555', fontStyle: 'italic', margin: 0, textAlign: 'center' }}>
-            📖 "Convertei-vos a mim de todo o vosso coração; e isso com jejuns, com choro e com pranto." — Joel 2:12
-          </p>
-        </div>
-
-        {/* ===== COMO FUNCIONA — Explicação clara ===== */}
-        <div style={{
-          background: '#fff', borderRadius: 16, padding: '1rem', marginBottom: '1.25rem',
-          border: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-        }}>
-          <h3 style={{ fontSize: '0.95rem', color: '#1a0a3e', margin: '0 0 0.6rem', textAlign: 'center' }}>
-            📋 {t('consecration.howWorks')}
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-              <span style={{
-                width: 28, height: 28, borderRadius: '50%', background: '#4caf50', color: '#fff',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0,
-              }}>1</span>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: '#444', lineHeight: 1.5 }}>
-                <strong>{t('consecration.beginFasting')}:</strong> {t('consecration.beginFastingDesc')}
-              </p>
-            </div>
-            <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-              <span style={{
-                width: 28, height: 28, borderRadius: '50%', background: '#ff6600', color: '#fff',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0,
-              }}>2</span>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: '#444', lineHeight: 1.5 }}>
-                <strong>{t('consecration.flameRises')}:</strong> {t('consecration.flameRisesDesc')}
-              </p>
-            </div>
-            <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-              <span style={{
-                width: 28, height: 28, borderRadius: '50%', background: '#e74c3c', color: '#fff',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0,
-              }}>3</span>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: '#444', lineHeight: 1.5 }}>
-                <strong>{t('consecration.endFasting')}:</strong> {t('consecration.endFastingDesc')}
-              </p>
-            </div>
-          </div>
-          <div style={{
-            marginTop: '0.8rem', padding: '0.6rem', borderRadius: 10,
-            background: 'rgba(255,102,0,0.08)', border: '1px solid rgba(255,102,0,0.2)', textAlign: 'center',
-          }}>
-            <span style={{ fontSize: '0.78rem', color: '#cc5500' }}>
-              🔥 {t('consecration.morePeople')}
-            </span>
-          </div>
-        </div>
-
-        {/* ===== TOGGLE BUTTON — com chama de fogo interna ===== */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1.25rem' }}>
-          <button onClick={handleToggle} disabled={toggling} style={{
-            width: 170, height: 170, borderRadius: '50%', border: 'none', cursor: 'pointer',
-            background: isActive
-              ? 'radial-gradient(circle at 50% 70%, #fff700 0%, #ff9500 20%, #ff4500 45%, #cc0000 70%, #880000 100%)'
-              : 'radial-gradient(circle, #1a0a3e, #4a1a8e)',
-            color: '#fff', fontSize: '0.9rem', fontWeight: 700,
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4,
-            boxShadow: isActive
-              ? '0 0 50px rgba(255, 102, 0, 0.8), 0 0 100px rgba(255, 51, 0, 0.5), inset 0 0 40px rgba(255,200,0,0.3)'
-              : '0 4px 20px rgba(26, 10, 62, 0.3)',
-            transition: 'all 0.5s ease',
-            animation: isActive ? 'pulseBtn 2s ease-in-out infinite' : 'none',
-            position: 'relative',
-            overflow: 'hidden',
-          }}>
-            {/* Inner flame effect */}
-            {isActive && (
-              <>
-                <span style={{
-                  position: 'absolute', bottom: '10%', left: '50%', transform: 'translateX(-50%)',
-                  width: 60, height: 90,
-                  borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
-                  background: 'radial-gradient(ellipse at bottom, #fff700 0%, #ffaa00 30%, #ff4500 60%, transparent 100%)',
-                  animation: 'innerFlame 1.5s ease-in-out infinite alternate',
-                  opacity: 0.6, filter: 'blur(3px)',
-                }} />
-                <span style={{
-                  position: 'absolute', bottom: '15%', left: '45%', transform: 'translateX(-50%)',
-                  width: 35, height: 55,
-                  borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
-                  background: 'radial-gradient(ellipse at bottom, #ffffff 0%, #ffe066 30%, #ff6600 70%, transparent 100%)',
-                  animation: 'innerFlame 1.2s ease-in-out infinite alternate-reverse',
-                  opacity: 0.5, filter: 'blur(2px)',
-                }} />
-                <span style={{
-                  position: 'absolute', bottom: '12%', left: '55%', transform: 'translateX(-50%)',
-                  width: 28, height: 45,
-                  borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
-                  background: 'radial-gradient(ellipse at bottom, #fff 0%, #ffcc00 40%, #ff3300 80%, transparent 100%)',
-                  animation: 'innerFlame 1s ease-in-out infinite alternate',
-                  opacity: 0.4, filter: 'blur(2px)',
-                }} />
-              </>
-            )}
-            <span style={{ position: 'relative', zIndex: 2, textShadow: isActive ? '0 0 10px rgba(255,200,0,0.8)' : 'none' }}>
-              <Flame size={44} />
-            </span>
-            <span style={{ position: 'relative', zIndex: 2, textShadow: isActive ? '0 0 10px rgba(255,200,0,0.8)' : 'none', fontSize: '0.95rem' }}>
-              {isActive ? t('consecration.consecrating') : t('consecration.startButton')}
-            </span>
-          </button>
-          <div style={{
-            marginTop: 10, padding: '0.5rem 1rem', borderRadius: 20,
-            background: isActive ? 'rgba(255,102,0,0.1)' : 'rgba(26,10,62,0.05)',
-            border: isActive ? '1px solid rgba(255,102,0,0.3)' : '1px solid rgba(26,10,62,0.1)',
-          }}>
-            <p style={{ margin: 0, textAlign: 'center', fontSize: '0.82rem', fontWeight: 600, color: isActive ? '#cc5500' : '#666' }}>
-              {isActive
-                ? '✅ ' + t('consecration.currentlyConsecrating')
-                : '👆 ' + t('consecration.touchButton')}
-            </p>
-          </div>
-        </div>
-
-        {/* ===== STATS — explicativos ===== */}
-        <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: '1.5rem' }}>
-          <div style={{
-            background: 'linear-gradient(135deg, #ff6600, #ff3300)', borderRadius: 14,
-            padding: '0.8rem 1rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 160,
-          }}>
-            <div style={{ fontSize: '1.8rem', fontWeight: 800 }}>🔥 {stats.totalConsecrations}</div>
-            <div style={{ fontSize: '0.72rem', opacity: 0.95, fontWeight: 600 }}>{t('consecration.totalCount')}</div>
-            <div style={{ fontSize: '0.65rem', opacity: 0.7, marginTop: 2 }}>{t('consecration.totalCountDesc')}</div>
-          </div>
-          <div style={{
-            background: 'linear-gradient(135deg, #daa520, #b8860b)', borderRadius: 14,
-            padding: '0.8rem 1rem', color: '#fff', textAlign: 'center', flex: 1, maxWidth: 160,
-          }}>
-            <div style={{ fontSize: '1.8rem', fontWeight: 800 }}>🙏 {stats.activeFasting}</div>
-            <div style={{ fontSize: '0.72rem', opacity: 0.95, fontWeight: 600 }}>{t('consecration.activeFasting')}</div>
-            <div style={{ fontSize: '0.65rem', opacity: 0.7, marginTop: 2 }}>{t('consecration.activeFastingDesc')}</div>
-          </div>
-        </div>
-
-        {/* Benefits button */}
-        <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
-          <button onClick={() => setShowBenefits(!showBenefits)} style={{
-            padding: '0.6rem 1.2rem', borderRadius: 25, border: '2px solid #daa520',
-            background: showBenefits ? '#daa520' : 'transparent',
-            color: showBenefits ? '#fff' : '#daa520',
-            fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem',
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-          }}>
-            📖 {t('consecration.benefitsTitle')} {showBenefits ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-          </button>
-        </div>
-
-        {/* Benefits accordion */}
-        {showBenefits && (
-          <div style={{ marginBottom: '1.5rem' }}>
-            {BENEFITS.map((section, si) => (
-              <div key={si} style={{ marginBottom: 6 }}>
-                <button onClick={() => setExpandedSection(expandedSection === si ? null : si)} style={{
-                  width: '100%', padding: '0.65rem 0.85rem', borderRadius: 10, border: '1px solid #eee',
-                  background: expandedSection === si ? '#1a0a3e' : '#fff',
-                  color: expandedSection === si ? '#fff' : '#1a0a3e',
-                  fontWeight: 700, fontSize: '0.82rem', cursor: 'pointer', textAlign: 'left',
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                }}>
-                  {section.title}
-                  {expandedSection === si ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                </button>
-                {expandedSection === si && (
-                  <div style={{ padding: '0.4rem 0.85rem', background: '#fafafa', borderRadius: '0 0 10px 10px' }}>
-                    {section.items.map((item, ii) => (
-                      <div key={ii} style={{ padding: '0.5rem 0', borderBottom: ii < section.items.length - 1 ? '1px solid #eee' : 'none' }}>
-                        <div style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: 3 }}>
-                          {item.icon} {item.text}
-                        </div>
-                        <div style={{ fontSize: '0.75rem', color: '#666', fontStyle: 'italic' }}>
-                          📖 {item.verse}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+        {showWarning && (
+          <div style={{position:'absolute',inset:0,zIndex:60,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(0,5,20,0.75)'}}>
+            <div className="warning-anim" style={{background:'rgba(4,12,32,0.97)',border:'1px solid rgba(60,120,220,0.4)',borderRadius:18,padding:'24px 22px',maxWidth:300,textAlign:'center',boxShadow:'0 0 50px rgba(20,80,200,0.3)'}}>
+              <div style={{fontSize:32,marginBottom:12}}>⚡</div>
+              <div style={{color:'#fff',fontSize:16,fontWeight:700,marginBottom:8}}>{t('consecration.watchYourWords') || 'Vigila as tuas palavras'}</div>
+              <div style={{color:'rgba(180,210,255,0.8)',fontSize:11,lineHeight:1.7,marginBottom:10}}>
+                {t('consecration.warningText') || 'Durante o jejum, cada palavra tem peso. Evita conversas vãs, críticas e conflitos. Guarda o teu coração com toda diligência.'}
               </div>
-            ))}
-
-            {/* Conclusão */}
-            <div style={{ background: 'linear-gradient(135deg, #1a0a3e, #4a1a8e)', borderRadius: 14, padding: '1rem', color: '#fff', marginTop: 10, textAlign: 'center' }}>
-              <p style={{ fontStyle: 'italic', fontSize: '0.85rem', margin: '0 0 6px' }}>
-                "Nem só de pão viverá o homem, mas de toda Palavra que sai da boca de Deus." — Mateus 4:4
-              </p>
-              <p style={{ fontSize: '0.75rem', opacity: 0.8, margin: 0 }}>
-                🔑 {t('consecration.conclusion')}
-              </p>
+              <div style={{color:'rgba(140,180,255,0.6)',fontSize:10,fontStyle:'italic',marginBottom:16,lineHeight:1.6}}>
+                "Que saiam da vossa boca somente palavras boas para edificação." — Efésios 4:29
+              </div>
+              <button onClick={confirmStart} style={{width:'100%',background:'linear-gradient(135deg,#1a6fd4,#0d4fa8)',color:'#fff',border:'none',borderRadius:20,padding:'10px 20px',fontSize:12,fontWeight:700,cursor:'pointer',marginBottom:8}}>
+                {t('consecration.understandStart') || 'Entendo — Começar a Consagração'}
+              </button>
+              <button onClick={()=>setShowWarning(false)} style={{background:'none',border:'none',color:'rgba(140,180,255,0.5)',fontSize:11,cursor:'pointer'}}>
+                Cancelar
+              </button>
             </div>
           </div>
         )}
 
+        <div style={{position:'absolute',top:12,left:'50%',transform:'translateX(-50%)',background:'rgba(255,140,20,0.12)',border:'1px solid rgba(255,140,20,0.4)',borderRadius:20,padding:'5px 18px',fontSize:12,color:'#ffb060',whiteSpace:'nowrap',zIndex:30,fontWeight:600}}>
+          {stats.activeFasting} {t('consecration.activeFasting') || 'llamas encendidas ahora'}
+        </div>
+
+        <div style={{position:'absolute',top:52,left:'50%',transform:'translateX(-50%)',textAlign:'center',zIndex:30,width:'90%',pointerEvents:'none'}}>
+          <h2 style={{color:'#fff',fontSize:22,fontWeight:700,textShadow:'0 0 24px rgba(80,140,255,0.7)',margin:0}}>{t('consecration.title')}</h2>
+          <p style={{color:'rgba(180,210,255,0.65)',fontSize:11,marginTop:4}}>{t('consecration.subtitle')}</p>
+        </div>
+
+        <div style={{position:'absolute',top:135,left:'50%',transform:'translateX(-50%)',textAlign:'center',zIndex:30,width:'72%',color:'rgba(200,220,255,0.75)',fontSize:11,lineHeight:1.7,fontStyle:'italic',pointerEvents:'none'}}>
+          {t('consecration.quote') || 'Cada llama representa una vida buscando a Dios... y juntas iluminan el cielo'}
+        </div>
+
+        {showPrayer && (
+          <div style={{position:'absolute',left:14,bottom:120,zIndex:50,width:240,background:'rgba(4,12,30,0.97)',border:'1px solid rgba(60,120,220,0.3)',borderRadius:14,padding:14}}>
+            <div style={{color:'#7ab4ff',fontSize:11,fontWeight:700,marginBottom:4}}>{t('consecration.prayerRequest') || 'Pedido de Oração'}</div>
+            <div style={{color:'rgba(150,190,255,0.6)',fontSize:10,marginBottom:8,lineHeight:1.5}}>Estamos orando por ti. Partilha o teu pedido.</div>
+            {prayerSent ? (
+              <div style={{textAlign:'center',color:'#80d8a0',fontSize:11,padding:'8px 0'}}>{prayerVis==='public'?'Publicado no Mural!':'Recebido em privado!'} Oramos por ti!</div>
+            ) : (
+              <>
+                <textarea value={prayerText} onChange={e=>setPrayerText(e.target.value)} rows={3} placeholder="Senhor, eu preciso de..." style={{width:'100%',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(60,120,220,0.25)',borderRadius:8,padding:'7px 10px',color:'#fff',fontSize:10,resize:'none',outline:'none',fontFamily:'sans-serif',lineHeight:1.5}} />
+                <div style={{display:'flex',gap:5,margin:'7px 0'}}>
+                  <button onClick={()=>setPrayerVis('public')} style={{flex:1,padding:'5px 3px',borderRadius:8,border:'1px solid '+(prayerVis==='public'?'rgba(255,130,20,0.4)':'rgba(60,120,220,0.2)'),background:prayerVis==='public'?'rgba(255,130,20,0.12)':'transparent',color:prayerVis==='public'?'#ffb060':'rgba(150,190,255,0.6)',fontSize:9,cursor:'pointer',fontWeight:600}}>Publicar no Mural</button>
+                  <button onClick={()=>setPrayerVis('private')} style={{flex:1,padding:'5px 3px',borderRadius:8,border:'1px solid '+(prayerVis==='private'?'rgba(80,140,255,0.4)':'rgba(60,120,220,0.2)'),background:prayerVis==='private'?'rgba(30,80,180,0.15)':'transparent',color:prayerVis==='private'?'#7ab4ff':'rgba(150,190,255,0.6)',fontSize:9,cursor:'pointer',fontWeight:600}}>Privado</button>
+                </div>
+                <button onClick={sendPrayer} style={{width:'100%',background:'linear-gradient(135deg,#1a4fa8,#0d3a80)',color:'#fff',fontSize:10,fontWeight:700,border:'none',borderRadius:10,padding:7,cursor:'pointer'}}>Enviar Pedido</button>
+              </>
+            )}
+          </div>
+        )}
+
+        <button onClick={()=>setShowPrayer(!showPrayer)} style={{position:'absolute',left:14,bottom:72,zIndex:30,background:'rgba(5,15,40,0.75)',border:'1px solid rgba(80,140,255,0.35)',borderRadius:22,padding:'7px 14px',cursor:'pointer',display:'flex',alignItems:'center',gap:7,color:'rgba(180,210,255,0.85)',fontSize:11,fontWeight:600}}>
+          <span style={{width:7,height:7,borderRadius:'50%',background:'#4a8fff',display:'inline-block'}}></span>
+          {t('consecration.prayerRequest') || 'Pedido de Oração'}
+        </button>
+
+        <button onClick={()=>setShowSidebar(true)} style={{position:'absolute',right:14,bottom:72,zIndex:30,background:'rgba(5,15,40,0.75)',border:'1px solid rgba(80,140,255,0.35)',borderRadius:22,padding:'7px 14px',cursor:'pointer',color:'rgba(180,210,255,0.85)',fontSize:11,fontWeight:600}}>
+          Guia
+        </button>
+
+        <button onClick={handleStartClick} disabled={toggling} style={{position:'absolute',bottom:14,left:'50%',transform:'translateX(-50%)',background:isActive?'linear-gradient(135deg,#0d4fa8,#1a6fd4)':'linear-gradient(135deg,#ff5500,#cc2200)',color:'#fff',fontSize:12,fontWeight:700,border:'none',borderRadius:28,padding:'12px 30px',zIndex:30,cursor:'pointer',boxShadow:isActive?'0 0 28px rgba(30,100,220,0.5)':'0 0 28px rgba(255,80,0,0.5)',transition:'all 0.5s',whiteSpace:'nowrap'}}>
+          {isActive ? (t('consecration.consecrating')||'CONSAGRANDO... (parar)') : (t('consecration.startButton')||'COMEÇAR CONSAGRAÇÃO')}
+        </button>
+
+        {showSidebar && (
+          <div style={{position:'absolute',right:0,top:0,bottom:0,width:270,zIndex:60,background:'rgba(4,12,30,0.97)',borderLeft:'1px solid rgba(60,120,220,0.2)',overflowY:'auto',padding:16}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14}}>
+              <span style={{color:'#a0c8ff',fontSize:13,fontWeight:700}}>Guia da Consagração</span>
+              <span onClick={()=>setShowSidebar(false)} style={{color:'rgba(140,180,255,0.5)',fontSize:20,cursor:'pointer',lineHeight:1}}>×</span>
+            </div>
+            {[
+              {title:'O Poder do Jejum',text:'O jejum é uma das armas espirituais mais poderosas. Não é dieta — é entrega total a Deus.',verse:'"Quando jejuares... teu Pai, que vê em secreto, te recompensará." — Mateus 6:17-18'},
+              {title:'Como Funciona',steps:['Clica em Começar — a tua chama acende','A chama cresce com as horas','Dias consecutivos mudam a cor da chama','Clica novamente para terminar']},
+              {title:'Evolução das Chamas',flames:[{c:'#ff6622',l:'Início — laranja'},{c:'#ffaa22',l:'1h+ — crescendo'},{c:'#88dd55',l:'Dia 1 — verde inicio'},{c:'#44cc77',l:'Dia 2 — verde forte'},{c:'#22ff88',l:'Dia 3+ — tocha épica'}]},
+              {title:'Benefícios Espirituais',text:'Força espiritual · Direção divina · Quebra de opressão · Intimidade com Deus',verse:'"Jejuamos e pedimos a Deus, e Ele nos ouviu." — Esdras 8:23'},
+              {title:'Quebrar o Jejum',text:'Termina com gratidão e simplicidade. Toma alimentos leves e dá graças.',verse:'"Fazei tudo para a glória de Deus." — 1 Coríntios 10:31'},
+            ].map((s,i)=>(
+              <div key={i} style={{marginBottom:16}}>
+                <div style={{color:'#7ab4ff',fontSize:11,fontWeight:700,marginBottom:6,textTransform:'uppercase',letterSpacing:'0.05em'}}>{s.title}</div>
+                {s.text && <p style={{color:'rgba(180,210,255,0.7)',fontSize:11,lineHeight:1.6,margin:0}}>{s.text}</p>}
+                {s.verse && <div style={{color:'rgba(140,180,255,0.6)',fontSize:10,fontStyle:'italic',marginTop:4,lineHeight:1.5}}>{s.verse}</div>}
+                {s.steps && <div style={{display:'flex',flexDirection:'column',gap:7}}>{s.steps.map((st,j)=>(
+                  <div key={j} style={{display:'flex',gap:8,alignItems:'flex-start'}}>
+                    <div style={{width:18,height:18,borderRadius:'50%',background:'rgba(30,80,180,0.5)',border:'1px solid rgba(80,140,255,0.4)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:9,color:'#7ab4ff',fontWeight:700,flexShrink:0}}>{j+1}</div>
+                    <span style={{color:'rgba(180,210,255,0.75)',fontSize:10,lineHeight:1.5}}>{st}</span>
+                  </div>
+                ))}</div>}
+                {s.flames && <div style={{display:'flex',flexDirection:'column',gap:5}}>{s.flames.map((f,j)=>(
+                  <div key={j} style={{display:'flex',alignItems:'center',gap:8,fontSize:10,color:'rgba(180,210,255,0.7)'}}>
+                    <div style={{width:8,height:8,borderRadius:'50%',background:f.c,flexShrink:0}}></div>{f.l}
+                  </div>
+                ))}</div>}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
