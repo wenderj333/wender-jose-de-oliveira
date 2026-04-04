@@ -95,11 +95,21 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
 
   const isGuest = !user && localStorage.getItem('guest') === '1';
   const guestBar = isGuest ? (
-    <div style={{background:'#0077b6',padding:'10px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:8}}>
-      <span style={{color:'#fff',fontSize:13,fontWeight:600}}>Voce esta navegando como convidado</span>
-      <div style={{display:'flex',gap:8}}>
-        <a href="/login" style={{color:'#fff',fontSize:12,fontWeight:700,background:'rgba(255,255,255,0.2)',padding:'5px 14px',borderRadius:20,textDecoration:'none'}}>Entrar</a>
-        <a href="/register" style={{color:'#0077b6',fontSize:12,fontWeight:700,background:'#fff',padding:'5px 14px',borderRadius:20,textDecoration:'none'}}>Criar conta gratuita</a>
+    <div>
+      <div style={{background:'#1a1a2e',padding:'10px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:8}}>
+        <div style={{display:'flex',alignItems:'center',gap:6}}>
+          <img src="/logo.svg" alt="logo" style={{width:28,height:28}} />
+          <span style={{color:'#f0c040',fontWeight:700,fontSize:15}}>Sigo com Fe</span>
+        </div>
+        <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+          <a href="/mural" style={{color:'rgba(255,255,255,0.85)',fontSize:12,textDecoration:'none',padding:'4px 10px',borderRadius:16,background:'rgba(255,255,255,0.1)'}}>Mural</a>
+          <a href="/register" style={{color:'#1a1a2e',fontSize:12,fontWeight:700,background:'#f0c040',padding:'5px 14px',borderRadius:20,textDecoration:'none'}}>Criar conta</a>
+          <a href="/login" style={{color:'#fff',fontSize:12,fontWeight:700,background:'rgba(255,255,255,0.15)',padding:'5px 14px',borderRadius:20,textDecoration:'none'}}>Entrar</a>
+        </div>
+      </div>
+      <div style={{background:'#0077b6',padding:'8px 20px',textAlign:'center'}}>
+        <span style={{color:'#fff',fontSize:12}}>Voce esta visitando como convidado. </span>
+        <a href="/register" style={{color:'#fff',fontWeight:700,fontSize:12}}>Registe-se para participar!</a>
       </div>
     </div>
   ) : null;
