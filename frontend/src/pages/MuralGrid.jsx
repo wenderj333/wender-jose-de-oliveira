@@ -93,7 +93,20 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
     externalOnPause && externalOnPause();
   };
 
+  const isGuest = !user && localStorage.getItem('guest') === '1';
+  const guestBar = isGuest ? (
+    <div style={{background:'#0077b6',padding:'10px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:8}}>
+      <span style={{color:'#fff',fontSize:13,fontWeight:600}}>Voce esta navegando como convidado</span>
+      <div style={{display:'flex',gap:8}}>
+        <a href="/login" style={{color:'#fff',fontSize:12,fontWeight:700,background:'rgba(255,255,255,0.2)',padding:'5px 14px',borderRadius:20,textDecoration:'none'}}>Entrar</a>
+        <a href="/register" style={{color:'#0077b6',fontSize:12,fontWeight:700,background:'#fff',padding:'5px 14px',borderRadius:20,textDecoration:'none'}}>Criar conta gratuita</a>
+      </div>
+    </div>
+  ) : null;
+
   return (
+    <>
+      {guestBar}
     <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(102,126,234,0.12)', border: '1px solid rgba(102,126,234,0.3)', borderRadius: 12, padding: '6px 10px', marginTop: 6 }}>
       <audio
         ref={audioRef}
@@ -114,6 +127,7 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
         </div>
       </div>
     </div>
+    </>
   );
 }
 
