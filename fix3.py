@@ -1,0 +1,8 @@
+﻿f = open(r'C:\Users\wender\Desktop\SIGO COM FE LOCAL\sigo-com-fe\frontend\src\pages\MuralGrid.jsx', encoding='utf-8')
+lines = f.readlines()
+f.close()
+lines[342] = lines[342].replace('onClick={() => setSelectedPost(post)}', 'onClick={() => window.open(mediaUrl, "_blank")}')
+f = open(r'C:\Users\wender\Desktop\SIGO COM FE LOCAL\sigo-com-fe\frontend\src\pages\MuralGrid.jsx', 'w', encoding='utf-8')
+f.writelines(lines)
+f.close()
+print('Feito!')
