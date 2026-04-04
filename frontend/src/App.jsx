@@ -78,7 +78,8 @@ export default function App() {
     </div>
   );
 
-  if (!user) {
+  const isGuest = localStorage.getItem('guest') === '1';
+  if (!user && !isGuest) {
     return (
       <Routes>
         <Route path="/" element={<Landing />} />
