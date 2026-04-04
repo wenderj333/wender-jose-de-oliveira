@@ -24,7 +24,7 @@ function FireScene({ isActive, activeFasting }) {
 
   function makePerson(W, H, days, name) {
     var x = 40 + Math.random()*(W-80);
-    var y = (0.18 + Math.random()*0.55)*H;
+    var y = (0.72 + Math.random()*0.22)*H;
     var sz = 0.4 + Math.min(days*0.35, 1.2);
     var p = {id: personIdRef.current++, x:x, y:y, name:name||null, days:days, particles:[]};
     for(var i=0;i<Math.round(22*sz);i++){
