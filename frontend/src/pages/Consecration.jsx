@@ -175,15 +175,15 @@ function FireScene({ isActive, activeFasting }) {
           <div style={{position:'absolute',inset:0,zIndex:60,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(0,5,20,0.75)'}}>
             <div className="warning-anim" style={{background:'rgba(4,12,32,0.97)',border:'1px solid rgba(60,120,220,0.4)',borderRadius:18,padding:'24px 22px',maxWidth:300,textAlign:'center',boxShadow:'0 0 50px rgba(20,80,200,0.3)'}}>
               <div style={{fontSize:32,marginBottom:12}}>⚡</div>
-              <div style={{color:'#fff',fontSize:16,fontWeight:700,marginBottom:8}}>{t('consecration.watchYourWords') || 'Vigila as tuas palavras'}</div>
+              <div style={{color:'#fff',fontSize:16,fontWeight:700,marginBottom:8}}>{'Vigila as tuas palavras'}</div>
               <div style={{color:'rgba(180,210,255,0.8)',fontSize:11,lineHeight:1.7,marginBottom:10}}>
-                {t('consecration.warningText') || 'Durante o jejum, cada palavra tem peso. Evita conversas vãs, críticas e conflitos. Guarda o teu coração com toda diligência.'}
+                {'Durante o jejum, cada palavra tem peso. Evita conversas vãs, críticas e conflitos. Guarda o teu coração com toda diligência.'}
               </div>
               <div style={{color:'rgba(140,180,255,0.6)',fontSize:10,fontStyle:'italic',marginBottom:16,lineHeight:1.6}}>
                 "Que saiam da vossa boca somente palavras boas para edificação." — Efésios 4:29
               </div>
               <button onClick={confirmStart} style={{width:'100%',background:'linear-gradient(135deg,#1a6fd4,#0d4fa8)',color:'#fff',border:'none',borderRadius:20,padding:'10px 20px',fontSize:12,fontWeight:700,cursor:'pointer',marginBottom:8}}>
-                {t('consecration.understandStart') || 'Entendo — Começar a Consagração'}
+                {'Entendo — Começar a Consagração'}
               </button>
               <button onClick={()=>setShowWarning(false)} style={{background:'none',border:'none',color:'rgba(140,180,255,0.5)',fontSize:11,cursor:'pointer'}}>
                 Cancelar
@@ -202,12 +202,12 @@ function FireScene({ isActive, activeFasting }) {
         </div>
 
         <div style={{position:'absolute',top:135,left:'50%',transform:'translateX(-50%)',textAlign:'center',zIndex:30,width:'72%',color:'rgba(200,220,255,0.75)',fontSize:11,lineHeight:1.7,fontStyle:'italic',pointerEvents:'none'}}>
-          {t('consecration.quote') || 'Cada llama representa una vida buscando a Dios... y juntas iluminan el cielo'}
+          {'Cada llama representa una vida buscando a Dios... y juntas iluminan el cielo'}
         </div>
 
         {showPrayer && (
           <div style={{position:'absolute',left:14,bottom:120,zIndex:50,width:240,background:'rgba(4,12,30,0.97)',border:'1px solid rgba(60,120,220,0.3)',borderRadius:14,padding:14}}>
-            <div style={{color:'#7ab4ff',fontSize:11,fontWeight:700,marginBottom:4}}>{t('consecration.prayerRequest') || 'Pedido de Oração'}</div>
+            <div style={{color:'#7ab4ff',fontSize:11,fontWeight:700,marginBottom:4}}>{'Pedido de Oração'}</div>
             <div style={{color:'rgba(150,190,255,0.6)',fontSize:10,marginBottom:8,lineHeight:1.5}}>Estamos orando por ti. Partilha o teu pedido.</div>
             {prayerSent ? (
               <div style={{textAlign:'center',color:'#80d8a0',fontSize:11,padding:'8px 0'}}>{prayerVis==='public'?'Publicado no Mural!':'Recebido em privado!'} Oramos por ti!</div>
@@ -226,7 +226,7 @@ function FireScene({ isActive, activeFasting }) {
 
         <button onClick={()=>setShowPrayer(!showPrayer)} style={{position:'absolute',left:14,bottom:72,zIndex:30,background:'rgba(5,15,40,0.75)',border:'1px solid rgba(80,140,255,0.35)',borderRadius:22,padding:'7px 14px',cursor:'pointer',display:'flex',alignItems:'center',gap:7,color:'rgba(180,210,255,0.85)',fontSize:11,fontWeight:600}}>
           <span style={{width:7,height:7,borderRadius:'50%',background:'#4a8fff',display:'inline-block'}}></span>
-          {t('consecration.prayerRequest') || 'Pedido de Oração'}
+          {'Pedido de Oração'}
         </button>
 
         <button onClick={()=>setShowSidebar(true)} style={{position:'absolute',right:14,bottom:72,zIndex:30,background:'rgba(5,15,40,0.75)',border:'1px solid rgba(80,140,255,0.35)',borderRadius:22,padding:'7px 14px',cursor:'pointer',color:'rgba(180,210,255,0.85)',fontSize:11,fontWeight:600}}>
