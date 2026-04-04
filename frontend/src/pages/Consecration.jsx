@@ -68,9 +68,9 @@ function FireScene({ isActive, activeFasting }) {
           pt.y -= (1.2+pt.speed)*sz;
           pt.r += 0.08*sz;
           pt.alpha = Math.max(0, 1-(pt.life/pt.maxLife));
-          if(pt.life>=pt.maxLife || pt.y < p.y-H*0.6){
+          if(pt.life>=pt.maxLife || pt.y < 0){
             pt.x=p.x+(Math.random()-0.5)*20*sz;
-            pt.y=p.y;
+            pt.y=H-10+(Math.random()*20);
             pt.r=(3+Math.random()*6)*sz;
             pt.speed=0.4+Math.random()*1.2;
             pt.vx=(Math.random()-0.5)*0.6;
@@ -85,9 +85,9 @@ function FireScene({ isActive, activeFasting }) {
           g.addColorStop(1,'rgba('+col[0]+','+col[1]+','+col[2]+',0)');
           ctx.beginPath();ctx.arc(pt.x,pt.y,pt.r*1.5,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
         });
-        if(p.name){lCtx.font='bold 11px sans-serif';lCtx.fillStyle='rgba(255,255,255,0.9)';lCtx.textAlign='center';lCtx.fillText(p.name,p.x,p.y+16);}
+        if(p.name){lCtx.font='bold 11px sans-serif';lCtx.fillStyle='rgba(255,255,255,0.9)';lCtx.textAlign='center';lCtx.fillText(p.name,p.x,H-8);}
         var dot=p.days>=3?'#44ff88':p.days>=1?'#88dd55':'#ff8844';
-        lCtx.beginPath();lCtx.arc(p.x,p.y,4,0,Math.PI*2);lCtx.fillStyle=dot;lCtx.fill();
+        lCtx.beginPath();lCtx.arc(p.x,H-2,4,0,Math.PI*2);lCtx.fillStyle=dot;lCtx.fill();
       });
       cCtx.clearRect(0,0,W,H);
       clouds.forEach(function(c){
