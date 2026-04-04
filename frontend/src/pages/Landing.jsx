@@ -144,6 +144,11 @@ export default function Landing() {
               Entrar com Google
             </a>
             <Link to="/register" style={{ display: 'block', width: 'fit-content', margin: '0 auto', background: '#42B72A', color: 'white', padding: '0.8rem 2rem', borderRadius: 6, fontSize: '1rem', fontWeight: 700, textDecoration: 'none', textAlign: 'center' }}>{t('landing.createFree')}</Link>
+            <div style={{ textAlign: 'center', marginTop: '0.8rem' }}>
+              <Link to="/mural" style={{ color: '#888', fontSize: '0.82rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                Visitar como convidado &rarr;
+              </Link>
+            </div>
           </div>
           <div style={{ background: 'white', borderRadius: 8, padding: '1rem', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', textAlign: 'center' }}>
             <p style={{ fontSize: '0.82rem', color: '#555', fontStyle: 'italic', lineHeight: 1.6 }}>{t('landing.verse')}</p>
