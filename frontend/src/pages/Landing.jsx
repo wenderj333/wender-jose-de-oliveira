@@ -145,7 +145,7 @@ export default function Landing() {
             </a>
             <Link to="/register" style={{ display: 'block', width: 'fit-content', margin: '0 auto', background: '#42B72A', color: 'white', padding: '0.8rem 2rem', borderRadius: 6, fontSize: '1rem', fontWeight: 700, textDecoration: 'none', textAlign: 'center' }}>{t('landing.createFree')}</Link>
             <div style={{ textAlign: 'center', marginTop: '0.8rem' }}>
-              <button onClick={() => { localStorage.setItem('guest','1'); window.location.href='/mural'; }} style={{ display: 'inline-block', color: '#fff', fontSize: '0.9rem', fontWeight: 600, textDecoration: 'none', background: '#0077b6', padding: '0.6rem 1.5rem', borderRadius: 6, border: 'none', cursor: 'pointer', letterSpacing: '0.01em' }}>
+              <button onClick={() => { window.location.href='/mural?guest=1'; }} style={{ display: 'inline-block', color: '#fff', fontSize: '0.9rem', fontWeight: 600, textDecoration: 'none', background: '#0077b6', padding: '0.6rem 1.5rem', borderRadius: 6, border: 'none', cursor: 'pointer', letterSpacing: '0.01em' }}>
                 Visitar como convidado &rarr;
               </button>
             </div>

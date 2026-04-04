@@ -93,7 +93,7 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
     externalOnPause && externalOnPause();
   };
 
-  const isGuest = !user && localStorage.getItem('guest') === '1';
+  const isGuest = !user && new URLSearchParams(window.location.search).get('guest') === '1';
   const guestBar = isGuest ? (
     <div>
       <div style={{background:'#1a1a2e',padding:'10px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:8}}>
