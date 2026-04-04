@@ -186,14 +186,6 @@ export default function App() {
       <div className="modern-layout">
 
         {/* LEFT SIDEBAR */}
-        {sidebarOpen && <div onClick={() => setSidebarOpen(false)} style={{position:'fixed',top:0,left:0,right:0,bottom:0,background:'rgba(0,0,0,0.5)',zIndex:200}} />}
-        <aside className="mobile-only" style={{position:'fixed',top:0,left:sidebarOpen?'0':'-320px',width:280,height:'100vh',background:'#1a1a2e',zIndex:201,overflowY:'auto',transition:'left 0.3s',padding:'20px 0'}}>
-          <button onClick={() => setSidebarOpen(false)} style={{position:'absolute',top:10,right:10,background:'none',border:'none',color:'white',fontSize:24,cursor:'pointer'}}>&#x2715;</button>
-          <div style={{padding:'0 16px'}}>
-            <p style={{color:'#f0c040',fontWeight:700,fontSize:14,marginBottom:16}}>{user.full_name}</p>
-            {[['/',t('nav.mural')],['/mural','Mural'],['/diario-com-deus',t('nav.diary')],['/pedidos-ajuda',t('nav.prayers')],['/membros',t('nav.members')],['/amigos',t('nav.friends')],['/mensagens',t('nav.messages')],['/musica',t('nav.music')],['/journeys',t('nav.journeys')],['/chat-pastoral',t('nav.pastoral_chat')]].map(([to,label])=>(<Link key={to} to={to} onClick={()=>setSidebarOpen(false)} style={{display:'block',padding:'10px 16px',color:'white',textDecoration:'none',fontSize:14,borderBottom:'1px solid rgba(255,255,255,0.1)'}}>{label}</Link>))}
-          </div>
-        </aside>
         <aside className="sidebar-left desktop-only">
 
           {/* Profile Card */}
