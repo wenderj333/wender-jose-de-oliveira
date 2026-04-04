@@ -44,8 +44,7 @@ function TrabalhoOportunidades({ token, user, t }) {
     indicate: { label:'Indicar alguem',         badge:'#fce8f0', badgeText:'#8a1a4a', icon:'📢' },
   };
 
-  function submitPost(e) {
-    e.preventDefault();
+  function submitPost() {
     if(!formText.trim()) return;
     const p = {
       id: Date.now(),
@@ -97,7 +96,7 @@ function TrabalhoOportunidades({ token, user, t }) {
             style={{width:'100%',padding:'7px 10px',borderRadius:8,border:'1px solid #d0dbff',fontSize:12,outline:'none',marginBottom:10}}
           />
           <div style={{display:'flex',gap:8}}>
-            <button onClick={submitPost}
+            <button onClick={()=>submitPost()}
               style={{background:'#1a3a6e',color:'#fff',border:'none',borderRadius:20,padding:'8px 20px',fontSize:12,fontWeight:700,cursor:'pointer'}}>
               Publicar
             </button>
