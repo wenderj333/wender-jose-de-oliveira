@@ -146,6 +146,7 @@ function TrabalhoOportunidades({ token, user, t }) {
           </div>
         );
       })}
+    <TrabalhoOportunidades token={token} user={user} t={t} />
     </div>
   );
 }
