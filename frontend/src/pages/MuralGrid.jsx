@@ -203,6 +203,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay
+  const [imageModal, setImageModal] = useState(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const postCardRef = useRef(null);
 
@@ -340,7 +341,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       )}
       {isImage && (
         <div style={{ width: '100%', maxHeight: 400, overflow: 'hidden' }}>
-          <img src={mediaUrl} alt="post" onClick={() => window.open(mediaUrl, "_blank")} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }} />
+          <img src={mediaUrl} alt="post" onClick={() => setImageModal(mediaUrl)} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }} />
         </div>
       )}
 
@@ -371,6 +372,12 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
           </button>
         )}
       </div>
+      {imageModal && (
+        <div onClick={() => setImageModal(null)} style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.95)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <img src={imageModal} alt='' style={{maxWidth:'95vw',maxHeight:'95vh',objectFit:'contain',borderRadius:12}} />
+          <button onClick={() => setImageModal(null)} style={{position:'fixed',top:16,right:16,background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:40,height:40,color:'white',cursor:'pointer',fontSize:24}}>x</button>
+        </div>
+      )}
       {reportOpen && (
         <ReportModal type="post" targetId={post.id} targetName={null} onClose={() => setReportOpen(false)} />
       )}
