@@ -52,6 +52,17 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  useEffect(() => {
+    if (!token) return;
+    fetch((import.meta.env.VITE_API_URL || '') + '/api/messages/conversations', {
+      headers: { Authorization: 'Bearer ' + token }
+    }).then(r => r.json()).then(data => {
+      if (Array.isArray(data)) {
+        const total = data.reduce((sum, c) => sum + (parseInt(c.unread) || 0), 0);
+        setUnreadMessages(total);
+      }
+    }).catch(() => {});
+  }, [token]);
   const wsCtx = useWebSocket();
   const lastEvent = wsCtx?.lastEvent;
 
