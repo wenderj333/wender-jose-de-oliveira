@@ -24,6 +24,7 @@ export default function Profile() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const avatarRef = useRef(null);
+  const [showAvatarBig, setShowAvatarBig] = React.useState(false);
   const coverRef = useRef(null);
 
   const targetId = userId || currentUser?.id;
@@ -126,7 +127,8 @@ export default function Profile() {
           {/* AVATAR */}
           <div style={{ position: 'relative', flexShrink: 0 }}>
             <div style={{ width: 100, height: 100, borderRadius: '50%', border: '4px solid #fff', overflow: 'hidden', background: '#daa520', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, fontWeight: 700, color: '#fff', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
-              {profile.avatar_url ? <img src={profile.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : initials}
+              {profile.avatar_url ? <img src={profile.avatar_url} alt="" onClick={()=>setShowAvatarBig(true)} style={{ width: '100%', height: '100%', objectFit: 'cover', cursor:'pointer' }} /> : initials}
+              {showAvatarBig && (<div onClick={()=>setShowAvatarBig(false)} style={{position:'fixed',top:0,left:0,right:0,bottom:0,background:'rgba(0,0,0,0.85)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center'}}><img src={profile.avatar_url} alt="" style={{maxWidth:'90vw',maxHeight:'90vh',borderRadius:12,boxShadow:'0 0 40px rgba(0,0,0,0.8)'}}/></div>)}
             </div>
             {isOwn && (
               <>
