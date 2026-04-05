@@ -5,114 +5,36 @@ import { Flame, ChevronDown, ChevronUp } from 'lucide-react';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
-function FireScene({ isActive, activeFasting }) {
-  const canvasRef = useRef(null);
-  const cloudRef = useRef(null);
-  const labelRef = useRef(null);
-  const animRef = useRef(null);
-  const personsRef = useRef([]);
-  const personIdRef = useRef(0);
+function FireScene() {
+  const { user } = useAuth();
+  const [flames, setFlames] = useState([]);
 
-  function lerpC(a,b,t){t=Math.max(0,Math.min(1,t));return[Math.round(a[0]+(b[0]-a[0])*t),Math.round(a[1]+(b[1]-a[1])*t),Math.round(a[2]+(b[2]-a[2])*t)];}
-  function fromStops(s,r){var sg=r*(s.length-1);var i=Math.min(Math.floor(sg),s.length-2);return lerpC(s[i],s[i+1],sg-i);}
-  function getFlameColor(r,days){
-    var warm=fromStops([[200,20,0],[240,90,20],[255,150,40],[255,210,60],[255,245,180]],r);
-    if(days>=3){var epic=fromStops([[100,20,0],[0,200,80],[0,160,60],[80,255,140],[210,255,220]],r);return lerpC(warm,epic,Math.min((days-2)/2,1));}
-    if(days>=1){var grn=fromStops([[180,30,0],[60,160,40],[30,130,40],[100,230,90],[200,255,190]],r);return lerpC(warm,grn,Math.min(days*0.45,1));}
-    return warm;
-  }
-
-  function makePerson(W, H, days, name) {
-    var x = 40 + Math.random()*(W-80);
-    var y = (0.72 + Math.random()*0.22)*H;
-    var sz = 0.4 + Math.min(days*0.35, 1.2);
-    var p = {id: personIdRef.current++, x:x, y:y, name:name||null, days:days, particles:[]};
-    for(var i=0;i<Math.round(22*sz);i++){
-      p.particles.push({x:x+(Math.random()-0.5)*10,y:y,r:(3+Math.random()*6)*sz,speed:0.4+Math.random()*1.2,vx:(Math.random()-0.5)*0.6,life:Math.floor(Math.random()*50),maxLife:50+Math.random()*40,alpha:1,seed:Math.random()*100});
-    }
-    return p;
+  function addUserFlame(name) {
+    const newFlame = {
+      id: Date.now(),
+      name,
+      x: Math.random() * 90,
+      delay: Math.random() * 2,
+      day: 0
+    };
+    setFlames(prev => [...prev, newFlame]);
   }
 
   useEffect(() => {
-    var canvas = canvasRef.current;
-    var cloudCanvas = cloudRef.current;
-    var labelCanvas = labelRef.current;
-    if(!canvas) return;
-    var W = canvas.offsetWidth || 500;
-    var H = canvas.offsetHeight || 500;
-    canvas.width = W; canvas.height = H;
-    cloudCanvas.width = W; cloudCanvas.height = H;
-    labelCanvas.width = W; labelCanvas.height = H;
-    var ctx = canvas.getContext('2d');
-    var cCtx = cloudCanvas.getContext('2d');
-    var lCtx = labelCanvas.getContext('2d');
-
-    var clouds = [{x:0,y:H*0.25,w:W*0.5,h:50,s:0.12},{x:W*0.4,y:H*0.35,w:W*0.55,h:60,s:0.08},{x:W*0.7,y:H*0.2,w:W*0.45,h:45,s:0.14},{x:-80,y:H*0.45,w:W*0.4,h:40,s:0.09}];
-
-    var NAMES = ['Ana Costa','Carlos M.','Maria S.','Joao P.','Rita L.','Pedro A.','Sofia B.','Luis C.'];
-    personsRef.current = [];
-    for(var i=0;i<5;i++){
-      var days = Math.floor(Math.random()*5);
-      var name = Math.random()<0.65 ? NAMES[Math.floor(Math.random()*NAMES.length)] : null;
-      personsRef.current.push(makePerson(W,H,days,name));
-    }
-
-    function loop(){
-      ctx.clearRect(0,0,W,H);
-      lCtx.clearRect(0,0,W,H);
-      personsRef.current.forEach(function(p){
-        var sz = 0.8+Math.min(p.days*0.35,1.2);
-        p.particles.forEach(function(pt){
-          pt.life++;
-          pt.x += pt.vx + Math.sin(pt.life*0.12+pt.seed)*0.8;
-          pt.y -= (1.2+pt.speed)*sz;
-          pt.r += 0.08*sz;
-          pt.alpha = Math.max(0, 1-(pt.life/pt.maxLife));
-          if(pt.life>=pt.maxLife || pt.y < 0){
-            pt.x=p.x+(Math.random()-0.5)*20*sz;
-            pt.y=H-10+(Math.random()*20);
-            pt.r=(3+Math.random()*6)*sz;
-            pt.speed=0.4+Math.random()*1.2;
-            pt.vx=(Math.random()-0.5)*0.6;
-            pt.life=0; pt.maxLife=50+Math.random()*40;
-            pt.alpha=1; pt.seed=Math.random()*100;
-          }
-          var col=getFlameColor(1-(pt.life/pt.maxLife),p.days);
-          var alpha=pt.alpha*0.85;
-          var g=ctx.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,pt.r*1.5);
-          g.addColorStop(0,'rgba('+col[0]+','+col[1]+','+col[2]+','+alpha+')');
-          g.addColorStop(0.5,'rgba('+col[0]+','+col[1]+','+col[2]+','+(alpha*0.4)+')');
-          g.addColorStop(1,'rgba('+col[0]+','+col[1]+','+col[2]+',0)');
-          ctx.beginPath();ctx.arc(pt.x,pt.y,pt.r*1.5,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-        });
-        if(p.name){lCtx.font='bold 11px sans-serif';lCtx.fillStyle='rgba(255,255,255,0.9)';lCtx.textAlign='center';lCtx.fillText(p.name,p.x,H-8);}
-        var dot=p.days>=3?'#44ff88':p.days>=1?'#88dd55':'#ff8844';
-        lCtx.beginPath();lCtx.arc(p.x,H-2,4,0,Math.PI*2);lCtx.fillStyle=dot;lCtx.fill();
-      });
-      cCtx.clearRect(0,0,W,H);
-      clouds.forEach(function(c){
-        c.x+=c.s;if(c.x>W+c.w)c.x=-c.w;
-        var grd=cCtx.createRadialGradient(c.x+c.w/2,c.y+c.h/2,0,c.x+c.w/2,c.y+c.h/2,c.w/2);
-        grd.addColorStop(0,'rgba(20,80,160,0.18)');
-        grd.addColorStop(0.5,'rgba(15,50,120,0.10)');
-        grd.addColorStop(1,'rgba(10,30,80,0)');
-        cCtx.beginPath();cCtx.ellipse(c.x+c.w/2,c.y+c.h/2,c.w/2,c.h/2,0,0,Math.PI*2);cCtx.fillStyle=grd;cCtx.fill();
-      });
-      animRef.current = requestAnimationFrame(loop);
-    }
-    loop();
-    return () => cancelAnimationFrame(animRef.current);
-  }, []);
+    const userName = user?.full_name || user?.name || "Convidado";
+    addUserFlame(userName);
+  }, [user]);
 
   return (
-    <div style={{position:'relative',width:'100%',height:'100%'}}>
-      <canvas ref={canvasRef} style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',zIndex:2}} />
-      <canvas ref={cloudRef} style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',zIndex:3}} />
-      <canvas ref={labelRef} style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',zIndex:4}} />
+    <div>
+      {flames.map(f => (
+        <div key={f.id}>{f.name}</div>
+      ))}
     </div>
   );
 }
-﻿export default function Consecration() {
+
+export default function Consecration() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
   const [stats, setStats] = useState({ totalConsecrations: 0, activeFasting: 0 });
