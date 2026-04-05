@@ -5,7 +5,7 @@ const { authenticate } = require('../middleware/auth');
 router.get('/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name FROM users WHERE id = $1', [userId]);
+    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, favorite_verse, testimony, life_motto, church_denomination, faith_years, platform_purpose, spiritual_gifts, interest_areas, christian_values, spiritual_state, profile_public, verse_public, testimony_public, church_public FROM users WHERE id = $1', [userId]);
     const user = result.rows[0];
 
     if (!user) return res.status(404).json({ error: 'User not found' });
@@ -22,7 +22,7 @@ router.get('/:userId', async (req, res) => {
 
 router.patch('/', authenticate, async (req, res) => {
   try {
-    const { full_name, bio, location, church_name, cover_url, avatar_url } = req.body;
+    const { full_name, bio, location, church_name, cover_url, avatar_url, favorite_verse, testimony, life_motto, church_denomination, faith_years, platform_purpose, spiritual_gifts, interest_areas, christian_values, spiritual_state, profile_public, verse_public, testimony_public, church_public } = req.body;
     const userId = req.user.id;
 
     const updates = {};
@@ -32,6 +32,20 @@ router.patch('/', authenticate, async (req, res) => {
     if (church_name !== undefined) updates.church_name = church_name;
     if (cover_url !== undefined) updates.cover_url = cover_url;
     if (avatar_url !== undefined) updates.avatar_url = avatar_url;
+    if (favorite_verse !== undefined) updates.favorite_verse = favorite_verse;
+    if (testimony !== undefined) updates.testimony = testimony;
+    if (life_motto !== undefined) updates.life_motto = life_motto;
+    if (church_denomination !== undefined) updates.church_denomination = church_denomination;
+    if (faith_years !== undefined) updates.faith_years = faith_years;
+    if (platform_purpose !== undefined) updates.platform_purpose = platform_purpose;
+    if (spiritual_gifts !== undefined) updates.spiritual_gifts = spiritual_gifts;
+    if (interest_areas !== undefined) updates.interest_areas = interest_areas;
+    if (christian_values !== undefined) updates.christian_values = christian_values;
+    if (spiritual_state !== undefined) updates.spiritual_state = spiritual_state;
+    if (profile_public !== undefined) updates.profile_public = profile_public;
+    if (verse_public !== undefined) updates.verse_public = verse_public;
+    if (testimony_public !== undefined) updates.testimony_public = testimony_public;
+    if (church_public !== undefined) updates.church_public = church_public;
 
     const updateKeys = Object.keys(updates);
     if (updateKeys.length === 0) {
@@ -43,7 +57,7 @@ router.patch('/', authenticate, async (req, res) => {
 
     await db.query(`UPDATE users SET ${setClause} WHERE id = $${updateKeys.length + 1}`, updateValues);
 
-    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name FROM users WHERE id = $1', [userId]);
+    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, favorite_verse, testimony, life_motto, church_denomination, faith_years, platform_purpose, spiritual_gifts, interest_areas, christian_values, spiritual_state, profile_public, verse_public, testimony_public, church_public FROM users WHERE id = $1', [userId]);
     const user = result.rows[0];
 
     res.json({ success: true, user });
