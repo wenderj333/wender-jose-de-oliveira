@@ -25,33 +25,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const avatarRef = useRef(null);
   const [showAvatarBig, setShowAvatarBig] = React.useState(false);
-  const [editSpiritual, setEditSpiritual] = React.useState(false);
-  const [spiritualData, setSpiritualData] = React.useState({});
-
-  useEffect(() => {
-    if (profile) setSpiritualData({
-      favorite_verse: profile.favorite_verse || '',
-      testimony: profile.testimony || '',
-      life_motto: profile.life_motto || '',
-      church_denomination: profile.church_denomination || '',
-      faith_years: profile.faith_years || '',
-      spiritual_gifts: profile.spiritual_gifts || '',
-      interest_areas: profile.interest_areas || '',
-      spiritual_state: profile.spiritual_state || 'em crescimento',
-    });
-  }, [profile]);
-
-  async function saveSpiritualProfile() {
-    try {
-      const res = await fetch(API_BASE + '/api/profile', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify(spiritualData),
-      });
-      const data = await res.json();
-      if (data.success) { setProfile(prev => ({ ...prev, ...spiritualData })); setEditSpiritual(false); }
-    } catch(e) { console.error(e); }
-  }
   const coverRef = useRef(null);
 
   const targetId = userId || currentUser?.id;
@@ -353,48 +326,6 @@ export default function Profile() {
               </div>
             </div>
           </div>
-        </div>
-      )}
-      {profile && (
-        <div style={{margin:'16px 0',background:'#fff',borderRadius:12,padding:20,boxShadow:'0 1px 4px rgba(0,0,0,0.08)'}}>
-          <div style={{fontWeight:700,fontSize:14,color:'#1a1a2e',marginBottom:16,display:'flex',alignItems:'center',gap:8}}>
-            ✝️ Perfil Espiritual
-            {isOwn && !editSpiritual && <button onClick={()=>setEditSpiritual(true)} style={{marginLeft:'auto',fontSize:11,padding:'4px 12px',borderRadius:20,border:'1px solid #d0dbff',background:'#fff',cursor:'pointer',color:'#3a6ad4'}}>Editar</button>}
-          </div>
-          {editSpiritual ? (
-            <div>
-              {[['favorite_verse','📖 Versículo favorito'],['testimony','🙏 Testemunho'],['life_motto','💬 Lema de vida'],['church_denomination','⛪ Igreja'],['faith_years','📅 Tempo na fé'],['spiritual_gifts','🎁 Dons (separados por vírgula)'],['interest_areas','❤️ Interesses (separados por vírgula)']].map(([field,label])=>(
-                <div key={field} style={{marginBottom:10}}>
-                  <div style={{fontSize:11,color:'#888',marginBottom:4,fontWeight:600}}>{label}</div>
-                  <textarea value={spiritualData[field]||''} onChange={e=>setSpiritualData(prev=>({...prev,[field]:e.target.value}))} style={{width:'100%',padding:'8px 10px',borderRadius:8,border:'1px solid #d0dbff',fontSize:12,resize:'vertical',minHeight:48,fontFamily:'inherit',outline:'none'}}/>
-                </div>
-              ))}
-              <div style={{marginBottom:10}}>
-                <div style={{fontSize:11,color:'#888',marginBottom:4,fontWeight:600}}>🌱 Estado espiritual</div>
-                <select value={spiritualData.spiritual_state||'em crescimento'} onChange={e=>setSpiritualData(prev=>({...prev,spiritual_state:e.target.value}))} style={{width:'100%',padding:'8px 10px',borderRadius:8,border:'1px solid #d0dbff',fontSize:12}}>
-                  <option value="em crescimento">Em crescimento</option>
-                  <option value="novo na fe">Novo na fé</option>
-                  <option value="consolidado">Consolidado</option>
-                  <option value="lider">Líder</option>
-                </select>
-              </div>
-              <div style={{display:'flex',gap:8,marginTop:12}}>
-                <button onClick={saveSpiritualProfile} style={{background:'#1a3a6e',color:'#fff',border:'none',borderRadius:20,padding:'8px 20px',fontSize:12,fontWeight:700,cursor:'pointer'}}>Guardar</button>
-                <button onClick={()=>setEditSpiritual(false)} style={{background:'none',border:'1px solid #d0dbff',borderRadius:20,padding:'8px 16px',fontSize:12,cursor:'pointer',color:'#666'}}>Cancelar</button>
-              </div>
-            </div>
-          ) : (
-            <div>
-              {profile.favorite_verse && <div style={{marginBottom:10}}><div style={{fontSize:10,color:'#888',fontWeight:600,marginBottom:2}}>📖 VERSÍCULO</div><div style={{fontSize:12,color:'#333',fontStyle:'italic',lineHeight:1.5}}>{profile.favorite_verse}</div></div>}
-              {profile.testimony && <div style={{marginBottom:10}}><div style={{fontSize:10,color:'#888',fontWeight:600,marginBottom:2}}>🙏 TESTEMUNHO</div><div style={{fontSize:12,color:'#333',lineHeight:1.5}}>{profile.testimony}</div></div>}
-              {profile.life_motto && <div style={{marginBottom:10}}><div style={{fontSize:10,color:'#888',fontWeight:600,marginBottom:2}}>💬 LEMA</div><div style={{fontSize:12,color:'#333',fontStyle:'italic'}}>{profile.life_motto}</div></div>}
-              {profile.church_denomination && <div style={{marginBottom:10}}><div style={{fontSize:10,color:'#888',fontWeight:600,marginBottom:2}}>⛪ IGREJA</div><div style={{fontSize:12,color:'#333'}}>{profile.church_denomination}</div></div>}
-              {profile.spiritual_state && <div style={{marginBottom:10}}><span style={{fontSize:11,padding:'3px 10px',borderRadius:20,background:'#ede9fe',color:'#7c3aed',fontWeight:600}}>🌱 {profile.spiritual_state}</span></div>}
-              {profile.spiritual_gifts && <div style={{marginBottom:10}}><div style={{fontSize:10,color:'#888',fontWeight:600,marginBottom:4}}>🎁 DONS</div><div style={{display:'flex',flexWrap:'wrap',gap:4}}>{profile.spiritual_gifts.split(',').map((g,i)=><span key={i} style={{fontSize:10,padding:'2px 8px',borderRadius:20,background:'#ede9fe',color:'#7c3aed'}}>{g.trim()}</span>)}</div></div>}
-              {profile.interest_areas && <div style={{marginBottom:10}}><div style={{fontSize:10,color:'#888',fontWeight:600,marginBottom:4}}>❤️ INTERESSES</div><div style={{display:'flex',flexWrap:'wrap',gap:4}}>{profile.interest_areas.split(',').map((a,i)=><span key={i} style={{fontSize:10,padding:'2px 8px',borderRadius:20,background:'#dbeafe',color:'#1877F2'}}>{a.trim()}</span>)}</div></div>}
-              {!profile.favorite_verse && !profile.testimony && isOwn && <div style={{fontSize:12,color:'#aaa',textAlign:'center',padding:10}}>Clica em Editar para preencher o teu perfil espiritual!</div>}
-            </div>
-          )}
         </div>
       )}
       <div style={{ textAlign: 'center', padding: '20px', marginTop: 20 }}><button onClick={() => { if(window.confirm('Tem certeza que deseja apagar sua conta? Esta acao nao pode ser desfeita.')) { fetch(API_BASE + '/api/auth/delete-account', { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } }).then(() => { logout(); }); } }} style={{ background: '#e74c3c', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 8, cursor: 'pointer', fontSize: 14, fontWeight: 700 }}>{t('profile.deleteAccount', 'Apagar Conta')}</button></div>
