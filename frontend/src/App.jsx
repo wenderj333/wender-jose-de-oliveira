@@ -85,6 +85,9 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/mural" element={<MuralGrid />} />
+        <Route path="/membros" element={<Members />} />
+        <Route path="/ia-biblica" element={<BiblicalAI />} />
+        <Route path="/journeys" element={<FaithJourneys />} />
         <Route path="*" element={<Landing />} />
       </Routes>
     );
