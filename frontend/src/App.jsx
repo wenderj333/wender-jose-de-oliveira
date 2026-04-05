@@ -132,7 +132,7 @@ export default function App() {
         <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8}}>
           <LanguageSelector />
           <Link to="/notificacoes" style={{position:'relative',background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',textDecoration:'none'}}>
-            <Bell size={17}/>
+            <Bell size={17}/>{unreadMessages > 0 && <span style={{ position:'absolute', top:-4, right:-4, background:'#e11d48', color:'white', borderRadius:'50%', width:16, height:16, fontSize:10, fontWeight:700, display:'flex', alignItems:'center', justifyContent:'center' }}>{unreadMessages > 9 ? '9+' : unreadMessages}</span>}
           </Link>
           <Link to={`/perfil/${user.id}`} style={{background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',overflow:'hidden',textDecoration:'none'}}>
             {user.avatar_url ? (
