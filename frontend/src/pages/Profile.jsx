@@ -25,16 +25,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const avatarRef = useRef(null);
   const [showAvatarBig, setShowAvatarBig] = React.useState(false);
-  const [editSpiritual, setEditSpiritual] = React.useState(false);
-  const [spiritualData, setSpiritualData] = React.useState({});
-  useEffect(() => { if (profile) setSpiritualData({favorite_verse: profile.favorite_verse||'',testimony: profile.testimony||'',life_motto: profile.life_motto||'',church_denomination: profile.church_denomination||'',faith_years: profile.faith_years||'',spiritual_gifts: profile.spiritual_gifts||'',interest_areas: profile.interest_areas||'',spiritual_state: profile.spiritual_state||'em crescimento'}); }, [profile]);
-  async function saveSpiritualProfile() {
-    try {
-      const res = await fetch(API_BASE + '/api/profile', { method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify(spiritualData) });
-      const data = await res.json();
-      if (data.success) { setProfile(prev => ({ ...prev, ...spiritualData })); setEditSpiritual(false); }
-    } catch(e) { console.error(e); }
-  }
   const coverRef = useRef(null);
 
   const targetId = userId || currentUser?.id;
@@ -338,7 +328,7 @@ export default function Profile() {
           </div>
         </div>
       )}
-      {isOwn && <div style={{ textAlign: 'center', padding: '20px', marginTop: 20 }}><button onClick={() => { if(window.confirm('Tem certeza que deseja apagar sua conta? Esta acao nao pode ser desfeita.')) { fetch(API_BASE + '/api/auth/delete-account', { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } }).then(() => { logout(); }); } }} style={{ background: '#e74c3c', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 8, cursor: 'pointer', fontSize: 14, fontWeight: 700 }}>{t('profile.deleteAccount', 'Apagar Conta')}</button></div>}
+      <div style={{ textAlign: 'center', padding: '20px', marginTop: 20 }}><button onClick={() => { if(window.confirm('Tem certeza que deseja apagar sua conta? Esta acao nao pode ser desfeita.')) { fetch(API_BASE + '/api/auth/delete-account', { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } }).then(() => { logout(); }); } }} style={{ background: '#e74c3c', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 8, cursor: 'pointer', fontSize: 14, fontWeight: 700 }}>{t('profile.deleteAccount', 'Apagar Conta')}</button></div>
     </div>
   );
 }
