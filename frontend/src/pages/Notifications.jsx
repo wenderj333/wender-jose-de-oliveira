@@ -103,7 +103,7 @@ export default function NotificationsPage() {
           {notifications.map(n => (
             <a key={n.id} href={getNotificationLink(n)} onClick={() => markAsRead(n.id)} style={{
               display: 'flex', alignItems: 'center', gap: 12, padding: '1rem',
-              background: n.is_read ? '#f8f8f8' : '#fff', borderRadius: 12, border: n.is_read ? '1px solid #eee' : '1px solid #daa520',
+              background: n.is_read ? '#f0fff4' : '#fff', borderRadius: 12, border: n.is_read ? '2px solid #86efac' : '2px solid #daa520', transition: 'background 0.3s',
               boxShadow: n.is_read ? 'none' : '0 0 0 2px #daa52030',
               cursor: 'pointer', textDecoration: 'none', color: 'inherit',
             }}>
@@ -111,7 +111,7 @@ export default function NotificationsPage() {
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600, color: '#1a0a3e', fontSize: '0.95rem' }}>{n.title}</div>
                 <div style={{ fontSize: '0.8rem', color: '#666', marginTop: 2 }}>{n.body}</div>
-                <div style={{ fontSize: '0.7rem', color: '#999', marginTop: 4 }}>{timeAgo(n.created_at)}</div>
+                <div style={{ fontSize: '0.7rem', color: '#999', marginTop: 4, display: 'flex', alignItems: 'center', gap: 8 }}>{timeAgo(n.created_at)}{n.is_read && <span style={{ color: '#16a34a', fontWeight: 700, fontSize: '0.7rem' }}>✓ Lido</span>}</div>
               </div>
               {!n.is_read && (
                 <CheckCircle size={20} color="#4caf50" style={{ flexShrink: 0 }} />
