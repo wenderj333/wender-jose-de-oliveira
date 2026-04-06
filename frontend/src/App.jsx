@@ -72,7 +72,7 @@ export default function App() {
   }, [lastEvent]);
 
   useEffect(() => {
-    if (location.pathname.startsWith('/mensagens')) {
+    if (location.pathname.startsWith('/mensagens') || location.pathname.startsWith('/notificacoes')) {
       setUnreadMessages(0);
     }
     setMobileMenuOpen(false);
