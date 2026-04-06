@@ -110,7 +110,7 @@ export default function App() {
       <header className="topbar">
         
         <Link to="/" style={{display:'flex',alignItems:'center',gap:'9px',textDecoration:'none'}}>
-          <img src='/logo-new.png' alt='Sigo com Fe' style={{height:36,width:'auto',objectFit:'contain'}} />
+          <img src='/logo-new.png' alt='Sigo com Fe' style={{height:38,width:38,objectFit:'cover',borderRadius:10}} />
         </Link>
 
         <nav className="nav-scroll desktop-only" style={{display:'flex',alignItems:'center',gap:'2px',marginLeft:'20px'}}>
