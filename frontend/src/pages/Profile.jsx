@@ -169,6 +169,9 @@ export default function Profile() {
                 <button onClick={() => avatarRef.current?.click()} style={{ position: 'absolute', bottom: 4, right: 4, width: 28, height: 28, borderRadius: '50%', background: '#daa520', border: '2px solid #fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Camera size={14} color="#fff" />
                 </button>
+                {profile.avatar_url && (
+                  <button onClick={() => { setCropImage(profile.avatar_url); setCropType('avatar'); setCropModal(true); setCrop({x:0,y:0}); setZoom(1); }} style={{ position: 'absolute', top: 0, left: 0, width: 22, height: 22, borderRadius: '50%', background: '#667eea', border: '2px solid #fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10 }} title='Ajustar'>✂️</button>
+                )}
                 <input ref={avatarRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} />
               </>
             )}
