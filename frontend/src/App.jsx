@@ -132,17 +132,43 @@ export default function App() {
   );
 
   if (!user) {
+    const isPublic = ['/', '/login', '/register', '/mural', '/membros', '/ia-biblica', '/journeys', '/musica'].some(p => location.pathname === p || location.pathname.startsWith(p));
+    if (!isPublic) return <Routes><Route path="*" element={<Landing />} /></Routes>;
     return (
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/mural" element={<MuralGrid />} />
-        <Route path="/membros" element={<Members />} />
-        <Route path="/ia-biblica" element={<BiblicalAI />} />
-        <Route path="/journeys" element={<FaithJourneys />} />
-        <Route path="*" element={<Landing />} />
-      </Routes>
+      <div style={{minHeight:'100vh',background:'#f5f7ff'}}>
+        {/* Barra publica */}
+        <header style={{background:'linear-gradient(135deg,#1a2a6c,#3568b8)',padding:'0 20px',height:56,display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:100}}>
+          <div style={{display:'flex',alignItems:'center',gap:16}}>
+            <img src='/logo-new.png' alt='logo' style={{height:34,width:34,borderRadius:8}} />
+            <span style={{color:'white',fontWeight:700,fontSize:16,fontFamily:"'Cormorant Garamond',serif"}}>Sigo com Fé</span>
+            <nav style={{display:'flex',gap:4,marginLeft:8}}>
+              {[['/mural','Mural'],['/membros','Membros'],['/musica','Músicas'],['/ia-biblica','IA Bíblica'],['/journeys','Jornadas']].map(([to,label]) => (
+                <a key={to} href={to} style={{color:'white',textDecoration:'none',padding:'6px 12px',borderRadius:8,fontSize:13,background:location.pathname===to?'rgba(255,255,255,0.2)':'transparent'}}>{label}</a>
+              ))}
+            </nav>
+          </div>
+          <div style={{display:'flex',gap:8}}>
+            <a href='/login' style={{color:'white',textDecoration:'none',padding:'7px 16px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',fontSize:13,fontWeight:600}}>Entrar</a>
+            <a href='/register' style={{color:'#1a2a6c',textDecoration:'none',padding:'7px 16px',borderRadius:20,background:'#f0c040',fontSize:13,fontWeight:700}}>✨ Registar</a>
+          </div>
+        </header>
+        {/* Banner registo */}
+        <div style={{background:'linear-gradient(135deg,#3568b8,#4a80d4)',padding:'10px 20px',textAlign:'center',display:'flex',alignItems:'center',justifyContent:'center',gap:12,flexWrap:'wrap'}}>
+          <span style={{color:'white',fontSize:13}}>👋 Estás a explorar como convidado.</span>
+          <a href='/register' style={{color:'#1a2a6c',background:'#f0c040',padding:'5px 14px',borderRadius:16,fontSize:13,fontWeight:700,textDecoration:'none'}}>Cria a tua conta gratuita →</a>
+        </div>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/mural" element={<MuralGrid />} />
+          <Route path="/membros" element={<Members />} />
+          <Route path="/musica" element={<MusicLibrary />} />
+          <Route path="/ia-biblica" element={<BiblicalAI />} />
+          <Route path="/journeys" element={<FaithJourneys />} />
+          <Route path="*" element={<Landing />} />
+        </Routes>
+      </div>
     );
   }
 
