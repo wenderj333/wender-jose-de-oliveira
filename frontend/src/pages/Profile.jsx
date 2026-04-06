@@ -48,7 +48,9 @@ export default function Profile() {
   };
   const handleCropSave = async () => {
     try {
+      console.log('crop pixels:', croppedAreaPixels);
       const blob = await getCroppedImage();
+      console.log('blob:', blob);
       const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
       const url = await uploadPhoto(file);
       const field = cropType === 'avatar' ? 'avatar_url' : 'cover_url';
