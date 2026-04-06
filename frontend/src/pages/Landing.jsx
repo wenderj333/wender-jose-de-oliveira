@@ -67,7 +67,7 @@ export default function Landing() {
     <div style={{ minHeight: '100vh', background: '#f0f2f5', fontFamily: 'Nunito, Segoe UI, sans-serif', cursor: 'url(data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="5" cy="5" r="4" fill="gray"/></svg>) 5 5, auto' }}>
       <nav style={{ background: 'white', height: 56, display: 'flex', alignItems: 'center', padding: '0 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.1)', position: 'sticky', top: 0, zIndex: 100, justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 8, overflowX:'hidden', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><img src='/logo.jpg' style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>
+          <div style={{ width: 48, height: 48, borderRadius: 8, overflowX:'hidden', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><img src='/logo-new.png' style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>
           <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1877F2', fontFamily: 'Georgia, serif' }}>Sigo com Fé</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
