@@ -80,11 +80,13 @@ export default function Profile() {
     Promise.all([
         fetch(`${API}/profile/${targetId}`, { headers }).then(r => r.json()),
         fetch(`${API}/feed/user/${targetId}?limit=30`, { headers }).then(r => r.json()),
-    ]).then(([profileData, feedData]) => {
+        token ? fetch(`${API}/friends/status/${targetId}`, { headers }).then(r => r.json()).catch(() => ({})) : Promise.resolve({}),
+    ]).then(([profileData, feedData, friendData]) => {
       const u = profileData.user || profileData;
       setProfile(u);
       setEditData({ full_name: u.full_name || '', bio: u.bio || '', location: u.location || '', church_name: u.church_name || '' });
       setPosts(feedData.posts || []);
+      setIsFriend(friendData.status === 'accepted');
     }).catch(console.error).finally(() => setLoading(false));
   }, [targetId, token]);
 
@@ -230,7 +232,7 @@ export default function Profile() {
                     <Send size={16} /> {t('common.send')}
                   </button>
                   <button style={{ padding: '8px 20px', borderRadius: 8, border: '1px solid #dbdbdb', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <UserPlus size={16} /> {t('nav.friends')}
+                    {isFriend ? <UserCheck size={16} /> : <UserPlus size={16} />} {isFriend ? t('profile.friends', 'Amigos') : t('friends.addFriend', 'Adicionar')}
                   </button>
                   <button onClick={() => { if(window.confirm(t('profile.blockConfirm', 'Bloquear este utilizador?'))) { fetch(API_BASE+'/api/users/'+profile.id+'/block',{method:'POST',headers:{Authorization:'Bearer '+token}}).then(()=>alert(t('profile.blocked', 'Utilizador bloqueado!'))); }}} style={{padding:'8px 20px',borderRadius:8,border:'1px solid #e74c3c',background:'#fff',color:'#e74c3c',cursor:'pointer',fontWeight:600,fontSize:14}}>Bloquear</button>
                 </>
