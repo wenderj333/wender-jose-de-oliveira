@@ -179,6 +179,8 @@ export default function Profile() {
                       <button onClick={() => { coverRef.current?.click(); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>📷 {t('profile.changeCover')}</button>
                       <button onClick={() => { avatarRef.current?.click(); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>🖼️ {t('profile.changeAvatar')}</button>
                       <button onClick={() => { setProfile(prev => ({...prev, cover_url: null})); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, color: '#e11d48', display: 'flex', alignItems: 'center', gap: 8 }}>🗑️ {t('profile.deleteCover')}</button>
+                        <div style={{height:1,background:'#f0f0f0',margin:'4px 0'}}/>
+                        <button onClick={() => { setShowMenu(false); if(window.confirm('Tem certeza? Esta acao nao pode ser desfeita.')) { fetch(API_BASE + '/api/auth/delete-account', { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } }).then(() => { logout(); }); } }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, color: '#e11d48', display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700 }}>⚠️ Apagar Conta</button>
                     </div>
                   )}
                 </div>
@@ -328,7 +330,7 @@ export default function Profile() {
           </div>
         </div>
       )}
-      {isOwn && <div style={{ textAlign: 'center', padding: '20px', marginTop: 20 }}><button onClick={() => { if(window.confirm('Tem certeza que deseja apagar sua conta? Esta acao nao pode ser desfeita.')) { fetch(API_BASE + '/api/auth/delete-account', { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } }).then(() => { logout(); }); } }} style={{ background: '#e74c3c', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 8, cursor: 'pointer', fontSize: 14, fontWeight: 700 }}>{t('profile.deleteAccount', 'Apagar Conta')}</button></div>}
+
     </div>
   );
 }
