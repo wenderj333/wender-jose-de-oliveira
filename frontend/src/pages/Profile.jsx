@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Cropper from 'react-easy-crop';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +29,84 @@ export default function Profile() {
   const coverRef = useRef(null);
 
   const targetId = userId || currentUser?.id;
+  const [cropModal, setCropModal] = useState(false);
+  const [cropImage, setCropImage] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [cropType, setCropType] = useState('avatar');
+
+  const onCropComplete = useCallback((_, croppedPixels) => {
+    setCroppedAreaPixels(croppedPixels);
+  }, []);
+
+  const getCroppedImage = async () => {
+    const image = new Image();
+    image.src = cropImage;
+    await new Promise(r => { image.onload = r; });
+    const canvas = document.createElement('canvas');
+    canvas.width = croppedAreaPixels.width;
+    canvas.height = croppedAreaPixels.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, croppedAreaPixels.x, croppedAreaPixels.y, croppedAreaPixels.width, croppedAreaPixels.height, 0, 0, croppedAreaPixels.width, croppedAreaPixels.height);
+    return new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+  };
+
+  const handleCropSave = async () => {
+    try {
+      const blob = await getCroppedImage();
+      const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
+      const url = await uploadPhoto(file);
+      if (cropType === 'avatar') {
+        setProfile(prev => ({ ...prev, avatar_url: url }));
+        await fetch(`${API}/users/${targetId}`, { method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ avatar_url: url }) });
+      } else {
+        setProfile(prev => ({ ...prev, cover_url: url }));
+        await fetch(`${API}/users/${targetId}`, { method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ cover_url: url }) });
+      }
+      setCropModal(false);
+      setCropImage(null);
+    } catch(e) { console.error(e); }
+  };
+  const [cropModal, setCropModal] = useState(false);
+  const [cropImage, setCropImage] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [cropType, setCropType] = useState('avatar');
+
+  const onCropComplete = useCallback((_, croppedPixels) => {
+    setCroppedAreaPixels(croppedPixels);
+  }, []);
+
+  const getCroppedImage = async () => {
+    const image = new Image();
+    image.src = cropImage;
+    await new Promise(r => { image.onload = r; });
+    const canvas = document.createElement('canvas');
+    canvas.width = croppedAreaPixels.width;
+    canvas.height = croppedAreaPixels.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, croppedAreaPixels.x, croppedAreaPixels.y, croppedAreaPixels.width, croppedAreaPixels.height, 0, 0, croppedAreaPixels.width, croppedAreaPixels.height);
+    return new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+  };
+
+  const handleCropSave = async () => {
+    try {
+      const blob = await getCroppedImage();
+      const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
+      const url = await uploadPhoto(file);
+      if (cropType === 'avatar') {
+        setProfile(prev => ({ ...prev, avatar_url: url }));
+        await fetch(`${API}/users/${targetId}`, { method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ avatar_url: url }) });
+      } else {
+        setProfile(prev => ({ ...prev, cover_url: url }));
+        await fetch(`${API}/users/${targetId}`, { method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ cover_url: url }) });
+      }
+      setCropModal(false);
+      setCropImage(null);
+    } catch(e) { console.error(e); }
+  };
   const isOwn = !userId || userId === currentUser?.id;
 
   const [profile, setProfile] = useState(null);
@@ -74,6 +153,11 @@ export default function Profile() {
   async function handleAvatarChange(e) {
     const file = e.target.files[0];
     if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => { setCropImage(reader.result); setCropType('avatar'); setCropModal(true); setCrop({x:0,y:0}); setZoom(1); };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+    return;
     setUploading(true);
     try {
       const url = await uploadPhoto(file);
@@ -89,6 +173,11 @@ export default function Profile() {
   async function handleCoverChange(e) {
     const file = e.target.files[0];
     if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => { setCropImage(reader.result); setCropType('cover'); setCropModal(true); setCrop({x:0,y:0}); setZoom(1); };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+    return;
     setUploading(true);
     try {
       const url = await uploadPhoto(file);
@@ -331,6 +420,28 @@ export default function Profile() {
         </div>
       )}
 
+    {cropModal && cropImage && (
+      <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.9)',zIndex:9999,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+        <div style={{position:'relative',width:'90vw',height:'60vh',maxWidth:500}}>
+          <Cropper
+            image={cropImage}
+            crop={crop}
+            zoom={zoom}
+            aspect={cropType === 'avatar' ? 1 : 16/9}
+            onCropChange={setCrop}
+            onZoomChange={setZoom}
+            onCropComplete={onCropComplete}
+          />
+        </div>
+        <div style={{marginTop:16,display:'flex',flexDirection:'column',alignItems:'center',gap:12,width:'90vw',maxWidth:500}}>
+          <input type='range' min={1} max={3} step={0.01} value={zoom} onChange={e=>setZoom(Number(e.target.value))} style={{width:'100%'}} />
+          <div style={{display:'flex',gap:12}}>
+            <button onClick={()=>{setCropModal(false);setCropImage(null);}} style={{padding:'10px 24px',borderRadius:20,background:'rgba(255,255,255,0.2)',border:'none',color:'white',cursor:'pointer',fontSize:15}}>Cancelar</button>
+            <button onClick={handleCropSave} style={{padding:'10px 24px',borderRadius:20,background:'#daa520',border:'none',color:'#1a0a3e',fontWeight:700,cursor:'pointer',fontSize:15}}>✂️ Guardar</button>
+          </div>
+        </div>
+      </div>
+    )}
     </div>
   );
 }
