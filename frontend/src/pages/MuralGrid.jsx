@@ -207,9 +207,8 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const [comments, setComments] = useState(post.comments || []);
   const loadComments = async () => {
     try {
-      const API = (import.meta.env.VITE_API_URL || '') + '/api';
-        const res = await fetch(`/feed//comments`, {
-          headers: token ? { Authorization: `Bearer ` } : {}
+      const res = await fetch(`${API}/feed/${post.id}/comments`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
       if (res.ok) {
         const data = await res.json();
@@ -219,6 +218,15 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   };
 
   const [reportOpen, setReportOpen] = useState(false);
+  const [commentAmens, setCommentAmens] = useState({});
+  const [replyTo, setReplyTo] = useState(null);
+
+  const toggleCommentAmen = (commentId) => {
+    setCommentAmens(prev => ({
+      ...prev,
+      [commentId]: !prev[commentId]
+    }));
+  };
   const authorName = post.full_name || post.author_name || post.authorName || t('common.user');
   const authorInitials = authorName.slice(0, 2).toUpperCase();
   const mediaUrl = post.media_url || post.mediaUrl;
@@ -408,16 +416,47 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 
       {showComments && (
         <div style={{ padding: '0 16px 14px', borderTop: '1px solid #f0f0f0' }}>
+          {comments.length === 0 && (
+            <p style={{ color: '#aaa', fontSize: 13, textAlign: 'center', padding: '12px 0' }}>Seja o primeiro a comentar 🙏</p>
+          )}
           {comments.map((c, i) => (
-            <div key={c.id || i} style={{ padding: '8px 0', fontSize: 13 }}>
-              <span style={{ fontWeight: 600, color: '#333' }}>{c.full_name || c.author_name || t('common.user')}</span>
-              <span style={{ color: '#555', marginLeft: 8 }}>{c.content}</span>
+            <div key={c.id || i} style={{ padding: '10px 0', borderBottom: '1px solid #f5f5f5' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg,#667eea,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 12, flexShrink: 0 }}>
+                  {(c.full_name || c.author_name || 'U').charAt(0).toUpperCase()}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ background: '#f7f7f7', borderRadius: 12, padding: '8px 12px' }}>
+                    <span style={{ fontWeight: 700, color: '#1a1a2e', fontSize: 13 }}>{c.full_name || c.author_name || t('common.user')}</span>
+                    <p style={{ color: '#444', fontSize: 13, margin: '4px 0 0', lineHeight: 1.5 }}>{c.content}</p>
+                  </div>
+                  <div style={{ display: 'flex', gap: 12, marginTop: 4, paddingLeft: 4 }}>
+                    <button onClick={() => toggleCommentAmen(c.id || i)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: commentAmens[c.id || i] ? '#e11d48' : '#888', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
+                      🙏 Amém {commentAmens[c.id || i] ? '✓' : ''}
+                    </button>
+                    {user && (
+                      <button onClick={() => setReplyTo(replyTo === (c.id || i) ? null : (c.id || i))} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#888', fontWeight: 600 }}>
+                        ↩ Responder
+                      </button>
+                    )}
+                  </div>
+                  {replyTo === (c.id || i) && user && (
+                    <form onSubmit={(e) => { e.preventDefault(); submitComment(e); setReplyTo(null); }} style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+                      <input value={comment} onChange={e => setComment(e.target.value)} placeholder={`Responder a ${c.full_name || 'utilizador'}...`} style={{ flex: 1, padding: '6px 10px', borderRadius: 16, border: '1px solid #e2e8f0', fontSize: 12, outline: 'none' }} autoFocus />
+                      <button type="submit" style={{ padding: '6px 12px', borderRadius: 16, background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', color: 'white', cursor: 'pointer', fontSize: 12 }}>Enviar</button>
+                    </form>
+                  )}
+                </div>
+              </div>
             </div>
           ))}
           {user && (
-            <form onSubmit={submitComment} style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-              <input value={comment} onChange={e => setComment(e.target.value)} placeholder={t('mural.commentPlaceholder')} style={{ flex: 1, padding: '8px 12px', borderRadius: 20, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none' }} />
-              <button type="submit" style={{ padding: '8px 14px', borderRadius: 20, background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', color: 'white', cursor: 'pointer' }}><Send size={14} /> {t('common.send')}</button>
+            <form onSubmit={submitComment} style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#667eea,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>
+                {(user.full_name || 'U').charAt(0).toUpperCase()}
+              </div>
+              <input value={comment} onChange={e => setComment(e.target.value)} placeholder={t('mural.commentPlaceholder')} style={{ flex: 1, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none', background: '#f7f7f7' }} />
+              <button type="submit" style={{ padding: '8px 14px', borderRadius: 20, background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}><Send size={14} /></button>
             </form>
           )}
         </div>
