@@ -108,7 +108,7 @@ export default function App() {
 
       {/* TOPBAR */}
       <header className="topbar">
-        <button className="mobile-only" onClick={()=>setSidebarOpen(s=>!s)} style={{background:'none',border:'none',color:'white',fontSize:26,cursor:'pointer',lineHeight:1}}>&#9776;</button>
+        
         <Link to="/" style={{display:'flex',alignItems:'center',gap:'9px',textDecoration:'none'}}>
           <img src='/logo-new.png' alt='Sigo com Fe' style={{height:36,width:'auto',objectFit:'contain'}} />
         </Link>
