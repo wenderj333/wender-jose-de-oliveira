@@ -254,6 +254,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 
   const isVideo = mediaUrl && mediaUrl.match(/\.(mp4|webm|mov|ogg)(\?|$)/i);
   const isImage = mediaUrl && !mediaUrl.match(/\.(mp4|webm|mov|ogg|mp3|wav|aac|m4a)(\?|$)/i);
+  const videoPoster = isVideo && mediaUrl && mediaUrl.includes('cloudinary.com') ? mediaUrl.replace('/video/upload/', '/video/upload/so_0,w_600/').replace(/\.(mp4|webm|mov|ogg)/i, '.jpg') : null;
 
   // Effect to manage video play/pause based on `isPlaying` prop
   useEffect(() => {
@@ -366,7 +367,8 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             src={mediaUrl}
             controls
             playsInline
-            muted={isMuted} // Control muted state
+            muted={isMuted}
+            poster={videoPoster || undefined}
             style={{ width: '100%', maxHeight: 400, objectFit: 'contain', display: 'block' }}
             onPlay={handleInternalVideoPlay}
             onPause={handleInternalVideoPause}
