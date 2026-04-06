@@ -73,6 +73,21 @@ export default function App() {
   };
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [pendingRequests, setPendingRequests] = useState(0);
+
+  useEffect(() => {
+    if (!token) return;
+    const fetchPending = () => {
+      fetch((import.meta.env.VITE_API_URL || '') + '/api/friends/requests', {
+        headers: { Authorization: 'Bearer ' + token }
+      }).then(r => r.json()).then(data => {
+        setPendingRequests((data.requests || []).length);
+      }).catch(() => {});
+    };
+    fetchPending();
+    const interval = setInterval(fetchPending, 30000);
+    return () => clearInterval(interval);
+  }, [token]);
   useEffect(() => {
     if (!token) return;
     fetch((import.meta.env.VITE_API_URL || '') + '/api/notifications/unread-count', {
@@ -90,11 +105,20 @@ export default function App() {
         setUnreadMessages(prev => prev + 1);
       }
     }
+    if (lastEvent?.type === 'friend_request') {
+      setPendingRequests(prev => prev + 1);
+    }
+    if (lastEvent?.type === 'friend_accepted') {
+      setPendingRequests(prev => Math.max(0, prev - 1));
+    }
   }, [lastEvent]);
 
   useEffect(() => {
     if (location.pathname.startsWith('/mensagens') || location.pathname.startsWith('/notificacoes')) {
       setUnreadMessages(0);
+    }
+    if (location.pathname.startsWith('/amigos')) {
+      setPendingRequests(0);
     }
     setMobileMenuOpen(false);
   }, [location]);
@@ -195,7 +219,7 @@ export default function App() {
               [`/perfil/${user?.id}`, <User size={20}/>, 'Meu Perfil'],
               ['/', <Home size={20}/>, t('nav.mural')],
               ['/mensagens', <MessageCircle size={20}/>, t('nav.messages', 'Mensagens'), unreadMessages],
-              ['/amigos', <Users size={20}/>, t('nav.friends', 'Amigos')],
+              ['/amigos', <Users size={20}/>, t('nav.friends', 'Amigos'), pendingRequests],
               ['/membros', <Users size={20}/>, t('nav.members')],
               ['/igrejas', <Globe size={20}/>, t('churches.title', 'Igrejas')],
               ['/musica', <Music size={20}/>, t('nav.music')],
@@ -278,7 +302,7 @@ export default function App() {
                 </span>
               )}
             </Link>
-            <Link to="/amigos" className={isActive('/amigos')}><Users size={17}/> {t('nav.friends', 'Amigos')}</Link>
+            <Link to="/amigos" className={isActive('/amigos')} style={{position:'relative'}}><Users size={17}/> {t('nav.friends', 'Amigos')}{pendingRequests > 0 && <span style={{marginLeft:'auto',background:'#e11d48',color:'white',borderRadius:'50%',minWidth:18,height:18,fontSize:'0.68rem',fontWeight:700,display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'0 4px'}}>{pendingRequests}</span>}</Link>
             <Link to="/membros" className={isActive('/membros')}><Users size={17}/> {t('nav.members')}</Link>
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/> {t('nav.groups')}</Link>
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/> {t('nav.music')}</Link>
