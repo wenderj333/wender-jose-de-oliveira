@@ -328,7 +328,7 @@ export default function Profile() {
           </div>
         </div>
       )}
-      <div style={{ textAlign: 'center', padding: '20px', marginTop: 20 }}><button onClick={() => { if(window.confirm('Tem certeza que deseja apagar sua conta? Esta acao nao pode ser desfeita.')) { fetch(API_BASE + '/api/auth/delete-account', { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } }).then(() => { logout(); }); } }} style={{ background: '#e74c3c', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 8, cursor: 'pointer', fontSize: 14, fontWeight: 700 }}>{t('profile.deleteAccount', 'Apagar Conta')}</button></div>
+      {isOwn && <div style={{ textAlign: 'center', padding: '20px', marginTop: 20 }}><button onClick={() => { if(window.confirm('Tem certeza que deseja apagar sua conta? Esta acao nao pode ser desfeita.')) { fetch(API_BASE + '/api/auth/delete-account', { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } }).then(() => { logout(); }); } }} style={{ background: '#e74c3c', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 8, cursor: 'pointer', fontSize: 14, fontWeight: 700 }}>{t('profile.deleteAccount', 'Apagar Conta')}</button></div>}
     </div>
   );
 }
