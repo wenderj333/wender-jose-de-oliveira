@@ -159,6 +159,7 @@ export default function App() {
               ['/curso-biblico', <BookOpen size={20}/>, t('course.title')],
               ['/ajuda-uma-vida', <Heart size={20}/>, t('nav.help_life')],
               ['/journeys', <Globe size={20}/>, t('nav.journeys')],
+              ['/live', <PlayCircle size={20}/>, '🔴 Directo'],
               ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
               ['/diario-com-deus', <BookOpen size={20}/>, t('nav.diary')],
             ].map(([to, icon, label, badge]) => (
