@@ -160,9 +160,10 @@ export default function App() {
               ['/journeys', <Globe size={20}/>, t('nav.journeys')],
               ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
               ['/diario-com-deus', <BookOpen size={20}/>, t('nav.diary')],
-            ].map(([to, icon, label]) => (
+            ].map(([to, icon, label, badge]) => (
               <Link key={to} to={to} onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'white',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
                 {icon} {label}
+                {badge > 0 && <span style={{marginLeft:'auto',background:'#e11d48',color:'white',borderRadius:'50%',minWidth:18,height:18,fontSize:'0.68rem',fontWeight:700,display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'0 4px'}}>{badge > 99 ? '99+' : badge}</span>}
               </Link>
             ))}
           </div>
@@ -171,7 +172,7 @@ export default function App() {
             {[
               [`/perfil/${user?.id}`, <User size={20}/>, 'Meu Perfil'],
               ['/', <Home size={20}/>, t('nav.mural')],
-              ['/mensagens', <MessageCircle size={20}/>, t('nav.messages', 'Mensagens')],
+              ['/mensagens', <MessageCircle size={20}/>, t('nav.messages', 'Mensagens'), unreadMessages],
               ['/amigos', <Users size={20}/>, t('nav.friends', 'Amigos')],
               ['/membros', <Users size={20}/>, t('nav.members')],
               ['/igrejas', <Globe size={20}/>, t('churches.title', 'Igrejas')],
