@@ -641,7 +641,8 @@ export default function MuralGrid() {
       setShowForm(false);
     } catch (err) {
       setUploadError(err.message || t('mural.uploadConnectionError'));
-      console.error(err);
+      console.error('UPLOAD ERROR:', err);
+      alert('Erro: ' + (err.message || 'desconhecido'));
     } finally { setUploading(false); }
   };
 
