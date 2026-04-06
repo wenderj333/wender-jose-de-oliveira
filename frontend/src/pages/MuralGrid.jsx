@@ -22,10 +22,23 @@ async function uploadToCloudinary(file) {
     const duration = await getVideoDuration(file);
     if (duration > 180) throw new Error("Video muito longo. Maximo 3 minutos.");
   }
+  // Converter HEIC/HEIF para JPEG (Xiaomi/iPhone)
+  let uploadFile = file;
+  if (file.type === 'image/heic' || file.type === 'image/heif' || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+    try {
+      const bitmap = await createImageBitmap(file);
+      const canvas = document.createElement('canvas');
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+      canvas.getContext('2d').drawImage(bitmap, 0, 0);
+      const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.92));
+      uploadFile = new File([blob], file.name.replace(/\.heic$/i, '.jpg').replace(/\.heif$/i, '.jpg'), { type: 'image/jpeg' });
+    } catch(e) { console.warn('HEIC conversion failed, uploading raw', e); }
+  }
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("file", uploadFile);
   formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-  const resourceType = file.type.startsWith("video") ? "video" : file.type.startsWith("audio") ? "video" : "auto";
+  const resourceType = uploadFile.type.startsWith("video") ? "video" : uploadFile.type.startsWith("audio") ? "video" : "auto";
   const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
   const res = await fetch(url, { method: "POST", body: formData });
   if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error?.message || "Erro no upload"); }
