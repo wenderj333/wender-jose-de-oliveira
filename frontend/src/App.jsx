@@ -110,8 +110,7 @@ export default function App() {
       <header className="topbar">
         <button className="mobile-only" onClick={()=>setSidebarOpen(s=>!s)} style={{background:'none',border:'none',color:'white',fontSize:26,cursor:'pointer',lineHeight:1}}>&#9776;</button>
         <Link to="/" style={{display:'flex',alignItems:'center',gap:'9px',textDecoration:'none'}}>
-          <div style={{width:34,height:34,borderRadius:'50%',background:'rgba(255,255,255,0.25)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.1rem'}}>📖</div>
-          <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.1rem',fontWeight:700,color:'#fff',letterSpacing:'0.03em'}}>Sigo com Fé</span>
+          <img src='/logo-new.png' alt='Sigo com Fe' style={{height:36,width:'auto',objectFit:'contain'}} />
         </Link>
 
         <nav className="nav-scroll desktop-only" style={{display:'flex',alignItems:'center',gap:'2px',marginLeft:'20px'}}>
