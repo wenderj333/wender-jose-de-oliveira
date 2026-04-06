@@ -31,7 +31,7 @@ export default function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { fetchNotifications(); }, []);
+  useEffect(() => { fetchNotifications(); markAllAsRead(); }, []);
 
   async function fetchNotifications() {
     if (!user) { setLoading(false); return; }
