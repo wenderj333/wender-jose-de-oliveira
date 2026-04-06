@@ -131,22 +131,41 @@ export default function App() {
     </div>
   );
 
-  if (!user) {
+  const [showRegisterPrompt, setShowRegisterPrompt] = React.useState(false);
+
+  if (!user && (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register')) {
     return (
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/mural" element={<MuralGrid />} />
-        <Route path="/membros" element={<Members />} />
-        <Route path="/ia-biblica" element={<BiblicalAI />} />
-        <Route path="/journeys" element={<FaithJourneys />} />
-        <Route path="*" element={<Landing />} />
       </Routes>
     );
   }
 
   const isActive = (path) => location.pathname === path ? "menu-link active" : "menu-link";
+
+  const requireAuth = (e) => {
+    if (!user) {
+      e.preventDefault();
+      setShowRegisterPrompt(true);
+    }
+  };
+
+  const RegisterPrompt = () => showRegisterPrompt ? (
+    <div onClick={() => setShowRegisterPrompt(false)} style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.7)',zIndex:99999,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:'white',borderRadius:20,padding:32,maxWidth:400,width:'100%',textAlign:'center',boxShadow:'0 20px 60px rgba(0,0,0,0.3)'}}>
+        <div style={{fontSize:48,marginBottom:12}}>🙏</div>
+        <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:24,color:'#1a1a2e',marginBottom:8}}>Junta-te à comunidade!</h2>
+        <p style={{color:'#666',fontSize:14,marginBottom:24,lineHeight:1.6}}>Para usar esta funcionalidade precisas de uma conta gratuita. Leva apenas 1 minuto!</p>
+        <div style={{display:'flex',flexDirection:'column',gap:10}}>
+          <a href="/register" style={{display:'block',padding:'12px 24px',borderRadius:12,background:'linear-gradient(135deg,#3568b8,#4a80d4)',color:'white',textDecoration:'none',fontWeight:700,fontSize:15}}>✨ Criar conta gratuita</a>
+          <a href="/login" style={{display:'block',padding:'12px 24px',borderRadius:12,background:'white',color:'#3568b8',textDecoration:'none',fontWeight:600,fontSize:15,border:'1px solid #3568b8'}}>Já tenho conta — Entrar</a>
+          <button onClick={() => setShowRegisterPrompt(false)} style={{background:'none',border:'none',color:'#aaa',cursor:'pointer',fontSize:13,marginTop:4}}>Continuar a explorar</button>
+        </div>
+      </div>
+    </div>
+  ) : null;
 
   return (
     <div className="app-container">
@@ -294,7 +313,7 @@ export default function App() {
             <p className="menu-title">Menu</p>
             <Link to="/" className={isActive('/')}><Home size={17}/> {t('nav.mural')}</Link>
             <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)}><User size={17}/> Meu Perfil</Link>
-            <Link to="/mensagens" className={location.pathname.startsWith('/mensagens') ? 'menu-link active' : 'menu-link'} style={{position:'relative'}}>
+            <Link to="/mensagens" onClick={requireAuth} className={location.pathname.startsWith('/mensagens') ? 'menu-link active' : 'menu-link'} style={{position:'relative'}}>
               <MessageCircle size={17}/> {t('nav.messages')}
               {unreadMessages > 0 && (
                 <span style={{marginLeft:'auto',background:'#e74c3c',color:'white',borderRadius:'50%',minWidth:18,height:18,fontSize:'0.68rem',fontWeight:700,display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'0 4px',lineHeight:1}}>
@@ -431,6 +450,7 @@ export default function App() {
       `}</style>
 
       <GlobalChat />
+      <RegisterPrompt />
     </div>
   );
 }
