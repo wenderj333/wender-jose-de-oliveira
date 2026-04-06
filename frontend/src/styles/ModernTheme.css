@@ -86,9 +86,9 @@ body {
 
 .modern-layout {
   display: grid;
-  grid-template-columns: 255px 1fr 255px;
+  grid-template-columns: 220px 1fr 220px;
   gap: 0;
-  max-width: 1180px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 16px 12px;
   min-height: calc(100vh - 56px);
