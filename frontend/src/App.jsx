@@ -26,6 +26,7 @@ import BiblicalCourse from "./pages/TheologyCourse";
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfUse from './pages/TermsOfUse';
 import DiarioComDeus from './pages/DiarioComDeus';
+import LiveStream from './pages/LiveStream';
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
 import AjudaUmaVida from "./pages/AjudaUmaVida";
@@ -302,6 +303,7 @@ export default function App() {
             <Route path="/igrejas/:id" element={<ChurchProfile />} />
             <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
                     <Route path='/diario-com-deus' element={<DiarioComDeus />} />
+            <Route path='/live' element={<LiveStream />} />
           <Route path='/privacidade' element={<PrivacyPolicy />} />
           <Route path='/termos' element={<TermsOfUse />} />
 </Routes>
@@ -321,7 +323,7 @@ export default function App() {
             <p style={{fontSize:'0.72rem',color:'rgba(255,255,255,0.55)',marginBottom:14}}>{t('live.be_first')}</p>
             {/* Golden button */}
             <button style={{width:'100%',padding:10,borderRadius:10,background:'linear-gradient(135deg,#c49a28,#f0c040)',color:'#1e2240',fontSize:'0.78rem',fontWeight:700,border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:6,boxShadow:'0 3px 10px rgba(240,192,64,0.4)'}}>
-              <PlayCircle size={15}/> {t('live.start')}
+              <a href='/live' style={{color:'inherit',textDecoration:'none',display:'flex',alignItems:'center',gap:6}}><PlayCircle size={15}/> {t('live.start')}</a>
             </button>
           </div>
 
