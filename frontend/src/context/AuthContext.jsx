@@ -40,7 +40,7 @@ export function AuthProvider({ children }) {
         try {
           await syncFirebaseUser(result.user);
           // Redirect to home after successful Google login on mobile
-          if (window.location.pathname === '/login' || window.location.pathname === '/cadastro') {
+          if (['/login','/cadastro','/register','/'].includes(window.location.pathname)) {
             window.location.href = '/';
           }
         } catch (e) {
