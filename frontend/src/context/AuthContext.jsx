@@ -117,15 +117,8 @@ export function AuthProvider({ children }) {
 
   const loginWithGoogle = async () => {
     try {
-      // Try popup first (works on desktop and some mobile browsers)
-      const result = await signInWithPopup(auth, googleProvider);
-      return await syncFirebaseUser(result.user);
+      await signInWithRedirect(auth, googleProvider);
     } catch (err) {
-      // If popup blocked/failed on mobile, fall back to redirect
-      if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
-        await signInWithRedirect(auth, googleProvider);
-        return; // Page will reload — redirect result handled in useEffect
-      }
       throw err;
     }
   };
