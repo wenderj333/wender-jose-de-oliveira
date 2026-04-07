@@ -18,7 +18,6 @@ export default function Login() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   React.useEffect(() => { if (user) navigate('/'); }, [user]);
-  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
