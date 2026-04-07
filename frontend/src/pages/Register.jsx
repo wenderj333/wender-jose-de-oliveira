@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, UserPlus, Mail, Lock, User, LogIn, Phone, Camera } from 'lucide-react';
+import { BookOpen, UserPlus, Mail, Lock, User } from 'lucide-react';
 
 // Google Analytics conversion events
 function trackSignUpEvent() {
@@ -18,20 +18,10 @@ export default function Register() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'member' });
-  const [avatar, setAvatar] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null);
   const [error, setError] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
 
-  function handleAvatarSelect(e) {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      setAvatar(file);
-      const reader = new FileReader();
-      reader.onload = () => setAvatarPreview(reader.result);
-      reader.readAsDataURL(file);
-    }
-  }
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [countryCode, setCountryCode] = useState('+55');
   const [confirmationResult, setConfirmationResult] = useState(null);
@@ -45,19 +35,7 @@ export default function Register() {
     if (form.password.length < 6) return setError(t('register.passwordError'));
     // avatar optional - user can add later
     try {
-      let avatarUrl = null;
-      if (avatar) {
-        try {
-          const fd = new FormData();
-          fd.append('file', avatar);
-          fd.append('upload_preset', 'sigo_com_fe');
-          fd.append('folder', 'sigo-com-fe/avatars');
-          const uploadRes = await fetch('https://api.cloudinary.com/v1_1/degxiuf43/image/upload', { method: 'POST', body: fd });
-          const uploadData = await uploadRes.json();
-          if (uploadData.secure_url) avatarUrl = uploadData.secure_url;
-        } catch (uploadErr) { console.error('Avatar upload error:', uploadErr); }
-      }
-      await register(form.email, form.password, form.full_name, form.role, avatarUrl);
+      await register(form.email, form.password, form.full_name, form.role, null);
       trackSignUpEvent();
       navigate('/'); // Navegar para a página inicial após o registo
     } catch (err) {
@@ -111,51 +89,6 @@ export default function Register() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {/* Avatar */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1rem' }}>
-            <label style={{ cursor: 'pointer', position: 'relative' }}>
-              <div style={{
-                width: 100, height: 100, borderRadius: '50%',
-                background: avatarPreview ? 'none' : 'linear-gradient(135deg, #fff8e1, #fff3e0)',
-                border: avatarPreview ? '3px solid #4caf50' : '3px dashed #daa520',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                overflow: 'hidden',
-                boxShadow: avatarPreview ? '0 4px 15px rgba(76,175,80,0.3)' : '0 4px 15px rgba(218,165,32,0.3)',
-                animation: !avatarPreview ? 'pulse 2s infinite' : 'none',
-              }}>
-                {avatarPreview ? (
-                  <>
-                    <img src={avatarPreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    <div style={{
-                      position: 'absolute', bottom: 0, right: 0,
-                      background: '#4caf50', borderRadius: '50%', width: 28, height: 28,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      border: '2px solid #fff',
-                    }}>
-                      <span style={{ color: '#fff', fontSize: '0.85rem' }}>✓</span>
-                    </div>
-                  </>
-                ) : (
-                  <div style={{ textAlign: 'center' }}>
-                    <Camera size={36} color="#daa520" />
-                  </div>
-                )}
-              </div>
-              <input type="file" accept="image/*" onChange={handleAvatarSelect} style={{ display: 'none' }} />
-            </label>
-            <div style={{
-              textAlign: 'center', fontSize: '0.85rem', marginTop: 6, fontWeight: 700,
-              color: avatarPreview ? '#4caf50' : '#daa520',
-            }}>
-              {avatarPreview ? '✅ Foto adicionada!' : '📷 Toque aqui para adicionar sua foto *'}
-            </div>
-            {!avatarPreview && (
-              <div style={{ fontSize: '0.72rem ', color: '#888 ', marginTop: 2 }}>
-                Opcional — podes adicionar a foto depois
-              </div>
-            )}
-          </div>
-
           <div className="form-group">
             <label><User size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.fullName')}</label>
             <input value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} placeholder={t('register.fullNamePlaceholder')} required />
