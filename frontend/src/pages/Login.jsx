@@ -14,8 +14,10 @@ function trackLoginEvent() {
 }
 
 export default function Login() {
-  const { login, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
+  const { user, login, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  React.useEffect(() => { if (user) navigate('/'); }, [user]);
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
