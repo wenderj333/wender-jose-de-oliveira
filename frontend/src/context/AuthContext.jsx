@@ -11,45 +11,61 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
+  const [isGuest, setIsGuest] = useState(localStorage.getItem('guestMode') === 'true');
 
   // Helper: sync Firebase user with our backend (social login)
   const syncFirebaseUser = async (firebaseUser) => {
-    const res = await fetch(`${API}/auth/social`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        full_name: firebaseUser.displayName || firebaseUser.email,
-        photo: firebaseUser.photoURL,
-      }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Erro ao sincronizar com servidor');
-    setUser(data.user);
-    setToken(data.token);
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    return data;
+    console.log('🔵 syncFirebaseUser iniciado:', { uid: firebaseUser.uid, email: firebaseUser.email });
+    try {
+      const res = await fetch(`${API}/auth/social`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          full_name: firebaseUser.displayName || firebaseUser.email,
+          photo: firebaseUser.photoURL,
+        }),
+      });
+      const data = await res.json();
+      console.log('🔵 Resposta do backend:', { ok: res.ok, status: res.status, data });
+      if (!res.ok) throw new Error(data.error || 'Erro ao sincronizar com servidor');
+      setUser(data.user);
+      setToken(data.token);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      console.log('✅ syncFirebaseUser concluído');
+      return data;
+    } catch (err) {
+      console.error('❌ Erro no syncFirebaseUser:', err);
+      throw err;
+    }
   };
 
   // Handle redirect result (mobile Google sign-in)
   useEffect(() => {
+    console.log('🔵 Verificando redirect result...');
     getRedirectResult(auth).then(async (result) => {
+      console.log('🔵 getRedirectResult resultado:', result);
       if (result?.user) {
+        console.log('✅ User do Google recebido:', result.user.email);
         try {
           await syncFirebaseUser(result.user);
-          // Redirect to home after successful Google login on mobile
-          if (['/login','/cadastro','/register','/'].includes(window.location.pathname)) {
+          console.log('✅ Sync completo, redirecionando...');
+          // Redirect to home after successful Google login
+          if (['/login','/cadastro','/register'].includes(window.location.pathname)) {
             window.location.href = '/';
           }
         } catch (e) {
-          console.error('Erro ao sincronizar com Google:', e);
-          alert('Erro ao fazer login com Google. Por favor, tenta novamente ou usa email/senha.');
+          console.error('❌ Erro ao sincronizar com Google:', e);
+          alert(`Erro ao fazer login com Google: ${e.message}\nPor favor, tenta novamente ou usa email/senha.`);
         }
+      } else {
+        console.log('ℹ️ Sem redirect result (normal se não veio do Google)');
       }
     }).catch((e) => {
-      console.error('Erro no redirect do Google:', e);
+      console.error('❌ Erro no getRedirectResult:', e);
+      alert(`Erro no redirect do Google: ${e.message}`);
     });
   }, []);
 
@@ -119,9 +135,21 @@ export function AuthProvider({ children }) {
   };
 
   const loginWithGoogle = async () => {
+    console.log('🔵 loginWithGoogle iniciado');
     try {
-      await signInWithRedirect(auth, googleProvider);
+      // Try popup first (works on desktop)
+      console.log('🔵 Tentando popup...');
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log('✅ Popup bem-sucedido');
+      return await syncFirebaseUser(result.user);
     } catch (err) {
+      console.log('⚠️ Popup falhou:', err.code, err.message);
+      // If popup blocked/failed, fall back to redirect (works on mobile)
+      if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+        console.log('🔵 Fallback para redirect...');
+        await signInWithRedirect(auth, googleProvider);
+        return; // Page will reload - redirect result handled in useEffect
+      }
       throw err;
     }
   };
@@ -190,8 +218,15 @@ export function AuthProvider({ children }) {
     }
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('guestMode');
     setToken(null);
     setUser(null);
+    setIsGuest(false);
+  };
+
+  const enableGuestMode = () => {
+    localStorage.setItem('guestMode', 'true');
+    setIsGuest(true);
   };
 
   const updateProfilePhoto = async (photoURL) => {
@@ -214,7 +249,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode, register, logout, updateProfilePhoto }}>
+    <AuthContext.Provider value={{ user, token, loading, isGuest, login, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode, register, logout, updateProfilePhoto, enableGuestMode }}>
       {children}
     </AuthContext.Provider>
   );

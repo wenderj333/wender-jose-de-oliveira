@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import GuestPrompt from '../components/GuestPrompt';
 
 // =============================================
 // CLOUDINARY CONFIG
