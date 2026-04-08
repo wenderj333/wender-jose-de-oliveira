@@ -7,6 +7,14 @@ const AuthContext = createContext(null);
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
 
+// Log da configuração da API (só em desenvolvimento ou para debug)
+console.log('🔧 AuthContext configurado:', {
+  API_BASE,
+  API,
+  hasToken: !!localStorage.getItem('token'),
+  env: import.meta.env.MODE
+});
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -135,21 +143,13 @@ export function AuthProvider({ children }) {
   };
 
   const loginWithGoogle = async () => {
-    console.log('🔵 loginWithGoogle iniciado');
+    console.log('🔵 loginWithGoogle iniciado - usando redirect direto');
     try {
-      // Try popup first (works on desktop)
-      console.log('🔵 Tentando popup...');
-      const result = await signInWithPopup(auth, googleProvider);
-      console.log('✅ Popup bem-sucedido');
-      return await syncFirebaseUser(result.user);
+      await signInWithRedirect(auth, googleProvider);
+      console.log('🔵 Redirect iniciado (página vai recarregar)');
+      // Page will reload and redirect result will be handled in useEffect
     } catch (err) {
-      console.log('⚠️ Popup falhou:', err.code, err.message);
-      // If popup blocked/failed, fall back to redirect (works on mobile)
-      if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
-        console.log('🔵 Fallback para redirect...');
-        await signInWithRedirect(auth, googleProvider);
-        return; // Page will reload - redirect result handled in useEffect
-      }
+      console.error('❌ Erro no signInWithRedirect:', err);
       throw err;
     }
   };
