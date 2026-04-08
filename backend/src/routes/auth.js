@@ -86,8 +86,8 @@ async function socialLoginHandler(req, res) {
       });
       // Update avatar if provided
       if (photo) {
-        const db = require('../db/connection');
-        await db.prepare('UPDATE users SET avatar_url = ? WHERE id = ?').run(photo, user.id);
+        const { pool } = require('../config/connection');
+        await pool.query('UPDATE users SET avatar_url = $1 WHERE id = $2', [photo, user.id]);
         user.avatar_url = photo;
       }
     }
@@ -114,10 +114,11 @@ router.post('/phone', async (req, res) => {
       return res.status(400).json({ error: 'uid e telefone são obrigatórios' });
     }
 
-    const db = require('../db/connection');
+    const { pool } = require('../config/connection');
 
     // Try to find user by uid (stored in email field as phone:uid pattern) or phone
-    let user = await db.prepare('SELECT * FROM users WHERE email = ?').get(`phone:${uid}`);
+    const userRes = await pool.query('SELECT * FROM users WHERE email = $1', [`phone:${uid}`]);
+    let user = userRes.rows[0];
     if (!user) {
       // Create local user for phone auth
       const crypto = require('crypto');
@@ -130,7 +131,7 @@ router.post('/phone', async (req, res) => {
       });
       // Store phone number (column added via migration, safe to ignore if missing)
       try {
-        await db.prepare('UPDATE users SET phone = ? WHERE id = ?').run(phone, user.id);
+        await pool.query('UPDATE users SET phone = $1 WHERE id = $2', [phone, user.id]);
       } catch (e) {
         console.warn('Could not set phone:', e.message);
       }

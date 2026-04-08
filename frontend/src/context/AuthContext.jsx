@@ -44,10 +44,13 @@ export function AuthProvider({ children }) {
             window.location.href = '/';
           }
         } catch (e) {
-          // Backend offline, ignore
+          console.error('Erro ao sincronizar com Google:', e);
+          alert('Erro ao fazer login com Google. Por favor, tenta novamente ou usa email/senha.');
         }
       }
-    }).catch(() => {});
+    }).catch((e) => {
+      console.error('Erro no redirect do Google:', e);
+    });
   }, []);
 
   // Listen for Firebase auth state changes (for page reload with active Google session)
