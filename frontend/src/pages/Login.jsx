@@ -14,9 +14,10 @@ function trackLoginEvent() {
 }
 
 export default function Login() {
-  const { login, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
+  const { user, login, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode, enableGuestMode } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  React.useEffect(() => { if (user) navigate('/'); }, [user]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -45,15 +46,24 @@ export default function Login() {
 
   const handleGoogleLogin = async () => {
     setError('');
+    setLoading(true);
     try {
+      console.log('🔵 Iniciando Google login...');
       const result = await loginWithGoogle();
+      console.log('✅ Google login resultado:', result);
       // Track Google Analytics conversion event
       trackLoginEvent();
-      if (result) navigate('/');
-    } catch (err) {
-      if (err.code !== 'auth/popup-closed-by-user') {
-        setError(err.message);
+      if (result) {
+        console.log('✅ Navegando para home...');
+        navigate('/');
       }
+    } catch (err) {
+      console.error('❌ Erro no Google login:', err);
+      if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
+        setError(err.message || 'Erro ao fazer login com Google');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,6 +160,32 @@ export default function Login() {
         */}
 
         {/* Phone auth removed - requires Firebase Blaze (paid) plan */}
+
+        <button
+          type="button"
+          onClick={() => {
+            enableGuestMode();
+            navigate('/');
+          }}
+          style={{
+            width: '100%',
+            marginTop: '1rem',
+            padding: '0.75rem',
+            background: 'transparent',
+            border: '2px dashed var(--blue)',
+            borderRadius: '8px',
+            color: 'var(--blue)',
+            fontSize: '0.95rem',
+            fontWeight: 600,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+          }}
+        >
+          👁️ Visitar como convidado
+        </button>
 
         <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--gray-500)' }}>
           {t('login.noAccount')} <Link to="/cadastro" style={{ color: 'var(--green)', fontWeight: 600 }}>{t('login.signUp')}</Link>
