@@ -29,6 +29,17 @@ async function ensureTables() {
       PRIMARY KEY (user_id, music_id)
     )
   `, []);
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS music_comments (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      music_id UUID REFERENCES music(id) ON DELETE CASCADE,
+      user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+      user_name VARCHAR(200),
+      user_avatar TEXT,
+      comment TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT NOW()
+    )
+  `, []);
   // Schema migration: add is_public if not exists
   await db.query(`ALTER TABLE music ADD COLUMN IF NOT EXISTS is_public BOOLEAN DEFAULT true`, []);
 }
@@ -49,10 +60,10 @@ router.get('/genres', async (req, res) => {
   }
 });
 
-// GET /api/music?search=&genre=&userId= — list songs (public + own private)
+// GET /api/music?search=&genre=&userId=&sort= — list songs (public + own private)
 router.get('/', async (req, res) => {
   try {
-    const { search, genre, limit, userId } = req.query;
+    const { search, genre, limit, userId, sort } = req.query;
     // Try to get authenticated user from Authorization header
     let authUserId = null;
     const authHeader = req.headers.authorization;
@@ -83,7 +94,16 @@ router.get('/', async (req, res) => {
         params.push(genre);
         sql += ` AND genre = $${params.length}`;
       }
-      sql += ` ORDER BY created_at DESC`;
+      
+      // Sort options: plays, likes, recent (default)
+      if (sort === 'plays') {
+        sql += ` ORDER BY play_count DESC, created_at DESC`;
+      } else if (sort === 'likes') {
+        sql += ` ORDER BY like_count DESC, created_at DESC`;
+      } else {
+        sql += ` ORDER BY created_at DESC`;
+      }
+      
       if (limit) {
         params.push(parseInt(limit, 10));
         sql += ` LIMIT $${params.length}`;
@@ -104,7 +124,16 @@ router.get('/', async (req, res) => {
         params.push(genre);
         sql += ` AND genre = $${params.length}`;
       }
-      sql += ` ORDER BY created_at DESC`;
+      
+      // Sort options
+      if (sort === 'plays') {
+        sql += ` ORDER BY play_count DESC, created_at DESC`;
+      } else if (sort === 'likes') {
+        sql += ` ORDER BY like_count DESC, created_at DESC`;
+      } else {
+        sql += ` ORDER BY created_at DESC`;
+      }
+      
       if (limit) {
         params.push(parseInt(limit, 10));
         sql += ` LIMIT $${params.length}`;
@@ -214,6 +243,62 @@ router.post('/:id/like', authenticate, async (req, res) => {
   } catch (err) {
     console.error('Error toggling like:', err);
     res.status(500).json({ error: 'Erro ao curtir música' });
+  }
+});
+
+// POST /api/music/:id/play — increment play count
+router.post('/:id/play', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await db.query(
+      `UPDATE music SET play_count = play_count + 1 WHERE id = $1`,
+      [id]
+    );
+    const updated = await db.query(
+      `SELECT play_count FROM music WHERE id = $1`,
+      [id]
+    );
+    res.json({ play_count: updated.rows[0]?.play_count || 0 });
+  } catch (err) {
+    console.error('Error incrementing play count:', err);
+    res.status(500).json({ error: 'Erro ao registrar play' });
+  }
+});
+
+// GET /api/music/:id/comments — list comments
+router.get('/:id/comments', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      `SELECT * FROM music_comments WHERE music_id = $1 ORDER BY created_at DESC`,
+      [id]
+    );
+    res.json({ comments: result.rows });
+  } catch (err) {
+    console.error('Error fetching comments:', err);
+    res.status(500).json({ error: 'Erro ao buscar comentários' });
+  }
+});
+
+// POST /api/music/:id/comments — add comment
+router.post('/:id/comments', authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { comment } = req.body;
+    if (!comment || !comment.trim()) {
+      return res.status(400).json({ error: 'Comentário vazio' });
+    }
+
+    const result = await db.query(
+      `INSERT INTO music_comments (music_id, user_id, user_name, user_avatar, comment)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING *`,
+      [id, req.user.id, req.user.full_name || 'Anónimo', req.user.avatar_url || null, comment.trim()]
+    );
+    res.json({ comment: result.rows[0] });
+  } catch (err) {
+    console.error('Error adding comment:', err);
+    res.status(500).json({ error: 'Erro ao adicionar comentário' });
   }
 });
 
