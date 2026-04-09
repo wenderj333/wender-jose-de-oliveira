@@ -29,37 +29,87 @@ export default function LiveCommunity() {
 
   // Carregar playlist
   useEffect(() => {
+    console.log('🎵 Carregando playlist...');
     fetch(`${API_BASE}/api/live-community/playlist`)
       .then(r => r.json())
-      .then(data => setSongs(data.songs || []))
-      .catch(() => {});
+      .then(data => {
+        console.log(`✅ ${data.songs?.length || 0} músicas carregadas`, data.songs);
+        setSongs(data.songs || []);
+      })
+      .catch((err) => {
+        console.error('❌ Erro ao carregar playlist:', err);
+      });
   }, []);
 
-  // Carregar stats
+  // Marcar como online e atualizar stats
   useEffect(() => {
-    fetch(`${API_BASE}/api/live-community/stats`)
-      .then(r => r.json())
-      .then(data => setOnlineCount(data.onlineCount || 0))
-      .catch(() => {});
-  }, []);
+    const markOnline = () => {
+      if (user && !isGuest) {
+        fetch(`${API_BASE}/api/live-community/join`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: user.id }),
+        })
+          .then(r => r.json())
+          .then(data => {
+            console.log(`✅ Online na live: ${data.onlineCount} usuários`);
+            setOnlineCount(data.onlineCount || 1);
+          })
+          .catch(() => {});
+      } else {
+        // Visitante - só pegar contador
+        fetch(`${API_BASE}/api/live-community/stats`)
+          .then(r => r.json())
+          .then(data => setOnlineCount(data.onlineCount || 0))
+          .catch(() => {});
+      }
+    };
+
+    markOnline();
+    const interval = setInterval(markOnline, 30000); // Refresh a cada 30s
+
+    return () => {
+      clearInterval(interval);
+      // Marcar como offline ao sair
+      if (user && !isGuest) {
+        fetch(`${API_BASE}/api/live-community/leave`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: user.id }),
+        }).catch(() => {});
+      }
+    };
+  }, [user, isGuest]);
 
   // WebSocket chat
   useEffect(() => {
-    if (!send || !on || !off) return;
+    if (!send || !on || !off) {
+      console.log('⚠️ WebSocket não disponível (send/on/off)', { send: !!send, on: !!on, off: !!off });
+      return;
+    }
+    
+    console.log('🔌 Conectando ao chat WebSocket...');
     
     const handleMessage = (data) => {
+      console.log('💬 Mensagem recebida:', data);
       setChatMessages(prev => [...prev, data].slice(-100)); // últimas 100
     };
 
     on('live_chat_broadcast', handleMessage);
     
     if (user && !isGuest) {
+      console.log('✅ Enviando live_join para WebSocket...', user.full_name);
       send({ type: 'live_join', userId: user.id, userName: user.full_name, userAvatar: user.avatar_url });
+    } else {
+      console.log('👁️ Usuário visitante (não envia live_join)');
     }
 
     return () => {
       off('live_chat_broadcast', handleMessage);
-      if (user && !isGuest) send({ type: 'live_leave', userId: user.id });
+      if (user && !isGuest) {
+        console.log('👋 Enviando live_leave...');
+        send({ type: 'live_leave', userId: user.id });
+      }
     };
   }, [send, on, off, user, isGuest]);
 
@@ -81,11 +131,16 @@ export default function LiveCommunity() {
 
   const handleSendMessage = () => {
     if (!user || isGuest) {
+      console.log('⚠️ Guest tentou enviar mensagem');
       setShowGuestPrompt(true);
       return;
     }
-    if (!messageInput.trim()) return;
+    if (!messageInput.trim()) {
+      console.log('⚠️ Mensagem vazia');
+      return;
+    }
     
+    console.log('📤 Enviando mensagem:', messageInput);
     send({
       type: 'live_chat_message',
       userId: user.id,
@@ -101,20 +156,29 @@ export default function LiveCommunity() {
   };
 
   const togglePlay = () => {
-    if (!audioRef.current) return;
+    if (!audioRef.current) {
+      console.error('❌ audioRef não existe');
+      return;
+    }
     
     if (!hasStarted) {
+      console.log('▶️ Primeiro play - iniciando...');
       setHasStarted(true);
     }
     
     if (isPlaying) {
+      console.log('⏸️ Pausando...');
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
+      console.log('▶️ Tocando...', audioRef.current.src);
       audioRef.current.play()
-        .then(() => setIsPlaying(true))
+        .then(() => {
+          console.log('✅ Play iniciado com sucesso');
+          setIsPlaying(true);
+        })
         .catch((err) => {
-          console.error('Play error:', err);
+          console.error('❌ Erro ao tocar:', err);
           setIsPlaying(false);
         });
     }
