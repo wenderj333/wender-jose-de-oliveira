@@ -463,6 +463,7 @@ app.use('/api/ai-louvor', require('./routes/ai-louvor'));
 app.use('/api/openclaw', require('./routes/openclaw'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/help-posts', require('./routes/help-posts'));
+app.use('/api/live-community', require('./routes/live-community'));
 
 // Log OpenClaw routes for debugging
 console.log('✅ OpenClaw routes registered: /api/openclaw/health, /api/openclaw/users/new');

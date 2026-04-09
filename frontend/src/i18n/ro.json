@@ -1347,6 +1347,17 @@
     "selectConvo": "Selecteaza o conversatie sau mergi la profilul unui prieten pentru a incepe sa vorbesti!",
     "search": "Cauta conversatie..."
   },
+  "live": {
+    "title": "Comunitate Live 24h",
+    "nowPlaying": "Se redă acum",
+    "online": "online",
+    "typeMessage": "Scrie un mesaj...",
+    "welcome": "Bine ai venit",
+    "enjoy": "Bucură-te de comunitatea live!",
+    "joinCommunity": "Alătură-te comunității!",
+    "createAccount": "Creează un cont pentru a participa la chat.",
+    "signUp": "Creează cont gratuit"
+  },
   "legal": {
     "privacy": "Politica Confidentialitate",
     "terms": "Termeni Utilizare"

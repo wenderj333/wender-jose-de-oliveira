@@ -1334,6 +1334,17 @@
     "selectConvo": "Wahle ein Gesprach aus oder gehe zum Profil eines Freundes!",
     "search": "Gesprach suchen..."
   },
+  "live": {
+    "title": "Live-Community 24h",
+    "nowPlaying": "Jetzt läuft",
+    "online": "online",
+    "typeMessage": "Schreibe eine Nachricht...",
+    "welcome": "Willkommen",
+    "enjoy": "Genieße die Live-Community!",
+    "joinCommunity": "Tritt der Community bei!",
+    "createAccount": "Erstelle ein Konto, um am Chat teilzunehmen.",
+    "signUp": "Kostenloses Konto erstellen"
+  },
   "legal": {
     "privacy": "Datenschutzrichtlinie",
     "terms": "Nutzungsbedingungen",

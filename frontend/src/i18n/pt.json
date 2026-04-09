@@ -1409,6 +1409,17 @@
     "selectConvo": "Seleciona uma conversa ou vai ao perfil de um amigo para comecar a conversar!",
     "search": "Procurar conversa..."
   },
+  "live": {
+    "title": "Comunidade ao Vivo 24h",
+    "nowPlaying": "Tocando agora",
+    "online": "online",
+    "typeMessage": "Escreve uma mensagem...",
+    "welcome": "Bem-vindo",
+    "enjoy": "Aproveita a comunidade ao vivo!",
+    "joinCommunity": "Junta-te à comunidade!",
+    "createAccount": "Cria uma conta para participar no chat.",
+    "signUp": "Criar conta grátis"
+  },
   "legal": {
     "privacy": "Politica de Privacidade",
     "terms": "Termos de Uso",

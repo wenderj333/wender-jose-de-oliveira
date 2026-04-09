@@ -268,6 +268,39 @@ function setupWebSocket(server) {
             clients.set(ws, ci);
             break;
           }
+
+          // ===== LIVE COMMUNITY CHAT =====
+          case 'live_chat_message': {
+            const { message, userId, userName, userAvatar } = msg;
+            broadcast(wss, {
+              type: 'live_chat_broadcast',
+              id: Date.now(),
+              userId,
+              userName,
+              userAvatar,
+              message,
+              timestamp: new Date().toISOString(),
+            });
+            break;
+          }
+
+          case 'live_join': {
+            broadcast(wss, {
+              type: 'live_user_joined',
+              userId: msg.userId,
+              userName: msg.userName,
+              userAvatar: msg.userAvatar,
+            });
+            break;
+          }
+
+          case 'live_leave': {
+            broadcast(wss, {
+              type: 'live_user_left',
+              userId: msg.userId,
+            });
+            break;
+          }
         }
       } catch (err) {
         console.error('Erro no WebSocket:', err);

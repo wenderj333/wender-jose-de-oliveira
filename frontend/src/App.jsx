@@ -36,6 +36,7 @@ import ChurchProfile from "./pages/ChurchProfile";
 import PastorDashboard from "./pages/PastorDashboard";
 import Friends from "./pages/Friends";
 import Notifications from "./pages/Notifications";
+import LiveCommunity from "./pages/LiveCommunity";
 
 // Components
 import LanguageSelector from "./components/LanguageSwitcher";
@@ -306,6 +307,7 @@ export default function App() {
             <Link to="/membros" className={isActive('/membros')}><Users size={17}/> {t('nav.members')}</Link>
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/> {t('nav.groups')}</Link>
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/> {t('nav.music')}</Link>
+            <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><Music size={17}/> 🎵 Comunidade ao Vivo</Link>
             <Link to="/igrejas" className={location.pathname.startsWith('/igrejas') ? 'menu-link active' : 'menu-link'}>⛪ {t('nav.churches', 'Igrejas')}</Link>
           </div>
 
@@ -349,6 +351,7 @@ export default function App() {
             <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
                     <Route path='/diario-com-deus' element={<DiarioComDeus />} />
             <Route path='/live' element={<LiveStream />} />
+            <Route path='/comunidade-ao-vivo' element={<LiveCommunity />} />
           <Route path='/privacidade' element={<PrivacyPolicy />} />
           <Route path='/termos' element={<TermsOfUse />} />
 </Routes>
