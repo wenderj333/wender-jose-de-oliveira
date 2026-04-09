@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useTranslation } from 'react-i18next';
 import GuestPrompt from '../components/GuestPrompt';
-import { Music, Users, Send } from 'lucide-react';
+import { Music, Users, Send, Play, Pause } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -18,6 +18,8 @@ export default function LiveCommunity() {
   const [messageInput, setMessageInput] = useState('');
   const [onlineCount, setOnlineCount] = useState(0);
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
@@ -40,7 +42,7 @@ export default function LiveCommunity() {
 
   // WebSocket chat
   useEffect(() => {
-    if (!send || !on) return;
+    if (!send || !on || !off) return;
     
     const handleMessage = (data) => {
       setChatMessages(prev => [...prev, data].slice(-100)); // últimas 100
@@ -48,26 +50,29 @@ export default function LiveCommunity() {
 
     on('live_chat_broadcast', handleMessage);
     
-    if (user) {
+    if (user && !isGuest) {
       send({ type: 'live_join', userId: user.id, userName: user.full_name, userAvatar: user.avatar_url });
     }
 
     return () => {
       off('live_chat_broadcast', handleMessage);
-      if (user) send({ type: 'live_leave', userId: user.id });
+      if (user && !isGuest) send({ type: 'live_leave', userId: user.id });
     };
-  }, [send, on, off, user]);
+  }, [send, on, off, user, isGuest]);
 
   // Auto scroll chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
 
-  // Tocar música
+  // Atualizar src da música quando mudar
   useEffect(() => {
     if (songs.length > 0 && audioRef.current) {
       audioRef.current.src = songs[currentSongIndex]?.file_url;
-      audioRef.current.play().catch(() => {});
+      // Se já estava tocando, continuar tocando a próxima
+      if (hasStarted && isPlaying) {
+        audioRef.current.play().catch(() => setIsPlaying(false));
+      }
     }
   }, [currentSongIndex, songs]);
 
@@ -92,6 +97,26 @@ export default function LiveCommunity() {
     setCurrentSongIndex((prev) => (prev + 1) % songs.length);
   };
 
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    
+    if (!hasStarted) {
+      setHasStarted(true);
+    }
+    
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => {
+          console.error('Play error:', err);
+          setIsPlaying(false);
+        });
+    }
+  };
+
   return (
     <div style={{ minHeight: '100vh', background: '#f5f5f5', padding: '16px' }}>
       <h1 style={{ textAlign: 'center', marginBottom: '20px', color: '#333' }}>
@@ -114,12 +139,82 @@ export default function LiveCommunity() {
                 <p style={{ color: '#666', fontSize: '0.9rem' }}>{songs[currentSongIndex].artist}</p>
               </div>
             )}
-            <audio
-              ref={audioRef}
-              controls
-              onEnded={nextSong}
-              style={{ width: '100%', marginTop: '12px' }}
-            />
+            
+            {/* Big Play Button (primeiro clique necessário para permitir autoplay) */}
+            {!hasStarted && (
+              <button
+                onClick={togglePlay}
+                style={{
+                  width: '100%',
+                  padding: '20px',
+                  marginTop: '12px',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontSize: '1.2rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '12px',
+                  fontWeight: 600,
+                  transition: 'transform 0.2s',
+                }}
+                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                <Play size={24} /> Começar a ouvir
+              </button>
+            )}
+
+            {/* Audio controls (aparece depois do primeiro play) */}
+            {hasStarted && (
+              <div style={{ marginTop: '12px' }}>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '8px' }}>
+                  <button
+                    onClick={togglePlay}
+                    style={{
+                      padding: '12px 24px',
+                      background: isPlaying ? '#764ba2' : '#667eea',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      fontWeight: 600,
+                      flex: 1,
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {isPlaying ? <><Pause size={18} /> Pausar</> : <><Play size={18} /> Tocar</>}
+                  </button>
+                  <button
+                    onClick={nextSong}
+                    style={{
+                      padding: '12px 24px',
+                      background: '#667eea',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontWeight: 600,
+                    }}
+                  >
+                    Próxima →
+                  </button>
+                </div>
+                <audio
+                  ref={audioRef}
+                  onEnded={nextSong}
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  style={{ width: '100%', marginTop: '8px' }}
+                />
+              </div>
+            )}
           </div>
 
           {/* Online Users */}
@@ -132,7 +227,12 @@ export default function LiveCommunity() {
           {/* Live Chat */}
           <div style={{ background: 'white', borderRadius: '12px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', height: '400px', display: 'flex', flexDirection: 'column' }}>
             <h3 style={{ margin: '0 0 12px' }}>💬 Chat ao Vivo</h3>
-            <div style={{ flex: 1, overflowY: 'auto', marginBottom: '12px' }}>
+            <div style={{ flex: 1, overflowY: 'auto', marginBottom: '12px', padding: '8px' }}>
+              {chatMessages.length === 0 && (
+                <p style={{ color: '#999', textAlign: 'center', marginTop: '20px' }}>
+                  Nenhuma mensagem ainda... Seja o primeiro! 👋
+                </p>
+              )}
               {chatMessages.map((msg, i) => (
                 <div key={i} style={{ marginBottom: '8px', padding: '8px', background: '#f9f9f9', borderRadius: '8px' }}>
                   <span style={{ fontWeight: 600, color: '#667eea' }}>{msg.userName}: </span>

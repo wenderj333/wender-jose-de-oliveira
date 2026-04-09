@@ -9,6 +9,7 @@ export function WebSocketProvider({ children }) {
   const wsRef = useRef(null);
   const reconnectTimer = useRef(null);
   const lastSoundTime = useRef(0);
+  const eventListeners = useRef(new Map()); // event type -> Set of callbacks
   const [liveSessions, setLiveSessions] = useState([]);
   const [totalChurchesPraying, setTotalChurchesPraying] = useState(0);
   const [lastEvent, setLastEvent] = useState(null);
@@ -20,6 +21,36 @@ export function WebSocketProvider({ children }) {
     if (now - lastSoundTime.current > 30000) {
       lastSoundTime.current = now;
       playNotificationSound();
+    }
+  }
+
+  // Subscribe to specific event types
+  const on = useCallback((eventType, callback) => {
+    if (!eventListeners.current.has(eventType)) {
+      eventListeners.current.set(eventType, new Set());
+    }
+    eventListeners.current.get(eventType).add(callback);
+  }, []);
+
+  // Unsubscribe from event types
+  const off = useCallback((eventType, callback) => {
+    const listeners = eventListeners.current.get(eventType);
+    if (listeners) {
+      listeners.delete(callback);
+    }
+  }, []);
+
+  // Emit event to all subscribers
+  function emit(eventType, data) {
+    const listeners = eventListeners.current.get(eventType);
+    if (listeners) {
+      listeners.forEach(callback => {
+        try {
+          callback(data);
+        } catch (e) {
+          console.error('Error in event listener:', e);
+        }
+      });
     }
   }
 
@@ -52,6 +83,10 @@ export function WebSocketProvider({ children }) {
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
+          
+          // Emit to custom listeners
+          emit(data.type, data);
+          
           switch (data.type) {
             case 'live_sessions':
               setLiveSessions(data.sessions || []);
@@ -104,6 +139,9 @@ export function WebSocketProvider({ children }) {
             case 'live_ice_candidate':
             case 'live_viewer_left':
             case 'live_error':
+            case 'live_chat_broadcast':
+            case 'live_user_joined':
+            case 'live_user_left':
               setLastEvent(data);
               break;
           }
@@ -143,7 +181,7 @@ export function WebSocketProvider({ children }) {
   }, []);
 
   return (
-    <WebSocketContext.Provider value={{ liveSessions, totalChurchesPraying, lastEvent, send, liveStreams }}>
+    <WebSocketContext.Provider value={{ liveSessions, totalChurchesPraying, lastEvent, send, on, off, liveStreams }}>
       {children}
     </WebSocketContext.Provider>
   );
