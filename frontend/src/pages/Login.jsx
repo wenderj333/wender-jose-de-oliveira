@@ -14,7 +14,7 @@ function trackLoginEvent() {
 }
 
 export default function Login() {
-  const { user, login, loginWithGoogle, enableGuestMode } = useAuth();
+  const { user, login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
   React.useEffect(() => { if (user) navigate('/'); }, [user]);
@@ -278,10 +278,7 @@ export default function Login() {
 
           <button
             type="button"
-            onClick={() => {
-              enableGuestMode();
-              navigate('/');
-            }}
+            onClick={() => navigate('/')}
             style={{
               width: '100%',
               marginTop: '1rem',
