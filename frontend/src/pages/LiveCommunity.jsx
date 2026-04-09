@@ -20,9 +20,12 @@ export default function LiveCommunity() {
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
+
+  const commonEmojis = ['😊', '❤️', '🙏', '✨', '🙌', '🔥', '💪', '🎵', '📖', '⛪', '🕊️', '🌟', '💫', '🎉', '👏'];
 
   // Carregar playlist
   useEffect(() => {
@@ -118,18 +121,29 @@ export default function LiveCommunity() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f5f5f5', padding: '16px' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '20px', color: '#333' }}>
-        🎵 {t('live.title', 'Comunidade ao Vivo 24h')}
-      </h1>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', padding: '0' }}>
+      <div style={{
+        background: 'rgba(255,255,255,0.95)',
+        borderRadius: '0',
+        padding: '24px 16px',
+        textAlign: 'center',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+      }}>
+        <h1 style={{ margin: 0, fontSize: '1.8rem', fontWeight: 800, color: '#333' }}>
+          🔴 {t('live.title', 'Comunidade ao Vivo 24h')}
+        </h1>
+        <p style={{ margin: '8px 0 0', color: '#666', fontSize: '0.95rem' }}>
+          Louvor contínuo e comunidade em oração
+        </p>
+      </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', maxWidth: '1400px', margin: '0 auto' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', padding: '16px', maxWidth: '100%', margin: '0 auto', height: 'calc(100vh - 120px)' }}>
         
         {/* Coluna Esquerda */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           
           {/* Music Player */}
-          <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+          <div style={{ background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)' }}>
             <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Music size={20} /> {t('live.nowPlaying', 'Tocando agora')}
             </h3>
@@ -218,14 +232,14 @@ export default function LiveCommunity() {
           </div>
 
           {/* Online Users */}
-          <div style={{ background: 'white', borderRadius: '12px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+          <div style={{ background: 'white', borderRadius: '16px', padding: '20px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)' }}>
             <h3 style={{ margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Users size={20} /> +{onlineCount} {t('live.online', 'online')}
             </h3>
           </div>
 
           {/* Live Chat */}
-          <div style={{ background: 'white', borderRadius: '12px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', height: '400px', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: 'white', borderRadius: '16px', padding: '20px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)', flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
             <h3 style={{ margin: '0 0 12px' }}>💬 Chat ao Vivo</h3>
             <div style={{ flex: 1, overflowY: 'auto', marginBottom: '12px', padding: '8px' }}>
               {chatMessages.length === 0 && (
@@ -241,25 +255,82 @@ export default function LiveCommunity() {
               ))}
               <div ref={chatEndRef} />
             </div>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <input
-                type="text"
-                value={messageInput}
-                onChange={(e) => setMessageInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder={user && !isGuest ? t('live.typeMessage', 'Escreve uma mensagem...') : '🔒 Cria conta para participar'}
-                disabled={!user || isGuest}
-                style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-              />
-              <button onClick={handleSendMessage} disabled={!user || isGuest} style={{ padding: '10px 16px', borderRadius: '8px', background: '#667eea', color: 'white', border: 'none', cursor: 'pointer' }}>
-                <Send size={18} />
-              </button>
+            <div style={{ position: 'relative' }}>
+              {showEmojiPicker && user && !isGuest && (
+                <div style={{
+                  position: 'absolute',
+                  bottom: '60px',
+                  left: 0,
+                  background: 'white',
+                  borderRadius: '12px',
+                  padding: '12px',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(5, 1fr)',
+                  gap: '8px',
+                  zIndex: 10,
+                }}>
+                  {commonEmojis.map(emoji => (
+                    <button
+                      key={emoji}
+                      onClick={() => {
+                        setMessageInput(prev => prev + emoji);
+                        setShowEmojiPicker(false);
+                      }}
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        border: 'none',
+                        background: 'transparent',
+                        cursor: 'pointer',
+                        fontSize: '22px',
+                        borderRadius: '8px',
+                        transition: 'background 0.2s',
+                      }}
+                      onMouseOver={(e) => e.currentTarget.style.background = '#f0f0f0'}
+                      onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {user && !isGuest && (
+                  <button
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    style={{
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      background: showEmojiPicker ? '#667eea' : '#f0f0f0',
+                      color: showEmojiPicker ? 'white' : '#666',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '18px',
+                    }}
+                  >
+                    😊
+                  </button>
+                )}
+                <input
+                  type="text"
+                  value={messageInput}
+                  onChange={(e) => setMessageInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder={user && !isGuest ? t('live.typeMessage', 'Escreve uma mensagem...') : '🔒 Cria conta para participar'}
+                  disabled={!user || isGuest}
+                  style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+                />
+                <button onClick={handleSendMessage} disabled={!user || isGuest} style={{ padding: '10px 16px', borderRadius: '8px', background: '#667eea', color: 'white', border: 'none', cursor: 'pointer' }}>
+                  <Send size={18} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Coluna Direita */}
-        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', height: 'fit-content' }}>
+        <div style={{ background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)', height: 'fit-content' }}>
           {user && !isGuest ? (
             <div>
               <h3>{t('live.welcome', 'Bem-vindo')}, {user.full_name}!</h3>
