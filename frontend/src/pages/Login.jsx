@@ -385,13 +385,13 @@ export default function Login() {
               gap: '0.5rem',
             }}>
               {[
-                'https://i.pravatar.cc/150?img=1',
-                'https://i.pravatar.cc/150?img=5',
-                'https://i.pravatar.cc/150?img=9',
-                'https://i.pravatar.cc/150?img=12',
-                'https://i.pravatar.cc/150?img=20',
-                'https://i.pravatar.cc/150?img=25',
-                'https://i.pravatar.cc/150?img=32',
+                '/avatar1.jpg',
+                '/avatar3.jpg',
+                '/avatar4.jpg',
+                '/avatar5.jpg',
+                '/avatar6.jpg',
+                '/avatar7.jpg',
+                '/avatar8.jpg',
               ].map((url, i) => (
                 <div
                   key={i}
