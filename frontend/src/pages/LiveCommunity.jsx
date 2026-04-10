@@ -18,6 +18,24 @@ export default function LiveCommunity() {
   const [messageInput, setMessageInput] = useState('');
   const [onlineCount, setOnlineCount] = useState(0);
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
+  const [guestTimeLeft, setGuestTimeLeft] = useState(600);
+  const [guestExpired, setGuestExpired] = useState(false);
+  useEffect(() => {
+    if (user && !isGuest) return;
+    const key = 'scf_live_start_' + new Date().toDateString();
+    const now = Date.now();
+    const start = parseInt(localStorage.getItem(key) || now);
+    if (!localStorage.getItem(key)) localStorage.setItem(key, now);
+    const elapsed = Math.floor((now - start) / 1000);
+    if (elapsed >= 600) { setGuestExpired(true); setShowGuestPrompt(true); return; }
+    setGuestTimeLeft(600 - elapsed);
+    const timer = setInterval(() => {
+      const e = Math.floor((Date.now() - start) / 1000);
+      if (e >= 600) { setGuestExpired(true); setShowGuestPrompt(true); clearInterval(timer); return; }
+      setGuestTimeLeft(600 - e);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [user, isGuest]);
   
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
@@ -72,6 +90,7 @@ export default function LiveCommunity() {
   }, [currentSongIndex, songs]);
 
   const handleSendMessage = () => {
+    if (guestExpired && (!user || isGuest)) { setShowGuestPrompt(true); return; }
     if (!user || isGuest) {
       setShowGuestPrompt(true);
       return;
