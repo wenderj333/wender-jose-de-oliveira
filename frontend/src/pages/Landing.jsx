@@ -15,7 +15,7 @@ const MEMBERS = [
 
 export default function Landing() {
   const { t } = useTranslation();
-  const [biblePhoto, setBiblePhoto] = useState(localStorage.getItem('scf_bible') || '/avatar2.jpg');
+  const [biblePhoto, setBiblePhoto] = useState('/avatar2.jpg');
   const memberPhotos = {0:'/avatar1.jpg',1:'/avatar3.jpg',2:'/avatar4.jpg',3:'/avatar5.jpg',4:'/avatar6.jpg',5:'/avatar7.jpg',6:'/avatar8.jpg'};
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [activeMemberUpload, setActiveMemberUpload] = useState(null);
