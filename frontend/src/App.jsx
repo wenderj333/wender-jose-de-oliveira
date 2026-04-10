@@ -144,6 +144,7 @@ export default function App() {
         <Route path="/journeys" element={<FaithJourneys />} />
         <Route path="/musica" element={<MusicLibrary />} />
         <Route path="/comunidade-ao-vivo" element={<LiveCommunity />} />
+        <Route path="/login" element={<Login />} />
         <Route path="*" element={<Landing />} />
       </Routes>
     );
