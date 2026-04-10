@@ -142,6 +142,8 @@ export default function App() {
         <Route path="/membros" element={<Members />} />
         <Route path="/ia-biblica" element={<BiblicalAI />} />
         <Route path="/journeys" element={<FaithJourneys />} />
+        <Route path="/musica" element={<MusicLibrary />} />
+        <Route path="/comunidade-ao-vivo" element={<LiveCommunity />} />
         <Route path="*" element={<Landing />} />
       </Routes>
     );
