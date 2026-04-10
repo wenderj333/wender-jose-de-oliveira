@@ -148,7 +148,7 @@ export default function Login() {
                 color: '#fff',
                 lineHeight: 1.2,
               }}>
-                🎵 Comunidade ao Vivo 24h
+                🎵 Fé em Sintonia 24h
               </h2>
               <p style={{
                 margin: 0,
