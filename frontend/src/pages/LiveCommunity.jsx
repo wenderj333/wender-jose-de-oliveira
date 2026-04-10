@@ -90,7 +90,7 @@ export default function LiveCommunity() {
   }, [currentSongIndex, songs]);
 
   const handleSendMessage = () => {
-    if (guestExpired && (!user || isGuest)) { setShowGuestPrompt(true); return; }
+    if (guestExpired) { setShowGuestPrompt(true); return; }
     if (!user || isGuest) {
       setShowGuestPrompt(true);
       return;
