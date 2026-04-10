@@ -21,7 +21,7 @@ export default function LiveCommunity() {
   const [guestTimeLeft, setGuestTimeLeft] = useState(600);
   const [guestExpired, setGuestExpired] = useState(false);
   useEffect(() => {
-    if (user && !isGuest) return;
+    if (user) return;
     const key = 'scf_live_start_' + new Date().toDateString();
     const now = Date.now();
     const start = parseInt(localStorage.getItem(key) || now);
