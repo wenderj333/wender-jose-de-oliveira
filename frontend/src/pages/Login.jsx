@@ -322,7 +322,7 @@ export default function Login() {
             marginBottom: '2rem',
           }}>
             <img
-              src="https://images.unsplash.com/photo-1515191107209-c28698631303?w=500&h=600&fit=crop"
+              src='/avatar2.jpg'
               alt="Mulher lendo a Bíblia"
               style={{
                 width: '100%',
