@@ -167,10 +167,10 @@ export default function LiveCommunity() {
                 onChange={(e) => setMessageInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder={user && !isGuest ? t('live.typeMessage', 'Escreve uma mensagem...') : '🔒 Cria conta para participar'}
-                disabled={!user || isGuest}
+                disabled={guestExpired && (!user || isGuest)}
                 style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
               />
-              <button onClick={handleSendMessage} disabled={!user || isGuest} style={{ padding: '10px 16px', borderRadius: '8px', background: '#667eea', color: 'white', border: 'none', cursor: 'pointer' }}>
+              <button onClick={handleSendMessage} disabled={guestExpired && (!user || isGuest)} style={{ padding: '10px 16px', borderRadius: '8px', background: '#667eea', color: 'white', border: 'none', cursor: 'pointer' }}>
                 <Send size={18} />
               </button>
             </div>
