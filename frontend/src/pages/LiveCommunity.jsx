@@ -18,6 +18,25 @@ export default function LiveCommunity() {
   const [messageInput, setMessageInput] = useState('');
   const [onlineCount, setOnlineCount] = useState(0);
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
+  const [guestTimeLeft, setGuestTimeLeft] = useState(600);
+  const [guestExpired, setGuestExpired] = useState(false);
+
+  React.useEffect(() => {
+    if (user) return;
+    const key = 'scf_live_start';
+    const now = Date.now();
+    const start = parseInt(localStorage.getItem(key) || now);
+    if (!localStorage.getItem(key)) localStorage.setItem(key, now);
+    const elapsed = Math.floor((now - start) / 1000);
+    if (elapsed >= 600) { setGuestExpired(true); setShowGuestPrompt(true); return; }
+    setGuestTimeLeft(600 - elapsed);
+    const timer = setInterval(() => {
+      const e = Math.floor((Date.now() - start) / 1000);
+      if (e >= 600) { setGuestExpired(true); setShowGuestPrompt(true); clearInterval(timer); return; }
+      setGuestTimeLeft(600 - e);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [user]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -381,7 +400,7 @@ export default function LiveCommunity() {
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder={user && !isGuest ? t('live.typeMessage', 'Escreve uma mensagem...') : '🔒 Cria conta para participar'}
+                  placeholder={user ? t('live.typeMessage', 'Escreve uma mensagem...') : guestExpired ? '⏰ Tempo esgotado! Cria conta para continuar' : `💬 Chat livre ainda por ${Math.floor(guestTimeLeft/60)}:${String(guestTimeLeft%60).padStart(2,'0')}`}  disabled={!user && guestExpired}
                   disabled={!user || isGuest}
                   style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
                 />
