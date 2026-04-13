@@ -48,13 +48,39 @@ export default function LiveCommunity() {
       .catch(() => {});
   }, []);
 
-  // Carregar stats
+  // Carregar stats e registar presenca
   useEffect(() => {
     fetch(`${API_BASE}/api/live-community/stats`)
       .then(r => r.json())
       .then(data => setOnlineCount(data.onlineCount || 0))
       .catch(() => {});
-  }, []);
+
+    // Registar como online
+    const uid = user?.id || 'guest_' + Math.random().toString(36).slice(2);
+    fetch(`${API_BASE}/api/live-community/join`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: uid }),
+    }).then(r => r.json()).then(data => setOnlineCount(data.onlineCount || 0)).catch(() => {});
+
+    // Atualizar contador a cada 30s
+    const interval = setInterval(() => {
+      fetch(`${API_BASE}/api/live-community/stats`)
+        .then(r => r.json())
+        .then(data => setOnlineCount(data.onlineCount || 0))
+        .catch(() => {});
+    }, 30000);
+
+    // Sair quando fechar a pagina
+    return () => {
+      clearInterval(interval);
+      fetch(`${API_BASE}/api/live-community/leave`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: uid }),
+      }).catch(() => {});
+    };
+  }, [user]);
 
   // WebSocket chat
   useEffect(() => {
