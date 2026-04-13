@@ -252,7 +252,7 @@ export default function App() {
       <div className="modern-layout">
 
         {/* LEFT SIDEBAR */}
-        <aside className="sidebar-left desktop-only">
+        <aside className="sidebar-left desktop-only" style={{ overflowY: "auto", maxHeight: "calc(100vh - 60px)" }}>
 
           {/* Profile Card */}
           <div className="profile-card-modern">
