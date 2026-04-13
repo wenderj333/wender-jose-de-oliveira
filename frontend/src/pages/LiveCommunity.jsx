@@ -18,6 +18,8 @@ export default function LiveCommunity() {
   const [messageInput, setMessageInput] = useState('');
   const [onlineCount, setOnlineCount] = useState(0);
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
+  const [showEmojis, setShowEmojis] = useState(false);
+  const EMOJIS = ['🙏','❤️','🔥','✝️','😊','🕊️','📖','🎵','🌟','👏','💪','🙌','😢','🤲','💝','🌹','⭐','🦋','🌈','💫','🎶','🕯️','🌺','💐','🫶'];
   const [guestTimeLeft, setGuestTimeLeft] = useState(1200);
   const [guestExpired, setGuestExpired] = useState(false);
   useEffect(() => {
@@ -187,7 +189,21 @@ export default function LiveCommunity() {
               ))}
               <div ref={chatEndRef} />
             </div>
+            {showEmojis && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, padding: 8, background: 'white', borderRadius: 8, border: '1px solid #ddd', marginBottom: 8 }}>
+                {['🙏','❤️','🔥','✝️','😊','🕊️','📖','🎵','🌟','👏','💪','🙌','😢','🤲','💝','🌹','⭐','🦋','🌈','💫'].map((emoji, i) => (
+                  <button key={i} onClick={() => setMessageInput(prev => prev + emoji)}
+                    style={{ background: 'none', border: 'none', fontSize: '1.3rem', cursor: 'pointer', padding: '2px 4px' }}>
+                    {emoji}
+                  </button>
+                ))}
+              </div>
+            )}
             <div style={{ display: 'flex', gap: '8px' }}>
+              <button onClick={() => setShowEmojis(!showEmojis)}
+                style={{ padding: '8px 10px', borderRadius: '8px', background: 'white', border: '1px solid #ddd', cursor: 'pointer', fontSize: '1.1rem' }}>
+                😊
+              </button>
               <input
                 type="text"
                 value={messageInput}
