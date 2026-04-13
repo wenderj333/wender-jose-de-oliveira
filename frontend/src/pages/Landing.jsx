@@ -246,9 +246,9 @@ export default function Landing() {
                 Conéctate con verdaderos cristianos, ora, crece en la fe y encuentra una comunidad que te edifique.
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {['{t('landing.msg1')}',
-                  '{t('landing.msg2')}',
-                  '{t('landing.msg3')}'].map((txt, i) => (
+                {[t('landing.msg1'),
+                  t('landing.msg2'),
+                  t('landing.msg3')].map((txt, i) => (
                   <div key={i} style={{ background: '#f8f9ff', borderLeft: '3px solid #1877F2', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', color: '#444', fontStyle: 'italic' }}>
                     {txt}
                   </div>
