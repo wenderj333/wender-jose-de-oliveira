@@ -117,10 +117,6 @@ export default function LiveCommunity() {
 
   const handleSendMessage = () => {
     if (guestExpired) { setShowGuestPrompt(true); return; }
-    if (guestExpired) {
-      setShowGuestPrompt(true);
-      return;
-    }
     if (!messageInput.trim()) return;
     
     send({
