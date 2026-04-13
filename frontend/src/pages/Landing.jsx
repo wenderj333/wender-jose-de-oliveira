@@ -186,16 +186,6 @@ export default function Landing() {
             {t('live.title', 'Comunidade ao Vivo 24h')}
           </h1>
 
-          <div style={{ background: 'white', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 8 }}><Music size={20} /> {t('live.nowPlaying', 'Tocando agora')}</h3>
-            {songs[currentSongIndex] ? (
-              <div>
-                <p style={{ fontWeight: 600, margin: '4px 0' }}>{songs[currentSongIndex].title}</p>
-                <p style={{ color: '#666', fontSize: '0.9rem' }}>{songs[currentSongIndex].artist}</p>
-              </div>
-            ) : <p style={{ color: '#999' }}>{t("common.loading", "A carregar...")}</p>}
-            <audio ref={audioRef} controls onEnded={nextSong} style={{ width: '100%', marginTop: 12 }} />
-          </div>
 
 
 
@@ -230,6 +220,16 @@ export default function Landing() {
             </div>
           </div>
         </div>
+          <div style={{ background: 'white', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+            <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 8 }}><Music size={20} /> {t('live.nowPlaying', 'Tocando agora')}</h3>
+            {songs[currentSongIndex] ? (
+              <div>
+                <p style={{ fontWeight: 600, margin: '4px 0' }}>{songs[currentSongIndex].title}</p>
+                <p style={{ color: '#666', fontSize: '0.9rem' }}>{songs[currentSongIndex].artist}</p>
+              </div>
+            ) : <p style={{ color: '#999' }}>{t("common.loading", "A carregar...")}</p>}
+            <audio ref={audioRef} controls onEnded={nextSong} style={{ width: '100%', marginTop: 12 }} />
+          </div>
 
         {/* DIREITA: IMAGEM + INFO */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'sticky', top: 72 }}>
