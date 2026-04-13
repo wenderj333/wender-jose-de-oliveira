@@ -193,7 +193,7 @@ export default function Landing() {
 
 
 
-          <div style={{ background: 'white', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', height: 500, backgroundImage: 'url(/chat-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundBlendMode: 'overlay', backgroundColor: 'rgba(255,255,255,0.85)' }}>
+          <div style={{ background: 'white', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', height: 500, backgroundImage: 'url(/chat-bg.png)', backgroundSize: '80%', backgroundPosition: 'center center', backgroundRepeat: 'no-repeat', backgroundColor: 'rgba(255,255,255,0.92)' }}>
             <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#e74c3c', display: 'inline-block', animation: 'pulse 1.5s infinite' }} /> {t('live.chatTitle', 'Chat ao Vivo')}
               <span style={{ fontSize: '0.8rem', color: '#667eea', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -304,10 +304,7 @@ export default function Landing() {
           </div>
 
           {/* Botão convidado */}
-          <button onClick={() => navigate('/comunidade-ao-vivo')}
-            style={{ width: '100%', padding: '12px', borderRadius: 8, background: '#667eea', color: 'white', border: 'none', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer' }}>
-            👁 {t('landing.guest', 'Visita como convidado →')}
-          </button>
+          
         </div>
       </div>
     </div>
