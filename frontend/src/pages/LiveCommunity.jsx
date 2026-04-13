@@ -87,7 +87,12 @@ export default function LiveCommunity() {
     if (!send || !on) return;
     
     const handleMessage = (data) => {
-      setChatMessages(prev => [...prev, data].slice(-100)); // últimas 100
+      setChatMessages(prev => {
+        // Evitar duplicados por id ou timestamp
+        const id = data.id || data.time || data.timestamp;
+        if (id && prev.some(m => (m.id || m.time || m.timestamp) === id)) return prev;
+        return [...prev, data].slice(-100);
+      });
     };
 
     on('live_chat_broadcast', handleMessage);
