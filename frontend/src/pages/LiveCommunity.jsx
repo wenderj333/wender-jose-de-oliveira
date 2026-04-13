@@ -117,7 +117,7 @@ export default function LiveCommunity() {
 
   const handleSendMessage = () => {
     if (guestExpired) { setShowGuestPrompt(true); return; }
-    if (!user || (isGuest && user?.role !== 'admin' && user?.role !== 'pastor')) {
+    if (guestExpired) {
       setShowGuestPrompt(true);
       return;
     }
@@ -125,9 +125,9 @@ export default function LiveCommunity() {
     
     send({
       type: 'live_chat_message',
-      userId: user.id,
-      userName: user.full_name,
-      userAvatar: user.avatar_url,
+      userId: user?.id || 'guest',
+      userName: user?.full_name || 'Visitante',
+      userAvatar: user?.avatar_url || null,
       text: messageInput,
     });
     setMessageInput('');
@@ -192,11 +192,11 @@ export default function LiveCommunity() {
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder={user && !isGuest ? t('live.typeMessage', 'Escreve uma mensagem...') : '🔒 Cria conta para participar'}
-                disabled={guestExpired && (!user || isGuest)}
+                placeholder={guestExpired ? '⏰ Tempo esgotado - Regista-te para continuar!' : t('live.typeMessage', 'Escreve uma mensagem...')}
+                disabled={guestExpired}
                 style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
               />
-              <button onClick={handleSendMessage} disabled={guestExpired && (!user || isGuest)} style={{ padding: '10px 16px', borderRadius: '8px', background: '#667eea', color: 'white', border: 'none', cursor: 'pointer' }}>
+              <button onClick={handleSendMessage} disabled={guestExpired} style={{ padding: '10px 16px', borderRadius: '8px', background: '#667eea', color: 'white', border: 'none', cursor: 'pointer' }}>
                 <Send size={18} />
               </button>
             </div>

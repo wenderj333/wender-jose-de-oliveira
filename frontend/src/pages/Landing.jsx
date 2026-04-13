@@ -12,7 +12,7 @@ export default function Landing() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { on, off } = useWebSocket();
+  const { on, off, send } = useWebSocket();
 
   const [songs, setSongs] = useState([]);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
@@ -27,6 +27,7 @@ export default function Landing() {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [landingMsg, setLandingMsg] = useState('');
 
   useEffect(() => {
     fetch(`${API_BASE}/api/live-community/playlist`)
@@ -91,6 +92,20 @@ export default function Landing() {
   };
 
   const handleGoogle = () => { window.location.href = `${API_BASE}/api/auth/google`; };
+
+  const handleLandingSend = () => {
+    if (!landingMsg.trim()) return;
+    if (send) {
+      send({
+        type: 'live_chat_message',
+        userId: 'guest_' + Math.random().toString(36).slice(2,7),
+        userName: 'Visitante',
+        userAvatar: null,
+        text: landingMsg,
+      });
+    }
+    setLandingMsg('');
+  };
 
   const toggleMode = (m) => { setMode(prev => prev === m ? null : m); setError(''); };
 
@@ -204,9 +219,12 @@ export default function Landing() {
               <div ref={chatEndRef} />
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
-              <input type="text" disabled placeholder={t("live.lockMessage", "🔒 Entra para participar")}
-                style={{ flex: 1, padding: '10px 12px', borderRadius: 8, border: '1px solid #ddd', background: '#f5f5f5', color: '#999', cursor: 'not-allowed' }} />
-              <button disabled style={{ padding: '10px 16px', borderRadius: 8, background: '#bbb', color: 'white', border: 'none', cursor: 'not-allowed' }}>
+              <input type="text" disabled placeholder={t("live.typeMessage", "Escreve uma mensagem...")}
+                value={landingMsg}
+                onChange={e => setLandingMsg(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleLandingSend()}
+                style={{ flex: 1, padding: '10px 12px', borderRadius: 8, border: '1px solid #ddd' }} />
+              <button onClick={handleLandingSend} style={{ padding: '10px 16px', borderRadius: 8, background: '#667eea', color: 'white', border: 'none', cursor: 'pointer' }}>
                 <Send size={18} />
               </button>
             </div>
