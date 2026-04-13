@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useAuth } from '../context/AuthContext';
 import LanguageSelector from '../components/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 import { Music, Users, Send } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
@@ -10,6 +11,7 @@ const API_BASE = import.meta.env.VITE_API_URL || '';
 export default function Landing() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { on, off } = useWebSocket();
 
   const [songs, setSongs] = useState([]);
@@ -104,10 +106,10 @@ export default function Landing() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <LanguageSelector variant="light" />
           <button onClick={() => toggleMode('login')} style={{ padding: '7px 18px', borderRadius: 6, border: '1.5px solid #1877F2', background: mode === 'login' ? '#1877F2' : 'white', color: mode === 'login' ? 'white' : '#1877F2', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' }}>
-            Para entrar
+            {t('landing.login', 'Para entrar')}
           </button>
           <button onClick={() => toggleMode('register')} style={{ padding: '7px 18px', borderRadius: 6, border: 'none', background: '#42B72A', color: 'white', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' }}>
-            Criar conta grátis
+            {t('landing.register', 'Criar conta grátis')}
           </button>
         </div>
       </nav>
@@ -129,17 +131,17 @@ export default function Landing() {
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
                 <button type="submit" disabled={loading}
                   style={{ padding: '12px', borderRadius: 8, background: '#1877F2', color: 'white', border: 'none', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>
-                  {loading ? 'A entrar...' : 'Para entrar'}
+                  {loading ? '{t('common.loading', 'A entrar...')}' : '{t('landing.login', 'Para entrar')}'}
                 </button>
                 <button type="button" onClick={handleGoogle}
                   style={{ padding: '11px', borderRadius: 8, background: 'white', border: '1.5px solid #ddd', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
                   <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width={20} height={20} alt="G" />
-                  Iniciar sessão com Google
+                  {t('landing.googleLogin', 'Iniciar sessão com Google')}
                 </button>
               </form>
             ) : (
               <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Nome completo" required
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="{t('auth.fullName', 'Nome completo')}" required
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
@@ -147,12 +149,12 @@ export default function Landing() {
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
                 <button type="submit" disabled={loading}
                   style={{ padding: '12px', borderRadius: 8, background: '#42B72A', color: 'white', border: 'none', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>
-                  {loading ? 'A criar...' : '✨ Criar conta grátis'}
+                  {loading ? '{t('common.loading', 'A criar...')}' : '✨ {t('landing.register', 'Criar conta grátis')}'}
                 </button>
                 <button type="button" onClick={handleGoogle}
                   style={{ padding: '11px', borderRadius: 8, background: 'white', border: '1.5px solid #ddd', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
                   <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width={20} height={20} alt="G" />
-                  Registar com Google
+                  {t('landing.googleLogin', 'Registar com Google')}
                 </button>
               </form>
             )}
@@ -166,32 +168,32 @@ export default function Landing() {
         {/* ESQUERDA: CHAT */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <h1 style={{ textAlign: 'center', color: '#333', margin: '0 0 8px', fontSize: '1.5rem' }}>
-            🎵 Comunidade ao Vivo 24h, 7 dias da semana
+            {t('live.title', 'Comunidade ao Vivo 24h')}
           </h1>
 
           <div style={{ background: 'white', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 8 }}><Music size={20} /> Tocando agora</h3>
+            <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 8 }}><Music size={20} /> {t('live.nowPlaying', 'Tocando agora')}</h3>
             {songs[currentSongIndex] ? (
               <div>
                 <p style={{ fontWeight: 600, margin: '4px 0' }}>{songs[currentSongIndex].title}</p>
                 <p style={{ color: '#666', fontSize: '0.9rem' }}>{songs[currentSongIndex].artist}</p>
               </div>
-            ) : <p style={{ color: '#999' }}>A carregar...</p>}
+            ) : <p style={{ color: '#999' }}>{t("common.loading", "A carregar...")}</p>}
             <audio ref={audioRef} controls onEnded={nextSong} style={{ width: '100%', marginTop: 12 }} />
           </div>
 
           <div style={{ background: 'white', borderRadius: 12, padding: '12px 16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: 8 }}>
             <Users size={18} style={{ color: '#667eea' }} />
-            <span style={{ fontWeight: 600 }}>+{onlineCount} em linha</span>
+            <span style={{ fontWeight: 600 }}>+{onlineCount} {t('live.online', 'em linha')}</span>
           </div>
 
           <div style={{ background: 'white', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', height: 380 }}>
             <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#e74c3c', display: 'inline-block' }} /> Chat ao Vivo
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#e74c3c', display: 'inline-block' }} /> {t('live.chatTitle', 'Chat ao Vivo')}
             </h3>
             <div style={{ flex: 1, overflowY: 'auto', marginBottom: 12 }}>
               {chatMessages.length === 0 && (
-                <p style={{ color: '#bbb', textAlign: 'center', marginTop: 40, fontSize: '0.9rem' }}>Sem mensagens ainda... Entra e participa! 🙏</p>
+                <p style={{ color: '#bbb', textAlign: 'center', marginTop: 40, fontSize: '0.9rem' }}>{t("live.noMessages", "Sem mensagens ainda... Entra e participa!")} 🙏</p>
               )}
               {chatMessages.map((msg, i) => (
                 <div key={i} style={{ marginBottom: 8, padding: '8px 10px', background: '#f9f9f9', borderRadius: 8 }}>
@@ -202,7 +204,7 @@ export default function Landing() {
               <div ref={chatEndRef} />
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
-              <input type="text" disabled placeholder="🔒 Entra para participar no chat"
+              <input type="text" disabled placeholder={t("live.lockMessage", "🔒 Entra para participar")}
                 style={{ flex: 1, padding: '10px 12px', borderRadius: 8, border: '1px solid #ddd', background: '#f5f5f5', color: '#999', cursor: 'not-allowed' }} />
               <button disabled style={{ padding: '10px 16px', borderRadius: 8, background: '#bbb', color: 'white', border: 'none', cursor: 'not-allowed' }}>
                 <Send size={18} />
@@ -218,17 +220,17 @@ export default function Landing() {
           <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             <img src="/avatar2.jpg" alt="Sigo com Fé" style={{ width: '100%', height: 280, objectFit: 'cover' }} />
             <div style={{ padding: '20px' }}>
-              <h2 style={{ margin: '0 0 8px', fontSize: '1.3rem', color: '#1877F2', fontFamily: 'Georgia, serif' }}>Sigo adelante con fe.</h2>
+              <h2 style={{ margin: '0 0 8px', fontSize: '1.3rem', color: '#1877F2', fontFamily: 'Georgia, serif' }}>{t('landing.tagline', 'Sigo adelante con fe.')}</h2>
               <p style={{ color: '#555', fontSize: '0.9rem', margin: '0 0 16px', lineHeight: 1.6 }}>
-                A rede social cristã. Quizás no sea una coincidencia que hayas llegado hasta aquí.
+                {t('landing.headline2', 'Quizás no sea una coincidencia...')}
               </p>
               <p style={{ color: '#777', fontSize: '0.85rem', margin: '0 0 16px', lineHeight: 1.6 }}>
                 Conéctate con verdaderos cristianos, ora, crece en la fe y encuentra una comunidad que te edifique.
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {['Si te sientes solo, este lugar es para ti. Dios no te ha olvidado.',
-                  'Quizás no sea casualidad que hayas llegado hasta aquí.',
-                  'Aquí tu fe crece cada día.'].map((txt, i) => (
+                {['{t('landing.msg1')}',
+                  '{t('landing.msg2')}',
+                  '{t('landing.msg3')}'].map((txt, i) => (
                   <div key={i} style={{ background: '#f8f9ff', borderLeft: '3px solid #1877F2', borderRadius: 6, padding: '8px 12px', fontSize: '0.85rem', color: '#444', fontStyle: 'italic' }}>
                     {txt}
                   </div>
@@ -240,14 +242,14 @@ export default function Landing() {
           {/* Versículo */}
           <div style={{ background: 'white', borderRadius: 12, padding: '16px 20px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', textAlign: 'center' }}>
             <p style={{ color: '#555', fontSize: '0.85rem', fontStyle: 'italic', margin: 0, lineHeight: 1.6 }}>
-              «Porque donde dos o tres se reúnen en mi nombre, allí estoy yo en medio de ellos.» —Mt 18:20
+              {t('landing.verse')}
             </p>
           </div>
 
           {/* Botão convidado */}
           <button onClick={() => navigate('/comunidade-ao-vivo')}
             style={{ width: '100%', padding: '12px', borderRadius: 8, background: '#667eea', color: 'white', border: 'none', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer' }}>
-            👁 Visita como convidado →
+            👁 {t('landing.guest', 'Visita como convidado →')}
           </button>
         </div>
       </div>
