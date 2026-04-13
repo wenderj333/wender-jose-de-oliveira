@@ -75,11 +75,11 @@ export default function Landing() {
   }, []);
 
   useEffect(() => {
-    if (!on) return;
+    if (!on || user) return;
     const handleMessage = (data) => setChatMessages(prev => [...prev, data].slice(-100));
     on('live_chat_broadcast', handleMessage);
     return () => off('live_chat_broadcast', handleMessage);
-  }, [on, off]);
+  }, [on, off, user]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
