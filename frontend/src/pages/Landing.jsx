@@ -31,6 +31,11 @@ export default function Landing() {
   const [visitorName, setVisitorName] = useState('');
   const [visitorCountry, setVisitorCountry] = useState('');
   const [chatReady, setChatReady] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setShowWelcome(false), 120000); // 2 minutos
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     fetch(`${API_BASE}/api/live-community/playlist`)
@@ -252,8 +257,7 @@ export default function Landing() {
               </button>
             </div>
           </div>
-          {/* Card boas-vindas */}
-          <div style={{ background: 'linear-gradient(135deg, #667eea22, #764ba222)', borderRadius: 12, padding: '14px 16px', border: '1px solid #667eea33' }}>
+          {showWelcome && <div style={{ background: 'linear-gradient(135deg, #667eea22, #764ba222)', borderRadius: 12, padding: '14px 16px', border: '1px solid #667eea33' }}>
             <p style={{ margin: '0 0 8px', color: '#333', fontSize: '0.9rem' }}>
               <span style={{ fontWeight: 700, color: '#667eea' }}>🙏 Sigo com Fé: </span>
               {t('live.welcome_msg', 'Bem-vindo! Deus te abencoe!')}
@@ -262,7 +266,7 @@ export default function Landing() {
               <span style={{ fontWeight: 700, color: '#daa520' }}>📖 </span>
               {t('live.daily_verse', '"O Senhor e o meu pastor." - Sl 23:1')}
             </p>
-          </div>
+          </div>}
           <div style={{ background: 'white', borderRadius: 12, padding: '10px 16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: 12 }}>
             <Music size={18} style={{ color: '#667eea', flexShrink: 0 }} />
             <div style={{ flex: 1, minWidth: 0 }}>
