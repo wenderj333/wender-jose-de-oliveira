@@ -146,7 +146,7 @@ export default function Landing() {
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
                 <button type="submit" disabled={loading}
                   style={{ padding: '12px', borderRadius: 8, background: '#1877F2', color: 'white', border: 'none', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>
-                  {loading ? '{t('common.loading', 'A entrar...')}' : '{t('landing.login', 'Para entrar')}'}
+                  {loading ? 'A entrar...' : t('landing.login', 'Para entrar')}
                 </button>
                 <button type="button" onClick={handleGoogle}
                   style={{ padding: '11px', borderRadius: 8, background: 'white', border: '1.5px solid #ddd', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
@@ -164,7 +164,7 @@ export default function Landing() {
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
                 <button type="submit" disabled={loading}
                   style={{ padding: '12px', borderRadius: 8, background: '#42B72A', color: 'white', border: 'none', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>
-                  {loading ? '{t('common.loading', 'A criar...')}' : '✨ {t('landing.register', t('landing.register'))}'}
+                  {loading ? 'A criar...' : '✨ ' + t('landing.register', 'Criar conta grátis')}
                 </button>
                 <button type="button" onClick={handleGoogle}
                   style={{ padding: '11px', borderRadius: 8, background: 'white', border: '1.5px solid #ddd', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
@@ -219,7 +219,7 @@ export default function Landing() {
               <div ref={chatEndRef} />
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
-              <input type="text" disabled placeholder={t("live.typeMessage", "Escreve uma mensagem...")}
+              <input type="text" placeholder={t("live.typeMessage", "Escreve uma mensagem...")}
                 value={landingMsg}
                 onChange={e => setLandingMsg(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleLandingSend()}
