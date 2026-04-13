@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { pool } = require('../config/connection');
+const db = require('../db/connection');
 
 // GET /api/live-community/playlist - obter músicas para tocar
 router.get('/playlist', async (req, res) => {
   try {
-    const result = await pool.query(
+    const result = await db.query(
       'SELECT id, title, artist, url AS file_url, cover_url FROM music WHERE is_public = true ORDER BY RANDOM() LIMIT 50'
     );
     console.log(`✅ Live Community: ${result.rows.length} músicas públicas encontradas`);
