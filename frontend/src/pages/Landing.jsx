@@ -124,7 +124,7 @@ export default function Landing() {
             {t('landing.login', 'Para entrar')}
           </button>
           <button onClick={() => toggleMode('register')} style={{ padding: '7px 18px', borderRadius: 6, border: 'none', background: '#42B72A', color: 'white', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer' }}>
-            {t('landing.register', 'Criar conta grátis')}
+            {t('landing.register', t('landing.register'))}
           </button>
         </div>
       </nav>
@@ -140,9 +140,9 @@ export default function Landing() {
             )}
             {mode === 'login' ? (
               <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t("auth.email", "Email")} required
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Senha" required
+                <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={t("auth.password", "Senha")} required
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
                 <button type="submit" disabled={loading}
                   style={{ padding: '12px', borderRadius: 8, background: '#1877F2', color: 'white', border: 'none', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>
@@ -151,20 +151,20 @@ export default function Landing() {
                 <button type="button" onClick={handleGoogle}
                   style={{ padding: '11px', borderRadius: 8, background: 'white', border: '1.5px solid #ddd', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
                   <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width={20} height={20} alt="G" />
-                  {t('landing.googleLogin', 'Iniciar sessão com Google')}
+                  {t('landing.googleLogin', t('landing.googleLogin'))}
                 </button>
               </form>
             ) : (
               <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="{t('auth.fullName', 'Nome completo')}" required
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder={t("auth.fullName", "Nome completo")} required
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t("auth.email", "Email")} required
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Senha" required
+                <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={t("auth.password", "Senha")} required
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
                 <button type="submit" disabled={loading}
                   style={{ padding: '12px', borderRadius: 8, background: '#42B72A', color: 'white', border: 'none', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>
-                  {loading ? '{t('common.loading', 'A criar...')}' : '✨ {t('landing.register', 'Criar conta grátis')}'}
+                  {loading ? '{t('common.loading', 'A criar...')}' : '✨ {t('landing.register', t('landing.register'))}'}
                 </button>
                 <button type="button" onClick={handleGoogle}
                   style={{ padding: '11px', borderRadius: 8, background: 'white', border: '1.5px solid #ddd', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
