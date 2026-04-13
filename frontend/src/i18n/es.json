@@ -1228,7 +1228,12 @@
     "lockMessage": "🔒 Inicia sesion para participar",
     "chatTitle": "Chat en Vivo",
     "welcome_msg": "Bienvenido! Dios te bendiga! De donde estas hablando? Tienes algun pedido de oracion?",
-    "daily_verse": "\"El Senor es mi pastor.\" - Sal 23:1"
+    "daily_verse": "\"El Senor es mi pastor.\" - Sal 23:1",
+    "before_chat": "Antes de entrar al chat",
+    "your_name": "Tu nombre...",
+    "your_country": "Tu pais...",
+    "other_country": "Otro pais",
+    "enter_chat": "Entrar al chat"
   },
   "auth": {
     "logout": "Salir"

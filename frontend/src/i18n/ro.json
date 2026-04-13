@@ -1224,7 +1224,12 @@
     "lockMessage": "🔒 Conecteaza-te pentru a participa",
     "chatTitle": "Chat Live",
     "welcome_msg": "Bun venit! Dumnezeu sa te binecuvanteze! De unde vorbesti? Ai o cerere de rugaciune?",
-    "daily_verse": "\"Domnul este Pastorul meu.\" - Ps 23:1"
+    "daily_verse": "\"Domnul este Pastorul meu.\" - Ps 23:1",
+    "before_chat": "Inainte de a intra in chat",
+    "your_name": "Numele tau...",
+    "your_country": "Tara ta...",
+    "other_country": "Alta tara",
+    "enter_chat": "Intra in chat"
   },
   "auth": {
     "logout": "Deconectare"

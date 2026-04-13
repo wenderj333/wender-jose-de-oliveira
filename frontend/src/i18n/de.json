@@ -1229,7 +1229,12 @@
     "lockMessage": "🔒 Anmelden um am Chat teilzunehmen",
     "chatTitle": "Live-Chat",
     "welcome_msg": "Willkommen! Gott segne dich! Woher sprichst du? Hast du eine Gebetsanfrage?",
-    "daily_verse": "\"Der Herr ist mein Hirte.\" - Ps 23:1"
+    "daily_verse": "\"Der Herr ist mein Hirte.\" - Ps 23:1",
+    "before_chat": "Bevor du den Chat betrittst",
+    "your_name": "Dein Name...",
+    "your_country": "Dein Land...",
+    "other_country": "Anderes Land",
+    "enter_chat": "Chat betreten"
   },
   "auth": {
     "logout": "Abmelden"

@@ -28,6 +28,9 @@ export default function Landing() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [landingMsg, setLandingMsg] = useState('');
+  const [visitorName, setVisitorName] = useState('');
+  const [visitorCountry, setVisitorCountry] = useState('');
+  const [chatReady, setChatReady] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE}/api/live-community/playlist`)
@@ -197,6 +200,34 @@ export default function Landing() {
                 <Users size={14} /> +{onlineCount} {t('live.online', 'online')}
               </span>
             </h3>
+            {!chatReady ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: 20, background: 'rgba(255,255,255,0.97)', borderRadius: 8, margin: '10px 0' }}>
+                <p style={{ margin: '0 0 8px', fontWeight: 700, color: '#333', textAlign: 'center' }}>🙏 {t('live.before_chat', 'Antes de entrar')}</p>
+                <input type="text" value={visitorName} onChange={e => setVisitorName(e.target.value)}
+                  placeholder={t('live.your_name', 'O teu nome...')}
+                  style={{ padding: '10px 12px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '0.95rem' }} />
+                <select value={visitorCountry} onChange={e => setVisitorCountry(e.target.value)}
+                  style={{ padding: '10px 12px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '0.95rem' }}>
+                  <option value="">{t('live.your_country', 'O teu pais...')}</option>
+                  <option value="BR">Brasil</option>
+                  <option value="PT">Portugal</option>
+                  <option value="DE">Alemanha</option>
+                  <option value="US">USA</option>
+                  <option value="ES">Espanha</option>
+                  <option value="FR">Franca</option>
+                  <option value="AO">Angola</option>
+                  <option value="MZ">Mocambique</option>
+                  <option value="CH">Suica</option>
+                  <option value="IT">Italia</option>
+                  <option value="OTHER">{t('live.other_country', 'Outro')}</option>
+                </select>
+                <button onClick={() => { if(visitorName.trim()) setChatReady(true); }}
+                  disabled={!visitorName.trim()}
+                  style={{ padding: 12, borderRadius: 8, background: visitorName.trim() ? '#667eea' : '#ccc', color: 'white', border: 'none', fontWeight: 700, fontSize: '1rem', cursor: visitorName.trim() ? 'pointer' : 'not-allowed' }}>
+                  {t('live.enter_chat', 'Entrar no chat')} 🙏
+                </button>
+              </div>
+            ) : (
             <div style={{ flex: 1, overflowY: 'auto', marginBottom: 12 }}>
               {/* Mensagem de boas vindas */}
               <div style={{ margin: '8px 0', padding: '10px 12px', background: 'rgba(102,126,234,0.15)', borderRadius: 8, borderLeft: '3px solid #667eea' }}>
@@ -218,7 +249,7 @@ export default function Landing() {
                 </div>
               ))}
               <div ref={chatEndRef} />
-            </div>
+            </div>)}
             <div style={{ display: 'flex', gap: 8 }}>
               <input type="text" placeholder={t("live.typeMessage", "Escreve uma mensagem...")}
                 value={landingMsg}

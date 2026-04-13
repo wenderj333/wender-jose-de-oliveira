@@ -1228,7 +1228,12 @@
     "lockMessage": "🔒 Sign in to join the chat",
     "chatTitle": "Live Chat",
     "welcome_msg": "Welcome! God bless you! Where are you speaking from? Do you have a prayer request?",
-    "daily_verse": "\"The Lord is my shepherd.\" - Ps 23:1"
+    "daily_verse": "\"The Lord is my shepherd.\" - Ps 23:1",
+    "before_chat": "Before entering the chat",
+    "your_name": "Your name...",
+    "your_country": "Your country...",
+    "other_country": "Other country",
+    "enter_chat": "Enter chat"
   },
   "auth": {
     "logout": "Logout"

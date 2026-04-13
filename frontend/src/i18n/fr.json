@@ -1228,7 +1228,12 @@
     "lockMessage": "🔒 Connecte-toi pour participer au chat",
     "chatTitle": "Chat en direct",
     "welcome_msg": "Bienvenue! Que Dieu te benisse! D ou parles-tu? As-tu une demande de priere?",
-    "daily_verse": "\"L Eternel est mon berger.\" - Ps 23:1"
+    "daily_verse": "\"L Eternel est mon berger.\" - Ps 23:1",
+    "before_chat": "Avant d entrer dans le chat",
+    "your_name": "Ton nom...",
+    "your_country": "Ton pays...",
+    "other_country": "Autre pays",
+    "enter_chat": "Entrer dans le chat"
   },
   "auth": {
     "logout": "Déconnexion"

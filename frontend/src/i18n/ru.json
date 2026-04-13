@@ -723,7 +723,12 @@
     "lockMessage": "🔒 Войди чтобы участвовать в чате",
     "chatTitle": "Живой чат",
     "welcome_msg": "Dobro pozhalovat! Da blagoslovit tebya Bog! Otkuda ty? Est li u tebya prosba o molitve?",
-    "daily_verse": "\"Gospod Pastyr moy.\" - Ps 23:1"
+    "daily_verse": "\"Gospod Pastyr moy.\" - Ps 23:1",
+    "before_chat": "Pered vhodom v chat",
+    "your_name": "Vashe imya...",
+    "your_country": "Vasha strana...",
+    "other_country": "Drugaya strana",
+    "enter_chat": "Voyti v chat"
   },
   "auth": {
     "logout": "Выйти"
