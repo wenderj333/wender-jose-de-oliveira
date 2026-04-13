@@ -328,7 +328,7 @@ export default function Landing() {
               ))}
               <div ref={chatEndRef} />
             </div>)}
-            <div style={{ display: 'flex', gap: 8 }}>
+            {chatReady && <div style={{ display: 'flex', gap: 8 }}>
               <input type="text" placeholder={t("live.typeMessage", "Escreve uma mensagem...")}
                 value={landingMsg}
                 onChange={e => setLandingMsg(e.target.value)}
@@ -337,7 +337,7 @@ export default function Landing() {
               <button onClick={handleLandingSend} style={{ padding: '10px 16px', borderRadius: 8, background: '#667eea', color: 'white', border: 'none', cursor: 'pointer' }}>
                 <Send size={18} />
               </button>
-            </div>
+            </div>}
           </div>
           {showWelcome && <div style={{ background: 'linear-gradient(135deg, #667eea22, #764ba222)', borderRadius: 12, padding: '14px 16px', border: '1px solid #667eea33' }}>
             <p style={{ margin: '0 0 8px', color: '#333', fontSize: '0.9rem' }}>
