@@ -1211,9 +1211,18 @@
     "title": "Evenimente Viitoare"
   },
   "live": {
-    "none": "Nicio transmisie",
-    "be_first": "Fii primul!",
-    "start": "Pornește Live"
+    "title": "Comunitate Live 24h",
+    "nowPlaying": "Se redă acum",
+    "online": "online",
+    "typeMessage": "Scrie un mesaj...",
+    "welcome": "Bine ai venit",
+    "enjoy": "Bucură-te de comunitatea live!",
+    "joinCommunity": "Alătură-te comunității!",
+    "createAccount": "Creează un cont pentru a participa la chat.",
+    "signUp": "Creează cont gratuit",
+    "noMessages": "Niciun mesaj inca... Intra si participa! 🙏",
+    "lockMessage": "🔒 Conecteaza-te pentru a participa",
+    "chatTitle": "Chat Live"
   },
   "auth": {
     "logout": "Deconectare"
@@ -1346,17 +1355,6 @@
     "yourMessages": "Mesajele tale",
     "selectConvo": "Selecteaza o conversatie sau mergi la profilul unui prieten pentru a incepe sa vorbesti!",
     "search": "Cauta conversatie..."
-  },
-  "live": {
-    "title": "Comunitate Live 24h",
-    "nowPlaying": "Se redă acum",
-    "online": "online",
-    "typeMessage": "Scrie un mesaj...",
-    "welcome": "Bine ai venit",
-    "enjoy": "Bucură-te de comunitatea live!",
-    "joinCommunity": "Alătură-te comunității!",
-    "createAccount": "Creează un cont pentru a participa la chat.",
-    "signUp": "Creează cont gratuit"
   },
   "legal": {
     "privacy": "Politica Confidentialitate",

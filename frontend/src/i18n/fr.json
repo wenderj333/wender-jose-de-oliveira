@@ -1215,9 +1215,18 @@
     "title": "Prochains Événements"
   },
   "live": {
-    "none": "Aucune diffusion",
-    "be_first": "Soyez le premier !",
-    "start": "Démarrer en Direct"
+    "title": "Communauté en Direct 24h",
+    "nowPlaying": "En cours de lecture",
+    "online": "en ligne",
+    "typeMessage": "Écrivez un message...",
+    "welcome": "Bienvenue",
+    "enjoy": "Profitez de la communauté en direct!",
+    "joinCommunity": "Rejoignez la communauté!",
+    "createAccount": "Créez un compte pour participer au chat.",
+    "signUp": "Créer un compte gratuit",
+    "noMessages": "Pas encore de messages... Rejoins et participe! 🙏",
+    "lockMessage": "🔒 Connecte-toi pour participer au chat",
+    "chatTitle": "Chat en direct"
   },
   "auth": {
     "logout": "Déconnexion"
@@ -1350,17 +1359,6 @@
     "yourMessages": "Vos messages",
     "selectConvo": "Selectionnez une conversation ou allez au profil d un ami pour commencer a chatter!",
     "search": "Rechercher une conversation..."
-  },
-  "live": {
-    "title": "Communauté en Direct 24h",
-    "nowPlaying": "En cours de lecture",
-    "online": "en ligne",
-    "typeMessage": "Écrivez un message...",
-    "welcome": "Bienvenue",
-    "enjoy": "Profitez de la communauté en direct!",
-    "joinCommunity": "Rejoignez la communauté!",
-    "createAccount": "Créez un compte pour participer au chat.",
-    "signUp": "Créer un compte gratuit"
   },
   "legal": {
     "privacy": "Politique de Confidentialite",

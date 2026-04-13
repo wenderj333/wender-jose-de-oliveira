@@ -1215,9 +1215,18 @@
     "title": "Upcoming Events"
   },
   "live": {
-    "none": "No broadcast",
-    "be_first": "Be the first!",
-    "start": "Start Live"
+    "title": "Live Community 24h",
+    "nowPlaying": "Now playing",
+    "online": "online",
+    "typeMessage": "Type a message...",
+    "welcome": "Welcome",
+    "enjoy": "Enjoy the live community!",
+    "joinCommunity": "Join the community!",
+    "createAccount": "Create an account to participate in the chat.",
+    "signUp": "Create free account",
+    "noMessages": "No messages yet... Join and participate! 🙏",
+    "lockMessage": "🔒 Sign in to join the chat",
+    "chatTitle": "Live Chat"
   },
   "auth": {
     "logout": "Logout"
@@ -1350,17 +1359,6 @@
     "yourMessages": "Your messages",
     "selectConvo": "Select a conversation or go to a friend profile to start chatting!",
     "search": "Search conversation..."
-  },
-  "live": {
-    "title": "Live Community 24h",
-    "nowPlaying": "Now playing",
-    "online": "online",
-    "typeMessage": "Type a message...",
-    "welcome": "Welcome",
-    "enjoy": "Enjoy the live community!",
-    "joinCommunity": "Join the community!",
-    "createAccount": "Create an account to participate in the chat.",
-    "signUp": "Create free account"
   },
   "legal": {
     "privacy": "Privacy Policy",
