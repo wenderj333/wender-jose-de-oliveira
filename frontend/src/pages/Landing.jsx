@@ -225,13 +225,13 @@ export default function Landing() {
               </span>
             </h3>
             {!chatReady ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: 20, background: 'rgba(255,255,255,0.97)', borderRadius: 8, margin: '10px 0' }}>
-                <p style={{ margin: '0 0 8px', fontWeight: 700, color: '#333', textAlign: 'center' }}>🙏 {t('live.before_chat', 'Antes de entrar')}</p>
+              <div style={{ display: 'flex', gap: 6, padding: '6px', borderRadius: 8, margin: '4px 0', flexWrap: 'wrap', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.8rem', color: '#667eea', fontWeight: 600 }}>🙏</span>
                 <input type="text" value={visitorName} onChange={e => setVisitorName(e.target.value)}
-                  placeholder={t('live.your_name', 'O teu nome...')}
-                  style={{ padding: '10px 12px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '0.95rem' }} />
+                  placeholder={t('live.your_name', 'Nome...')}
+                  style={{ flex: 2, minWidth: 80, padding: '5px 8px', borderRadius: 6, border: '1px solid #ddd', fontSize: '0.82rem' }} />
                 <select value={visitorCountry} onChange={e => setVisitorCountry(e.target.value)}
-                  style={{ padding: '10px 12px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '0.95rem' }}>
+                  style={{ flex: 1, minWidth: 60, padding: '5px 6px', borderRadius: 6, border: '1px solid #ddd', fontSize: '0.82rem' }}>
                   <option value="">{t('live.your_country', 'O teu pais...')}</option>
                   <option value="BR">Brasil</option>
                   <option value="PT">Portugal</option>
@@ -247,7 +247,7 @@ export default function Landing() {
                 </select>
                 <button onClick={() => { if(visitorName.trim()) setChatReady(true); }}
                   disabled={!visitorName.trim()}
-                  style={{ padding: 12, borderRadius: 8, background: visitorName.trim() ? '#667eea' : '#ccc', color: 'white', border: 'none', fontWeight: 700, fontSize: '1rem', cursor: visitorName.trim() ? 'pointer' : 'not-allowed' }}>
+                  style={{ padding: '5px 10px', borderRadius: 6, background: visitorName.trim() ? '#667eea' : '#ccc', color: 'white', border: 'none', fontWeight: 600, fontSize: '0.82rem', cursor: visitorName.trim() ? 'pointer' : 'not-allowed' }}>
                   {t('live.enter_chat', 'Entrar no chat')} 🙏
                 </button>
               </div>
@@ -300,7 +300,7 @@ export default function Landing() {
 
           {/* Imagem principal */}
           <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <img src="/avatar2.jpg" alt="Sigo com Fé" style={{ width: '100%', height: 320, objectFit: 'cover', objectPosition: 'center top' }} />
+            <img src="/avatar2.jpg" alt="Sigo com Fé" style={{ width: '100%', height: 320, objectFit: 'cover', objectPosition: 'center bottom' }} />
             <div style={{ padding: '20px' }}>
               <h2 style={{ margin: '0 0 8px', fontSize: '1.3rem', color: '#1877F2', fontFamily: 'Georgia, serif' }}>{t('landing.tagline', 'Sigo adelante con fe.')}</h2>
               <p style={{ color: '#555', fontSize: '0.9rem', margin: '0 0 16px', lineHeight: 1.6 }}>
