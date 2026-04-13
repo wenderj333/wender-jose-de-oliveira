@@ -219,7 +219,6 @@ export default function Landing() {
               </button>
             </div>
           </div>
-        </div>
           <div style={{ background: 'white', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 8 }}><Music size={20} /> {t('live.nowPlaying', 'Tocando agora')}</h3>
             {songs[currentSongIndex] ? (
@@ -230,6 +229,7 @@ export default function Landing() {
             ) : <p style={{ color: '#999' }}>{t("common.loading", "A carregar...")}</p>}
             <audio ref={audioRef} controls onEnded={nextSong} style={{ width: '100%', marginTop: 12 }} />
           </div>
+        </div>
 
         {/* DIREITA: IMAGEM + INFO */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'sticky', top: 72 }}>
