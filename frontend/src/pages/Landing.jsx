@@ -300,7 +300,7 @@ export default function Landing() {
 
           {/* Imagem principal */}
           <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <img src="/avatar2.jpg" alt="Sigo com Fé" style={{ width: '100%', height: 320, objectFit: 'cover', objectPosition: 'center bottom' }} />
+            <img src="/avatar2.jpg" alt="Sigo com Fé" style={{ width: '100%', height: 380, objectFit: 'cover', objectPosition: 'center bottom' }} />
             <div style={{ padding: '20px' }}>
               <h2 style={{ margin: '0 0 8px', fontSize: '1.3rem', color: '#1877F2', fontFamily: 'Georgia, serif' }}>{t('landing.tagline', 'Sigo adelante con fe.')}</h2>
               <p style={{ color: '#555', fontSize: '0.9rem', margin: '0 0 16px', lineHeight: 1.6 }}>
