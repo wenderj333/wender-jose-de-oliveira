@@ -102,7 +102,7 @@ export default function LiveCommunity() {
       userId: user.id,
       userName: user.full_name,
       userAvatar: user.avatar_url,
-      message: messageInput,
+      text: messageInput,
     });
     setMessageInput('');
   };
