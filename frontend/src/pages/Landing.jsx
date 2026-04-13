@@ -197,14 +197,14 @@ export default function Landing() {
             <audio ref={audioRef} controls onEnded={nextSong} style={{ width: '100%', marginTop: 12 }} />
           </div>
 
-          <div style={{ background: 'white', borderRadius: 12, padding: '12px 16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Users size={18} style={{ color: '#667eea' }} />
-            <span style={{ fontWeight: 600 }}>+{onlineCount} {t('live.online', 'em linha')}</span>
-          </div>
+
 
           <div style={{ background: 'white', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', height: 380 }}>
             <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#e74c3c', display: 'inline-block' }} /> {t('live.chatTitle', 'Chat ao Vivo')}
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#e74c3c', display: 'inline-block', animation: 'pulse 1.5s infinite' }} /> {t('live.chatTitle', 'Chat ao Vivo')}
+              <span style={{ fontSize: '0.8rem', color: '#667eea', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <Users size={14} /> +{onlineCount} {t('live.online', 'online')}
+              </span>
             </h3>
             <div style={{ flex: 1, overflowY: 'auto', marginBottom: 12 }}>
               {chatMessages.length === 0 && (
@@ -236,7 +236,7 @@ export default function Landing() {
 
           {/* Imagem principal */}
           <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <img src="/avatar2.jpg" alt="Sigo com Fé" style={{ width: '100%', height: 280, objectFit: 'cover' }} />
+            <img src="/avatar2.jpg" alt="Sigo com Fé" style={{ width: '100%', height: 320, objectFit: 'cover', objectPosition: 'center top' }} />
             <div style={{ padding: '20px' }}>
               <h2 style={{ margin: '0 0 8px', fontSize: '1.3rem', color: '#1877F2', fontFamily: 'Georgia, serif' }}>{t('landing.tagline', 'Sigo adelante con fe.')}</h2>
               <p style={{ color: '#555', fontSize: '0.9rem', margin: '0 0 16px', lineHeight: 1.6 }}>
