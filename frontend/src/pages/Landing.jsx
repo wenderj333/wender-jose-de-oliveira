@@ -139,7 +139,7 @@ export default function Landing() {
               </div>
             )}
             {mode === 'login' ? (
-              <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <form onSubmit={handleLogin} onClick={e => e.stopPropagation()} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t("auth.email", "Email")} required
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
                 <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={t("auth.password", "Senha")} required
@@ -155,7 +155,7 @@ export default function Landing() {
                 </button>
               </form>
             ) : (
-              <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <form onSubmit={handleRegister} onClick={e => e.stopPropagation()} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder={t("auth.fullName", "Nome completo")} required
                   style={{ padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ddd', fontSize: '1rem' }} />
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t("auth.email", "Email")} required
