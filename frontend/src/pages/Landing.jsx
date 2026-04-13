@@ -9,7 +9,7 @@ import { Music, Users, Send } from 'lucide-react';
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export default function Landing() {
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { on, off, send } = useWebSocket();
@@ -127,7 +127,14 @@ export default function Landing() {
     finally { setLoading(false); }
   };
 
-  const handleGoogle = () => { window.location.href = `${API_BASE}/api/auth/google`; };
+  const handleGoogle = async () => {
+    try {
+      await loginWithGoogle();
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Erro ao entrar com Google');
+    }
+  };
 
   const handleLandingSend = () => {
     if (!landingMsg.trim()) return;
