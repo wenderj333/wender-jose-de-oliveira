@@ -146,7 +146,7 @@ export default function LiveCommunity() {
         🎵 {t('live.title', 'Comunidade ao Vivo 24h')}
       </h1>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', maxWidth: '1400px', margin: '0 auto' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', maxWidth: '1400px', margin: '0 auto' }}>
         
         {/* Coluna Esquerda */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
