@@ -190,7 +190,7 @@ export default function Landing() {
 
 
 
-          <div style={{ background: 'white', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', height: 380, backgroundImage: 'url(/chat-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundBlendMode: 'overlay', backgroundColor: 'rgba(255,255,255,0.85)' }}>
+          <div style={{ background: 'white', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', height: 500, backgroundImage: 'url(/chat-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundBlendMode: 'overlay', backgroundColor: 'rgba(255,255,255,0.85)' }}>
             <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#e74c3c', display: 'inline-block', animation: 'pulse 1.5s infinite' }} /> {t('live.chatTitle', 'Chat ao Vivo')}
               <span style={{ fontSize: '0.8rem', color: '#667eea', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -230,15 +230,12 @@ export default function Landing() {
               </button>
             </div>
           </div>
-          <div style={{ background: 'white', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 8 }}><Music size={20} /> {t('live.nowPlaying', 'Tocando agora')}</h3>
-            {songs[currentSongIndex] ? (
-              <div>
-                <p style={{ fontWeight: 600, margin: '4px 0' }}>{songs[currentSongIndex].title}</p>
-                <p style={{ color: '#666', fontSize: '0.9rem' }}>{songs[currentSongIndex].artist}</p>
-              </div>
-            ) : <p style={{ color: '#999' }}>{t("common.loading", "A carregar...")}</p>}
-            <audio ref={audioRef} controls onEnded={nextSong} style={{ width: '100%', marginTop: 12 }} />
+          <div style={{ background: 'white', borderRadius: 12, padding: '10px 16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <Music size={18} style={{ color: '#667eea', flexShrink: 0 }} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ fontWeight: 600, margin: 0, fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{songs[currentSongIndex]?.title || t("common.loading", "A carregar...")}</p>
+              <audio ref={audioRef} controls onEnded={nextSong} style={{ width: '100%', height: 32, marginTop: 4 }} />
+            </div>
           </div>
         </div>
 
