@@ -221,7 +221,55 @@ export default function Landing() {
       )}
 
       {/* MAIN */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 20px', display: 'grid', gridTemplateColumns: '1fr 400px', gap: 32, alignItems: 'start' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 20px', display: 'grid', gridTemplateColumns: '220px 1fr 380px', gap: 20, alignItems: 'start' }}>
+
+        {/* MENU LATERAL */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, position: 'sticky', top: 72 }}>
+          <div style={{ background: 'white', borderRadius: 12, padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+            <p style={{ fontSize: '0.7rem', fontWeight: 700, color: '#c9a84c', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>
+              {t('nav.spiritual_life', 'Vida Espiritual')}
+            </p>
+            {[
+              { icon: '🙏', label: t('nav.prayers', 'Orações'), path: '/pedidos-ajuda' },
+              { icon: '🔥', label: t('nav.consecration', 'Consagração'), path: '/consagracao' },
+              { icon: '☀️', label: t('nav.reflection', 'Reflexão'), path: '/reflexao' },
+              { icon: '📖', label: t('course.title', 'Curso Bíblico'), path: '/curso-biblico' },
+              { icon: '❤️', label: t('nav.help_life', 'Ajuda'), path: '/ajuda-uma-vida' },
+              { icon: '🌍', label: t('nav.journeys', 'Viagens de Fé'), path: '/journeys' },
+              { icon: '📔', label: t('nav.diary', 'Diário com Deus'), path: '/diario-com-deus' },
+              { icon: '💬', label: t('nav.pastoral_chat', 'Charla Pastoral'), path: '/chat-pastoral' },
+            ].map((item, i) => (
+              <div key={i} onClick={() => setMode('register')}
+                style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 8px', borderRadius: 8, cursor: 'pointer', fontSize: '0.82rem', color: '#444', transition: 'background 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.background = '#f0f2ff'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                <span>{item.icon}</span> {item.label}
+              </div>
+            ))}
+            <hr style={{ margin: '10px 0', border: 'none', borderTop: '1px solid #eee' }} />
+            <p style={{ fontSize: '0.7rem', fontWeight: 700, color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Menu</p>
+            {[
+              { icon: '🏠', label: t('nav.mural', 'Mural'), path: '/' },
+              { icon: '💬', label: t('nav.messages', 'Mensagens'), path: '/mensagens' },
+              { icon: '👥', label: t('nav.friends', 'Amigos'), path: '/amigos' },
+              { icon: '👤', label: t('nav.members', 'Membros'), path: '/membros' },
+              { icon: '🎵', label: t('nav.music', 'Música'), path: '/musica' },
+              { icon: '⛪', label: t('nav.churches', 'Igrejas'), path: '/igrejas' },
+              { icon: '👥', label: t('nav.groups', 'Grupos'), path: '/grupos' },
+            ].map((item, i) => (
+              <div key={i} onClick={() => setMode('register')}
+                style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 8px', borderRadius: 8, cursor: 'pointer', fontSize: '0.82rem', color: '#444', transition: 'background 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.background = '#f0f2ff'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                <span>{item.icon}</span> {item.label}
+              </div>
+            ))}
+          </div>
+          <div onClick={() => setMode('register')} style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 12, padding: '14px 16px', textAlign: 'center', cursor: 'pointer', color: 'white' }}>
+            <p style={{ margin: '0 0 8px', fontWeight: 700, fontSize: '0.9rem' }}>✨ {t('landing.register', 'Criar conta grátis')}</p>
+            <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.9 }}>{t('landing.ctaFree', 'Grátis. Cristão. Para ti.')}</p>
+          </div>
+        </div>
 
         {/* ESQUERDA: CHAT */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
