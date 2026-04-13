@@ -18,7 +18,7 @@ export default function LiveCommunity() {
   const [messageInput, setMessageInput] = useState('');
   const [onlineCount, setOnlineCount] = useState(0);
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
-  const [guestTimeLeft, setGuestTimeLeft] = useState(600);
+  const [guestTimeLeft, setGuestTimeLeft] = useState(1200);
   const [guestExpired, setGuestExpired] = useState(false);
   useEffect(() => {
     if (user) return;
@@ -27,12 +27,12 @@ export default function LiveCommunity() {
     const start = parseInt(localStorage.getItem(key) || now);
     if (!localStorage.getItem(key)) localStorage.setItem(key, now);
     const elapsed = Math.floor((now - start) / 1000);
-    if (elapsed >= 600) { setGuestExpired(true); setShowGuestPrompt(true); return; }
-    setGuestTimeLeft(600 - elapsed);
+    if (elapsed >= 1200) { setGuestExpired(true); setShowGuestPrompt(true); return; }
+    setGuestTimeLeft(1200 - elapsed);
     const timer = setInterval(() => {
       const e = Math.floor((Date.now() - start) / 1000);
-      if (e >= 600) { setGuestExpired(true); setShowGuestPrompt(true); clearInterval(timer); return; }
-      setGuestTimeLeft(600 - e);
+      if (e >= 1200) { setGuestExpired(true); setShowGuestPrompt(true); clearInterval(timer); return; }
+      setGuestTimeLeft(1200 - e);
     }, 1000);
     return () => clearInterval(timer);
   }, [user, isGuest]);
