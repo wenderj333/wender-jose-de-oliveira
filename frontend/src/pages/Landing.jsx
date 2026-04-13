@@ -31,6 +31,14 @@ export default function Landing() {
   const [visitorName, setVisitorName] = useState('');
   const [visitorCountry, setVisitorCountry] = useState('');
   const [chatReady, setChatReady] = useState(false);
+  const [musicStarted, setMusicStarted] = useState(false);
+
+  const startMusic = () => {
+    if (!musicStarted && audioRef.current) {
+      audioRef.current.volume = 0.15;
+      audioRef.current.play().then(() => setMusicStarted(true)).catch(() => {});
+    }
+  };
   const [showWelcome, setShowWelcome] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => setShowWelcome(false), 120000); // 2 minutos
@@ -138,7 +146,7 @@ export default function Landing() {
   const toggleMode = (m) => { setMode(prev => prev === m ? null : m); setError(''); };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f0f2f5', fontFamily: 'Nunito, Segoe UI, sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: '#f0f2f5', fontFamily: 'Nunito, Segoe UI, sans-serif' }} onClick={startMusic}>
 
       {/* NAV */}
       <nav style={{ background: 'white', height: 56, display: 'flex', alignItems: 'center', padding: '0 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.1)', position: 'sticky', top: 0, zIndex: 100, justifyContent: 'space-between' }}>
