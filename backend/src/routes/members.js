@@ -1,100 +1,47 @@
-﻿const express = require('express');
+const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
 
-// Middleware: only pastors/admins
-function pastorOnly(req, res, next) {
-  if (req.user.role !== 'pastor' && req.user.role !== 'admin') {
-    return res.status(403).json({ error: 'Acesso restrito a pastores' });
-  }
-  next();
-}
-
-// GET /api/members â€” list all members (pastor only)
 router.get('/', authenticate, async (req, res) => {
   try {
-    const members = await db.prepare(
-      `SELECT u.id, u.email, u.full_name, u.display_name, u.avatar_url, u.role, u.is_active, u.last_seen_at, u.created_at, f.status AS friendship_status FROM users u LEFT JOIN friendships f ON (f.requester_id = $1 AND f.addressee_id = u.id) OR (f.addressee_id = $1 AND f.requester_id = u.id) ORDER BY u.created_at DESC`
-    ).all(req.user.id);; express = require('express');
-const router = express.Router();
-const db = require('../db/connection');
-const { authenticate } = require('../middleware/auth');
-
-// Middleware: only pastors/admins
-function pastorOnly(req, res, next) {
-  if (req.user.role !== 'pastor' && req.user.role !== 'admin') {
-    return res.status(403).json({ error: 'Acesso restrito a pastores' });
-  }
-  next();
-}
-
-// GET /api/members â€” list all members (pastor only)
-router.get('/', authenticate, async (req, res) => {
-  try {
-    const members = await db.prepare(
-      `SELECT id, email, full_name, display_name, avatar_url, role, is_active, last_seen_at, created_at
-       FROM users ORDER BY created_at DESC`
-    )  .all(req.user.id, req.user.id);
-    res.json({ members });
+    const result = await db.query(
+      `SELECT u.id, u.email, u.full_name, u.display_name, u.avatar_url, u.role, u.is_active, u.last_seen_at, u.created_at, f.status AS friendship_status FROM users u LEFT JOIN friendships f ON (f.requester_id = $1 AND f.addressee_id = u.id) OR (f.addressee_id = $1 AND f.requester_id = u.id) ORDER BY u.created_at DESC`,
+      [req.user.id]
+    );
+    res.json({ members: result.rows });
   } catch (err) {
-    console.error('Error listing members:', err);
-    res.status(500).json({ error: 'Erro ao listar membros' });
+    res.status(500).json({ error: err.message });
   }
 });
 
-// GET /api/members/pastors â€” list all pastors for donations (authenticated users only)
 router.get('/pastors', authenticate, async (req, res) => {
   try {
-    const pastors = await db.prepare(
-      `SELECT u.id, u.full_name, c.name AS church_name
-       FROM users u
-       LEFT JOIN churches c ON c.pastor_id = u.id
-       WHERE u.role = 'pastor' AND u.is_active = true
-       ORDER BY u.full_name ASC`
-    )  .all(req.user.id, req.user.id);
-    res.json({ pastors });
+    const result = await db.query(`SELECT u.id, u.full_name FROM users u WHERE u.role = 'pastor' AND u.is_active = true ORDER BY u.full_name ASC`);
+    res.json({ pastors: result.rows });
   } catch (err) {
-    console.error('Error listing pastors:', err);
-    res.status(500).json({ error: 'Erro ao listar pastores' });
+    res.status(500).json({ error: err.message });
   }
 });
 
-// GET /api/members/messages/:userId â€” get direct messages with a user
 router.get('/messages/:userId', authenticate, async (req, res) => {
   try {
-    const messages = await db.prepare(
-      `SELECT * FROM direct_messages
-       WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)
-       ORDER BY created_at ASC LIMIT 100`
-    ).all(req.user.id, req.params.userId, req.params.userId, req.user.id);
-    res.json({ messages });
+    const result = await db.query(`SELECT * FROM direct_messages WHERE (sender_id = $1 AND receiver_id = $2) OR (sender_id = $2 AND receiver_id = $1) ORDER BY created_at ASC LIMIT 100`, [req.user.id, req.params.userId]);
+    res.json({ messages: result.rows });
   } catch (err) {
-    console.error('Error fetching messages:', err);
-    res.status(500).json({ error: 'Erro ao buscar mensagens' });
+    res.status(500).json({ error: err.message });
   }
 });
 
-// POST /api/members/messages â€” send direct message
 router.post('/messages', authenticate, async (req, res) => {
   try {
     const { receiverId, content } = req.body;
-    if (!receiverId || !content?.trim()) {
-      return res.status(400).json({ error: 'receiverId e content sÃ£o obrigatÃ³rios' });
-    }
-    const msg = await db.prepare(
-      `INSERT INTO direct_messages (sender_id, receiver_id, content)
-       VALUES (?, ?, ?) RETURNING *`
-    ).get(req.user.id, receiverId, content.trim());
-    res.status(201).json({ message: msg });
+    if (!receiverId || !content) return res.status(400).json({ error: 'Campos obrigatorios' });
+    const result = await db.query(`INSERT INTO direct_messages (sender_id, receiver_id, content) VALUES ($1, $2, $3) RETURNING *`, [req.user.id, receiverId, content.trim()]);
+    res.status(201).json({ message: result.rows[0] });
   } catch (err) {
-    console.error('Error sending message:', err);
-    res.status(500).json({ error: 'Erro ao enviar mensagem' });
+    res.status(500).json({ error: err.message });
   }
 });
 
 module.exports = router;
-
-
-
-// fix
