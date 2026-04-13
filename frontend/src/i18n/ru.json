@@ -721,7 +721,9 @@
     "signUp": "Создать бесплатный аккаунт",
     "noMessages": "Пока нет сообщений... Присоединяйся! 🙏",
     "lockMessage": "🔒 Войди чтобы участвовать в чате",
-    "chatTitle": "Живой чат"
+    "chatTitle": "Живой чат",
+    "welcome_msg": "Dobro pozhalovat! Da blagoslovit vas Bog!",
+    "daily_verse": "\"Gospod Pastyr moy.\" - Ps 23:1"
   },
   "auth": {
     "logout": "Выйти"

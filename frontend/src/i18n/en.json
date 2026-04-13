@@ -1226,7 +1226,9 @@
     "signUp": "Create free account",
     "noMessages": "No messages yet... Join and participate! 🙏",
     "lockMessage": "🔒 Sign in to join the chat",
-    "chatTitle": "Live Chat"
+    "chatTitle": "Live Chat",
+    "welcome_msg": "Welcome! May God bless you!",
+    "daily_verse": "\"The Lord is my shepherd.\" - Ps 23:1"
   },
   "auth": {
     "logout": "Logout"

@@ -1284,7 +1284,9 @@
     "signUp": "Criar conta grátis",
     "noMessages": "Sem mensagens ainda... Entra e participa! 🙏",
     "lockMessage": "🔒 Entra para participar no chat",
-    "chatTitle": "Chat ao Vivo"
+    "chatTitle": "Chat ao Vivo",
+    "welcome_msg": "Bem-vindo! Que Deus te abencoe!",
+    "daily_verse": "\"O Senhor e o meu pastor.\" - Sl 23:1"
   },
   "auth": {
     "logout": "Sair"

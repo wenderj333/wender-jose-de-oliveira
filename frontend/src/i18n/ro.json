@@ -1222,7 +1222,9 @@
     "signUp": "Creează cont gratuit",
     "noMessages": "Niciun mesaj inca... Intra si participa! 🙏",
     "lockMessage": "🔒 Conecteaza-te pentru a participa",
-    "chatTitle": "Chat Live"
+    "chatTitle": "Chat Live",
+    "welcome_msg": "Bun venit! Dumnezeu sa te binecuvanteze!",
+    "daily_verse": "\"Domnul este Pastorul meu.\" - Ps 23:1"
   },
   "auth": {
     "logout": "Deconectare"
