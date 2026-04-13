@@ -21,7 +21,7 @@ export default function LiveCommunity() {
   const [guestTimeLeft, setGuestTimeLeft] = useState(1200);
   const [guestExpired, setGuestExpired] = useState(false);
   useEffect(() => {
-    if (user) return;
+    if (user) return; // utilizadores registados: sem limite
     const key = 'scf_live_start_' + new Date().toDateString();
     const now = Date.now();
     const start = parseInt(localStorage.getItem(key) || now);
@@ -117,7 +117,7 @@ export default function LiveCommunity() {
 
   const handleSendMessage = () => {
     if (guestExpired) { setShowGuestPrompt(true); return; }
-    if (!user || isGuest) {
+    if (!user || (isGuest && user?.role !== 'admin' && user?.role !== 'pastor')) {
       setShowGuestPrompt(true);
       return;
     }
