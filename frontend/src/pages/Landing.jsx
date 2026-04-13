@@ -107,7 +107,7 @@ export default function Landing() {
       if (!res.ok) throw new Error(data.error || 'Erro ao entrar');
       login(data.token, data.user);
       navigate('/');
-    } catch (err) { setError(err.message); console.error('LOGIN ERROR:', err); alert('Erro: ' + err.message); }
+    } catch (err) { setError(err.message); }
     finally { setLoading(false); }
   };
 
@@ -123,7 +123,7 @@ export default function Landing() {
       if (!res.ok) throw new Error(data.error || 'Erro ao criar conta');
       login(data.token, data.user);
       navigate('/');
-    } catch (err) { setError(err.message); console.error('LOGIN ERROR:', err); alert('Erro: ' + err.message); }
+    } catch (err) { setError(err.message); }
     finally { setLoading(false); }
   };
 
