@@ -255,7 +255,25 @@
       "photos": "Fotos"
     },
     "addMusic": "Musik hinzufügen",
-    "pickMusic": "Musik aus der Bibliothek wählen"
+    "pickMusic": "Musik aus der Bibliothek wählen",
+    "testimony": "🙏 Zeugnis",
+    "worship": "🎵 Anbetung",
+    "photo": "📸 Foto/Video",
+    "verse": "📖 Bibelvers",
+    "reflection": "💭 Reflexion",
+    "campaign": "💝 Kampagne",
+    "placeholder": "Teile etwas mit der Gemeinschaft...",
+    "noPosts": "Noch keine Beiträge. Sei der Erste!",
+    "delete": "Beitrag löschen",
+    "addContent": "Bitte füge Text oder Medien hinzu",
+    "fileTooLarge": "Datei zu groß! Maximum {{maxSize}} MB.",
+    "uploading": "📤 Hochladen {{filename}}...",
+    "uploadingLarge": "📤 Hochladen {{filename}}... das kann etwas dauern",
+    "uploadTooSlow": "Upload zu langsam. Verbindung möglicherweise schwach.",
+    "fileTooLargeSimple": "❌ Datei zu groß!",
+    "doNotClose": "Bitte Seite nicht schließen oder neu laden!",
+    "loading": "Wird geladen...",
+    "noMusicUploaded": "Noch keine Musik hochgeladen"
   },
   "kids": {
     "title": "Digital Sunday School",
@@ -1271,7 +1289,8 @@
     "googleLogin": "Mit Google anmelden",
     "msg1": "Wenn du einsam bist ist dieser Ort fur dich. Gott hat dich nicht vergessen.",
     "msg2": "Vielleicht ist es kein Zufall dass Sie hier sind.",
-    "msg3": "Hier wachst dein Glaube jeden Tag."
+    "msg3": "Hier wachst dein Glaube jeden Tag.",
+    "guest": "Als Gast besuchen →"
   },
   "locale": "de-DE",
   "report": {
