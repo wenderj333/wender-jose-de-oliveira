@@ -155,7 +155,7 @@ export default function LiveCommunity() {
               {chatMessages.map((msg, i) => (
                 <div key={i} style={{ marginBottom: '8px', padding: '8px', background: '#f9f9f9', borderRadius: '8px' }}>
                   <span style={{ fontWeight: 600, color: '#667eea' }}>{msg.userName}: </span>
-                  <span style={{ color: '#333' }}>{msg.message}</span>
+                  <span style={{ color: '#333' }}>{msg.text || msg.message}</span>
                 </div>
               ))}
               <div ref={chatEndRef} />
