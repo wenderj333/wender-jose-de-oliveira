@@ -17,7 +17,7 @@ export default function Landing() {
   const [songs, setSongs] = useState([]);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [chatMessages, setChatMessages] = useState([]);
-  const [onlineCount, setOnlineCount] = useState(0);
+  const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * 4) + 4); // 4-7 pessoas
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
 
@@ -197,8 +197,18 @@ export default function Landing() {
               </span>
             </h3>
             <div style={{ flex: 1, overflowY: 'auto', marginBottom: 12 }}>
+              {/* Mensagem de boas vindas */}
+              <div style={{ margin: '8px 0', padding: '10px 12px', background: 'rgba(102,126,234,0.15)', borderRadius: 8, borderLeft: '3px solid #667eea' }}>
+                <span style={{ fontWeight: 700, color: '#667eea' }}>🙏 Sigo com Fé: </span>
+                <span style={{ color: '#333' }}>{t('live.welcome_msg', 'Bem-vindo! Estamos felizes por teres chegado. Que Deus te abençoe!')}</span>
+              </div>
+              {/* Versiculo do dia */}
+              <div style={{ margin: '8px 0', padding: '10px 12px', background: 'rgba(218,165,32,0.1)', borderRadius: 8, borderLeft: '3px solid #daa520' }}>
+                <span style={{ fontWeight: 700, color: '#daa520' }}>📖 </span>
+                <span style={{ color: '#555', fontStyle: 'italic' }}>{t('live.daily_verse', '"O Senhor é o meu pastor; nada me faltará." — Sl 23:1')}</span>
+              </div>
               {chatMessages.length === 0 && (
-                <p style={{ color: '#bbb', textAlign: 'center', marginTop: 40, fontSize: '0.9rem' }}>{t("live.noMessages", "Sem mensagens ainda... Entra e participa!")} 🙏</p>
+                <p style={{ color: '#bbb', textAlign: 'center', marginTop: 20, fontSize: '0.9rem' }}>{t("live.noMessages", "Sem mensagens ainda... Entra e participa!")} 🙏</p>
               )}
               {chatMessages.map((msg, i) => (
                 <div key={i} style={{ marginBottom: 8, padding: '8px 10px', background: '#f9f9f9', borderRadius: 8 }}>
