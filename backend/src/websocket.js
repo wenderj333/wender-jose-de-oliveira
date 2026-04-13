@@ -276,18 +276,7 @@ function setupWebSocket(server) {
           }
 
           // ===== LIVE COMMUNITY CHAT =====
-          case 'live_chat_message': {
-            const { message, userId, userName, userAvatar } = msg;
-            broadcast(wss, {
-              type: 'live_chat_broadcast',
-              id: Date.now(),
-              userId,
-              userName,
-              userAvatar,
-              message,
-              timestamp: new Date().toISOString(),
-            });
-            break;
+          
           }
 
           case 'live_join': {
