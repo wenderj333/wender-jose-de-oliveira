@@ -193,7 +193,7 @@ export default function Landing() {
 
 
 
-          <div style={{ background: 'white', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', height: 500, backgroundImage: 'url(/chat-bg.png)', backgroundSize: '80%', backgroundPosition: 'center center', backgroundRepeat: 'no-repeat', backgroundColor: 'rgba(255,255,255,0.92)' }}>
+          <div style={{ background: 'white', borderRadius: 12, padding: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', height: 500, backgroundImage: 'url(/chat-bg.png)', backgroundSize: '40%', backgroundPosition: 'center center', backgroundRepeat: 'no-repeat', backgroundColor: 'rgba(255,255,255,0.94)' }}>
             <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#e74c3c', display: 'inline-block', animation: 'pulse 1.5s infinite' }} /> {t('live.chatTitle', 'Chat ao Vivo')}
               <span style={{ fontSize: '0.8rem', color: '#667eea', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -229,16 +229,7 @@ export default function Landing() {
               </div>
             ) : (
             <div style={{ flex: 1, overflowY: 'auto', marginBottom: 12 }}>
-              {/* Mensagem de boas vindas */}
-              <div style={{ margin: '8px 0', padding: '10px 12px', background: 'rgba(102,126,234,0.15)', borderRadius: 8, borderLeft: '3px solid #667eea' }}>
-                <span style={{ fontWeight: 700, color: '#667eea' }}>🙏 Sigo com Fé: </span>
-                <span style={{ color: '#333' }}>{t('live.welcome_msg', 'Bem-vindo! Estamos felizes por teres chegado. Que Deus te abençoe!')}</span>
-              </div>
-              {/* Versiculo do dia */}
-              <div style={{ margin: '8px 0', padding: '10px 12px', background: 'rgba(218,165,32,0.1)', borderRadius: 8, borderLeft: '3px solid #daa520' }}>
-                <span style={{ fontWeight: 700, color: '#daa520' }}>📖 </span>
-                <span style={{ color: '#555', fontStyle: 'italic' }}>{t('live.daily_verse', '"O Senhor é o meu pastor; nada me faltará." — Sl 23:1')}</span>
-              </div>
+
               {chatMessages.length === 0 && (
                 <p style={{ color: '#bbb', textAlign: 'center', marginTop: 20, fontSize: '0.9rem' }}>{t("live.noMessages", "Sem mensagens ainda... Entra e participa!")} 🙏</p>
               )}
@@ -260,6 +251,17 @@ export default function Landing() {
                 <Send size={18} />
               </button>
             </div>
+          </div>
+          {/* Card boas-vindas */}
+          <div style={{ background: 'linear-gradient(135deg, #667eea22, #764ba222)', borderRadius: 12, padding: '14px 16px', border: '1px solid #667eea33' }}>
+            <p style={{ margin: '0 0 8px', color: '#333', fontSize: '0.9rem' }}>
+              <span style={{ fontWeight: 700, color: '#667eea' }}>🙏 Sigo com Fé: </span>
+              {t('live.welcome_msg', 'Bem-vindo! Deus te abencoe!')}
+            </p>
+            <p style={{ margin: 0, color: '#555', fontSize: '0.85rem', fontStyle: 'italic' }}>
+              <span style={{ fontWeight: 700, color: '#daa520' }}>📖 </span>
+              {t('live.daily_verse', '"O Senhor e o meu pastor." - Sl 23:1')}
+            </p>
           </div>
           <div style={{ background: 'white', borderRadius: 12, padding: '10px 16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: 12 }}>
             <Music size={18} style={{ color: '#667eea', flexShrink: 0 }} />
