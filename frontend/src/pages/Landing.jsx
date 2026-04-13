@@ -57,9 +57,12 @@ export default function Landing() {
       body: JSON.stringify({ userId: uid }),
     }).then(r => r.json()).then(d => setOnlineCount(d.onlineCount || 0)).catch(() => {});
     const interval = setInterval(() => {
-      fetch(`${API_BASE}/api/live-community/stats`)
-        .then(r => r.json()).then(d => setOnlineCount(d.onlineCount || 0)).catch(() => {});
-    }, 30000);
+      // Renovar presenca
+      fetch(`${API_BASE}/api/live-community/join`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: uid }),
+      }).then(r => r.json()).then(d => setOnlineCount(d.onlineCount || 0)).catch(() => {});
+    }, 60000);
     return () => {
       clearInterval(interval);
       fetch(`${API_BASE}/api/live-community/leave`, {

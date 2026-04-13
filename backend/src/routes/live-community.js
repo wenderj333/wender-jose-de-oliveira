@@ -2,54 +2,56 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 
-// GET /api/live-community/playlist - obter músicas para tocar
+// GET /api/live-community/playlist
 router.get('/playlist', async (req, res) => {
   try {
     const result = await db.query(
       'SELECT id, title, artist, url AS file_url, cover_url FROM music WHERE is_public = true ORDER BY RANDOM() LIMIT 50'
     );
-    console.log(`✅ Live Community: ${result.rows.length} músicas públicas encontradas`);
     res.json({ songs: result.rows });
   } catch (err) {
-    console.error('❌ Erro ao carregar playlist:', err);
     res.status(500).json({ error: 'Erro ao carregar playlist' });
   }
 });
 
-// Rastrear usuários online (em memória)
-let liveUsers = new Set();
+// Rastrear usuarios com timestamp
+let liveUsers = new Map(); // userId -> lastSeen timestamp
 
-// GET /api/live-community/stats - estatísticas (online count)
+// GET /api/live-community/stats
 router.get('/stats', async (req, res) => {
   res.json({ onlineCount: liveUsers.size });
 });
 
-// POST /api/live-community/join - marcar como online
+// POST /api/live-community/join
 router.post('/join', async (req, res) => {
   const { userId } = req.body;
   if (userId) {
-    liveUsers.add(userId);
-    console.log(`✅ User ${userId} joined live community. Online: ${liveUsers.size}`);
+    liveUsers.set(userId, Date.now());
+    console.log(`User ${userId} joined. Online: ${liveUsers.size}`);
   }
   res.json({ onlineCount: liveUsers.size });
 });
 
-// POST /api/live-community/leave - marcar como offline
+// POST /api/live-community/leave
 router.post('/leave', async (req, res) => {
   const { userId } = req.body;
   if (userId) {
     liveUsers.delete(userId);
-    console.log(`👋 User ${userId} left live community. Online: ${liveUsers.size}`);
+    console.log(`User ${userId} left. Online: ${liveUsers.size}`);
   }
   res.json({ onlineCount: liveUsers.size });
 });
 
-// Limpar usuários inativos a cada 5 minutos
+// Limpar usuarios inativos ha mais de 10 minutos
 setInterval(() => {
-  if (liveUsers.size > 0) {
-    console.log(`🧹 Cleaning inactive users. Before: ${liveUsers.size}`);
-    liveUsers.clear(); // Simples: limpa tudo (em produção, rastrear timestamps)
+  const now = Date.now();
+  for (const [userId, lastSeen] of liveUsers.entries()) {
+    if (now - lastSeen > 10 * 60 * 1000) {
+      liveUsers.delete(userId);
+      console.log(`Removed inactive user: ${userId}`);
+    }
   }
-}, 5 * 60 * 1000);
+  console.log(`Online users: ${liveUsers.size}`);
+}, 2 * 60 * 1000);
 
 module.exports = router;
