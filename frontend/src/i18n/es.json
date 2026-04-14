@@ -48,7 +48,8 @@
     "bible_ai": "IA Bíblica",
     "journeys": "Jornadas de Fe",
     "help_requests": "Solicitudes de Ayuda",
-    "diary": "Diario con Dios"
+    "diary": "Diario con Dios",
+    "tithe": "Diezmo"
   },
   "footer": "© 2026 Sigo com Fé - Tecnología al servicio del Reino",
   "home": {
@@ -726,7 +727,8 @@
     "cancel": "Cancelar",
     "remove": "Remover",
     "noText": "(Sem texto)",
-    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?"
+    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?",
+    "profile": "Perfil"
   },
   "offerings": {
     "title": "Ofrendas y Diezmos",

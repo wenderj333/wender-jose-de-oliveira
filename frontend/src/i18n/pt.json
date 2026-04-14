@@ -48,7 +48,8 @@
     "bible_ai": "IA Bíblica",
     "journeys": "Jornadas de Fé",
     "help_requests": "Pedidos de Ajuda",
-    "diary": "Diario com Deus"
+    "diary": "Diario com Deus",
+    "tithe": "Dízimo"
   },
   "footer": "© 2026 Sigo com Fé - Tecnologia a serviço do Reino",
   "home": {
@@ -721,7 +722,8 @@
     "noText": "(Sem texto)",
     "deleteConfirm": "Tem certeza que deseja excluir esta publicação?",
     "installApp": "Instalar App",
-    "welcomeBack": "Bem-vindo de volta"
+    "welcomeBack": "Bem-vindo de volta",
+    "profile": "Perfil"
   },
   "offerings": {
     "title": "Ofertas e Dízimos",

@@ -48,7 +48,8 @@
     "bible_ai": "Библейский ИИ",
     "journeys": "Путешествия Веры",
     "help_requests": "Просьбы о помощи",
-    "diary": "Дневник с Богом"
+    "diary": "Дневник с Богом",
+    "tithe": "Десятина"
   },
   "footer": "© 2026 Sigo com Fé — Технологии на Службе Царства",
   "home": {
@@ -285,7 +286,8 @@
     "hideTranslation": "Ocultar tradução",
     "remove": "Remover",
     "noText": "(Sem texto)",
-    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?"
+    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?",
+    "profile": "Профиль"
   },
   "helpRequests": {
     "title": "🆘 Как работают запросы о помощи?",

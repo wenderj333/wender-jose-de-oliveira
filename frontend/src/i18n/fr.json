@@ -48,7 +48,8 @@
     "bible_ai": "IA Biblique",
     "journeys": "Parcours de Foi",
     "help_requests": "Demandes d'aide",
-    "diary": "Journal avec Dieu"
+    "diary": "Journal avec Dieu",
+    "tithe": "Dîme"
   },
   "footer": "© 2026 Sigo com Fé - La technologie au service du Royaume",
   "home": {
@@ -726,7 +727,8 @@
     "cancel": "Annuler",
     "remove": "Remover",
     "noText": "(Sem texto)",
-    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?"
+    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?",
+    "profile": "Profil"
   },
   "offerings": {
     "title": "Offrandes et Dîmes",

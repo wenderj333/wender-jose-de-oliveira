@@ -48,7 +48,8 @@
     "bible_ai": "IA Biblică",
     "journeys": "Călătorii de Credință",
     "help_requests": "Cereri de Ajutor",
-    "diary": "Jurnal cu Dumnezeu"
+    "diary": "Jurnal cu Dumnezeu",
+    "tithe": "Zeciuiala"
   },
   "footer": "© 2026 Sigo com Fé - Tehnologie în slujba Împărăției",
   "home": {
@@ -727,7 +728,8 @@
     "cancel": "Anulează",
     "remove": "Remover",
     "noText": "(Sem texto)",
-    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?"
+    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?",
+    "profile": "Profil"
   },
   "offerings": {
     "title": "Ofrande și Zeciuieli",

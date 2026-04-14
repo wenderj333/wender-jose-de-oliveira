@@ -435,8 +435,39 @@ export default function App() {
           .desktop-only { display: none !important; }
           .mobile-only { display: flex !important; }
           .modern-layout { grid-template-columns: 1fr; }
+          .mobile-bottom-nav { display: flex !important; }
+          .main-content-area { padding-bottom: 70px !important; }
+        }
+        @media (min-width: 1101px) {
+          .mobile-bottom-nav { display: none !important; }
         }
       `}</style>
+
+      {/* MENU INFERIOR MOBILE */}
+      <nav style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 300,
+        background: 'white', borderTop: '1px solid #e0e0e0',
+        display: 'flex', justifyContent: 'space-around', alignItems: 'center',
+        padding: '8px 0 12px', boxShadow: '0 -2px 10px rgba(0,0,0,0.1)'
+      }} className="mobile-bottom-nav">
+        {[
+          { to: '/', icon: <Home size={22}/>, label: t('nav.mural', 'Início') },
+          { to: '/amigos', icon: <Users size={22}/>, label: t('nav.friends', 'Amigos'), badge: pendingRequests },
+          { to: '/mensagens', icon: <MessageCircle size={22}/>, label: t('nav.messages', 'Mensagens'), badge: unreadMessages },
+          { to: '/sala-pastor', icon: <span style={{fontSize:20}}>💰</span>, label: t('nav.tithe', 'Dízimo') },
+          { to: `/perfil/${user.id}`, icon: user.avatar_url ? <img src={user.avatar_url} style={{width:24,height:24,borderRadius:'50%',objectFit:'cover'}}/> : <User size={22}/>, label: t('common.profile', 'Perfil') },
+        ].map(item => (
+          <Link key={item.to} to={item.to} style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+            textDecoration: 'none', color: location.pathname === item.to ? '#667eea' : '#888',
+            fontSize: 10, fontWeight: 600, position: 'relative', minWidth: 50,
+          }}>
+            {item.badge > 0 && <span style={{position:'absolute',top:-4,right:8,background:'#e11d48',color:'white',borderRadius:'50%',width:16,height:16,fontSize:9,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700}}>{item.badge > 9 ? '9+' : item.badge}</span>}
+            {item.icon}
+            <span>{item.label}</span>
+          </Link>
+        ))}
+      </nav>
 
       <GlobalChat />
     </div>

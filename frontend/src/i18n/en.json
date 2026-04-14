@@ -48,7 +48,8 @@
     "bible_ai": "Bible AI",
     "journeys": "Faith Journeys",
     "help_requests": "Help Requests",
-    "diary": "Diary with God"
+    "diary": "Diary with God",
+    "tithe": "Tithe"
   },
   "footer": "© 2026 Sigo com Fé - Technology serving the Kingdom",
   "home": {
@@ -726,7 +727,8 @@
     "cancel": "Cancel",
     "remove": "Remover",
     "noText": "(Sem texto)",
-    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?"
+    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?",
+    "profile": "Profile"
   },
   "offerings": {
     "title": "Offerings and Tithes",

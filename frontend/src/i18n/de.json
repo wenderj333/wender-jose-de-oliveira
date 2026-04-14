@@ -48,7 +48,8 @@
     "bible_ai": "Bibel KI",
     "journeys": "Glaubensreisen",
     "help_requests": "Hilfeanfragen",
-    "diary": "Tagebuch mit Gott"
+    "diary": "Tagebuch mit Gott",
+    "tithe": "Zehnten"
   },
   "footer": "© 2026 Sigo com Fé - Technology serving the Kingdom",
   "home": {
@@ -727,7 +728,8 @@
     "cancel": "Abbrechen",
     "remove": "Remover",
     "noText": "(Sem texto)",
-    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?"
+    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?",
+    "profile": "Profil"
   },
   "offerings": {
     "title": "Offerings and Tithes",
