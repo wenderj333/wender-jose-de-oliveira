@@ -489,6 +489,7 @@ export default function MuralGrid() {
   const [viewMode, setViewMode] = useState('feed');
   const [showForm, setShowForm] = useState(false);
   const [postText, setPostText] = useState('');
+  const [postVisibility, setPostVisibility] = useState('public');
   const [postCategory, setPostCategory] = useState('testemunho');
   const [mediaFile, setMediaFile] = useState(null);
   const [mediaPreview, setMediaPreview] = useState(null);
@@ -627,6 +628,7 @@ export default function MuralGrid() {
         body: JSON.stringify({
           content: postText || '📸',
           category: postCategory,
+          visibility: postVisibility,
           media_url: mediaUrl || undefined,
           media_type: mediaType || undefined,
           audio_url: audioUrl || undefined,
@@ -730,6 +732,19 @@ export default function MuralGrid() {
 
           {uploadError && <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#e11d48' }}>⚠️ {uploadError}</div>}
 
+          {/* Selector de visibilidade */}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+            {[
+              { value: 'public', label: '🌍 ' + t('mural.visPublic', 'Público'), color: '#27ae60' },
+              { value: 'members', label: '⛪ ' + t('mural.visMembers', 'Membros'), color: '#2980b9' },
+              { value: 'private', label: '🔒 ' + t('mural.visPrivate', 'Privado'), color: '#7f8c8d' },
+            ].map(opt => (
+              <button key={opt.value} type="button" onClick={() => setPostVisibility(opt.value)}
+                style={{ flex: 1, padding: '6px 4px', borderRadius: 8, border: `2px solid ${postVisibility === opt.value ? opt.color : '#eee'}`, background: postVisibility === opt.value ? opt.color : 'white', color: postVisibility === opt.value ? 'white' : '#666', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
+                {opt.label}
+              </button>
+            ))}
+          </div>
           <button onClick={handleSubmit} disabled={uploading || (!postText.trim() && !mediaFile)} style={{ width: '100%', padding: 12, background: uploading ? '#ccc' : 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', borderRadius: 12, color: 'white', fontSize: 15, fontWeight: 600, cursor: uploading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
             {uploading ? t('mural.publishing') : <><Send size={16} /> {t('mural.publish')}</>}
           </button>

@@ -335,7 +335,10 @@
     "fileTooLargeSimple": "❌ Datei zu groß!",
     "doNotClose": "Bitte Seite nicht schließen oder neu laden!",
     "loading": "Wird geladen...",
-    "noMusicUploaded": "Noch keine Musik hochgeladen"
+    "noMusicUploaded": "Noch keine Musik hochgeladen",
+    "visPublic": "Öffentlich",
+    "visMembers": "Mitglieder",
+    "visPrivate": "Privat"
   },
   "kids": {
     "title": "Digital Sunday School",

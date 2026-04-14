@@ -334,7 +334,10 @@
       "foto": "Foto"
     },
     "addMusic": "Añadir música",
-    "pickMusic": "Elegir música de la biblioteca"
+    "pickMusic": "Elegir música de la biblioteca",
+    "visPublic": "Público",
+    "visMembers": "Miembros",
+    "visPrivate": "Privado"
   },
   "kids": {
     "title": "Escuela Dominical Digital",

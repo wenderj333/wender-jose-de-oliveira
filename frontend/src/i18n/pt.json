@@ -325,7 +325,10 @@
       "foto": "Foto"
     },
     "addMusic": "Adicionar música",
-    "pickMusic": "Escolher música da biblioteca"
+    "pickMusic": "Escolher música da biblioteca",
+    "visPublic": "Público",
+    "visMembers": "Membros",
+    "visPrivate": "Privado"
   },
   "groups": {
     "title": "Grupos",

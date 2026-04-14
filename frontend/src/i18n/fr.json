@@ -334,7 +334,10 @@
       "foto": "Photo"
     },
     "addMusic": "Ajouter de la musique",
-    "pickMusic": "Choisir une musique dans la bibliothèque"
+    "pickMusic": "Choisir une musique dans la bibliothèque",
+    "visPublic": "Public",
+    "visMembers": "Membres",
+    "visPrivate": "Privé"
   },
   "kids": {
     "title": "École du Dimanche Numérique",

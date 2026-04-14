@@ -334,7 +334,10 @@
       "foto": "Photo"
     },
     "addMusic": "Add music",
-    "pickMusic": "Pick music from library"
+    "pickMusic": "Pick music from library",
+    "visPublic": "Public",
+    "visMembers": "Members",
+    "visPrivate": "Private"
   },
   "kids": {
     "title": "Digital Sunday School",

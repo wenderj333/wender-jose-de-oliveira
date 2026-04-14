@@ -228,6 +228,7 @@ export default function App() {
               ['/membros', <Users size={20}/>, t('nav.members')],
               ['/igrejas', <Globe size={20}/>, t('churches.title', 'Igrejas')],
               ['/musica', <Music size={20}/>, t('nav.music')],
+              ['/comunidade-ao-vivo', <Music size={20}/>, '🎵 ' + t('nav.live_community', 'Comunidade ao Vivo')],
               ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA Bíblica')],
               ['/grupos', <Users size={20}/>, t('nav.groups')],
             ].map(([to, icon, label]) => (
