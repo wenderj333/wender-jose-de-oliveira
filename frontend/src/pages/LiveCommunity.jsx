@@ -42,6 +42,14 @@ export default function LiveCommunity() {
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
 
+  // Carregar historico do chat
+  useEffect(() => {
+    fetch(`${API_BASE}/api/live-community/history`)
+      .then(r => r.json())
+      .then(data => { if (data.messages && data.messages.length > 0) setChatMessages(data.messages); })
+      .catch(() => {});
+  }, []);
+
   // Carregar playlist
   useEffect(() => {
     fetch(`${API_BASE}/api/live-community/playlist`)
@@ -133,6 +141,10 @@ export default function LiveCommunity() {
       userAvatar: user?.avatar_url || null,
       text: messageInput,
     });
+    fetch(`${API_BASE}/api/live-community/history`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: user?.id || 'guest', userName: user?.full_name || 'Visitante', userAvatar: user?.avatar_url || null, message: messageInput }),
+    }).catch(() => {});
     setMessageInput('');
   };
 
