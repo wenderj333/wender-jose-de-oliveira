@@ -238,10 +238,10 @@ export default function Landing() {
       )}
 
       {/* MAIN */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 20px', display: 'grid', gridTemplateColumns: '220px 1fr 380px', gap: 20, alignItems: 'start' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16, alignItems: 'start' }}>
 
         {/* MENU LATERAL */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, position: 'sticky', top: 72 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, position: 'sticky', top: 72 }} className='desktop-only'>
           <div style={{ background: 'white', borderRadius: 12, padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
             <p style={{ fontSize: '0.7rem', fontWeight: 700, color: '#c9a84c', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>
               {t('nav.spiritual_life', 'Vida Espiritual')}
