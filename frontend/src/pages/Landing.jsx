@@ -20,6 +20,7 @@ export default function Landing() {
   const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * 4) + 4); // 4-7 pessoas
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
+  const fakeCount = useRef(Math.floor(Math.random() * 4) + 4);
 
   const [mode, setMode] = useState(null); // null | 'login' | 'register'
   const [email, setEmail] = useState('');
