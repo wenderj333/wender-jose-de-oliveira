@@ -5,6 +5,16 @@ import { useAuth } from '../context/AuthContext';
 import { ShieldCheck, Users, Heart, BookOpen, MessageCircle, DollarSign, Calendar, ArrowLeft, Megaphone, HandHeart, BarChart3, Settings, Plus, Send, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'degxiuf43';
+const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'sigo_com_fe';
+async function uploadToCloudinary(file) {
+  const form = new FormData();
+  form.append('file', file);
+  form.append('upload_preset', UPLOAD_PRESET);
+  const res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload', { method: 'POST', body: form });
+  const data = await res.json();
+  return data.secure_url;
+}
 
 const PURPLE = '#6C3FA0';
 const PURPLE_DARK = '#4A2270';
@@ -959,6 +969,26 @@ function MinhaIgrejaSection({ apiFetch, headers, token }) {
             </div>
             <label style={cs.label}>Morada / Localização</label>
             <input style={cs.input} value={churchForm.location} onChange={e => setChurchForm(f => ({ ...f, location: e.target.value }))} placeholder="Rua, número, bairro..." />
+            {/* Upload foto de perfil */}
+            <div style={{ marginBottom: 12 }}>
+              <label style={cs.label}>📷 Foto de Perfil da Igreja</label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                {churchForm.logo_url && <img src={churchForm.logo_url} alt="logo" style={{ width: 60, height: 60, borderRadius: 8, objectFit: 'cover' }} />}
+                <label style={{ padding: '8px 16px', background: '#667eea', color: 'white', borderRadius: 8, cursor: 'pointer', fontSize: 13 }}>
+                  📤 Carregar foto
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={async e => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    setMsg('A carregar foto...');
+                    try {
+                      const url = await uploadToCloudinary(file);
+                      setChurchForm(f => ({ ...f, logo_url: url }));
+                      setMsg('✅ Foto carregada!');
+                    } catch { setMsg('Erro ao carregar foto'); }
+                  }} />
+                </label>
+              </div>
+            </div>
             {msg && <div style={{ marginBottom: 8, fontSize: 13, color: msg.startsWith('✅') ? '#27ae60' : '#c0392b' }}>{msg}</div>}
             <button type="submit" style={cs.btn()} disabled={saving}>
               {saving ? 'Guardando...' : church ? '💾 Guardar Alterações' : '✨ Criar Igreja'}
