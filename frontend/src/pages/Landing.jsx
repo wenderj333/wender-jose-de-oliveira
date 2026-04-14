@@ -287,7 +287,7 @@ export default function Landing() {
             <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#e74c3c', display: 'inline-block', animation: 'pulse 1.5s infinite' }} /> {t('live.chatTitle', 'Chat ao Vivo')}
               <span style={{ fontSize: '0.8rem', color: '#667eea', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-                <Users size={14} /> +{{Math.max(onlineCount, fakeCount.current)} {t('live.online', 'online')}
+                <Users size={14} /> +{Math.max(onlineCount, fakeCount.current)} {t('live.online', 'online')}
               </span>
             </h3>
             {!chatReady ? (
