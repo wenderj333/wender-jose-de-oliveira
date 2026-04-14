@@ -51,6 +51,14 @@ export default function Landing() {
       .then(r => r.json()).then(data => setSongs(data.songs || [])).catch(() => {});
   }, []);
 
+  // Carregar historico do chat
+  useEffect(() => {
+    fetch(`${API_BASE}/api/live-community/history`)
+      .then(r => r.json())
+      .then(data => { if (data.messages && data.messages.length > 0) setChatMessages(data.messages); })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     const uid = 'guest_' + Math.random().toString(36).slice(2,8);
     fetch(`${API_BASE}/api/live-community/join`, {
@@ -151,6 +159,11 @@ export default function Landing() {
         text: landingMsg,
       });
     }
+    // Guardar no historico
+    fetch(`${API_BASE}/api/live-community/history`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: 'guest', userName: visitorName || 'Visitante', userAvatar: null, message: landingMsg }),
+    }).catch(() => {});
     setLandingMsg('');
   };
 
