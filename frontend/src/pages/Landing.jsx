@@ -312,7 +312,7 @@ export default function Landing() {
                   <option value="IT">Italia</option>
                   <option value="OTHER">{t('live.other_country', 'Outro')}</option>
                 </select>
-                <button onClick={() => { if(visitorName.trim()) setChatReady(true); }}
+                <button onClick={() => { if(visitorName.trim()) { setChatReady(true); startMusic(); } }}
                   disabled={!visitorName.trim()}
                   style={{ padding: '5px 10px', borderRadius: 6, background: visitorName.trim() ? '#667eea' : '#ccc', color: 'white', border: 'none', fontWeight: 600, fontSize: '0.82rem', cursor: visitorName.trim() ? 'pointer' : 'not-allowed' }}>
                   {t('live.enter_chat', 'Entrar no chat')} 🙏
@@ -354,9 +354,7 @@ export default function Landing() {
             </p>
           </div>}
           <div style={{ background: 'white', borderRadius: 12, padding: '10px 16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <button onClick={startMusic} style={{ background: musicStarted ? '#42B72A' : '#667eea', border: 'none', borderRadius: '50%', width: 34, height: 34, color: 'white', fontSize: '1rem', cursor: 'pointer', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {musicStarted ? '🎵' : '▶'}
-            </button>
+            <Music size={18} style={{ color: '#667eea', flexShrink: 0 }} />
             <div style={{ flex: 1, minWidth: 0 }}>
               <p style={{ fontWeight: 600, margin: 0, fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{songs[currentSongIndex]?.title || t("common.loading", "A carregar...")}</p>
               <audio ref={audioRef} controls onEnded={nextSong} style={{ width: '100%', height: 32, marginTop: 4 }} />
