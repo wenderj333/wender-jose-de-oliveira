@@ -34,6 +34,7 @@ import Chat from "./pages/Chat";
 import Churches from "./pages/Churches";
 import ChurchProfile from "./pages/ChurchProfile";
 import PastorDashboard from "./pages/PastorDashboard";
+import Offerings from "./pages/Offerings";
 import Friends from "./pages/Friends";
 import Notifications from "./pages/Notifications";
 import LiveCommunity from "./pages/LiveCommunity";
