@@ -9,7 +9,7 @@ import { Music, Users, Send } from 'lucide-react';
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export default function Landing() {
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, user } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { on, off, send } = useWebSocket();
