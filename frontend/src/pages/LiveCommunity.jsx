@@ -19,6 +19,23 @@ export default function LiveCommunity() {
   const [onlineCount, setOnlineCount] = useState(0);
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
   const [showEmojis, setShowEmojis] = useState(false);
+
+  // Som de notificacao
+  const playNotificationSound = () => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc.frequency.setValueAtTime(660, ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.3);
+    } catch(e) {}
+  };
   const EMOJIS = ['🙏','❤️','🔥','✝️','😊','🕊️','📖','🎵','🌟','👏','💪','🙌','😢','🤲','💝','🌹','⭐','🦋','🌈','💫','🎶','🕯️','🌺','💐','🫶'];
   const [guestTimeLeft, setGuestTimeLeft] = useState(1200);
   const [guestExpired, setGuestExpired] = useState(false);
@@ -97,6 +114,7 @@ export default function LiveCommunity() {
     if (!send || !on) return;
     
     const handleMessage = (data) => {
+      playNotificationSound();
       setChatMessages(prev => {
         // Evitar duplicados por id ou timestamp
         const id = data.id || data.time || data.timestamp;
