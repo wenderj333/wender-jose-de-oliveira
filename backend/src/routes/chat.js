@@ -1,85 +1,90 @@
-const express = require('express');
+﻿const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
+const Anthropic = require('@anthropic-ai/sdk');
 
-// GET /api/chat/churches-online
-router.get('/churches-online', async (req, res) => {
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+// Auto-migration
+(async () => {
   try {
-    const churches = await db.prepare(
-      `SELECT id, name, city, country, denomination, languages FROM churches ORDER BY name ASC`
-    ).all();
-    res.json(churches);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to list churches' });
-  }
-});
+    await db.query(`CREATE TABLE IF NOT EXISTS chat_rooms (
+      id SERIAL PRIMARY KEY, requester_name VARCHAR(100),
+      requester_language VARCHAR(10) DEFAULT 'pt',
+      pastor_language VARCHAR(10) DEFAULT 'pt',
+      help_type VARCHAR(50), status VARCHAR(20) DEFAULT 'waiting',
+      target_church_id INTEGER, created_at TIMESTAMP DEFAULT NOW()
+    )`);
+    await db.query(`CREATE TABLE IF NOT EXISTS chat_messages (
+      id SERIAL PRIMARY KEY, room_id INTEGER, sender VARCHAR(50),
+      original_text TEXT, translated_text TEXT,
+      sender_language VARCHAR(10), created_at TIMESTAMP DEFAULT NOW()
+    )`);
+    console.log('Chat tables ready');
+  } catch(e) { console.error('Chat migration:', e.message); }
+})();
+
+// Traduzir mensagem
+async function translateMessage(text, fromLang, toLang) {
+  if (fromLang === toLang) return text;
+  try {
+    const langNames = { pt: 'Portuguese', en: 'English', de: 'German', fr: 'French', es: 'Spanish', ro: 'Romanian', ru: 'Russian' };
+    const msg = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514', max_tokens: 500,
+      messages: [{ role: 'user', content: `Translate this text from ${langNames[fromLang] || fromLang} to ${langNames[toLang] || toLang}. Return ONLY the translation, nothing else:\n\n${text}` }]
+    });
+    return msg.content[0].text;
+  } catch(e) { return text; }
+}
 
 // POST /api/chat/request
 router.post('/request', async (req, res) => {
   try {
-    const { language = 'pt', name, helpType, churchId, churchName } = req.body;
-    const result = await db.prepare(
-      `INSERT INTO chat_rooms (requester_name, requester_language, help_type, target_church_id, target_church_name) VALUES (?, ?, ?, ?, ?) RETURNING *`
-    ).get(name || 'Anônimo', language, helpType || 'general', churchId || null, churchName || null);
-    res.json({ success: true, roomId: result.id, room: result });
-  } catch (err) {
-    console.error('Error creating chat room:', err);
-    res.status(500).json({ error: 'Failed to create chat room' });
-  }
+    const { language = 'pt', name, helpType, churchId } = req.body;
+    const r = await db.query(
+      `INSERT INTO chat_rooms (requester_name, requester_language, help_type, target_church_id) VALUES ($1,$2,$3,$4) RETURNING *`,
+      [name || 'Anonimo', language, helpType || 'general', churchId || null]
+    );
+    res.json({ success: true, roomId: r.rows[0].id, room: r.rows[0] });
+  } catch(err) { res.status(500).json({ error: 'Erro' }); }
 });
 
 // GET /api/chat/rooms
 router.get('/rooms', async (req, res) => {
   try {
-    const rooms = await db.prepare(
-      `SELECT * FROM chat_rooms WHERE status = 'waiting' ORDER BY created_at DESC`
-    ).all();
-    res.json(rooms);
-  } catch (err) {
-    console.error('Error listing chat rooms:', err);
-    res.status(500).json({ error: 'Failed to list rooms' });
-  }
+    const r = await db.query(`SELECT * FROM chat_rooms WHERE status='waiting' ORDER BY created_at DESC`);
+    res.json(r.rows);
+  } catch(err) { res.status(500).json({ error: 'Erro' }); }
 });
 
 // GET /api/chat/rooms/:roomId/messages
 router.get('/rooms/:roomId/messages', async (req, res) => {
   try {
-    const messages = await db.prepare(
-      `SELECT * FROM chat_messages WHERE room_id = ? ORDER BY created_at ASC`
-    ).all(req.params.roomId);
-    res.json(messages);
-  } catch (err) {
-    console.error('Error getting messages:', err);
-    res.status(500).json({ error: 'Failed to get messages' });
-  }
+    const r = await db.query(`SELECT * FROM chat_messages WHERE room_id=$1 ORDER BY created_at ASC`, [req.params.roomId]);
+    res.json(r.rows);
+  } catch(err) { res.status(500).json({ error: 'Erro' }); }
 });
 
-// POST /api/chat/rooms/:roomId/join
-router.post('/rooms/:roomId/join', async (req, res) => {
+// POST /api/chat/rooms/:roomId/messages
+router.post('/rooms/:roomId/messages', async (req, res) => {
   try {
-    const { pastorName, language } = req.body;
-    await db.prepare(
-      `UPDATE chat_rooms SET pastor_name = ?, pastor_language = ?, status = 'active' WHERE id = ?`
-    ).run(pastorName || 'Pastor', language || 'pt', req.params.roomId);
-    const room = await db.prepare('SELECT * FROM chat_rooms WHERE id = ?').get(req.params.roomId);
-    res.json({ success: true, room });
-  } catch (err) {
-    console.error('Error joining chat room:', err);
-    res.status(500).json({ error: 'Failed to join room' });
-  }
+    const { sender, text, senderLanguage, recipientLanguage } = req.body;
+    const translated = await translateMessage(text, senderLanguage || 'pt', recipientLanguage || 'pt');
+    const r = await db.query(
+      `INSERT INTO chat_messages (room_id, sender, original_text, translated_text, sender_language) VALUES ($1,$2,$3,$4,$5) RETURNING *`,
+      [req.params.roomId, sender, text, translated, senderLanguage || 'pt']
+    );
+    res.json({ message: r.rows[0] });
+  } catch(err) { res.status(500).json({ error: 'Erro' }); }
 });
 
-// POST /api/chat/rooms/:roomId/close
-router.post('/rooms/:roomId/close', async (req, res) => {
+// PATCH /api/chat/rooms/:roomId/status
+router.patch('/rooms/:roomId/status', async (req, res) => {
   try {
-    await db.prepare(
-      `UPDATE chat_rooms SET status = 'closed', closed_at = NOW() WHERE id = ?`
-    ).run(req.params.roomId);
+    const { status, pastorLanguage } = req.body;
+    await db.query(`UPDATE chat_rooms SET status=$1, pastor_language=$2 WHERE id=$3`, [status, pastorLanguage || 'pt', req.params.roomId]);
     res.json({ success: true });
-  } catch (err) {
-    console.error('Error closing chat room:', err);
-    res.status(500).json({ error: 'Failed to close room' });
-  }
+  } catch(err) { res.status(500).json({ error: 'Erro' }); }
 });
 
 module.exports = router;
