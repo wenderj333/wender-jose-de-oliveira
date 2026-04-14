@@ -5,8 +5,19 @@ import { Heart, DollarSign, CreditCard, Save, Copy, Check, Gift, TrendingUp, Cal
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
+const getCurrency = (lang) => {
+  const currencies = {
+    'pt': 'R$', 'pt-BR': 'R$', 'pt-PT': '€',
+    'en': '$', 'en-US': '$', 'en-GB': '£',
+    'de': '€', 'fr': '€', 'es': '€',
+    'ro': 'lei', 'ru': '₽'
+  };
+  return currencies[lang] || '€';
+};
+
 export default function Offerings() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currency = getCurrency(i18n.language);
   const { user, token } = useAuth();
   const isPastor = user?.role === 'pastor' || user?.role === 'admin';
   const [tab, setTab] = useState(isPastor ? 'config' : 'contribute');
@@ -191,12 +202,12 @@ export default function Offerings() {
           <div style={{ display: 'flex', gap: 12, marginBottom: '1rem', flexWrap: 'wrap' }}>
             <div style={{ flex: 1, minWidth: 140, padding: '1rem', borderRadius: 12, background: '#e8f5e9', textAlign: 'center' }}>
               <TrendingUp size={20} color="#2e7d32" />
-              <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#2e7d32' }}>R$ {monthTotal.toFixed(2)}</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#2e7d32' }}>{currency} {monthTotal.toFixed(2)}</div>
               <div style={{ fontSize: '0.75rem', color: '#666' }}>{t('offerings.thisMonth')}</div>
             </div>
             <div style={{ flex: 1, minWidth: 140, padding: '1rem', borderRadius: 12, background: '#fff3e0', textAlign: 'center' }}>
               <Gift size={20} color="#e65100" />
-              <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#e65100' }}>R$ {totalAmount.toFixed(2)}</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#e65100' }}>{currency} {totalAmount.toFixed(2)}</div>
               <div style={{ fontSize: '0.75rem', color: '#666' }}>{t('offerings.totalGeneral')}</div>
             </div>
             <div style={{ flex: 1, minWidth: 140, padding: '1rem', borderRadius: 12, background: '#e3f2fd', textAlign: 'center' }}>
@@ -225,7 +236,7 @@ export default function Offerings() {
                     </div>
                     {r.note && <div style={{ fontSize: '0.75rem', color: '#666', fontStyle: 'italic' }}>"{r.note}"</div>}
                   </div>
-                  <div style={{ fontWeight: 700, fontSize: '1.1rem', color: '#4caf50' }}>R$ {parseFloat(r.amount).toFixed(2)}</div>
+                  <div style={{ fontWeight: 700, fontSize: '1.1rem', color: '#4caf50' }}>{currency} {parseFloat(r.amount).toFixed(2)}</div>
                 </div>
               ))}
             </div>
