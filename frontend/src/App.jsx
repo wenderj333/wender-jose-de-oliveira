@@ -73,6 +73,7 @@ export default function App() {
     setInstallPrompt(null);
   };
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [hideSidebars, setHideSidebars] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [pendingRequests, setPendingRequests] = useState(0);
 
@@ -193,6 +194,11 @@ export default function App() {
           <button className="icon-btn mobile-only" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{background:'transparent',border:'none',color:'white',display:'none',cursor:'pointer'}}>
             {mobileMenuOpen ? <X size={24}/> : <Menu size={24}/>}
           </button>
+        <button onClick={() => setHideSidebars(!hideSidebars)} className="desktop-only"
+            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '6px 10px', borderRadius: 6, fontSize: 18 }}
+            title={hideSidebars ? 'Mostrar menus' : 'Esconder menus'}>
+            {hideSidebars ? '☰' : '✕'}
+          </button>
         </div>
       </header>
 
@@ -253,7 +259,7 @@ export default function App() {
       <div className="modern-layout">
 
         {/* LEFT SIDEBAR */}
-        <aside className="sidebar-left desktop-only" style={{ overflowY: "auto", maxHeight: "calc(100vh - 60px)" }}>
+        <aside className="sidebar-left desktop-only" style={{ overflowY: "auto", maxHeight: "calc(100vh - 60px)", display: hideSidebars ? "none" : undefined }}>
 
           {/* Profile Card */}
           <div className="profile-card-modern">
@@ -363,7 +369,7 @@ export default function App() {
         </main>
 
         {/* RIGHT SIDEBAR */}
-        <aside className="sidebar-right desktop-only">
+        <aside className="sidebar-right desktop-only" style={{ display: hideSidebars ? "none" : undefined }}>
 
           {/* LIVE Widget — golden theme */}
           <div style={{background:'linear-gradient(135deg,#3568b8 0%,#4a80d4 60%,#6a9ade 100%)',borderRadius:14,padding:18,marginBottom:14,color:'white',position:'relative',overflow:'hidden',border:'1px solid rgba(240,192,64,0.3)'}}>
