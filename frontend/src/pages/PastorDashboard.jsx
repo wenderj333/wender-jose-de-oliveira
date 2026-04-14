@@ -999,6 +999,21 @@ function MinhaIgrejaSection({ apiFetch, headers, token }) {
             <div style={{ marginTop: 16, padding: 12, background: '#f8f8ff', borderRadius: 12, fontSize: 13, color: '#555' }}>
               <strong>Igreja registada:</strong> {church.name} — {church.city || '—'}<br />
               <strong>Membros ativos:</strong> {church.member_count || 0} · <strong>Pedidos:</strong> {church.pending_count || 0}
+              <div style={{ marginTop: 12 }}>
+                <button onClick={async () => {
+                  if (!window.confirm('Tens a certeza que queres apagar esta igreja?')) return;
+                  try {
+                    await fetch(`${API_BASE}/api/churches/${church.id}`, {
+                      method: 'DELETE',
+                      headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setChurch(null);
+                    setMsg('✅ Igreja apagada com sucesso!');
+                  } catch { setMsg('Erro ao apagar igreja'); }
+                }} style={{ padding: '8px 16px', background: '#e74c3c', color: 'white', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>
+                  🗑️ Apagar Igreja
+                </button>
+              </div>
             </div>
           )}
         </div>
