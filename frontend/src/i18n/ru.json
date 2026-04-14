@@ -81,7 +81,69 @@
         "text": "Молитва праведного много может в своем действии.",
         "ref": "Иакова 5:16"
       }
-    ]
+    ],
+    "subtitle": "Ore, conecte-se e fortaleça sua fé com milhares de irmãos ao redor do mundo.",
+    "exploreFeatures": "Explore as Principais Funcionalidades",
+    "recentTestimonies": "Testemunhos Recentes",
+    "daysAgo": "Há alguns dias",
+    "liveNow": "Ao Vivo Agora",
+    "live": "DIRECTO",
+    "whyChoose": "Por Que Escolher Sigo com Fé?",
+    "shareText": "Conheça o Sigo com Fé! Rede social cristã.",
+    "global": "Comunidade Global",
+    "globalDesc": "Conecte-se com cristãos de todo o mundo",
+    "secure": "Seguro e Privado",
+    "secureDesc": "Seus dados estão sempre protegidos",
+    "free": "Totalmente Grátis",
+    "freeDesc": "Acesso completo sem custos ocultos",
+    "mobile": "Mobile First",
+    "mobileDesc": "Funciona perfeitamente em seu telemóvel",
+    "forPastors": "Para Pastores",
+    "forPastorsDesc": "Ferramentas completas para gerenciar sua congregação, finanças, campanhas e muito mais.",
+    "features": {
+      "prayers": "🙏 Orações",
+      "live": "🔴 Ao Vivo",
+      "pastoral": "💬 Chat Pastoral",
+      "biblicalAI": "📖 IA Bíblica",
+      "music": "🎵 Música",
+      "consecration": "🔥 Consagração",
+      "groups": "👥 Grupos",
+      "mural": "📸 Mural"
+    },
+    "startNow": "Comece Agora",
+    "seePrayerRequests": "Ver Pedidos de Oração",
+    "churchPraying_one": "{{count}} igreja orando agora!",
+    "churchPraying_other": "{{count}} igrejas orando agora!",
+    "featurePrayers": "Pedidos de Oração",
+    "featurePrayersDesc": "Compartilhe seus pedidos e ore pelos irmãos. Veja o poder da oração coletiva e celebre as vitórias!",
+    "featureLive": "Pastor Orando ao Vivo",
+    "featureLiveDesc": "Saiba quando seu pastor está orando em tempo real. Bolhas de oração sobem como incenso ao céu.",
+    "featureMap": "Mapa de Igrejas",
+    "featureMapDesc": "Encontre igrejas em qualquer cidade. Perfeito para viajantes e famílias em mudança.",
+    "featureDashboard": "Dashboard Pastoral",
+    "featureDashboardDesc": "Ferramentas completas de gestão para pastores: membros, finanças, campanhas e muito mais.",
+    "featureMural": "Mural da Comunidade",
+    "featureMuralDesc": "Compartilhe testemunhos, louvores e versículos com a comunidade cristã.",
+    "featureKids": "Cantinho Kids",
+    "featureKidsDesc": "Histórias bíblicas, quiz interativo e atividades para as crianças aprenderem sobre a Bíblia!",
+    "featureChurch": "Cadastre Sua Igreja",
+    "featureChurchDesc": "Registre sua igreja na plataforma e conecte-se com fiéis de todo o mundo.",
+    "explore": "Explorar",
+    "registerBtn": "Cadastrar",
+    "helpTitle": "Precisa de Ajuda?",
+    "helpSubtitle": "Você não está sozinho. Uma igreja pode te ajudar.",
+    "helpSeeThings": "ðŸ‘ï¸ Vejo coisas",
+    "helpHearThings": "ðŸ‘‚ Escuto barulhos",
+    "helpFeelAlone": "ðŸ˜” Me sinto sozinho(a)",
+    "helpNeedPrayer": "ðŸ™ Preciso de oração",
+    "helpAnxious": "ðŸ˜° Estou ansioso(a)",
+    "helpDepressed": "ðŸ˜¢ Estou triste/deprimido(a)",
+    "helpSent": "âœ… Seu pedido foi enviado! Uma igreja próxima entrará em contato para te ajudar. Deus te abençoe! ðŸ™",
+    "helpNamePlaceholder": "Seu nome (opcional)",
+    "helpContactPlaceholder": "Telefone ou email para contato",
+    "helpMessagePlaceholder": "Conte um pouco mais sobre o que está sentindo...",
+    "helpSend": "Pedir Ajuda",
+    "helpBtn": "Pedir Ajuda"
   },
   "mural": {
     "testimony": "🙏 Свидетельство",
@@ -156,7 +218,19 @@
     },
     "timeAgo": {
       "now": "Только что"
-    }
+    },
+    "title": "Grupos",
+    "createGroup": "Criar Grupo",
+    "newGroup": "Criar Novo Grupo",
+    "groupName": "Nome do grupo",
+    "description": "Descrição (opcional)",
+    "creating": "Criando...",
+    "cancel": "Cancelar",
+    "members": "membros",
+    "join": "Entrar no Grupo",
+    "leave": "Sair do Grupo",
+    "writePlaceholder": "Escreva no grupo...",
+    "back": "Voltar"
   },
   "members": {
     "never": "Никогда",
@@ -186,7 +260,29 @@
     "comment": "Комментарий",
     "send": "Отправить",
     "loading": "Загрузка...",
-    "cancel": "Отмена"
+    "cancel": "Отмена",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "close": "Fechar",
+    "confirm": "Confirmar",
+    "loginToLike": "Faça login para curtir!",
+    "loginToComment": "Faça login para comentar!",
+    "report": "Denunciar",
+    "reportConfirm": "Denunciar este post como inadequado?",
+    "reported": "Post denunciado! Os moderadores irão avaliar.",
+    "writeComment": "Escreva um comentário...",
+    "publish": "Publicar",
+    "publishing": "Enviando...",
+    "shareCommunity": "Compartilhe algo com a comunidade...",
+    "noPostsYet": "Nenhuma publicação ainda.",
+    "beFirst": "Seja o primeiro a publicar!",
+    "translate": "Traduzir",
+    "translation": "Tradução",
+    "hideTranslation": "Ocultar tradução",
+    "remove": "Remover",
+    "noText": "(Sem texto)",
+    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?"
   },
   "helpRequests": {
     "title": "🆘 Как работают запросы о помощи?",
@@ -521,7 +617,35 @@
     "introVerse1": "Придите ко Мне, все утруждённые и обременённые, и Я успокою вас. — Матфея 11:28",
     "introFeatures": "💜 Конфиденциальный и безопасный разговор<br />🌍 Автоматический перевод на 15 языков<br />🙏 Волонтёры-пасторы со всего мира",
     "introVerse2": "Без совета предприятия терпят крах, а при множестве советников они удаются. — Притчи 15:22",
-    "startBtn": "Начать разговор"
+    "startBtn": "Начать разговор",
+    "title": "Chat Pastoral",
+    "subtitle": "Converse diretamente com um pastor. Tradução automática incluída.",
+    "yourName": "Seu nome",
+    "selectHelp": "O que você precisa?",
+    "selectLanguage": "Seu idioma",
+    "startChat": "Iniciar Conversa",
+    "anyChurch": "Qualquer igreja disponível",
+    "waiting": "Aguardando um pastor...",
+    "waitingDesc": "Um pastor vai entrar na conversa em breve. Tenha fé!",
+    "imPastor": "Sou Pastor",
+    "imPerson": "Preciso de Ajuda",
+    "waitingRooms": "Pessoas aguardando",
+    "noWaiting": "Nenhuma pessoa aguardando no momento.",
+    "joinChat": "Atender",
+    "pastorName": "Seu nome (pastor)",
+    "endChat": "Encerrar conversa",
+    "chatEnded": "Conversa encerrada. Deus abençoe!",
+    "typeMessage": "Digite sua mensagem...",
+    "send": "Enviar",
+    "typing": "digitando...",
+    "translated": "Tradução",
+    "joinedChat": "entrou na conversa",
+    "leftChat": "saiu da conversa",
+    "langPt": "Português",
+    "langEn": "English",
+    "langEs": "EspaÃ±ol",
+    "langDe": "Deutsch",
+    "autoTranslate": "ðŸŒ Tradução automática ativada"
   },
   "reflection": {
     "title": "Размышление с Богом",
@@ -742,7 +866,21 @@
     "copyLink": "Kopirovat link",
     "changeAvatar": "Izmenit foto",
     "deleteCover": "Udalit oblozhku",
-    "deleteAccount": "Udalit akkount"
+    "deleteAccount": "Udalit akkount",
+    "title": "Perfil",
+    "memberSince": "Membro desde",
+    "prayers": "Orações",
+    "posts": "Publicações",
+    "bio": "Sobre",
+    "noBio": "Nenhuma bio ainda",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "addPhotoPrompt": "Adicione uma foto ao seu perfil!",
+    "addPhotoDesc": "Toque aqui para personalizar seu perfil com uma foto.",
+    "addFriend": "Adicionar",
+    "pendingFriend": "Pendente",
+    "acceptFriend": "Aceitar",
+    "rejectFriend": "Recusar"
   },
   "landing": {
     "subtitle": "Общайтесь с настоящими христианами, молитесь, растите в вере и найдите сообщество, которое укрепляет — а не отвлекает.",
@@ -806,10 +944,18 @@
   "media": {
     "photo": "Фото",
     "video": "Видео",
-    "audio": "Аудио"
+    "audio": "Аудио",
+    "url": "URL",
+    "urlPrompt": "Cole a URL (YouTube, Vimeo, etc):",
+    "urlPlaceholder": "Cole a URL de YouTube ou outro vídeo...",
+    "clearUrl": "Limpar URL",
+    "youtubePreview": "YouTube (preview indisponível)"
   },
   "time": {
-    "now": "Сейчас"
+    "now": "Сейчас",
+    "minAgo": "Há {{count}}min",
+    "hoursAgo": "Há {{count}}h",
+    "daysAgo": "Há {{count}}d"
   },
   "locale": "ru-RU",
   "music": {
@@ -852,7 +998,11 @@
     "audio": "Аудио",
     "uploadHint": "MP3, WAV, MP4, MOV · макс 5 мин",
     "uploadCover": "Обложка песни",
-    "uploadCoverHint": "Нажмите, чтобы добавить изображение обложки"
+    "uploadCoverHint": "Нажмите, чтобы добавить изображение обложки",
+    "favorites": "Favoritos",
+    "noFavorites": "Nenhum favorito ainda",
+    "tapHeart": "Toque no â¤ï¸ para salvar músicas",
+    "freeSources": "Mais música gratuita"
   },
   "report": {
     "title": "Пожаловаться",
@@ -925,9 +1075,404 @@
   },
   "legal": {
     "privacy": "Politika",
-    "terms": "Usloviya"
+    "terms": "Usloviya",
+    "p1title": "Informacoes coletadas",
+    "p1text": "Coletamos informacoes que voce fornece.",
+    "p2title": "Como usamos os dados",
+    "p2text": "Usamos para melhorar nossos servicos.",
+    "p3title": "Compartilhamento",
+    "p3text": "Nao vendemos seus dados.",
+    "p4title": "Seguranca",
+    "p4text": "Protegemos suas informacoes.",
+    "p5title": "Seus direitos",
+    "p5text": "Voce pode excluir seus dados.",
+    "contact": "Contato",
+    "lastUpdate": "Ultima atualizacao",
+    "t1title": "Aceitacao dos Termos",
+    "t1text": "Ao usar a Sigo com Fe voce concorda com estes termos.",
+    "t2title": "Uso Aceitavel",
+    "t2text": "E proibido publicar conteudo ofensivo.",
+    "t3title": "Conta",
+    "t3text": "Voce e responsavel pela seguranca da sua conta.",
+    "t4title": "Conteudo",
+    "t4text": "Voce mantem os direitos do conteudo.",
+    "t5title": "Encerramento",
+    "t5text": "Voce pode apagar sua conta a qualquer momento."
   },
   "register": {
-    "emailVerify": "Posle registracii vy poluchite pismo s podtverzhdeniem. Proverite vashу pochtu."
+    "emailVerify": "Posle registracii vy poluchite pismo s podtverzhdeniem. Proverite vashу pochtu.",
+    "joinCommunity": "Entre na Rede Social Cristã!",
+    "fullName": "Nome Completo",
+    "fullNamePlaceholder": "Seu nome completo",
+    "email": "Email",
+    "emailPlaceholder": "seu@email.com",
+    "password": "Senha",
+    "passwordPlaceholder": "Mínimo 6 caracteres",
+    "passwordError": "A senha deve ter no mínimo 6 caracteres",
+    "iAm": "Eu sou:",
+    "member": "Membro / Fiel",
+    "pastor": "Pastor / Líder",
+    "submit": "Cadastrar",
+    "or": "ou",
+    "google": "Cadastrar com Google",
+    "facebook": "Cadastrar com Facebook",
+    "phone": "Cadastrar com Telefone",
+    "hasAccount": "Já tem conta?",
+    "signIn": "Entrar",
+    "addPhoto": "Adicionar foto"
+  },
+  "login": {
+    "welcomeBack": "Bem-vindo de volta!",
+    "email": "Email",
+    "emailPlaceholder": "seu@email.com",
+    "password": "Senha",
+    "passwordPlaceholder": "Sua senha",
+    "submit": "Entrar",
+    "or": "ou",
+    "google": "Entrar com Google",
+    "facebook": "Entrar com Facebook",
+    "phone": "Entrar com Telefone",
+    "phoneNumber": "Número de telefone",
+    "sendCode": "Enviar código",
+    "verifyCode": "Verificar código",
+    "codeSent": "Código enviado!",
+    "codePlaceholder": "Código de 6 dígitos",
+    "noAccount": "Não tem conta?",
+    "signUp": "Cadastre-se"
+  },
+  "prayerFeed": {
+    "victoryWall": "Mural de Vitórias",
+    "prayerRequests": "Pedidos de Oração",
+    "newRequest": "Novo Pedido",
+    "allRequests": "Todos os Pedidos",
+    "answeredPrayers": "Orações Respondidas",
+    "newPrayerRequest": "Novo Pedido de Oração",
+    "titleOptional": "Título (opcional)",
+    "titlePlaceholder": "Ex: Oração pela minha família",
+    "yourRequest": "Seu pedido *",
+    "requestPlaceholder": "Compartilhe seu pedido de oração...",
+    "category": "Categoria",
+    "urgentRequest": "Pedido urgente",
+    "submitRequest": "Enviar Pedido",
+    "loading": "Carregando orações...",
+    "noRequests": "Nenhum pedido de oração ainda. Seja o primeiro!",
+    "categories": {
+      "all": "Todas",
+      "health": "Saúde",
+      "work_finance": "Trabalho/Finanças",
+      "family": "Família",
+      "studies": "Estudos",
+      "housing": "Moradia",
+      "emotional": "Emocional",
+      "decisions": "Decisões",
+      "other": "Outros"
+    }
+  },
+  "livePrayer": {
+    "title": "Oração ao Vivo",
+    "churchPraying_one": "igreja orando",
+    "churchPraying_other": "igrejas orando",
+    "rightNow": "neste momento",
+    "closeOverlay": "Fechar Overlay",
+    "immersiveView": "Ver Oração Imersiva",
+    "pastorPanel": "Painel do Pastor",
+    "focusOptional": "Foco da oração (opcional)",
+    "focusPlaceholder": "Ex: Orando pelas famílias",
+    "startLive": "Iniciar Oração ao Vivo",
+    "prayingLive": "Você está orando ao vivo...",
+    "endPrayer": "Encerrar Oração",
+    "pastorsPraying": "Pastores orando agora:",
+    "noPastors": "Nenhum pastor orando ao vivo neste momento.",
+    "comeBack": "Volte em breve!"
+  },
+  "churchMap": {
+    "title": "Mapa de Igrejas",
+    "searchPlaceholder": "Buscar por cidade, país ou nome...",
+    "search": "Buscar",
+    "searching": "Buscando igrejas...",
+    "noResults": "Nenhuma igreja encontrada para \"{{query}}\". Cadastre a sua!"
+  },
+  "churchRegister": {
+    "title": "Cadastrar Igreja",
+    "subtitle": "Registre sua igreja na plataforma Sigo com Fé",
+    "churchName": "Nome da Igreja *",
+    "churchNamePlaceholder": "Ex: Igreja Batista Central",
+    "denomination": "Denominação",
+    "denominationPlaceholder": "Ex: Batista, Assembleia de Deus, etc.",
+    "address": "Endereço",
+    "addressPlaceholder": "Rua, número, bairro",
+    "city": "Cidade",
+    "cityPlaceholder": "Sua cidade",
+    "country": "País",
+    "countryPlaceholder": "País",
+    "phone": "Telefone",
+    "phonePlaceholder": "+55 11 99999-9999",
+    "pastorName": "Nome do Pastor",
+    "pastorNamePlaceholder": "Nome do pastor responsável",
+    "submit": "Cadastrar Igreja",
+    "submitting": "Cadastrando...",
+    "success": "Igreja Cadastrada!",
+    "redirecting": "Redirecionando para o mapa de igrejas...",
+    "nameRequired": "Nome da igreja é obrigatório",
+    "loginRequired": "Você precisa estar logado para cadastrar uma igreja.",
+    "error": "Erro ao cadastrar"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "overview": "Visão geral em tempo real",
+    "users": "Utilizadores",
+    "churches": "Igrejas",
+    "prayerRequests": "Pedidos de Oração",
+    "answeredPrayers": "Orações Respondidas",
+    "pastorManagement": "Sala de Gestão do Pastor",
+    "managementDesc": "Gerencie membros, dízimos, comunicados e mais",
+    "quickActions": "Ações Rápidas",
+    "newPrayerRequest": "Nova Oração",
+    "registerChurch": "Reg. Igreja",
+    "kidsCorner": "Kids",
+    "recentActivity": "Atividade Recente",
+    "viewAll": "Ver tudo",
+    "requestedPrayer": "pediu oração",
+    "noActivity": "Nenhuma atividade recente",
+    "loadingUsers": "Carregando...",
+    "noUsers": "Nenhum usuário encontrado."
+  },
+  "kids": {
+    "title": "Escola Dominical Digital",
+    "subtitle": "Aprenda sobre a Bíblia de um jeito divertido!",
+    "bibleStories": "Histórias Bíblicas",
+    "readStory": "Ler História",
+    "years": "anos",
+    "bibleQuiz": "Quiz Bíblico",
+    "question": "Pergunta {{current}} de {{total}}",
+    "congrats": "Parabéns!",
+    "scoreResult": "Você acertou <strong>{{score}}</strong> de <strong>{{total}}</strong>!",
+    "perfect": "Perfeito! Você é um campeão da Bíblia!",
+    "good": "Muito bem! Continue estudando!",
+    "tryAgain": "Não desista! Tente de novo!",
+    "playAgain": "Jogar de Novo",
+    "weekVerse": "Versículo da Semana",
+    "weekVerseText": "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna.",
+    "weekVerseRef": "- João 3:16",
+    "memorized": "Memorizado!",
+    "memorize": "Já memorizei!",
+    "activities": "Atividades",
+    "comingSoon": "Em breve!",
+    "stories": [
+      {
+        "title": "Davi e Golias",
+        "desc": "Um menino corajoso que venceu um gigante com uma pedra e muita fé em Deus",
+        "age": "6-8"
+      },
+      {
+        "title": "A Arca de Noé",
+        "desc": "Noé construiu um barco enorme e salvou todos os animais do grande dilúvio",
+        "age": "3-5"
+      },
+      {
+        "title": "Jonas e a Baleia",
+        "desc": "Jonas fugiu de Deus mas aprendeu que Ele está em todo lugar",
+        "age": "6-8"
+      },
+      {
+        "title": "Daniel na Cova dos Leões",
+        "desc": "Daniel orou com fé e Deus fechou a boca dos leões",
+        "age": "9-12"
+      },
+      {
+        "title": "Moisés e o Mar Vermelho",
+        "desc": "Deus abriu o mar para Seu povo passar em segurança",
+        "age": "6-8"
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Quem derrotou o gigante Golias?",
+        "opts": [
+          "Saul",
+          "Davi",
+          "Moisés",
+          "Josué"
+        ]
+      },
+      {
+        "q": "Quantos dias durou o dilúvio?",
+        "opts": [
+          "10 dias",
+          "20 dias",
+          "40 dias",
+          "100 dias"
+        ]
+      },
+      {
+        "q": "Quem foi jogado na cova dos leões?",
+        "opts": [
+          "Jonas",
+          "Daniel",
+          "Paulo",
+          "Pedro"
+        ]
+      },
+      {
+        "q": "Qual o primeiro livro da Bíblia?",
+        "opts": [
+          "ÃŠxodo",
+          "Salmos",
+          "Gênesis",
+          "Mateus"
+        ]
+      },
+      {
+        "q": "Jesus nasceu em qual cidade?",
+        "opts": [
+          "Jerusalém",
+          "Nazaré",
+          "Belém",
+          "Cafarnaum"
+        ]
+      }
+    ],
+    "activityList": [
+      {
+        "title": "Colorir",
+        "desc": "Pinte personagens bíblicos com cores lindas"
+      },
+      {
+        "title": "Caça-Palavras",
+        "desc": "Encontre palavras da Bíblia escondidas"
+      },
+      {
+        "title": "Jogo da Memória",
+        "desc": "Encontre os pares dos 12 apóstolos"
+      },
+      {
+        "title": "Quebra-Cabeça",
+        "desc": "Monte cenas bíblicas incríveis"
+      }
+    ]
+  },
+  "feedPost": {
+    "tapToWatch": "Toque para assistir",
+    "photo": "Foto",
+    "amem": "Amém",
+    "share": "Partilhar"
+  },
+  "prayerCard": {
+    "urgent": "URGENTE",
+    "testimony": "Testemunho:",
+    "personPraying_one": "{{count}} pessoa orando",
+    "personPraying_other": "{{count}} pessoas orando",
+    "timeAgo": {
+      "min": "{{count}}min atrás",
+      "hour": "{{count}}h atrás",
+      "day": "{{count}}d atrás"
+    },
+    "categories": {
+      "health": "Saúde",
+      "work_finance": "Trabalho/Finanças",
+      "family": "Família",
+      "studies": "Estudos",
+      "housing": "Moradia",
+      "emotional": "Emocional",
+      "decisions": "Decisões",
+      "other": "Outros"
+    }
+  },
+  "amemButton": {
+    "praying": "Estou Orando!",
+    "prayForYou": "Estou Orando por Você"
+  },
+  "pastorOverlay": {
+    "title": "Pastores Orando ao Vivo",
+    "churchesInPrayer_one": "{{count}} igreja em oração neste momento",
+    "churchesInPrayer_other": "{{count}} igrejas em oração neste momento",
+    "close": "Fechar"
+  },
+  "churchPin": {
+    "pastor": "Pastor {{name}}",
+    "members": "{{count}} membros",
+    "following": "Seguindo",
+    "follow": "Seguir",
+    "directions": "Como Chegar",
+    "share": "Compartilhar",
+    "shareText": "Conheça {{name}} no Sigo com Fé!"
+  },
+  "langSwitcher": {
+    "label": "Idioma"
+  },
+  "friends": {
+    "title": "Amigos",
+    "search": "Buscar",
+    "myFriends": "Meus Amigos",
+    "requests": "Pedidos",
+    "addFriend": "Adicionar",
+    "pending": "Pendente",
+    "accept": "Aceitar",
+    "reject": "Rejeitar",
+    "removeFriend": "Remover",
+    "noFriends": "Você ainda não tem amigos. Busque pessoas para se conectar!",
+    "noRequests": "Nenhum pedido de amizade pendente.",
+    "searchPlaceholder": "Buscar por nome...",
+    "requestSent": "Pedido de amizade enviado!",
+    "friendAdded": "Amizade aceita!",
+    "friendRemoved": "Amigo removido."
+  },
+  "messages": {
+    "title": "Mensagens",
+    "noConversations": "Nenhuma conversa ainda",
+    "whenSomeone": "Quando alguém te enviar uma mensagem, aparecerá aqui!",
+    "noMessages": "Nenhuma mensagem ainda",
+    "writePlaceholder": "Escreva sua mensagem...",
+    "loading": "Carregando...",
+    "back": "Voltar"
+  },
+  "notifications": {
+    "title": "Notificações",
+    "markAllRead": "Marcar todas como lidas",
+    "noNotifications": "Nenhuma notificação por enquanto.",
+    "flaggedPost": "Post Denunciado"
+  },
+  "offerings": {
+    "title": "Ofertas e Dízimos",
+    "notPastor": "Para contribuir, entre em contato com o pastor da sua igreja.",
+    "configure": "Configurar",
+    "records": "Registros",
+    "pixKey": "Chave PIX (CPF, Email, Telefone ou Aleatória)",
+    "pixKeyPlaceholder": "Sua chave PIX",
+    "pixName": "Nome do Titular",
+    "pixNamePlaceholder": "Nome que aparece no PIX",
+    "paypalEmail": "Email do PayPal",
+    "bank": "Banco",
+    "agency": "Agência",
+    "account": "Conta",
+    "holder": "Titular",
+    "holderPlaceholder": "Nome do titular",
+    "bankTransfer": "Transferência Bancária",
+    "messageToMembers": "Mensagem para os Membros",
+    "messagePlaceholder": "Deus abençoe a sua oferta!",
+    "save": "Salvar Configurações",
+    "saving": "Salvando...",
+    "saved": "Salvo!",
+    "thisMonth": "Este mês",
+    "totalGeneral": "Total geral",
+    "contributions": "Contribuições",
+    "noContributions": "Nenhuma contribuição registrada ainda",
+    "tithe": "Dízimo",
+    "offering": "Oferta"
+  },
+  "courseFinance": {
+    "title": "Finanças Bíblicas",
+    "description": "Aprenda a administrar suas finanças segundo os princípios bíblicos",
+    "topics": "Dízimo, Ofertas, Poupança, Investimentos, Dívidas, Prosperidade"
+  },
+  "courseTheology": {
+    "title": "Curso de Teologia",
+    "description": "Aprofunde seu conhecimento teológico",
+    "topics": "Cristologia, Soteriologia, Eclesiologia, Escatologia, Pneumatologia, Hermenêutica"
+  },
+  "testimonies": {
+    "demo1": "Encontrei paz e comunidade nesta plataforma. Minhas orações foram ouvidas e respondidas.",
+    "demo2": "A IA Bíblica me ajudou a entender melhor as escrituras e fortalecer minha fé diariamente.",
+    "demo3": "Encontrei minha igreja local e agora sou membro ativo da comunidade cristã online e presencial."
   }
 }

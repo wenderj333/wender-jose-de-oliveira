@@ -81,7 +81,69 @@
         "text": "The prayer of a righteous person is powerful and effective.",
         "ref": "James 5:16"
       }
-    ]
+    ],
+    "subtitle": "Ore, conecte-se e fortaleça sua fé com milhares de irmãos ao redor do mundo.",
+    "exploreFeatures": "Explore as Principais Funcionalidades",
+    "recentTestimonies": "Testemunhos Recentes",
+    "daysAgo": "Há alguns dias",
+    "liveNow": "Ao Vivo Agora",
+    "live": "DIRECTO",
+    "whyChoose": "Por Que Escolher Sigo com Fé?",
+    "shareText": "Conheça o Sigo com Fé! Rede social cristã.",
+    "global": "Comunidade Global",
+    "globalDesc": "Conecte-se com cristãos de todo o mundo",
+    "secure": "Seguro e Privado",
+    "secureDesc": "Seus dados estão sempre protegidos",
+    "free": "Totalmente Grátis",
+    "freeDesc": "Acesso completo sem custos ocultos",
+    "mobile": "Mobile First",
+    "mobileDesc": "Funciona perfeitamente em seu telemóvel",
+    "forPastors": "Para Pastores",
+    "forPastorsDesc": "Ferramentas completas para gerenciar sua congregação, finanças, campanhas e muito mais.",
+    "features": {
+      "prayers": "🙏 Orações",
+      "live": "🔴 Ao Vivo",
+      "pastoral": "💬 Chat Pastoral",
+      "biblicalAI": "📖 IA Bíblica",
+      "music": "🎵 Música",
+      "consecration": "🔥 Consagração",
+      "groups": "👥 Grupos",
+      "mural": "📸 Mural"
+    },
+    "startNow": "Comece Agora",
+    "seePrayerRequests": "Ver Pedidos de Oração",
+    "churchPraying_one": "{{count}} igreja orando agora!",
+    "churchPraying_other": "{{count}} igrejas orando agora!",
+    "featurePrayers": "Pedidos de Oração",
+    "featurePrayersDesc": "Compartilhe seus pedidos e ore pelos irmãos. Veja o poder da oração coletiva e celebre as vitórias!",
+    "featureLive": "Pastor Orando ao Vivo",
+    "featureLiveDesc": "Saiba quando seu pastor está orando em tempo real. Bolhas de oração sobem como incenso ao céu.",
+    "featureMap": "Mapa de Igrejas",
+    "featureMapDesc": "Encontre igrejas em qualquer cidade. Perfeito para viajantes e famílias em mudança.",
+    "featureDashboard": "Dashboard Pastoral",
+    "featureDashboardDesc": "Ferramentas completas de gestão para pastores: membros, finanças, campanhas e muito mais.",
+    "featureMural": "Mural da Comunidade",
+    "featureMuralDesc": "Compartilhe testemunhos, louvores e versículos com a comunidade cristã.",
+    "featureKids": "Cantinho Kids",
+    "featureKidsDesc": "Histórias bíblicas, quiz interativo e atividades para as crianças aprenderem sobre a Bíblia!",
+    "featureChurch": "Cadastre Sua Igreja",
+    "featureChurchDesc": "Registre sua igreja na plataforma e conecte-se com fiéis de todo o mundo.",
+    "explore": "Explorar",
+    "registerBtn": "Cadastrar",
+    "helpTitle": "Precisa de Ajuda?",
+    "helpSubtitle": "Você não está sozinho. Uma igreja pode te ajudar.",
+    "helpSeeThings": "ðŸ‘ï¸ Vejo coisas",
+    "helpHearThings": "ðŸ‘‚ Escuto barulhos",
+    "helpFeelAlone": "ðŸ˜” Me sinto sozinho(a)",
+    "helpNeedPrayer": "ðŸ™ Preciso de oração",
+    "helpAnxious": "ðŸ˜° Estou ansioso(a)",
+    "helpDepressed": "ðŸ˜¢ Estou triste/deprimido(a)",
+    "helpSent": "âœ… Seu pedido foi enviado! Uma igreja próxima entrará em contato para te ajudar. Deus te abençoe! ðŸ™",
+    "helpNamePlaceholder": "Seu nome (opcional)",
+    "helpContactPlaceholder": "Telefone ou email para contato",
+    "helpMessagePlaceholder": "Conte um pouco mais sobre o que está sentindo...",
+    "helpSend": "Pedir Ajuda",
+    "helpBtn": "Pedir Ajuda"
   },
   "login": {
     "welcomeBack": "Welcome back!",
@@ -563,7 +625,19 @@
     },
     "timeAgo": {
       "now": "Now"
-    }
+    },
+    "title": "Grupos",
+    "createGroup": "Criar Grupo",
+    "newGroup": "Criar Novo Grupo",
+    "groupName": "Nome do grupo",
+    "description": "Descrição (opcional)",
+    "creating": "Criando...",
+    "cancel": "Cancelar",
+    "members": "membros",
+    "join": "Entrar no Grupo",
+    "leave": "Sair do Grupo",
+    "writePlaceholder": "Escreva no grupo...",
+    "back": "Voltar"
   },
   "consecration": {
     "title": "Consecration",
@@ -646,7 +720,10 @@
     "installApp": "Install App",
     "user": "User",
     "welcomeBack": "Welcome back",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "remove": "Remover",
+    "noText": "(Sem texto)",
+    "deleteConfirm": "Tem certeza que deseja excluir esta publicação?"
   },
   "offerings": {
     "title": "Offerings and Tithes",
@@ -1392,5 +1469,10 @@
     "t4text": "You retain rights to your content.",
     "t5title": "Termination",
     "t5text": "You can delete your account anytime."
+  },
+  "testimonies": {
+    "demo1": "Encontrei paz e comunidade nesta plataforma. Minhas orações foram ouvidas e respondidas.",
+    "demo2": "A IA Bíblica me ajudou a entender melhor as escrituras e fortalecer minha fé diariamente.",
+    "demo3": "Encontrei minha igreja local e agora sou membro ativo da comunidade cristã online e presencial."
   }
 }
