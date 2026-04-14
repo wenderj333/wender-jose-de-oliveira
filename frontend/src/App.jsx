@@ -256,7 +256,7 @@ export default function App() {
 
       {/* MAIN LAYOUT */}
       {sidebarOpen&&<div style={{position:'fixed',top:0,left:0,right:0,bottom:0,zIndex:199,background:'rgba(0,0,0,0.5)'}} onClick={()=>setSidebarOpen(false)}/>}{sidebarOpen&&<aside style={{position:'fixed',top:0,left:0,width:260,height:'100vh',background:'#1a1a2e',zIndex:200,overflowY:'auto',padding:'16px 0'}}><button onClick={()=>setSidebarOpen(false)} style={{position:'absolute',top:12,right:12,background:'none',border:'none',color:'white',fontSize:22,cursor:'pointer'}}>&#x2715;</button><div style={{padding:'40px 16px 16px'}}><p style={{color:'#f0c040',fontWeight:700,marginBottom:16}}>{user.full_name}</p>{[['/','Mural'],['/diario-com-deus',t('nav.diary')],['/pedidos-ajuda',t('nav.prayers')],['/membros',t('nav.members')],['/amigos',t('nav.friends')],['/mensagens',t('nav.messages')],['/musica',t('nav.music')],['/chat-pastoral',t('nav.pastoral_chat')]].map(([to,label])=><Link key={to} to={to} onClick={()=>setSidebarOpen(false)} style={{display:'block',color:'white',textDecoration:'none',padding:'10px 0',borderBottom:'1px solid rgba(255,255,255,0.1)',fontSize:14}}>{label}</Link>)}</div></aside>}
-      <div className="modern-layout">
+      <div className="modern-layout" style={{ gridTemplateColumns: hideSidebars ? "1fr" : undefined }}>
 
         {/* LEFT SIDEBAR */}
         <aside className="sidebar-left desktop-only" style={{ overflowY: "auto", maxHeight: "calc(100vh - 60px)", display: hideSidebars ? "none" : undefined }}>
