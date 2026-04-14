@@ -276,8 +276,6 @@ function setupWebSocket(server) {
           }
 
           // ===== LIVE COMMUNITY CHAT =====
-          
-          }
 
           case 'live_join': {
             broadcast(wss, {
