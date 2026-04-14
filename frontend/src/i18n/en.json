@@ -1410,7 +1410,8 @@
     "reject": "Reject",
     "remove": "Remove",
     "pendingMembers": "Pending requests",
-    "activeMembers": "Active members"
+    "activeMembers": "Active members",
+    "howToGet": "Get directions"
   },
   "prayers": {
     "title": "Prayer Requests",

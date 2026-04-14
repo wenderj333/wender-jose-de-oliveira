@@ -1411,7 +1411,8 @@
     "reject": "Respinge",
     "remove": "Elimină",
     "pendingMembers": "Cereri în așteptare",
-    "activeMembers": "Membri activi"
+    "activeMembers": "Membri activi",
+    "howToGet": "Cum să ajungi"
   },
   "prayers": {
     "title": "Cereri de Rugaciune",

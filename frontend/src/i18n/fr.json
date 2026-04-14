@@ -1410,7 +1410,8 @@
     "reject": "Rejeter",
     "remove": "Supprimer",
     "pendingMembers": "Demandes en attente",
-    "activeMembers": "Membres actifs"
+    "activeMembers": "Membres actifs",
+    "howToGet": "Itinéraire"
   },
   "prayers": {
     "title": "Demandes de Priere",

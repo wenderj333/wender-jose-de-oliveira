@@ -1391,7 +1391,8 @@
     "reject": "Recusar",
     "remove": "Remover",
     "pendingMembers": "Pedidos pendentes",
-    "activeMembers": "Membros ativos"
+    "activeMembers": "Membros ativos",
+    "howToGet": "Como chegar"
   },
   "prayers": {
     "title": "Pedidos de Oração",

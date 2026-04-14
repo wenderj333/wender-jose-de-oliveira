@@ -1039,7 +1039,8 @@
     "reject": "Отклонить",
     "remove": "Удалить",
     "pendingMembers": "Ожидающие запросы",
-    "activeMembers": "Активные участники"
+    "activeMembers": "Активные участники",
+    "howToGet": "Как добраться"
   },
   "prayers": {
     "title": "Молитвенные просьбы",

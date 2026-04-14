@@ -144,6 +144,18 @@ export default function ChurchProfile() {
               {church.pastor_name && <div style={styles.churchSub}>👤 Pastor: {church.pastor_name}</div>}
               {church.city && <div style={styles.churchSub}>📍 {church.city}{church.country ? `, ${church.country}` : ''}</div>}
               <div style={styles.churchSub}>👥 {church.member_count || 0} {t('churches.members', 'membros')}</div>
+              {church.latitude && church.longitude && (
+                <button onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${church.latitude},${church.longitude}`, '_blank')}
+                  style={{ marginTop: 8, padding: '6px 14px', background: '#4285f4', color: 'white', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  🗺️ {t('churches.howToGet', 'Como chegar')}
+                </button>
+              )}
+              {church.city && !church.latitude && (
+                <button onClick={() => window.open(`https://www.google.com/maps/search/${encodeURIComponent((church.name || '') + ' ' + (church.city || '') + ' ' + (church.country || ''))}`, '_blank')}
+                  style={{ marginTop: 8, padding: '6px 14px', background: '#4285f4', color: 'white', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  🗺️ {t('churches.howToGet', 'Como chegar')}
+                </button>
+              )}
             </div>
           </div>
 

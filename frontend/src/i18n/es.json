@@ -1410,7 +1410,8 @@
     "reject": "Rechazar",
     "remove": "Eliminar",
     "pendingMembers": "Solicitudes pendientes",
-    "activeMembers": "Miembros activos"
+    "activeMembers": "Miembros activos",
+    "howToGet": "Cómo llegar"
   },
   "prayers": {
     "title": "Peticiones de Oración",

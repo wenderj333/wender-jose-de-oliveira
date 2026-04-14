@@ -1412,7 +1412,8 @@
     "reject": "Ablehnen",
     "remove": "Entfernen",
     "pendingMembers": "Ausstehende Anfragen",
-    "activeMembers": "Aktive Mitglieder"
+    "activeMembers": "Aktive Mitglieder",
+    "howToGet": "Wegbeschreibung"
   },
   "prayers": {
     "title": "Gebetsanliegen",
