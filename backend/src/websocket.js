@@ -1,4 +1,17 @@
 const { WebSocketServer } = require('ws');
+const Anthropic = require('@anthropic-ai/sdk');
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+async function translateWithClaude(text, sourceLang, targetLang) {
+  const langNames = { pt: 'Portuguese', en: 'English', de: 'German', fr: 'French', es: 'Spanish', ro: 'Romanian', ru: 'Russian', it: 'Italian', ar: 'Arabic', zh: 'Chinese', ja: 'Japanese', ko: 'Korean' };
+  try {
+    const msg = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514', max_tokens: 300,
+      messages: [{ role: 'user', content: 'Translate from ' + (langNames[sourceLang]||sourceLang) + ' to ' + (langNames[targetLang]||targetLang) + '. Return ONLY the translation:\n\n' + text }]
+    });
+    return msg.content[0].text;
+  } catch(e) { console.error('Translation error:', e); return text; }
+}
 const PastorSession = require('./models/PastorSession');
 
 const clients = new Map(); // ws -> { userId, churchId }
@@ -228,18 +241,13 @@ function setupWebSocket(server) {
             let translated = msg.text;
             if (msg.targetLang && msg.sourceLang && msg.targetLang !== msg.sourceLang) {
               try {
-                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(msg.text)}&langpair=${msg.sourceLang}|${msg.targetLang}`;
-                const resp = await fetch(url);
-                const data = await resp.json();
-                if (data.responseData && data.responseData.translatedText) {
-                  translated = data.responseData.translatedText;
-                }
+                translated = await translateWithClaude(msg.text, msg.sourceLang, msg.targetLang);
               } catch (e) { console.error('Translation error:', e); }
             }
             const chatDb = require('./db/connection');
-            await chatDb.prepare(
-              'INSERT INTO chat_messages (room_id, sender_role, sender_name, original_text, translated_text, original_lang, target_lang) VALUES (?, ?, ?, ?, ?, ?, ?)'
-            ).run(msg.roomId, msg.role, msg.name, msg.text, translated, msg.sourceLang, msg.targetLang);
+            await chatDb.query(
+              'INSERT INTO chat_messages (room_id, sender_role, sender_name, original_text, translated_text, original_lang, target_lang) VALUES ($1,$2,$3,$4,$5,$6,$7)',
+              [msg.roomId, msg.role, msg.name, msg.text, translated, msg.sourceLang, msg.targetLang]);
             broadcastToRoom(wss, clients, msg.roomId, {
               type: 'chat_new_message',
               roomId: msg.roomId,
