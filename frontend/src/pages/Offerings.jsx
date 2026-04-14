@@ -27,6 +27,35 @@ export default function Offerings() {
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState('');
   const [loading, setLoading] = useState(true);
+  const [amount, setAmount] = useState('');
+  const [offerType, setOfferType] = useState('dizimo');
+  const [note, setNote] = useState('');
+  const [myChurch, setMyChurch] = useState(null);
+  const [paying, setPaying] = useState(false);
+  const [payMsg, setPayMsg] = useState('');
+
+  useEffect(() => {
+    if (!isPastor && token) {
+      fetch(`${API}/churches/my/church`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(r => r.json()).then(d => setMyChurch(d.church)).catch(() => {});
+    }
+  }, []);
+
+  async function handleContribute() {
+    if (!amount || parseFloat(amount) < 1) return setPayMsg('Valor minimo: 1€');
+    setPaying(true); setPayMsg('');
+    try {
+      const res = await fetch(`${API}/stripe/create-checkout-session`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: parseFloat(amount), description: offerType === 'dizimo' ? 'Dizimo' : 'Oferta', pastor_id: myChurch?.pastor_id, note }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+      else setPayMsg(data.error || 'Erro ao processar pagamento');
+    } catch { setPayMsg('Erro de conexao'); }
+    finally { setPaying(false); }
+  }
 
   useEffect(() => {
     if (isPastor) { fetchConfig(); fetchRecords(); }
@@ -194,6 +223,43 @@ export default function Offerings() {
             {saved ? <><Check size={18} /> {t('offerings.saved')}</> : <><Save size={18} /> {saving ? t('offerings.saving') : t('offerings.save')}</>}
           </button>
         </form>
+      )}
+
+      {/* Contribute Tab - para membros */}
+      {!isPastor && (
+        <div style={{ padding: '1rem' }}>
+          {myChurch ? (
+            <div style={{ background: '#f8f0ff', borderRadius: 12, padding: '1rem', marginBottom: 16, border: '1px solid #e0c8ff' }}>
+              <p style={{ margin: 0, fontWeight: 600, color: '#6C3FA0' }}>⛪ {myChurch.name}</p>
+              <p style={{ margin: '4px 0 0', fontSize: 13, color: '#666' }}>Pastor: {myChurch.pastor_name}</p>
+            </div>
+          ) : (
+            <div style={{ background: '#fff3e0', borderRadius: 12, padding: '1rem', marginBottom: 16 }}>
+              <p style={{ margin: 0, fontSize: 13, color: '#e65100' }}>⚠️ Não tens uma igreja associada. Vai a Igrejas e junta-te a uma.</p>
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+            {['dizimo', 'oferta'].map(type => (
+              <button key={type} onClick={() => setOfferType(type)}
+                style={{ flex: 1, padding: '10px', borderRadius: 10, border: `2px solid ${offerType === type ? '#6C3FA0' : '#eee'}`, background: offerType === type ? '#6C3FA0' : 'white', color: offerType === type ? 'white' : '#666', fontWeight: 600, cursor: 'pointer' }}>
+                {type === 'dizimo' ? '💰 Dízimo' : '🎁 Oferta'}
+              </button>
+            ))}
+          </div>
+          <label style={{ fontSize: 13, color: '#666', display: 'block', marginBottom: 4 }}>Valor ({currency})</label>
+          <input type="number" min="1" value={amount} onChange={e => setAmount(e.target.value)}
+            placeholder="Ex: 50"
+            style={{ width: '100%', padding: '12px', borderRadius: 10, border: '1px solid #ddd', fontSize: 16, marginBottom: 12, boxSizing: 'border-box' }} />
+          <label style={{ fontSize: 13, color: '#666', display: 'block', marginBottom: 4 }}>Mensagem (opcional)</label>
+          <textarea value={note} onChange={e => setNote(e.target.value)}
+            placeholder="Ex: Com gratidao a Deus..."
+            rows={3} style={{ width: '100%', padding: '10px', borderRadius: 10, border: '1px solid #ddd', fontSize: 14, marginBottom: 12, resize: 'none', boxSizing: 'border-box' }} />
+          {payMsg && <p style={{ color: payMsg.includes('Erro') ? '#e74c3c' : '#27ae60', fontSize: 13, marginBottom: 8 }}>{payMsg}</p>}
+          <button onClick={handleContribute} disabled={paying || !myChurch}
+            style={{ width: '100%', padding: '14px', borderRadius: 12, border: 'none', background: paying || !myChurch ? '#ccc' : 'linear-gradient(135deg,#667eea,#764ba2)', color: 'white', fontSize: 16, fontWeight: 700, cursor: paying || !myChurch ? 'not-allowed' : 'pointer' }}>
+            {paying ? 'A processar...' : `💳 Pagar ${amount ? currency + ' ' + amount : ''}`}
+          </button>
+        </div>
       )}
 
       {/* Records Tab */}
