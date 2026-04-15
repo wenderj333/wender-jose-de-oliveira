@@ -104,7 +104,7 @@ function PastorDashboard() {
   }, [token]);
 
   useEffect(() => {
-    apiFetch('/api/pastor/overview').then(setOverview).catch(() => {}).finally(() => setLoadingOverview(false));
+    apiFetch('/api/pastor/overview').then(d => setOverview(d || {})).catch(() => setOverview({})).finally(() => setLoadingOverview(false));
   }, []);
 
   const verse = verses[Math.floor(Math.random() * verses.length)];
@@ -128,7 +128,7 @@ function PastorDashboard() {
     setSection(id);
   };
 
-  const stats = overview?.stats;
+  const stats = overview?.stats || {};
 
   return (
     <div style={styles.page}>
