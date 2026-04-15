@@ -361,7 +361,7 @@ export default function App() {
             <Route path="/pastor-dashboard" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
             <Route path="/igrejas" element={<Churches />} />
             <Route path="/igrejas/:id" element={<ChurchProfile />} />
-            <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard />
+            <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
         <Route path="/dizimos" element={<Offerings />} /></ProtectedRoute>} />
                     <Route path='/diario-com-deus' element={<DiarioComDeus />} />
             <Route path='/live' element={<LiveStream />} />
