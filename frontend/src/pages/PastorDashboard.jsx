@@ -150,7 +150,7 @@ function PastorDashboard() {
       <div style={styles.header}>
         <div style={styles.headerTitle}><ShieldCheck size={24} /> {t('pastorDashboard.title')}</div>
         <div style={styles.verse}>{verse}</div>
-        {overview?.church && <div style={{ fontSize: 13, opacity: 0.8, paddingBottom: 8 }}>{overview.church}</div>}
+        {overview?.church && <div style={{ fontSize: 13, opacity: 0.8, paddingBottom: 8 }}>{overview.church?.name || overview.church}</div>}
       </div>
       <div style={styles.container}>
         {!section && (
