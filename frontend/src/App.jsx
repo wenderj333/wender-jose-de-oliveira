@@ -34,6 +34,7 @@ import Chat from "./pages/Chat";
 import Churches from "./pages/Churches";
 import ChurchProfile from "./pages/ChurchProfile";
 import PastorDashboard from "./pages/PastorDashboard";
+import Offerings from "./pages/Offerings";
 import Friends from "./pages/Friends";
 import Notifications from "./pages/Notifications";
 import LiveCommunity from "./pages/LiveCommunity";
@@ -73,6 +74,7 @@ export default function App() {
     setInstallPrompt(null);
   };
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [hideSidebars, setHideSidebars] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [pendingRequests, setPendingRequests] = useState(0);
 
@@ -192,6 +194,10 @@ export default function App() {
           <button className="icon-btn mobile-only" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{background:'transparent',border:'none',color:'white',display:'none',cursor:'pointer'}}>
             {mobileMenuOpen ? <X size={24}/> : <Menu size={24}/>}
           </button>
+        <button onClick={() => setHideSidebars(!hideSidebars)} className="desktop-only"
+            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '6px 10px', borderRadius: 6, fontSize: 18 }}>
+            {hideSidebars ? '☰' : '✕'}
+          </button>
         </div>
       </header>
 
@@ -251,7 +257,7 @@ export default function App() {
       <div className="modern-layout">
 
         {/* LEFT SIDEBAR */}
-        <aside className="sidebar-left desktop-only">
+        <aside className="sidebar-left desktop-only" style={{ display: hideSidebars ? "none" : undefined }}>
 
           {/* Profile Card */}
           <div className="profile-card-modern">
@@ -352,6 +358,7 @@ export default function App() {
             <Route path="/igrejas" element={<Churches />} />
             <Route path="/igrejas/:id" element={<ChurchProfile />} />
             <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
+        <Route path="/dizimos" element={<Offerings />} />
                     <Route path='/diario-com-deus' element={<DiarioComDeus />} />
             <Route path='/live' element={<LiveStream />} />
             <Route path='/comunidade-ao-vivo' element={<LiveCommunity />} />
@@ -361,7 +368,7 @@ export default function App() {
         </main>
 
         {/* RIGHT SIDEBAR */}
-        <aside className="sidebar-right desktop-only">
+        <aside className="sidebar-right desktop-only" style={{ display: hideSidebars ? "none" : undefined }}>
 
           {/* LIVE Widget — golden theme */}
           <div style={{background:'linear-gradient(135deg,#3568b8 0%,#4a80d4 60%,#6a9ade 100%)',borderRadius:14,padding:18,marginBottom:14,color:'white',position:'relative',overflow:'hidden',border:'1px solid rgba(240,192,64,0.3)'}}>
@@ -433,8 +440,37 @@ export default function App() {
           .desktop-only { display: none !important; }
           .mobile-only { display: flex !important; }
           .modern-layout { grid-template-columns: 1fr; }
+          .mobile-bottom-nav { display: flex !important; }
+          .main-content-area { padding-bottom: 70px !important; }
+        }
+        @media (min-width: 1101px) {
+          .mobile-bottom-nav { display: none !important; }
         }
       `}</style>
+
+      <nav style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 300,
+        background: 'white', borderTop: '1px solid #e0e0e0',
+        display: 'flex', justifyContent: 'space-around', alignItems: 'center',
+        padding: '8px 0 12px', boxShadow: '0 -2px 10px rgba(0,0,0,0.1)'
+      }} className="mobile-bottom-nav">
+        {[
+          { to: '/', icon: <Home size={22}/>, label: t('nav.mural', 'Inicio') },
+          { to: '/amigos', icon: <Users size={22}/>, label: t('nav.friends', 'Amigos') },
+          { to: '/mensagens', icon: <MessageCircle size={22}/>, label: t('nav.messages', 'Mensagens') },
+          { to: '/dizimos', icon: <span style={{fontSize:20}}>💰</span>, label: t('nav.tithe', 'Dizimo') },
+          { to: `/perfil/${user.id}`, icon: user.avatar_url ? <img src={user.avatar_url} style={{width:24,height:24,borderRadius:'50%',objectFit:'cover'}}/> : <User size={22}/>, label: t('common.profile', 'Perfil') },
+        ].map(item => (
+          <Link key={item.to} to={item.to} style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+            textDecoration: 'none', color: location.pathname === item.to ? '#667eea' : '#888',
+            fontSize: 10, fontWeight: 600, minWidth: 50,
+          }}>
+            {item.icon}
+            <span>{item.label}</span>
+          </Link>
+        ))}
+      </nav>
 
       <GlobalChat />
     </div>
