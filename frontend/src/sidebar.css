@@ -1,71 +1,44 @@
-﻿.sidebar-instagram {
-  position: fixed;
-  top: 60px;
-  left: 0;
-  height: calc(100vh - 60px);
-  width: 70px;
-  background: white;
-  border-right: 1px solid #e0e0e0;
-  overflow: hidden;
+﻿/* Menu Instagram Style */
+.sidebar-left {
+  width: 240px;
   transition: width 0.3s ease;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  padding: 16px 0;
-}
-
-.sidebar-instagram:hover {
-  width: 220px;
-  box-shadow: 4px 0 15px rgba(0,0,0,0.1);
-}
-
-.sidebar-instagram .nav-item-ig {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 20px;
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-  border-radius: 10px;
-  margin: 2px 8px;
-  transition: background 0.2s;
-}
-
-.sidebar-instagram .nav-item-ig:hover {
-  background: #f0f0f5;
-}
-
-.sidebar-instagram .nav-item-ig.active {
-  background: #ede8ff;
-  color: #6C3FA0;
-  font-weight: 700;
-}
-
-.sidebar-instagram .nav-text {
-  opacity: 0;
-  transition: opacity 0.2s ease;
   overflow: hidden;
 }
 
-.sidebar-instagram:hover .nav-text {
-  opacity: 1;
+.sidebar-left.collapsed {
+  width: 70px;
 }
 
-.main-content-ig {
-  margin-left: 70px;
-  transition: margin-left 0.3s ease;
-  min-height: calc(100vh - 60px);
-}
-
-@media (max-width: 1100px) {
-  .sidebar-instagram { display: none !important; }
-  .main-content-ig { margin-left: 0 !important; }
-  .mobile-bottom-nav { display: flex !important; }
+.sidebar-left.collapsed .prof-name,
+.sidebar-left.collapsed .prof-stats,
+.sidebar-left.collapsed .sidebar-section-title,
+.sidebar-left.collapsed .nav-text {
+  display: none;
 }
 
 @media (min-width: 1101px) {
-  .mobile-bottom-nav { display: none !important; }
+  .sidebar-left:not(:hover) {
+    width: 70px;
+  }
+  .sidebar-left:not(:hover) .prof-name,
+  .sidebar-left:not(:hover) p,
+  .sidebar-left:not(:hover) .sidebar-section-title {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+  }
+  .sidebar-left {
+    width: 240px;
+  }
+  .sidebar-left .nav-item {
+    justify-content: flex-start;
+    padding: 8px 20px;
+  }
+}
+
+.mobile-bottom-nav { display: none; }
+
+@media (max-width: 1100px) {
+  .sidebar-left { display: none !important; }
+  .mobile-bottom-nav { display: flex !important; }
 }
