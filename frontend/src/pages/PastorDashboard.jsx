@@ -5,16 +5,6 @@ import { useAuth } from '../context/AuthContext';
 import { ShieldCheck, Users, Heart, BookOpen, MessageCircle, DollarSign, Calendar, ArrowLeft, Megaphone, HandHeart, BarChart3, Settings, Plus, Send, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
-const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'degxiuf43';
-const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'sigo_com_fe';
-async function uploadToCloudinary(file) {
-  const form = new FormData();
-  form.append('file', file);
-  form.append('upload_preset', UPLOAD_PRESET);
-  const res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload', { method: 'POST', body: form });
-  const data = await res.json();
-  return data.secure_url;
-}
 
 const PURPLE = '#6C3FA0';
 const PURPLE_DARK = '#4A2270';
@@ -794,3 +784,322 @@ function RelatoriosSection({ apiFetch }) {
 }
 
 export default PastorDashboard;
+
+/* =================== MINHA IGREJA =================== */
+
+const API_BASE_CHURCH = import.meta.env.VITE_API_URL || '';
+const PURPLE_C = '#6C3FA0';
+const GOLD_C = '#D4A843';
+
+function MinhaIgrejaSection({ apiFetch, headers, token }) {
+  const [tab, setTab] = useState('igreja');
+  const [church, setChurch] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [members, setMembers] = useState([]);
+  const [memberFilter, setMemberFilter] = useState('');
+  const [events, setEvents] = useState([]);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [eventForm, setEventForm] = useState({ title: '', event_type: 'culto', event_date: '', event_time: '', description: '' });
+  const [churchForm, setChurchForm] = useState({ name: '', description: '', city: '', country: '', location: '', pastor_name: '' });
+
+  const loadChurch = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_CHURCH}/api/churches/my/church`, { headers });
+      const data = await res.json();
+      setChurch(data.church || null);
+      if (data.church) {
+        setChurchForm({
+          name: data.church.name || '',
+          description: data.church.description || '',
+          city: data.church.city || '',
+          country: data.church.country || '',
+          location: data.church.address || '',
+          pastor_name: data.church.pastor_name || '',
+        });
+      }
+    } catch {}
+    setLoading(false);
+  }, [headers]);
+
+  const loadMembers = React.useCallback(async (statusFilter) => {
+    if (!church) return;
+    try {
+      const url = `${API_BASE_CHURCH}/api/churches/${church.id}/members${statusFilter ? `?status=${statusFilter}` : ''}`;
+      const res = await fetch(url, { headers });
+      const data = await res.json();
+      setMembers(data.members || []);
+    } catch {}
+  }, [church, headers]);
+
+  const loadEvents = React.useCallback(async () => {
+    if (!church) return;
+    try {
+      const res = await fetch(`${API_BASE_CHURCH}/api/churches/${church.id}/events`, { headers });
+      const data = await res.json();
+      setEvents(data.events || []);
+    } catch {}
+  }, [church, headers]);
+
+  useEffect(() => { loadChurch(); }, [loadChurch]);
+  useEffect(() => { if (tab === 'membros' && church) loadMembers(memberFilter); }, [tab, church, memberFilter]);
+  useEffect(() => { if (tab === 'agenda' && church) loadEvents(); }, [tab, church]);
+
+  const saveChurch = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setMsg('');
+    try {
+      const method = church ? 'PATCH' : 'POST';
+      const url = church ? `${API_BASE_CHURCH}/api/churches/${church.id}` : `${API_BASE_CHURCH}/api/churches`;
+      const res = await fetch(url, { method, headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify(churchForm) });
+      const data = await res.json();
+      if (data.church) {
+        setMsg('✅ Igreja guardada com sucesso!');
+        setChurch(data.church);
+      } else {
+        setMsg('⚠️ ' + (data.error || 'Erro ao guardar'));
+      }
+    } catch { setMsg('⚠️ Erro de rede'); }
+    setSaving(false);
+  };
+
+  const handleMemberAction = async (userId, action, tag) => {
+    await fetch(`${API_BASE_CHURCH}/api/churches/${church.id}/members/${userId}`, {
+      method: 'PATCH',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, tag }),
+    });
+    loadMembers(memberFilter);
+  };
+
+  const createEvent = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${API_BASE_CHURCH}/api/churches/${church.id}/events`, {
+        method: 'POST',
+        headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify(eventForm),
+      });
+      const data = await res.json();
+      if (data.event) {
+        setShowEventModal(false);
+        setEventForm({ title: '', event_type: 'culto', event_date: '', event_time: '', description: '' });
+        loadEvents();
+      }
+    } catch {}
+  };
+
+  const deleteEvent = async (eventId) => {
+    if (!window.confirm('Apagar este evento?')) return;
+    await fetch(`${API_BASE_CHURCH}/api/churches/${church.id}/events/${eventId}`, { method: 'DELETE', headers });
+    loadEvents();
+  };
+
+  const tabs = [
+    { id: 'igreja', label: '🏛️ Igreja' },
+    { id: 'membros', label: '👥 Membros' },
+    { id: 'agenda', label: '📅 Agenda' },
+  ];
+
+  const cs = {
+    tab: (active) => ({
+      padding: '8px 16px', borderRadius: 10, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600,
+      background: active ? PURPLE_C : '#f0f0f0', color: active ? '#fff' : '#555',
+    }),
+    input: { width: '100%', padding: '9px 12px', borderRadius: 10, border: '1.5px solid #ddd', fontSize: 13, boxSizing: 'border-box', marginBottom: 8 },
+    textarea: { width: '100%', padding: '9px 12px', borderRadius: 10, border: '1.5px solid #ddd', fontSize: 13, boxSizing: 'border-box', marginBottom: 8, minHeight: 72, resize: 'vertical', fontFamily: 'inherit' },
+    select: { width: '100%', padding: '9px 12px', borderRadius: 10, border: '1.5px solid #ddd', fontSize: 13, boxSizing: 'border-box', marginBottom: 8, background: '#fff' },
+    btn: (bg) => ({ background: bg || PURPLE_C, color: '#fff', border: 'none', borderRadius: 10, padding: '9px 18px', fontSize: 13, fontWeight: 600, cursor: 'pointer' }),
+    label: { fontSize: 12, fontWeight: 600, color: '#666', display: 'block', marginBottom: 2 },
+    memberRow: { display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0', borderBottom: '1px solid #f0f0f0' },
+    badge: (bg) => ({ background: bg, color: '#fff', borderRadius: 8, padding: '2px 8px', fontSize: 11, fontWeight: 600 }),
+    eventRow: { display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 0', borderBottom: '1px solid #f0f0f0' },
+    overlay: { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 },
+    modal: { background: '#fff', borderRadius: 18, padding: 24, width: '100%', maxWidth: 420 },
+  };
+
+  if (loading) return <div style={{ textAlign: 'center', color: PURPLE_C, padding: 32 }}>🏛️ Carregando...</div>;
+
+  return (
+    <div>
+      <div style={styles.sectionTitle}>🏛️ Minha Igreja</div>
+
+      {/* Tabs */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
+        {tabs.map(t => (
+          <button key={t.id} style={cs.tab(tab === t.id)} onClick={() => setTab(t.id)}>{t.label}</button>
+        ))}
+      </div>
+
+      {/* ── Tab Igreja ── */}
+      {tab === 'igreja' && (
+        <div>
+          {!church && <div style={{ background: '#fff8e8', border: '1px solid #f0c040', borderRadius: 12, padding: 12, marginBottom: 16, fontSize: 13, color: '#a07820' }}>
+            Ainda não tens uma igreja registada. Preenche abaixo para criar a tua.
+          </div>}
+          <form onSubmit={saveChurch}>
+            <label style={cs.label}>Nome da Igreja *</label>
+            <input style={cs.input} value={churchForm.name} onChange={e => setChurchForm(f => ({ ...f, name: e.target.value }))} required placeholder="Ex: Igreja Vida Nova" />
+            <label style={cs.label}>Nome do Pastor</label>
+            <input style={cs.input} value={churchForm.pastor_name} onChange={e => setChurchForm(f => ({ ...f, pastor_name: e.target.value }))} placeholder="Nome do pastor responsável" />
+            <label style={cs.label}>Descrição</label>
+            <textarea style={cs.textarea} value={churchForm.description} onChange={e => setChurchForm(f => ({ ...f, description: e.target.value }))} placeholder="Apresenta a tua igreja..." />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              <div>
+                <label style={cs.label}>Cidade</label>
+                <input style={cs.input} value={churchForm.city} onChange={e => setChurchForm(f => ({ ...f, city: e.target.value }))} placeholder="Ex: Madrid" />
+              </div>
+              <div>
+                <label style={cs.label}>País</label>
+                <input style={cs.input} value={churchForm.country} onChange={e => setChurchForm(f => ({ ...f, country: e.target.value }))} placeholder="Ex: Espanha" />
+              </div>
+            </div>
+            <label style={cs.label}>Morada / Localização</label>
+            <input style={cs.input} value={churchForm.location} onChange={e => setChurchForm(f => ({ ...f, location: e.target.value }))} placeholder="Rua, número, bairro..." />
+            {msg && <div style={{ marginBottom: 8, fontSize: 13, color: msg.startsWith('✅') ? '#27ae60' : '#c0392b' }}>{msg}</div>}
+            <button type="submit" style={cs.btn()} disabled={saving}>
+              {saving ? 'Guardando...' : church ? '💾 Guardar Alterações' : '✨ Criar Igreja'}
+            </button>
+          </form>
+
+          {church && (
+            <div style={{ marginTop: 16, padding: 12, background: '#f8f8ff', borderRadius: 12, fontSize: 13, color: '#555' }}>
+              <strong>Igreja registada:</strong> {church.name} — {church.city || '—'}<br />
+              <strong>Membros ativos:</strong> {church.member_count || 0} · <strong>Pedidos:</strong> {church.pending_count || 0}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Tab Membros ── */}
+      {tab === 'membros' && (
+        <div>
+          {!church ? (
+            <div style={{ textAlign: 'center', color: '#999', padding: 32 }}>Cria uma igreja primeiro.</div>
+          ) : (
+            <>
+              <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
+                {[
+                  { val: '', label: 'Todos' },
+                  { val: 'pending', label: '⏳ Pedidos pendentes' },
+                  { val: 'active', label: '✅ Membros ativos' },
+                ].map(f => (
+                  <button key={f.val} style={cs.tab(memberFilter === f.val)} onClick={() => setMemberFilter(f.val)}>{f.label}</button>
+                ))}
+              </div>
+              <div style={{ fontSize: 12, color: '#888', marginBottom: 8 }}>
+                {church.member_count || 0} membros · {church.pending_count || 0} pedidos pendentes
+              </div>
+              {members.length === 0 ? (
+                <div style={{ textAlign: 'center', color: '#999', padding: 24 }}>Nenhum membro encontrado.</div>
+              ) : members.map(m => (
+                <div key={m.id} style={cs.memberRow}>
+                  {m.avatar_url ? (
+                    <img src={m.avatar_url} alt="" style={{ width: 38, height: 38, borderRadius: '50%', objectFit: 'cover' }} />
+                  ) : (
+                    <div style={{ width: 38, height: 38, borderRadius: '50%', background: `linear-gradient(135deg, ${PURPLE_C}, ${GOLD_C})`, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 14 }}>
+                      {(m.full_name || '?')[0].toUpperCase()}
+                    </div>
+                  )}
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: 13 }}>{m.full_name}</div>
+                    <div style={{ fontSize: 11, color: '#888' }}>{m.email}</div>
+                  </div>
+                  <span style={cs.badge(m.status === 'active' ? '#27ae60' : GOLD_C)}>{m.member_tag || 'member'}</span>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    {m.status === 'pending' && (
+                      <>
+                        <button style={cs.btn('#27ae60')} onClick={() => handleMemberAction(m.user_id, 'approve')}>✅</button>
+                        <button style={cs.btn('#c0392b')} onClick={() => handleMemberAction(m.user_id, 'reject')}>❌</button>
+                      </>
+                    )}
+                    {m.status === 'active' && (
+                      <>
+                        <select style={{ ...cs.select, width: 'auto', marginBottom: 0, fontSize: 11 }}
+                          value={m.member_tag || 'member'}
+                          onChange={e => handleMemberAction(m.user_id, 'set_tag', e.target.value)}>
+                          <option value="member">Membro</option>
+                          <option value="visitor">Visitante</option>
+                          <option value="new_convert">Novo Convertido</option>
+                          <option value="leader">Líder</option>
+                        </select>
+                        <button style={cs.btn('#c0392b')} onClick={() => handleMemberAction(m.user_id, 'remove')}>🗑️</button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+      )}
+
+      {/* ── Tab Agenda ── */}
+      {tab === 'agenda' && (
+        <div>
+          {!church ? (
+            <div style={{ textAlign: 'center', color: '#999', padding: 32 }}>Cria uma igreja primeiro.</div>
+          ) : (
+            <>
+              <button style={{ ...cs.btn(), marginBottom: 16 }} onClick={() => setShowEventModal(true)}>+ Criar Evento</button>
+
+              {events.length === 0 ? (
+                <div style={{ textAlign: 'center', color: '#999', padding: 24 }}>Sem eventos programados.</div>
+              ) : events.map(ev => {
+                const typeLabel = { culto: '🕊️ Culto', campanha: '📢 Campanha', reuniao: '🤝 Reunião', outro: '📅 Evento' }[ev.event_type] || '📅 Evento';
+                const typeColor = { culto: '#2980b9', campanha: GOLD_C, reuniao: '#27ae60', outro: '#888' }[ev.event_type] || '#888';
+                return (
+                  <div key={ev.id} style={cs.eventRow}>
+                    <span style={cs.badge(typeColor)}>{typeLabel}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600, fontSize: 13 }}>{ev.title}</div>
+                      <div style={{ fontSize: 11, color: '#888' }}>
+                        {new Date(ev.event_date).toLocaleDateString('pt-PT')}
+                        {ev.event_time ? ` · ${ev.event_time.slice(0, 5)}` : ''}
+                      </div>
+                      {ev.description && <div style={{ fontSize: 11, color: '#666', marginTop: 2 }}>{ev.description}</div>}
+                    </div>
+                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#c0392b', fontSize: 16 }} onClick={() => deleteEvent(ev.id)}>🗑️</button>
+                  </div>
+                );
+              })}
+
+              {/* Modal criar evento */}
+              {showEventModal && (
+                <div style={cs.overlay} onClick={() => setShowEventModal(false)}>
+                  <div style={cs.modal} onClick={e => e.stopPropagation()}>
+                    <div style={{ fontWeight: 700, fontSize: 16, color: PURPLE_C, marginBottom: 16 }}>📅 Criar Evento</div>
+                    <form onSubmit={createEvent}>
+                      <label style={cs.label}>Título *</label>
+                      <input style={cs.input} value={eventForm.title} onChange={e => setEventForm(f => ({ ...f, title: e.target.value }))} required placeholder="Ex: Culto de Domingo" />
+                      <label style={cs.label}>Tipo</label>
+                      <select style={cs.select} value={eventForm.event_type} onChange={e => setEventForm(f => ({ ...f, event_type: e.target.value }))}>
+                        <option value="culto">🕊️ Culto</option>
+                        <option value="campanha">📢 Campanha</option>
+                        <option value="reuniao">🤝 Reunião</option>
+                        <option value="outro">📅 Outro</option>
+                      </select>
+                      <label style={cs.label}>Data *</label>
+                      <input style={cs.input} type="date" value={eventForm.event_date} onChange={e => setEventForm(f => ({ ...f, event_date: e.target.value }))} required />
+                      <label style={cs.label}>Hora</label>
+                      <input style={cs.input} type="time" value={eventForm.event_time} onChange={e => setEventForm(f => ({ ...f, event_time: e.target.value }))} />
+                      <label style={cs.label}>Descrição</label>
+                      <textarea style={cs.textarea} value={eventForm.description} onChange={e => setEventForm(f => ({ ...f, description: e.target.value }))} placeholder="Detalhes do evento..." />
+                      <div style={{ display: 'flex', gap: 10 }}>
+                        <button type="submit" style={cs.btn()}>✨ Criar</button>
+                        <button type="button" style={cs.btn('#999')} onClick={() => setShowEventModal(false)}>Cancelar</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
