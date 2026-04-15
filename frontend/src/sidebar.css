@@ -1,44 +1,8 @@
-﻿/* Menu Instagram Style */
-.sidebar-left {
-  width: 240px;
-  transition: width 0.3s ease;
-  overflow: hidden;
-}
-
-.sidebar-left.collapsed {
-  width: 70px;
-}
-
-.sidebar-left.collapsed .prof-name,
-.sidebar-left.collapsed .prof-stats,
-.sidebar-left.collapsed .sidebar-section-title,
-.sidebar-left.collapsed .nav-text {
-  display: none;
-}
-
-@media (min-width: 1101px) {
-  .sidebar-left:not(:hover) {
-    width: 70px;
-  }
-  .sidebar-left:not(:hover) .prof-name,
-  .sidebar-left:not(:hover) p,
-  .sidebar-left:not(:hover) .sidebar-section-title {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
-  }
-  .sidebar-left {
-    width: 240px;
-  }
-  .sidebar-left .nav-item {
-    justify-content: flex-start;
-    padding: 8px 20px;
-  }
-}
-
-.mobile-bottom-nav { display: none; }
+﻿.mobile-bottom-nav { display: none; }
 
 @media (max-width: 1100px) {
   .sidebar-left { display: none !important; }
+  .sidebar-right { display: none !important; }
   .mobile-bottom-nav { display: flex !important; }
+  .main-content-area { padding-bottom: 70px !important; }
 }
