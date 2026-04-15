@@ -1,7 +1,7 @@
 {
   "name": "sigo-com-fe-backend",
   "version": "1.0.0",
-  "description": "Backend da Rede Social Cristã - Sigo com Fé",
+  "description": "Backend da Rede Social Crist\u00e3 - Sigo com F\u00e9",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/db/migrate.js && node src/server.js",
@@ -9,7 +9,7 @@
     "migrate": "node src/db/migrate.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.89.0",
+    "@anthropic-ai/sdk": "^0.20.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.9.0",
     "cors": "^2.8.5",
