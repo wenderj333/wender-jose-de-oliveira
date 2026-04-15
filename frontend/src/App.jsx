@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import "./sidebar.css";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "./context/AuthContext";
@@ -257,7 +258,7 @@ export default function App() {
       <div className="modern-layout">
 
         {/* LEFT SIDEBAR */}
-        <aside className="sidebar-left desktop-only" style={{ display: hideSidebars ? "none" : undefined }}>
+        <aside className="sidebar-left desktop-only">
 
           {/* Profile Card */}
           <div className="profile-card-modern">
