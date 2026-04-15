@@ -99,7 +99,7 @@ function PastorDashboard() {
 
   const apiFetch = useCallback(async (path, opts = {}) => {
     const res = await fetch(`${API_BASE}${path}`, { headers, ...opts });
-    if (!res.ok) throw new Error(`Erro ${res.status}`);
+    if (!res.ok) return null;
     return res.json();
   }, [token]);
 
