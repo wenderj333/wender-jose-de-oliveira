@@ -250,7 +250,7 @@ function MembrosSection({ apiFetch }) {
         'Para adicionar membros: eles precisam se registrar no Sigo com Fé e buscar sua igreja.',
         'Você pode acompanhar quando cada membro esteve ativo pela última vez.',
       ]} />
-      {members.map(m => (
+      {(members || []).map(m => (
         <div key={m.id} style={{ ...styles.listItem, display: 'flex', alignItems: 'center', gap: 12 }}>
           {m.avatar_url ? (
             <img src={m.avatar_url} alt="" style={{ width: 42, height: 42, borderRadius: '50%', objectFit: 'cover' }} />
@@ -345,7 +345,7 @@ function DizimosSection({ apiFetch, headers }) {
 
       {loading ? <div style={styles.loading}>Carregando...</div> : !tithes.length ? <div style={styles.empty}>Nenhum dízimo registrado ainda. Comece agora! 🙏</div> : (
         <div style={{ marginTop: 16 }}>
-          {tithes.map((t, i) => (
+          {(tithes || []).map((t, i) => (
             <div key={t.id || i} style={styles.listItem}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
@@ -447,7 +447,7 @@ function DespesasSection({ apiFetch, headers }) {
 
       {loading ? <div style={styles.loading}>Carregando...</div> : !expenses.length ? <div style={styles.empty}>Nenhuma despesa registrada este mês. 📋</div> : (
         <div style={{ marginTop: 16 }}>
-          {expenses.map((e, i) => (
+          {(expenses || []).map((e, i) => (
             <div key={e.id || i} style={styles.listItem}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div>
@@ -498,7 +498,7 @@ function OracoesSection({ apiFetch }) {
         <div style={styles.empty}>🕊️ {t('pastorDashboard.noPrayerRequests', 'Nenhum pedido de oração ainda.')}</div>
       ) : (
         <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {posts.map((p, i) => (
+          {(posts || []).map((p, i) => (
             <div key={p.id || i} style={{ ...styles.listItem, borderLeft: '4px solid #6c47d4' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                 <span style={{ fontWeight: 600, fontSize: 13, color: '#6c47d4' }}>
@@ -574,7 +574,7 @@ function EstudosSection({ apiFetch, headers }) {
 
       {loading ? <div style={styles.loading}>{t('common.loading', 'Carregando...')}</div> : !studies.length ? <div style={styles.empty}>{t('pastorDashboard.noStudies', 'Nenhum estudo publicado ainda. Compartilhe a Palavra!')} 📖</div> : (
         <div style={{ marginTop: 16 }}>
-          {studies.map((s, i) => (
+          {(studies || []).map((s, i) => (
             <div key={s.id || i} style={styles.listItem}>
               <div style={{ fontWeight: 600, fontSize: 15 }}>{s.title}</div>
               <div style={{ fontSize: 12, color: '#aaa', marginBottom: 4 }}>{formatDate(s.created_at)} {s.bible_references && <span style={{ color: GOLD }}>• {s.bible_references}</span>}</div>
@@ -642,7 +642,7 @@ function ComunicadosSection({ apiFetch, headers }) {
 
       {loading ? <div style={styles.loading}>Carregando...</div> : !announcements.length ? <div style={styles.empty}>Nenhum comunicado enviado ainda. Fale com a sua igreja! 📢</div> : (
         <div style={{ marginTop: 16 }}>
-          {announcements.map((a, i) => (
+          {(announcements || []).map((a, i) => (
             <div key={a.id || i} style={styles.listItem}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontWeight: 600, fontSize: 15 }}>{a.title}</span>
@@ -719,7 +719,7 @@ function AgendaSection({ apiFetch, headers }) {
 
       {loading ? <div style={styles.loading}>Carregando...</div> : !events.length ? <div style={styles.empty}>Nenhum evento agendado. Crie o primeiro! 📅</div> : (
         <div style={{ marginTop: 16 }}>
-          {events.map((ev, i) => (
+          {(events || []).map((ev, i) => (
             <div key={ev.id || i} style={{ ...styles.listItem, display: 'flex', gap: 12, alignItems: 'center' }}>
               <div style={{ background: typeColors[ev.event_type] || PURPLE, color: '#fff', borderRadius: 10, padding: '8px 10px', textAlign: 'center', minWidth: 50 }}>
                 <div style={{ fontSize: 18, fontWeight: 700 }}>{ev.event_date ? new Date(ev.event_date).getDate() : '?'}</div>
@@ -781,7 +781,7 @@ function RelatoriosSection({ apiFetch }) {
       {report.recent_events?.length > 0 && (
         <>
           <div style={{ ...styles.sectionTitle, fontSize: 15, marginTop: 8 }}>📅 Próximos Eventos</div>
-          {report.recent_events.map((ev, i) => (
+          {report.recent_(events || []).map((ev, i) => (
             <div key={i} style={styles.listItem}>
               <span style={{ fontWeight: 600 }}>{ev.title}</span>
               <span style={{ fontSize: 12, color: '#999', marginLeft: 8 }}>{formatDate(ev.event_date)}</span>
