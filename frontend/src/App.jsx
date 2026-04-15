@@ -166,6 +166,7 @@ export default function App() {
         </Link>
 
         <nav className="nav-scroll desktop-only" style={{display:'flex',alignItems:'center',gap:'2px',marginLeft:'20px'}}>
+          <Link to="/comunidade-ao-vivo" className={`nav-item ${isActive('/comunidade-ao-vivo')} `} style={{color:'white',textDecoration:'none',padding:'6px 11px',borderRadius:8,fontSize:'0.84rem',display:'flex',alignItems:'center',gap:6}}>🕊️ {t('nav.live_community', 'Espaço de Fé')}</Link>
           <Link to="/" className={`nav-item ${location.pathname==='/'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'6px 11px',borderRadius:8,fontSize:'0.84rem',display:'flex',alignItems:'center',gap:6}}>
             <Home size={15}/> {t('nav.mural')}
           </Link>
@@ -235,7 +236,7 @@ export default function App() {
               ['/membros', <Users size={20}/>, t('nav.members')],
               ['/igrejas', <Globe size={20}/>, t('churches.title', 'Igrejas')],
               ['/musica', <Music size={20}/>, t('nav.music')],
-              ['/comunidade-ao-vivo', <Music size={20}/>, '🎵 ' + t('nav.live_community', 'Comunidade ao Vivo')],
+              ['/comunidade-ao-vivo', <Music size={20}/>, '🎵 ' + t('nav.live_community', 'Espaço de Fé')],
               ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA Bíblica')],
               ['/grupos', <Users size={20}/>, t('nav.groups')],
             ].map(([to, icon, label]) => (
@@ -319,7 +320,7 @@ export default function App() {
             <Link to="/membros" className={isActive('/membros')}><Users size={17}/> {t('nav.members')}</Link>
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/> {t('nav.groups')}</Link>
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/> {t('nav.music')}</Link>
-            <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><Music size={17}/> 🎵 Comunidade ao Vivo</Link>
+            <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><Music size={17}/> 🕊️ Espaço de Fé</Link>
             <Link to="/igrejas" className={location.pathname.startsWith('/igrejas') ? 'menu-link active' : 'menu-link'}>⛪ {t('nav.churches', 'Igrejas')}</Link>
           </div>
 
