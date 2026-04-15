@@ -34,7 +34,6 @@ import Chat from "./pages/Chat";
 import Churches from "./pages/Churches";
 import ChurchProfile from "./pages/ChurchProfile";
 import PastorDashboard from "./pages/PastorDashboard";
-import Offerings from "./pages/Offerings";
 import Friends from "./pages/Friends";
 import Notifications from "./pages/Notifications";
 import LiveCommunity from "./pages/LiveCommunity";
@@ -74,7 +73,6 @@ export default function App() {
     setInstallPrompt(null);
   };
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [hideSidebars, setHideSidebars] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [pendingRequests, setPendingRequests] = useState(0);
 
@@ -140,7 +138,6 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/cadastro" element={<Register />} />
         <Route path="/mural" element={<MuralGrid />} />
         <Route path="/membros" element={<Members />} />
         <Route path="/ia-biblica" element={<BiblicalAI />} />
@@ -166,7 +163,6 @@ export default function App() {
         </Link>
 
         <nav className="nav-scroll desktop-only" style={{display:'flex',alignItems:'center',gap:'2px',marginLeft:'20px'}}>
-          <Link to="/comunidade-ao-vivo" className={`nav-item ${isActive('/comunidade-ao-vivo')} `} style={{color:'white',textDecoration:'none',padding:'6px 11px',borderRadius:8,fontSize:'0.84rem',display:'flex',alignItems:'center',gap:6}}>🕊️ {t('nav.live_community', 'Espaço de Fé')}</Link>
           <Link to="/" className={`nav-item ${location.pathname==='/'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'6px 11px',borderRadius:8,fontSize:'0.84rem',display:'flex',alignItems:'center',gap:6}}>
             <Home size={15}/> {t('nav.mural')}
           </Link>
@@ -195,11 +191,6 @@ export default function App() {
           </Link>
           <button className="icon-btn mobile-only" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{background:'transparent',border:'none',color:'white',display:'none',cursor:'pointer'}}>
             {mobileMenuOpen ? <X size={24}/> : <Menu size={24}/>}
-          </button>
-        <button onClick={() => setHideSidebars(!hideSidebars)} className="desktop-only"
-            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '6px 10px', borderRadius: 6, fontSize: 18 }}
-            title={hideSidebars ? 'Mostrar menus' : 'Esconder menus'}>
-            {hideSidebars ? '☰' : '✕'}
           </button>
         </div>
       </header>
@@ -236,7 +227,6 @@ export default function App() {
               ['/membros', <Users size={20}/>, t('nav.members')],
               ['/igrejas', <Globe size={20}/>, t('churches.title', 'Igrejas')],
               ['/musica', <Music size={20}/>, t('nav.music')],
-              ['/comunidade-ao-vivo', <Music size={20}/>, '🎵 ' + t('nav.live_community', 'Espaço de Fé')],
               ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA Bíblica')],
               ['/grupos', <Users size={20}/>, t('nav.groups')],
             ].map(([to, icon, label]) => (
@@ -258,10 +248,10 @@ export default function App() {
 
       {/* MAIN LAYOUT */}
       {sidebarOpen&&<div style={{position:'fixed',top:0,left:0,right:0,bottom:0,zIndex:199,background:'rgba(0,0,0,0.5)'}} onClick={()=>setSidebarOpen(false)}/>}{sidebarOpen&&<aside style={{position:'fixed',top:0,left:0,width:260,height:'100vh',background:'#1a1a2e',zIndex:200,overflowY:'auto',padding:'16px 0'}}><button onClick={()=>setSidebarOpen(false)} style={{position:'absolute',top:12,right:12,background:'none',border:'none',color:'white',fontSize:22,cursor:'pointer'}}>&#x2715;</button><div style={{padding:'40px 16px 16px'}}><p style={{color:'#f0c040',fontWeight:700,marginBottom:16}}>{user.full_name}</p>{[['/','Mural'],['/diario-com-deus',t('nav.diary')],['/pedidos-ajuda',t('nav.prayers')],['/membros',t('nav.members')],['/amigos',t('nav.friends')],['/mensagens',t('nav.messages')],['/musica',t('nav.music')],['/chat-pastoral',t('nav.pastoral_chat')]].map(([to,label])=><Link key={to} to={to} onClick={()=>setSidebarOpen(false)} style={{display:'block',color:'white',textDecoration:'none',padding:'10px 0',borderBottom:'1px solid rgba(255,255,255,0.1)',fontSize:14}}>{label}</Link>)}</div></aside>}
-      <div className="modern-layout" style={{ gridTemplateColumns: hideSidebars ? "1fr" : undefined }}>
+      <div className="modern-layout">
 
         {/* LEFT SIDEBAR */}
-        <aside className="sidebar-left desktop-only" style={{ overflowY: "auto", maxHeight: "calc(100vh - 60px)", display: hideSidebars ? "none" : undefined }}>
+        <aside className="sidebar-left desktop-only">
 
           {/* Profile Card */}
           <div className="profile-card-modern">
@@ -320,7 +310,7 @@ export default function App() {
             <Link to="/membros" className={isActive('/membros')}><Users size={17}/> {t('nav.members')}</Link>
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/> {t('nav.groups')}</Link>
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/> {t('nav.music')}</Link>
-            <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><Music size={17}/> 🕊️ Espaço de Fé</Link>
+            <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><Music size={17}/> 🎵 Comunidade ao Vivo</Link>
             <Link to="/igrejas" className={location.pathname.startsWith('/igrejas') ? 'menu-link active' : 'menu-link'}>⛪ {t('nav.churches', 'Igrejas')}</Link>
           </div>
 
@@ -362,17 +352,16 @@ export default function App() {
             <Route path="/igrejas" element={<Churches />} />
             <Route path="/igrejas/:id" element={<ChurchProfile />} />
             <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
-        <Route path="/dizimos" element={<Offerings />} /></ProtectedRoute>} />
                     <Route path='/diario-com-deus' element={<DiarioComDeus />} />
             <Route path='/live' element={<LiveStream />} />
             <Route path='/comunidade-ao-vivo' element={<LiveCommunity />} />
           <Route path='/privacidade' element={<PrivacyPolicy />} />
           <Route path='/termos' element={<TermsOfUse />} />
-        </Routes>
+</Routes>
         </main>
 
         {/* RIGHT SIDEBAR */}
-        <aside className="sidebar-right desktop-only" style={{ display: hideSidebars ? "none" : undefined }}>
+        <aside className="sidebar-right desktop-only">
 
           {/* LIVE Widget — golden theme */}
           <div style={{background:'linear-gradient(135deg,#3568b8 0%,#4a80d4 60%,#6a9ade 100%)',borderRadius:14,padding:18,marginBottom:14,color:'white',position:'relative',overflow:'hidden',border:'1px solid rgba(240,192,64,0.3)'}}>
@@ -444,39 +433,8 @@ export default function App() {
           .desktop-only { display: none !important; }
           .mobile-only { display: flex !important; }
           .modern-layout { grid-template-columns: 1fr; }
-          .mobile-bottom-nav { display: flex !important; }
-          .main-content-area { padding-bottom: 70px !important; }
-        }
-        @media (min-width: 1101px) {
-          .mobile-bottom-nav { display: none !important; }
         }
       `}</style>
-
-      {/* MENU INFERIOR MOBILE */}
-      <nav style={{
-        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 300,
-        background: 'white', borderTop: '1px solid #e0e0e0',
-        display: 'flex', justifyContent: 'space-around', alignItems: 'center',
-        padding: '8px 0 12px', boxShadow: '0 -2px 10px rgba(0,0,0,0.1)'
-      }} className="mobile-bottom-nav">
-        {[
-          { to: '/', icon: <Home size={22}/>, label: t('nav.mural', 'Início') },
-          { to: '/amigos', icon: <Users size={22}/>, label: t('nav.friends', 'Amigos'), badge: pendingRequests },
-          { to: '/mensagens', icon: <MessageCircle size={22}/>, label: t('nav.messages', 'Mensagens'), badge: unreadMessages },
-          { to: '/sala-pastor', icon: <span style={{fontSize:20}}>💰</span>, label: t('nav.tithe', 'Dízimo') },
-          { to: `/perfil/${user.id}`, icon: user.avatar_url ? <img src={user.avatar_url} style={{width:24,height:24,borderRadius:'50%',objectFit:'cover'}}/> : <User size={22}/>, label: t('common.profile', 'Perfil') },
-        ].map(item => (
-          <Link key={item.to} to={item.to} style={{
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
-            textDecoration: 'none', color: location.pathname === item.to ? '#667eea' : '#888',
-            fontSize: 10, fontWeight: 600, position: 'relative', minWidth: 50,
-          }}>
-            {item.badge > 0 && <span style={{position:'absolute',top:-4,right:8,background:'#e11d48',color:'white',borderRadius:'50%',width:16,height:16,fontSize:9,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700}}>{item.badge > 9 ? '9+' : item.badge}</span>}
-            {item.icon}
-            <span>{item.label}</span>
-          </Link>
-        ))}
-      </nav>
 
       <GlobalChat />
     </div>
