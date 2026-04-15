@@ -368,7 +368,7 @@ export default function App() {
             <Route path='/comunidade-ao-vivo' element={<LiveCommunity />} />
           <Route path='/privacidade' element={<PrivacyPolicy />} />
           <Route path='/termos' element={<TermsOfUse />} />
-</Routes>
+        </Routes>
         </main>
 
         {/* RIGHT SIDEBAR */}
