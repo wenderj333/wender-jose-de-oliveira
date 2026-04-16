@@ -34,7 +34,7 @@ import AjudaUmaVida from "./pages/AjudaUmaVida";
 import Chat from "./pages/Chat";
 import Churches from "./pages/Churches";
 import ChurchProfile from "./pages/ChurchProfile";
-import Pastor<span className="nav-text" style={{marginLeft:8}}>Dashboard</span> from "./pages/Pastor<span className="nav-text" style={{marginLeft:8}}>Dashboard</span>";
+import PastorDashboard from "./pages/PastorDashboard";
 import Offerings from "./pages/Offerings";
 import Friends from "./pages/Friends";
 import Notifications from "./pages/Notifications";
