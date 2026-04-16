@@ -35,10 +35,26 @@
   display: inline;
 }
 
+/* Feed mais largo - sidebar direito menor */
+.sidebar-right {
+  width: 260px !important;
+  min-width: 260px !important;
+}
+
+/* Layout principal - feed ocupa mais espaco */
+.modern-layout {
+  display: grid !important;
+  grid-template-columns: 72px 1fr 260px !important;
+  gap: 16px !important;
+  margin-left: 0 !important;
+}
+
 .mobile-bottom-nav { display: none; }
 
 @media (max-width: 1100px) {
   .sidebar-left { display: none !important; }
+  .sidebar-right { display: none !important; }
+  .modern-layout { grid-template-columns: 1fr !important; }
   .mobile-bottom-nav { display: flex !important; }
   .main-content-area { padding-bottom: 70px !important; }
 }
