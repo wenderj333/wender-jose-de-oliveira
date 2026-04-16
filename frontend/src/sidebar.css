@@ -35,7 +35,6 @@
   display: inline;
 }
 
-/* Feed muito mais largo */
 .modern-layout {
   display: grid !important;
   grid-template-columns: 72px 1fr 240px !important;
@@ -45,14 +44,13 @@
   padding: 0 8px !important;
 }
 
-/* Feed central maior */
 .main-content-area {
   max-width: 100% !important;
   width: 100% !important;
+  min-width: 0 !important;
 }
 
-/* Posts mais largos */
-.post-card, [class*="post"], .feed-item {
+.main-content-area > * {
   max-width: 100% !important;
 }
 
