@@ -20,20 +20,24 @@ export default function LiveCommunity() {
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
   const [showEmojis, setShowEmojis] = useState(false);
 
-  // Som de notificacao
+  // Som de notificacao tipo WhatsApp
   const playNotificationSound = () => {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.frequency.setValueAtTime(880, ctx.currentTime);
-      osc.frequency.setValueAtTime(660, ctx.currentTime + 0.1);
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.3);
+      const times = [0, 0.1, 0.2];
+      const freqs = [880, 1100, 1320];
+      times.forEach((t, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.setValueAtTime(freqs[i], ctx.currentTime + t);
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.2, ctx.currentTime + t);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.15);
+        osc.start(ctx.currentTime + t);
+        osc.stop(ctx.currentTime + t + 0.15);
+      });
     } catch(e) {}
   };
   const EMOJIS = ['🙏','❤️','🔥','✝️','😊','🕊️','📖','🎵','🌟','👏','💪','🙌','😢','🤲','💝','🌹','⭐','🦋','🌈','💫','🎶','🕯️','🌺','💐','🫶'];
@@ -212,9 +216,20 @@ export default function LiveCommunity() {
             <h3 style={{ margin: '0 0 12px' }}>💬 Chat ao Vivo</h3>
             <div style={{ flex: 1, overflowY: 'auto', marginBottom: '12px' }}>
               {chatMessages.map((msg, i) => (
-                <div key={i} style={{ marginBottom: '8px', padding: '8px', background: '#f9f9f9', borderRadius: '8px' }}>
-                  <span style={{ fontWeight: 600, color: '#667eea' }}>{msg.userName}: </span>
-                  <span style={{ color: '#333' }}>{msg.text || msg.message}</span>
+                <div key={i} style={{ marginBottom: '8px', padding: '8px', background: '#f9f9f9', borderRadius: '8px', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                  {/* Avatar clicavel */}
+                  <div onClick={() => msg.userId && window.location.href !== '#' && (window.location.href = '/perfil/' + msg.userId)}
+                    style={{ width: 32, height: 32, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, cursor: msg.userId ? 'pointer' : 'default', background: '#667eea', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {msg.userAvatar ? (
+                      <img src={msg.userAvatar} alt={msg.userName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <span style={{ color: 'white', fontSize: 12, fontWeight: 700 }}>{(msg.userName || '?').charAt(0).toUpperCase()}</span>
+                    )}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <span style={{ fontWeight: 600, color: '#667eea', fontSize: 13 }}>{msg.userName} </span>
+                    <span style={{ color: '#333', fontSize: 14 }}>{msg.text || msg.message}</span>
+                  </div>
                 </div>
               ))}
               <div ref={chatEndRef} />
