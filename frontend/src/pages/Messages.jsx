@@ -145,12 +145,17 @@ export default function Messages() {
             messages.map(msg => {
               const isMine = msg.sender_id === user.id;
               return (
-                <div key={msg.id} style={{
-                  alignSelf: isMine ? 'flex-end' : 'flex-start',
-                  maxWidth: '75%', padding: '0.6rem 0.9rem', borderRadius: 16,
-                  background: isMine ? '#4caf50' : '#f0f0f0',
-                  color: isMine ? '#fff' : '#333', fontSize: '0.9rem', lineHeight: 1.4,
-                }}>
+                <div key={msg.id} style={{ display:'flex', alignItems:'flex-end', gap:6, justifyContent: isMine ? 'flex-end' : 'flex-start', marginBottom:4 }}>
+                  {!isMine && (
+                    <div style={{ width:28, height:28, borderRadius:'50%', overflow:'hidden', flexShrink:0, background:'#667eea', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                      {selectedConv?.avatar_url ? <img src={selectedConv.avatar_url} style={{width:'100%',height:'100%',objectFit:'cover'}}/> : <span style={{color:'white',fontSize:10,fontWeight:700}}>{(selectedConv?.full_name||'?').charAt(0).toUpperCase()}</span>}
+                    </div>
+                  )}
+                  <div style={{
+                    maxWidth: '75%', padding: '0.6rem 0.9rem', borderRadius: 16,
+                    background: isMine ? '#4caf50' : '#f0f0f0',
+                    color: isMine ? '#fff' : '#333', fontSize: '0.9rem', lineHeight: 1.4,
+                  }}>
                   {msg.content}
                   <div style={{ fontSize: '0.65rem', opacity: 0.7, marginTop: 4, textAlign: 'right' }}>
                     {new Date(msg.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
