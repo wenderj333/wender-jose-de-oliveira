@@ -288,7 +288,7 @@ export default function App() {
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.groups')}</span></Link>
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music')}</span></Link>
             <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><Music size={17}/> <span className="nav-text" style={{marginLeft:8}}>🎵 Comunidade ao Vivo</span></Link>
-            <Link to="/igrejas" className={location.pathname.startsWith('/igrejas') ? 'menu-link active' : 'menu-link'}>⛪ {t('nav.churches', 'Igrejas')}</Link>
+            <Link to="/igrejas" className={location.pathname.startsWith('/igrejas') ? 'menu-link active' : 'menu-link'}>⛪<span className="nav-text" style={{marginLeft:8}}>{t('nav.churches', 'Igrejas')}</span></Link>
           </div>
 
           {(user.role === 'pastor' || user.role === 'admin') && (
