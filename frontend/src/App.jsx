@@ -34,7 +34,7 @@ import AjudaUmaVida from "./pages/AjudaUmaVida";
 import Chat from "./pages/Chat";
 import Churches from "./pages/Churches";
 import ChurchProfile from "./pages/ChurchProfile";
-import PastorDashboard from "./pages/PastorDashboard";
+import Pastor<span className="nav-text" style={{marginLeft:8}}>Dashboard</span> from "./pages/Pastor<span className="nav-text" style={{marginLeft:8}}>Dashboard</span>";
 import Offerings from "./pages/Offerings";
 import Friends from "./pages/Friends";
 import Notifications from "./pages/Notifications";
@@ -240,7 +240,7 @@ export default function App() {
             ))}
             {user?.role === 'pastor' && (
               <Link to="/sala-pastor" onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'#c9a84c',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)',fontWeight:600}}>
-                <BookOpen size={20}/> 🕊️ Sala do Pastor
+                <BookOpen size={20}/> 🕊️ <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span>
               </Link>
             )}
           </div>
@@ -287,7 +287,7 @@ export default function App() {
             <Link to="/membros" className={isActive('/membros')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.members')}</span></Link>
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.groups')}</span></Link>
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music')}</span></Link>
-            <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><Music size={17}/> 🎵 Comunidade ao Vivo</Link>
+            <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><Music size={17}/> <span className="nav-text" style={{marginLeft:8}}>🎵 Comunidade ao Vivo</span></Link>
             <Link to="/igrejas" className={location.pathname.startsWith('/igrejas') ? 'menu-link active' : 'menu-link'}>⛪ {t('nav.churches', 'Igrejas')}</Link>
           </div>
 
@@ -295,8 +295,8 @@ export default function App() {
             <div className="menu-group">
               <p className="menu-title">Admin</p>
               <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_requests')}</span></Link>
-              <Link to="/pastor-dashboard" className={isActive('/pastor-dashboard')}><Shield size={17}/> Dashboard</Link>
-              <Link to="/sala-pastor" className={isActive('/sala-pastor')}><Shield size={17}/> Sala do Pastor</Link>
+              <Link to="/pastor-dashboard" className={isActive('/pastor-dashboard')}><Shield size={17}/> <span className="nav-text" style={{marginLeft:8}}>Dashboard</span></Link>
+              <Link to="/sala-pastor" className={isActive('/sala-pastor')}><Shield size={17}/> <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span></Link>
             </div>
           )}
 
@@ -325,10 +325,10 @@ export default function App() {
             <Route path="/amigos" element={<Friends />} />
             <Route path="/notificacoes" element={<Notifications />} />
             <Route path="/pedidos-ajuda" element={<HelpRequests />} />
-            <Route path="/pastor-dashboard" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
+            <Route path="/pastor-dashboard" element={<ProtectedRoute role="pastor"><Pastor<span className="nav-text" style={{marginLeft:8}}>Dashboard</span> /></ProtectedRoute>} />
             <Route path="/igrejas" element={<Churches />} />
             <Route path="/igrejas/:id" element={<ChurchProfile />} />
-            <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
+            <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><Pastor<span className="nav-text" style={{marginLeft:8}}>Dashboard</span> /></ProtectedRoute>} />
         <Route path="/dizimos" element={<Offerings />} />
                     <Route path='/diario-com-deus' element={<DiarioComDeus />} />
             <Route path='/live' element={<LiveStream />} />
