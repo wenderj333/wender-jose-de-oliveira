@@ -15,29 +15,24 @@
   box-shadow: 4px 0 20px rgba(0,0,0,0.08);
 }
 
-.sidebar-left .nav-text {
-  display: none;
+.sidebar-left .nav-item,
+.sidebar-left .menu-link {
+  display: flex;
+  align-items: center;
   white-space: nowrap;
-}
-
-.sidebar-left:hover .nav-text {
-  display: inline;
-}
-
-.sidebar-left .menu-title,
-.sidebar-left p,
-.sidebar-left .prof-name {
-  display: none !important;
-}
-
-.sidebar-left:hover .menu-title,
-.sidebar-left:hover .prof-name {
-  display: block !important;
-}
-
-.sidebar-left .nav-item {
   overflow: hidden;
-  white-space: nowrap;
+}
+
+.sidebar-left .nav-text,
+.sidebar-left .menu-title,
+.sidebar-left p {
+  display: none;
+}
+
+.sidebar-left:hover .nav-text,
+.sidebar-left:hover .menu-title,
+.sidebar-left:hover p {
+  display: inline;
 }
 
 .mobile-bottom-nav { display: none; }
