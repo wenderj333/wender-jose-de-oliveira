@@ -195,10 +195,7 @@ export default function App() {
           <button className="icon-btn mobile-only" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{background:'transparent',border:'none',color:'white',display:'none',cursor:'pointer'}}>
             {mobileMenuOpen ? <X size={24}/> : <Menu size={24}/>}
           </button>
-        <button onClick={() => setHideSidebars(!hideSidebars)} className="desktop-only"
-            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '6px 10px', borderRadius: 6, fontSize: 18 }}>
-            {hideSidebars ? '☰' : '✕'}
-          </button>
+
         </div>
       </header>
 
@@ -260,34 +257,7 @@ export default function App() {
         {/* LEFT SIDEBAR */}
         <aside className="sidebar-left desktop-only">
 
-          {/* Profile Card */}
-          <div className="profile-card-modern">
-            <div className="prof-avatar">
-              {user.avatar_url ? (
-                <img src={user.avatar_url} alt="Me" style={{width:'100%',height:'100%',borderRadius:'50%',objectFit:'cover'}} />
-              ) : (
-                <span style={{fontSize:'1.8rem'}}>{user.full_name?.charAt(0)}</span>
-              )}
-            </div>
-            <p className="prof-name">{user.full_name || t('common.user')}</p>
-            <p style={{fontSize:'0.78rem',color:'rgba(255,255,255,0.75)',marginBottom:4,fontStyle:'italic',lineHeight:1.4,padding:'0 4px'}}>
-              {t('common.welcomeBack')}
-            </p>
-            {/* Bible verse — golden */}
-            <p style={{fontSize:'0.7rem',color:'#f0c040',fontStyle:'italic',lineHeight:1.5,marginBottom:12,padding:'0 4px',fontFamily:"'Cormorant Garamond',serif"}}>
-              "O Senhor é o meu pastor; nada me faltará." — Sl 23:1
-            </p>
-            <div className="prof-stats">
-              <div className="prof-stat">
-                <div className="prof-stat-n">{user.friendsCount || 0}</div>
-                <div className="prof-stat-l">{t('profile.friends')}</div>
-              </div>
-              <div className="prof-stat">
-                <div className="prof-stat-n">{user.prayersCount || 0}</div>
-                <div className="prof-stat-l">{t('nav.prayers')}</div>
-              </div>
-            </div>
-          </div>
+          
 
           <div className="menu-group">
             <p className="menu-title">{t('nav.spiritual_life')}</p>
@@ -375,9 +345,7 @@ export default function App() {
           <div style={{background:'linear-gradient(135deg,#3568b8 0%,#4a80d4 60%,#6a9ade 100%)',borderRadius:14,padding:18,marginBottom:14,color:'white',position:'relative',overflow:'hidden',border:'1px solid rgba(240,192,64,0.3)'}}>
             {/* gold top border accent */}
             <div style={{position:'absolute',top:0,left:0,right:0,height:3,background:'linear-gradient(90deg,transparent,#f0c040,transparent)'}}/>
-            <div style={{display:'flex',alignItems:'center',gap:6,fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#f0c040',marginBottom:8}}>
-              <span style={{width:7,height:7,borderRadius:'50%',background:'#f0c040',boxShadow:'0 0 6px #f0c040',display:'inline-block'}}></span> DIRECTO
-            </div>
+            
             <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1rem',fontWeight:600,marginBottom:4}}>{t('live.none')}</p>
             <p style={{fontSize:'0.72rem',color:'rgba(255,255,255,0.55)',marginBottom:14}}>{t('live.be_first')}</p>
             {/* Golden button */}
