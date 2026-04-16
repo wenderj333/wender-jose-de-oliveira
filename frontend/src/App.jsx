@@ -274,7 +274,7 @@ export default function App() {
           <div className="menu-group">
             <p className="menu-title">Menu</p>
             <Link to="/" className={isActive('/')}><Home size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.mural')}</span></Link>
-            <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)}><User size={17}/> Meu Perfil</Link>
+            <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)}><User size={17}/><span className="nav-text" style={{marginLeft:8}}>Meu Perfil</span></Link>
             <Link to="/mensagens" className={location.pathname.startsWith('/mensagens') ? 'menu-link active' : 'menu-link'} style={{position:'relative'}}>
               <MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.messages')}</span>
               {unreadMessages > 0 && (
