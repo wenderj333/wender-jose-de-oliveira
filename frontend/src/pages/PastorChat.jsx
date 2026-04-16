@@ -432,11 +432,24 @@ export default function PastorChat() {
             }
             const isOwn = msg.own || msg.role === role;
             return (
-              <div key={i} style={styles.bubble(isOwn)}>
-                <div style={styles.bubbleName}>{msg.name}</div>
-                <div style={styles.bubbleText}>{msg.originalText}</div>
-                {msg.translatedText && msg.translatedText !== msg.originalText && (
-                  <div style={styles.translatedText}>🌍 {msg.translatedText}</div>
+              <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:8, justifyContent: isOwn ? 'flex-end' : 'flex-start', marginBottom:6 }}>
+                {!isOwn && (
+                  <div style={{ width:32, height:32, borderRadius:'50%', overflow:'hidden', flexShrink:0, background:'#8e44ad', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}
+                    onClick={() => msg.userId && (window.location.href = '/perfil/' + msg.userId)}>
+                    {msg.avatar ? <img src={msg.avatar} style={{width:'100%',height:'100%',objectFit:'cover'}} /> : <span style={{color:'white',fontSize:12,fontWeight:700}}>{(msg.name||'?').charAt(0).toUpperCase()}</span>}
+                  </div>
+                )}
+                <div style={styles.bubble(isOwn)}>
+                  <div style={styles.bubbleName}>{msg.name}</div>
+                  <div style={styles.bubbleText}>{msg.originalText}</div>
+                  {msg.translatedText && msg.translatedText !== msg.originalText && (
+                    <div style={styles.translatedText}>🌍 {msg.translatedText}</div>
+                  )}
+                </div>
+                {isOwn && (
+                  <div style={{ width:32, height:32, borderRadius:'50%', overflow:'hidden', flexShrink:0, background:'#2980b9', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    {user?.avatar_url ? <img src={user.avatar_url} style={{width:'100%',height:'100%',objectFit:'cover'}} /> : <span style={{color:'white',fontSize:12,fontWeight:700}}>{(user?.full_name||'?').charAt(0).toUpperCase()}</span>}
+                  </div>
                 )}
               </div>
             );
