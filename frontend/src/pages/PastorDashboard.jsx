@@ -1,19 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-class ErrorBoundary extends React.Component {
-  constructor(props) { super(props); this.state = { error: null }; }
-  static getDerivedStateFromError(error) { return { error }; }
-  render() {
-    if (this.state.error) return (
-      <div style={{padding:20,color:'red'}}>
-        <h2>Erro na Sala do Pastor:</h2>
-        <pre>{this.state.error?.message}</pre>
-        <pre>{this.state.error?.stack?.slice(0,500)}</pre>
-      </div>
-    );
-    return this.props.children;
-  }
-}
+
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
@@ -808,7 +795,4 @@ function RelatoriosSection({ apiFetch }) {
   );
 }
 
-function PastorDashboardWrapper() {
-  return <ErrorBoundary><PastorDashboard /></ErrorBoundary>;
-}
-export default PastorDashboardWrapper;
+export default PastorDashboard;
