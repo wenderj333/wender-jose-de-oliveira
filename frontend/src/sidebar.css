@@ -1,7 +1,8 @@
 ﻿.sidebar-left {
   width: 72px;
   min-width: 72px;
-  transition: width 0.25s ease;
+  max-width: 72px;
+  transition: width 0.25s ease, max-width 0.25s ease;
   overflow: hidden;
   background: white;
   border-right: 1px solid #e8e8e8;
@@ -10,33 +11,33 @@
 
 .sidebar-left:hover {
   width: 240px;
+  max-width: 240px;
   box-shadow: 4px 0 20px rgba(0,0,0,0.08);
 }
 
 .sidebar-left .nav-text {
-  opacity: 0;
-  max-width: 0;
-  overflow: hidden;
-  transition: opacity 0.2s ease, max-width 0.25s ease;
-  display: inline-block;
+  display: none;
   white-space: nowrap;
 }
 
 .sidebar-left:hover .nav-text {
-  opacity: 1;
-  max-width: 200px;
+  display: inline;
 }
 
 .sidebar-left .menu-title,
 .sidebar-left p,
 .sidebar-left .prof-name {
-  display: none;
+  display: none !important;
 }
 
 .sidebar-left:hover .menu-title,
-.sidebar-left:hover p,
 .sidebar-left:hover .prof-name {
-  display: block;
+  display: block !important;
+}
+
+.sidebar-left .nav-item {
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .mobile-bottom-nav { display: none; }
