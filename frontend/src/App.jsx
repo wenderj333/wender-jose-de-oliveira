@@ -261,32 +261,32 @@ export default function App() {
 
           <div className="menu-group">
             <p className="menu-title">{t('nav.spiritual_life')}</p>
-            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/> {t('nav.prayers')}</Link>
-            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/> {t('nav.consecration')}</Link>
-            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/> {t('nav.reflection')}</Link>
-            <Link to="/curso-biblico" className={isActive('/curso-biblico')}><BookOpen size={17}/> {t('course.title')}</Link>
-            <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}><Heart size={17}/> {t('nav.help_life')}</Link>
-            <Link to="/journeys" className={isActive('/journeys')}><Globe size={17}/> {t('nav.journeys')}</Link>
-            <Link to='/diario-com-deus' className={isActive('/diario-com-deus')}><BookOpen size={17}/> {t('nav.diary')}</Link>
-            <Link to="/chat-pastoral" className={isActive('/chat-pastoral')}><MessageCircle size={17}/> {t('nav.pastoral_chat')}</Link>
+            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers')}</span></Link>
+            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration')}</span></Link>
+            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection')}</span></Link>
+            <Link to="/curso-biblico" className={isActive('/curso-biblico')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('course.title')}</span></Link>
+            <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_life')}</span></Link>
+            <Link to="/journeys" className={isActive('/journeys')}><Globe size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.journeys')}</span></Link>
+            <Link to='/diario-com-deus' className={isActive('/diario-com-deus')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.diary')}</span></Link>
+            <Link to="/chat-pastoral" className={isActive('/chat-pastoral')}><MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.pastoral_chat')}</span></Link>
           </div>
 
           <div className="menu-group">
             <p className="menu-title">Menu</p>
-            <Link to="/" className={isActive('/')}><Home size={17}/> {t('nav.mural')}</Link>
+            <Link to="/" className={isActive('/')}><Home size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.mural')}</span></Link>
             <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)}><User size={17}/> Meu Perfil</Link>
             <Link to="/mensagens" className={location.pathname.startsWith('/mensagens') ? 'menu-link active' : 'menu-link'} style={{position:'relative'}}>
-              <MessageCircle size={17}/> {t('nav.messages')}
+              <MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.messages')}</span>
               {unreadMessages > 0 && (
                 <span style={{marginLeft:'auto',background:'#e74c3c',color:'white',borderRadius:'50%',minWidth:18,height:18,fontSize:'0.68rem',fontWeight:700,display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'0 4px',lineHeight:1}}>
                   {unreadMessages > 99 ? '99+' : unreadMessages}
                 </span>
               )}
             </Link>
-            <Link to="/amigos" className={isActive('/amigos')} style={{position:'relative'}}><Users size={17}/> {t('nav.friends', 'Amigos')}{pendingRequests > 0 && <span style={{marginLeft:'auto',background:'#e11d48',color:'white',borderRadius:'50%',minWidth:18,height:18,fontSize:'0.68rem',fontWeight:700,display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'0 4px'}}>{pendingRequests}</span>}</Link>
-            <Link to="/membros" className={isActive('/membros')}><Users size={17}/> {t('nav.members')}</Link>
-            <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/> {t('nav.groups')}</Link>
-            <Link to="/musica" className={isActive('/musica')}><Music size={17}/> {t('nav.music')}</Link>
+            <Link to="/amigos" className={isActive('/amigos')} style={{position:'relative'}}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.friends', 'Amigos')}</span>{pendingRequests > 0 && <span style={{marginLeft:'auto',background:'#e11d48',color:'white',borderRadius:'50%',minWidth:18,height:18,fontSize:'0.68rem',fontWeight:700,display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'0 4px'}}>{pendingRequests}</span>}</Link>
+            <Link to="/membros" className={isActive('/membros')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.members')}</span></Link>
+            <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.groups')}</span></Link>
+            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music')}</span></Link>
             <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><Music size={17}/> 🎵 Comunidade ao Vivo</Link>
             <Link to="/igrejas" className={location.pathname.startsWith('/igrejas') ? 'menu-link active' : 'menu-link'}>⛪ {t('nav.churches', 'Igrejas')}</Link>
           </div>
@@ -294,14 +294,14 @@ export default function App() {
           {(user.role === 'pastor' || user.role === 'admin') && (
             <div className="menu-group">
               <p className="menu-title">Admin</p>
-              <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/> {t('nav.help_requests')}</Link>
+              <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_requests')}</span></Link>
               <Link to="/pastor-dashboard" className={isActive('/pastor-dashboard')}><Shield size={17}/> Dashboard</Link>
               <Link to="/sala-pastor" className={isActive('/sala-pastor')}><Shield size={17}/> Sala do Pastor</Link>
             </div>
           )}
 
           <button className="menu-link logout-btn" onClick={logout} style={{marginTop:14}}>
-            <LogOut size={17}/> {t('auth.logout')}
+            <LogOut size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('auth.logout')}</span>
           </button>
         </aside>
 
