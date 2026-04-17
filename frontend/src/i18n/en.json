@@ -1323,7 +1323,7 @@
     "logout": "Logout"
   },
   "landing": {
-    "subtitle": "Connect with real Christians, pray, grow in faith and find a community that builds you up — not distract you.",
+    "subtitle": "Have you felt alone, with no one to pray with? Here there is always someone for you.",
     "register": "Create free account",
     "login": "Login",
     "verse": "\"For where two or three gather in my name, there am I with them.\" — Mt 18:20",
@@ -1355,7 +1355,7 @@
     "f6desc": "Connect with Christians from Brazil, Europe, Africa and all over the world.",
     "tagline": "The Christian social network",
     "loginShort": "Login",
-    "joinNow": "I want to join",
+    "joinNow": "Join now",
     "headline1": "The Christian social network",
     "headline2": "Maybe it is not by chance that you arrived here.",
     "trust1": "No inappropriate content",
@@ -1379,7 +1379,24 @@
     "googleLogin": "Sign in with Google",
     "msg1": "If you feel lonely, this place is for you. God has not forgotten you.",
     "msg2": "Maybe it is not by chance that you arrived here.",
-    "msg3": "Here your faith grows every day."
+    "msg3": "Here your faith grows every day.",
+    "title1": "Don't walk alone in your faith",
+    "praying": "people praying right now",
+    "prayerTitle": "Write your prayer request",
+    "prayerPlaceholder": "Write your request here...",
+    "sendPrayer": "Send request",
+    "prayerSent": "To see responses, create your account:",
+    "createAccount": "Create free account",
+    "cta1": "I want to join and not be alone",
+    "free": "Free forever",
+    "noCard": "No credit card",
+    "instant": "Immediate access",
+    "benefitsTitle": "This is not just a social network",
+    "urgency": "Right now there are people waiting to pray with you",
+    "notCasual": "You did not arrive here by chance",
+    "ctaFinalText": "God can use this moment to change something in your life.",
+    "ctaFinal": "Create free account now",
+    "joinFree": "Create free account"
   },
   "locale": "en-GB",
   "report": {

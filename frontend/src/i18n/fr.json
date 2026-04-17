@@ -1323,7 +1323,7 @@
     "logout": "Déconnexion"
   },
   "landing": {
-    "subtitle": "Connectez-vous avec de vrais chrétiens, priez, grandissez dans la foi et trouvez une communauté qui vous édifie — pas qui vous distrait.",
+    "subtitle": "Tu te sens seul, sans personne avec qui prier? Ici il y a toujours quelquun pour toi.",
     "register": "Créer un compte gratuit",
     "login": "Se connecter",
     "verse": "\"Car là où deux ou trois sont réunis en mon nom, je suis au milieu d'eux.\" — Mt 18:20",
@@ -1355,7 +1355,7 @@
     "f6desc": "Connectez-vous avec des chrétiens du Brésil, d'Europe, d'Afrique et du monde entier.",
     "tagline": "Le réseau social chrétien",
     "loginShort": "Se connecter",
-    "joinNow": "Je veux rejoindre",
+    "joinNow": "Rejoindre maintenant",
     "headline1": "Le réseau social chrétien",
     "headline2": "Ce nest pas un hasard que vous soyez arrive ici.",
     "trust1": "Sans contenu inapproprié",
@@ -1379,7 +1379,24 @@
     "googleLogin": "Se connecter avec Google",
     "msg1": "Si vous vous sentez seul, cet endroit est pour vous. Dieu ne vous a pas oublie.",
     "msg2": "Ce nest pas un hasard que vous soyez arrive ici.",
-    "msg3": "Ici votre foi grandit chaque jour."
+    "msg3": "Ici votre foi grandit chaque jour.",
+    "title1": "Ne marche pas seul dans ta foi",
+    "praying": "personnes priant en ce moment",
+    "prayerTitle": "Ecris ta demande de priere",
+    "prayerPlaceholder": "Ecris ta demande ici...",
+    "sendPrayer": "Envoyer la demande",
+    "prayerSent": "Pour voir les reponses, cree ton compte:",
+    "createAccount": "Creer un compte gratuit",
+    "cta1": "Je veux rejoindre et ne pas etre seul",
+    "free": "Gratuit pour toujours",
+    "noCard": "Sans carte bancaire",
+    "instant": "Acces immediat",
+    "benefitsTitle": "Ce nest pas juste un reseau social",
+    "urgency": "En ce moment des personnes attendent de prier avec toi",
+    "notCasual": "Tu nes pas arrive ici par hasard",
+    "ctaFinalText": "Dieu peut utiliser ce moment pour changer quelque chose dans ta vie.",
+    "ctaFinal": "Creer un compte gratuit maintenant",
+    "joinFree": "Creer un compte gratuit"
   },
   "locale": "fr-FR",
   "report": {

@@ -1323,7 +1323,7 @@
     "logout": "Salir"
   },
   "landing": {
-    "subtitle": "Conéctate con cristianos de verdad, ora, crece en la fe y encuentra una comunidad que edifica — no distrae.",
+    "subtitle": "Te has sentido solo? Aqui siempre hay alguien para ti.",
     "register": "Crear cuenta gratuita",
     "login": "Entrar",
     "verse": "\"Porque donde dos o tres se reúnen en mi nombre, allí estoy yo en medio de ellos.\" — Mt 18:20",
@@ -1355,7 +1355,7 @@
     "f6desc": "Conéctate con cristianos de Brasil, Europa, África y todo el mundo.",
     "tagline": "La red social cristiana",
     "loginShort": "Entrar",
-    "joinNow": "Quiero unirme",
+    "joinNow": "Unirme ahora",
     "headline1": "La red social cristiana",
     "headline2": "Quizas no es casualidad que hayas llegado aqui.",
     "trust1": "Sin contenido inapropiado",
@@ -1379,7 +1379,24 @@
     "googleLogin": "Iniciar sesion con Google",
     "msg1": "Si te sientes solo, este lugar es para ti. Dios no te ha olvidado.",
     "msg2": "Quizas no sea casualidad que hayas llegado aqui.",
-    "msg3": "Aqui tu fe crece cada dia."
+    "msg3": "Aqui tu fe crece cada dia.",
+    "title1": "No camines solo en tu fe",
+    "praying": "personas orando ahora mismo",
+    "prayerTitle": "Escribe tu peticion de oracion",
+    "prayerPlaceholder": "Escribe tu peticion aqui...",
+    "sendPrayer": "Enviar peticion",
+    "prayerSent": "Para ver respuestas, crea tu cuenta:",
+    "createAccount": "Crear cuenta gratis",
+    "cta1": "Quiero entrar y no estar solo",
+    "free": "Gratis para siempre",
+    "noCard": "Sin tarjeta",
+    "instant": "Acceso inmediato",
+    "benefitsTitle": "Aqui no es solo una red social",
+    "urgency": "Ahora mismo hay personas esperando para orar contigo",
+    "notCasual": "No llegaste aqui por casualidad",
+    "ctaFinalText": "Dios puede usar este momento para cambiar algo en tu vida.",
+    "ctaFinal": "Crear cuenta gratis ahora",
+    "joinFree": "Crear cuenta gratis"
   },
   "locale": "es-ES",
   "report": {

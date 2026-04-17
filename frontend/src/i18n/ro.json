@@ -1324,7 +1324,7 @@
     "logout": "Deconectare"
   },
   "landing": {
-    "subtitle": "Conectează-te cu creștini adevărați, roagă-te, crește în credință și găsește o comunitate care te zidește — nu te distrage.",
+    "subtitle": "Te-ai simtit singur, fara cineva cu care sa te rogi? Aici intotdeauna e cineva pentru tine.",
     "register": "Creează cont gratuit",
     "login": "Autentificare",
     "verse": "\"Căci acolo unde doi sau trei sunt adunați în Numele Meu, sunt și Eu în mijlocul lor.\" — Mt 18:20",
@@ -1356,7 +1356,7 @@
     "f6desc": "Conectează-te cu creștini din Brazilia, Europa, Africa și din toată lumea.",
     "tagline": "Rețeaua socială creștină",
     "loginShort": "Autentificare",
-    "joinNow": "Vreau să fac parte",
+    "joinNow": "Alatura-te acum",
     "headline1": "Rețeaua socială creștină",
     "headline2": "Poate ca nu este o coincidenta ca ai ajuns aici.",
     "trust1": "Fără conținut inadecvat",
@@ -1380,7 +1380,24 @@
     "googleLogin": "Conectati-va cu Google",
     "msg1": "Daca te simti singur acest loc este pentru tine. Dumnezeu nu te-a uitat.",
     "msg2": "Poate ca nu este o coincidenta ca ai ajuns aici.",
-    "msg3": "Aici credinta ta creste in fiecare zi."
+    "msg3": "Aici credinta ta creste in fiecare zi.",
+    "title1": "Nu merge singur in credinta ta",
+    "praying": "persoane care se roaga acum",
+    "prayerTitle": "Scrie cererea ta de rugaciune",
+    "prayerPlaceholder": "Scrie cererea ta aici...",
+    "sendPrayer": "Trimite cererea",
+    "prayerSent": "Pentru a vedea raspunsuri, creeaza-ti contul:",
+    "createAccount": "Creeaza cont gratuit",
+    "cta1": "Vreau sa ma alatur si sa nu fiu singur",
+    "free": "Gratuit pentru totdeauna",
+    "noCard": "Fara card bancar",
+    "instant": "Acces imediat",
+    "benefitsTitle": "Aceasta nu este doar o retea sociala",
+    "urgency": "Chiar acum sunt persoane care asteapta sa se roage cu tine",
+    "notCasual": "Nu ai ajuns aici intamplator",
+    "ctaFinalText": "Dumnezeu poate folosi acest moment pentru a schimba ceva in viata ta.",
+    "ctaFinal": "Creeaza cont gratuit acum",
+    "joinFree": "Creeaza cont gratuit"
   },
   "locale": "ro-RO",
   "report": {

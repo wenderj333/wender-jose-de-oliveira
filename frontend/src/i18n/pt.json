@@ -1304,7 +1304,7 @@
     "logout": "Sair"
   },
   "landing": {
-    "subtitle": "Conecte-se com cristãos de verdade, ore, cresça na fé e encontre uma comunidade que edifica — não distrai.",
+    "subtitle": "Te sentiste sozinho, sem ninguem com quem orar? Aqui ha sempre alguem para ti.",
     "register": "Criar conta gratuita",
     "login": "Entrar",
     "verse": "\"Onde dois ou três estiverem reunidos em meu nome, ali estou no meio deles.\" — Mt 18:20",
@@ -1336,7 +1336,7 @@
     "f6desc": "Conecte com cristãos de Brasil, Europa, África e mundo todo.",
     "tagline": "A rede social cristã",
     "loginShort": "Entrar",
-    "joinNow": "Quero fazer parte",
+    "joinNow": "Entrar agora",
     "headline1": "A rede social cristã",
     "headline2": "Talvez nao seja por acaso que voce chegou aqui.",
     "trust1": "Sem conteúdo impróprio",
@@ -1360,7 +1360,24 @@
     "googleLogin": "Entrar com Google",
     "msg1": "Se voce se sente sozinho, esse lugar e para voce. Deus nao esqueceu de voce.",
     "msg2": "Talvez nao seja por acaso que voce chegou aqui.",
-    "msg3": "Aqui sua fe cresce todos os dias."
+    "msg3": "Aqui sua fe cresce todos os dias.",
+    "title1": "Nao caminhes sozinho na tua fe",
+    "praying": "pessoas orando agora mesmo",
+    "prayerTitle": "Escreve o teu pedido de oracao",
+    "prayerPlaceholder": "Escreve o teu pedido aqui...",
+    "sendPrayer": "Enviar pedido",
+    "prayerSent": "Para ver respostas, cria a tua conta:",
+    "createAccount": "Criar conta gratis",
+    "cta1": "Quero entrar e nao estar sozinho",
+    "free": "Gratis para sempre",
+    "noCard": "Sem cartao",
+    "instant": "Acesso imediato",
+    "benefitsTitle": "Aqui nao e so uma rede social",
+    "urgency": "Agora mesmo ha pessoas esperando para orar contigo",
+    "notCasual": "Nao chegaste aqui por acaso",
+    "ctaFinalText": "Deus pode usar este momento para mudar algo na tua vida.",
+    "ctaFinal": "Criar conta gratis agora",
+    "joinFree": "Criar conta gratis"
   },
   "locale": "pt-PT",
   "report": {

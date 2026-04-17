@@ -1324,7 +1324,7 @@
     "logout": "Abmelden"
   },
   "landing": {
-    "subtitle": "Verbinde dich mit echten Christen, bete, wachse im Glauben und finde eine Gemeinschaft, die aufbaut — nicht ablenkt.",
+    "subtitle": "Hast du dich allein gefuehlt? Hier ist immer jemand fuer dich.",
     "register": "Kostenloses Konto erstellen",
     "login": "Einloggen",
     "verse": "\"Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.\" — Mt 18:20",
@@ -1356,7 +1356,7 @@
     "f6desc": "Verbinden Sie sich mit Christen aus Brasilien, Europa, Afrika und der ganzen Welt.",
     "tagline": "Das christliche soziale Netzwerk",
     "loginShort": "Anmelden",
-    "joinNow": "Ich möchte dabei sein",
+    "joinNow": "Jetzt beitreten",
     "headline1": "Das christliche Netzwerk",
     "headline2": "Vielleicht ist es kein Zufall dass Sie hier angekommen sind.",
     "trust1": "Keine unangemessenen Inhalte",
@@ -1381,7 +1381,24 @@
     "msg1": "Wenn du einsam bist ist dieser Ort fur dich. Gott hat dich nicht vergessen.",
     "msg2": "Vielleicht ist es kein Zufall dass Sie hier sind.",
     "msg3": "Hier wachst dein Glaube jeden Tag.",
-    "guest": "Als Gast besuchen →"
+    "guest": "Als Gast besuchen →",
+    "title1": "Gehe nicht allein in deinem Glauben",
+    "praying": "Personen beten gerade jetzt",
+    "prayerTitle": "Schreibe dein Gebetsanliegen",
+    "prayerPlaceholder": "Schreibe dein Anliegen hier...",
+    "sendPrayer": "Anliegen senden",
+    "prayerSent": "Um Antworten zu sehen, erstelle dein Konto:",
+    "createAccount": "Kostenloses Konto erstellen",
+    "cta1": "Ich moechte beitreten und nicht allein sein",
+    "free": "Kostenlos fuer immer",
+    "noCard": "Keine Kreditkarte",
+    "instant": "Sofortiger Zugang",
+    "benefitsTitle": "Das ist nicht nur ein soziales Netzwerk",
+    "urgency": "Gerade jetzt warten Menschen darauf, mit dir zu beten",
+    "notCasual": "Du bist nicht zufaellig hier",
+    "ctaFinalText": "Gott kann diesen Moment nutzen, um etwas in deinem Leben zu veraendern.",
+    "ctaFinal": "Jetzt kostenloses Konto erstellen",
+    "joinFree": "Kostenloses Konto erstellen"
   },
   "locale": "de-DE",
   "report": {
