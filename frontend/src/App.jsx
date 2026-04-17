@@ -7,7 +7,7 @@ import { useWebSocket } from "./context/WebSocketContext";
 import {
   Home, User, MessageCircle, Heart, Globe, LogOut,
   Menu, X, Bell, Music, BookOpen, Users,
-  Calendar, Shield, PlayCircle, Sun
+  Calendar, Shield, PlayCircle, Sun, Mail
 } from "lucide-react";
 
 // Pages
@@ -257,52 +257,51 @@ export default function App() {
         {/* LEFT SIDEBAR */}
         <aside className="sidebar-left desktop-only">
 
-          
-
+          {/* 1. PRINCIPAL */}
           <div className="menu-group">
-            <p className="menu-title">{t('nav.spiritual_life')}</p>
-            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers')}</span></Link>
-            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration')}</span></Link>
-            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection')}</span></Link>
-            <Link to="/curso-biblico" className={isActive('/curso-biblico')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('course.title')}</span></Link>
-            <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_life')}</span></Link>
-            <Link to="/journeys" className={isActive('/journeys')}><Globe size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.journeys')}</span></Link>
-            <Link to='/diario-com-deus' className={isActive('/diario-com-deus')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.diary')}</span></Link>
-            <Link to="/chat-pastoral" className={isActive('/chat-pastoral')}><MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.pastoral_chat')}</span></Link>
+            <p className="menu-title">PRINCIPAL</p>
+            <Link to="/" className={isActive('/')}><Home size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.mural','Inicio')}</span></Link>
+            <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.live_community','Chat')} {unreadMessages>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{unreadMessages}</span>}</span></Link>
+            <Link to="/notificacoes" className={isActive('/notificacoes')}><Bell size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.notifications','Notificações')}</span></Link>
           </div>
 
+          {/* 2. VOCE */}
           <div className="menu-group">
-            <p className="menu-title">Menu</p>
-            <Link to="/" className={isActive('/')}><Home size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.mural')}</span></Link>
-            <Link to={`/perfil/${user.id}`} className={isActive(`/perfil/${user.id}`)}><User size={17}/><span className="nav-text" style={{marginLeft:8}}>Meu Perfil</span></Link>
-            <Link to="/mensagens" className={location.pathname.startsWith('/mensagens') ? 'menu-link active' : 'menu-link'} style={{position:'relative'}}>
-              <MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.messages')}</span>
-              {unreadMessages > 0 && (
-                <span style={{marginLeft:'auto',background:'#e74c3c',color:'white',borderRadius:'50%',minWidth:18,height:18,fontSize:'0.68rem',fontWeight:700,display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'0 4px',lineHeight:1}}>
-                  {unreadMessages > 99 ? '99+' : unreadMessages}
-                </span>
-              )}
-            </Link>
-            <Link to="/amigos" className={isActive('/amigos')} style={{position:'relative'}}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.friends', 'Amigos')}</span>{pendingRequests > 0 && <span style={{marginLeft:'auto',background:'#e11d48',color:'white',borderRadius:'50%',minWidth:18,height:18,fontSize:'0.68rem',fontWeight:700,display:'inline-flex',alignItems:'center',justifyContent:'center',padding:'0 4px'}}>{pendingRequests}</span>}</Link>
-            <Link to="/membros" className={isActive('/membros')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.members')}</span></Link>
-            <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.groups')}</span></Link>
-            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music')}</span></Link>
-            <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><Music size={17}/> <span className="nav-text" style={{marginLeft:8}}>🎵 Comunidade ao Vivo</span></Link>
-            <Link to="/igrejas" className={location.pathname.startsWith('/igrejas') ? 'menu-link active' : 'menu-link'}>⛪<span className="nav-text" style={{marginLeft:8}}>{t('nav.churches', 'Igrejas')}</span></Link>
+            <p className="menu-title">VOCÊ</p>
+            <Link to={`/perfil/${user?.id}`} className={isActive(`/perfil/${user?.id}`)}><User size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.profile','Meu Perfil')}</span></Link>
+            <Link to="/amigos" className={isActive('/amigos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.friends','Amigos')} {pendingRequests>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{pendingRequests}</span>}</span></Link>
+            <Link to="/mensagens" className={isActive('/mensagens')}><Mail size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.messages','Mensagens')}</span></Link>
           </div>
 
-          {(user.role === 'pastor' || user.role === 'admin') && (
-            <div className="menu-group">
-              <p className="menu-title">Admin</p>
-              <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_requests')}</span></Link>
-              <Link to="/pastor-dashboard" className={isActive('/pastor-dashboard')}><Shield size={17}/> <span className="nav-text" style={{marginLeft:8}}>Dashboard</span></Link>
-              <Link to="/sala-pastor" className={isActive('/sala-pastor')}><Shield size={17}/> <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span></Link>
-            </div>
-          )}
+          {/* 3. COMUNIDADE */}
+          <div className="menu-group">
+            <p className="menu-title">COMUNIDADE</p>
+            <Link to="/membros" className={isActive('/membros')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.members','Membros')}</span></Link>
+            <Link to="/igrejas" className={isActive('/igrejas')}><Globe size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('churches.title','Igrejas')}</span></Link>
+            <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.groups','Grupos')}</span></Link>
+          </div>
 
-          <button className="menu-link logout-btn" onClick={logout} style={{marginTop:14}}>
-            <LogOut size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('auth.logout')}</span>
-          </button>
+          {/* 4. ESPIRITUAL */}
+          <div className="menu-group">
+            <p className="menu-title">ESPIRITUAL</p>
+            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bible_ai','IA Bíblica')}</span></Link>
+            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','Orações')}</span></Link>
+            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','Reflexão')}</span></Link>
+            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','Música')}</span></Link>
+            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','Consagração')}</span></Link>
+          </div>
+
+          {/* 5. SISTEMA */}
+          <div className="menu-group">
+            <p className="menu-title">SISTEMA</p>
+            {(user.role === 'pastor' || user.role === 'admin') && (
+              <Link to="/sala-pastor" className={isActive('/sala-pastor')}><Shield size={17}/><span className="nav-text" style={{marginLeft:10}}>Sala do Pastor</span></Link>
+            )}
+            <button className="menu-link logout-btn" onClick={logout} style={{marginTop:4}}>
+              <LogOut size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('auth.logout','Sair')}</span>
+            </button>
+          </div>
+
         </aside>
 
         {/* CENTER FEED */}
