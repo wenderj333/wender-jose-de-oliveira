@@ -23,7 +23,7 @@
     "consecration": "Consacrare & Post",
     "members": "Membri",
     "offerings": "Ofrandă",
-    "notifications": "Notificări",
+    "notifications": "Notificari",
     "myProfile": "Profilul Meu",
     "music": "Muzică",
     "courseFinance": "Finanțe Biblice",
@@ -50,7 +50,8 @@
     "help_requests": "Cereri de Ajutor",
     "diary": "Jurnal cu Dumnezeu",
     "tithe": "Zeciuiala",
-    "live_community": "Chat Evanghelici"
+    "live_community": "Chat Evanghelici",
+    "profile": "Profilul Meu"
   },
   "footer": "© 2026 Sigo com Fé - Tehnologie în slujba Împărăției",
   "home": {
@@ -1482,5 +1483,18 @@
     "demo1": "Encontrei paz e comunidade nesta plataforma. Minhas orações foram ouvidas e respondidas.",
     "demo2": "A IA Bíblica me ajudou a entender melhor as escrituras e fortalecer minha fé diariamente.",
     "demo3": "Encontrei minha igreja local e agora sou membro ativo da comunidade cristã online e presencial."
+  },
+  "sidebar": {
+    "verse": "VERSETUL ZILEI",
+    "prayers": "CERERI DE RUGACIUNE",
+    "online": "ONLINE ACUM",
+    "events": "EVENIMENTE"
+  },
+  "menu": {
+    "principal": "PRINCIPAL",
+    "you": "EU",
+    "community": "COMUNITATE",
+    "spiritual": "SPIRITUAL",
+    "system": "SISTEM"
   }
 }

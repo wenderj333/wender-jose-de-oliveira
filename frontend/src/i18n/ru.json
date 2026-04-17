@@ -50,7 +50,8 @@
     "help_requests": "Просьбы о помощи",
     "diary": "Дневник с Богом",
     "tithe": "Десятина",
-    "live_community": "Чат Евангелистов"
+    "live_community": "Чат Евангелистов",
+    "profile": "Мой Профиль"
   },
   "footer": "© 2026 Sigo com Fé — Технологии на Службе Царства",
   "home": {
@@ -1481,5 +1482,18 @@
     "demo1": "Encontrei paz e comunidade nesta plataforma. Minhas orações foram ouvidas e respondidas.",
     "demo2": "A IA Bíblica me ajudou a entender melhor as escrituras e fortalecer minha fé diariamente.",
     "demo3": "Encontrei minha igreja local e agora sou membro ativo da comunidade cristã online e presencial."
+  },
+  "sidebar": {
+    "verse": "СТИХ ДНЯ",
+    "prayers": "МОЛИТВЕННЫЕ НУЖДЫ",
+    "online": "ОНЛАЙН",
+    "events": "СОБЫТИЯ"
+  },
+  "menu": {
+    "principal": "ГЛАВНОЕ",
+    "you": "Я",
+    "community": "СООБЩЕСТВО",
+    "spiritual": "ДУХОВНОЕ",
+    "system": "СИСТЕМА"
   }
 }

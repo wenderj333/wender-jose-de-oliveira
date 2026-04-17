@@ -50,7 +50,8 @@
     "help_requests": "Demandes d'aide",
     "diary": "Journal avec Dieu",
     "tithe": "Dîme",
-    "live_community": "Chat Évangéliques"
+    "live_community": "Chat Évangéliques",
+    "profile": "Mon Profil"
   },
   "footer": "© 2026 Sigo com Fé - La technologie au service du Royaume",
   "home": {
@@ -1481,5 +1482,18 @@
     "demo1": "Encontrei paz e comunidade nesta plataforma. Minhas orações foram ouvidas e respondidas.",
     "demo2": "A IA Bíblica me ajudou a entender melhor as escrituras e fortalecer minha fé diariamente.",
     "demo3": "Encontrei minha igreja local e agora sou membro ativo da comunidade cristã online e presencial."
+  },
+  "sidebar": {
+    "verse": "VERSET DU JOUR",
+    "prayers": "DEMANDES DE PRIÈRE",
+    "online": "EN LIGNE",
+    "events": "ÉVÉNEMENTS"
+  },
+  "menu": {
+    "principal": "PRINCIPAL",
+    "you": "MOI",
+    "community": "COMMUNAUTÉ",
+    "spiritual": "SPIRITUEL",
+    "system": "SYSTÈME"
   }
 }

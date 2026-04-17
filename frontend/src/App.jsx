@@ -259,7 +259,7 @@ export default function App() {
 
           {/* 1. PRINCIPAL */}
           <div className="menu-group">
-            <p className="menu-title">PRINCIPAL</p>
+            <p className="menu-title">{t('menu.principal','PRINCIPAL')}</p>
             <Link to="/" className={isActive('/')}><Home size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.mural','Inicio')}</span></Link>
             <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.live_community','Chat')} {unreadMessages>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{unreadMessages}</span>}</span></Link>
             <Link to="/notificacoes" className={isActive('/notificacoes')}><Bell size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.notifications','Notificações')}</span></Link>
@@ -267,7 +267,7 @@ export default function App() {
 
           {/* 2. VOCE */}
           <div className="menu-group">
-            <p className="menu-title">VOCÊ</p>
+            <p className="menu-title">{t('menu.you','VOCÊ')}</p>
             <Link to={`/perfil/${user?.id}`} className={isActive(`/perfil/${user?.id}`)}><User size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.profile','Meu Perfil')}</span></Link>
             <Link to="/amigos" className={isActive('/amigos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.friends','Amigos')} {pendingRequests>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{pendingRequests}</span>}</span></Link>
             <Link to="/mensagens" className={isActive('/mensagens')}><Mail size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.messages','Mensagens')}</span></Link>
@@ -275,7 +275,7 @@ export default function App() {
 
           {/* 3. COMUNIDADE */}
           <div className="menu-group">
-            <p className="menu-title">COMUNIDADE</p>
+            <p className="menu-title">{t('menu.community','COMUNIDADE')}</p>
             <Link to="/membros" className={isActive('/membros')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.members','Membros')}</span></Link>
             <Link to="/igrejas" className={isActive('/igrejas')}><Globe size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('churches.title','Igrejas')}</span></Link>
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.groups','Grupos')}</span></Link>
@@ -283,7 +283,7 @@ export default function App() {
 
           {/* 4. ESPIRITUAL */}
           <div className="menu-group">
-            <p className="menu-title">ESPIRITUAL</p>
+            <p className="menu-title">{t('menu.spiritual','ESPIRITUAL')}</p>
             <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bible_ai','IA Bíblica')}</span></Link>
             <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','Orações')}</span></Link>
             <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','Reflexão')}</span></Link>
@@ -293,7 +293,7 @@ export default function App() {
 
           {/* 5. SISTEMA */}
           <div className="menu-group">
-            <p className="menu-title">SISTEMA</p>
+            <p className="menu-title">{t('menu.system','SISTEMA')}</p>
             {(user.role === 'pastor' || user.role === 'admin') && (
               <Link to="/sala-pastor" className={isActive('/sala-pastor')}><Shield size={17}/><span className="nav-text" style={{marginLeft:10}}>Sala do Pastor</span></Link>
             )}

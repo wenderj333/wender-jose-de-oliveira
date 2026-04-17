@@ -50,7 +50,8 @@
     "help_requests": "Pedidos de Ajuda",
     "diary": "Diario com Deus",
     "tithe": "Dízimo",
-    "live_community": "Chat Evangélicos"
+    "live_community": "Chat Evangélicos",
+    "profile": "Meu Perfil"
   },
   "footer": "© 2026 Sigo com Fé - Tecnologia a serviço do Reino",
   "home": {
@@ -1457,5 +1458,18 @@
     "t4text": "Voce mantem os direitos do conteudo.",
     "t5title": "Encerramento",
     "t5text": "Voce pode apagar sua conta a qualquer momento."
+  },
+  "sidebar": {
+    "verse": "VERSÍCULO DO DIA",
+    "prayers": "PETIÇÕES DE ORAÇÃO",
+    "online": "ONLINE AGORA",
+    "events": "PRÓXIMOS EVENTOS"
+  },
+  "menu": {
+    "principal": "PRINCIPAL",
+    "you": "VOCÊ",
+    "community": "COMUNIDADE",
+    "spiritual": "ESPIRITUAL",
+    "system": "SISTEMA"
   }
 }

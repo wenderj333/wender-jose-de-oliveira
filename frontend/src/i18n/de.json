@@ -23,7 +23,7 @@
     "consecration": "Weihe & Fasten",
     "members": "Mitglieder",
     "offerings": "Offerings",
-    "notifications": "Notifications",
+    "notifications": "Benachrichtigungen",
     "myProfile": "My Profile",
     "music": "Musik",
     "courseFinance": "Biblical Finance",
@@ -50,7 +50,8 @@
     "help_requests": "Hilfeanfragen",
     "diary": "Tagebuch mit Gott",
     "tithe": "Zehnten",
-    "live_community": "Evangelikaler Chat"
+    "live_community": "Evangelikaler Chat",
+    "profile": "Mein Profil"
   },
   "footer": "© 2026 Sigo com Fé - Technology serving the Kingdom",
   "home": {
@@ -1483,5 +1484,18 @@
     "demo1": "Encontrei paz e comunidade nesta plataforma. Minhas orações foram ouvidas e respondidas.",
     "demo2": "A IA Bíblica me ajudou a entender melhor as escrituras e fortalecer minha fé diariamente.",
     "demo3": "Encontrei minha igreja local e agora sou membro ativo da comunidade cristã online e presencial."
+  },
+  "sidebar": {
+    "verse": "TAGESVERS",
+    "prayers": "GEBETSANLIEGEN",
+    "online": "JETZT ONLINE",
+    "events": "KOMMENDE EVENTS"
+  },
+  "menu": {
+    "principal": "HAUPTMENÜ",
+    "you": "ICH",
+    "community": "GEMEINSCHAFT",
+    "spiritual": "SPIRITUELL",
+    "system": "SYSTEM"
   }
 }
