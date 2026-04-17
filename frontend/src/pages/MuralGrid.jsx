@@ -773,7 +773,7 @@ export default function MuralGrid() {
                   mediaUrl.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
                     <div style={{ width: '100%', height: '100%', background: '#1a1a2e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Play size={28} color="#daa520" /></div>
                   ) : (
-                    <img src={mediaUrl} alt="" style={{ width: '100%', maxHeight: '600px', objectFit: 'contain', background: '#f0f0f0' }} />
+                    <img src={mediaUrl} alt="" style={{ width: '100%', maxHeight: '400px', objectFit: 'contain', background: '#f8f8f8' }} />
                   )
                 ) : (
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(135deg,${color}22,white)`, padding: 8 }}>
