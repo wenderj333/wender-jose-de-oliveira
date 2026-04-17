@@ -340,6 +340,25 @@ export default function App() {
         {/* RIGHT SIDEBAR */}
         <aside className="sidebar-right desktop-only" style={{ display: hideSidebars ? "none" : undefined }}>
 
+          {/* VERSICULO DO DIA */}
+          <div style={{background:'linear-gradient(135deg,#6C3FA0,#4A2270)',borderRadius:14,padding:16,marginBottom:14,color:'white'}}>
+            <p style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',opacity:0.8,marginBottom:8}}>📖 {t('sidebar.verse','VERSICULO DO DIA')}</p>
+            <p style={{fontSize:13,fontStyle:'italic',lineHeight:1.6,marginBottom:6}}>
+              {[
+                {t:'"Todo lo puedo en Aquel que me fortalece"',r:'Fil 4:13'},
+                {t:'"El Senor es mi pastor, nada me faltara"',r:'Sal 23:1'},
+                {t:'"Confia en el Senor con todo tu corazon"',r:'Prov 3:5'},
+                {t:'"Porque yo se los planes que tengo para ti"',r:'Jer 29:11'},
+                {t:'"Esfuerzate y se valiente"',r:'Jos 1:9'},
+                {t:'"Dios es nuestro amparo y fortaleza"',r:'Sal 46:1'},
+                {t:'"El amor de Dios ha sido derramado en nuestros corazones"',r:'Rom 5:5'},
+              ][new Date().getDate() % 7].t}
+            </p>
+            <p style={{fontSize:11,opacity:0.8,textAlign:'right'}}>
+              {["Fil 4:13","Sal 23:1","Prov 3:5","Jer 29:11","Jos 1:9","Sal 46:1","Rom 5:5"][new Date().getDate() % 7]}
+            </p>
+          </div>
+
           {/* LIVE Widget — golden theme */}
           <div style={{background:'linear-gradient(135deg,#3568b8 0%,#4a80d4 60%,#6a9ade 100%)',borderRadius:14,padding:18,marginBottom:14,color:'white',position:'relative',overflow:'hidden',border:'1px solid rgba(240,192,64,0.3)'}}>
             {/* gold top border accent */}
