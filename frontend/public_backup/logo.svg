@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Bible book - cover -->
+  <path d="M120 100 C120 88 130 78 142 78 L370 78 C382 78 392 88 392 100 L392 380 C392 392 382 402 370 402 L142 402 C130 402 120 392 120 380Z" fill="#6c2d91"/>
+  <!-- Spine shadow -->
+  <path d="M120 100 C120 88 130 78 142 78 L158 78 L158 402 L142 402 C130 402 120 392 120 380Z" fill="#5b2480"/>
+  <!-- Spine detail lines -->
+  <line x1="139" y1="110" x2="139" y2="370" stroke="#4a1d6b" stroke-width="1.5"/>
+  <!-- Cover border/edge detail -->
+  <rect x="130" y="88" width="252" height="304" rx="6" fill="none" stroke="#8e44ad" stroke-width="2"/>
+  <!-- Pages visible from side -->
+  <path d="M148 90 L148 390 L384 390 L384 90" fill="#faf3e0" stroke="#e8dcc8" stroke-width="1"/>
+  <!-- Page lines (realistic detail) -->
+  <line x1="384" y1="100" x2="384" y2="388" stroke="#d4c5a9" stroke-width="0.5"/>
+  <line x1="383" y1="100" x2="383" y2="388" stroke="#e0d4bc" stroke-width="0.5"/>
+  <line x1="382" y1="100" x2="382" y2="388" stroke="#d4c5a9" stroke-width="0.3"/>
+  <!-- Inner page area -->
+  <rect x="158" y="98" width="216" height="284" rx="4" fill="#fff9ee"/>
+  <!-- Page text lines (decorative) -->
+  <line x1="178" y1="140" x2="354" y2="140" stroke="#d4c5a9" stroke-width="1.5"/>
+  <line x1="178" y1="158" x2="340" y2="158" stroke="#d4c5a9" stroke-width="1.5"/>
+  <line x1="178" y1="176" x2="350" y2="176" stroke="#d4c5a9" stroke-width="1.5"/>
+  <line x1="178" y1="194" x2="330" y2="194" stroke="#d4c5a9" stroke-width="1.5"/>
+  <line x1="178" y1="220" x2="354" y2="220" stroke="#d4c5a9" stroke-width="1.5"/>
+  <line x1="178" y1="238" x2="345" y2="238" stroke="#d4c5a9" stroke-width="1.5"/>
+  <line x1="178" y1="256" x2="350" y2="256" stroke="#d4c5a9" stroke-width="1.5"/>
+  <line x1="178" y1="274" x2="325" y2="274" stroke="#d4c5a9" stroke-width="1.5"/>
+  <line x1="178" y1="300" x2="354" y2="300" stroke="#d4c5a9" stroke-width="1.5"/>
+  <line x1="178" y1="318" x2="338" y2="318" stroke="#d4c5a9" stroke-width="1.5"/>
+  <line x1="178" y1="336" x2="348" y2="336" stroke="#d4c5a9" stroke-width="1.5"/>
+  <line x1="178" y1="354" x2="320" y2="354" stroke="#d4c5a9" stroke-width="1.5"/>
+  <!-- Ribbon bookmark -->
+  <path d="M300 78 L300 180 L310 165 L320 180 L320 78" fill="#e74c3c"/>
+  <path d="M300 78 L300 180 L310 165 L320 180 L320 78" fill="none" stroke="#c0392b" stroke-width="0.5"/>
+  <!-- Gold corner accents on cover -->
+  <path d="M130 88 L160 88 L130 118Z" fill="#d4a017" opacity="0.6"/>
+  <path d="M382 88 L352 88 L382 118Z" fill="#d4a017" opacity="0.6"/>
+  <path d="M130 392 L160 392 L130 362Z" fill="#d4a017" opacity="0.6"/>
+  <path d="M382 392 L352 392 L382 362Z" fill="#d4a017" opacity="0.6"/>
+  <!-- Subtle glow -->
+  <circle cx="266" cy="240" r="180" fill="none" stroke="#8e44ad" stroke-width="1" opacity="0.15"/>
+  <!-- Text: Sigo com Fé -->
+  <text x="256" y="448" text-anchor="middle" font-family="Georgia, serif" font-size="42" font-weight="700" fill="#2c3e50">Sigo com Fé</text>
+  <!-- Subtitle -->
+  <text x="256" y="478" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#7f8c8d">Rede Social Cristã</text>
+</svg>
