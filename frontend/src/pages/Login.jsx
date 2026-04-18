@@ -17,7 +17,7 @@ export default function Login() {
   const { user, login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  React.useEffect(() => { if (user) navigate('/'); }, [user]);
+  React.useEffect(() => { if (user) navigate('/mural'); }, [user]);
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,7 +33,7 @@ export default function Login() {
     try {
       await login(email, password);
       trackLoginEvent();
-      navigate('/');
+      navigate('/mural');
     } catch (err) {
       setError(err.message);
     }
@@ -46,7 +46,7 @@ export default function Login() {
       const result = await loginWithGoogle();
       trackLoginEvent();
       if (result) {
-        navigate('/');
+        navigate('/mural');
       }
     } catch (err) {
       if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
@@ -464,7 +464,7 @@ export default function Login() {
             </Link>
 
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/mural')}
               style={{
                 width: '100%',
                 padding: '1rem',
@@ -737,7 +737,7 @@ export default function Login() {
 
             <button
               type="button"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/mural')}
               style={{
                 width: '100%',
                 padding: '0.875rem',
