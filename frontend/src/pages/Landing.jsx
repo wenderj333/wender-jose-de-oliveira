@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -32,10 +32,10 @@ export default function Landing() {
       <nav style={{ background:'white', padding:'12px 32px', display:'flex', justifyContent:'space-between', alignItems:'center', boxShadow:'0 2px 8px rgba(0,0,0,0.08)', position:'sticky', top:0, zIndex:100 }}>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
           <img src='/logo-new.png' alt='Logo' style={{ height:36, width:36, borderRadius:8 }} />
-          <span style={{ fontSize:20, fontWeight:800, color:'#6C3FA0' }}>Sigo com Fé</span>
+          <span style={{ fontSize:20, fontWeight:800, color:'#6C3FA0' }}>Sigo com FÃ©</span>
         </div>
         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-          <LanguageSelector />
+          <LanguageSelector variant="light" />
           <button onClick={() => navigate('/login')} style={{ padding:'8px 18px', borderRadius:8, border:'1px solid #6C3FA0', background:'white', color:'#6C3FA0', fontWeight:600, cursor:'pointer' }}>{t('auth.login','Entrar')}</button>
           <button onClick={() => navigate('/register')} style={{ padding:'8px 18px', borderRadius:8, border:'none', background:'#6C3FA0', color:'white', fontWeight:600, cursor:'pointer' }}>{t('landing.joinFree','Crear cuenta gratis')}</button>
         </div>
