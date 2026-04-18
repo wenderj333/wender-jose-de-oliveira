@@ -2,6 +2,7 @@
 import { useTranslation } from 'react-i18next';
 import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Grid, List, Volume2, VolumeX, Search, Flag } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import LiveViewers from '../components/LiveViewers';
 import ReportModal from '../components/ReportModal';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
@@ -678,7 +679,8 @@ export default function MuralGrid() {
 
   return (
     <>
-      {activeLive && (
+      <LiveViewers activeLive={activeLive} />
+      {false && ( && (
         <div onClick={() => window.location.href='/live-stream'} style={{ background:'linear-gradient(135deg,#e74c3c,#c0392b)', borderRadius:12, padding:'14px 20px', marginBottom:16, cursor:'pointer', display:'flex', alignItems:'center', gap:12, boxShadow:'0 4px 15px rgba(231,76,60,0.4)' }}>
           <div style={{ width:12, height:12, background:'white', borderRadius:'50%' }}/>
           <div style={{ flex:1 }}>
