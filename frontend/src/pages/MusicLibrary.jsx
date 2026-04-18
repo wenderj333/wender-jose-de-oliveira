@@ -78,7 +78,7 @@ function CommentsModal({ song, onClose, token, user }) {
         body: JSON.stringify({ comment: newComment.trim() }),
       });
       const data = await res.json();
-      setComments([data.comment, ...comments]);
+      if (data.comment) setComments([data.comment, ...comments]); else await fetchComments();
       setNewComment('');
     } catch (err) {
       console.error(err);
