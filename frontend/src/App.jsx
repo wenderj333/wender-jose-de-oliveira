@@ -356,67 +356,6 @@ export default function App() {
           <RightSidebar activeLive={activeLive} showInstall={showInstall} onInstall={() => { if (installPrompt) { installPrompt.prompt(); setShowInstall(false); } }} />
           </aside>
 
-          {/* LIVE Widget â€” golden theme */}
-          <div style={{background:'linear-gradient(135deg,#3568b8 0%,#4a80d4 60%,#6a9ade 100%)',borderRadius:14,padding:18,marginBottom:14,color:'white',position:'relative',overflow:'hidden',border:'1px solid rgba(240,192,64,0.3)'}}>
-            {/* gold top border accent */}
-            <div style={{position:'absolute',top:0,left:0,right:0,height:3,background:'linear-gradient(90deg,transparent,#f0c040,transparent)'}}/>
-            
-            <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1rem',fontWeight:600,marginBottom:4}}>{t('live.none')}</p>
-            <p style={{fontSize:'0.72rem',color:'rgba(255,255,255,0.55)',marginBottom:14}}>{t('live.be_first')}</p>
-            {/* Golden button */}
-            <button style={{width:'100%',padding:10,borderRadius:10,background:'linear-gradient(135deg,#c49a28,#f0c040)',color:'#1e2240',fontSize:'0.78rem',fontWeight:700,border:'none',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:6,boxShadow:'0 3px 10px rgba(240,192,64,0.4)'}}>
-              <a href='/live' style={{color:'inherit',textDecoration:'none',display:'flex',alignItems:'center',gap:6}}><PlayCircle size={15}/> {t('live.start')}</a>
-            </button>
-          </div>
-
-          {/* Prayers Widget */}
-          <div className="modern-card widget-card">
-            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'0.95rem',fontWeight:700,color:'var(--text)',marginBottom:12,display:'flex',alignItems:'center',gap:7,borderBottom:'1px solid var(--border)',paddingBottom:10}}>
-              <Heart size={15} style={{color:'var(--gold)'}}/> {t('nav.prayers')}
-            </div>
-            <div style={{display:'flex',gap:9,padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
-              <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#4a80d4,#6a9ade)',flexShrink:0,fontSize:'0.85rem'}}>ðŸ™</div>
-              <div>
-                <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb)'}}>Ana Costa</b> pede saÃºde</p>
-                <button style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}}>{t('mural.pray')}</button>
-              </div>
-            </div>
-            <div style={{display:'flex',gap:9,padding:'8px 0'}}>
-              <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#a07820,#c49a28)',flexShrink:0,fontSize:'0.85rem'}}>ðŸ•Šï¸</div>
-              <div>
-                <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb)'}}>Carlos</b> pede paz</p>
-                <button style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}}>{t('mural.pray')}</button>
-              </div>
-            </div>
-          </div>
-
-          {/* Events Widget */}
-          <div className="modern-card widget-card">
-            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'0.95rem',fontWeight:700,color:'var(--text)',marginBottom:12,display:'flex',alignItems:'center',gap:7,borderBottom:'1px solid var(--border)',paddingBottom:10}}>
-              <Calendar size={15} style={{color:'var(--gold)'}}/> {t('events.title')}
-            </div>
-            <div style={{display:'flex',alignItems:'center',gap:10}}>
-              <div style={{width:38,height:38,borderRadius:9,background:'linear-gradient(135deg,#3568b8,#4a80d4)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:'white',flexShrink:0}}>
-                <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1rem',fontWeight:700,color:'#f0c040',lineHeight:1}}>09</span>
-                <span style={{fontSize:'0.48rem',color:'rgba(255,255,255,0.7)',textTransform:'uppercase'}}>MAR</span>
-              </div>
-              <div>
-                <p style={{fontSize:'0.8rem',fontWeight:600,color:'var(--text)'}}>Culto Dominical</p>
-                <p style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h Â· Online</p>
-              </div>
-            </div>
-          </div>
-
-          {showInstall && (
-          <div style={{marginTop:16,background:'linear-gradient(135deg,#667eea,#764ba2)',borderRadius:12,padding:'14px 16px',textAlign:'center'}}>
-            <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>ðŸ“² Instalar App</p>
-            <p style={{color:'rgba(255,255,255,0.8)',fontSize:'0.75rem',margin:'0 0 10px'}}>Acede mais rapido no teu telemovel</p>
-            <button onClick={handleInstallClick} style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',border:'none',cursor:'pointer'}}>â¬‡ï¸ Instalar</button>
-          </div>
-          )}
-
-        </div>
-
       </div>
 
       <style>{`
