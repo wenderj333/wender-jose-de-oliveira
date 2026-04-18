@@ -64,20 +64,6 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
-    const checkLive = async () => {
-      try {
-        const r = await fetch(API_URL + '/api/live-community/active');
-        const d = await r.json();
-        setActiveLive(d.live || null);
-      } catch(e) {}
-    };
-    checkLive();
-    const i = setInterval(checkLive, 15000);
-    return () => clearInterval(i);
-  }, []);
-
-  useEffect(() => {
     if (audioRef.current) {
       if (playing) {
         audioRef.current.play().catch(e => console.error("Error playing audio:", e));
@@ -498,7 +484,6 @@ export default function MuralGrid() {
   const { t } = useTranslation(); // Use useTranslation
   const { user, token } = useAuth();
   const [posts, setPosts] = useState([]);
-  const [activeLive, setActiveLive] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('todas');
   const [viewMode, setViewMode] = useState('feed');
@@ -522,6 +507,21 @@ export default function MuralGrid() {
   const photoRef = useRef(null);
   const videoRef = useRef(null);
   const musicRef = useRef(null);
+  const [activeLive, setActiveLive] = useState(null);
+
+  useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
+    const checkLive = async () => {
+      try {
+        const r = await fetch(API_URL + '/api/live-community/active');
+        const d = await r.json();
+        setActiveLive(d.live || null);
+      } catch(e) {}
+    };
+    checkLive();
+    const iv = setInterval(checkLive, 15000);
+    return () => clearInterval(iv);
+  }, []);
 
   // State for active video playback
   const [activeVideoId, setActiveVideoId] = useState(null);
@@ -677,17 +677,18 @@ export default function MuralGrid() {
   ];
 
   return (
-    {activeLive && (
-        <div onClick={() => navigate('/live-stream')} style={{ background:'linear-gradient(135deg,#e74c3c,#c0392b)', borderRadius:12, padding:'14px 20px', marginBottom:16, cursor:'pointer', display:'flex', alignItems:'center', gap:12, boxShadow:'0 4px 15px rgba(231,76,60,0.4)' }}>
-          <div style={{ width:12, height:12, background:'white', borderRadius:'50%', animation:'pulse 1s infinite' }}/>
+    <>
+      {activeLive && (
+        <div onClick={() => window.location.href='/live-stream'} style={{ background:'linear-gradient(135deg,#e74c3c,#c0392b)', borderRadius:12, padding:'14px 20px', marginBottom:16, cursor:'pointer', display:'flex', alignItems:'center', gap:12, boxShadow:'0 4px 15px rgba(231,76,60,0.4)' }}>
+          <div style={{ width:12, height:12, background:'white', borderRadius:'50%' }}/>
           <div style={{ flex:1 }}>
-            <p style={{ color:'white', fontWeight:800, fontSize:16, margin:0 }}>🔴  AO VIVO agora!</p>
-            <p style={{ color:'rgba(255,255,255,0.85)', fontSize:13, margin:0 }}>{activeLive.user_name}  está transmitindo</p>
+            <p style={{ color:'white', fontWeight:800, fontSize:16, margin:0 }}>🔴 AO VIVO agora!</p>
+            <p style={{ color:'rgba(255,255,255,0.85)', fontSize:13, margin:0 }}>{activeLive.user_name} está transmitindo</p>
           </div>
           <span style={{ color:'white', fontSize:13, fontWeight:600 }}>Entrar →</span>
         </div>
       )}
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: 16 }}>
+    <div style={{ maxWidth: 900, margin: '0 auto', padding: 16 }}>
       {/* Header */}
       <div style={{ background: 'linear-gradient(135deg,#667eea,#764ba2)', borderRadius: 16, padding: '20px 24px', marginBottom: 20, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
@@ -869,6 +870,7 @@ export default function MuralGrid() {
         />
       )}
     </div>
+    </>
   );
 }
 
