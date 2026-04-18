@@ -387,7 +387,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         </div>
       )}
       {isImage && (
-        <div style={{ width: '100%', maxHeight: 400, overflow: 'hidden' }}>
+        <div style={{ width: '100%', maxHeight: 500, overflow: 'hidden', background: '#f8f9ff', display: 'flex', justifyContent: 'center' }}>
           <img src={mediaUrl} alt="post" onClick={() => setImageModal(mediaUrl)} style={{ width: '100%', objectFit: 'contain', display: 'block', cursor: 'zoom-in', background: '#f8f9ff' }} />
         </div>
       )}
