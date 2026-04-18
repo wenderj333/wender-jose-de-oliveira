@@ -58,4 +58,31 @@ router.post('/history', async (req, res) => {
   } catch (err) { res.json({ ok: false }); }
 });
 
+
+router.post('/start', async (req, res) => {
+  const { userId, userName, userAvatar, title } = req.body;
+  try {
+    await db.query(`CREATE TABLE IF NOT EXISTS active_lives (id SERIAL PRIMARY KEY, user_id VARCHAR(100), user_name VARCHAR(100), user_avatar TEXT, title TEXT, started_at TIMESTAMP DEFAULT NOW())`);
+    await db.query(`DELETE FROM active_lives WHERE user_id = $1`, [userId]);
+    await db.query(`INSERT INTO active_lives (user_id, user_name, user_avatar, title) VALUES ($1, $2, $3, $4)`, [userId, userName, userAvatar, title || 'Live ao Vivo']);
+    res.json({ ok: true });
+  } catch (err) { res.status(500).json({ error: 'Erro' }); }
+});
+
+router.post('/stop', async (req, res) => {
+  const { userId } = req.body;
+  try {
+    await db.query(`DELETE FROM active_lives WHERE user_id = $1`, [userId]);
+    res.json({ ok: true });
+  } catch (err) { res.status(500).json({ error: 'Erro' }); }
+});
+
+router.get('/active', async (req, res) => {
+  try {
+    await db.query(`CREATE TABLE IF NOT EXISTS active_lives (id SERIAL PRIMARY KEY, user_id VARCHAR(100), user_name VARCHAR(100), user_avatar TEXT, title TEXT, started_at TIMESTAMP DEFAULT NOW())`);
+    await db.query(`DELETE FROM active_lives WHERE started_at < NOW() - INTERVAL '4 hours'`);
+    const r = await db.query(`SELECT * FROM active_lives ORDER BY started_at DESC LIMIT 1`);
+    res.json({ live: r.rows[0] || null });
+  } catch (err) { res.json({ live: null }); }
+});
 module.exports = router;
