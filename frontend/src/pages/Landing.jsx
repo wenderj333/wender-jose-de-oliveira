@@ -46,7 +46,7 @@ export default function Landing() {
       <nav style={{ background:'white', padding:'12px 32px', display:'flex', justifyContent:'space-between', alignItems:'center', boxShadow:'0 2px 8px rgba(0,0,0,0.08)', position:'sticky', top:0, zIndex:100 }}>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
           <img src='/logo-new.png' alt='Logo' style={{ height:36, width:36, borderRadius:8 }} />
-          <span style={{ fontSize:20, fontWeight:800, color:'#6C3FA0' }}>Sigo com FÃ©</span>
+          <span style={{ fontSize:'clamp(16px,2vw,22px)', fontWeight:800, color:'#6C3FA0' }}>Sigo com FÃ©</span>
         </div>
         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
           <LanguageSelector variant="light" />
@@ -57,14 +57,14 @@ export default function Landing() {
       <div style={{ background:'#e74c3c', padding:'10px 24px', textAlign:'center' }}>
         <span style={{ color:'white', fontSize:14, fontWeight:600 }}>+{online} {t('landing.praying','personas orando ahora mismo')}</span>
       </div>
-      <div style={{ maxWidth:800, margin:'0 auto', padding:'70px 24px 50px', textAlign:'center' }}>
-        <h1 style={{ fontSize:48, fontWeight:900, color:'#1a0a3e', lineHeight:1.15, margin:'0 0 20px' }}>
+      <div style={{ maxWidth:900, margin:'0 auto', padding:'70px 24px 50px', textAlign:'center' }}>
+        <h1 style={{ fontSize:'clamp(28px,5vw,52px)', fontWeight:900, color:'#1a0a3e', lineHeight:1.15, margin:'0 0 20px' }}>
           {t('landing.title1','No camines solo en tu fe')}
         </h1>
-        <p style={{ fontSize:20, color:'#555', lineHeight:1.7, margin:'0 0 32px', maxWidth:600, marginLeft:'auto', marginRight:'auto' }}>
+        <p style={{ fontSize:'clamp(16px,2vw,22px)', color:'#555', lineHeight:1.7, margin:'0 0 32px', maxWidth:640, marginLeft:'auto', marginRight:'auto' }}>
           {t('landing.subtitle','Te has sentido solo? Aqui siempre hay alguien para ti.')}
         </p>
-        <div style={{ background:'white', borderRadius:16, padding:24, boxShadow:'0 4px 20px rgba(0,0,0,0.08)', maxWidth:500, margin:'0 auto 24px' }}>
+        <div style={{ background:'white', borderRadius:16, padding:24, boxShadow:'0 4px 20px rgba(0,0,0,0.08)', maxWidth:540, margin:'0 auto 24px' }}>
           {!prayerSent ? (
             <div>
               <p style={{ fontWeight:700, color:'#6C3FA0', marginBottom:12 }}>{t('landing.prayerTitle','Escribe tu peticion de oracion')}</p>
@@ -78,14 +78,14 @@ export default function Landing() {
             </div>
           )}
         </div>
-        <button onClick={() => navigate('/register')} style={{ padding:'18px 40px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#6C3FA0,#4A2270)', color:'white', fontWeight:900, cursor:'pointer', fontSize:20, boxShadow:'0 6px 20px rgba(108,63,160,0.4)', display:'block', margin:'0 auto 12px' }}>
+        <button onClick={() => navigate('/register')} style={{ padding:'18px 40px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#6C3FA0,#4A2270)', color:'white', fontWeight:900, cursor:'pointer', fontSize:'clamp(16px,2vw,22px)', boxShadow:'0 6px 20px rgba(108,63,160,0.4)', display:'block', margin:'0 auto 12px' }}>
           {t('landing.cta1','Quiero entrar y no estar solo')}
         </button>
         <p style={{ fontSize:13, color:'#888' }}>{t('landing.free','Gratis')} - {t('landing.noCard','Sin tarjeta')} - {t('landing.instant','Acceso inmediato')}</p>
       </div>
       <div style={{ background:'white', padding:'50px 24px' }}>
         <h2 style={{ textAlign:'center', fontSize:28, fontWeight:800, color:'#1a0a3e', marginBottom:32 }}>{t('landing.benefitsTitle','Aqui no es solo una red social')}</h2>
-        <div style={{ maxWidth:700, margin:'0 auto', display:'flex', flexDirection:'column', gap:16 }}>
+        <div style={{ maxWidth:760, margin:'0 auto', display:'flex', flexDirection:'column', gap:16 }}>
           {benefits.map((b,i) => (
             <div key={i} style={{ display:'flex', alignItems:'center', gap:16, background:'#f8f9ff', borderRadius:12, padding:'16px 20px' }}>
               <span style={{ fontSize:16, fontWeight:600, color:'#1a0a3e' }}>{b}</span>
@@ -100,7 +100,7 @@ export default function Landing() {
       <div style={{ background:'#1a0a3e', padding:'60px 24px', textAlign:'center' }}>
         <p style={{ color:'rgba(255,255,255,0.7)', fontSize:14, marginBottom:8 }}>{t('landing.notCasual','No llegaste aqui por casualidad')}</p>
         <h2 style={{ color:'white', fontSize:32, fontWeight:900, margin:'0 0 12px' }}>{t('landing.ctaFinalText','Dios puede usar este momento para cambiar algo en tu vida.')}</h2>
-        <button onClick={() => navigate('/register')} style={{ padding:'18px 48px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#6C3FA0,#4A2270)', color:'white', fontWeight:900, cursor:'pointer', fontSize:20, marginTop:16 }}>{t('landing.ctaFinal','Crear cuenta gratis ahora')}</button>
+        <button onClick={() => navigate('/register')} style={{ padding:'18px 48px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#6C3FA0,#4A2270)', color:'white', fontWeight:900, cursor:'pointer', fontSize:'clamp(16px,2vw,22px)', marginTop:16 }}>{t('landing.ctaFinal','Crear cuenta gratis ahora')}</button>
       </div>
     </div>
   );
