@@ -17,21 +17,7 @@ export default function Landing() {
     return () => clearInterval(i);
   }, []);
 
-  const sendPrayer = async () => {
-    if (!prayer.trim()) return;
-    try {
-      const { getFirestore, collection, addDoc, serverTimestamp } = await import('firebase/firestore');
-      const { default: app } = await import('../firebase');
-      const db = getFirestore(app);
-      await addDoc(collection(db, 'prayer_requests'), {
-        text: prayer,
-        createdAt: serverTimestamp(),
-        status: 'pending',
-        lang: navigator.language || 'pt',
-      });
-    } catch (e) { console.error(e); }
-    setPrayerSent(true);
-  };
+  const sendPrayer = () => { if (prayer.trim()) setPrayerSent(true); };
 
   const benefits = [
     'Personas orando por ti en tiempo real',
@@ -73,7 +59,7 @@ export default function Landing() {
             </div>
           ) : (
             <div style={{ textAlign:'center', padding:'12px 0' }}>
-              <p style={{ fontWeight:700, color:'#1a0a3e', fontSize:16, marginBottom:8 }}>🙏 {t('landing.prayerReceived','Tu peticion fue recibida! Los pastores y la comunidad estaran orando por tu causa. No estas solo, Dios te escucha y nosotros tambien.')}</p>
+              <p style={{ fontWeight:700, color:'#1a0a3e', fontSize:16, marginBottom:8 }}>{t('landing.prayerSent','Para ver respuestas, crea tu cuenta:')}</p>
               <button onClick={() => navigate('/register')} style={{ padding:'12px 28px', borderRadius:10, border:'none', background:'#27ae60', color:'white', fontWeight:700, cursor:'pointer', fontSize:15 }}>{t('landing.createAccount','Crear cuenta gratis')}</button>
             </div>
           )}
