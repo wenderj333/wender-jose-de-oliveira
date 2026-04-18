@@ -680,7 +680,7 @@ export default function MuralGrid() {
   return (
     <>
       <LiveViewers activeLive={activeLive} />
-      {false && ( && (
+      {false && (
         <div onClick={() => window.location.href='/live-stream'} style={{ background:'linear-gradient(135deg,#e74c3c,#c0392b)', borderRadius:12, padding:'14px 20px', marginBottom:16, cursor:'pointer', display:'flex', alignItems:'center', gap:12, boxShadow:'0 4px 15px rgba(231,76,60,0.4)' }}>
           <div style={{ width:12, height:12, background:'white', borderRadius:'50%' }}/>
           <div style={{ flex:1 }}>
