@@ -28,16 +28,31 @@ export default function LiveStream() {
     return () => clearInterval(i);
   }, []);
 
+  const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
   const startStream = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video:true, audio:true });
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
       setIsLive(true);
+      await fetch(API_URL + '/api/live-community/start', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ userId: user.uid, userName: user.full_name || user.displayName, userAvatar: user.photoURL, title: 'Live ao Vivo' })
+      });
     } catch(e) { alert("Nao foi possivel aceder a camara"); }
   };
 
-  const stopStream = () => { streamRef.current?.getTracks().forEach(t => t.stop()); setIsLive(false); };
+  const stopStream = async () => {
+    streamRef.current?.getTracks().forEach(t => t.stop());
+    setIsLive(false);
+    const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
+    await fetch(API_URL + '/api/live-community/stop', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ userId: user.uid })
+    });
+  };
   const toggleMute = () => { streamRef.current?.getAudioTracks().forEach(t => { t.enabled = !t.enabled; }); setIsMuted(m => !m); };
   const toggleCam = () => { streamRef.current?.getVideoTracks().forEach(t => { t.enabled = !t.enabled; }); setIsCamOff(c => !c); };
 
