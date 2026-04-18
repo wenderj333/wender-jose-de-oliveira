@@ -78,7 +78,7 @@ export default function LiveStream() {
   ];
 
   return (
-    <div style={{ position:"fixed", top:0, left:0, right:0, bottom:0, background:"#000", zIndex:1000, display:"flex" }}>
+    <div style={{ position:"fixed", top:0, left:0, right:0, bottom:0, background:"#000", zIndex:1000, display:"flex", flexDirection:"column" }}>
       <div style={{ flex:1, position:"relative" }}>
         <video ref={videoRef} autoPlay muted playsInline style={{ width:"100%", height:"100%", objectFit:"cover" }} />
         {!isLive && (
@@ -134,7 +134,7 @@ export default function LiveStream() {
           <div key={r.id} style={{ position:"absolute", bottom:120, left:r.x+"%", fontSize:36, pointerEvents:"none" }}>{r.emoji}</div>
         ))}
       </div>
-      <div style={{ width:300, display:"flex", flexDirection:"column", background:"rgba(0,0,0,0.85)", borderLeft:"1px solid rgba(255,255,255,0.1)" }}>
+      <div style={{ width:"100%", height:280, display:"flex", flexDirection:"column", background:"rgba(0,0,0,0.85)", borderTop:"1px solid rgba(255,255,255,0.1)" }}>
         <div style={{ padding:"16px 16px 12px", borderBottom:"1px solid rgba(255,255,255,0.1)" }}>
           <p style={{ color:"white", fontWeight:700, fontSize:15 }}>💬 Chat ao Vivo</p>
         </div>
