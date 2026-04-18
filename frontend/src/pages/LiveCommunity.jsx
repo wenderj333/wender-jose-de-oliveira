@@ -213,7 +213,7 @@ export default function LiveCommunity() {
 
           {/* Live Chat */}
           <div style={{ background: 'white', borderRadius: '12px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', height: '400px', display: 'flex', flexDirection: 'column' }}>
-            <h3 style={{ margin: '0 0 12px' }}>💬 Chat ao Vivo</h3>
+            <h3 style={{ margin: '0 0 12px' }}>💬 {t('live.chatTitle', 'Chat da Fe')}</h3>
             <div style={{ flex: 1, overflowY: 'auto', marginBottom: '12px' }}>
               {chatMessages.map((msg, i) => (
                 <div key={i} style={{ marginBottom: '8px', padding: '8px', background: '#f9f9f9', borderRadius: '8px', display: 'flex', gap: 8, alignItems: 'flex-start' }}>

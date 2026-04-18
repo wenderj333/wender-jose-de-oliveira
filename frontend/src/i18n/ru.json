@@ -841,7 +841,7 @@
     "title": "Предстоящие события"
   },
   "live": {
-    "title": "Живое Сообщество 24ч",
+    "title": "Живое сообщество 24ч",
     "nowPlaying": "Сейчас играет",
     "online": "онлайн",
     "typeMessage": "Напишите сообщение...",
@@ -852,7 +852,7 @@
     "signUp": "Создать бесплатный аккаунт",
     "noMessages": "Пока нет сообщений... Присоединяйся! 🙏",
     "lockMessage": "🔒 Войди чтобы участвовать в чате",
-    "chatTitle": "Живой чат",
+    "chatTitle": "Чат веры",
     "welcome_msg": "Dobro pozhalovat! Da blagoslovit tebya Bog! Otkuda ty? Est li u tebya prosba o molitve?",
     "daily_verse": "\"Gospod Pastyr moy.\" - Ps 23:1",
     "before_chat": "Pered vhodom v chat",
