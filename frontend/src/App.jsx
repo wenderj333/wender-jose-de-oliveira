@@ -354,7 +354,7 @@ export default function App() {
         {/* RIGHT SIDEBAR */}
         <aside className="sidebar-right desktop-only" style={{ display: hideSidebars ? "none" : undefined }}>
           <RightSidebar activeLive={activeLive} showInstall={showInstall} onInstall={() => { if (installPrompt) { installPrompt.prompt(); setShowInstall(false); } }} />
-        </div>
+          </aside>
 
           {/* LIVE Widget â€” golden theme */}
           <div style={{background:'linear-gradient(135deg,#3568b8 0%,#4a80d4 60%,#6a9ade 100%)',borderRadius:14,padding:18,marginBottom:14,color:'white',position:'relative',overflow:'hidden',border:'1px solid rgba(240,192,64,0.3)'}}>
