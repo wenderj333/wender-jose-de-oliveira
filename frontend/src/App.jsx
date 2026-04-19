@@ -48,6 +48,20 @@ import GlobalChat from "./components/GlobalChat";
 // Styles
 import "./styles/ModernTheme.css";
 
+function playSound(type) {
+  try {
+    const sounds = {
+      notify: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
+      message: 'https://assets.mixkit.co/active_storage/sfx/2355/2355-preview.mp3',
+      pray: 'https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3',
+    };
+    const audio = new Audio(sounds[type]);
+    audio.volume = 0.5;
+    audio.play().catch(() => {});
+  } catch(e) {}
+}
+window.playSound = playSound;
+
 export default function App() {
   const { t } = useTranslation();
   const { user, logout, loading, token } = useAuth();
