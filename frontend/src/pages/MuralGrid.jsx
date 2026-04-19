@@ -686,7 +686,7 @@ export default function MuralGrid() {
           <div style={{ width:12, height:12, background:'white', borderRadius:'50%' }}/>
           <div style={{ flex:1 }}>
             <p style={{ color:'white', fontWeight:800, fontSize:16, margin:0 }}>🔴 AO VIVO agora!</p>
-            <p style={{ color:'rgba(255,255,255,0.85)', fontSize:13, margin:0 }}>{activeLive.user_name} está transmitindo</p>
+            <p style={{ color:'rgba(255,255,255,0.85)', fontSize:13, margin:0 }}>{activeLive?.user_name} está transmitindo</p>
           </div>
           <span style={{ color:'white', fontSize:13, fontWeight:600 }}>Entrar →</span>
         </div>
