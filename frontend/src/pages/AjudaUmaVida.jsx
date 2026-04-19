@@ -30,10 +30,10 @@ const TYPE_CONFIG = {
 };
 
 const QUICK_ACTIONS = [
-  { icon: "🙏", label: "Pedir oração",    desc: "Alguém vai orar por ti",        type: "request"   },
-  { icon: "🕊️", label: "Orar por alguém", desc: "Responde com oração",           type: null, scroll: true },
-  { icon: "🤝", label: "Oferecer ajuda",  desc: "Apoia alguém da comunidade",    type: "offer"     },
-  { icon: "💛", label: "Testemunho",      desc: "Partilha o que Deus fez",        type: "testimony" },
+  { icon: "🙏", image: "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=400&q=80", label: "Pedir oração",    desc: "Alguém vai orar por ti",        type: "request"   },
+  { icon: "🕊️", image: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=400&q=80", label: "Orar por alguém", desc: "Responde com oração",           type: null, scroll: true },
+  { icon: "🤝", image: "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&q=80", label: "Oferecer ajuda",  desc: "Apoia alguém da comunidade",    type: "offer"     },
+  { icon: "💛", image: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&q=80", label: "Testemunho",      desc: "Partilha o que Deus fez",        type: "testimony" },
 ];
 
 const EMOJIS = ["🙏","❤️","✝️","😢","😊","🔥","✨","🕊️","💛","🫂","🙌","💪","😭","🤲","👐"];
@@ -122,7 +122,7 @@ export default function AjudaUmaVida() {
             style={{ background: "white", borderRadius: 16, padding: 16, cursor: "pointer", border: "2px solid #f0eaff", textAlign: "center", transition: "all 0.2s", boxShadow: "0 2px 8px rgba(108,71,212,0.08)" }}
             onMouseEnter={e => e.currentTarget.style.borderColor = "#6c47d4"}
             onMouseLeave={e => e.currentTarget.style.borderColor = "#f0eaff"}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>{a.icon}</div>
+            {a.image ? <img src={a.image} alt={a.label} style={{ width:'100%', height:90, objectFit:'cover', borderRadius:10, marginBottom:8 }} onError={e => e.target.style.display='none'} /> : <div style={{ fontSize:32, marginBottom:8 }}>{a.icon}</div>}
             <p style={{ fontSize: 14, fontWeight: 700, color: "#1a0a3e", margin: "0 0 4px" }}>{a.label}</p>
             <p style={{ fontSize: 12, color: "#888", margin: 0 }}>{a.desc}</p>
           </div>
