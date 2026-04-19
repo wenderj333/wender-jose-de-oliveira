@@ -109,7 +109,7 @@ export default function AjudaUmaVida() {
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "0 16px 40px" }}>
 
       {/* HEADER */}
-      <div style={{ background: "linear-gradient(135deg,#1a0a3e,#6c47d4)", borderRadius: "0 0 24px 24px", padding: "32px 24px", textAlign: "center", marginBottom: 24, color: "white" }}>
+      <div style={{ backgroundImage: "url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800)", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "0 0 24px 24px", padding: "32px 24px", textAlign: "center", marginBottom: 24, color: "white" }}>
         <h1 style={{ fontSize: 28, fontWeight: 900, margin: "0 0 8px" }}>🕊️ Ajuda uma Vida</h1>
         <p style={{ fontSize: 14, opacity: 0.85, margin: "0 0 4px" }}>Um lugar onde ninguém ora sozinho</p>
         <p style={{ fontSize: 12, opacity: 0.6, fontStyle: "italic" }}>"Carregai os fardos uns dos outros" — Gál 6:2</p>
