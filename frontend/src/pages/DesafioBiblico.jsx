@@ -165,7 +165,9 @@ export default function DesafioBiblico() {
         <input value={codigoInput} onChange={e => setCodigoInput(e.target.value.toUpperCase())} placeholder=' + chr(39) + 'Codigo da sala...' + chr(39) + ' style={{ flex:1, padding:14, borderRadius:12, border:' + chr(39) + 'none' + chr(39) + ', background:' + chr(39) + 'rgba(255,255,255,0.15)' + chr(39) + ', color:' + chr(39) + 'white' + chr(39) + ', fontSize:16, outline:' + chr(39) + 'none' + chr(39) + ' }} />
         <button onClick={entrarSala} style={{ padding:' + chr(39) + '14px 20px' + chr(39) + ', borderRadius:12, border:' + chr(39) + 'none' + chr(39) + ', background:' + chr(39) + '#27ae60' + chr(39) + ', color:' + chr(39) + 'white' + chr(39) + ', fontWeight:700, cursor:' + chr(39) + 'pointer' + chr(39) + ', fontSize:16 }}>Entrar</button>
       </div>
-      <button onClick={() => navigate(-1)} style={{ background:' + chr(39) + 'none' + chr(39) + ', border:' + chr(39) + 'none' + chr(39) + ', color:' + chr(39) + 'rgba(255,255,255,0.5)' + chr(39) + ', cursor:' + chr(39) + 'pointer' + chr(39) + ', fontSize:14 }}>Voltar</button>
+      <button onClick={() => navigate(-1)} style={{ background:' + chr(39) + 'none' + chr(39) + ', border:' + chr(39) + 'none' + chr(39) + ', color:' + chr(39) + 'rgba(255,255,255,0.5)' + chr(39) + ', cursor:' + chr(39) + 'pointer' + chr(39) + ', fontSize:14 }}>
+      <button onClick={() => { const m = "Te desafio no Desafio Biblico do Sigo com Fe! Aceitas? https://sigo-com-fe.vercel.app/desafio-biblico"; if(navigator.share) navigator.share({title:"Desafio Biblico",text:m}); else{navigator.clipboard.writeText(m);alert("Copiado!");} }} style={{ width:"100%", maxWidth:320, padding:14, borderRadius:14, border:"none", background:"#25D366", color:"white", fontSize:15, fontWeight:700, cursor:"pointer", marginBottom:12 }}>Desafiar um amigo</button>
+      Voltar</button>
     </div>
   );
 
