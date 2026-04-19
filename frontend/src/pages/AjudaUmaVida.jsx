@@ -68,6 +68,11 @@ export default function AjudaUmaVida() {
   const [createContent, setCreateContent] = useState('');
   const [createAnon, setCreateAnon] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [mediaFile, setMediaFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
+  const [showEmojis, setShowEmojis] = useState(false);
+  const fileRef = React.useRef(null);
+  const EMOJIS = ['🙏','❤️','✝️','😢','😊','🔥','✨','🕊️','💛','🫂','🙌','💪','😭','🤲','👐'];
 
   const [expandedComments, setExpandedComments] = useState(new Set());
   const [commentsData, setCommentsData] = useState({});
@@ -115,12 +120,16 @@ export default function AjudaUmaVida() {
           post_type: createType,
           is_anonymous: createAnon,
           category: 'general',
+          media_url: mediaPreview || null,
         }),
       });
       if (res.ok) {
         setCreating(false);
         setCreateContent('');
         setCreateAnon(false);
+        setMediaFile(null);
+        setMediaPreview(null);
+        setShowEmojis(false);
         await loadPosts();
       } else {
         const d = await res.json();
@@ -736,6 +745,34 @@ export default function AjudaUmaVida() {
               onChange={e => setCreateContent(e.target.value)}
               autoFocus
             />
+            {/* Emojis */}
+            {showEmojis && (
+              <div style={{ display:'flex', flexWrap:'wrap', gap:6, padding:'10px 0' }}>
+                {['🙏','❤️','✝️','😢','😊','🔥','✨','🕊️','💛','🫂','🙌','💪','😭','🤲','👐'].map(e => (
+                  <button key={e} type="button" onClick={() => { setCreateContent(prev => prev + e); setShowEmojis(false); }} style={{ fontSize:22, background:'none', border:'none', cursor:'pointer', padding:2 }}>{e}</button>
+                ))}
+              </div>
+            )}
+            {/* Media preview */}
+            {mediaPreview && (
+              <div style={{ position:'relative', marginTop:10 }}>
+                <img src={mediaPreview} alt="preview" style={{ width:'100%', maxHeight:200, objectFit:'cover', borderRadius:10 }} />
+                <button type="button" onClick={() => { setMediaFile(null); setMediaPreview(null); }} style={{ position:'absolute', top:6, right:6, background:'rgba(0,0,0,0.6)', border:'none', borderRadius:'50%', width:28, height:28, color:'white', cursor:'pointer', fontSize:16 }}>✕</button>
+              </div>
+            )}
+            {/* Botoes media + emoji */}
+            <div style={{ display:'flex', gap:10, marginTop:10 }}>
+              <button type="button" onClick={() => fileRef.current?.click()} style={{ padding:'6px 14px', borderRadius:20, border:'1.5px solid #6c47d4', background:'white', color:'#6c47d4', fontSize:13, fontWeight:600, cursor:'pointer' }}>📷 Foto</button>
+              <button type="button" onClick={() => setShowEmojis(v => !v)} style={{ padding:'6px 14px', borderRadius:20, border:'1.5px solid #6c47d4', background:'white', color:'#6c47d4', fontSize:13, fontWeight:600, cursor:'pointer' }}>😊 Emoji</button>
+              <input ref={fileRef} type="file" accept="image/*,video/*" style={{ display:'none' }} onChange={e => {
+                const f = e.target.files[0];
+                if (!f) return;
+                setMediaFile(f);
+                const reader = new FileReader();
+                reader.onload = ev => setMediaPreview(ev.target.result);
+                reader.readAsDataURL(f);
+              }} />
+            </div>
 
             {/* Tipo selector */}
             <div style={{ fontSize: '0.8rem', color: '#888', marginTop: 10, marginBottom: 4 }}>
