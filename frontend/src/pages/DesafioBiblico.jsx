@@ -3,7 +3,6 @@ import PERGUNTAS_JSON from '../data/perguntas.json';
 
 function filtrarPerguntas(livro) { let pool = PERGUNTAS_JSON.filter(p => livro === 'Todos' || p.livro === livro); if(pool.length===0) pool=PERGUNTAS_JSON; const f=pool.filter(p=>p.nivel==='facil').sort(()=>Math.random()-0.5).slice(0,2); const m=pool.filter(p=>p.nivel==='medio').sort(()=>Math.random()-0.5).slice(0,2); const d=pool.filter(p=>p.nivel==='dificil').sort(()=>Math.random()-0.5).slice(0,1); return [...f,...m,...d]; }
 import React, { useState, useEffect, useRef } from 'react';
-import PERGUNTAS_JSON from '../data/perguntas.json';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
