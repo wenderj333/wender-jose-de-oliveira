@@ -862,5 +862,2009 @@
     ],
     "r": 1,
     "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem encontrou Moises no rio?",
+    "opts": [
+      "Filha de Farao",
+      "Miria",
+      "Sara",
+      "Rebeca"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem falou com Moises na sarca ardente?",
+    "opts": [
+      "Anjo",
+      "Deus",
+      "Arao",
+      "Profeta"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Qual foi a primeira praga?",
+    "opts": [
+      "Ras",
+      "Sangue",
+      "Moscas",
+      "Escuridao"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem ajudava Moises a falar?",
+    "opts": [
+      "Jose",
+      "Arao",
+      "Davi",
+      "Samuel"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que cobria o monte Sinai?",
+    "opts": [
+      "Neve",
+      "Fogo e nuvem",
+      "Agua",
+      "Areia"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quantos dias Moises ficou no monte?",
+    "opts": [
+      "10",
+      "20",
+      "40",
+      "50"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que o povo fez enquanto Moises estava no monte?",
+    "opts": [
+      "Orou",
+      "Construiu bezerro de ouro",
+      "Dormiu",
+      "Fugiu"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem fez o bezerro de ouro?",
+    "opts": [
+      "Arao",
+      "Moises",
+      "Josue",
+      "Farao"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que Deus escreveu nas tabuas?",
+    "opts": [
+      "Leis",
+      "Historia",
+      "Nomes",
+      "Cantos"
+    ],
+    "r": 0,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem subiu com Moises ao monte?",
+    "opts": [
+      "Arao",
+      "Josue",
+      "Davi",
+      "Samuel"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que era o mana?",
+    "opts": [
+      "Carne",
+      "Pao do ceu",
+      "Peixe",
+      "Fruta"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Onde o povo caminhou 40 anos?",
+    "opts": [
+      "Cidade",
+      "Deserto",
+      "Montanha",
+      "Rio"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem era o lider do Egito?",
+    "opts": [
+      "Rei",
+      "Farao",
+      "Imperador",
+      "General"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Qual instrumento Moises usava?",
+    "opts": [
+      "Espada",
+      "Vara",
+      "Escudo",
+      "Arco"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que Deus enviou contra o Egito?",
+    "opts": [
+      "Chuva",
+      "Pragas",
+      "Vento",
+      "Fogo"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Qual foi a ultima praga?",
+    "opts": [
+      "Ras",
+      "Morte dos primogenitos",
+      "Sangue",
+      "Escuridao"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem saiu do Egito?",
+    "opts": [
+      "Israelitas",
+      "Egipcios",
+      "Romanos",
+      "Gregos"
+    ],
+    "r": 0,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem guiava o povo?",
+    "opts": [
+      "Moises",
+      "Arao",
+      "Josue",
+      "Davi"
+    ],
+    "r": 0,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que Deus deu ao povo no deserto?",
+    "opts": [
+      "Agua e comida",
+      "Ouro",
+      "Armas",
+      "Roupas"
+    ],
+    "r": 0,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Qual monte Deus falou com Moises?",
+    "opts": [
+      "Sinai",
+      "Carmelo",
+      "Siao",
+      "Oliveiras"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem escreveu a lei?",
+    "opts": [
+      "Moises",
+      "Arao",
+      "Josue",
+      "Davi"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que protegia o povo a noite?",
+    "opts": [
+      "Lua",
+      "Fogo",
+      "Nuvem",
+      "Vento"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que protegia o povo de dia?",
+    "opts": [
+      "Sol",
+      "Nuvem",
+      "Fogo",
+      "Areia"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem construiu o tabernaculo?",
+    "opts": [
+      "Povo",
+      "Rei",
+      "Soldados",
+      "Profetas"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Onde estavam guardadas as tabuas?",
+    "opts": [
+      "Arca",
+      "Templo",
+      "Casa",
+      "Monte"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Qual era o nome do jardim onde Deus colocou o homem?",
+    "opts": [
+      "Eden",
+      "Babel",
+      "Ur",
+      "Canaa"
+    ],
+    "r": 0,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Qual rio NAO e mencionado no Eden?",
+    "opts": [
+      "Tigre",
+      "Eufrates",
+      "Nilo",
+      "Pisom"
+    ],
+    "r": 2,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi o pai de todos os que tocam harpa e flauta?",
+    "opts": [
+      "Jubal",
+      "Jabal",
+      "Tubalcaim",
+      "Enoque"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi o pai dos que habitam em tendas e criam gado?",
+    "opts": [
+      "Jubal",
+      "Jabal",
+      "Caim",
+      "Sete"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem forjou instrumentos de bronze e ferro?",
+    "opts": [
+      "Jabal",
+      "Tubalcaim",
+      "Jubal",
+      "Lameque"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Qual era o nome da esposa de Abraao antes de ser mudado?",
+    "opts": [
+      "Sara",
+      "Sarai",
+      "Rebeca",
+      "Raquel"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Qual era o nome de Abraao antes de Deus mudar?",
+    "opts": [
+      "Abrao",
+      "Abraao",
+      "Abarao",
+      "Abel"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem era o sacerdote que abencou Abraao?",
+    "opts": [
+      "Melquisedeque",
+      "Arao",
+      "Moises",
+      "Samuel"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quantos justos Abraao pediu para salvar Sodoma no minimo?",
+    "opts": [
+      "5",
+      "10",
+      "20",
+      "50"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem deu o nome de Benoni ao filho, depois mudado?",
+    "opts": [
+      "Raquel",
+      "Lea",
+      "Sara",
+      "Rebeca"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Qual e o Salmo mais longo da Biblia?",
+    "opts": [
+      "Salmo 23",
+      "Salmo 91",
+      "Salmo 119",
+      "Salmo 150"
+    ],
+    "r": 2,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Qual e o Salmo mais curto da Biblia?",
+    "opts": [
+      "Salmo 1",
+      "Salmo 117",
+      "Salmo 23",
+      "Salmo 100"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quantos Salmos existem na Biblia?",
+    "opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O Senhor e meu pastor e nada me...?",
+    "opts": [
+      "Faltara",
+      "Assustara",
+      "Vencera",
+      "Separara"
+    ],
+    "r": 0,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Em que Salmo David diz Deus e minha luz e salvacao?",
+    "opts": [
+      "Salmo 23",
+      "Salmo 27",
+      "Salmo 91",
+      "Salmo 100"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quem e o escudo dos que confiam em Deus?",
+    "opts": [
+      "Anjo",
+      "Rei",
+      "Deus",
+      "Profeta"
+    ],
+    "r": 2,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O que Davi pede a Deus no Salmo 51?",
+    "opts": [
+      "Riqueza",
+      "Perdicao de inimigos",
+      "Perdo e limpeza",
+      "Forca"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quem habita no esconderijo do Altissimo?",
+    "opts": [
+      "Profeta",
+      "Quem confia em Deus",
+      "Rei",
+      "Sacerdote"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Louvai ao Senhor todas as...?",
+    "opts": [
+      "Tribos",
+      "Nacoes",
+      "Montanhas",
+      "Estrelas"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Qual animal e mencionado no Salmo 22?",
+    "opts": [
+      "Leao",
+      "Aguia",
+      "Touro",
+      "Cordeiro"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Os ceus declaram a gloria de...?",
+    "opts": [
+      "Rei",
+      "Profeta",
+      "Deus",
+      "Homem"
+    ],
+    "r": 2,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quem escreveu o Salmo 90?",
+    "opts": [
+      "Davi",
+      "Salomao",
+      "Moises",
+      "Elias"
+    ],
+    "r": 2,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Qual palavra comeca o Salmo 1?",
+    "opts": [
+      "Louvado",
+      "Bem-aventurado",
+      "Santo",
+      "Forte"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O justo e como arvore plantada junto a...?",
+    "opts": [
+      "Monte",
+      "Aguas",
+      "Deserto",
+      "Cidade"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Alegrai-vos no Senhor vos...?",
+    "opts": [
+      "Profetas",
+      "Reis",
+      "Justos",
+      "Sacerdotes"
+    ],
+    "r": 2,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quem e o rei da gloria?",
+    "opts": [
+      "Davi",
+      "Deus",
+      "Anjo",
+      "Profeta"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Buscai ao Senhor enquanto se pode...?",
+    "opts": [
+      "Achar",
+      "Ver",
+      "Ouvir",
+      "Sentir"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Qual instrumento e mencionado no Salmo 150?",
+    "opts": [
+      "Violino",
+      "Trombeta",
+      "Guitarra",
+      "Piano"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O Salmo 23 diz que Deus prepara uma mesa na presenca dos...?",
+    "opts": [
+      "Amigos",
+      "Inimigos",
+      "Anjos",
+      "Reis"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Como Davi descreve a Palavra de Deus no Salmo 119?",
+    "opts": [
+      "Pesada",
+      "Lampada para os meus pes",
+      "Difícil",
+      "Antiga"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quem sobe ao monte do Senhor?",
+    "opts": [
+      "Qualquer um",
+      "O de maos limpas",
+      "O rico",
+      "O sacerdote"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "De onde vem o meu socorro?",
+    "opts": [
+      "Do rei",
+      "Do Senhor",
+      "Do exercito",
+      "Do profeta"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O Salmo 22 comeca com qual frase?",
+    "opts": [
+      "O Senhor e meu pastor",
+      "Deus meu porque me abandonaste",
+      "Louvai ao Senhor",
+      "Alegrai-vos"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quantos Salmos sao atribuidos a Davi?",
+    "opts": [
+      "50",
+      "73",
+      "100",
+      "150"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O que Davi fazia quando tocava harpa para Saul?",
+    "opts": [
+      "Dançava",
+      "Orava",
+      "Calmava o espirito",
+      "Cantava"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Qual Salmo e cantado nas subidas ao templo?",
+    "opts": [
+      "Salmo 1",
+      "Salmo 120",
+      "Salmo 23",
+      "Salmo 91"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Louvai a Deus no seu...?",
+    "opts": [
+      "Trono",
+      "Santuario",
+      "Templo",
+      "Monte"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem foram os pais de Jesus?",
+    "opts": [
+      "João e Maria",
+      "José e Maria",
+      "Pedro e Ana",
+      "Tiago e Sara"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quantos anos tinha Jesus quando foi ao templo?",
+    "opts": [
+      "10",
+      "12",
+      "15",
+      "18"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem batizou Jesus?",
+    "opts": [
+      "Pedro",
+      "Paulo",
+      "João Batista",
+      "Tiago"
+    ],
+    "r": 2,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Onde Jesus foi tentado?",
+    "opts": [
+      "Templo",
+      "Deserto",
+      "Monte",
+      "Rio"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quantas vezes Jesus foi tentado no deserto?",
+    "opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Qual foi o primeiro milagre de Jesus em Mateus?",
+    "opts": [
+      "Cura de cego",
+      "Cura de leproso",
+      "Multiplicação de pães",
+      "Água em vinho"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quantos discípulos Jesus chamou primeiro?",
+    "opts": [
+      "2",
+      "4",
+      "6",
+      "12"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem era cobrador de impostos e virou discípulo?",
+    "opts": [
+      "Pedro",
+      "Mateus",
+      "João",
+      "Tiago"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Qual é o maior mandamento segundo Jesus?",
+    "opts": [
+      "Não matar",
+      "Amar a Deus",
+      "Honrar pais",
+      "Não roubar"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quantas pessoas Jesus alimentou com 5 pães?",
+    "opts": [
+      "2000",
+      "3000",
+      "4000",
+      "5000"
+    ],
+    "r": 3,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem andou sobre as águas com Jesus?",
+    "opts": [
+      "João",
+      "Tiago",
+      "Pedro",
+      "Paulo"
+    ],
+    "r": 2,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quanto tempo Jesus ficou no sepulcro?",
+    "opts": [
+      "1 dia",
+      "2 dias",
+      "3 dias",
+      "7 dias"
+    ],
+    "r": 2,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem traiu Jesus?",
+    "opts": [
+      "Pedro",
+      "João",
+      "Judas",
+      "Tiago"
+    ],
+    "r": 2,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Por quanto Judas vendeu Jesus?",
+    "opts": [
+      "10 moedas",
+      "20 moedas",
+      "30 moedas",
+      "50 moedas"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem negou Jesus três vezes?",
+    "opts": [
+      "João",
+      "Tiago",
+      "Judas",
+      "Pedro"
+    ],
+    "r": 3,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Onde Jesus foi crucificado?",
+    "opts": [
+      "Belém",
+      "Gólgota",
+      "Nazaré",
+      "Getsêmani"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem ajudou Jesus a carregar a cruz?",
+    "opts": [
+      "Pedro",
+      "Simão de Cirene",
+      "João",
+      "Nicodemos"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "O que foi colocado na cabeça de Jesus?",
+    "opts": [
+      "Coroa de flores",
+      "Coroa de espinhos",
+      "Véu",
+      "Manto"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem pediu o corpo de Jesus?",
+    "opts": [
+      "Pedro",
+      "José de Arimateia",
+      "João",
+      "Nicodemos"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Qual era o título escrito na cruz?",
+    "opts": [
+      "Rei dos Judeus",
+      "Filho de Deus",
+      "Salvador",
+      "Messias"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem foi o governador que condenou Jesus?",
+    "opts": [
+      "Herodes",
+      "Pilatos",
+      "César",
+      "Caifás"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Qual é a oração que Jesus ensinou?",
+    "opts": [
+      "Pai Nosso",
+      "Ave Maria",
+      "Credo",
+      "Magnificat"
+    ],
+    "r": 0,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "O Sermão da Montanha começa com as...?",
+    "opts": [
+      "Orações",
+      "Bem-aventuranças",
+      "Parábolas",
+      "Profecias"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quantas bem-aventuranças há no Sermão da Montanha?",
+    "opts": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "r": 2,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem veio visitar Jesus recém-nascido do Oriente?",
+    "opts": [
+      "Pastores",
+      "Reis Magos",
+      "Discípulos",
+      "Fariseus"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Qual estrela guiou os magos?",
+    "opts": [
+      "Estrela do Norte",
+      "Estrela de Belém",
+      "Lua",
+      "Cometa"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem mandou matar os meninos de Belém?",
+    "opts": [
+      "César",
+      "Pilatos",
+      "Herodes",
+      "Caifás"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Para onde Jesus fugiu quando criança?",
+    "opts": [
+      "Roma",
+      "Grécia",
+      "Egito",
+      "Síria"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "O que Jesus disse ser o caminho a vida?",
+    "opts": [
+      "Largo",
+      "Estreito",
+      "Médio",
+      "Longo"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Qual parábola fala de um filho que voltou ao pai?",
+    "opts": [
+      "Filho perdido",
+      "Semeador",
+      "Talentos",
+      "Ovelha perdida"
+    ],
+    "r": 0,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quantos talentos recebeu o servo que ganhou mais?",
+    "opts": [
+      "2",
+      "5",
+      "10",
+      "20"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "O que Jesus fez na entrada de Jerusalém?",
+    "opts": [
+      "Chorou",
+      "Entrou num jumento",
+      "Pregou",
+      "Curou cegos"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "O que Jesus expulsou do templo?",
+    "opts": [
+      "Fariseus",
+      "Vendedores",
+      "Soldados",
+      "Discípulos"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Onde Jesus orou antes de ser preso?",
+    "opts": [
+      "Templo",
+      "Getsêmani",
+      "Monte das Oliveiras",
+      "Gólgota"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Quem disse ser inocente do sangue de Jesus?",
+    "opts": [
+      "Herodes",
+      "Pilatos",
+      "Caifás",
+      "César"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "O que rasgou quando Jesus morreu?",
+    "opts": [
+      "Manto do templo",
+      "Véu do templo",
+      "Cortina do palácio",
+      "Roupa de Jesus"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Qual foi o ultimo mandato de Jesus em Mateus?",
+    "opts": [
+      "Orai sempre",
+      "Ide e fazei discípulos",
+      "Amai-vos",
+      "Jejuai"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Jesus disse estar com os seus até...?",
+    "opts": [
+      "O fim do ano",
+      "A consumação dos séculos",
+      "O dia do julgamento",
+      "Sempre"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Confia no Senhor de todo o teu coracao e nao te apoies no teu proprio...?",
+    "opts": [
+      "Coracao",
+      "Entendimento",
+      "Braco",
+      "Esforco"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O filho sabio alegra o...?",
+    "opts": [
+      "Irmao",
+      "Pai",
+      "Amigo",
+      "Rei"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Melhor e o pobre que anda em integridade do que o rico de...?",
+    "opts": [
+      "Carater perverso",
+      "Muitos amigos",
+      "Pouca fe",
+      "Grande familia"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "A mulher virtuosa quem a achara? O seu valor excede o de...?",
+    "opts": [
+      "Ouro",
+      "Rubis",
+      "Prata",
+      "Diamantes"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Ensina a crianca no caminho em que deve andar e quando envelhecer...?",
+    "opts": [
+      "Ensinara outros",
+      "Nao se desviara",
+      "Sera rico",
+      "Sera rei"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O inicio da contenda e como uma abertura de...?",
+    "opts": [
+      "Porta",
+      "Aguas",
+      "Rio",
+      "Ferida"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Ha amigo mais chegado que um...?",
+    "opts": [
+      "Pai",
+      "Irmao",
+      "Vizinho",
+      "Rei"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Como agucar agucar o ferro assim o homem agucar o...?",
+    "opts": [
+      "Espirito",
+      "Rosto do amigo",
+      "Coracao",
+      "Entendimento"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O coracao do homem e mais enganoso que todas as coisas segundo...?",
+    "opts": [
+      "Salomao",
+      "Jeremias",
+      "Proverbios",
+      "Isaias"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Quem semeia vento colhera...?",
+    "opts": [
+      "Chuva",
+      "Tempestade",
+      "Nada",
+      "Paz"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "A esperanca adiada enferma o...?",
+    "opts": [
+      "Corpo",
+      "Coracao",
+      "Espirito",
+      "Alma"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O temor do Senhor prolonga os...?",
+    "opts": [
+      "Bens",
+      "Dias",
+      "Amigos",
+      "Filhos"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O que e doce ao homem e depois amargo?",
+    "opts": [
+      "Riqueza",
+      "Pao de mentira",
+      "Amor",
+      "Vinho"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Nao digas ao teu proximo vai e volta amanha e eu te darei quando...?",
+    "opts": [
+      "Tiveres tempo",
+      "Tens o que dar",
+      "Quiseres",
+      "Puder"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O testemunho falso nao ficara sem...?",
+    "opts": [
+      "Recompensa",
+      "Castigo",
+      "Vergonha",
+      "Fim"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Honra ao Senhor com os teus...?",
+    "opts": [
+      "Louvores",
+      "Bens",
+      "Trabalhos",
+      "Filhos"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O nome do Senhor e uma torre...?",
+    "opts": [
+      "Alta",
+      "Forte",
+      "Bela",
+      "Santa"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Quem da ao pobre empresta ao...?",
+    "opts": [
+      "Rei",
+      "Senhor",
+      "Proximo",
+      "Rico"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Sem visao o povo...?",
+    "opts": [
+      "Peca",
+      "Perece",
+      "Erra",
+      "Cai"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O coracao tranquilo e vida para o corpo mas a inveja e...?",
+    "opts": [
+      "Fraqueza",
+      "Podridao dos ossos",
+      "Tristeza",
+      "Morte"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Filho meu nao rejeites a disciplina do Senhor nem te...?",
+    "opts": [
+      "Afastes",
+      "Canses de sua correcao",
+      "Envergonhes",
+      "Rebeldes"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "A sabedoria edificou a sua...?",
+    "opts": [
+      "Cidade",
+      "Casa",
+      "Torre",
+      "Familia"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Quem acha esposa acha uma coisa boa e alcanca o favor do...?",
+    "opts": [
+      "Rei",
+      "Senhor",
+      "Povo",
+      "Pai"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O homem projetou o seu caminho mas o Senhor...?",
+    "opts": [
+      "Aprova",
+      "Dirige os passos",
+      "Abencoa",
+      "Guia"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O Senhor aborrece o coracao...?",
+    "opts": [
+      "Frio",
+      "Soberbo",
+      "Triste",
+      "Vazio"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Melhor e um prato de hervas com amor do que boi cevado com...?",
+    "opts": [
+      "Riqueza",
+      "Odio",
+      "Orgulho",
+      "Falsidade"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O Senhor fez tudo para o seu proposito ate o impio para o dia do...?",
+    "opts": [
+      "Julgamento",
+      "Mal",
+      "Pecado",
+      "Castigo"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Antes da ruina vem o orgulho e antes da queda o espirito...?",
+    "opts": [
+      "Fraco",
+      "Soberbo",
+      "Vazio",
+      "Perdido"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quem recebeu a revelacao do Apocalipse?",
+    "opts": [
+      "Pedro",
+      "Paulo",
+      "Joao",
+      "Tiago"
+    ],
+    "r": 2,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Em qual ilha Joao estava quando recebeu a visao?",
+    "opts": [
+      "Chipre",
+      "Malta",
+      "Patmos",
+      "Creta"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quantas igrejas sao mencionadas no Apocalipse?",
+    "opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "r": 2,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual e o numero da besta?",
+    "opts": [
+      "616",
+      "999",
+      "666",
+      "777"
+    ],
+    "r": 2,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quantos selos tem o livro na visao?",
+    "opts": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "r": 3,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual e a primeira igreja mencionada no Apocalipse?",
+    "opts": [
+      "Esmirna",
+      "Efeso",
+      "Laodiceia",
+      "Filadelfia"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "O que significa Apocalipse em grego?",
+    "opts": [
+      "Fim",
+      "Revelacao",
+      "Julgamento",
+      "Profecia"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quantos cavaleiros do Apocalipse existem?",
+    "opts": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "r": 2,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual cor e o cavalo da morte?",
+    "opts": [
+      "Branco",
+      "Vermelho",
+      "Preto",
+      "Amarelo"
+    ],
+    "r": 3,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual cidade e chamada de Babilonia no Apocalipse?",
+    "opts": [
+      "Jerusalem",
+      "Roma",
+      "Atenas",
+      "Efeso"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quantas trombetas sao tocadas no Apocalipse?",
+    "opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "O que e o lago de fogo no Apocalipse?",
+    "opts": [
+      "Rio",
+      "Segunda morte",
+      "Inferno",
+      "Purgatório"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual e a nova cidade que desce do ceu?",
+    "opts": [
+      "Nova Babilonia",
+      "Nova Jerusalem",
+      "Nova Roma",
+      "Nova Siao"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quantas portas tem a Nova Jerusalem?",
+    "opts": [
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "O que ilumina a Nova Jerusalem?",
+    "opts": [
+      "Sol",
+      "Lua",
+      "Gloria de Deus",
+      "Estrelas"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quantos ancioes estao ao redor do trono?",
+    "opts": [
+      "12",
+      "24",
+      "36",
+      "48"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "O que os quatro seres viventes dizem dia e noite?",
+    "opts": [
+      "Aleluia",
+      "Santo santo santo",
+      "Gloria a Deus",
+      "Amen"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quem e o Alfa e o Omega?",
+    "opts": [
+      "Anjo",
+      "Jesus",
+      "Profeta",
+      "Rei"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "O que e lanado no lago de fogo no fim?",
+    "opts": [
+      "Pecadores apenas",
+      "Morte e inferno",
+      "Diabos apenas",
+      "Besta apenas"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual igreja e chamada de morna?",
+    "opts": [
+      "Efeso",
+      "Esmirna",
+      "Laodiceia",
+      "Filadelfia"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual e a promessa para a igreja de Filadelfia?",
+    "opts": [
+      "Coroa da vida",
+      "Porta aberta",
+      "Maná escondido",
+      "Estrela da manha"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "O que Joao comeu que era doce na boca e amargo no ventre?",
+    "opts": [
+      "Fruto",
+      "Livro",
+      "Pao",
+      "Mel"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quantos anos e o reinado de Cristo mencionado?",
+    "opts": [
+      "100",
+      "500",
+      "1000",
+      "2000"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quem e o dragao no Apocalipse?",
+    "opts": [
+      "Besta",
+      "Satanas",
+      "Anticristo",
+      "Falso profeta"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual rio flui da cidade de Deus?",
+    "opts": [
+      "Rio do Jordao",
+      "Rio da vida",
+      "Rio de cristal",
+      "Rio eterno"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "O que nao havera mais na Nova Jerusalem?",
+    "opts": [
+      "Alegria",
+      "Lagrimas nem morte",
+      "Louvor",
+      "Luz"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Bem-aventurado quem le e guarda as palavras desta...?",
+    "opts": [
+      "Lei",
+      "Profecia",
+      "Historia",
+      "Revelacao"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual e a ultima palavra da Biblia?",
+    "opts": [
+      "Amen",
+      "Aleluia",
+      "Gloria",
+      "Maranata"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Jesus diz Eis que venho...?",
+    "opts": [
+      "Em breve",
+      "Logo",
+      "Ja",
+      "Em poder"
+    ],
+    "r": 0,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quem vence recebe a coroa da vida na igreja de...?",
+    "opts": [
+      "Efeso",
+      "Esmirna",
+      "Pergamo",
+      "Tiatira"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual e a arvore que da frutos todos os meses?",
+    "opts": [
+      "Arvore do Eden",
+      "Arvore da vida",
+      "Arvore do bem",
+      "Arvore eterna"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quantos sao os selados das tribos de Israel?",
+    "opts": [
+      "12000",
+      "72000",
+      "144000",
+      "1000000"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "O que os martires clamavam debaixo do altar?",
+    "opts": [
+      "Gloria",
+      "Justica e vinganca",
+      "Paz",
+      "Misericordia"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual besta sobe do mar?",
+    "opts": [
+      "Com 5 cabecas",
+      "Com 7 cabecas",
+      "Com 10 cabecas",
+      "Com 7 cabecas e 10 cornos"
+    ],
+    "r": 3,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "O que e escrito na testa da prostituta?",
+    "opts": [
+      "666",
+      "Babilonia a grande",
+      "Morte",
+      "Perdição"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quem luta contra a besta no Armagedom?",
+    "opts": [
+      "Anjos",
+      "O Cordeiro",
+      "Exercito do ceu",
+      "Todos"
+    ],
+    "r": 2,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual e o nome do cavalo branco do vencedor?",
+    "opts": [
+      "Fiel e Verdadeiro",
+      "Santo",
+      "Poderoso",
+      "Eterno"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "O que Deus elimina na nova criacao?",
+    "opts": [
+      "Pecado apenas",
+      "Mar tambem",
+      "Morte apenas",
+      "Trevas apenas"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Qual e a esposa do Cordeiro?",
+    "opts": [
+      "Igreja",
+      "Israel",
+      "Nova Jerusalem",
+      "Maria"
+    ],
+    "r": 0,
+    "nivel": "medio"
   }
 ]
