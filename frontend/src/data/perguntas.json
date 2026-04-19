@@ -58,5 +58,809 @@
     ],
     "r": 1,
     "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi a primeira mulher?",
+    "opts": [
+      "Sara",
+      "Eva",
+      "Rebeca",
+      "Raquel"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quantos dias durou o diluvio de chuva?",
+    "opts": [
+      "30",
+      "40",
+      "50",
+      "60"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi vendido pelos irmaos?",
+    "opts": [
+      "Isaque",
+      "Jose",
+      "Jaco",
+      "Esau"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem libertou o povo do Egito?",
+    "opts": [
+      "Abraao",
+      "Moises",
+      "Davi",
+      "Jose"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Qual mar foi aberto?",
+    "opts": [
+      "Mar Morto",
+      "Mar Vermelho",
+      "Mar Negro",
+      "Mar Azul"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quantos mandamentos Deus deu?",
+    "opts": [
+      "5",
+      "10",
+      "12",
+      "15"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Onde Moises recebeu os mandamentos?",
+    "opts": [
+      "Monte Sinai",
+      "Monte Carmelo",
+      "Monte Siao",
+      "Monte Horebe"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quem escreveu muitos Salmos?",
+    "opts": [
+      "Moises",
+      "Davi",
+      "Salomao",
+      "Elias"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O Senhor e meu...?",
+    "opts": [
+      "Rei",
+      "Pastor",
+      "Juiz",
+      "Amigo"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O que nao faltara ao que confia em Deus?",
+    "opts": [
+      "Nada",
+      "Dinheiro",
+      "Comida",
+      "Forca"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Quem escreveu muitos proverbios?",
+    "opts": [
+      "Davi",
+      "Salomao",
+      "Moises",
+      "Elias"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O temor do Senhor e o principio de que?",
+    "opts": [
+      "Sabedoria",
+      "Forca",
+      "Riqueza",
+      "Amor"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem matou Abel?",
+    "opts": [
+      "Caim",
+      "Noe",
+      "Adao",
+      "Sete"
+    ],
+    "r": 0,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Qual foi o sinal da alianca apos o diluvio?",
+    "opts": [
+      "Estrela",
+      "Arco-iris",
+      "Fogo",
+      "Nuvem"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi o pai de Abraao?",
+    "opts": [
+      "Tera",
+      "Isaque",
+      "Lo",
+      "Jaco"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Qual o nome da esposa de Abraao?",
+    "opts": [
+      "Rebeca",
+      "Sara",
+      "Raquel",
+      "Miria"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem quase foi sacrificado por Abraao?",
+    "opts": [
+      "Isaque",
+      "Jaco",
+      "Jose",
+      "Esau"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quantos filhos Jaco teve?",
+    "opts": [
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "r": 2,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem interpretava sonhos no Egito?",
+    "opts": [
+      "Moises",
+      "Jose",
+      "Arao",
+      "Farao"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Qual era o nome do irmao de Jose?",
+    "opts": [
+      "Juda",
+      "Moises",
+      "Arao",
+      "Samuel"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Onde Deus colocou Adao e Eva?",
+    "opts": [
+      "Deserto",
+      "Jardim do Eden",
+      "Monte",
+      "Rio"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem lutou com o anjo?",
+    "opts": [
+      "Abraao",
+      "Jaco",
+      "Isaque",
+      "Jose"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem era o irmao de Moises?",
+    "opts": [
+      "Jose",
+      "Arao",
+      "Davi",
+      "Samuel"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem era a irma de Moises?",
+    "opts": [
+      "Marta",
+      "Miria",
+      "Sara",
+      "Ana"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que Deus enviou para alimentar o povo?",
+    "opts": [
+      "Carne",
+      "Mana",
+      "Peixe",
+      "Pao"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que saiu da rocha?",
+    "opts": [
+      "Fogo",
+      "Agua",
+      "Areia",
+      "Oleo"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem endureceu o coracao?",
+    "opts": [
+      "Moises",
+      "Farao",
+      "Arao",
+      "Jose"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quantas pragas houve no Egito?",
+    "opts": [
+      "7",
+      "10",
+      "12",
+      "15"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Qual animal foi sacrificado na Pascoa?",
+    "opts": [
+      "Cordeiro",
+      "Boi",
+      "Pombo",
+      "Cabra"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem falou com Deus na sarca ardente?",
+    "opts": [
+      "Arao",
+      "Moises",
+      "Davi",
+      "Abraao"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que guiava o povo de noite?",
+    "opts": [
+      "Lua",
+      "Coluna de fogo",
+      "Estrela",
+      "Tocha"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que guiava o povo de dia?",
+    "opts": [
+      "Sol",
+      "Nuvem",
+      "Vento",
+      "Fogo"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Qual instrumento Davi tocava?",
+    "opts": [
+      "Flauta",
+      "Harpa",
+      "Tambor",
+      "Violino"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quem e nosso refugio?",
+    "opts": [
+      "Rei",
+      "Deus",
+      "Anjo",
+      "Homem"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O Senhor e bom e sua...?",
+    "opts": [
+      "Lei",
+      "Misericordia dura para sempre",
+      "Forca",
+      "Justica"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Onde Davi confiava?",
+    "opts": [
+      "Espada",
+      "Deus",
+      "Rei",
+      "Exercito"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quem conhece o coracao?",
+    "opts": [
+      "Homem",
+      "Deus",
+      "Anjo",
+      "Profeta"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O Senhor e minha... e salvacao?",
+    "opts": [
+      "Luz",
+      "Forca",
+      "Casa",
+      "Vida"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quem criou os ceus?",
+    "opts": [
+      "Homem",
+      "Deus",
+      "Rei",
+      "Anjo"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O que devemos fazer ao Senhor?",
+    "opts": [
+      "Ignorar",
+      "Louvar",
+      "Temer homens",
+      "Fugir"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quem protege?",
+    "opts": [
+      "Soldado",
+      "Deus",
+      "Rei",
+      "Pai"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Salmos",
+    "q": "O Senhor ouve a...?",
+    "opts": [
+      "Musica",
+      "Oracao",
+      "Guerra",
+      "Lei"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "A resposta branda desvia o que?",
+    "opts": [
+      "Amor",
+      "Furia",
+      "Paz",
+      "Medo"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Quem busca sabedoria encontra?",
+    "opts": [
+      "Vida",
+      "Problema",
+      "Erro",
+      "Dor"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O orgulho precede a...?",
+    "opts": [
+      "Vitoria",
+      "Queda",
+      "Alegria",
+      "Paz"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Melhor e pouco com...?",
+    "opts": [
+      "Riqueza",
+      "Justica",
+      "Raiva",
+      "Poder"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Quem guarda a boca preserva...?",
+    "opts": [
+      "Vida",
+      "Dinheiro",
+      "Amigos",
+      "Tempo"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O coracao alegre faz o que?",
+    "opts": [
+      "Chorar",
+      "Bem",
+      "Mal",
+      "Dormir"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "A lingua tem poder de...?",
+    "opts": [
+      "Vida e morte",
+      "Dinheiro",
+      "Tempo",
+      "Forca"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Quem anda com sabios sera...?",
+    "opts": [
+      "Rico",
+      "Sabio",
+      "Forte",
+      "Rei"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O preguicoso deseja e nao tem?",
+    "opts": [
+      "Nada",
+      "Tudo",
+      "Paz",
+      "Forca"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Proverbios",
+    "q": "O justo e como a luz da...?",
+    "opts": [
+      "Noite",
+      "Aurora",
+      "Lua",
+      "Estrela"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi o filho mais novo de Jaco?",
+    "opts": [
+      "Jose",
+      "Benjamim",
+      "Juda",
+      "Ruben"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi transformada em estatua de sal?",
+    "opts": [
+      "Sara",
+      "Mulher de Lo",
+      "Rebeca",
+      "Raquel"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Qual cidade foi destruida junto com Sodoma?",
+    "opts": [
+      "Jerico",
+      "Gomorra",
+      "Babel",
+      "Ninive"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem enganou Isaque para dar a bencao?",
+    "opts": [
+      "Esau",
+      "Jaco",
+      "Jose",
+      "Lo"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem era o irmao de Esau?",
+    "opts": [
+      "Jose",
+      "Jaco",
+      "Isaque",
+      "Abraao"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem teve um sonho com uma escada ate o ceu?",
+    "opts": [
+      "Abraao",
+      "Jaco",
+      "Jose",
+      "Noe"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi o filho prometido a Abraao?",
+    "opts": [
+      "Ismael",
+      "Isaque",
+      "Jaco",
+      "Jose"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi a mae de Isaque?",
+    "opts": [
+      "Sara",
+      "Rebeca",
+      "Raquel",
+      "Lea"
+    ],
+    "r": 0,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi vendido por 20 moedas?",
+    "opts": [
+      "Jose",
+      "Jaco",
+      "Esau",
+      "Isaque"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem governava o Egito quando Jose chegou?",
+    "opts": [
+      "Rei",
+      "Farao",
+      "Imperador",
+      "Sacerdote"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quantos anos viveu Matusalem?",
+    "opts": [
+      "777",
+      "969",
+      "888",
+      "950"
+    ],
+    "r": 1,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi pai de Noe?",
+    "opts": [
+      "Lameque",
+      "Sete",
+      "Adao",
+      "Enoque"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Qual foi o sinal que Deus colocou em Caim?",
+    "opts": [
+      "Marca",
+      "Luz",
+      "Fogo",
+      "Coroa"
+    ],
+    "r": 0,
+    "nivel": "dificil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi o avo de Jaco?",
+    "opts": [
+      "Abraao",
+      "Isaque",
+      "Jose",
+      "Noe"
+    ],
+    "r": 0,
+    "nivel": "medio"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem teve doze filhos que formaram as tribos?",
+    "opts": [
+      "Abraao",
+      "Jaco",
+      "Isaque",
+      "Jose"
+    ],
+    "r": 1,
+    "nivel": "facil"
   }
 ]
