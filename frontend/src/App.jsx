@@ -114,7 +114,7 @@ export default function App() {
       fetch((import.meta.env.VITE_API_URL || '') + '/api/friends/requests', {
         headers: { Authorization: 'Bearer ' + token }
       }).then(r => r.json()).then(data => {
-        if (typeof window.playSound === 'function') window.playSound('notify'); setPendingRequests((data.requests || []).length);
+        setPendingRequests((data.requests || []).length);
       }).catch(() => {});
     };
     fetchPending();
@@ -126,7 +126,7 @@ export default function App() {
     fetch((import.meta.env.VITE_API_URL || '') + '/api/notifications/unread-count', {
       headers: { Authorization: 'Bearer ' + token }
     }).then(r => r.json()).then(data => {
-      if (data && data.count !== undefined) if (typeof window.playSound === 'function') window.playSound('message'); setUnreadMessages(data.count);
+      if (data && data.count !== undefined) setUnreadMessages(data.count);
     }).catch(() => {});
   }, [token]);
   const wsCtx = useWebSocket();
