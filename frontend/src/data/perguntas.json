@@ -1,0 +1,62 @@
+[
+  {
+    "livro": "Genesis",
+    "q": "Quem foi o primeiro homem?",
+    "opts": [
+      "Noe",
+      "Adao",
+      "Abraao",
+      "Moises"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem construiu a arca?",
+    "opts": [
+      "Abraao",
+      "Noe",
+      "Lo",
+      "Isaque"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quem abriu o mar?",
+    "opts": [
+      "Noe",
+      "Moises",
+      "Davi",
+      "Jose"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Mateus",
+    "q": "Onde Jesus nasceu?",
+    "opts": [
+      "Jerusalem",
+      "Belem",
+      "Nazare",
+      "Roma"
+    ],
+    "r": 1,
+    "nivel": "facil"
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quem teve a visao do Apocalipse?",
+    "opts": [
+      "Pedro",
+      "Joao",
+      "Paulo",
+      "Tiago"
+    ],
+    "r": 1,
+    "nivel": "medio"
+  }
+]
