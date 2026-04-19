@@ -233,6 +233,7 @@ export default function App() {
               ['/musica', <Music size={20}/>, t('nav.music')],
               ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA BÃ­blica')],
               ['/grupos', <Users size={20}/>, t('nav.groups')],
+              ['/ajuda-uma-vida', <Heart size={20}/>, t('nav.help_life', 'Ajuda ao Proximo')],
             ].map(([to, icon, label]) => (
               <Link key={to} to={to} onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'white',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
                 {icon} {label}
