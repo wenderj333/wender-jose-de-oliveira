@@ -4,7 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import PERGUNTAS_JSON from '../data/perguntas.json';
 
-const PERGUNTAS = PERGUNTAS_JSON
+const PERGUNTAS = PERGUNTAS_JSON;
+
 const TEMPO = 15;
 
 export default function DesafioBiblico() {
