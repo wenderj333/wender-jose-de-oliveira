@@ -1512,5 +1512,26 @@
     "community": "COMMUNITY",
     "spiritual": "SPIRITUAL",
     "system": "SYSTEM"
+  },
+  "bible_challenge": {
+    "title": "Bible Challenge",
+    "subtitle": "Test your knowledge of the Word!",
+    "createRoom": "Create Room",
+    "joinRoom": "Join",
+    "roomCode": "Room code...",
+    "copyInvite": "Copy invite",
+    "startGame": "Start Game!",
+    "question": "Question",
+    "points": "pts",
+    "shareResult": "Share result",
+    "playAgain": "Play again",
+    "back": "Back",
+    "waiting": "Waiting Room",
+    "host": "Host",
+    "correct": "Amen!",
+    "wrong": "Almost!",
+    "masterBible": "Bible Master!",
+    "veryGood": "Very good!",
+    "keepStudying": "Keep studying!"
   }
 }

@@ -1488,5 +1488,26 @@
     "community": "COMUNIDADE",
     "spiritual": "ESPIRITUAL",
     "system": "SISTEMA"
+  },
+  "bible_challenge": {
+    "title": "Desafio Biblico",
+    "subtitle": "Testa o teu conhecimento da Palavra!",
+    "createRoom": "Criar Sala",
+    "joinRoom": "Entrar",
+    "roomCode": "Codigo da sala...",
+    "copyInvite": "Copiar convite",
+    "startGame": "Iniciar Jogo!",
+    "question": "Pergunta",
+    "points": "pts",
+    "shareResult": "Partilhar resultado",
+    "playAgain": "Jogar de novo",
+    "back": "Voltar",
+    "waiting": "Sala de Espera",
+    "host": "Anfitriao",
+    "correct": "Amem!",
+    "wrong": "Quase!",
+    "masterBible": "Mestre Biblico!",
+    "veryGood": "Muito bem!",
+    "keepStudying": "Continue estudando!"
   }
 }

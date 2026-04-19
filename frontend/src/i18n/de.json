@@ -1514,5 +1514,26 @@
     "community": "GEMEINSCHAFT",
     "spiritual": "SPIRITUELL",
     "system": "SYSTEM"
+  },
+  "bible_challenge": {
+    "title": "Bibel-Challenge",
+    "subtitle": "Teste dein Wissen der Schrift!",
+    "createRoom": "Raum erstellen",
+    "joinRoom": "Beitreten",
+    "roomCode": "Raumcode...",
+    "copyInvite": "Einladung kopieren",
+    "startGame": "Spiel starten!",
+    "question": "Frage",
+    "points": "Pkt",
+    "shareResult": "Ergebnis teilen",
+    "playAgain": "Nochmal spielen",
+    "back": "Zuruck",
+    "waiting": "Wartezimmer",
+    "host": "Gastgeber",
+    "correct": "Amen!",
+    "wrong": "Fast!",
+    "masterBible": "Bibelmeister!",
+    "veryGood": "Sehr gut!",
+    "keepStudying": "Weiter lernen!"
   }
 }

@@ -30,6 +30,7 @@ import DiarioComDeus from './pages/DiarioComDeus';
 import LiveStream from './pages/LiveStream';
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
+import DesafioBiblico from "./pages/DesafioBiblico";
 import AjudaUmaVida from "./pages/AjudaUmaVida";
 import Chat from "./pages/Chat";
 import Churches from "./pages/Churches";
@@ -335,7 +336,7 @@ export default function App() {
             <Route path="/musica" element={<MusicLibrary />} />
             <Route path="/consagracao" element={<Consecration />} />
             <Route path="/reflexao" element={<Reflection />} />
-            <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
+            <Route path="/desafio-biblico" element={<DesafioBiblico />} /><Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
             <Route path="/mensagens" element={<Chat />} />
             <Route path="/mensagens/:userId" element={<Chat />} />
             <Route path="/amigos" element={<Friends />} />

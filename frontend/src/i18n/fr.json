@@ -1512,5 +1512,26 @@
     "community": "COMMUNAUTÉ",
     "spiritual": "SPIRITUEL",
     "system": "SYSTÈME"
+  },
+  "bible_challenge": {
+    "title": "Defi Biblique",
+    "subtitle": "Teste ta connaissance de la Parole!",
+    "createRoom": "Creer une salle",
+    "joinRoom": "Rejoindre",
+    "roomCode": "Code de salle...",
+    "copyInvite": "Copier invitation",
+    "startGame": "Demarrer le jeu!",
+    "question": "Question",
+    "points": "pts",
+    "shareResult": "Partager le resultat",
+    "playAgain": "Rejouer",
+    "back": "Retour",
+    "waiting": "Salle dattente",
+    "host": "Hote",
+    "correct": "Amen!",
+    "wrong": "Presque!",
+    "masterBible": "Maitre Biblique!",
+    "veryGood": "Tres bien!",
+    "keepStudying": "Continue detudier!"
   }
 }

@@ -1512,5 +1512,26 @@
     "community": "СООБЩЕСТВО",
     "spiritual": "ДУХОВНОЕ",
     "system": "СИСТЕМА"
+  },
+  "bible_challenge": {
+    "title": "Библейский вызов",
+    "subtitle": "Проверь своё знание Слова!",
+    "createRoom": "Создать комнату",
+    "joinRoom": "Войти",
+    "roomCode": "Код комнаты...",
+    "copyInvite": "Копировать приглашение",
+    "startGame": "Начать игру!",
+    "question": "Вопрос",
+    "points": "очк",
+    "shareResult": "Поделиться результатом",
+    "playAgain": "Играть снова",
+    "back": "Назад",
+    "waiting": "Зал ожидания",
+    "host": "Хозяин",
+    "correct": "Аминь!",
+    "wrong": "Почти!",
+    "masterBible": "Библейский мастер!",
+    "veryGood": "Очень хорошо!",
+    "keepStudying": "Продолжай учиться!"
   }
 }

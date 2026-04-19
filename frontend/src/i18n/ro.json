@@ -1513,5 +1513,26 @@
     "community": "COMUNITATE",
     "spiritual": "SPIRITUAL",
     "system": "SISTEM"
+  },
+  "bible_challenge": {
+    "title": "Provocare Biblica",
+    "subtitle": "Testeaza-ti cunostintele din Cuvant!",
+    "createRoom": "Creeaza camera",
+    "joinRoom": "Intra",
+    "roomCode": "Codul camerei...",
+    "copyInvite": "Copiaza invitatia",
+    "startGame": "Incepe jocul!",
+    "question": "Intrebare",
+    "points": "pct",
+    "shareResult": "Distribuie rezultatul",
+    "playAgain": "Joaca din nou",
+    "back": "Inapoi",
+    "waiting": "Sala de asteptare",
+    "host": "Gazda",
+    "correct": "Amin!",
+    "wrong": "Aproape!",
+    "masterBible": "Maestru Biblic!",
+    "veryGood": "Foarte bine!",
+    "keepStudying": "Continua sa studiezi!"
   }
 }
