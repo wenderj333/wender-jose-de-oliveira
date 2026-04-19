@@ -67,7 +67,13 @@ export default function Chat() {
       const res = await fetch(`${API}/api/messages/${userId}`, { headers });
       if (res.ok) {
         const data = await res.json();
-        setMessages(data.messages || []);
+        const newMsgs = data.messages || [];
+      setMessages(prev => {
+        if (prev.length > 0 && newMsgs.length > prev.length) {
+          if (typeof window.playSound === ' + chr(39) + 'function' + chr(39) + ') window.playSound(' + chr(39) + 'message' + chr(39) + ');
+        }
+        return newMsgs;
+      });
         setFriendStatus(data.friendshipStatus || 'none');
         setOtherUser(data.otherUser || null);
       }
