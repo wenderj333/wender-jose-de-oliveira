@@ -205,6 +205,7 @@ export default function App() {
           <div style={{marginBottom:'20px'}}>
             <p style={{color:'#c9a84c',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'10px',paddingLeft:'16px'}}>{t('nav.spiritual_life')}</p>
             {[
+              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA Biblica')],
               ['/pedidos-ajuda', <Heart size={20}/>, t('nav.prayers')],
               ['/consagracao', <PlayCircle size={20}/>, t('nav.consecration')],
               ['/reflexao', <Sun size={20}/>, t('nav.reflection')],
