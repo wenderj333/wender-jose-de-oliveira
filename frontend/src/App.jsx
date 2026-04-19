@@ -462,7 +462,7 @@ export default function App() {
           { to: '/', icon: <Home size={22}/>, label: t('nav.mural', 'Inicio') },
           { to: '/amigos', icon: <Users size={22}/>, label: t('nav.friends', 'Amigos') },
           { to: '/mensagens', icon: <MessageCircle size={22}/>, label: t('nav.messages', 'Mensagens') },
-          { to: '/comunidade-ao-vivo', icon: <span style={{fontSize:20}}>ðŸ•Šï¸</span>, label: t('nav.live_community', 'Chat') },
+          { to: '/comunidade-ao-vivo', icon: <MessageCircle size={20}/>, label: t('nav.live_community', 'Chat') },
           { to: `/perfil/${user.id}`, icon: user.avatar_url ? <img src={user.avatar_url} style={{width:24,height:24,borderRadius:'50%',objectFit:'cover'}}/> : <User size={22}/>, label: t('common.profile', 'Perfil') },
         ].map(item => (
           <Link key={item.to} to={item.to} style={{
