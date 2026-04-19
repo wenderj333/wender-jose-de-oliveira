@@ -48,6 +48,35 @@ import GlobalChat from "./components/GlobalChat";
 // Styles
 import "./styles/ModernTheme.css";
 
+function playSound(type) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    if (type === 'notify') {
+      o.frequency.setValueAtTime(880, ctx.currentTime);
+      o.frequency.setValueAtTime(1100, ctx.currentTime + 0.1);
+      g.gain.setValueAtTime(0.3, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.4);
+    } else if (type === 'message') {
+      o.frequency.setValueAtTime(660, ctx.currentTime);
+      o.frequency.setValueAtTime(880, ctx.currentTime + 0.15);
+      g.gain.setValueAtTime(0.2, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.5);
+    } else if (type === 'pray') {
+      o.type = 'sine';
+      o.frequency.setValueAtTime(528, ctx.currentTime);
+      g.gain.setValueAtTime(0.15, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.0);
+      o.start(ctx.currentTime); o.stop(ctx.currentTime + 1.0);
+    }
+  } catch(e) {}
+}
+window.playSound = playSound;
+
 export default function App() {
   const { t } = useTranslation();
   const { user, logout, loading, token } = useAuth();
@@ -85,7 +114,7 @@ export default function App() {
       fetch((import.meta.env.VITE_API_URL || '') + '/api/friends/requests', {
         headers: { Authorization: 'Bearer ' + token }
       }).then(r => r.json()).then(data => {
-        setPendingRequests((data.requests || []).length);
+        if (typeof window.playSound === 'function') window.playSound('notify'); setPendingRequests((data.requests || []).length);
       }).catch(() => {});
     };
     fetchPending();
@@ -97,7 +126,7 @@ export default function App() {
     fetch((import.meta.env.VITE_API_URL || '') + '/api/notifications/unread-count', {
       headers: { Authorization: 'Bearer ' + token }
     }).then(r => r.json()).then(data => {
-      if (data && data.count !== undefined) setUnreadMessages(data.count);
+      if (data && data.count !== undefined) if (typeof window.playSound === 'function') window.playSound('message'); setUnreadMessages(data.count);
     }).catch(() => {});
   }, [token]);
   const wsCtx = useWebSocket();
