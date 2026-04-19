@@ -28,6 +28,15 @@ function setupWebSocket(server) {
         const msg = JSON.parse(data);
 
         switch (msg.type) {
+          case 'game_create':
+          case 'game_join':
+          case 'game_ready':
+          case 'game_start':
+          case 'game_answer':
+          case 'game_chat':
+          case 'game_end':
+            handleGame(ws, msg);
+            break;
           case 'identify':
             clients.set(ws, { userId: msg.userId, churchId: msg.churchId });
             // Send current live sessions
@@ -371,6 +380,77 @@ function broadcastToStream(wss, streamId, data, excludeWs) {
     if (vws.readyState === 1 && vws !== excludeWs) {
       vws.send(message);
     }
+  }
+}
+
+
+const gameRooms = new Map();
+
+function handleGame(ws, msg) {
+  const client = clients.get(ws);
+  const userId = client?.userId || msg.userId;
+  const userName = msg.userName || 'Jogador';
+
+  if (msg.type === 'game_create') {
+    const roomId = msg.roomId;
+    gameRooms.set(roomId, {
+      id: roomId,
+      livro: msg.livro || 'Todos',
+      jogadores: [{ userId, userName, avatar: msg.avatar, pontos: 0, pronto: false, ws }],
+      iniciado: false,
+      perguntaIdx: 0,
+    });
+    ws.send(JSON.stringify({ type: 'game_joined', roomId, jogadores: gameRooms.get(roomId).jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto })) }));
+  }
+
+  else if (msg.type === 'game_join') {
+    const roomId = msg.roomId;
+    const room = gameRooms.get(roomId);
+    if (!room) { ws.send(JSON.stringify({ type: 'game_error', message: 'Sala nao encontrada' })); return; }
+    if (room.iniciado) { ws.send(JSON.stringify({ type: 'game_error', message: 'Jogo ja iniciado' })); return; }
+    room.jogadores.push({ userId, userName, avatar: msg.avatar, pontos: 0, pronto: false, ws });
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_joined', roomId, jogadores: jogadoresPublico })); });
+  }
+
+  else if (msg.type === 'game_ready') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const j = room.jogadores.find(j => j.userId === userId);
+    if (j) j.pronto = true;
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_update', jogadores: jogadoresPublico })); });
+  }
+
+  else if (msg.type === 'game_start') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    room.iniciado = true;
+    room.perguntaIdx = 0;
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_started', livro: room.livro })); });
+  }
+
+  else if (msg.type === 'game_answer') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const j = room.jogadores.find(j => j.userId === userId);
+    if (j) j.pontos += msg.pontos || 0;
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_score', jogadores: jogadoresPublico })); });
+  }
+
+  else if (msg.type === 'game_chat') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_chat_msg', userName, texto: msg.texto })); });
+  }
+
+  else if (msg.type === 'game_end') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores: jogadoresPublico })); });
+    gameRooms.delete(msg.roomId);
   }
 }
 
