@@ -6,6 +6,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import PERGUNTAS_JSON from '../data/perguntas.json';
 
 const PERGUNTAS = [];
 const TEMPO = 6;
