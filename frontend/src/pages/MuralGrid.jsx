@@ -737,7 +737,7 @@ export default function MuralGrid() {
           <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleMediaSelect(e, 'foto')} />
           <input ref={videoRef} type="file" accept="video/*" style={{ display: 'none' }} onChange={e => handleMediaSelect(e, 'video')} />
           
-          <input ref={videoRef} type="file" accept="video/*" capture="environment" style={{ display: "none" }} onChange={e => handleMediaSelect(e, "video")} />
+          <input ref={videoRef} type="file" accept="video/*" style={{ display: "none" }} onChange={e => handleMediaSelect(e, "video")} />
           <input ref={musicRef} type="file" accept="audio/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files[0]; if (f) { setMusicFile(f); setMusicName(f.name); } }} />
 
           {/* Selected music from library */}
