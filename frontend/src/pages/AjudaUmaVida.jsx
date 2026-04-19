@@ -28,6 +28,7 @@ export default function AjudaUmaVida() {
   const ACTION_CARDS = [
     {
       emoji: '😔',
+      image: 'https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=400&q=80',
       label: t('ajudaProximo.needHelp'),
       desc: t('ajudaProximo.needHelpDesc'),
       type: 'request',
@@ -36,6 +37,7 @@ export default function AjudaUmaVida() {
     },
     {
       emoji: '🙏',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
       label: t('ajudaProximo.wantToPray'),
       desc: t('ajudaProximo.wantToPrayDesc'),
       type: null,
@@ -44,6 +46,7 @@ export default function AjudaUmaVida() {
     },
     {
       emoji: '❤️',
+      image: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&q=80',
       label: t('ajudaProximo.wantToHelp'),
       desc: t('ajudaProximo.wantToHelpDesc'),
       type: 'offer',
@@ -52,6 +55,7 @@ export default function AjudaUmaVida() {
     },
     {
       emoji: '📖',
+      image: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&q=80',
       label: t('ajudaProximo.testimony'),
       desc: t('ajudaProximo.testimonyDesc'),
       type: 'testimony',
@@ -581,7 +585,7 @@ export default function AjudaUmaVida() {
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              <span style={styles.actionEmoji}>{card.emoji}</span>
+              {card.image ? <img src={card.image} alt={card.label} style={{ width:'100%', height:120, objectFit:'cover', borderRadius:10, marginBottom:10, display:'block' }} onError={e => { e.target.style.display='none'; }} /> : <span style={styles.actionEmoji}>{card.emoji}</span>}
               <div style={styles.actionLabel}>{card.label}</div>
               <div style={styles.actionDesc}>{card.desc}</div>
             </div>
