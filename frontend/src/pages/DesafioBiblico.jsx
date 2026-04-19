@@ -1,14 +1,28 @@
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import PERGUNTAS_JSON from '../data/perguntas.json';
 
-const PERGUNTAS = [];
-function filtrarPerguntas(livro) { let pool = PERGUNTAS_JSON.filter(p => livro === 'Todos' || p.livro === livro); if(pool.length===0) pool=PERGUNTAS_JSON; const f=pool.filter(p=>p.nivel==='facil').sort(()=>Math.random()-0.5).slice(0,2); const m=pool.filter(p=>p.nivel==='medio').sort(()=>Math.random()-0.5).slice(0,2); const d=pool.filter(p=>p.nivel==='dificil').sort(()=>Math.random()-0.5).slice(0,1); return [...f,...m,...d]; }
-const TEMPO = 6;
+const PERGUNTAS = [
+  { q: 'Quem foi o pai de Matusalem?', opts: ['Noe', 'Enoque', 'Lameque', 'Sete'], r: 1 },
+  { q: 'Quantos livros tem o Novo Testamento?', opts: ['25', '26', '27', '28'], r: 2 },
+  { q: 'Quem substituiu Judas Iscariotes?', opts: ['Paulo', 'Barnabe', 'Matias', 'Silas'], r: 2 },
+  { q: 'Em que monte Moises recebeu a Lei?', opts: ['Monte Carmelo', 'Monte Sinai', 'Monte Hermon', 'Monte das Oliveiras'], r: 1 },
+  { q: 'Quem foi lancado na cova dos leoes?', opts: ['Elias', 'Eliseu', 'Daniel', 'Jeremias'], r: 2 },
+  { q: 'Quem foi o rei quando Daniel foi lancado na cova?', opts: ['Nabucodonosor', 'Ciro', 'Dario', 'Saul'], r: 2 },
+  { q: 'Quantos anos tinha Noe quando o diluvio comecou?', opts: ['500', '600', '700', '800'], r: 1 },
+  { q: 'Qual foi o primeiro milagre de Jesus?', opts: ['Cura de cego', 'Agua em vinho', 'Multiplicacao de paes', 'Ressurreicao de Lazaro'], r: 1 },
+  { q: 'Quantos discipulos Jesus escolheu?', opts: ['10', '11', '12', '13'], r: 2 },
+  { q: 'Quem escreveu o livro do Apocalipse?', opts: ['Paulo', 'Pedro', 'Tiago', 'Joao'], r: 3 },
+  { q: 'Em qual cidade Jesus nasceu?', opts: ['Nazare', 'Belem', 'Jerusalém', 'Cafarnaum'], r: 1 },
+  { q: 'Qual o rio onde Jesus foi batizado?', opts: ['Eufrates', 'Nilo', 'Jordao', 'Tigre'], r: 2 },
+  { q: 'Quantos dias Jesus ficou no deserto?', opts: ['20', '30', '40', '50'], r: 2 },
+  { q: 'Quem vendeu Jose como escravo?', opts: ['Seus irmaos', 'Seu pai', 'Seus inimigos', 'Farao'], r: 0 },
+  { q: 'Qual livro vem depois de Geneses?', opts: ['Levitico', 'Numeros', 'Exodo', 'Deuteronomio'], r: 2 },
+];
+
+const TEMPO = 15;
 
 export default function DesafioBiblico() {
   const { t } = useTranslation();
