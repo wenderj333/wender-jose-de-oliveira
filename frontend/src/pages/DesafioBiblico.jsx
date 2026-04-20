@@ -1,201 +1,204 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import PERGUNTAS_JSON from '../data/perguntas.json';
 
-const PERGUNTAS = PERGUNTAS_JSON;
-
+const LIVROS = ['Todos','Genesis','Exodo','Salmos','Proverbios','Mateus','Apocalipse'];
 const TEMPO = 15;
+const bg = { minHeight:'100vh', background:'linear-gradient(135deg,#1a0a3e,#2d1054)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:24, color:'white' };
+
+function filtrar(livro) {
+  let p = PERGUNTAS_JSON.filter(x => livro==='Todos' || x.livro===livro);
+  if(!p.length) p = PERGUNTAS_JSON;
+  const f=p.filter(x=>x.nivel==='facil').sort(()=>Math.random()-0.5).slice(0,2);
+  const m=p.filter(x=>x.nivel==='medio').sort(()=>Math.random()-0.5).slice(0,2);
+  const d=p.filter(x=>x.nivel==='dificil').sort(()=>Math.random()-0.5).slice(0,1);
+  return [...f,...m,...d];
+}
 
 export default function DesafioBiblico() {
-  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
-
   const [tela, setTela] = useState('lobby');
-  const [codigoSala, setCodigoSala] = useState('');
-  const [codigoInput, setCodigoInput] = useState('');
-  const [jogadores, setJogadores] = useState([]);
-  const [perguntaIdx, setPerguntaIdx] = useState(0);
+  const [livro, setLivro] = useState('Todos');
+  const [codigo, setCodigo] = useState('');
+  const [cInput, setCInput] = useState('');
+  const [perguntas, setPerguntas] = useState([]);
+  const [idx, setIdx] = useState(0);
   const [tempo, setTempo] = useState(TEMPO);
-  const [respostaSelecionada, setRespostaSelecionada] = useState(null);
+  const [pausado, setPausado] = useState(false);
+  const [resp, setResp] = useState(null);
   const [pontos, setPontos] = useState(0);
   const [feedback, setFeedback] = useState(null);
-  const [resultado, setResultado] = useState(null);
+  const [chat, setChat] = useState([]);
+  const [chatMsg, setChatMsg] = useState('');
   const timerRef = useRef(null);
-  const tempoRespostaRef = useRef(TEMPO);
+  const tRef = useRef(TEMPO);
+  const chatEnd = useRef(null);
 
-  const pergunta = PERGUNTAS[perguntaIdx];
-
-  function gerarCodigo() {
-    return Math.random().toString(36).substring(2, 8).toUpperCase();
-  }
-
-  function criarSala() {
-    const codigo = gerarCodigo();
-    setCodigoSala(codigo);
-    setJogadores([{ nome: user?.full_name || 'Eu', pontos: 0, id: user?.id }]);
-    setTela('sala');
-  }
-
-  function entrarSala() {
-    if (!codigoInput.trim()) return;
-    setCodigoSala(codigoInput.toUpperCase());
-    setJogadores([{ nome: user?.full_name || 'Eu', pontos: 0, id: user?.id }]);
-    setTela('sala');
-  }
-
-  function iniciarJogo() {
-    setPerguntaIdx(0);
-    setPontos(0);
-    setRespostaSelecionada(null);
-    setFeedback(null);
-    setTela('jogo');
-  }
+  useEffect(() => { chatEnd.current?.scrollIntoView({behavior:'smooth'}); }, [chat]);
 
   useEffect(() => {
-    if (tela !== 'jogo') return;
-    setTempo(TEMPO);
-    tempoRespostaRef.current = TEMPO;
+    if (tela !== 'jogo' || pausado) return;
+    setTempo(TEMPO); tRef.current = TEMPO;
+    clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
       setTempo(prev => {
-        tempoRespostaRef.current = prev - 1;
-        if (prev <= 1) {
-          clearInterval(timerRef.current);
-          if (respostaSelecionada === null) proximaPergunta(null, TEMPO);
-          return 0;
-        }
-        return prev - 1;
+        tRef.current = prev-1;
+        if(prev<=1){ clearInterval(timerRef.current); avancar(); return 0; }
+        return prev-1;
       });
     }, 1000);
     return () => clearInterval(timerRef.current);
-  }, [perguntaIdx, tela]);
+  }, [idx, tela, pausado]);
 
-  function responder(idx) {
-    if (respostaSelecionada !== null) return;
+  function gerar() { return Math.random().toString(36).substring(2,8).toUpperCase(); }
+  function criarSala() { setCodigo(gerar()); setTela('sala'); }
+  function entrarSala() { if(!cInput.trim()) return; setCodigo(cInput.toUpperCase()); setTela('sala'); }
+
+  function iniciar() {
+    const ps = filtrar(livro);
+    setPerguntas(ps); setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
+    setTela('jogo');
+  }
+
+  function responder(i) {
+    if(resp!==null || pausado) return;
     clearInterval(timerRef.current);
-    setRespostaSelecionada(idx);
-    const correto = idx === pergunta.r;
-    const tempRestante = tempoRespostaRef.current;
-    const pts = correto ? (tempRestante >= 4 ? 10 : 5) : 0;
-    setFeedback({ correto, pts });
-    setPontos(prev => prev + pts);
-    setTimeout(() => proximaPergunta(idx, tempRestante), 1500);
+    setResp(i);
+    const p=perguntas[idx];
+    const ok=i===p.r;
+    const pts=ok?(tRef.current>=10?10:5):0;
+    setFeedback({ok,pts});
+    setPontos(prev=>prev+pts);
+    setTimeout(avancar, 1500);
   }
 
-  function proximaPergunta(resposta, tempRestante) {
-    setFeedback(null);
-    setRespostaSelecionada(null);
-    if (perguntaIdx + 1 >= 5) {
-      setResultado({ pontos: pontos + (resposta === pergunta?.r ? (tempRestante >= 4 ? 10 : 5) : 0) });
-      setTela('resultado');
-    } else {
-      setPerguntaIdx(prev => prev + 1);
-    }
+  function avancar() {
+    setFeedback(null); setResp(null);
+    if(idx+1>=perguntas.length) setTela('resultado');
+    else setIdx(prev=>prev+1);
   }
 
-  function compartilhar() {
-    const msg = 'Joguei o Desafio Biblico no Sigo com Fe e fiz ' + (resultado?.pontos || 0) + ' pontos! Vem jogar comigo! https://sigo-com-fe.vercel.app/desafio-biblico';
-    if (navigator.share) {
-      navigator.share({ title: 'Desafio Biblico', text: msg });
-    } else {
-      navigator.clipboard.writeText(msg);
-      alert('Link copiado!');
-    }
+  function pausa() { if(!pausado) clearInterval(timerRef.current); setPausado(p=>!p); }
+
+  function enviarChat() {
+    if(!chatMsg.trim()) return;
+    const nome=user?.full_name?.split(' ')[0]||'Eu';
+    setChat(prev=>[...prev,{nome,texto:chatMsg}]);
+    setChatMsg('');
   }
 
-  const bg = { minHeight: '100vh', background: 'linear-gradient(135deg,#1a0a3e,#2d1054)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, color: 'white' };
+  function share(pts) {
+    const msg='Joguei o Desafio Biblico no Sigo com Fe e fiz '+pts+' pontos! Te atreves? https://sigo-com-fe.vercel.app/desafio-biblico';
+    if(navigator.share) navigator.share({title:'Desafio Biblico',text:msg});
+    else { navigator.clipboard.writeText(msg); alert('Copiado!'); }
+  }
 
-  if (tela === 'lobby') return (
+  function desafiar() {
+    const msg='Te desafio no Desafio Biblico do Sigo com Fe! https://sigo-com-fe.vercel.app/desafio-biblico';
+    if(navigator.share) navigator.share({title:'Desafio',text:msg});
+    else { navigator.clipboard.writeText(msg); alert('Copiado!'); }
+  }
+
+  const av=user?.photo_url||user?.avatar_url;
+  const nm=user?.full_name||'Jogador';
+  const perg=perguntas[idx];
+  const btn=(onClick,bg2,txt,mb=10)=><button onClick={onClick} style={{width:'100%',maxWidth:320,padding:14,borderRadius:14,border:'none',background:bg2,color:'white',fontSize:15,fontWeight:700,cursor:'pointer',marginBottom:mb}}>{txt}</button>;
+
+  if(tela==='lobby') return (
     <div style={bg}>
-      <div style={{ fontSize: 60, marginBottom: 16 }}>🏆</div>
-      <h1 style={{ fontSize: 28, fontWeight: 900, marginBottom: 8, textAlign: 'center' }}>Desafio Biblico</h1>
-      <p style={{ opacity: 0.7, marginBottom: 32, textAlign: 'center' }}>Testa o teu conhecimento da Palavra!</p>
-      <button onClick={criarSala} style={{ width: '100%', maxWidth: 320, padding: 16, borderRadius: 14, border: 'none', background: 'linear-gradient(135deg,#6c47d4,#4A2270)', color: 'white', fontSize: 18, fontWeight: 700, cursor: 'pointer', marginBottom: 14 }}>
-        ➕ Criar Sala
-      </button>
-      <div style={{ width: '100%', maxWidth: 320, display: 'flex', gap: 10, marginBottom: 14 }}>
-        <input value={codigoInput} onChange={e => setCodigoInput(e.target.value.toUpperCase())} placeholder='Codigo da sala...' style={{ flex: 1, padding: 14, borderRadius: 12, border: 'none', background: 'rgba(255,255,255,0.15)', color: 'white', fontSize: 16, outline: 'none' }} />
-        <button onClick={entrarSala} style={{ padding: '14px 20px', borderRadius: 12, border: 'none', background: '#27ae60', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: 16 }}>Entrar</button>
+      <div style={{fontSize:60,marginBottom:12}}>🏆</div>
+      <h1 style={{fontSize:26,fontWeight:900,marginBottom:6,textAlign:'center'}}>Desafio Biblico</h1>
+      <p style={{opacity:0.7,marginBottom:16,fontSize:14,textAlign:'center'}}>Testa o teu conhecimento da Palavra!</p>
+      <p style={{fontSize:13,opacity:0.8,marginBottom:8}}>📖 Escolhe o livro:</p>
+      <div style={{display:'flex',flexWrap:'wrap',gap:8,justifyContent:'center',marginBottom:20,maxWidth:360}}>
+        {LIVROS.map(l=><button key={l} onClick={()=>setLivro(l)} style={{padding:'6px 14px',borderRadius:20,border:'none',background:livro===l?'#f0c040':'rgba(255,255,255,0.15)',color:livro===l?'#1a0a3e':'white',fontWeight:700,cursor:'pointer',fontSize:13}}>{l}</button>)}
       </div>
-      <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: 14 }}>Voltar</button>
+      {btn(criarSala,'linear-gradient(135deg,#6c47d4,#4A2270)','+ Criar Sala')}
+      <div style={{width:'100%',maxWidth:320,display:'flex',gap:10,marginBottom:10}}>
+        <input value={cInput} onChange={e=>setCInput(e.target.value.toUpperCase())} placeholder='Codigo da sala...' style={{flex:1,padding:12,borderRadius:12,border:'none',background:'rgba(255,255,255,0.15)',color:'white',fontSize:15,outline:'none'}} />
+        <button onClick={entrarSala} style={{padding:'12px 18px',borderRadius:12,border:'none',background:'#27ae60',color:'white',fontWeight:700,cursor:'pointer',fontSize:15}}>Entrar</button>
+      </div>
+      {btn(desafiar,'#25D366','Desafiar um amigo')}
+      <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Voltar</button>
     </div>
   );
 
-  if (tela === 'sala') return (
+  if(tela==='sala') return (
     <div style={bg}>
-      <h2 style={{ fontSize: 22, marginBottom: 8 }}>Sala de Espera</h2>
-      <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 12, padding: '10px 24px', marginBottom: 24, fontSize: 28, fontWeight: 900, letterSpacing: 8 }}>{codigoSala}</div>
-      <p style={{ opacity: 0.7, marginBottom: 24, textAlign: 'center', fontSize: 13 }}>Partilha este codigo com os teus amigos!</p>
-      <button onClick={() => { navigator.clipboard.writeText('Vem jogar o Desafio Biblico comigo! Codigo: ' + codigoSala + ' https://sigo-com-fe.vercel.app/desafio-biblico'); alert('Copiado!'); }} style={{ padding: '10px 24px', borderRadius: 20, border: '1px solid rgba(255,255,255,0.4)', background: 'transparent', color: 'white', cursor: 'pointer', marginBottom: 24, fontSize: 14 }}>
-        📋 Copiar convite
-      </button>
-      <div style={{ width: '100%', maxWidth: 320, marginBottom: 24 }}>
-        {jogadores.map((j, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 16px', background: 'rgba(255,255,255,0.1)', borderRadius: 10, marginBottom: 8 }}>
-            <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#6c47d4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>{j.nome.charAt(0)}</div>
-            <span>{j.nome}</span>
-            {i === 0 && <span style={{ marginLeft: 'auto', fontSize: 11, opacity: 0.7 }}>Anfitriao</span>}
-          </div>
-        ))}
+      <h2 style={{fontSize:20,marginBottom:8}}>Sala de Espera</h2>
+      <div style={{background:'rgba(255,255,255,0.1)',borderRadius:12,padding:'10px 24px',marginBottom:8,fontSize:26,fontWeight:900,letterSpacing:8}}>{codigo}</div>
+      <p style={{opacity:0.6,fontSize:12,marginBottom:4}}>Livro: {livro}</p>
+      <button onClick={()=>{navigator.clipboard.writeText('Codigo: '+codigo+' https://sigo-com-fe.vercel.app/desafio-biblico');alert('Copiado!');}} style={{padding:'8px 18px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer',marginBottom:16,fontSize:13}}>Copiar convite</button>
+      <div style={{width:'100%',maxWidth:320,marginBottom:16}}>
+        <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 16px',background:'rgba(255,255,255,0.1)',borderRadius:10,marginBottom:8}}>
+          {av?<img src={av} style={{width:40,height:40,borderRadius:'50%',objectFit:'cover'}}/>:<div style={{width:40,height:40,borderRadius:'50%',background:'#6c47d4',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700}}>{nm.charAt(0)}</div>}
+          <span style={{flex:1}}>{nm}</span><span style={{fontSize:11,opacity:0.7}}>Anfitriao</span>
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 16px',background:'rgba(255,255,255,0.05)',borderRadius:10,border:'1px dashed rgba(255,255,255,0.2)'}}>
+          <div style={{width:40,height:40,borderRadius:'50%',background:'rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center'}}>?</div>
+          <span style={{opacity:0.5,fontSize:13}}>A aguardar jogador...</span>
+        </div>
       </div>
-      <button onClick={iniciarJogo} style={{ width: '100%', maxWidth: 320, padding: 16, borderRadius: 14, border: 'none', background: 'linear-gradient(135deg,#e74c3c,#c0392b)', color: 'white', fontSize: 18, fontWeight: 700, cursor: 'pointer' }}>
-        🚀 Iniciar Jogo!
-      </button>
+      {btn(iniciar,'linear-gradient(135deg,#e74c3c,#c0392b)','Iniciar Jogo!')}
+      <button onClick={()=>setTela('lobby')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Voltar</button>
     </div>
   );
 
-  if (tela === 'jogo') return (
-    <div style={{ ...bg, justifyContent: 'flex-start', paddingTop: 40 }}>
-      <div style={{ width: '100%', maxWidth: 480 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
-          <span style={{ opacity: 0.7 }}>Pergunta {perguntaIdx + 1}/5</span>
-          <span style={{ fontWeight: 700, color: tempo <= 2 ? '#e74c3c' : '#f0c040' }}>⏱️ {tempo}s</span>
-          <span style={{ opacity: 0.7 }}>🏆 {pontos} pts</span>
+  if(tela==='jogo' && perg) return (
+    <div style={{...bg,justifyContent:'flex-start',paddingTop:20}}>
+      <div style={{width:'100%',maxWidth:500}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
+          <span style={{opacity:0.7,fontSize:13}}>Pergunta {idx+1}/{perguntas.length}</span>
+          <button onClick={pausa} style={{padding:'5px 14px',borderRadius:20,border:'1px solid rgba(255,255,255,0.3)',background:pausado?'#f0c040':'transparent',color:pausado?'#1a0a3e':'white',cursor:'pointer',fontSize:12,fontWeight:700}}>{pausado?'Continuar':'Pausa'}</button>
+          <span style={{fontWeight:700,color:tempo<=3?'#e74c3c':'#f0c040'}}>{tempo}s</span>
         </div>
-        <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 16, padding: 20, marginBottom: 20 }}>
-          <div style={{ width: '100%', height: 6, background: 'rgba(255,255,255,0.2)', borderRadius: 3, marginBottom: 16 }}>
-            <div style={{ width: (tempo/TEMPO*100) + '%', height: '100%', background: tempo <= 2 ? '#e74c3c' : '#6c47d4', borderRadius: 3, transition: 'width 1s linear' }} />
+        <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
+          {av?<img src={av} style={{width:36,height:36,borderRadius:'50%',objectFit:'cover',border:'2px solid #6c47d4'}}/>:<div style={{width:36,height:36,borderRadius:'50%',background:'#6c47d4',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:14}}>{nm.charAt(0)}</div>}
+          <span style={{fontSize:13}}>{nm}</span>
+          <span style={{marginLeft:'auto',color:'#f0c040',fontWeight:700}}>{pontos} pts</span>
+        </div>
+        <div style={{background:'rgba(255,255,255,0.1)',borderRadius:16,padding:20,marginBottom:14}}>
+          <div style={{width:'100%',height:6,background:'rgba(255,255,255,0.2)',borderRadius:3,marginBottom:12}}>
+            <div style={{width:(tempo/TEMPO*100)+'%',height:'100%',background:tempo<=3?'#e74c3c':'#6c47d4',borderRadius:3,transition:'width 1s linear'}} />
           </div>
-          <p style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.5, textAlign: 'center' }}>{pergunta.q}</p>
+          <p style={{fontSize:17,fontWeight:700,lineHeight:1.5,textAlign:'center',margin:0}}>{perg.q}</p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          {pergunta.opts.map((opt, i) => {
-            let bg2 = 'rgba(255,255,255,0.1)';
-            if (respostaSelecionada !== null) {
-              if (i === pergunta.r) bg2 = '#27ae60';
-              else if (i === respostaSelecionada) bg2 = '#e74c3c';
-            }
-            return (
-              <button key={i} onClick={() => responder(i)} style={{ padding: '16px 12px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.2)', background: bg2, color: 'white', fontSize: 15, fontWeight: 600, cursor: 'pointer', transition: 'background 0.3s', textAlign: 'center' }}>
-                {opt}
-              </button>
-            );
+        {pausado && <div style={{textAlign:'center',fontSize:18,marginBottom:12,opacity:0.8}}>Jogo pausado</div>}
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:14}}>
+          {perg.opts.map((opt,i)=>{
+            let bg2='rgba(255,255,255,0.1)';
+            if(resp!==null){if(i===perg.r)bg2='#27ae60';else if(i===resp)bg2='#e74c3c';}
+            return <button key={i} onClick={()=>responder(i)} style={{padding:'14px 10px',borderRadius:12,border:'1px solid rgba(255,255,255,0.2)',background:bg2,color:'white',fontSize:14,fontWeight:600,cursor:'pointer',transition:'background 0.3s'}}>{opt}</button>;
           })}
         </div>
-        {feedback && (
-          <div style={{ marginTop: 20, textAlign: 'center', fontSize: 28, animation: 'fadeIn 0.3s' }}>
-            {feedback.correto ? '🙏 Amem! +' + feedback.pts + ' pts' : '❌ Quase!'}
+        {feedback && <div style={{textAlign:'center',fontSize:22,marginBottom:12}}>{feedback.ok?'Amem! +'+feedback.pts+' pts':'Quase!'}</div>}
+        <div style={{background:'rgba(0,0,0,0.3)',borderRadius:12,padding:12}}>
+          <p style={{fontSize:12,opacity:0.7,margin:'0 0 6px'}}>Chat</p>
+          <div style={{maxHeight:70,overflowY:'auto',marginBottom:8}}>
+            {chat.map((m,i)=><div key={i} style={{fontSize:12,marginBottom:3}}><b style={{color:'#f0c040'}}>{m.nome}:</b> {m.texto}</div>)}
+            <div ref={chatEnd}/>
           </div>
-        )}
+          <div style={{display:'flex',gap:8}}>
+            <input value={chatMsg} onChange={e=>setChatMsg(e.target.value)} onKeyDown={e=>e.key==='Enter'&&enviarChat()} placeholder='Mensagem...' style={{flex:1,padding:'6px 10px',borderRadius:8,border:'none',background:'rgba(255,255,255,0.15)',color:'white',fontSize:12,outline:'none'}}/>
+            <button onClick={enviarChat} style={{padding:'6px 12px',borderRadius:8,border:'none',background:'#6c47d4',color:'white',cursor:'pointer',fontSize:12}}>Enviar</button>
+          </div>
+        </div>
       </div>
     </div>
   );
 
-  if (tela === 'resultado') return (
+  if(tela==='resultado') return (
     <div style={bg}>
-      <div style={{ fontSize: 60, marginBottom: 16 }}>🏆</div>
-      <h2 style={{ fontSize: 28, fontWeight: 900, marginBottom: 8 }}>Resultado Final!</h2>
-      <div style={{ fontSize: 48, fontWeight: 900, color: '#f0c040', marginBottom: 8 }}>{resultado?.pontos} pts</div>
-      <p style={{ opacity: 0.7, marginBottom: 32 }}>{resultado?.pontos >= 40 ? 'Mestre Biblico!' : resultado?.pontos >= 25 ? 'Muito bem!' : 'Continue estudando!'}</p>
-      <button onClick={compartilhar} style={{ width: '100%', maxWidth: 320, padding: 16, borderRadius: 14, border: 'none', background: '#25D366', color: 'white', fontSize: 16, fontWeight: 700, cursor: 'pointer', marginBottom: 14 }}>
-        📱 Partilhar resultado
-      </button>
-      <button onClick={() => { setPerguntaIdx(0); setPontos(0); setTela('lobby'); }} style={{ width: '100%', maxWidth: 320, padding: 16, borderRadius: 14, border: '1px solid rgba(255,255,255,0.3)', background: 'transparent', color: 'white', fontSize: 16, cursor: 'pointer', marginBottom: 14 }}>
-        🔄 Jogar de novo
-      </button>
-      <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: 14 }}>Voltar</button>
+      <div style={{fontSize:60,marginBottom:12}}>🏆</div>
+      <h2 style={{fontSize:26,fontWeight:900,marginBottom:8}}>Resultado Final!</h2>
+      <div style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:8}}>{pontos} pts</div>
+      <p style={{opacity:0.7,marginBottom:28}}>{pontos>=40?'Mestre Biblico!':pontos>=25?'Muito bem!':'Continue estudando!'}</p>
+      {btn(()=>share(pontos),'#25D366','Partilhar resultado')}
+      {btn(desafiar,'#6c47d4','Desafiar um amigo')}
+      {btn(()=>{setIdx(0);setPontos(0);setTela('lobby');},'rgba(255,255,255,0.2)','Jogar de novo')}
+      <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Voltar</button>
     </div>
   );
 
