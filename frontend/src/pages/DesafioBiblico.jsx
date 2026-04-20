@@ -76,33 +76,33 @@ export default function DesafioBiblico() {
   function cancelarFila() { wsRef.current?.close(); setEsperando(false); }
   function gerar() { return Math.random().toString(36).substring(2,8).toUpperCase(); }
   function conectarWS(roomId, tipo) {
-    const ws = new WebSocket((window.location.protocol === ' + chr(39) + 'https:' + chr(39) + ' ? ' + chr(39) + 'wss' + chr(39) + ' : ' + chr(39) + 'ws' + chr(39) + ') + ' + chr(39) + '://sigo-com-fe-api.onrender.com/ws' + chr(39) + ');
+    const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
     wsRef.current = ws;
     ws.onopen = () => {
       ws.send(JSON.stringify({ type: tipo, roomId, userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
     };
     ws.onmessage = (e) => {
       const msg = JSON.parse(e.data);
-      if (msg.type === ' + chr(39) + 'game_joined' + chr(39) + ') {
+      if (msg.type === 'game_joined') {
         if (msg.jogadores && msg.jogadores.length >= 2) {
-          alert(' + chr(39) + 'Adversario encontrado! A comecar...' + chr(39) + ');
+          alert('Adversario encontrado! A comecar...');
         }
       }
-      if (msg.type === ' + chr(39) + 'game_started' + chr(39) + ') { iniciar(); }
+      if (msg.type === 'game_started') { iniciar(); }
     };
   }
   function criarSala() {
     const c = gerar();
     setCodigo(c);
-    setTela(' + chr(39) + 'sala' + chr(39) + ');
-    conectarWS(c, ' + chr(39) + 'game_create' + chr(39) + ');
+    setTela('sala');
+    conectarWS(c, 'game_create');
   }
   function entrarSala() {
     if(!cInput.trim()) return;
     const c = cInput.toUpperCase();
     setCodigo(c);
-    setTela(' + chr(39) + 'sala' + chr(39) + ');
-    conectarWS(c, ' + chr(39) + 'game_join' + chr(39) + ');
+    setTela('sala');
+    conectarWS(c, 'game_join');
   }
 
   function iniciar() {
