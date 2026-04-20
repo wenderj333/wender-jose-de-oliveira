@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import PERGUNTAS_JSON from '../data/perguntas.json';
 
@@ -17,6 +18,7 @@ function filtrar(livro) {
 }
 
 export default function DesafioBiblico() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [tela, setTela] = useState('lobby');
@@ -129,8 +131,8 @@ export default function DesafioBiblico() {
   if(tela==='lobby') return (
     <div style={bg}>
       <div style={{fontSize:60,marginBottom:12}}>🏆</div>
-      <h1 style={{fontSize:26,fontWeight:900,marginBottom:6,textAlign:'center'}}>Desafio Biblico</h1>
-      <p style={{opacity:0.7,marginBottom:16,fontSize:14,textAlign:'center'}}>Testa o teu conhecimento da Palavra!</p>
+      <h1 style={{fontSize:26,fontWeight:900,marginBottom:6,textAlign:'center'}}>{t('desafio.title')}</h1>
+      <p style={{opacity:0.7,marginBottom:16,fontSize:14,textAlign:'center'}}>{t('desafio.subtitle')}</p>
       <p style={{fontSize:13,opacity:0.8,marginBottom:8}}>📖 Escolhe o livro:</p>
       <div style={{display:'flex',flexWrap:'wrap',gap:8,justifyContent:'center',marginBottom:20,maxWidth:360}}>
         {LIVROS.map(l=><button key={l} onClick={()=>setLivro(l)} style={{padding:'6px 14px',borderRadius:20,border:'none',background:livro===l?'#f0c040':'rgba(255,255,255,0.15)',color:livro===l?'#1a0a3e':'white',fontWeight:700,cursor:'pointer',fontSize:13}}>{l}</button>)}
@@ -142,28 +144,28 @@ export default function DesafioBiblico() {
       </div>
       {esperando ? <div style={{textAlign:'center',marginBottom:10}}><p style={{opacity:0.8,marginBottom:8}}>A aguardar um adversario...</p><button onClick={cancelarFila} style={{padding:'8px 20px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer'}}>Cancelar</button></div> : btn(jogarAleatorio,'#e74c3c','Jogar com alguem')}
       {btn(desafiar,'#25D366','Desafiar um amigo')}
-      <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Voltar</button>
+      <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
   );
 
   if(tela==='sala') return (
     <div style={bg}>
-      <h2 style={{fontSize:20,marginBottom:8}}>Sala de Espera</h2>
+      <h2 style={{fontSize:20,marginBottom:8}}>{t('desafio.waitroom')}</h2>
       <div style={{background:'rgba(255,255,255,0.1)',borderRadius:12,padding:'10px 24px',marginBottom:8,fontSize:26,fontWeight:900,letterSpacing:8}}>{codigo}</div>
       <p style={{opacity:0.6,fontSize:12,marginBottom:4}}>Livro: {livro}</p>
-      <button onClick={()=>{navigator.clipboard.writeText('Codigo: '+codigo+' https://sigo-com-fe.vercel.app/desafio-biblico');alert('Copiado!');}} style={{padding:'8px 18px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer',marginBottom:16,fontSize:13}}>Copiar convite</button>
+      <button onClick={()=>{navigator.clipboard.writeText('Codigo: '+codigo+' https://sigo-com-fe.vercel.app/desafio-biblico');alert('Copiado!');}} style={{padding:'8px 18px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer',marginBottom:16,fontSize:13}}>{t('desafio.copyinvite')}</button>
       <div style={{width:'100%',maxWidth:320,marginBottom:16}}>
         <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 16px',background:'rgba(255,255,255,0.1)',borderRadius:10,marginBottom:8}}>
           {av?<img src={av} style={{width:40,height:40,borderRadius:'50%',objectFit:'cover'}}/>:<div style={{width:40,height:40,borderRadius:'50%',background:'#6c47d4',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700}}>{nm.charAt(0)}</div>}
-          <span style={{flex:1}}>{nm}</span><span style={{fontSize:11,opacity:0.7}}>Anfitriao</span>
+          <span style={{flex:1}}>{nm}</span><span style={{fontSize:11,opacity:0.7}}>{t('desafio.host')}</span>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 16px',background:'rgba(255,255,255,0.05)',borderRadius:10,border:'1px dashed rgba(255,255,255,0.2)'}}>
           <div style={{width:40,height:40,borderRadius:'50%',background:'rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center'}}>?</div>
-          <span style={{opacity:0.5,fontSize:13}}>A aguardar jogador...</span>
+          <span style={{opacity:0.5,fontSize:13}}>{t('desafio.waitingplayer')}</span>
         </div>
       </div>
       {btn(iniciar,'linear-gradient(135deg,#e74c3c,#c0392b)','Iniciar Jogo!')}
-      <button onClick={()=>setTela('lobby')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Voltar</button>
+      <button onClick={()=>setTela('lobby')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
   );
 
@@ -196,14 +198,14 @@ export default function DesafioBiblico() {
         </div>
         {feedback && <div style={{textAlign:'center',fontSize:22,marginBottom:12}}>{feedback.ok?'Amem! +'+feedback.pts+' pts':'Quase!'}</div>}
         <div style={{background:'rgba(0,0,0,0.3)',borderRadius:12,padding:12}}>
-          <p style={{fontSize:12,opacity:0.7,margin:'0 0 6px'}}>Chat</p>
+          <p style={{fontSize:12,opacity:0.7,margin:'0 0 6px'}}>{t('desafio.chat')}</p>
           <div style={{maxHeight:70,overflowY:'auto',marginBottom:8}}>
             {chat.map((m,i)=><div key={i} style={{fontSize:12,marginBottom:3}}><b style={{color:'#f0c040'}}>{m.nome}:</b> {m.texto}</div>)}
             <div ref={chatEnd}/>
           </div>
           <div style={{display:'flex',gap:8}}>
             <input value={chatMsg} onChange={e=>setChatMsg(e.target.value)} onKeyDown={e=>e.key==='Enter'&&enviarChat()} placeholder='Mensagem...' style={{flex:1,padding:'6px 10px',borderRadius:8,border:'none',background:'rgba(255,255,255,0.15)',color:'white',fontSize:12,outline:'none'}}/>
-            <button onClick={enviarChat} style={{padding:'6px 12px',borderRadius:8,border:'none',background:'#6c47d4',color:'white',cursor:'pointer',fontSize:12}}>Enviar</button>
+            <button onClick={enviarChat} style={{padding:'6px 12px',borderRadius:8,border:'none',background:'#6c47d4',color:'white',cursor:'pointer',fontSize:12}}>{t('desafio.send')}</button>
           </div>
         </div>
       </div>
@@ -213,13 +215,13 @@ export default function DesafioBiblico() {
   if(tela==='resultado') return (
     <div style={bg}>
       <div style={{fontSize:60,marginBottom:12}}>🏆</div>
-      <h2 style={{fontSize:26,fontWeight:900,marginBottom:8}}>Resultado Final!</h2>
+      <h2 style={{fontSize:26,fontWeight:900,marginBottom:8}}>{t('desafio.result')}</h2>
       <div style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:8}}>{pontos} pts</div>
       <p style={{opacity:0.7,marginBottom:28}}>{pontos>=40?'Mestre Biblico!':pontos>=25?'Muito bem!':'Continue estudando!'}</p>
       {btn(()=>share(pontos),'#25D366','Partilhar resultado')}
       {btn(desafiar,'#6c47d4','Desafiar um amigo')}
       {btn(()=>{setIdx(0);setPontos(0);setTela('lobby');},'rgba(255,255,255,0.2)','Jogar de novo')}
-      <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Voltar</button>
+      <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
   );
 
