@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import PERGUNTAS_JSON from '../data/perguntas.json';
 
@@ -18,7 +17,6 @@ function filtrar(livro) {
 }
 
 export default function DesafioBiblico() {
-  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [tela, setTela] = useState('lobby');
@@ -75,35 +73,8 @@ export default function DesafioBiblico() {
   }
   function cancelarFila() { wsRef.current?.close(); setEsperando(false); }
   function gerar() { return Math.random().toString(36).substring(2,8).toUpperCase(); }
-  function conectarWS(roomId, tipo) {
-    const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
-    wsRef.current = ws;
-    ws.onopen = () => {
-      ws.send(JSON.stringify({ type: tipo, roomId, userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
-    };
-    ws.onmessage = (e) => {
-      const msg = JSON.parse(e.data);
-      if (msg.type === 'game_joined') {
-        if (msg.jogadores && msg.jogadores.length >= 2) {
-          alert('Adversario encontrado! A comecar...');
-        }
-      }
-      if (msg.type === 'game_started') { iniciar(); }
-    };
-  }
-  function criarSala() {
-    const c = gerar();
-    setCodigo(c);
-    setTela('sala');
-    conectarWS(c, 'game_create');
-  }
-  function entrarSala() {
-    if(!cInput.trim()) return;
-    const c = cInput.toUpperCase();
-    setCodigo(c);
-    setTela('sala');
-    conectarWS(c, 'game_join');
-  }
+  function criarSala() { setCodigo(gerar()); setTela('sala'); }
+  function entrarSala() { if(!cInput.trim()) return; setCodigo(cInput.toUpperCase()); setTela('sala'); }
 
   function iniciar() {
     const ps = filtrar(livro);
@@ -158,9 +129,9 @@ export default function DesafioBiblico() {
   if(tela==='lobby') return (
     <div style={bg}>
       <div style={{fontSize:60,marginBottom:12}}>🏆</div>
-      <h1 style={{fontSize:26,fontWeight:900,marginBottom:6,textAlign:'center'}}>{t('desafio.title')}</h1>
-      <p style={{opacity:0.7,marginBottom:16,fontSize:14,textAlign:'center'}}>{t('desafio.subtitle')}</p>
-      <p style={{fontSize:13,opacity:0.8,marginBottom:8}}>📖 {t('desafio.choosebook')}</p>
+      <h1 style={{fontSize:26,fontWeight:900,marginBottom:6,textAlign:'center'}}>Desafio Biblico</h1>
+      <p style={{opacity:0.7,marginBottom:16,fontSize:14,textAlign:'center'}}>Testa o teu conhecimento da Palavra!</p>
+      <p style={{fontSize:13,opacity:0.8,marginBottom:8}}>📖 Escolhe o livro:</p>
       <div style={{display:'flex',flexWrap:'wrap',gap:8,justifyContent:'center',marginBottom:20,maxWidth:360}}>
         {LIVROS.map(l=><button key={l} onClick={()=>setLivro(l)} style={{padding:'6px 14px',borderRadius:20,border:'none',background:livro===l?'#f0c040':'rgba(255,255,255,0.15)',color:livro===l?'#1a0a3e':'white',fontWeight:700,cursor:'pointer',fontSize:13}}>{l}</button>)}
       </div>
@@ -171,13 +142,13 @@ export default function DesafioBiblico() {
       </div>
       {esperando ? <div style={{textAlign:'center',marginBottom:10}}><p style={{opacity:0.8,marginBottom:8}}>A aguardar um adversario...</p><button onClick={cancelarFila} style={{padding:'8px 20px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer'}}>Cancelar</button></div> : btn(jogarAleatorio,'#e74c3c','Jogar com alguem')}
       {btn(desafiar,'#25D366','Desafiar um amigo')}
-      <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
+      <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Voltar</button>
     </div>
   );
 
   if(tela==='sala') return (
     <div style={bg}>
-      <h2 style={{fontSize:20,marginBottom:8}}>{t('desafio.waitroom')}</h2>
+      <h2 style={{fontSize:20,marginBottom:8}}>Sala de Espera</h2>
       <div style={{background:'rgba(255,255,255,0.1)',borderRadius:12,padding:'10px 24px',marginBottom:8,fontSize:26,fontWeight:900,letterSpacing:8}}>{codigo}</div>
       <p style={{opacity:0.6,fontSize:12,marginBottom:4}}>Livro: {livro}</p>
       <button onClick={()=>{navigator.clipboard.writeText('Codigo: '+codigo+' https://sigo-com-fe.vercel.app/desafio-biblico');alert('Copiado!');}} style={{padding:'8px 18px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer',marginBottom:16,fontSize:13}}>Copiar convite</button>
@@ -191,8 +162,8 @@ export default function DesafioBiblico() {
           <span style={{opacity:0.5,fontSize:13}}>A aguardar jogador...</span>
         </div>
       </div>
-      {btn(iniciar,'linear-gradient(135deg,#e74c3c,#c0392b)','{t('desafio.start')}')}
-      <button onClick={()=>setTela('lobby')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
+      {btn(iniciar,'linear-gradient(135deg,#e74c3c,#c0392b)','Iniciar Jogo!')}
+      <button onClick={()=>setTela('lobby')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Voltar</button>
     </div>
   );
 
@@ -242,13 +213,13 @@ export default function DesafioBiblico() {
   if(tela==='resultado') return (
     <div style={bg}>
       <div style={{fontSize:60,marginBottom:12}}>🏆</div>
-      <h2 style={{fontSize:26,fontWeight:900,marginBottom:8}}>{t('desafio.result')}</h2>
+      <h2 style={{fontSize:26,fontWeight:900,marginBottom:8}}>Resultado Final!</h2>
       <div style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:8}}>{pontos} pts</div>
       <p style={{opacity:0.7,marginBottom:28}}>{pontos>=40?'Mestre Biblico!':pontos>=25?'Muito bem!':'Continue estudando!'}</p>
-      {btn(()=>share(pontos),'#25D366','{t('desafio.shareresult')}')}
-      {btn(desafiar,'#6c47d4','{t('desafio.challenge')}')}
-      {btn(()=>{setIdx(0);setPontos(0);setTela('lobby');},'rgba(255,255,255,0.2)','{t('desafio.playagain')}')}
-      <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
+      {btn(()=>share(pontos),'#25D366','Partilhar resultado')}
+      {btn(desafiar,'#6c47d4','Desafiar um amigo')}
+      {btn(()=>{setIdx(0);setPontos(0);setTela('lobby');},'rgba(255,255,255,0.2)','Jogar de novo')}
+      <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Voltar</button>
     </div>
   );
 
