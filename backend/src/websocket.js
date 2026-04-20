@@ -403,13 +403,28 @@ function broadcastToStream(wss, streamId, data, excludeWs) {
 
 
 const gameRooms = new Map();
+const gameQueue = new Map();
 
 function handleGame(ws, msg) {
   const client = clients.get(ws);
   const userId = client?.userId || msg.userId;
   const userName = msg.userName || 'Jogador';
 
-  if (msg.type === 'game_create') {
+  if (msg.type === ' + chr(39) + 'game_queue' + chr(39) + ') {
+    const livro = msg.livro || ' + chr(39) + 'Todos' + chr(39) + ';
+    if (!gameQueue.has(livro)) gameQueue.set(livro, []);
+    const fila = gameQueue.get(livro);
+    if (fila.length > 0) {
+      const outro = fila.shift();
+      const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
+      gameRooms.set(roomId, { id: roomId, livro, jogadores: [outro, { userId, userName: msg.userName, avatar: msg.avatar, ws }] });
+      outro.ws.send(JSON.stringify({ type: ' + chr(39) + 'game_matched' + chr(39) + ', roomId }));
+      ws.send(JSON.stringify({ type: ' + chr(39) + 'game_matched' + chr(39) + ', roomId }));
+    } else {
+      fila.push({ userId, userName: msg.userName, avatar: msg.avatar, ws });
+      ws.send(JSON.stringify({ type: ' + chr(39) + 'game_queued' + chr(39) + ' }));
+    }
+  } else if (msg.type === ' + chr(39) + 'game_create' + chr(39) + ') {
     const roomId = msg.roomId;
     gameRooms.set(roomId, {
       id: roomId,
