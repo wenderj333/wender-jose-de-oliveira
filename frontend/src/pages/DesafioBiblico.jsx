@@ -23,6 +23,8 @@ export default function DesafioBiblico() {
   const [livro, setLivro] = useState('Todos');
   const [codigo, setCodigo] = useState('');
   const [cInput, setCInput] = useState('');
+  const [esperando, setEsperando] = useState(false);
+  const wsRef = useRef(null);
   const [perguntas, setPerguntas] = useState([]);
   const [idx, setIdx] = useState(0);
   const [tempo, setTempo] = useState(TEMPO);
@@ -52,6 +54,24 @@ export default function DesafioBiblico() {
     return () => clearInterval(timerRef.current);
   }, [idx, tela, pausado]);
 
+  function jogarAleatorio() {
+    const ws = new WebSocket((window.location.protocol === ' + chr(39) + 'https:' + chr(39) + ' ? ' + chr(39) + 'wss' + chr(39) + ' : ' + chr(39) + 'ws' + chr(39) + ') + ' + chr(39) + '://sigo-com-fe-api.onrender.com/ws' + chr(39) + ');
+    wsRef.current = ws;
+    setEsperando(true);
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ type: ' + chr(39) + 'game_queue' + chr(39) + ', userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
+    };
+    ws.onmessage = (e) => {
+      const msg = JSON.parse(e.data);
+      if (msg.type === ' + chr(39) + 'game_matched' + chr(39) + ') {
+        setEsperando(false);
+        setCodigo(msg.roomId);
+        setTela(' + chr(39) + 'sala' + chr(39) + ');
+      }
+    };
+    ws.onerror = () => { setEsperando(false); alert(' + chr(39) + 'Erro ao conectar. Tenta de novo!' + chr(39) + '); };
+  }
+  function cancelarFila() { wsRef.current?.close(); setEsperando(false); }
   function gerar() { return Math.random().toString(36).substring(2,8).toUpperCase(); }
   function criarSala() { setCodigo(gerar()); setTela('sala'); }
   function entrarSala() { if(!cInput.trim()) return; setCodigo(cInput.toUpperCase()); setTela('sala'); }
@@ -120,6 +140,7 @@ export default function DesafioBiblico() {
         <input value={cInput} onChange={e=>setCInput(e.target.value.toUpperCase())} placeholder='Codigo da sala...' style={{flex:1,padding:12,borderRadius:12,border:'none',background:'rgba(255,255,255,0.15)',color:'white',fontSize:15,outline:'none'}} />
         <button onClick={entrarSala} style={{padding:'12px 18px',borderRadius:12,border:'none',background:'#27ae60',color:'white',fontWeight:700,cursor:'pointer',fontSize:15}}>Entrar</button>
       </div>
+      {esperando ? <div style={{textAlign:'center',marginBottom:10}}><p style={{opacity:0.8,marginBottom:8}}>A aguardar um adversario...</p><button onClick={cancelarFila} style={{padding:'8px 20px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer'}}>Cancelar</button></div> : btn(jogarAleatorio,'#e74c3c','Jogar com alguem')}
       {btn(desafiar,'#25D366','Desafiar um amigo')}
       <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Voltar</button>
     </div>
