@@ -139,13 +139,13 @@ export default function DesafioBiblico() {
   }
 
   function share(pts) {
-    const msg='Joguei o {t('desafio.title')} no Sigo com Fe e fiz '+pts+' pontos! Te atreves? https://sigo-com-fe.vercel.app/desafio-biblico';
-    if(navigator.share) navigator.share({title:'{t('desafio.title')}',text:msg});
+    const msg='Joguei o Desafio Biblico no Sigo com Fe e fiz '+pts+' pontos! Te atreves? https://sigo-com-fe.vercel.app/desafio-biblico';
+    if(navigator.share) navigator.share({title:'Desafio Biblico',text:msg});
     else { navigator.clipboard.writeText(msg); alert('Copiado!'); }
   }
 
   function desafiar() {
-    const msg='Te desafio no {t('desafio.title')} do Sigo com Fe! https://sigo-com-fe.vercel.app/desafio-biblico';
+    const msg='Te desafio no Desafio Biblico do Sigo com Fe! https://sigo-com-fe.vercel.app/desafio-biblico';
     if(navigator.share) navigator.share({title:'Desafio',text:msg});
     else { navigator.clipboard.writeText(msg); alert('Copiado!'); }
   }
