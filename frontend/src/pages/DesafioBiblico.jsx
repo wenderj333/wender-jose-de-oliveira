@@ -184,10 +184,10 @@ export default function DesafioBiblico() {
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
           {av?<img src={av} style={{width:36,height:36,borderRadius:'50%',objectFit:'cover',border:'2px solid #6c47d4'}}/>:<div style={{width:36,height:36,borderRadius:'50%',background:'#6c47d4',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:14}}>{nm.charAt(0)}</div>}
           <span style={{fontSize:13}}>{nm}</span>
-          {adversario && <div style={{display:' + chr(39) + 'flex' + chr(39) + ',alignItems:' + chr(39) + 'center' + chr(39) + ',gap:6,marginLeft:' + chr(39) + 'auto' + chr(39) + ',background:' + chr(39) + 'rgba(255,255,255,0.1)' + chr(39) + ',padding:' + chr(39) + '4px 10px' + chr(39) + ',borderRadius:20}}>
+          {adversario ? <div style={{display:' + chr(39) + 'flex' + chr(39) + ',alignItems:' + chr(39) + 'center' + chr(39) + ',gap:6,marginLeft:' + chr(39) + 'auto' + chr(39) + ',background:' + chr(39) + 'rgba(255,255,255,0.1)' + chr(39) + ',padding:' + chr(39) + '4px 10px' + chr(39) + ',borderRadius:20}}>
             {advAv?<img src={advAv} style={{width:28,height:28,borderRadius:' + chr(39) + '50%' + chr(39) + ',objectFit:' + chr(39) + 'cover' + chr(39) + '}}/>:<div style={{width:28,height:28,borderRadius:' + chr(39) + '50%' + chr(39) + ',background:' + chr(39) + '#e74c3c' + chr(39) + ',display:' + chr(39) + 'flex' + chr(39) + ',alignItems:' + chr(39) + 'center' + chr(39) + ',justifyContent:' + chr(39) + 'center' + chr(39) + ',fontWeight:700,fontSize:12}}>{advNm.charAt(0)}</div>}
             <span style={{fontSize:12,color:' + chr(39) + 'white' + chr(39) + '}}>{advNm}</span>
-          </div>}
+          </div> : <div style={{marginLeft:'auto',fontSize:12,opacity:0.5,color:'white'}}>A aguardar...</div>}
           <span style={{marginLeft:'auto',color:'#f0c040',fontWeight:700}}>{pontos} pts</span>
         </div>
         <div style={{background:'rgba(255,255,255,0.1)',borderRadius:16,padding:20,marginBottom:14}}>
