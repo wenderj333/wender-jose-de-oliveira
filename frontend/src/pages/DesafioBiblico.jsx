@@ -55,11 +55,11 @@ export default function DesafioBiblico() {
   }, [idx, tela, pausado]);
 
   function jogarAleatorio() {
-    const ws = new WebSocket((window.location.protocol === ' + chr(39) + 'https:' + chr(39) + ' ? ' + chr(39) + 'wss' + chr(39) + ' : ' + chr(39) + 'ws' + chr(39) + ') + ' + chr(39) + '://sigo-com-fe-api.onrender.com/ws' + chr(39) + ');
+    const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
     wsRef.current = ws;
     setEsperando(true);
     ws.onopen = () => {
-      ws.send(JSON.stringify({ type: ' + chr(39) + 'game_queue' + chr(39) + ', userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
+      ws.send(JSON.stringify({ type: 'game_queue', userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
     };
     ws.onmessage = (e) => {
       const msg = JSON.parse(e.data);
