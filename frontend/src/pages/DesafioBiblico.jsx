@@ -169,7 +169,7 @@ export default function DesafioBiblico() {
         <input value={cInput} onChange={e=>setCInput(e.target.value.toUpperCase())} placeholder='Codigo da sala...' style={{flex:1,padding:12,borderRadius:12,border:'none',background:'rgba(255,255,255,0.15)',color:'white',fontSize:15,outline:'none'}} />
         <button onClick={entrarSala} style={{padding:'12px 18px',borderRadius:12,border:'none',background:'#27ae60',color:'white',fontWeight:700,cursor:'pointer',fontSize:15}}>Entrar</button>
       </div>
-      {esperando ? <div style={{textAlign:'center',marginBottom:10}}><p style={{opacity:0.8,marginBottom:8}}>A aguardar um adversario...</p><button onClick={cancelarFila} style={{padding:'8px 20px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer'}}>Cancelar</button></div> : btn(jogarAleatorio,'#e74c3c','{t('desafio.playalone')}')}
+      {esperando ? <div style={{textAlign:'center',marginBottom:10}}><p style={{opacity:0.8,marginBottom:8}}>A aguardar um adversario...</p><button onClick={cancelarFila} style={{padding:'8px 20px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer'}}>Cancelar</button></div> : btn(jogarAleatorio,'#e74c3c','Jogar com alguem')}
       {btn(desafiar,'#25D366','Desafiar um amigo')}
       <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
