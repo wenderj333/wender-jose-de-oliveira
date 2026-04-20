@@ -9,7 +9,11 @@
       "Moises"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién fue el primer hombre?",
+    "en_q": "Who was the first man?",
+    "de_q": "Wer war der erste Mann?",
+    "fr_q": "Qui a été le premier homme ?"
   },
   {
     "livro": "Genesis",
@@ -21,7 +25,11 @@
       "Isaque"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién construyó el arca?",
+    "en_q": "Who built the ark?",
+    "de_q": "Wer baute die Arche?",
+    "fr_q": "Qui a construit l'arche ?"
   },
   {
     "livro": "Exodo",
@@ -33,7 +41,11 @@
       "Jose"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién abrió el mar?",
+    "en_q": "Who opened the sea?",
+    "de_q": "Wer öffnete das Meer?",
+    "fr_q": "Qui a ouvert la mer ?"
   },
   {
     "livro": "Mateus",
@@ -45,7 +57,11 @@
       "Roma"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Dónde nació Jesús?",
+    "en_q": "Where was Jesus born?",
+    "de_q": "Wo wurde Jesus geboren?",
+    "fr_q": "Où Jésus est-il né ?"
   },
   {
     "livro": "Apocalipse",
@@ -57,7 +73,11 @@
       "Tiago"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién tuvo la visión del Apocalipsis?",
+    "en_q": "Who had the vision of the Apocalypse?",
+    "de_q": "Wer hatte die Vision der Offenbarung?",
+    "fr_q": "Qui a eu la vision de l'Apocalypse ?"
   },
   {
     "livro": "Genesis",
@@ -69,7 +89,11 @@
       "Raquel"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién fue la primera mujer?",
+    "en_q": "Who was the first woman?",
+    "de_q": "Wer war die erste Frau?",
+    "fr_q": "Qui a été la première femme ?"
   },
   {
     "livro": "Genesis",
@@ -81,7 +105,11 @@
       "60"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántos días duró el diluvio de lluvia?",
+    "en_q": "How many days did the rainfall flood last?",
+    "de_q": "Wie viele Tage dauerte die Regenflut?",
+    "fr_q": "Combien de jours a duré le déluge de pluie ?"
   },
   {
     "livro": "Genesis",
@@ -93,7 +121,11 @@
       "Esau"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién fue vendido por los hermanos?",
+    "en_q": "Who was sold by his brothers?",
+    "de_q": "Wer wurde von seinen Brüdern verkauft?",
+    "fr_q": "Qui a été vendu par ses frères ?"
   },
   {
     "livro": "Exodo",
@@ -105,7 +137,11 @@
       "Jose"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién liberó al pueblo de Egipto?",
+    "en_q": "Who freed the people from Egypt?",
+    "de_q": "Wer befreite das Volk aus Ägypten?",
+    "fr_q": "Qui a libéré le peuple d'Égypte ?"
   },
   {
     "livro": "Exodo",
@@ -117,7 +153,11 @@
       "Mar Azul"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué mar fue abierto?",
+    "en_q": "Which sea was opened?",
+    "de_q": "Welches Meer wurde geöffnet?",
+    "fr_q": "Quel mar a été ouvert ?"
   },
   {
     "livro": "Exodo",
@@ -129,7 +169,11 @@
       "15"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuántos mandamientos dio Dios?",
+    "en_q": "How many commandments did God give?",
+    "de_q": "Wie viele Gebote gab Gott?",
+    "fr_q": "Combien de commandements Dieu a-t-il donnés ?"
   },
   {
     "livro": "Exodo",
@@ -141,7 +185,11 @@
       "Monte Horebe"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Dónde Moisés recibió los mandamientos?",
+    "en_q": "Where did Moses receive the commandments?",
+    "de_q": "Wo erhielt Mose die Gebote?",
+    "fr_q": "Où Moïse a-t-il reçu les commandements ?"
   },
   {
     "livro": "Salmos",
@@ -153,7 +201,11 @@
       "Elias"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién escribió muchos Salmos?",
+    "en_q": "Who wrote many Psalms?",
+    "de_q": "Wer hat viele Psalmen geschrieben?",
+    "fr_q": "Qui a écrit beaucoup de Psaumes ?"
   },
   {
     "livro": "Salmos",
@@ -165,7 +217,11 @@
       "Amigo"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "El Señor es mi...",
+    "en_q": "The Lord is my...?",
+    "de_q": "Der Herr ist mein...?",
+    "fr_q": "Le Seigneur est mon...?"
   },
   {
     "livro": "Salmos",
@@ -177,7 +233,11 @@
       "Forca"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué no le faltará al que confía en Dios?",
+    "en_q": "What will not be lacking to those who trust in God?",
+    "de_q": "Was wird dem nicht fehlen, der auf Gott vertraut?",
+    "fr_q": "Ce qui ne manquera pas à celui qui fait confiance en Dieu?"
   },
   {
     "livro": "Proverbios",
@@ -189,7 +249,11 @@
       "Elias"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién escribió muchos proverbios?",
+    "en_q": "Who wrote many proverbs?",
+    "de_q": "Wer schrieb viele Sprichwörter?",
+    "fr_q": "Qui a écrit beaucoup de proverbes ?"
   },
   {
     "livro": "Proverbios",
@@ -201,7 +265,11 @@
       "Amor"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "El temor del Señor es el principio de ¿qué?",
+    "en_q": "The fear of the Lord is the beginning of what?",
+    "de_q": "Die Furcht des Herrn ist der Anfang von was?",
+    "fr_q": "La crainte du Seigneur est le principe de quoi ?"
   },
   {
     "livro": "Genesis",
@@ -213,7 +281,11 @@
       "Sete"
     ],
     "r": 0,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién mató a Abel?",
+    "en_q": "Who killed Abel?",
+    "de_q": "Wer tötete Abel?",
+    "fr_q": "Qui a tué Abel ?"
   },
   {
     "livro": "Genesis",
@@ -225,7 +297,11 @@
       "Nuvem"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuál fue el signo de la alianza después del diluvio?",
+    "en_q": "What was the sign of the covenant after the flood?",
+    "de_q": "Welches Zeichen des Bundes gab es nach der Sintflut?",
+    "fr_q": "Quel fut le signe de l'alliance après le déluge ?"
   },
   {
     "livro": "Genesis",
@@ -237,7 +313,11 @@
       "Jaco"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién fue el padre de Abraham?",
+    "en_q": "Who was the father of Abraham?",
+    "de_q": "Wer war der Vater Abrahams?",
+    "fr_q": "Qui était le père d'Abraham ?"
   },
   {
     "livro": "Genesis",
@@ -249,7 +329,11 @@
       "Miria"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuál es el nombre de la esposa de Abraham?",
+    "en_q": "What is the name of Abraham's wife?",
+    "de_q": "Wie heißt die Ehefrau von Abraham?",
+    "fr_q": "Quel est le nom de la femme d'Abraham ?"
   },
   {
     "livro": "Genesis",
@@ -261,7 +345,11 @@
       "Esau"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién casi fue sacrificado por Abraham?",
+    "en_q": "Who was almost sacrificed by Abraham?",
+    "de_q": "Wer wäre fast von Abraham geopfert worden?",
+    "fr_q": "Qui a failli être sacrifié par Abraham ?"
   },
   {
     "livro": "Genesis",
@@ -273,7 +361,11 @@
       "13"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántos hijos tuvo Jacob?",
+    "en_q": "How many children did Jacob have?",
+    "de_q": "Wie viele Kinder hatte Jakob?",
+    "fr_q": "Combien d'enfants Jacob a-t-il eu ?"
   },
   {
     "livro": "Genesis",
@@ -285,7 +377,11 @@
       "Farao"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién interpretaba los sueños en Egipto?",
+    "en_q": "Who interpreted dreams in Egypt?",
+    "de_q": "Wer interpretierte Träume im alten Ägypten?",
+    "fr_q": "Qui interprétait les rêves en Égypte ?"
   },
   {
     "livro": "Genesis",
@@ -297,7 +393,11 @@
       "Samuel"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál era el nombre del hermano de José?",
+    "en_q": "What was the name of Jose's brother?",
+    "de_q": "Wie war der Name von Josés Bruder?",
+    "fr_q": "Quel était le nom du frère de José ?"
   },
   {
     "livro": "Genesis",
@@ -309,7 +409,11 @@
       "Rio"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Dónde Dios puso a Adán y Eva?",
+    "en_q": "Where did God place Adam and Eve?",
+    "de_q": "Wo hat Gott Adam und Eva platziert?",
+    "fr_q": "Où Dieu a-t-il placé Adam et Ève ?"
   },
   {
     "livro": "Genesis",
@@ -321,7 +425,11 @@
       "Jose"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién luchó con el ángel?",
+    "en_q": "Who wrestled with the angel?",
+    "de_q": "Wer kämpfte mit dem Engel?",
+    "fr_q": "Qui a lutté avec l'ange ?"
   },
   {
     "livro": "Exodo",
@@ -333,7 +441,11 @@
       "Samuel"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién era el hermano de Moisés?",
+    "en_q": "Who was Moses's brother?",
+    "de_q": "Wer war der Bruder des Mose?",
+    "fr_q": "Qui était le frère de Moïse ?"
   },
   {
     "livro": "Exodo",
@@ -345,7 +457,11 @@
       "Ana"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién era la hermana de Moisés?",
+    "en_q": "Who was Moses' sister?",
+    "de_q": "Wer war die Schwester von Mose?",
+    "fr_q": "Qui était la sœur de Moïse?"
   },
   {
     "livro": "Exodo",
@@ -357,7 +473,11 @@
       "Pao"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué envió Dios para alimentar al pueblo?",
+    "en_q": "What did God send to feed the people?",
+    "de_q": "Was hat Gott dem Volk zum Essen geschickt?",
+    "fr_q": "Qu'est-ce que Dieu a envoyé pour nourrir le peuple ?"
   },
   {
     "livro": "Exodo",
@@ -369,7 +489,11 @@
       "Oleo"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué salió de la roca?",
+    "en_q": "What came out of the rock?",
+    "de_q": "Was kam aus dem Felsen?",
+    "fr_q": "Qu'est-ce qui est sorti du rocher ?"
   },
   {
     "livro": "Exodo",
@@ -381,7 +505,11 @@
       "Jose"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién endureció el corazón?",
+    "en_q": "Who hardened the heart?",
+    "de_q": "Wer hat das Herz verhärtet?",
+    "fr_q": "Qui a endurci le cœur ?"
   },
   {
     "livro": "Exodo",
@@ -393,7 +521,11 @@
       "15"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántas plagas hubo en Egipto?",
+    "en_q": "How many plagues were there in Egypt?",
+    "de_q": "Wie viele Plagen gab es in Ägypten?",
+    "fr_q": "Combien de plaies y a-t-il eu en Égypte ?"
   },
   {
     "livro": "Exodo",
@@ -405,7 +537,11 @@
       "Cabra"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué animal fue sacrificado en la Pascua?",
+    "en_q": "What animal was sacrificed at Easter?",
+    "de_q": "Welches Tier wurde zu Ostern geopfert?",
+    "fr_q": "Quel animal a été sacrifié à Pâques ?"
   },
   {
     "livro": "Exodo",
@@ -417,7 +553,11 @@
       "Abraao"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién habló con Dios en la zarza ardiente?",
+    "en_q": "Who spoke with God in the burning bush?",
+    "de_q": "Wer sprach mit Gott im brennenden Dornbusch?",
+    "fr_q": "Qui a parlé à Dieu dans le buisson ardent ?"
   },
   {
     "livro": "Exodo",
@@ -429,7 +569,11 @@
       "Tocha"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué guiaba al pueblo de noche?",
+    "en_q": "What guided the people at night?",
+    "de_q": "Was guidethe people at night?",
+    "fr_q": "Qu'est-ce qui guidait le peuple la nuit ?"
   },
   {
     "livro": "Exodo",
@@ -441,7 +585,11 @@
       "Fogo"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué guiaba al pueblo de día?",
+    "en_q": "What guided the people by day?",
+    "de_q": "Was guided the people by day?",
+    "fr_q": "Qu'est-ce qui guidait le peuple de jour ?"
   },
   {
     "livro": "Salmos",
@@ -453,7 +601,11 @@
       "Violino"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué instrumento tocaba David?",
+    "en_q": "What instrument did David play?",
+    "de_q": "Welches Instrument spielte David?",
+    "fr_q": "Quel instrument David jouait-il ?"
   },
   {
     "livro": "Salmos",
@@ -465,7 +617,11 @@
       "Homem"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién es nuestro refugio?",
+    "en_q": "Who is our refuge?",
+    "de_q": "Wer ist unsere Zuflucht?",
+    "fr_q": "Qui est notre refuge ?"
   },
   {
     "livro": "Salmos",
@@ -477,7 +633,11 @@
       "Justica"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "El Señor es bueno y su...?",
+    "en_q": "The Lord is good and his...?",
+    "de_q": "Der Herr ist gut und sein...?",
+    "fr_q": "Le Seigneur est bon et sa...?"
   },
   {
     "livro": "Salmos",
@@ -489,7 +649,11 @@
       "Exercito"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿En dónde confiaba David?",
+    "en_q": "Where did David trust?",
+    "de_q": "Worauf vertraute David?",
+    "fr_q": "En qui David confiait-il ?"
   },
   {
     "livro": "Salmos",
@@ -501,7 +665,11 @@
       "Profeta"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién conoce el corazón?",
+    "en_q": "Who knows the heart?",
+    "de_q": "Wer kennt das Herz?",
+    "fr_q": "Qui connaît le cœur?"
   },
   {
     "livro": "Salmos",
@@ -513,7 +681,11 @@
       "Vida"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "El Señor es mi... y salvación.",
+    "en_q": "\"The Lord is my... and salvation?\"",
+    "de_q": "Der Herr ist mein... und Heil?",
+    "fr_q": "Le Seigneur est ma... et mon salut?"
   },
   {
     "livro": "Salmos",
@@ -525,7 +697,11 @@
       "Anjo"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién creó los cielos?",
+    "en_q": "Who created the skies?",
+    "de_q": "Wer hat die Himmel erschaffen?",
+    "fr_q": "Qui a créé les cieux ?"
   },
   {
     "livro": "Salmos",
@@ -537,7 +713,11 @@
       "Fugir"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué debemos hacer al Señor?",
+    "en_q": "What should we do to the Lord?",
+    "de_q": "Was sollen wir dem Herrn tun?",
+    "fr_q": "Que devons-nous faire au Seigneur?"
   },
   {
     "livro": "Salmos",
@@ -549,7 +729,11 @@
       "Pai"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién protege?",
+    "en_q": "Who protects?",
+    "de_q": "Wer schützt?",
+    "fr_q": "Qui protège?"
   },
   {
     "livro": "Salmos",
@@ -561,7 +745,11 @@
       "Lei"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿El Señor escucha...?",
+    "en_q": "The Lord hears the...?",
+    "de_q": "Der Herr hört...?",
+    "fr_q": "Le Seigneur entend...?"
   },
   {
     "livro": "Proverbios",
@@ -573,7 +761,11 @@
       "Medo"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "La respuesta blanda ¿desvía qué?",
+    "en_q": "The soft answer turns away what?",
+    "de_q": "Die sanfte Antwort weicht ab von was?",
+    "fr_q": "La réponse molle dévie quoi ?"
   },
   {
     "livro": "Proverbios",
@@ -585,7 +777,11 @@
       "Dor"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién busca sabiduría encuentra?",
+    "en_q": "Who seeks wisdom finds?",
+    "de_q": "Wer Weisheit sucht, findet?",
+    "fr_q": "Qui cherche la sagesse trouve?"
   },
   {
     "livro": "Proverbios",
@@ -597,7 +793,11 @@
       "Paz"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "El orgullo precede a...?",
+    "en_q": "Pride precedes the...?",
+    "de_q": "Der Stolz geht dem... voraus?",
+    "fr_q": "L'orgueil précède la...?"
   },
   {
     "livro": "Proverbios",
@@ -609,7 +809,11 @@
       "Poder"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Mejor y poco con...?",
+    "en_q": "Better and little with...?",
+    "de_q": "Besser und wenig mit...?",
+    "fr_q": "Mieux et peu avec...?"
   },
   {
     "livro": "Proverbios",
@@ -621,7 +825,11 @@
       "Tempo"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién guarda la boca preserva...?",
+    "en_q": "Who guards the mouth preserves...?",
+    "de_q": "Wer seinen Mund bewacht, bewahrt...?",
+    "fr_q": "Qui garde sa bouche préserve...?"
   },
   {
     "livro": "Proverbios",
@@ -633,7 +841,11 @@
       "Dormir"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "El corazón alegre ¿hace qué?",
+    "en_q": "A happy heart does what?\n\n(The full saying is: \"O coração alegre faz bem como remédio\" - A happy heart is good medicine/works like a remedy)",
+    "de_q": "Das fröhliche Herz tut was?",
+    "fr_q": "Le cœur joyeux fait quoi?"
   },
   {
     "livro": "Proverbios",
@@ -645,7 +857,11 @@
       "Forca"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "La lengua tiene el poder de...?",
+    "en_q": "The language has the power to...?",
+    "de_q": "Die Zunge hat die Kraft zu...?",
+    "fr_q": "La langue a le pouvoir de...?"
   },
   {
     "livro": "Proverbios",
@@ -657,7 +873,11 @@
       "Rei"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién anda con sabios será...?",
+    "en_q": "Who walks with the wise will be...?",
+    "de_q": "Wer mit Weisen wandelt wird...?",
+    "fr_q": "Qui marche avec les sages sera...?"
   },
   {
     "livro": "Proverbios",
@@ -669,7 +889,11 @@
       "Forca"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "El perezoso desea y no tiene.",
+    "en_q": "The lazy person wishes and does not have?",
+    "de_q": "Der Faule wünscht sich und hat nichts?",
+    "fr_q": "Le paresseux désire et n'a pas ?"
   },
   {
     "livro": "Proverbios",
@@ -681,7 +905,11 @@
       "Estrela"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "El justo es como la luz de...?",
+    "en_q": "The just man is like the light of...?",
+    "de_q": "Der Gerechte ist wie das Licht des...?",
+    "fr_q": "Le juste est comme la lumière de...?"
   },
   {
     "livro": "Genesis",
@@ -693,7 +921,11 @@
       "Ruben"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién fue el hijo más joven de Jacob?",
+    "en_q": "Who was Jacob's youngest son?",
+    "de_q": "Wer war Jakobs jüngster Sohn?",
+    "fr_q": "Qui était le fils le plus jeune de Jacob ?"
   },
   {
     "livro": "Genesis",
@@ -705,7 +937,11 @@
       "Raquel"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién fue transformada en estatua de sal?",
+    "en_q": "Who was transformed into a statue of salt?",
+    "de_q": "Wer wurde in eine Salzsäule verwandelt?",
+    "fr_q": "Qui a été transformée en statue de sel?"
   },
   {
     "livro": "Genesis",
@@ -717,7 +953,11 @@
       "Ninive"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué ciudad fue destruida junto con Sodoma?",
+    "en_q": "What city was destroyed along with Sodom?",
+    "de_q": "Welche Stadt wurde zusammen mit Sodom zerstört?",
+    "fr_q": "Quelle ville a été détruite avec Sodome ?"
   },
   {
     "livro": "Genesis",
@@ -729,7 +969,11 @@
       "Lo"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién engañó a Isaac para darle la bendición?",
+    "en_q": "Who deceived Isaac to give the blessing?",
+    "de_q": "Wer täuschte Isaak, um den Segen zu geben?",
+    "fr_q": "Qui a trompé Isaac pour lui donner la bénédiction ?"
   },
   {
     "livro": "Genesis",
@@ -741,7 +985,11 @@
       "Abraao"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién era el hermano de Esaú?",
+    "en_q": "Who was Esau's brother?",
+    "de_q": "Wer war der Bruder von Esau?",
+    "fr_q": "Qui était le frère d'Ésau ?"
   },
   {
     "livro": "Genesis",
@@ -753,7 +1001,11 @@
       "Noe"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién tuvo un sueño con una escalera hasta el cielo?",
+    "en_q": "Who had a dream about a ladder to heaven?",
+    "de_q": "Wer träumte von einer Leiter bis zum Himmel?",
+    "fr_q": "Qui a eu un rêve avec une échelle jusqu'au ciel ?"
   },
   {
     "livro": "Genesis",
@@ -765,7 +1017,11 @@
       "Jose"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién fue el hijo prometido a Abraham?",
+    "en_q": "Who was the promised son to Abraham?",
+    "de_q": "Wer war der verheißene Sohn Abrahams?",
+    "fr_q": "Qui était le fils promis à Abraham ?"
   },
   {
     "livro": "Genesis",
@@ -777,7 +1033,11 @@
       "Lea"
     ],
     "r": 0,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién fue la madre de Isaac?",
+    "en_q": "Who was Isaac's mother?",
+    "de_q": "Wer war die Mutter von Isaak?",
+    "fr_q": "Qui était la mère d'Isaac ?"
   },
   {
     "livro": "Genesis",
@@ -789,7 +1049,11 @@
       "Isaque"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién fue vendido por 20 monedas?",
+    "en_q": "Who was sold for 20 coins?",
+    "de_q": "Wer wurde für 20 Münzen verkauft?",
+    "fr_q": "Qui a été vendu pour 20 pièces?"
   },
   {
     "livro": "Genesis",
@@ -801,7 +1065,11 @@
       "Sacerdote"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién gobernaba Egipto cuando José llegó?",
+    "en_q": "Who ruled Egypt when Joseph arrived?",
+    "de_q": "Wer regierte Ägypten, als Josef ankam?",
+    "fr_q": "Qui gouvernait l'Égypte quand Joseph est arrivé ?"
   },
   {
     "livro": "Genesis",
@@ -813,7 +1081,11 @@
       "950"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuántos años vivió Matusalén?",
+    "en_q": "How many years did Methuselah live?",
+    "de_q": "Wie viele Jahre lebte Methuselah?",
+    "fr_q": "Combien d'années Mathusalem a-t-il vécu ?"
   },
   {
     "livro": "Genesis",
@@ -825,7 +1097,11 @@
       "Enoque"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién fue el padre de Noé?",
+    "en_q": "Who was Noah's father?",
+    "de_q": "Wer war der Vater von Noah?",
+    "fr_q": "Qui a été le père de Noé ?"
   },
   {
     "livro": "Genesis",
@@ -837,7 +1113,11 @@
       "Coroa"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuál fue la señal que Dios puso en Caín?",
+    "en_q": "What sign did God place on Cain?",
+    "de_q": "Welches Zeichen setzte Gott auf Kain?",
+    "fr_q": "Quel était le signe que Dieu a placé sur Caïn ?"
   },
   {
     "livro": "Genesis",
@@ -849,7 +1129,11 @@
       "Noe"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién fue el abuelo de Jacob?",
+    "en_q": "Who was Jacob's grandfather?",
+    "de_q": "Wer war der Großvater von Jakob?",
+    "fr_q": "Qui était le grand-père de Jacob ?"
   },
   {
     "livro": "Genesis",
@@ -861,7 +1145,11 @@
       "Jose"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién tuvo doce hijos que formaron las tribus?",
+    "en_q": "Who had twelve children that formed the tribes?",
+    "de_q": "Wer hatte zwölf Söhne, die die Stämme bildeten?",
+    "fr_q": "Qui a eu douze enfants qui ont formé les tribus ?"
   },
   {
     "livro": "Exodo",
@@ -873,7 +1161,11 @@
       "Rebeca"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién encontró a Moisés en el río?",
+    "en_q": "Who found Moses in the river?",
+    "de_q": "Wer fand Mose am Fluss?",
+    "fr_q": "Qui a trouvé Moïse au fleuve ?"
   },
   {
     "livro": "Exodo",
@@ -885,7 +1177,11 @@
       "Profeta"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién habló con Moisés en la zarza ardiente?",
+    "en_q": "Who spoke with Moses in the burning bush?",
+    "de_q": "Wer sprach mit Mose im brennenden Dornbusch?",
+    "fr_q": "Qui a parlé à Moïse dans le buisson ardent ?"
   },
   {
     "livro": "Exodo",
@@ -897,7 +1193,11 @@
       "Escuridao"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál fue la primera plaga?",
+    "en_q": "What was the first plague?",
+    "de_q": "Was war die erste Plage?",
+    "fr_q": "Quelle a été la première plaie ?"
   },
   {
     "livro": "Exodo",
@@ -909,7 +1209,11 @@
       "Samuel"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién ayudaba a Moisés a hablar?",
+    "en_q": "Who helped Moses speak?",
+    "de_q": "Wer half Mose zu sprechen?",
+    "fr_q": "Qui aidait Moïse à parler ?"
   },
   {
     "livro": "Exodo",
@@ -921,7 +1225,11 @@
       "Areia"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué cubría el monte Sinaí?",
+    "en_q": "What covered Mount Sinai?",
+    "de_q": "Was den Berg Sinai bedeckte?",
+    "fr_q": "Qu'est-ce qui couvrait le mont Sinaï ?"
   },
   {
     "livro": "Exodo",
@@ -933,7 +1241,11 @@
       "50"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántos días Moisés estuvo en el monte?",
+    "en_q": "How many days did Moses stay on the mountain?",
+    "de_q": "Wie viele Tage blieb Mose auf dem Berg?",
+    "fr_q": "Combien de jours Moïse est-il resté sur la montagne ?"
   },
   {
     "livro": "Exodo",
@@ -945,7 +1257,11 @@
       "Fugiu"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué hizo la gente mientras Moisés estaba en la montaña?",
+    "en_q": "What did the people do while Moses was on the mountain?",
+    "de_q": "Was hat das Volk getan, während Mose auf dem Berg war?",
+    "fr_q": "Que faisait le peuple pendant que Moïse était sur la montagne ?"
   },
   {
     "livro": "Exodo",
@@ -957,7 +1273,11 @@
       "Farao"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién hizo el becerro de oro?",
+    "en_q": "Who made the golden calf?",
+    "de_q": "Wer machte das goldene Kalb?",
+    "fr_q": "Qui a fait le veau d'or ?"
   },
   {
     "livro": "Exodo",
@@ -969,7 +1289,11 @@
       "Cantos"
     ],
     "r": 0,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué escribió Dios en las tablas?",
+    "en_q": "What did God write on the tablets?",
+    "de_q": "Was hat Gott auf die Tafeln geschrieben?",
+    "fr_q": "Qu'est-ce que Dieu a écrit sur les tables ?"
   },
   {
     "livro": "Exodo",
@@ -981,7 +1305,11 @@
       "Samuel"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién subió con Moisés al monte?",
+    "en_q": "Who went up with Moses to the mountain?",
+    "de_q": "Wer stieg mit Mose auf den Berg?",
+    "fr_q": "Qui est monté avec Moïse sur la montagne ?"
   },
   {
     "livro": "Exodo",
@@ -993,7 +1321,11 @@
       "Fruta"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué era el maná?",
+    "en_q": "What was mana?",
+    "de_q": "Was war Mana?",
+    "fr_q": "Qu'était le mana ?"
   },
   {
     "livro": "Exodo",
@@ -1005,7 +1337,11 @@
       "Rio"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Dónde caminó el pueblo 40 años?",
+    "en_q": "Where did the people walk for 40 years?",
+    "de_q": "Wo wanderte das Volk 40 Jahre lang?",
+    "fr_q": "Où le peuple a-t-il marché pendant 40 ans?"
   },
   {
     "livro": "Exodo",
@@ -1017,7 +1353,11 @@
       "General"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién era el líder de Egipto?",
+    "en_q": "Who was the leader of Egypt?",
+    "de_q": "Wer war der Anführer Ägyptens?",
+    "fr_q": "Qui était le leader de l'Égypte ?"
   },
   {
     "livro": "Exodo",
@@ -1029,7 +1369,11 @@
       "Arco"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué instrumento usaba Moisés?",
+    "en_q": "What instrument did Moses use?",
+    "de_q": "Welches Instrument benutzte Moses?",
+    "fr_q": "Quel instrument Moïse utilisait-il ?"
   },
   {
     "livro": "Exodo",
@@ -1041,7 +1385,11 @@
       "Fogo"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué envió Dios contra Egipto?",
+    "en_q": "What did God send against Egypt?",
+    "de_q": "Was hat Gott gegen Ägypten gesandt?",
+    "fr_q": "Qu'a envoyé Dieu contre l'Égypte ?"
   },
   {
     "livro": "Exodo",
@@ -1053,7 +1401,11 @@
       "Escuridao"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál fue la última plaga?",
+    "en_q": "What was the last plague?",
+    "de_q": "Was war die letzte Plage?",
+    "fr_q": "Quelle a été la dernière plaie ?"
   },
   {
     "livro": "Exodo",
@@ -1065,7 +1417,11 @@
       "Gregos"
     ],
     "r": 0,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién salió de Egipto?",
+    "en_q": "Who left Egypt?",
+    "de_q": "Wer ist aus Ägypten ausgezogen?",
+    "fr_q": "Qui a quitté l'Égypte?"
   },
   {
     "livro": "Exodo",
@@ -1077,7 +1433,11 @@
       "Davi"
     ],
     "r": 0,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién guiaba al pueblo?",
+    "en_q": "Who guided the people?",
+    "de_q": "Wer führte das Volk?",
+    "fr_q": "Qui guidait le peuple ?"
   },
   {
     "livro": "Exodo",
@@ -1089,7 +1449,11 @@
       "Roupas"
     ],
     "r": 0,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué le dio Dios al pueblo en el desierto?",
+    "en_q": "What did God give to the people in the desert?",
+    "de_q": "Was gab Gott dem Volk in der Wüste?",
+    "fr_q": "Que Dieu a donné au peuple dans le désert ?"
   },
   {
     "livro": "Exodo",
@@ -1101,7 +1465,11 @@
       "Oliveiras"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál monte Dios habló con Moisés?",
+    "en_q": "Which mountain did God speak to Moses?",
+    "de_q": "Welcher Berg sprach Gott mit Mose?",
+    "fr_q": "Sur quel mont Dieu a-t-il parlé à Moïse ?"
   },
   {
     "livro": "Exodo",
@@ -1113,7 +1481,11 @@
       "Davi"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién escribió la ley?",
+    "en_q": "Who wrote the law?",
+    "de_q": "Wer hat das Gesetz geschrieben?",
+    "fr_q": "Qui a écrit la loi ?"
   },
   {
     "livro": "Exodo",
@@ -1125,7 +1497,11 @@
       "Vento"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué protegía al pueblo en la noche?",
+    "en_q": "What protected the people at night?",
+    "de_q": "Was schützte die Menschen nachts?",
+    "fr_q": "Ce qui protégeait le peuple la nuit?"
   },
   {
     "livro": "Exodo",
@@ -1137,7 +1513,11 @@
       "Areia"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué protegía al pueblo de día?",
+    "en_q": "What protected the people during the day?",
+    "de_q": "Was schützte das Volk tagsüber?",
+    "fr_q": "Qu'est-ce qui protégeait le peuple de jour?"
   },
   {
     "livro": "Exodo",
@@ -1149,7 +1529,11 @@
       "Profetas"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién construyó el tabernáculo?",
+    "en_q": "Who built the tabernacle?",
+    "de_q": "Wer baute die Stiftshütte?",
+    "fr_q": "Qui a construit le tabernacle ?"
   },
   {
     "livro": "Exodo",
@@ -1161,7 +1545,11 @@
       "Monte"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Dónde estaban guardadas las tablas?",
+    "en_q": "Where were the tablets stored?",
+    "de_q": "Wo waren die Tafeln aufbewahrt?",
+    "fr_q": "Où étaient gardées les tablettes ?"
   },
   {
     "livro": "Genesis",
@@ -1173,7 +1561,11 @@
       "Canaa"
     ],
     "r": 0,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuál era el nombre del jardín donde Dios puso al hombre?",
+    "en_q": "What was the name of the garden where God placed man?",
+    "de_q": "Wie hieß der Garten, in den Gott den Menschen setzte?",
+    "fr_q": "Quel était le nom du jardin où Dieu a placé l'homme ?"
   },
   {
     "livro": "Genesis",
@@ -1185,7 +1577,11 @@
       "Pisom"
     ],
     "r": 2,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Qué río NO es mencionado en el Edén?",
+    "en_q": "Which river is NOT mentioned in Eden?",
+    "de_q": "Welcher Fluss wird in Eden NICHT erwähnt?",
+    "fr_q": "Quel fleuve N'EST PAS mentionné dans l'Éden ?"
   },
   {
     "livro": "Genesis",
@@ -1197,7 +1593,11 @@
       "Enoque"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién fue el padre de todos los que tocan arpa y flauta?",
+    "en_q": "Who was the father of all those who play the harp and flute?",
+    "de_q": "Wer war der Vater aller, die Harfe und Flöte spielen?",
+    "fr_q": "Qui fut le père de tous ceux qui jouent de la harpe et de la flûte ?"
   },
   {
     "livro": "Genesis",
@@ -1209,7 +1609,11 @@
       "Sete"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién fue el padre de los que habitan en tiendas y crían ganado?",
+    "en_q": "Who was the father of those who dwell in tents and raise livestock?",
+    "de_q": "Wer war der Vater derer, die in Zelten wohnen und Vieh züchten?",
+    "fr_q": "Qui était le père de ceux qui habitent dans des tentes et élèvent du bétail?"
   },
   {
     "livro": "Genesis",
@@ -1221,7 +1625,11 @@
       "Lameque"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién forjó instrumentos de bronce y hierro?",
+    "en_q": "Who forged instruments of bronze and iron?",
+    "de_q": "Wer schmiedete Bronzewerkzeuge und Eisenwerkzeuge?",
+    "fr_q": "Qui a forgé les instruments de bronze et de fer ?"
   },
   {
     "livro": "Genesis",
@@ -1233,7 +1641,11 @@
       "Raquel"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál era el nombre de la esposa de Abraham antes de ser cambiado?",
+    "en_q": "What was the name of Abraham's wife before it was changed?",
+    "de_q": "Wie war der Name von Abrahams Ehefrau, bevor er geändert wurde?",
+    "fr_q": "Quel était le nom de l'épouse d'Abraham avant qu'il ne soit changé ?"
   },
   {
     "livro": "Genesis",
@@ -1245,7 +1657,11 @@
       "Abel"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál era el nombre de Abrahán antes de que Dios lo cambiara?",
+    "en_q": "What was Abraham's name before God changed it?",
+    "de_q": "Welchen Namen hatte Abraham, bevor Gott ihn änderte?",
+    "fr_q": "Quel était le nom d'Abraham avant que Dieu le change?"
   },
   {
     "livro": "Genesis",
@@ -1257,7 +1673,11 @@
       "Samuel"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién era el sacerdote que bendijo a Abraham?",
+    "en_q": "Who was the priest who blessed Abraham?",
+    "de_q": "Wer war der Priester, der Abraham segnete?",
+    "fr_q": "Qui était le prêtre qui a béni Abraham ?"
   },
   {
     "livro": "Genesis",
@@ -1269,7 +1689,11 @@
       "50"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuántos justos pidió Abraham como mínimo para salvar a Sodoma?",
+    "en_q": "How many righteous people did Abraham ask God to spare Sodom for at minimum?",
+    "de_q": "Wie viele Gerechte bat Abraham mindestens um, um Sodom zu retten?",
+    "fr_q": "Combien de justes Abraham a-t-il demandé au minimum pour sauver Sodome ?"
   },
   {
     "livro": "Genesis",
@@ -1281,7 +1705,11 @@
       "Rebeca"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién le dio el nombre de Benoni al hijo, que luego fue cambiado?",
+    "en_q": "Who gave the name Benoni to his son, which was later changed?",
+    "de_q": "Wer gab dem Sohn den Namen Benoni, der später geändert wurde?",
+    "fr_q": "Qui a donné le nom de Benoni au fils, puis changé ?"
   },
   {
     "livro": "Salmos",
@@ -1293,7 +1721,11 @@
       "Salmo 150"
     ],
     "r": 2,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuál es el Salmo más largo de la Biblia?",
+    "en_q": "What is the longest Psalm in the Bible?",
+    "de_q": "Welcher ist der längste Psalm der Bibel?",
+    "fr_q": "Quel est le Psaume le plus long de la Bible ?"
   },
   {
     "livro": "Salmos",
@@ -1305,7 +1737,11 @@
       "Salmo 100"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuál es el Salmo más corto de la Biblia?",
+    "en_q": "What is the shortest Psalm in the Bible?",
+    "de_q": "Welcher ist der kürzeste Psalm der Bibel?",
+    "fr_q": "Quel est le Psaume le plus court de la Bible ?"
   },
   {
     "livro": "Salmos",
@@ -1317,7 +1753,11 @@
       "180"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántos Salmos existen en la Biblia?",
+    "en_q": "How many Psalms are there in the Bible?",
+    "de_q": "Wie viele Psalmen gibt es in der Bibel?",
+    "fr_q": "Combien de Psaumes existe-t-il dans la Bible ?"
   },
   {
     "livro": "Salmos",
@@ -1329,7 +1769,11 @@
       "Separara"
     ],
     "r": 0,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "El Señor es mi pastor y nada me falta.",
+    "en_q": "The Lord is my shepherd and I lack nothing.\n\n(This is the beginning of Psalm 23)",
+    "de_q": "Der Herr ist mein Hirte und mir wird nichts mangeln.",
+    "fr_q": "Le Seigneur est mon berger et je ne manque de rien."
   },
   {
     "livro": "Salmos",
@@ -1341,7 +1785,11 @@
       "Salmo 100"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿En qué Salmo David dice Dios es mi luz y mi salvación?",
+    "en_q": "In which Psalm does David say God is my light and salvation?",
+    "de_q": "In welchem Psalm sagt David \"Gott ist mein Licht und meine Rettung\"?",
+    "fr_q": "En quel Psaume David dit-il Dieu est ma lumière et mon salut ?"
   },
   {
     "livro": "Salmos",
@@ -1353,7 +1801,11 @@
       "Profeta"
     ],
     "r": 2,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién es el escudo de los que confían en Dios?",
+    "en_q": "Who is the shield of those who trust in God?",
+    "de_q": "Wer ist der Schild derer, die auf Gott vertrauen?",
+    "fr_q": "Qui est le bouclier de ceux qui ont confiance en Dieu ?"
   },
   {
     "livro": "Salmos",
@@ -1365,7 +1817,11 @@
       "Forca"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué le pide David a Dios en el Salmo 51?",
+    "en_q": "What does David ask God for in Psalm 51?",
+    "de_q": "Was bittet David Gott in Psalm 51?",
+    "fr_q": "Que demande David à Dieu dans le Psaume 51 ?"
   },
   {
     "livro": "Salmos",
@@ -1377,7 +1833,11 @@
       "Sacerdote"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién habita en el escondite del Altísimo?",
+    "en_q": "Who dwells in the shelter of the Most High?",
+    "de_q": "Wer wohnt in der Zuflucht des Höchsten?",
+    "fr_q": "Qui habite au refuge du Très-Haut?"
   },
   {
     "livro": "Salmos",
@@ -1389,7 +1849,11 @@
       "Estrelas"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "Alabad al Señor a todos los...",
+    "en_q": "\"Praise the Lord all the...?\"\n\n(This appears to be the beginning of a phrase, likely \"Praise the Lord all the earth\" or similar, but the complete thought is cut off by the \"...?\")",
+    "de_q": "Lobt den Herrn alle...?",
+    "fr_q": "Louai au Seigneur tous les...?"
   },
   {
     "livro": "Salmos",
@@ -1401,7 +1865,11 @@
       "Cordeiro"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Qué animal se menciona en el Salmo 22?",
+    "en_q": "What animal is mentioned in Psalm 22?",
+    "de_q": "Welches Tier wird in Psalm 22 erwähnt?",
+    "fr_q": "Quel animal est mentionné dans le Psaume 22 ?"
   },
   {
     "livro": "Salmos",
@@ -1413,7 +1881,11 @@
       "Homem"
     ],
     "r": 2,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "Los cielos declaran la gloria de...?",
+    "en_q": "The heavens declare the glory of...?",
+    "de_q": "Die Himmel verkünden die Herrlichkeit von...?",
+    "fr_q": "Les cieux déclarent la gloire de...?"
   },
   {
     "livro": "Salmos",
@@ -1425,7 +1897,11 @@
       "Elias"
     ],
     "r": 2,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién escribió el Salmo 90?",
+    "en_q": "Who wrote Psalm 90?",
+    "de_q": "Wer schrieb Psalm 90?",
+    "fr_q": "Qui a écrit le Psaume 90 ?"
   },
   {
     "livro": "Salmos",
@@ -1437,7 +1913,11 @@
       "Forte"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué palabra comienza el Salmo 1?",
+    "en_q": "What word begins Psalm 1?",
+    "de_q": "Welches Wort beginnt Psalm 1?",
+    "fr_q": "Quel mot commence le Psaume 1?"
   },
   {
     "livro": "Salmos",
@@ -1449,7 +1929,11 @@
       "Cidade"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "El justo es como árbol plantado junto a...?",
+    "en_q": "The just one is like a tree planted beside...?",
+    "de_q": "Der Gerechte ist wie ein Baum, der neben...?",
+    "fr_q": "Le juste est comme un arbre planté près de...?"
   },
   {
     "livro": "Salmos",
@@ -1461,7 +1945,11 @@
       "Sacerdotes"
     ],
     "r": 2,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "Alegraos en el Señor vos...?",
+    "en_q": "\"Rejoice in the Lord you...?\"\n\n(This appears to be the beginning of Philippians 4:4 in Portuguese: \"Alegrai-vos no Senhor sempre\" = \"Rejoice in the Lord always\")",
+    "de_q": "Freuet euch im Herrn allezeit...?",
+    "fr_q": "Réjouissez-vous dans le Seigneur vous...?"
   },
   {
     "livro": "Salmos",
@@ -1473,7 +1961,11 @@
       "Profeta"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién es el rey de la gloria?",
+    "en_q": "Who is the King of glory?",
+    "de_q": "Wer ist der König der Herrlichkeit?",
+    "fr_q": "Qui est le roi de la gloire?"
   },
   {
     "livro": "Salmos",
@@ -1485,7 +1977,11 @@
       "Sentir"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "Buscad al Señor mientras se puede...?",
+    "en_q": "\"Seek the Lord while he may be found...?\"",
+    "de_q": "Sucht den Herrn, während er sich finden lässt...?",
+    "fr_q": "Cherchez le Seigneur tandis qu'on peut...?"
   },
   {
     "livro": "Salmos",
@@ -1497,7 +1993,11 @@
       "Piano"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué instrumento se menciona en el Salmo 150?",
+    "en_q": "What instrument is mentioned in Psalm 150?",
+    "de_q": "Welche Instrumente werden in Psalm 150 erwähnt?",
+    "fr_q": "Quel instrument est mentionné dans le Psaume 150 ?"
   },
   {
     "livro": "Salmos",
@@ -1509,7 +2009,11 @@
       "Reis"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "El Salmo 23 dice que Dios prepara una mesa en la presencia de los...?",
+    "en_q": "Psalm 23 says that God prepares a table in the presence of...?",
+    "de_q": "Psalm 23 sagt, dass Gott einen Tisch in der Gegenwart der...?",
+    "fr_q": "Le Psaume 23 dit que Dieu prépare une table en présence des...?"
   },
   {
     "livro": "Salmos",
@@ -1521,7 +2025,11 @@
       "Antiga"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cómo describe David la Palabra de Dios en el Salmo 119?",
+    "en_q": "How does David describe the Word of God in Psalm 119?",
+    "de_q": "Wie beschreibt David das Wort Gottes in Psalm 119?",
+    "fr_q": "Comment David décrit-il la Parole de Dieu dans le Psaume 119 ?"
   },
   {
     "livro": "Salmos",
@@ -1533,7 +2041,11 @@
       "O sacerdote"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién sube al monte del Señor?",
+    "en_q": "Who ascends to the mountain of the Lord?",
+    "de_q": "Wer erhebt sich auf den Berg des Herrn?",
+    "fr_q": "Qui monte sur la montagne du Seigneur ?"
   },
   {
     "livro": "Salmos",
@@ -1545,7 +2057,11 @@
       "Do profeta"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿De dónde viene mi auxilio?",
+    "en_q": "Where does my help come from?",
+    "de_q": "Woher kommt meine Hilfe?",
+    "fr_q": "D'où vient mon secours ?"
   },
   {
     "livro": "Salmos",
@@ -1557,7 +2073,11 @@
       "Alegrai-vos"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Con qué frase comienza el Salmo 22?",
+    "en_q": "Psalm 22 begins with which phrase?",
+    "de_q": "Psalm 22 beginnt mit welchem Satz?",
+    "fr_q": "Le Psaume 22 commence par quelle phrase ?"
   },
   {
     "livro": "Salmos",
@@ -1569,7 +2089,11 @@
       "150"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuántos Salmos se atribuyen a David?",
+    "en_q": "How many Psalms are attributed to David?",
+    "de_q": "Wie viele Psalmen werden David zugeordnet?",
+    "fr_q": "Combien de Psaumes sont attribués à David ?"
   },
   {
     "livro": "Salmos",
@@ -1581,7 +2105,11 @@
       "Cantava"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué hacía David cuando tocaba el arpa para Saúl?",
+    "en_q": "What did David do when he played the harp for Saul?",
+    "de_q": "Was spielte Davi auf der Harfe für Saul?",
+    "fr_q": "Que faisait David quand il jouait de la harpe pour Saül ?"
   },
   {
     "livro": "Salmos",
@@ -1593,7 +2121,11 @@
       "Salmo 91"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuál Salmo es cantado en las subidas al templo?",
+    "en_q": "Which Psalm is sung on the ascents to the temple?",
+    "de_q": "Welcher Psalm wird beim Aufstieg zum Tempel gesungen?",
+    "fr_q": "Quel Psaume est chanté dans les montées au temple ?"
   },
   {
     "livro": "Salmos",
@@ -1605,7 +2137,11 @@
       "Monte"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "Alaba a Dios en tu...?",
+    "en_q": "Praise God in your...?",
+    "de_q": "Lobt Gott in eurem...?",
+    "fr_q": "Je louais Dieu en son...?"
   },
   {
     "livro": "Mateus",
@@ -1617,7 +2153,11 @@
       "Tiago e Sara"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quiénes fueron los padres de Jesús?",
+    "en_q": "Who were the parents of Jesus?",
+    "de_q": "Wer waren die Eltern Jesu?",
+    "fr_q": "Qui étaient les parents de Jésus ?"
   },
   {
     "livro": "Mateus",
@@ -1629,7 +2169,11 @@
       "18"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántos años tenía Jesús cuando fue al templo?",
+    "en_q": "How old was Jesus when he went to the temple?",
+    "de_q": "Wie alt war Jesus, als er zum Tempel ging?",
+    "fr_q": "Quel âge avait Jésus quand il est allé au temple ?"
   },
   {
     "livro": "Mateus",
@@ -1641,7 +2185,11 @@
       "Tiago"
     ],
     "r": 2,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién bautizó a Jesús?",
+    "en_q": "Who baptized Jesus?",
+    "de_q": "Wer taufte Jesus?",
+    "fr_q": "Qui a baptisé Jésus ?"
   },
   {
     "livro": "Mateus",
@@ -1653,7 +2201,11 @@
       "Rio"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Dónde fue tentado Jesús?",
+    "en_q": "Where was Jesus tempted?",
+    "de_q": "Wo wurde Jesus versucht?",
+    "fr_q": "Où Jésus a-t-il été tenté ?"
   },
   {
     "livro": "Mateus",
@@ -1665,7 +2217,11 @@
       "4"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántas veces fue tentado Jesús en el desierto?",
+    "en_q": "How many times was Jesus tempted in the desert?",
+    "de_q": "Wie oft wurde Jesus in der Wüste versucht?",
+    "fr_q": "Combien de fois Jésus a-t-il été tenté dans le désert ?"
   },
   {
     "livro": "Mateus",
@@ -1677,7 +2233,11 @@
       "Água em vinho"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál fue el primer milagro de Jesús en Mateo?",
+    "en_q": "What was Jesus' first miracle in Matthew?",
+    "de_q": "Welches war das erste Wunder Jesu bei Matthäus?",
+    "fr_q": "Quel a été le premier miracle de Jésus dans Matthieu ?"
   },
   {
     "livro": "Mateus",
@@ -1689,7 +2249,11 @@
       "12"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántos discípulos llamó Jesús primero?",
+    "en_q": "How many disciples did Jesus call first?",
+    "de_q": "Wie viele Jünger rief Jesus zuerst?",
+    "fr_q": "Combien de disciples Jésus a-t-il d'abord appelés ?"
   },
   {
     "livro": "Mateus",
@@ -1701,7 +2265,11 @@
       "Tiago"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién era cobrador de impuestos y se convirtió en discípulo?",
+    "en_q": "Who was a tax collector and became a disciple?",
+    "de_q": "Wer war ein Steuereintreiber und wurde zum Jünger?",
+    "fr_q": "Qui était percepteur d'impôts et devenu disciple?"
   },
   {
     "livro": "Mateus",
@@ -1713,7 +2281,11 @@
       "Não roubar"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuál es el mayor mandamiento según Jesús?",
+    "en_q": "What is the greatest commandment according to Jesus?",
+    "de_q": "Was ist das größte Gebot nach Jesus?",
+    "fr_q": "Quel est le plus grand commandement selon Jésus ?"
   },
   {
     "livro": "Mateus",
@@ -1725,7 +2297,11 @@
       "5000"
     ],
     "r": 3,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántas personas alimentó Jesús con 5 panes?",
+    "en_q": "How many people did Jesus feed with 5 loaves?",
+    "de_q": "Wie viele Menschen speiste Jesus mit 5 Broten?",
+    "fr_q": "Combien de personnes Jésus a-t-il nourries avec 5 pains ?"
   },
   {
     "livro": "Mateus",
@@ -1737,7 +2313,11 @@
       "Paulo"
     ],
     "r": 2,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién caminó sobre las aguas con Jesús?",
+    "en_q": "Who walked on the water with Jesus?",
+    "de_q": "Wer wandelte über die Wasser mit Jesus?",
+    "fr_q": "Qui a marché sur les eaux avec Jésus ?"
   },
   {
     "livro": "Mateus",
@@ -1749,7 +2329,11 @@
       "7 dias"
     ],
     "r": 2,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuánto tiempo Jesús estuvo en el sepulcro?",
+    "en_q": "How long did Jesus stay in the tomb?",
+    "de_q": "Wie lange blieb Jesus im Grab?",
+    "fr_q": "Combien de temps Jésus a-t-il passé dans le tombeau ?"
   },
   {
     "livro": "Mateus",
@@ -1761,7 +2345,11 @@
       "Tiago"
     ],
     "r": 2,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién traicionó a Jesús?",
+    "en_q": "Who betrayed Jesus?",
+    "de_q": "Wer verriet Jesus?",
+    "fr_q": "Qui a trahi Jésus ?"
   },
   {
     "livro": "Mateus",
@@ -1773,7 +2361,11 @@
       "50 moedas"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Por cuánto Judas vendió a Jesús?",
+    "en_q": "For how much did Judas sell Jesus?",
+    "de_q": "Für wie viel verkaufte Judas Jesus?",
+    "fr_q": "Pour combien Judas a-t-il vendu Jésus ?"
   },
   {
     "livro": "Mateus",
@@ -1785,7 +2377,11 @@
       "Pedro"
     ],
     "r": 3,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién negó a Jesús tres veces?",
+    "en_q": "Who denied Jesus three times?",
+    "de_q": "Wer hat Jesus drei Mal verleugnet?",
+    "fr_q": "Qui a renié Jésus trois fois ?"
   },
   {
     "livro": "Mateus",
@@ -1797,7 +2393,11 @@
       "Getsêmani"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Dónde fue crucificado Jesús?",
+    "en_q": "Where was Jesus crucified?",
+    "de_q": "Wo wurde Jesus gekreuzigt?",
+    "fr_q": "Où Jésus a-t-il été crucifié ?"
   },
   {
     "livro": "Mateus",
@@ -1809,7 +2409,11 @@
       "Nicodemos"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién ayudó a Jesús a llevar la cruz?",
+    "en_q": "Who helped Jesus carry the cross?",
+    "de_q": "Wer half Jesus, das Kreuz zu tragen?",
+    "fr_q": "Qui a aidé Jésus à porter la croix ?"
   },
   {
     "livro": "Mateus",
@@ -1821,7 +2425,11 @@
       "Manto"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué fue colocado en la cabeza de Jesús?",
+    "en_q": "What was placed on Jesus's head?",
+    "de_q": "Was wurde Jesus auf den Kopf gelegt?",
+    "fr_q": "Qu'est-ce qui a été mis sur la tête de Jésus?"
   },
   {
     "livro": "Mateus",
@@ -1833,7 +2441,11 @@
       "Nicodemos"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién pidió el cuerpo de Jesús?",
+    "en_q": "Who asked for the body of Jesus?",
+    "de_q": "Wer forderte den Leichnam Jesu an?",
+    "fr_q": "Qui a demandé le corps de Jésus ?"
   },
   {
     "livro": "Mateus",
@@ -1845,7 +2457,11 @@
       "Messias"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál era el título escrito en la cruz?",
+    "en_q": "What was the title written on the cross?",
+    "de_q": "Welcher Titel stand auf dem Kreuz geschrieben?",
+    "fr_q": "Quel était le titre écrit sur la croix ?"
   },
   {
     "livro": "Mateus",
@@ -1857,7 +2473,11 @@
       "Caifás"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién fue el gobernador que condenó a Jesús?",
+    "en_q": "Who was the governor that condemned Jesus?",
+    "de_q": "Wer war der Gouverneur, der Jesus verurteilte?",
+    "fr_q": "Qui était le gouverneur qui a condamné Jésus ?"
   },
   {
     "livro": "Mateus",
@@ -1869,7 +2489,11 @@
       "Magnificat"
     ],
     "r": 0,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuál es la oración que Jesús enseñó?",
+    "en_q": "What is the prayer that Jesus taught?",
+    "de_q": "Welches Gebet lehrte Jesus?",
+    "fr_q": "Quelle est la prière que Jésus a enseignée ?"
   },
   {
     "livro": "Mateus",
@@ -1881,7 +2505,11 @@
       "Profecias"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿El Sermón de la Montaña comienza con las...?",
+    "en_q": "The Sermon on the Mount begins with the...?",
+    "de_q": "Die Bergpredigt beginnt mit den...?",
+    "fr_q": "Le Sermon sur la Montagne commence par les...?"
   },
   {
     "livro": "Mateus",
@@ -1893,7 +2521,11 @@
       "9"
     ],
     "r": 2,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuántas bienaventuranzas hay en el Sermão de la Montaña?",
+    "en_q": "How many beatitudes are there in the Sermon on the Mount?",
+    "de_q": "Wie viele Seligpreisungen gibt es in der Bergpredigt?",
+    "fr_q": "Combien de béatitudes y a-t-il dans le Sermon sur la montagne ?"
   },
   {
     "livro": "Mateus",
@@ -1905,7 +2537,11 @@
       "Fariseus"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién vino a visitar a Jesús recién nacido desde Oriente?",
+    "en_q": "Who came from the East to visit the newborn Jesus?",
+    "de_q": "Wer besuchte das neugeborene Jesus aus dem Osten?",
+    "fr_q": "Qui est venu visiter Jésus nouveau-né de l'Orient ?"
   },
   {
     "livro": "Mateus",
@@ -1917,7 +2553,11 @@
       "Cometa"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué estrella guió a los magos?",
+    "en_q": "What star guided the wise men?",
+    "de_q": "Welcher Stern führte die Magier?",
+    "fr_q": "Quelle étoile a guidé les mages ?"
   },
   {
     "livro": "Mateus",
@@ -1929,7 +2569,11 @@
       "Caifás"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién ordenó matar a los niños de Belén?",
+    "en_q": "Who ordered the killing of the boys of Bethlehem?",
+    "de_q": "Wer befahl, die Jungen von Bethlehem zu töten?",
+    "fr_q": "Qui a ordonné de tuer les enfants de Bethléem ?"
   },
   {
     "livro": "Mateus",
@@ -1941,7 +2585,11 @@
       "Síria"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿A dónde huyó Jesús cuando era niño?",
+    "en_q": "Where did Jesus flee to as a child?",
+    "de_q": "Wohin floh Jesus als Kind?",
+    "fr_q": "Où Jésus s'est-il enfui quand il était enfant ?"
   },
   {
     "livro": "Mateus",
@@ -1953,7 +2601,11 @@
       "Longo"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué dijo Jesús que es el camino, la verdad y la vida?",
+    "en_q": "What did Jesus say was the way and the life?",
+    "de_q": "Was hat Jesus gesagt, dass der Weg und das Leben ist?",
+    "fr_q": "Qu'a dit Jésus être le chemin, la vérité et la vie ?"
   },
   {
     "livro": "Mateus",
@@ -1965,7 +2617,11 @@
       "Ovelha perdida"
     ],
     "r": 0,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuál es la parábola que habla de un hijo que regresó al padre?",
+    "en_q": "Which parable talks about a son who returned to his father?",
+    "de_q": "Welche Parabel spricht von einem Sohn, der zum Vater zurückkehrte?",
+    "fr_q": "Quelle parabole parle d'un fils qui est revenu à son père ?"
   },
   {
     "livro": "Mateus",
@@ -1977,7 +2633,11 @@
       "20"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuántos talentos recibió el siervo que ganó más?",
+    "en_q": "How many talents did the servant who gained the most receive?",
+    "de_q": "Wie viele Talente erhielt der Sklave, der am meisten gewann?",
+    "fr_q": "Combien de talents a reçu le serviteur qui en a gagné le plus ?"
   },
   {
     "livro": "Mateus",
@@ -1989,7 +2649,11 @@
       "Curou cegos"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué hizo Jesús en la entrada de Jerusalén?",
+    "en_q": "What did Jesus do at the entrance of Jerusalem?",
+    "de_q": "Was tat Jesus beim Einzug in Jerusalem?",
+    "fr_q": "Qu'a fait Jésus à l'entrée de Jérusalem ?"
   },
   {
     "livro": "Mateus",
@@ -2001,7 +2665,11 @@
       "Discípulos"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué expulsó Jesús del templo?",
+    "en_q": "What did Jesus drive out of the temple?",
+    "de_q": "Was hat Jesus aus dem Tempel vertrieben?",
+    "fr_q": "Qu'est-ce que Jésus a expulsé du temple ?"
   },
   {
     "livro": "Mateus",
@@ -2013,7 +2681,11 @@
       "Gólgota"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Dónde oró Jesús antes de ser arrestado?",
+    "en_q": "Where did Jesus pray before being arrested?",
+    "de_q": "Wo betete Jesus, bevor er verhaftet wurde?",
+    "fr_q": "Où Jésus a-t-il prié avant d'être arrêté ?"
   },
   {
     "livro": "Mateus",
@@ -2025,7 +2697,11 @@
       "César"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién dijo ser inocente de la sangre de Jesús?",
+    "en_q": "Who said they were innocent of the blood of Jesus?",
+    "de_q": "Wer sagte, unschuldig am Blut Jesu zu sein?",
+    "fr_q": "Qui a dit être innocent du sang de Jésus ?"
   },
   {
     "livro": "Mateus",
@@ -2037,7 +2713,11 @@
       "Roupa de Jesus"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Qué se rasgó cuando Jesús murió?",
+    "en_q": "What tore when Jesus died?",
+    "de_q": "Was zerriss, als Jesus starb?",
+    "fr_q": "Qu'est-ce qui s'est déchiré quand Jésus est mort ?"
   },
   {
     "livro": "Mateus",
@@ -2049,7 +2729,11 @@
       "Jejuai"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál fue el último mandato de Jesús en Mateo?",
+    "en_q": "What was the last command of Jesus in Matthew?",
+    "de_q": "Was war Jesu letztes Gebot in Matthäus?",
+    "fr_q": "Quel fut le dernier mandat de Jésus dans Matthieu ?"
   },
   {
     "livro": "Mateus",
@@ -2061,7 +2745,11 @@
       "Sempre"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "Jesús dijo estar con los suyos hasta...?",
+    "en_q": "Jesus said he would be with his people until...?",
+    "de_q": "Jesus sagte, bei seinen zu sein bis...?",
+    "fr_q": "Jésus a dit être avec les siens jusqu'à...?"
   },
   {
     "livro": "Proverbios",
@@ -2073,7 +2761,11 @@
       "Esforco"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "Confía en el Señor de todo tu corazón y no te apoyes en tu propia...",
+    "en_q": "Trust in the Lord with all your heart and lean not on your own...",
+    "de_q": "Vertraue dem Herrn von ganzem Herzen und verlasse dich nicht auf deine eigene...",
+    "fr_q": "Fais confiance au Seigneur de tout ton cœur et ne t'appuie pas sur ta propre..."
   },
   {
     "livro": "Proverbios",
@@ -2085,7 +2777,11 @@
       "Rei"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "El hijo sabio alegra al...?",
+    "en_q": "The wise son brings joy to the...?",
+    "de_q": "Der weise Sohn erfreut den...?",
+    "fr_q": "Le fils sage réjouit le...?"
   },
   {
     "livro": "Proverbios",
@@ -2097,7 +2793,11 @@
       "Grande familia"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "Mejor es el pobre que anda en integridad que el rico de...?",
+    "en_q": "\"Better is the poor who walks in integrity than the rich...?\"\n\n(This appears to be an incomplete Bible verse, likely from Proverbs 28:6)",
+    "de_q": "Besser ist der Arme, der in Integrität wandelt, als der Reiche...?",
+    "fr_q": "Mieux vaut le pauvre qui marche dans l'intégrité que le riche qui...?"
   },
   {
     "livro": "Proverbios",
@@ -2109,7 +2809,11 @@
       "Diamantes"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "La mujer virtuosa, ¿quién la hallará? ¿Su valor excede el de...?",
+    "en_q": "\"Who can find a virtuous woman? Her value exceeds that of...?\"",
+    "de_q": "Die tugendhafte Frau, wer wird sie finden? Ihr Wert übersteigt den von...?",
+    "fr_q": "La femme vertueuse, qui la trouvera? Sa valeur dépasse celle de...?"
   },
   {
     "livro": "Proverbios",
@@ -2121,7 +2825,11 @@
       "Sera rei"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "Enseña al niño en el camino en que debe andar y cuando envejezca...?",
+    "en_q": "Teach a child in the way they should go, and when they grow old...?",
+    "de_q": "Lehre das Kind auf dem Weg, auf dem es gehen soll, und wenn es alt wird...?",
+    "fr_q": "Enseigne à l'enfant le chemin dans lequel il doit marcher et quand il vieillira...?"
   },
   {
     "livro": "Proverbios",
@@ -2133,7 +2841,11 @@
       "Ferida"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "El inicio de la contienda y como una apertura de...?",
+    "en_q": "The beginning of the dispute is like an opening of...?",
+    "de_q": "Der Anfang des Streits ist wie eine Öffnung von...?",
+    "fr_q": "Le début du différend et comme une ouverture de...?"
   },
   {
     "livro": "Proverbios",
@@ -2145,7 +2857,11 @@
       "Rei"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Ha amigo más cercano que un...?",
+    "en_q": "\"Hey buddy, closer than a...?\"\n\n(This appears to be an incomplete phrase in Portuguese. The full expression is typically \"Ha amigo mais chegado que um irmão\" = \"A friend closer than a brother\")",
+    "de_q": "Hat ein Freund, der näher ist als ein...?",
+    "fr_q": "Ha amigo mais chegado que um irmão.\n\n(French translation:)\n\nAh mon ami plus proche qu'un frère."
   },
   {
     "livro": "Proverbios",
@@ -2157,7 +2873,11 @@
       "Entendimento"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "Como el acero endurece el acero, así el hombre endurece al...?\n\n(Note: \"agucar\" doesn't appear to be a standard Portuguese word. I interpreted it as \"açar\" or a variation meaning \"to harden/strengthen.\" If you meant a different word, please clarify.)",
+    "en_q": "I can see this appears to be Portuguese text, but it seems incomplete or contains unclear/repeated words (\"agucar\" appears multiple times). \n\nA literal attempt would be something like:\n\"How to sugar sugar the iron thus the man sugar the...?\"\n\nHowever, this doesn't form coherent meaning. Could you please:\n1. Verify the original text is correct?\n2. Provide the complete sentence?\n3. Clarify what \"agucar\" should be (perhaps \"açúcar\" meaning sugar, or another word)?\n\nThis would help me provide an accurate translation.",
+    "de_q": "Wie man Zucker Zucker das Eisen so der Mann Zucker das...?",
+    "fr_q": "Je ne peux pas traduire ce texte car il ne constitue pas une phrase claire ou complète en portugais. Le texte semble contenir des répétitions et des mots peu clairs (\"agucar\" n'est pas un mot portugais standard).\n\nPourriez-vous vérifier l'orthographe ou fournir le texte complet ?"
   },
   {
     "livro": "Proverbios",
@@ -2169,7 +2889,11 @@
       "Isaias"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "El corazón del hombre es más engañoso que todas las cosas según...?",
+    "en_q": "The heart of man is more deceitful than all things according to...?",
+    "de_q": "Das Herz des Menschen ist trügerischer als alle Dinge, laut...?",
+    "fr_q": "Le cœur de l'homme est plus trompeur que toutes choses selon...?"
   },
   {
     "livro": "Proverbios",
@@ -2181,7 +2905,11 @@
       "Paz"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién siembra viento cosechará...?",
+    "en_q": "\"He who sows wind will reap...?\"\n\n(This is part of the Portuguese proverb \"Quem semeia vento colherá tempestade\" - \"He who sows wind will reap a whirlwind\")",
+    "de_q": "Wer Wind sät, wird Sturm ernten...?",
+    "fr_q": "Qui sème le vent récoltera...?"
   },
   {
     "livro": "Proverbios",
@@ -2193,7 +2921,11 @@
       "Alma"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "La esperanza aplazada enferma el...?",
+    "en_q": "\"Hope deferred makes the...\"\n\n(This is the beginning of a famous proverb from the Bible: \"Hope deferred makes the heart sick\" - Proverbs 13:12)",
+    "de_q": "Die aufgeschobene Hoffnung macht den...?",
+    "fr_q": "L'espoir ajourné rend malade le...?"
   },
   {
     "livro": "Proverbios",
@@ -2205,7 +2937,11 @@
       "Filhos"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "El temor del Señor prolonga los...?",
+    "en_q": "The fear of the Lord prolongs...?",
+    "de_q": "Die Furcht des Herrn verlängert die...?",
+    "fr_q": "La crainte du Seigneur prolonge les...?"
   },
   {
     "livro": "Proverbios",
@@ -2217,7 +2953,11 @@
       "Vinho"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Qué es dulce para el hombre y después amargo?",
+    "en_q": "What is sweet to a man and then bitter?",
+    "de_q": "Was ist für den Mann süß und dann bitter?",
+    "fr_q": "Ce qui est doux pour l'homme et ensuite amer?"
   },
   {
     "livro": "Proverbios",
@@ -2229,7 +2969,11 @@
       "Puder"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "No digas a tu prójimo \"vete y vuelve mañana y te daré cuando...?\"",
+    "en_q": "\"Do not say to your neighbor, 'Go and come back tomorrow and I will give you,' when...?\"",
+    "de_q": "Sag deinem Nächsten nicht \"geh und komm morgen zurück und ich werde dir geben, wenn...?\"",
+    "fr_q": "Ne dis pas à ton prochain : va et reviens demain, et je te donnerai quand...?"
   },
   {
     "livro": "Proverbios",
@@ -2241,7 +2985,11 @@
       "Fim"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "El falso testimonio no quedará sin...?",
+    "en_q": "\"False testimony will not go unpunished...?\"",
+    "de_q": "Der falsche Zeugnis wird nicht bleiben ohne...?",
+    "fr_q": "Le faux témoignage ne restera pas sans...?"
   },
   {
     "livro": "Proverbios",
@@ -2253,7 +3001,11 @@
       "Filhos"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "Honra al Señor con tus...",
+    "en_q": "Honor the Lord with your...?",
+    "de_q": "Ehre den Herrn mit deinem...?",
+    "fr_q": "Honre o Seigneur avec tes..."
   },
   {
     "livro": "Proverbios",
@@ -2265,7 +3017,11 @@
       "Santa"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "El nombre del Señor es una torre...",
+    "en_q": "The name of the Lord is a tower...?",
+    "de_q": "Der Name des Herrn ist ein Turm...?",
+    "fr_q": "Le nom du Seigneur est une tour...?"
   },
   {
     "livro": "Proverbios",
@@ -2277,7 +3033,11 @@
       "Rico"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Quién da al pobre presta al...?",
+    "en_q": "Who gives to the poor lends to...?",
+    "de_q": "Wer dem Armen gibt, leiht dem...?",
+    "fr_q": "Qui donne au pauvre prête à...?"
   },
   {
     "livro": "Proverbios",
@@ -2289,7 +3049,11 @@
       "Cai"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "Sin visión el pueblo...?",
+    "en_q": "\"Without vision the people...?\"",
+    "de_q": "Ohne Vision das Volk...?",
+    "fr_q": "Sans vision, le peuple...?"
   },
   {
     "livro": "Proverbios",
@@ -2301,7 +3065,11 @@
       "Morte"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "El corazón tranquilo da vida al cuerpo pero la envidia...?",
+    "en_q": "A peaceful heart gives life to the body, but envy and...?",
+    "de_q": "O coração tranquilo e vida para o corpo mas a inveja e...?\n\nDas ruhige Herz ist Leben für den Körper, aber der Neid und...?",
+    "fr_q": "Le cœur tranquille apporte la vie au corps, mais l'envie et...?"
   },
   {
     "livro": "Proverbios",
@@ -2313,7 +3081,11 @@
       "Rebeldes"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "Hijo mío, no rechaces la disciplina del Señor ni te...?",
+    "en_q": "\"My son, do not reject the discipline of the Lord, nor...\"",
+    "de_q": "Mein Sohn, lehne die Zucht des Herrn nicht ab und...?",
+    "fr_q": "Mon fils, ne rejette pas la discipline du Seigneur et ne te...?"
   },
   {
     "livro": "Proverbios",
@@ -2325,7 +3097,11 @@
       "Familia"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "La sabiduría edificó su...?",
+    "en_q": "\"Wisdom has built her...\"\n\n(This appears to be the beginning of a verse, likely from Proverbs 9:1 in Portuguese, which continues with \"house\" or \"home\" in English.)",
+    "de_q": "Die Weisheit hat ihr Haus gebaut...?",
+    "fr_q": "La sagesse a construit sa...?"
   },
   {
     "livro": "Proverbios",
@@ -2337,7 +3113,11 @@
       "Pai"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "Quien encuentra esposa encuentra una cosa buena y alcanza el favor del...?",
+    "en_q": "\"Whoever finds a wife finds a good thing and obtains favor from the...?\"",
+    "de_q": "Wer eine Frau findet, findet etwas Gutes und erlangt die Gunst des...?",
+    "fr_q": "Qui trouve une épouse trouve une bonne chose et obtient la faveur du...?"
   },
   {
     "livro": "Proverbios",
@@ -2349,7 +3129,11 @@
       "Guia"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "El hombre proyectó su camino pero el Señor...?",
+    "en_q": "The man planned his path but the Lord...?",
+    "de_q": "Der Mann plante seinen Weg, aber der Herr...?",
+    "fr_q": "L'homme a planifié son chemin mais le Seigneur...?"
   },
   {
     "livro": "Proverbios",
@@ -2361,7 +3145,11 @@
       "Vazio"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "El Señor aborrece el corazón...?",
+    "en_q": "The Lord abhors the heart...?",
+    "de_q": "Der Herr hasst das Herz...?",
+    "fr_q": "Le Seigneur déteste le coeur...?"
   },
   {
     "livro": "Proverbios",
@@ -2373,7 +3161,11 @@
       "Falsidade"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "Mejor es un plato de hierbas con amor que buey engordado con...?",
+    "en_q": "\"Better a plate of herbs with love than a fattened ox with...?\"",
+    "de_q": "Besser ein Gericht aus Kräutern mit Liebe als ein gemästeter Stier mit...?",
+    "fr_q": "Mieux vaut un plat d'herbes avec amour qu'un bœuf engraissé avec...?"
   },
   {
     "livro": "Proverbios",
@@ -2385,7 +3177,11 @@
       "Castigo"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "El Señor hizo todo para su propósito, hasta el impío para el día del...",
+    "en_q": "The Lord has made everything for his purpose, even the wicked for the day of...?",
+    "de_q": "Der Herr hat alles für seinen Zweck gemacht, sogar den Bösen für den Tag der...?",
+    "fr_q": "Le Seigneur a tout fait pour son objectif, même le méchant pour le jour du...?"
   },
   {
     "livro": "Proverbios",
@@ -2397,7 +3193,11 @@
       "Perdido"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "Antes de la ruina viene el orgullo y antes de la caída el espíritu...?",
+    "en_q": "Before ruin comes pride and before the fall the spirit...?",
+    "de_q": "Vor dem Untergang kommt der Hochmut und vor dem Fall der Geist...?",
+    "fr_q": "Avant la ruine vient l'orgueil et avant la chute l'esprit...?"
   },
   {
     "livro": "Apocalipse",
@@ -2409,7 +3209,11 @@
       "Tiago"
     ],
     "r": 2,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién recibió la revelación del Apocalipsis?",
+    "en_q": "Who received the revelation of the Apocalypse?",
+    "de_q": "Wer erhielt die Offenbarung der Apokalypse?",
+    "fr_q": "Qui a reçu la révélation de l'Apocalypse ?"
   },
   {
     "livro": "Apocalipse",
@@ -2421,7 +3225,11 @@
       "Creta"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿En cuál isla Juan estaba cuando recibió la visión?",
+    "en_q": "On which island was João when he received the vision?",
+    "de_q": "Auf welcher Insel war João, als er die Vision erhielt?",
+    "fr_q": "Sur quelle île Jean était-il quand il a reçu la vision ?"
   },
   {
     "livro": "Apocalipse",
@@ -2433,7 +3241,11 @@
       "8"
     ],
     "r": 2,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuántas iglesias se mencionan en el Apocalipsis?",
+    "en_q": "How many churches are mentioned in the Revelation?",
+    "de_q": "Wie viele Kirchen werden in der Offenbarung erwähnt?",
+    "fr_q": "Combien d'églises sont mentionnées dans l'Apocalypse?"
   },
   {
     "livro": "Apocalipse",
@@ -2445,7 +3257,11 @@
       "777"
     ],
     "r": 2,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuál es el número de la bestia?",
+    "en_q": "What is the number of the beast?",
+    "de_q": "Welche Nummer des Tieres ist es?",
+    "fr_q": "Quel est le numéro de la bête ?"
   },
   {
     "livro": "Apocalipse",
@@ -2457,7 +3273,11 @@
       "7"
     ],
     "r": 3,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántos sellos tiene el libro en la visión?",
+    "en_q": "How many stamps does the book have in the vision?",
+    "de_q": "Wie viele Briefmarken hat das Buch in der Sicht?",
+    "fr_q": "Combien de timbres le livre a-t-il dans la vision ?"
   },
   {
     "livro": "Apocalipse",
@@ -2469,7 +3289,11 @@
       "Filadelfia"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál es la primera iglesia mencionada en el Apocalipsis?",
+    "en_q": "What is the first church mentioned in Revelation?",
+    "de_q": "Welche ist die erste Kirche, die in der Offenbarung erwähnt wird?",
+    "fr_q": "Quelle est la première église mentionnée dans l'Apocalypse ?"
   },
   {
     "livro": "Apocalipse",
@@ -2481,7 +3305,11 @@
       "Profecia"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué significa Apocalipsis en griego?",
+    "en_q": "What does Apocalypse mean in Greek?",
+    "de_q": "Was bedeutet Apokalypse im Griechischen?",
+    "fr_q": "Que signifie Apocalypse en grec ?"
   },
   {
     "livro": "Apocalipse",
@@ -2493,7 +3321,11 @@
       "5"
     ],
     "r": 2,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuántos jinetes del Apocalipsis existen?",
+    "en_q": "How many horsemen of the Apocalypse are there?",
+    "de_q": "Wie viele Reiter der Apokalypse gibt es?",
+    "fr_q": "Combien de cavaliers de l'Apocalypse y a-t-il ?"
   },
   {
     "livro": "Apocalipse",
@@ -2505,7 +3337,11 @@
       "Amarelo"
     ],
     "r": 3,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál es el color del caballo de la muerte?",
+    "en_q": "What color is the horse of death?",
+    "de_q": "Welche Farbe hat das Pferd des Todes?",
+    "fr_q": "Quelle couleur est le cheval de la mort ?"
   },
   {
     "livro": "Apocalipse",
@@ -2517,7 +3353,11 @@
       "Efeso"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Qué ciudad es llamada Babilonia en el Apocalipsis?",
+    "en_q": "Which city is called Babylon in the Revelation?",
+    "de_q": "Welche Stadt wird in der Offenbarung Babylon genannt?",
+    "fr_q": "Quelle ville est appelée Babylone dans l'Apocalypse ?"
   },
   {
     "livro": "Apocalipse",
@@ -2529,7 +3369,11 @@
       "8"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántas trompetas se tocan en el Apocalipsis?",
+    "en_q": "How many trumpets are sounded in the Revelation?",
+    "de_q": "Wie viele Trompeten werden in der Offenbarung geblasen?",
+    "fr_q": "Combien de trompettes sont jouées dans l'Apocalypse ?"
   },
   {
     "livro": "Apocalipse",
@@ -2541,7 +3385,11 @@
       "Purgatório"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué es el lago de fuego en el Apocalipsis?",
+    "en_q": "What is the lake of fire in the Apocalypse?",
+    "de_q": "Was ist der Feuersee in der Offenbarung?",
+    "fr_q": "Qu'est-ce que le lac de feu dans l'Apocalypse ?"
   },
   {
     "livro": "Apocalipse",
@@ -2553,7 +3401,11 @@
       "Nova Siao"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Cuál es la nueva ciudad que desciende del cielo?",
+    "en_q": "What is the new city that descends from heaven?",
+    "de_q": "Welche ist die neue Stadt, die vom Himmel herabkommt?",
+    "fr_q": "Quelle est la nouvelle ville qui descend du ciel ?"
   },
   {
     "livro": "Apocalipse",
@@ -2565,7 +3417,11 @@
       "14"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántas puertas tiene la Nueva Jerusalén?",
+    "en_q": "How many doors does the New Jerusalem have?",
+    "de_q": "Wie viele Tore hat das Neue Jerusalem?",
+    "fr_q": "Combien de portes a la Nouvelle Jérusalem ?"
   },
   {
     "livro": "Apocalipse",
@@ -2577,7 +3433,11 @@
       "Estrelas"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué ilumina la Nueva Jerusalén?",
+    "en_q": "What illuminates the New Jerusalem?",
+    "de_q": "Was erleuchtet das Neue Jerusalem?",
+    "fr_q": "Qu'est-ce qui illumine la Nouvelle Jérusalem?"
   },
   {
     "livro": "Apocalipse",
@@ -2589,7 +3449,11 @@
       "48"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántos ancianos están alrededor del trono?",
+    "en_q": "How many ancients are around the throne?",
+    "de_q": "Wie viele Älteste sind um den Thron herum?",
+    "fr_q": "Combien d'anges sont autour du trône ?"
   },
   {
     "livro": "Apocalipse",
@@ -2601,7 +3465,11 @@
       "Amen"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué dicen los cuatro seres vivientes día y noche?",
+    "en_q": "What do the four living beings say day and night?",
+    "de_q": "Was sagen die vier lebenden Wesen Tag und Nacht?",
+    "fr_q": "Que disent les quatre êtres vivants jour et nuit ?"
   },
   {
     "livro": "Apocalipse",
@@ -2613,7 +3481,11 @@
       "Rei"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién es el Alfa y la Omega?",
+    "en_q": "Who is the Alpha and the Omega?",
+    "de_q": "Wer ist der Alfa und der Omega?",
+    "fr_q": "Qui est l'Alpha et l'Oméga ?"
   },
   {
     "livro": "Apocalipse",
@@ -2625,7 +3497,11 @@
       "Besta apenas"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Qué es lanzado al lago de fuego al final?",
+    "en_q": "What is cast into the lake of fire at the end?",
+    "de_q": "Was wird am Ende in den Feuersee geworfen?",
+    "fr_q": "Qu'est-ce qui est jeté dans le lac de feu à la fin ?"
   },
   {
     "livro": "Apocalipse",
@@ -2637,7 +3513,11 @@
       "Filadelfia"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué iglesia es llamada de morna?",
+    "en_q": "Which church is called morna?",
+    "de_q": "Welche Kirche wird Morna genannt?",
+    "fr_q": "Quelle église est appelée la morna?"
   },
   {
     "livro": "Apocalipse",
@@ -2649,7 +3529,11 @@
       "Estrela da manha"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuál es la promesa para la iglesia de Filadelfia?",
+    "en_q": "What is the promise for the church of Philadelphia?",
+    "de_q": "Was ist die Verheißung für die Gemeinde von Philadelphia?",
+    "fr_q": "Quelle est la promesse pour l'église de Philadelphie?"
   },
   {
     "livro": "Apocalipse",
@@ -2661,7 +3545,11 @@
       "Mel"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Qué comió João que era dulce en la boca y amargo en el vientre?",
+    "en_q": "What did João eat that was sweet in the mouth and bitter in the belly?",
+    "de_q": "Was hat João gegessen, das süß im Mund und bitter im Bauch war?",
+    "fr_q": "Qu'a mangé João qui était doux en bouche et amer au ventre ?"
   },
   {
     "livro": "Apocalipse",
@@ -2673,7 +3561,11 @@
       "2000"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántos años tiene el reinado de Cristo mencionado?",
+    "en_q": "How many years is the reign of Christ mentioned?",
+    "de_q": "Wie viele Jahre dauerte die Herrschaft Christi, die erwähnt wird?",
+    "fr_q": "Combien d'années dure le règne du Christ mentionné ?"
   },
   {
     "livro": "Apocalipse",
@@ -2685,7 +3577,11 @@
       "Falso profeta"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Quién es el dragón en el Apocalipsis?",
+    "en_q": "Who is the dragon in the Apocalypse?",
+    "de_q": "Wer ist der Drache in der Offenbarung?",
+    "fr_q": "Qui est le dragon dans l'Apocalypse ?"
   },
   {
     "livro": "Apocalipse",
@@ -2697,7 +3593,11 @@
       "Rio eterno"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Qué río fluye desde la ciudad de Dios?",
+    "en_q": "Which river flows from the City of God?",
+    "de_q": "Welcher Fluss fließt aus der Stadt Gottes?",
+    "fr_q": "Quel fleuve coule de la Cité de Dieu ?"
   },
   {
     "livro": "Apocalipse",
@@ -2709,7 +3609,11 @@
       "Luz"
     ],
     "r": 1,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "¿Qué no habrá más en la Nueva Jerusalén?",
+    "en_q": "What will no longer exist in the New Jerusalem?",
+    "de_q": "Was wird es im Neuen Jerusalem nicht mehr geben?",
+    "fr_q": "Qu'est-ce qui n'existera plus dans la Nouvelle Jérusalem?"
   },
   {
     "livro": "Apocalipse",
@@ -2721,7 +3625,11 @@
       "Revelacao"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "Bienaventurado quien lee y guarda las palabras de esta...",
+    "en_q": "Blessed is the one who reads and keeps the words of this...?",
+    "de_q": "Selig, wer die Worte dieser liest und bewahrt...?",
+    "fr_q": "Bienheureux celui qui lit et garde les paroles de ce..."
   },
   {
     "livro": "Apocalipse",
@@ -2733,7 +3641,11 @@
       "Maranata"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuál es la última palabra de la Biblia?",
+    "en_q": "What is the last word of the Bible?",
+    "de_q": "Welche ist das letzte Wort der Bibel?",
+    "fr_q": "Quelle est le dernier mot de la Bible?"
   },
   {
     "livro": "Apocalipse",
@@ -2745,7 +3657,11 @@
       "Em poder"
     ],
     "r": 0,
-    "nivel": "facil"
+    "nivel": "facil",
+    "es_q": "Jesús dice: He aquí que vengo...",
+    "en_q": "\"Jesus says, 'Behold, I come...'\"",
+    "de_q": "Jesus sagt: Siehe, ich komme...?",
+    "fr_q": "Jésus dit : Voici que je viens...?"
   },
   {
     "livro": "Apocalipse",
@@ -2757,7 +3673,11 @@
       "Tiatira"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién vence recibe la corona de la vida en la iglesia de...?",
+    "en_q": "Who wins receives the crown of life in the church of...?",
+    "de_q": "Wer gewinnt, erhält die Krone des Lebens in der Kirche von...?",
+    "fr_q": "Qui gagne reçoit la couronne de la vie dans l'église de...?"
   },
   {
     "livro": "Apocalipse",
@@ -2769,7 +3689,11 @@
       "Arvore eterna"
     ],
     "r": 1,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál es el árbol que da frutos todos los meses?",
+    "en_q": "What is the tree that bears fruit every month?",
+    "de_q": "Welcher Baum trägt das ganze Jahr über Früchte?",
+    "fr_q": "Quel est l'arbre qui produit des fruits tous les mois ?"
   },
   {
     "livro": "Apocalipse",
@@ -2781,7 +3705,11 @@
       "1000000"
     ],
     "r": 2,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuántos son los sellados de las tribus de Israel?",
+    "en_q": "How many are the sealed ones of the tribes of Israel?",
+    "de_q": "Wie viele sind die Versiegelten der Stämme Israels?",
+    "fr_q": "Combien y a-t-il de scellés des tribus d'Israël ?"
   },
   {
     "livro": "Apocalipse",
@@ -2793,7 +3721,11 @@
       "Misericordia"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Qué clamaban los mártires debajo del altar?",
+    "en_q": "What were the martyrs crying out under the altar?",
+    "de_q": "Was schrieen die Märtyrer unter dem Altar?",
+    "fr_q": "Que criaient les martyrs sous l'autel ?"
   },
   {
     "livro": "Apocalipse",
@@ -2805,7 +3737,11 @@
       "Com 7 cabecas e 10 cornos"
     ],
     "r": 3,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuál bestia sube del mar?",
+    "en_q": "What beast rises from the sea?",
+    "de_q": "Welch Ungeheuer steigt aus dem Meer?",
+    "fr_q": "Quelle bête sort de la mer ?"
   },
   {
     "livro": "Apocalipse",
@@ -2817,7 +3753,11 @@
       "Perdição"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Qué está escrito en la frente de la prostituta?",
+    "en_q": "\"What is written on the prostitute's forehead?\"",
+    "de_q": "Was steht auf der Stirn der Prostituierten geschrieben?",
+    "fr_q": "Qu'est-ce qui est écrit sur le front de la prostituée ?"
   },
   {
     "livro": "Apocalipse",
@@ -2829,7 +3769,11 @@
       "Todos"
     ],
     "r": 2,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Quién lucha contra la bestia en Armagedón?",
+    "en_q": "Who fights against the beast at Armageddon?",
+    "de_q": "Wer kämpft gegen das Tier bei Harmagedon?",
+    "fr_q": "Qui combattra la bête à l'Armaguédon?"
   },
   {
     "livro": "Apocalipse",
@@ -2841,7 +3785,11 @@
       "Eterno"
     ],
     "r": 0,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Cuál es el nombre del caballo blanco del ganador?",
+    "en_q": "What is the name of the winner's white horse?",
+    "de_q": "Was ist der Name des weißen Pferdes des Siegers?",
+    "fr_q": "Quel est le nom du cheval blanc du vainqueur ?"
   },
   {
     "livro": "Apocalipse",
@@ -2853,7 +3801,11 @@
       "Trevas apenas"
     ],
     "r": 1,
-    "nivel": "dificil"
+    "nivel": "dificil",
+    "es_q": "¿Qué elimina Dios en la nueva creación?",
+    "en_q": "What does God eliminate in the new creation?",
+    "de_q": "Was eliminiert Gott in der neuen Schöpfung?",
+    "fr_q": "Qu'est-ce que Dieu élimine dans la nouvelle création ?"
   },
   {
     "livro": "Apocalipse",
@@ -2865,6 +3817,10 @@
       "Maria"
     ],
     "r": 0,
-    "nivel": "medio"
+    "nivel": "medio",
+    "es_q": "¿Cuál es la esposa del Cordero?",
+    "en_q": "Who is the wife of the Lamb?",
+    "de_q": "Wer ist die Braut des Lammes?",
+    "fr_q": "Qui est l'épouse de l'Agneau?"
   }
 ]
