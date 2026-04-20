@@ -63,13 +63,13 @@ export default function DesafioBiblico() {
     };
     ws.onmessage = (e) => {
       const msg = JSON.parse(e.data);
-      if (msg.type === ' + chr(39) + 'game_matched' + chr(39) + ') {
+      if (msg.type === 'game_matched') {
         setEsperando(false);
         setCodigo(msg.roomId);
-        setTela(' + chr(39) + 'sala' + chr(39) + ');
+        setTela('sala');
       }
     };
-    ws.onerror = () => { setEsperando(false); alert(' + chr(39) + 'Erro ao conectar. Tenta de novo!' + chr(39) + '); };
+    ws.onerror = () => { setEsperando(false); alert('Erro ao conectar. Tenta de novo!'); };
   }
   function cancelarFila() { wsRef.current?.close(); setEsperando(false); }
   function gerar() { return Math.random().toString(36).substring(2,8).toUpperCase(); }
