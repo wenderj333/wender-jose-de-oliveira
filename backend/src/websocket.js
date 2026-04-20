@@ -46,6 +46,10 @@ function setupWebSocket(server) {
           case 'game_end':
             handleGame(ws, msg);
             break;
+          case 'game_queue':
+          case 'game_cancel_queue':
+            handleGameQueue(ws, msg);
+            break;
           case 'identify':
             clients.set(ws, { userId: msg.userId, churchId: msg.churchId });
             // Send current live sessions
@@ -534,4 +538,33 @@ function handleGame(ws, msg) {
   }
 }
 
+
+const gameQueue = [];
+
+function handleGameQueue(ws, msg) {
+  const userId = msg.userId;
+  const userName = msg.userName || 'Jogador';
+  const avatar = msg.avatar || '';
+  const livro = msg.livro || 'Todos';
+
+  if (msg.type === 'game_queue') {
+    // Procurar alguem na fila
+    const idx = gameQueue.findIndex(p => p.userId !== userId);
+    if (idx !== -1) {
+      const outro = gameQueue.splice(idx, 1)[0];
+      const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
+      const matchMsg = JSON.stringify({ type: 'game_matched', roomId, livro });
+      if (outro.ws.readyState === 1) outro.ws.send(matchMsg);
+      if (ws.readyState === 1) ws.send(matchMsg);
+    } else {
+      gameQueue.push({ userId, userName, avatar, livro, ws });
+      if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'game_queued' }));
+    }
+  }
+
+  if (msg.type === 'game_cancel_queue') {
+    const idx = gameQueue.findIndex(p => p.userId === userId);
+    if (idx !== -1) gameQueue.splice(idx, 1);
+  }
+}
 module.exports = { setupWebSocket };
