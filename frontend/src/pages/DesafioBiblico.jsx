@@ -26,6 +26,7 @@ export default function DesafioBiblico() {
   const [codigo, setCodigo] = useState('');
   const [cInput, setCInput] = useState('');
   const [esperando, setEsperando] = useState(false);
+  const [adversario, setAdversario] = useState(null);
   const wsRef = useRef(null);
   const [perguntas, setPerguntas] = useState([]);
   const [idx, setIdx] = useState(0);
@@ -68,7 +69,8 @@ export default function DesafioBiblico() {
       if (msg.type === 'game_matched') {
         setEsperando(false);
         setCodigo(msg.roomId);
-        setTela('sala');
+        if (msg.adversario) setAdversario(msg.adversario);
+        iniciar();
       }
     };
     ws.onerror = () => { setEsperando(false); alert('Erro ao conectar. Tenta de novo!'); };
