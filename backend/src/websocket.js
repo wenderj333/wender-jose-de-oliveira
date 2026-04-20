@@ -468,7 +468,7 @@ function handleGame(ws, msg) {
 }
 
 
-const gameRooms = new Map();
+
 
 function handleGame(ws, msg) {
   const client = clients.get(ws);
