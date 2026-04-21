@@ -37,6 +37,20 @@
       "Adam",
       "Abraham",
       "Moïse"
+    ],
+    "ro_q": "Cine a fost primul om?",
+    "ro_opts": [
+      "Noe",
+      "Adam",
+      "Avraam",
+      "Moise"
+    ],
+    "ru_q": "Кто был первым человеком?",
+    "ru_opts": [
+      "Ной",
+      "Адам",
+      "Авраам",
+      "Моисей"
     ]
   },
   {
@@ -77,6 +91,20 @@
       "Noé",
       "Lot",
       "Isaac"
+    ],
+    "ro_q": "Cine a construit arca?",
+    "ro_opts": [
+      "Avraam",
+      "Noe",
+      "Lot",
+      "Isac"
+    ],
+    "ru_q": "Кто построил ковчег?",
+    "ru_opts": [
+      "Авраам",
+      "Ной",
+      "Лот",
+      "Исаак"
     ]
   },
   {
@@ -117,6 +145,20 @@
       "Moïse",
       "David",
       "Joseph"
+    ],
+    "ro_q": "Cine a deschis marea?",
+    "ro_opts": [
+      "Noe",
+      "Moise",
+      "David",
+      "Iosif"
+    ],
+    "ru_q": "Кто открыл море?",
+    "ru_opts": [
+      "Ной",
+      "Моисей",
+      "Давид",
+      "Иосиф"
     ]
   },
   {
@@ -157,6 +199,20 @@
       "Bélem",
       "Nazaré",
       "Rome"
+    ],
+    "ro_q": "Unde s-a născut Isus?",
+    "ro_opts": [
+      "Ierusalim",
+      "Betlem",
+      "Nazaret",
+      "Roma"
+    ],
+    "ru_q": "Где родился Иисус?",
+    "ru_opts": [
+      "Иерусалим",
+      "Вифлеем",
+      "Назарет",
+      "Рим"
     ]
   },
   {
@@ -197,6 +253,20 @@
       "João",
       "Paulo",
       "Tiago"
+    ],
+    "ro_q": "Cine a avut viziunea Apocalipsei?",
+    "ro_opts": [
+      "Pedro",
+      "João",
+      "Paulo",
+      "Tiago"
+    ],
+    "ru_q": "Кто видел видение Апокалипсиса?",
+    "ru_opts": [
+      "Педро",
+      "Жоау",
+      "Паулу",
+      "Тиагу"
     ]
   },
   {
@@ -237,6 +307,20 @@
       "Eva",
       "Rébecca",
       "Raquel"
+    ],
+    "ro_q": "Cine a fost prima femeie?",
+    "ro_opts": [
+      "Sara",
+      "Eva",
+      "Rebeca",
+      "Raquel"
+    ],
+    "ru_q": "Кто была первая женщина?",
+    "ru_opts": [
+      "Сара",
+      "Ева",
+      "Ребека",
+      "Рэйчел"
     ]
   },
   {
@@ -273,6 +357,20 @@
       "60"
     ],
     "fr_opts": [
+      "30",
+      "40",
+      "50",
+      "60"
+    ],
+    "ro_q": "Câte zile a durat diluviul de ploaie?",
+    "ro_opts": [
+      "30",
+      "40",
+      "50",
+      "60"
+    ],
+    "ru_q": "Сколько дней длился потоп дождя?",
+    "ru_opts": [
       "30",
       "40",
       "50",
@@ -317,6 +415,20 @@
       "Joseph",
       "Jacob",
       "Ésau"
+    ],
+    "ro_q": "Cine a fost vândut de frații lui?",
+    "ro_opts": [
+      "Isac",
+      "Iosif",
+      "Iacob",
+      "Esau"
+    ],
+    "ru_q": "Кого продали братья?",
+    "ru_opts": [
+      "Исаак",
+      "Хосе",
+      "Яков",
+      "Исав"
     ]
   },
   {
@@ -357,6 +469,20 @@
       "Moïse",
       "David",
       "Joseph"
+    ],
+    "ro_q": "Cine a eliberat poporul din Egipt?",
+    "ro_opts": [
+      "Avraam",
+      "Moise",
+      "David",
+      "Iosif"
+    ],
+    "ru_q": "Кто освободил народ из Египта?",
+    "ru_opts": [
+      "Авраам",
+      "Моисей",
+      "Давид",
+      "Иосиф"
     ]
   },
   {
@@ -397,6 +523,20 @@
       "Mer Rouge",
       "Mer Noire",
       "Mer Bleue"
+    ],
+    "ro_q": "Ce mare a fost deschisă?",
+    "ro_opts": [
+      "Marea Moartă",
+      "Marea Roșie",
+      "Marea Neagră",
+      "Marea Albastră"
+    ],
+    "ru_q": "Какое море было открыто?",
+    "ru_opts": [
+      "Мёртвое море",
+      "Красное море",
+      "Чёрное море",
+      "Голубое море"
     ]
   },
   {
@@ -433,6 +573,20 @@
       "15"
     ],
     "fr_opts": [
+      "5",
+      "10",
+      "12",
+      "15"
+    ],
+    "ro_q": "Câți porunci a dat Dumnezeu?",
+    "ro_opts": [
+      "5",
+      "10",
+      "12",
+      "15"
+    ],
+    "ru_q": "Сколько заповедей дал Бог?",
+    "ru_opts": [
       "5",
       "10",
       "12",
@@ -477,6 +631,20 @@
       "Mont Carmel",
       "Mont Siao",
       "Mont Horeb"
+    ],
+    "ro_q": "Unde a primit Moise poruncile?",
+    "ro_opts": [
+      "Muntele Sinai",
+      "Muntele Carmel",
+      "Muntele Siao",
+      "Muntele Horeb"
+    ],
+    "ru_q": "Где Моисей получил заповеди?",
+    "ru_opts": [
+      "Гора Синай",
+      "Гора Кармель",
+      "Гора Сион",
+      "Гора Хорив"
     ]
   },
   {
@@ -517,6 +685,20 @@
       "David",
       "Salomon",
       "Élie"
+    ],
+    "ro_q": "Cine a scris mulți Psalmi?",
+    "ro_opts": [
+      "Moise",
+      "David",
+      "Solomon",
+      "Ilie"
+    ],
+    "ru_q": "Кто написал много Псалмов?",
+    "ru_opts": [
+      "Моисей",
+      "Давид",
+      "Соломон",
+      "Илия"
     ]
   },
   {
@@ -557,6 +739,20 @@
       "Pasteur",
       "Juge",
       "Ami"
+    ],
+    "ro_q": "Domnul este al meu...?",
+    "ro_opts": [
+      "Rege",
+      "Păstor",
+      "Judecător",
+      "Prieten"
+    ],
+    "ru_q": "Господь мой...?",
+    "ru_opts": [
+      "Король",
+      "Пастор",
+      "Судья",
+      "Друг"
     ]
   },
   {
@@ -597,6 +793,20 @@
       "Argent",
       "Nourriture",
       "Force"
+    ],
+    "ro_q": "Ce nu va lipsi celui care are încredere în Dumnezeu?",
+    "ro_opts": [
+      "Nimic",
+      "Bani",
+      "Mâncare",
+      "Forță"
+    ],
+    "ru_q": "Чего не будет не хватать тому, кто доверяет Богу?",
+    "ru_opts": [
+      "Ничего",
+      "Деньги",
+      "Еда",
+      "Сила"
     ]
   },
   {
@@ -637,6 +847,20 @@
       "Salomon",
       "Moïse",
       "Élie"
+    ],
+    "ro_q": "Cine a scris multe proverburi?",
+    "ro_opts": [
+      "Davi",
+      "Salomон",
+      "Moise",
+      "Ilie"
+    ],
+    "ru_q": "Кто написал много пословиц?",
+    "ru_opts": [
+      "Давид",
+      "Соломон",
+      "Моисей",
+      "Илия"
     ]
   },
   {
@@ -677,6 +901,20 @@
       "Force",
       "Richesse",
       "Amour"
+    ],
+    "ro_q": "O temor do Senhor é o princípio da sabedoria.\n\n**Frica de Domnul este începutul înțelepciunii.**",
+    "ro_opts": [
+      "Înțelepciune",
+      "Forță",
+      "Bogăție",
+      "Iubire"
+    ],
+    "ru_q": "Страх Господень — начало чего?",
+    "ru_opts": [
+      "Мудрость",
+      "Сила",
+      "Богатство",
+      "Любовь"
     ]
   },
   {
@@ -717,6 +955,20 @@
       "Noé",
       "Adam",
       "Seth"
+    ],
+    "ro_q": "Cine l-a ucis pe Abel?",
+    "ro_opts": [
+      "Cain",
+      "Noe",
+      "Adam",
+      "Set"
+    ],
+    "ru_q": "Кто убил Авеля?",
+    "ru_opts": [
+      "Каин",
+      "Ной",
+      "Адам",
+      "Сет"
     ]
   },
   {
@@ -757,6 +1009,20 @@
       "Arc-en-ciel",
       "Feu",
       "Nuage"
+    ],
+    "ro_q": "Care a fost semnul legământului după potop?",
+    "ro_opts": [
+      "Stea",
+      "Curcubeu",
+      "Foc",
+      "Nor"
+    ],
+    "ru_q": "Какой был знак завета после потопа?",
+    "ru_opts": [
+      "Звезда",
+      "Радуга",
+      "Огонь",
+      "Облако"
     ]
   },
   {
@@ -797,6 +1063,20 @@
       "Isaque",
       "Lo",
       "Jaco"
+    ],
+    "ro_q": "Cine a fost tatăl lui Avraam?",
+    "ro_opts": [
+      "Tera",
+      "Isac",
+      "Lo",
+      "Iacov"
+    ],
+    "ru_q": "Кто был отцом Авраама?",
+    "ru_opts": [
+      "Тера",
+      "Исаак",
+      "Ло",
+      "Жако"
     ]
   },
   {
@@ -837,6 +1117,20 @@
       "Sara",
       "Raquel",
       "Miria"
+    ],
+    "ro_q": "Care este numele soției lui Avraam?",
+    "ro_opts": [
+      "Rebeca",
+      "Sara",
+      "Raquel",
+      "Miria"
+    ],
+    "ru_q": "Как зовут жену Авраама?",
+    "ru_opts": [
+      "Ребека",
+      "Сара",
+      "Рахиль",
+      "Мириам"
     ]
   },
   {
@@ -877,6 +1171,20 @@
       "Jacob",
       "Joseph",
       "Esau"
+    ],
+    "ro_q": "Cine a fost aproape sacrificat de Avraam?",
+    "ro_opts": [
+      "Isac",
+      "Iacob",
+      "Iosif",
+      "Esau"
+    ],
+    "ru_q": "Кого Авраам чуть не принёс в жертву?",
+    "ru_opts": [
+      "Исаак",
+      "Яков",
+      "Иосиф",
+      "Исав"
     ]
   },
   {
@@ -913,6 +1221,20 @@
       "13"
     ],
     "fr_opts": [
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "ro_q": "Câți copii a avut Iacov?",
+    "ro_opts": [
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "ru_q": "Сколько детей было у Якова?",
+    "ru_opts": [
       "10",
       "11",
       "12",
@@ -957,6 +1279,20 @@
       "José",
       "Arao",
       "Pharaon"
+    ],
+    "ro_q": "Cine interpreta visuri în Egipt?",
+    "ro_opts": [
+      "Moise",
+      "Iosif",
+      "Arao",
+      "Faraon"
+    ],
+    "ru_q": "Кто толковал сны в Египте?",
+    "ru_opts": [
+      "Моисей",
+      "Хосе",
+      "Арао",
+      "Фараон"
     ]
   },
   {
@@ -997,6 +1333,20 @@
       "Moïse",
       "Arao",
       "Samuel"
+    ],
+    "ro_q": "Care era numele fratelui lui Jose?",
+    "ro_opts": [
+      "Iuda",
+      "Moise",
+      "Arao",
+      "Samuel"
+    ],
+    "ru_q": "Как звали брата Хосе?",
+    "ru_opts": [
+      "Иуда",
+      "Моисей",
+      "Араон",
+      "Самуил"
     ]
   },
   {
@@ -1037,6 +1387,20 @@
       "Jardin d'Éden",
       "Montagne",
       "Fleuve"
+    ],
+    "ro_q": "Unde a pus Dumnezeu pe Adam și Eva?",
+    "ro_opts": [
+      "Deșert",
+      "Grădina Edenului",
+      "Munte",
+      "Râu"
+    ],
+    "ru_q": "Где Бог поместил Адама и Еву?",
+    "ru_opts": [
+      "Пустыня",
+      "Сад Эдема",
+      "Гора",
+      "Река"
     ]
   },
   {
@@ -1077,6 +1441,20 @@
       "Jacob",
       "Isaac",
       "Joseph"
+    ],
+    "ro_q": "Cine s-a luptat cu îngerul?",
+    "ro_opts": [
+      "Avraam",
+      "Iacov",
+      "Isaac",
+      "Iosif"
+    ],
+    "ru_q": "Кто боролся с ангелом?",
+    "ru_opts": [
+      "Авраам",
+      "Иаков",
+      "Исаак",
+      "Иосиф"
     ]
   },
   {
@@ -1117,6 +1495,20 @@
       "Arao",
       "Davi",
       "Samuel"
+    ],
+    "ro_q": "Cine era fratele lui Mozes?",
+    "ro_opts": [
+      "Jose",
+      "Arao",
+      "Davi",
+      "Samuel"
+    ],
+    "ru_q": "Кто был братом Моисея?",
+    "ru_opts": [
+      "Хосе",
+      "Араo",
+      "Дави",
+      "Самуэль"
     ]
   },
   {
@@ -1157,6 +1549,20 @@
       "Miria",
       "Sara",
       "Ana"
+    ],
+    "ro_q": "Cine era sora lui Moise?",
+    "ro_opts": [
+      "Marta",
+      "Miria",
+      "Sara",
+      "Ana"
+    ],
+    "ru_q": "Кто была сестра Моисея?",
+    "ru_opts": [
+      "Марта",
+      "Мирия",
+      "Сара",
+      "Ана"
     ]
   },
   {
@@ -1197,6 +1603,20 @@
       "Mana",
       "Poisson",
       "Pain"
+    ],
+    "ro_q": "Ce a trimis Dumnezeu pentru a hrăni poporul?",
+    "ro_opts": [
+      "Carne",
+      "Mână",
+      "Pește",
+      "Pâine"
+    ],
+    "ru_q": "Что Бог послал, чтобы накормить народ?",
+    "ru_opts": [
+      "Мясо",
+      "Мана",
+      "Рыба",
+      "Хлеб"
     ]
   },
   {
@@ -1237,6 +1657,20 @@
       "Eau",
       "Sable",
       "Huile"
+    ],
+    "ro_q": "Ce a ieșit din stâncă?",
+    "ro_opts": [
+      "Foc",
+      "Apă",
+      "Nisip",
+      "Ulei"
+    ],
+    "ru_q": "Что вышло из скалы?",
+    "ru_opts": [
+      "Огонь",
+      "Вода",
+      "Песок",
+      "Масло"
     ]
   },
   {
@@ -1277,6 +1711,20 @@
       "Pharaon",
       "Aram",
       "Joseph"
+    ],
+    "ro_q": "Cine i-a întărit inima?",
+    "ro_opts": [
+      "Moise",
+      "Faraon",
+      "Arao",
+      "Iosif"
+    ],
+    "ru_q": "Кто ожесточил сердце?",
+    "ru_opts": [
+      "Моисей",
+      "Фараон",
+      "Арао",
+      "Хосе"
     ]
   },
   {
@@ -1313,6 +1761,20 @@
       "15"
     ],
     "fr_opts": [
+      "7",
+      "10",
+      "12",
+      "15"
+    ],
+    "ro_q": "Câte plăgi au fost în Egipt?",
+    "ro_opts": [
+      "7",
+      "10",
+      "12",
+      "15"
+    ],
+    "ru_q": "Сколько казней было в Египте?",
+    "ru_opts": [
       "7",
       "10",
       "12",
@@ -1357,6 +1819,20 @@
       "Boeuf",
       "Pigeon",
       "Chèvre"
+    ],
+    "ro_q": "Ce animal a fost sacrificat la Paște?",
+    "ro_opts": [
+      "Miel",
+      "Bou",
+      "Porumbel",
+      "Capră"
+    ],
+    "ru_q": "Какое животное было пожертвовано на Пасху?",
+    "ru_opts": [
+      "Ягненок",
+      "Бык",
+      "Голубь",
+      "Коза"
     ]
   },
   {
@@ -1397,6 +1873,20 @@
       "Moïse",
       "David",
       "Abraham"
+    ],
+    "ro_q": "Cine a vorbit cu Dumnezeu în rugul aprins?",
+    "ro_opts": [
+      "Arao",
+      "Moise",
+      "David",
+      "Avraam"
+    ],
+    "ru_q": "Кто говорил с Богом в горящем кусте?",
+    "ru_opts": [
+      "Араo",
+      "Моисей",
+      "Давид",
+      "Авраам"
     ]
   },
   {
@@ -1437,6 +1927,20 @@
       "Colonne de feu",
       "Étoile",
       "Torche"
+    ],
+    "ro_q": "Ce-i ghida pe popor noaptea?",
+    "ro_opts": [
+      "Lua",
+      "Coloană de foc",
+      "Stea",
+      "Flacără"
+    ],
+    "ru_q": "Что вело народ ночью?",
+    "ru_opts": [
+      "Луа",
+      "Огненная колонна",
+      "Звезда",
+      "Факел"
     ]
   },
   {
@@ -1477,6 +1981,20 @@
       "Nuage",
       "Vent",
       "Feu"
+    ],
+    "ro_q": "Ce-i ghida pe popor ziua?",
+    "ro_opts": [
+      "Soare",
+      "Nor",
+      "Vânt",
+      "Foc"
+    ],
+    "ru_q": "Что вело народ днём?",
+    "ru_opts": [
+      "Солнце",
+      "Облако",
+      "Ветер",
+      "Огонь"
     ]
   },
   {
@@ -1517,6 +2035,20 @@
       "Harpe",
       "Tambour",
       "Violon"
+    ],
+    "ro_q": "Ce instrument cânta David?",
+    "ro_opts": [
+      "Flaut",
+      "Harpă",
+      "Tobă",
+      "Vioară"
+    ],
+    "ru_q": "Какой инструмент играл Давид?",
+    "ru_opts": [
+      "Флейта",
+      "Арфа",
+      "Барабан",
+      "Скрипка"
     ]
   },
   {
@@ -1557,6 +2089,20 @@
       "Dieu",
       "Ange",
       "Homme"
+    ],
+    "ro_q": "Cine este refugiul nostru?",
+    "ro_opts": [
+      "Rege",
+      "Dumnezeu",
+      "Înger",
+      "Om"
+    ],
+    "ru_q": "Кто наше убежище?",
+    "ru_opts": [
+      "Рей",
+      "Бог",
+      "Ангел",
+      "Человек"
     ]
   },
   {
@@ -1597,6 +2143,20 @@
       "La Miséricorde dure pour toujours",
       "Force",
       "Justice"
+    ],
+    "ro_q": "Domnul este bun și al Său...?",
+    "ro_opts": [
+      "Legea",
+      "Milă durează pentru totdeauna",
+      "Putere",
+      "Justiție"
+    ],
+    "ru_q": "Господь добр и Его...?",
+    "ru_opts": [
+      "Закон",
+      "Милосердие длится вечно",
+      "Сила",
+      "Справедливость"
     ]
   },
   {
@@ -1637,6 +2197,20 @@
       "Dieu",
       "Roi",
       "Armée"
+    ],
+    "ro_q": "Pe cine se încredea David?",
+    "ro_opts": [
+      "Sabie",
+      "Dumnezeu",
+      "Rege",
+      "Armată"
+    ],
+    "ru_q": "На кого уповал Давид?",
+    "ru_opts": [
+      "Меч",
+      "Бог",
+      "Король",
+      "Армия"
     ]
   },
   {
@@ -1677,6 +2251,20 @@
       "Dieu",
       "Ange",
       "Prophète"
+    ],
+    "ro_q": "Cine cunoaște inima?",
+    "ro_opts": [
+      "Bărbat",
+      "Dumnezeu",
+      "Înger",
+      "Profet"
+    ],
+    "ru_q": "Кто знает сердце?",
+    "ru_opts": [
+      "Человек",
+      "Бог",
+      "Ангел",
+      "Пророк"
     ]
   },
   {
@@ -1717,6 +2305,20 @@
       "Force",
       "Maison",
       "Vie"
+    ],
+    "ro_q": "Domnul este... și salvarea mea?",
+    "ro_opts": [
+      "Lumină",
+      "Forță",
+      "Casa",
+      "Viață"
+    ],
+    "ru_q": "Господь — моя... и спасение?",
+    "ru_opts": [
+      "Свет",
+      "Сила",
+      "Дом",
+      "Жизнь"
     ]
   },
   {
@@ -1757,6 +2359,20 @@
       "Dieu",
       "Roi",
       "Ange"
+    ],
+    "ro_q": "Cine a creat cerurile?",
+    "ro_opts": [
+      "Om",
+      "Dumnezeu",
+      "Rege",
+      "Înger"
+    ],
+    "ru_q": "Кто создал небеса?",
+    "ru_opts": [
+      "Человек",
+      "Бог",
+      "Король",
+      "Ангел"
     ]
   },
   {
@@ -1797,6 +2413,20 @@
       "Louer",
       "Craindre les hommes",
       "Fuir"
+    ],
+    "ro_q": "Ce ar trebui să facem Domnului?",
+    "ro_opts": [
+      "Ignora",
+      "Laudă",
+      "Se teme de bărbați",
+      "Fugi"
+    ],
+    "ru_q": "Что мы должны делать Господу?",
+    "ru_opts": [
+      "Игнорировать",
+      "Хвалить",
+      "Бояться мужчин",
+      "Бежать"
     ]
   },
   {
@@ -1837,6 +2467,20 @@
       "Dieu",
       "Roi",
       "Père"
+    ],
+    "ro_q": "Cine protejează?",
+    "ro_opts": [
+      "Soldat",
+      "Dumnezeu",
+      "Rege",
+      "Tată"
+    ],
+    "ru_q": "Кто защищает?",
+    "ru_opts": [
+      "Боец",
+      "Бог",
+      "Король",
+      "Отец"
     ]
   },
   {
@@ -1877,6 +2521,20 @@
       "Prière",
       "Guerre",
       "Loi"
+    ],
+    "ro_q": "Domnul aude...?",
+    "ro_opts": [
+      "Muzică",
+      "Rugăciune",
+      "Război",
+      "Lege"
+    ],
+    "ru_q": "Господь слышит...?",
+    "ru_opts": [
+      "Музыка",
+      "Молитва",
+      "Война",
+      "Закон"
     ]
   },
   {
@@ -1917,6 +2575,20 @@
       "Fureur",
       "Paix",
       "Peur"
+    ],
+    "ro_q": "Răspunsul bland deviază ce?",
+    "ro_opts": [
+      "Iubire",
+      "Furie",
+      "Pace",
+      "Frică"
+    ],
+    "ru_q": "Мягкий ответ отклоняет что?",
+    "ru_opts": [
+      "Любовь",
+      "Ярость",
+      "Мир",
+      "Страх"
     ]
   },
   {
@@ -1957,6 +2629,20 @@
       "Problème",
       "Erreur",
       "Douleur"
+    ],
+    "ro_q": "Cine caută înțelepciune găsește?",
+    "ro_opts": [
+      "Viață",
+      "Problemă",
+      "Eroare",
+      "Durere"
+    ],
+    "ru_q": "Кто ищет мудрость, найдёт?",
+    "ru_opts": [
+      "Жизнь",
+      "Проблема",
+      "Ошибка",
+      "Боль"
     ]
   },
   {
@@ -1997,6 +2683,20 @@
       "Chute",
       "Joie",
       "Paix"
+    ],
+    "ro_q": "Mândria precede...?",
+    "ro_opts": [
+      "Victorie",
+      "Cădere",
+      "Bucurie",
+      "Pace"
+    ],
+    "ru_q": "Гордость предшествует...?",
+    "ru_opts": [
+      "Победа",
+      "Падение",
+      "Радость",
+      "Мир"
     ]
   },
   {
@@ -2037,6 +2737,20 @@
       "Justice",
       "Colère",
       "Pouvoir"
+    ],
+    "ro_q": "Mai bine și puțin cu...?",
+    "ro_opts": [
+      "Bogăție",
+      "Justiție",
+      "Mânie",
+      "Putere"
+    ],
+    "ru_q": "Лучше меньше, но...?",
+    "ru_opts": [
+      "Богатство",
+      "Справедливость",
+      "Гнев",
+      "Власть"
     ]
   },
   {
@@ -2077,6 +2791,20 @@
       "Argent",
       "Amis",
       "Temps"
+    ],
+    "ro_q": "Cine păzește gura păstrează...?",
+    "ro_opts": [
+      "Viață",
+      "Bani",
+      "Prieteni",
+      "Timp"
+    ],
+    "ru_q": "Кто хранит уста, сохраняет...?",
+    "ru_opts": [
+      "Жизнь",
+      "Деньги",
+      "Друзья",
+      "Время"
     ]
   },
   {
@@ -2117,6 +2845,20 @@
       "Bien",
       "Mal",
       "Dormir"
+    ],
+    "ro_q": "O inimă veselă face ce?",
+    "ro_opts": [
+      "Plânge",
+      "Bine",
+      "Rău",
+      "Dormi"
+    ],
+    "ru_q": "Веселое сердце делает что?",
+    "ru_opts": [
+      "Плакать",
+      "Хорошо",
+      "Плохо",
+      "Спать"
     ]
   },
   {
@@ -2157,6 +2899,20 @@
       "Argent",
       "Temps",
       "Force"
+    ],
+    "ro_q": "Limba are puterea de...?",
+    "ro_opts": [
+      "Viață și moarte",
+      "Bani",
+      "Timp",
+      "Forță"
+    ],
+    "ru_q": "Язык имеет власть над...?",
+    "ru_opts": [
+      "Жизнь и смерть",
+      "Деньги",
+      "Время",
+      "Сила"
     ]
   },
   {
@@ -2197,6 +2953,20 @@
       "Sage",
       "Fort",
       "Roi"
+    ],
+    "ro_q": "Cine merge cu înțelepții va fi...?",
+    "ro_opts": [
+      "Bogat",
+      "Înțelept",
+      "Puternic",
+      "Rege"
+    ],
+    "ru_q": "Кто ходит с мудрецами, станет...?",
+    "ru_opts": [
+      "Рико",
+      "Мудрый",
+      "Сильный",
+      "Король"
     ]
   },
   {
@@ -2237,6 +3007,20 @@
       "Tout",
       "Paix",
       "Force"
+    ],
+    "ro_q": "Un leneș dorește și nu are?",
+    "ro_opts": [
+      "Nimic",
+      "Tot",
+      "Pace",
+      "Forță"
+    ],
+    "ru_q": "О ленивце желает и не имеет?",
+    "ru_opts": [
+      "Ничего",
+      "Всё",
+      "Мир",
+      "Сила"
     ]
   },
   {
@@ -2277,6 +3061,20 @@
       "Aurore",
       "Lune",
       "Étoile"
+    ],
+    "ro_q": "Un om drept e ca lumina...?",
+    "ro_opts": [
+      "Noapte",
+      "Aurora",
+      "Lună",
+      "Stea"
+    ],
+    "ru_q": "О справедливый и как свет...?",
+    "ru_opts": [
+      "Ночь",
+      "Зарядия",
+      "Луна",
+      "Звезда"
     ]
   },
   {
@@ -2317,6 +3115,20 @@
       "Benjamin",
       "Juda",
       "Ruben"
+    ],
+    "ro_q": "Cine a fost fiul cel mai mic al lui Iacov?",
+    "ro_opts": [
+      "Jose",
+      "Iosif",
+      "Iuda",
+      "Ruben"
+    ],
+    "ru_q": "Кто был самый младший сын Иакова?",
+    "ru_opts": [
+      "Хосе",
+      "Вениамин",
+      "Иуда",
+      "Рубен"
     ]
   },
   {
@@ -2357,6 +3169,20 @@
       "Femme de Lo",
       "Rébecca",
       "Rachel"
+    ],
+    "ro_q": "Cine a fost transformată în statuie de sare?",
+    "ro_opts": [
+      "Sara",
+      "Soția lui Lo",
+      "Rebecca",
+      "Rachel"
+    ],
+    "ru_q": "Кто была превращена в соляной столб?",
+    "ru_opts": [
+      "Сара",
+      "Жена Ло",
+      "Ребекка",
+      "Рахиль"
     ]
   },
   {
@@ -2397,6 +3223,20 @@
       "Gomorrhe",
       "Babel",
       "Ninive"
+    ],
+    "ro_q": "Ce oraș a fost distrus împreună cu Sodoma?",
+    "ro_opts": [
+      "Ierihon",
+      "Gomora",
+      "Babilon",
+      "Ninivă"
+    ],
+    "ru_q": "Какой город был разрушен вместе с Содомом?",
+    "ru_opts": [
+      "Иерихон",
+      "Гоморра",
+      "Вавилон",
+      "Ниневия"
     ]
   },
   {
@@ -2437,6 +3277,20 @@
       "Jacob",
       "Joseph",
       "Lo"
+    ],
+    "ro_q": "Cine l-a înșelat pe Isac pentru a da binecuvântarea?",
+    "ro_opts": [
+      "Esau",
+      "Iacov",
+      "Iosif",
+      "Lo"
+    ],
+    "ru_q": "Кто обманул Исаака, чтобы получить благословение?",
+    "ru_opts": [
+      "Исав",
+      "Иаков",
+      "Иосиф",
+      "Ло"
     ]
   },
   {
@@ -2477,6 +3331,20 @@
       "Jacques",
       "Isaac",
       "Abraham"
+    ],
+    "ro_q": "Cine era fratele lui Esau?",
+    "ro_opts": [
+      "Jose",
+      "Iacob",
+      "Izac",
+      "Avraam"
+    ],
+    "ru_q": "Кто был братом Исава?",
+    "ru_opts": [
+      "Хосе",
+      "Жаку",
+      "Исаак",
+      "Авраам"
     ]
   },
   {
@@ -2517,6 +3385,20 @@
       "Jacob",
       "Joseph",
       "Noé"
+    ],
+    "ro_q": "Cine a avut un vis cu o scară până la cer?",
+    "ro_opts": [
+      "Avraam",
+      "Iacov",
+      "Iosif",
+      "Noe"
+    ],
+    "ru_q": "Кто видел сон о лестнице до небес?",
+    "ru_opts": [
+      "Авраам",
+      "Яков",
+      "Иосиф",
+      "Ной"
     ]
   },
   {
@@ -2557,6 +3439,20 @@
       "Isaac",
       "Jacob",
       "Joseph"
+    ],
+    "ro_q": "Cine a fost fiul promis lui Avraam?",
+    "ro_opts": [
+      "Ismail",
+      "Isaac",
+      "Iacov",
+      "Iosif"
+    ],
+    "ru_q": "Кто был сыном, обещанным Аврааму?",
+    "ru_opts": [
+      "Измаил",
+      "Исаак",
+      "Иаков",
+      "Иосиф"
     ]
   },
   {
@@ -2597,6 +3493,20 @@
       "Rebeca",
       "Raquel",
       "Léa"
+    ],
+    "ro_q": "Cine a fost mama lui Isac?",
+    "ro_opts": [
+      "Sara",
+      "Rebeca",
+      "Raquel",
+      "Lea"
+    ],
+    "ru_q": "Кто была мать Исаака?",
+    "ru_opts": [
+      "Сара",
+      "Ребека",
+      "Рахель",
+      "Лея"
     ]
   },
   {
@@ -2637,6 +3547,20 @@
       "Jaco",
       "Ésau",
       "Isaac"
+    ],
+    "ro_q": "Cine a fost vândut pentru 20 de monede?",
+    "ro_opts": [
+      "Jose",
+      "Iacov",
+      "Esau",
+      "Isaac"
+    ],
+    "ru_q": "Кто был продан за 20 монет?",
+    "ru_opts": [
+      "Хосе",
+      "Яко",
+      "Исав",
+      "Исаак"
     ]
   },
   {
@@ -2677,6 +3601,20 @@
       "Pharaon",
       "Empereur",
       "Prêtre"
+    ],
+    "ro_q": "Cine guverna Egiptul când a sosit Iosif?",
+    "ro_opts": [
+      "Rege",
+      "Faraon",
+      "Împărat",
+      "Preot"
+    ],
+    "ru_q": "Кто правил Египтом, когда Иосиф прибыл?",
+    "ru_opts": [
+      "Царь",
+      "Фараон",
+      "Император",
+      "Священник"
     ]
   },
   {
@@ -2713,6 +3651,20 @@
       "950"
     ],
     "fr_opts": [
+      "777",
+      "969",
+      "888",
+      "950"
+    ],
+    "ro_q": "Câți ani a trăit Matusalem?",
+    "ro_opts": [
+      "777",
+      "969",
+      "888",
+      "950"
+    ],
+    "ru_q": "Сколько лет прожил Мафусаил?",
+    "ru_opts": [
       "777",
       "969",
       "888",
@@ -2757,6 +3709,20 @@
       "Sète",
       "Adao",
       "Énoch"
+    ],
+    "ro_q": "Cine a fost tatăl lui Noe?",
+    "ro_opts": [
+      "Lameque",
+      "Sete",
+      "Adao",
+      "Enoque"
+    ],
+    "ru_q": "Кто был отцом Ноя?",
+    "ru_opts": [
+      "Ламек",
+      "Сиф",
+      "Адам",
+      "Енох"
     ]
   },
   {
@@ -2797,6 +3763,20 @@
       "Lumière",
       "Feu",
       "Couronne"
+    ],
+    "ro_q": "Care a fost semnul pe care Dumnezeu l-a pus pe Cain?",
+    "ro_opts": [
+      "Marcă",
+      "Lumină",
+      "Foc",
+      "Coroană"
+    ],
+    "ru_q": "Какой знак Бог поставил на Каина?",
+    "ru_opts": [
+      "Марка",
+      "Свет",
+      "Огонь",
+      "Корона"
     ]
   },
   {
@@ -2837,6 +3817,20 @@
       "Isaac",
       "Joseph",
       "Noé"
+    ],
+    "ro_q": "Cine a fost bunicul lui Iacob?",
+    "ro_opts": [
+      "Avraam",
+      "Isaac",
+      "Iosif",
+      "Noe"
+    ],
+    "ru_q": "Кто был дедом Якова?",
+    "ru_opts": [
+      "Авраам",
+      "Исаак",
+      "Иосиф",
+      "Ной"
     ]
   },
   {
@@ -2877,6 +3871,20 @@
       "Jacob",
       "Isaac",
       "Joseph"
+    ],
+    "ro_q": "Cine a avut doisprezece copii care au format triburile?",
+    "ro_opts": [
+      "Avraam",
+      "Iacov",
+      "Isaac",
+      "Iosif"
+    ],
+    "ru_q": "Кто имел двенадцать сыновей, которые образовали племена?",
+    "ru_opts": [
+      "Авраам",
+      "Иаков",
+      "Исаак",
+      "Иосиф"
     ]
   },
   {
@@ -2917,6 +3925,20 @@
       "Miria",
       "Sara",
       "Rébecca"
+    ],
+    "ro_q": "Cine l-a găsit pe Moise în râu?",
+    "ro_opts": [
+      "Fiica Faraonului",
+      "Miria",
+      "Sara",
+      "Rebecca"
+    ],
+    "ru_q": "Кто нашел Моисея в реке?",
+    "ru_opts": [
+      "Дочь фараона",
+      "Мирия",
+      "Сара",
+      "Ребекка"
     ]
   },
   {
@@ -2957,6 +3979,20 @@
       "Dieu",
       "Archange",
       "Prophète"
+    ],
+    "ro_q": "Cine a vorbit cu Moise în rugul aprins?",
+    "ro_opts": [
+      "Înger",
+      "Dumnezeu",
+      "Arhanghel",
+      "Profet"
+    ],
+    "ru_q": "Кто говорил с Моисеем в горящем кусте?",
+    "ru_opts": [
+      "Ангел",
+      "Бог",
+      "Ареопагит",
+      "Пророк"
     ]
   },
   {
@@ -2997,6 +4033,20 @@
       "Sang",
       "Mouches",
       "Obscurité"
+    ],
+    "ro_q": "Care a fost prima plagă?",
+    "ro_opts": [
+      "Șobolani",
+      "Sânge",
+      "Muște",
+      "Întuneric"
+    ],
+    "ru_q": "Какая была первая казнь?",
+    "ru_opts": [
+      "Крысы",
+      "Кровь",
+      "Мухи",
+      "Тьма"
     ]
   },
   {
@@ -3037,6 +4087,20 @@
       "Araô",
       "Davi",
       "Samuel"
+    ],
+    "ro_q": "Cine îl ajuta pe Moise să vorbească?",
+    "ro_opts": [
+      "Jose",
+      "Arao",
+      "Davi",
+      "Samuel"
+    ],
+    "ru_q": "Кто помогал Моисею говорить?",
+    "ru_opts": [
+      "Хосе",
+      "Араo",
+      "Дави",
+      "Самуэль"
     ]
   },
   {
@@ -3077,6 +4141,20 @@
       "Feu et nuage",
       "Eau",
       "Sable"
+    ],
+    "ro_q": "Ce acoperă Muntele Sinai?",
+    "ro_opts": [
+      "Zăpadă",
+      "Foc și nor",
+      "Apă",
+      "Nisip"
+    ],
+    "ru_q": "Что покрывало гору Синай?",
+    "ru_opts": [
+      "Снег",
+      "Огонь и облако",
+      "Вода",
+      "Песок"
     ]
   },
   {
@@ -3113,6 +4191,20 @@
       "50"
     ],
     "fr_opts": [
+      "10",
+      "20",
+      "40",
+      "50"
+    ],
+    "ro_q": "Câți zile a stat Moise pe munte?",
+    "ro_opts": [
+      "10",
+      "20",
+      "40",
+      "50"
+    ],
+    "ru_q": "Сколько дней Моисей находился на горе?",
+    "ru_opts": [
       "10",
       "20",
       "40",
@@ -3157,6 +4249,20 @@
       "Construisit un veau d'or",
       "Dormit",
       "S'enfuit"
+    ],
+    "ro_q": "Ce a făcut poporul în timp ce Moise era pe munte?",
+    "ro_opts": [
+      "Orou",
+      "Construi un vițel de aur",
+      "Dormit",
+      "Fugit"
+    ],
+    "ru_q": "Что народ делал, пока Моисей был на горе?",
+    "ru_opts": [
+      "Оро",
+      "Построил золотого тельца",
+      "Спал",
+      "Убежал"
     ]
   },
   {
@@ -3197,6 +4303,20 @@
       "Moïse",
       "Josué",
       "Pharaon"
+    ],
+    "ro_q": "Cine a făcut vițelul de aur?",
+    "ro_opts": [
+      "Arao",
+      "Moise",
+      "Iosua",
+      "Faraon"
+    ],
+    "ru_q": "Кто сделал золотого тельца?",
+    "ru_opts": [
+      "Араон",
+      "Моисей",
+      "Иисус Навин",
+      "Фараон"
     ]
   },
   {
@@ -3237,6 +4357,20 @@
       "Histoire",
       "Noms",
       "Chants"
+    ],
+    "ro_q": "Ce a scris Dumnezeu pe tablele?",
+    "ro_opts": [
+      "Legi",
+      "Istorie",
+      "Nume",
+      "Cântece"
+    ],
+    "ru_q": "Что Бог написал на скрижалях?",
+    "ru_opts": [
+      "Законы",
+      "История",
+      "Имена",
+      "Песни"
     ]
   },
   {
@@ -3280,6 +4414,20 @@
       "Josué",
       "David",
       "Samuel"
+    ],
+    "ro_q": "Cine s-a suit cu Moise pe munte?",
+    "ro_opts": [
+      "Arao",
+      "Iosua",
+      "David",
+      "Samuel"
+    ],
+    "ru_q": "Кто поднялся с Моисеем на гору?",
+    "ru_opts": [
+      "Арао",
+      "Иосуя",
+      "Давид",
+      "Самуил"
     ]
   },
   {
@@ -3320,6 +4468,20 @@
       "Pain du ciel",
       "Poisson",
       "Fruit"
+    ],
+    "ro_q": "Ce era mana?",
+    "ro_opts": [
+      "Carne",
+      "Pâine din cer",
+      "Pește",
+      "Fruct"
+    ],
+    "ru_q": "Что такое мана?",
+    "ru_opts": [
+      "Мясо",
+      "Небесный хлеб",
+      "Рыба",
+      "Фрукт"
     ]
   },
   {
@@ -3360,6 +4522,20 @@
       "Désert",
       "Montagne",
       "Rivière"
+    ],
+    "ro_q": "Unde a umblat poporul 40 de ani?",
+    "ro_opts": [
+      "Oraș",
+      "Deșert",
+      "Munte",
+      "Râu"
+    ],
+    "ru_q": "Где народ ходил 40 лет?",
+    "ru_opts": [
+      "Город",
+      "Пустыня",
+      "Гора",
+      "Река"
     ]
   },
   {
@@ -3400,6 +4576,20 @@
       "Pharaon",
       "Empereur",
       "Général"
+    ],
+    "ro_q": "Cine era liderul Egiptului?",
+    "ro_opts": [
+      "Rege",
+      "Faraon",
+      "Împărat",
+      "General"
+    ],
+    "ru_q": "Кто был лидером Египта?",
+    "ru_opts": [
+      "Рей",
+      "Фараон",
+      "Император",
+      "Генерал"
     ]
   },
   {
@@ -3440,6 +4630,20 @@
       "Bâton",
       "Bouclier",
       "Arc"
+    ],
+    "ro_q": "Ce instrument folosea Moise?",
+    "ro_opts": [
+      "Spadă",
+      "Bară",
+      "Scut",
+      "Arc"
+    ],
+    "ru_q": "Какой инструмент использовал Моисей?",
+    "ru_opts": [
+      "Меч",
+      "Палка",
+      "Щит",
+      "Лук"
     ]
   },
   {
@@ -3480,6 +4684,20 @@
       "Parasites",
       "Vent",
       "Feu"
+    ],
+    "ro_q": "Ce a trimis Dumnezeu împotriva Egiptului?",
+    "ro_opts": [
+      "Ploaie",
+      "Dăunători",
+      "Vânt",
+      "Foc"
+    ],
+    "ru_q": "Что Бог послал против Египта?",
+    "ru_opts": [
+      "Дождь",
+      "Вредители",
+      "Ветер",
+      "Огонь"
     ]
   },
   {
@@ -3520,6 +4738,20 @@
       "Mort des premiers-nés",
       "Sang",
       "Obscurité"
+    ],
+    "ro_q": "Care a fost ultima plagă?",
+    "ro_opts": [
+      "Ciumă",
+      "Moartea întâilor născuți",
+      "Sânge",
+      "Întuneric"
+    ],
+    "ru_q": "Какая была последняя казнь?",
+    "ru_opts": [
+      "Ра",
+      "Смерть первенцев",
+      "Кровь",
+      "Тьма"
     ]
   },
   {
@@ -3560,6 +4792,20 @@
       "Égyptiens",
       "Romains",
       "Grecs"
+    ],
+    "ro_q": "Cine a ieșit din Egipt?",
+    "ro_opts": [
+      "Israeliți",
+      "Egipțeni",
+      "Romani",
+      "Greci"
+    ],
+    "ru_q": "Кто вышел из Египта?",
+    "ru_opts": [
+      "Израильтяне",
+      "Египтяне",
+      "Римляне",
+      "Греки"
     ]
   },
   {
@@ -3600,6 +4846,20 @@
       "Arao",
       "Josué",
       "Davi"
+    ],
+    "ro_q": "Cine îi conducea pe popor?",
+    "ro_opts": [
+      "Moise",
+      "Arao",
+      "Iosua",
+      "David"
+    ],
+    "ru_q": "Кто вел народ?",
+    "ru_opts": [
+      "Моисей",
+      "Араон",
+      "Иосуя",
+      "Давид"
     ]
   },
   {
@@ -3640,6 +4900,20 @@
       "Or",
       "Armes",
       "Vêtements"
+    ],
+    "ro_q": "Ce a dat Dumnezeu poporului în deșert?",
+    "ro_opts": [
+      "Apă și mâncare",
+      "Aur",
+      "Arme",
+      "Haine"
+    ],
+    "ru_q": "Что Бог дал народу в пустыне?",
+    "ru_opts": [
+      "Вода и еда",
+      "Золото",
+      "Оружие",
+      "Одежда"
     ]
   },
   {
@@ -3680,6 +4954,20 @@
       "Carmelo",
       "Siao",
       "Oliveiras"
+    ],
+    "ro_q": "Ce munte a vorbit Dumnezeu cu Moise?",
+    "ro_opts": [
+      "Sinai",
+      "Carmelo",
+      "Siao",
+      "Oliveiras"
+    ],
+    "ru_q": "На каком горе Бог говорил с Моисеем?",
+    "ru_opts": [
+      "Синай",
+      "Кармело",
+      "Сиао",
+      "Оливейрас"
     ]
   },
   {
@@ -3720,6 +5008,20 @@
       "Arao",
       "Josué",
       "David"
+    ],
+    "ro_q": "Cine a scris legea?",
+    "ro_opts": [
+      "Moise",
+      "Arao",
+      "Iosua",
+      "David"
+    ],
+    "ru_q": "Кто написал закон?",
+    "ru_opts": [
+      "Моисей",
+      "Арао",
+      "Иисус Навин",
+      "Давид"
     ]
   },
   {
@@ -3760,6 +5062,20 @@
       "Feu",
       "Nuage",
       "Vent"
+    ],
+    "ro_q": "Ce proteja poporul noaptea?",
+    "ro_opts": [
+      "Lună",
+      "Foc",
+      "Nor",
+      "Vânt"
+    ],
+    "ru_q": "Что защищало людей ночью?",
+    "ru_opts": [
+      "Луа",
+      "Огонь",
+      "Облако",
+      "Ветер"
     ]
   },
   {
@@ -3800,6 +5116,20 @@
       "Nuage",
       "Feu",
       "Sable"
+    ],
+    "ro_q": "Ce proteja poporul ziua?",
+    "ro_opts": [
+      "Soare",
+      "Nor",
+      "Foc",
+      "Nisip"
+    ],
+    "ru_q": "Что защищало людей днём?",
+    "ru_opts": [
+      "Солнце",
+      "Облако",
+      "Огонь",
+      "Песок"
     ]
   },
   {
@@ -3840,6 +5170,20 @@
       "Roi",
       "Soldats",
       "Prophètes"
+    ],
+    "ro_q": "Cine a construit tabernacolul?",
+    "ro_opts": [
+      "Popor",
+      "Rege",
+      "Soldați",
+      "Profeți"
+    ],
+    "ru_q": "Кто построил скинию?",
+    "ru_opts": [
+      "Народ",
+      "Король",
+      "Солдаты",
+      "Пророки"
     ]
   },
   {
@@ -3880,6 +5224,20 @@
       "Temple",
       "Maison",
       "Mont"
+    ],
+    "ro_q": "Unde erau ținute tabelele?",
+    "ro_opts": [
+      "Lada",
+      "Templu",
+      "Casă",
+      "Munte"
+    ],
+    "ru_q": "Где хранились скрижали?",
+    "ru_opts": [
+      "Ковчег",
+      "Храм",
+      "Дом",
+      "Гора"
     ]
   },
   {
@@ -3920,6 +5278,20 @@
       "Babel",
       "Ur",
       "Canaan"
+    ],
+    "ro_q": "Care era numele grădinii unde Dumnezeu a pus omul?",
+    "ro_opts": [
+      "Eden",
+      "Babilon",
+      "Ur",
+      "Canaan"
+    ],
+    "ru_q": "Как назывался сад, в котором Бог поместил человека?",
+    "ru_opts": [
+      "Эдем",
+      "Вавилон",
+      "Ур",
+      "Ханаан"
     ]
   },
   {
@@ -3960,6 +5332,20 @@
       "Euphrate",
       "Nil",
       "Pison"
+    ],
+    "ro_q": "Care râu NU este menționat în Eden?",
+    "ro_opts": [
+      "Tigru",
+      "Eufrat",
+      "Nil",
+      "Pison"
+    ],
+    "ru_q": "Какая река НЕ упоминается в Эдеме?",
+    "ru_opts": [
+      "Тигр",
+      "Евфрат",
+      "Нил",
+      "Писом"
     ]
   },
   {
@@ -4000,6 +5386,20 @@
       "Jabal",
       "Tubalcaïn",
       "Énoch"
+    ],
+    "ro_q": "Cine a fost tatăl tuturor celor care cântă la harpă și la fluier?",
+    "ro_opts": [
+      "Iubal",
+      "Iabal",
+      "Tubalcain",
+      "Enoh"
+    ],
+    "ru_q": "Кто был отцом всех, кто играет на арфе и флейте?",
+    "ru_opts": [
+      "Юбал",
+      "Джабал",
+      "Тубалкаин",
+      "Енох"
     ]
   },
   {
@@ -4040,6 +5440,20 @@
       "Jabal",
       "Caïn",
       "Seth"
+    ],
+    "ro_q": "Cine a fost tatăl acelora care locuiesc în corturi și cresc vite?",
+    "ro_opts": [
+      "Jubal",
+      "Jabal",
+      "Caim",
+      "Sete"
+    ],
+    "ru_q": "Кто был отцом тех, кто жил в шатрах и разводил скот?",
+    "ru_opts": [
+      "Юбал",
+      "Джабал",
+      "Каин",
+      "Сет"
     ]
   },
   {
@@ -4080,6 +5494,20 @@
       "Tubalcaïn",
       "Jubal",
       "Lémek"
+    ],
+    "ro_q": "Cine a forjat instrumente de bronz și fier?",
+    "ro_opts": [
+      "Jabal",
+      "Tubalcaim",
+      "Jubal",
+      "Lamec"
+    ],
+    "ru_q": "Кто ковал инструменты из бронзы и железа?",
+    "ru_opts": [
+      "Джабал",
+      "Тубалкаин",
+      "Джубал",
+      "Ламех"
     ]
   },
   {
@@ -4120,6 +5548,20 @@
       "Saraï",
       "Rebecca",
       "Rachel"
+    ],
+    "ro_q": "Care era numele soției lui Avraam înainte să fie schimbat?",
+    "ro_opts": [
+      "Sara",
+      "Sarai",
+      "Rebeca",
+      "Rahela"
+    ],
+    "ru_q": "Какое было имя жены Авраама до того, как оно было изменено?",
+    "ru_opts": [
+      "Сара",
+      "Сарай",
+      "Ребекка",
+      "Рахиль"
     ]
   },
   {
@@ -4160,6 +5602,20 @@
       "Abraham",
       "Abraham",
       "Abel"
+    ],
+    "ro_q": "Care era numele lui Avraam înainte ca Dumnezeu să-l schimbe?",
+    "ro_opts": [
+      "Abraam",
+      "Abraam",
+      "Abraam",
+      "Abel"
+    ],
+    "ru_q": "Какое было имя Авраама до того, как Бог его изменил?",
+    "ru_opts": [
+      "Авраам",
+      "Авраам",
+      "Авраам",
+      "Авель"
     ]
   },
   {
@@ -4200,6 +5656,20 @@
       "Arao",
       "Moïse",
       "Samuel"
+    ],
+    "ro_q": "Cine era preotul care l-a binecuvântat pe Avraam?",
+    "ro_opts": [
+      "Melchisedec",
+      "Arao",
+      "Moise",
+      "Samuel"
+    ],
+    "ru_q": "Кто был священником, который благословил Авраама?",
+    "ru_opts": [
+      "Мелхиседек",
+      "Араох",
+      "Моисей",
+      "Самуил"
     ]
   },
   {
@@ -4236,6 +5706,20 @@
       "50"
     ],
     "fr_opts": [
+      "5",
+      "10",
+      "20",
+      "50"
+    ],
+    "ro_q": "Câți drepți a cerut Avraam pentru a salva Sodoma, minimum?",
+    "ro_opts": [
+      "5",
+      "10",
+      "20",
+      "50"
+    ],
+    "ru_q": "Сколько праведников Авраам просил спасти Содому как минимум?",
+    "ru_opts": [
       "5",
       "10",
       "20",
@@ -4280,6 +5764,20 @@
       "Léa",
       "Sara",
       "Rébecca"
+    ],
+    "ro_q": "Cine i-a dat numele de Benoni fiului, apoi schimbat?",
+    "ro_opts": [
+      "Raquel",
+      "Lea",
+      "Sara",
+      "Rebeca"
+    ],
+    "ru_q": "Кто дал имя Бенони сыну, позже измененное?",
+    "ru_opts": [
+      "Рахель",
+      "Лея",
+      "Сара",
+      "Ребекка"
     ]
   },
   {
@@ -4320,6 +5818,20 @@
       "Psaume 91",
       "Psaume 119",
       "Psaume 150"
+    ],
+    "ro_q": "Care este Psalmul cel mai lung din Biblie?",
+    "ro_opts": [
+      "Psalmul 23",
+      "Psalmul 91",
+      "Psalmul 119",
+      "Psalmul 150"
+    ],
+    "ru_q": "Какой псалом самый длинный в Библии?",
+    "ru_opts": [
+      "Псалом 23",
+      "Псалом 91",
+      "Псалом 119",
+      "Псалом 150"
     ]
   },
   {
@@ -4360,6 +5872,20 @@
       "Psaume 117",
       "Psaume 23",
       "Psaume 100"
+    ],
+    "ro_q": "Care este Psalmul cel mai scurt din Biblie?",
+    "ro_opts": [
+      "Psalmul 1",
+      "Psalmul 117",
+      "Psalmul 23",
+      "Psalmul 100"
+    ],
+    "ru_q": "Какой псалом самый короткий в Библии?",
+    "ru_opts": [
+      "Псалом 1",
+      "Псалом 117",
+      "Псалом 23",
+      "Псалом 100"
     ]
   },
   {
@@ -4396,6 +5922,20 @@
       "180"
     ],
     "fr_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "ro_q": "Câți Psalmi există în Biblie?",
+    "ro_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "ru_q": "Сколько Псалмов в Библии?",
+    "ru_opts": [
       "100",
       "120",
       "150",
@@ -4440,6 +5980,20 @@
       "Effrayera",
       "Vainquera",
       "Séparera"
+    ],
+    "ro_q": "Domnul este păstorul meu și nu-mi lipsește nimic...",
+    "ro_opts": [
+      "Vor lipsi",
+      "Vor înspăimânta",
+      "Vor învinge",
+      "Vor separa"
+    ],
+    "ru_q": "Господь — мой пастырь, и ничего мне не будет...?",
+    "ru_opts": [
+      "Будет недостаточно",
+      "Напугает",
+      "Победит",
+      "Разделит"
     ]
   },
   {
@@ -4480,6 +6034,20 @@
       "Psaume 27",
       "Psaume 91",
       "Psaume 100"
+    ],
+    "ro_q": "În ce Psalm David spune Dumnezeu este lumina mea și salvarea mea?",
+    "ro_opts": [
+      "Psalmul 23",
+      "Psalmul 27",
+      "Psalmul 91",
+      "Psalmul 100"
+    ],
+    "ru_q": "В каком Псалме Давид говорит \"Бог - мой свет и спасение\"?",
+    "ru_opts": [
+      "Псалом 23",
+      "Псалом 27",
+      "Псалом 91",
+      "Псалом 100"
     ]
   },
   {
@@ -4520,6 +6088,20 @@
       "Roi",
       "Dieu",
       "Prophète"
+    ],
+    "ro_q": "Cine este scutul celor care au încredere în Dumnezeu?",
+    "ro_opts": [
+      "Înger",
+      "Rege",
+      "Dumnezeu",
+      "Profet"
+    ],
+    "ru_q": "Кто защита тех, кто доверяет Богу?",
+    "ru_opts": [
+      "Ангел",
+      "Король",
+      "Бог",
+      "Пророк"
     ]
   },
   {
@@ -4560,6 +6142,20 @@
       "Perte d'ennemis",
       "Pardon et purification",
       "Force"
+    ],
+    "ro_q": "Ce cere David lui Dumnezeu în Psalmul 51?",
+    "ro_opts": [
+      "Bogăție",
+      "Pierderea inamicilor",
+      "Iertare și curățire",
+      "Forță"
+    ],
+    "ru_q": "Что Давид просит у Бога в Псалме 51?",
+    "ru_opts": [
+      "Богатство",
+      "Гибель врагов",
+      "Прощение и очищение",
+      "Сила"
     ]
   },
   {
@@ -4600,6 +6196,20 @@
       "Celui qui fait confiance en Dieu",
       "Roi",
       "Prêtre"
+    ],
+    "ro_q": "Cine locuiește în ascunzătoarea Celui Preaînalt?",
+    "ro_opts": [
+      "Profet",
+      "Cine se încrede în Dumnezeu",
+      "Rege",
+      "Preot"
+    ],
+    "ru_q": "Кто обитает в убежище Всевышнего?",
+    "ru_opts": [
+      "Пророк",
+      "Кто доверяет Богу",
+      "Король",
+      "Священник"
     ]
   },
   {
@@ -4640,6 +6250,20 @@
       "Nations",
       "Montagnes",
       "Étoiles"
+    ],
+    "ro_q": "Lăudați pe Domnul toate...?",
+    "ro_opts": [
+      "Triburi",
+      "Națiuni",
+      "Munți",
+      "Stele"
+    ],
+    "ru_q": "Louvaí ao Senhor todas as...?\n\n**Russian translation:**\n\nХвалите Господа все...?",
+    "ru_opts": [
+      "Племена",
+      "Нации",
+      "Горы",
+      "Звёзды"
     ]
   },
   {
@@ -4680,6 +6304,20 @@
       "Aigle",
       "Taureau",
       "Agneau"
+    ],
+    "ro_q": "Ce animal este menționat în Psalmul 22?",
+    "ro_opts": [
+      "Leu",
+      "Vultur",
+      "Taur",
+      "Miel"
+    ],
+    "ru_q": "Какое животное упоминается в Псалме 22?",
+    "ru_opts": [
+      "Лев",
+      "Орел",
+      "Бык",
+      "Агнец"
     ]
   },
   {
@@ -4720,6 +6358,20 @@
       "Prophète",
       "Dieu",
       "Homme"
+    ],
+    "ro_q": "Cerurile proclamă gloria lui...?",
+    "ro_opts": [
+      "Rege",
+      "Profet",
+      "Dumnezeu",
+      "Om"
+    ],
+    "ru_q": "Небеса возвещают славу...?",
+    "ru_opts": [
+      "Король",
+      "Пророк",
+      "Бог",
+      "Человек"
     ]
   },
   {
@@ -4760,6 +6412,20 @@
       "Salomon",
       "Moïse",
       "Élie"
+    ],
+    "ro_q": "Cine a scris Psalmul 90?",
+    "ro_opts": [
+      "Davi",
+      "Solomon",
+      "Moise",
+      "Ilie"
+    ],
+    "ru_q": "Кто написал Псалом 90?",
+    "ru_opts": [
+      "Давид",
+      "Соломон",
+      "Моисей",
+      "Илия"
     ]
   },
   {
@@ -4800,6 +6466,20 @@
       "Bienheureux",
       "Saint",
       "Fort"
+    ],
+    "ro_q": "Ce cuvânt începe Psalmul 1?",
+    "ro_opts": [
+      "Lăudat",
+      "Binecuvântat",
+      "Sfânt",
+      "Puternic"
+    ],
+    "ru_q": "Какое слово начинает Псалом 1?",
+    "ru_opts": [
+      "Прославляемый",
+      "Блаженный",
+      "Святой",
+      "Сильный"
     ]
   },
   {
@@ -4840,6 +6520,20 @@
       "Eaux",
       "Désert",
       "Ville"
+    ],
+    "ro_q": "Un drept și cum un copac plantat lângă...?",
+    "ro_opts": [
+      "Munte",
+      "Ape",
+      "Deșert",
+      "Oraș"
+    ],
+    "ru_q": "Праведник как дерево, посаженное у...?",
+    "ru_opts": [
+      "Гора",
+      "Воды",
+      "Пустыня",
+      "Город"
     ]
   },
   {
@@ -4880,6 +6574,20 @@
       "Rois",
       "Justes",
       "Prêtres"
+    ],
+    "ro_q": "Bucuraţi-vos în Domnul vos...?",
+    "ro_opts": [
+      "Profeți",
+      "Regi",
+      "Drepți",
+      "Preoți"
+    ],
+    "ru_q": "Радуйтесь в Господе...?",
+    "ru_opts": [
+      "Пророки",
+      "Цари",
+      "Праведники",
+      "Священники"
     ]
   },
   {
@@ -4920,6 +6628,20 @@
       "Dieu",
       "Ange",
       "Prophète"
+    ],
+    "ro_q": "Cine este regele gloriei?",
+    "ro_opts": [
+      "Davi",
+      "Dumnezeu",
+      "Înger",
+      "Profet"
+    ],
+    "ru_q": "Кто царь славы?",
+    "ru_opts": [
+      "Дави",
+      "Бог",
+      "Ангел",
+      "Пророк"
     ]
   },
   {
@@ -4960,6 +6682,20 @@
       "Voir",
       "Écouter",
       "Sentir"
+    ],
+    "ro_q": "Căutați pe Domnul cât timp se poate...?",
+    "ro_opts": [
+      "A găsi",
+      "A vedea",
+      "A auzi",
+      "A simți"
+    ],
+    "ru_q": "Ищите Господа, пока можно...?",
+    "ru_opts": [
+      "Найти",
+      "Видеть",
+      "Слышать",
+      "Чувствовать"
     ]
   },
   {
@@ -5000,6 +6736,20 @@
       "Trompette",
       "Guitare",
       "Piano"
+    ],
+    "ro_q": "Ce instrument este menționat în Psalmul 150?",
+    "ro_opts": [
+      "Vioară",
+      "Trompetă",
+      "Chitară",
+      "Pian"
+    ],
+    "ru_q": "Какие инструменты упоминаются в Псалме 150?",
+    "ru_opts": [
+      "Скрипка",
+      "Труба",
+      "Гитара",
+      "Пианино"
     ]
   },
   {
@@ -5040,6 +6790,20 @@
       "Ennemis",
       "Anges",
       "Rois"
+    ],
+    "ro_q": "Psalmul 23 spune că Dumnezeu pregătește o masă în prezența...?",
+    "ro_opts": [
+      "Prieteni",
+      "Dușmani",
+      "Îngeri",
+      "Regi"
+    ],
+    "ru_q": "Псалом 23 говорит, что Бог приготавливает стол в присутствии...?",
+    "ru_opts": [
+      "Друзья",
+      "Враги",
+      "Ангелы",
+      "Короли"
     ]
   },
   {
@@ -5080,6 +6844,20 @@
       "Lampe pour mes pieds",
       "Difficile",
       "Ancienne"
+    ],
+    "ro_q": "Cum descrie David Cuvântul lui Dumnezeu în Psalmul 119?",
+    "ro_opts": [
+      "Grea",
+      "Lampă pentru picioarele mele",
+      "Dificil",
+      "Veche"
+    ],
+    "ru_q": "Как Давид описывает Слово Божие в Псалме 119?",
+    "ru_opts": [
+      "Тяжелая",
+      "Лампа для моих ног",
+      "Сложная",
+      "Старая"
     ]
   },
   {
@@ -5120,6 +6898,20 @@
       "Celui aux mains propres",
       "Le riche",
       "Le prêtre"
+    ],
+    "ro_q": "Cine se-ntoarce pe muntele Domnului?",
+    "ro_opts": [
+      "Oricine",
+      "Cel cu mâinile curate",
+      "Bogatul",
+      "Preotul"
+    ],
+    "ru_q": "Кто восходит на гору Господа?",
+    "ru_opts": [
+      "Любой",
+      "Чистоплюй",
+      "Богач",
+      "Священник"
     ]
   },
   {
@@ -5160,6 +6952,23 @@
       "Du Seigneur",
       "De l'armée",
       "Du prophète"
+    ],
+    "ro_q": "De unde vine ajutorul meu?",
+    "ro_opts": [
+      "Al regelui",
+      "Al Domnului",
+      "Al armatei",
+      "Al profetului"
+    ],
+    "ru_q": "Откуда мне помощь?",
+    "ru_opts": [
+      "Do rei",
+      "Do Senhor",
+      "Do exército",
+      "Do profeta\n\nЦаря",
+      "Господа",
+      "Армии",
+      "Пророка"
     ]
   },
   {
@@ -5200,6 +7009,20 @@
       "Mon Dieu pourquoi m'as-tu abandonné",
       "Louez le Seigneur",
       "Réjouissez-vous"
+    ],
+    "ro_q": "Psalmul 22 începe cu care frază?",
+    "ro_opts": [
+      "Domnul este păstorul meu",
+      "Dumneul meu, de ce m-ai părăsit",
+      "Lăudați pe Domnul",
+      "Bucurați-vă"
+    ],
+    "ru_q": "Псалом 22 начинается с какой фразы?",
+    "ru_opts": [
+      "Господь - мой пастырь",
+      "Боже мой, почему Ты меня оставил",
+      "Хвалите Господа",
+      "Радуйтесь"
     ]
   },
   {
@@ -5236,6 +7059,20 @@
       "150"
     ],
     "fr_opts": [
+      "50",
+      "73",
+      "100",
+      "150"
+    ],
+    "ro_q": "Câți Psalmi sunt atribuiți lui David?",
+    "ro_opts": [
+      "50",
+      "73",
+      "100",
+      "150"
+    ],
+    "ru_q": "Сколько псалмов приписывается Давиду?",
+    "ru_opts": [
       "50",
       "73",
       "100",
@@ -5280,6 +7117,20 @@
       "Travaillait",
       "Calmait l'esprit",
       "Chantait"
+    ],
+    "ro_q": "Ce făcea Davi când cânta cu harpa pentru Saul?",
+    "ro_opts": [
+      "Dansa",
+      "Zbiera",
+      "Linistea spiritul",
+      "Canta"
+    ],
+    "ru_q": "Что Давид делал, когда играл на арфе для Саула?",
+    "ru_opts": [
+      "Танцевала",
+      "Молилась",
+      "Успокаивала дух",
+      "Пела"
     ]
   },
   {
@@ -5320,6 +7171,20 @@
       "Psaume 120",
       "Psaume 23",
       "Psaume 91"
+    ],
+    "ro_q": "Care psalm este cântat în urcările către templu?",
+    "ro_opts": [
+      "Psalmul 1",
+      "Psalmul 120",
+      "Psalmul 23",
+      "Psalmul 91"
+    ],
+    "ru_q": "Какой псалом поётся при восхождении в храм?",
+    "ru_opts": [
+      "Псалом 1",
+      "Псалом 120",
+      "Псалом 23",
+      "Псалом 91"
     ]
   },
   {
@@ -5360,6 +7225,20 @@
       "Sanctuaire",
       "Temple",
       "Mont"
+    ],
+    "ro_q": "Lăudați pe Dumnezeu în al vostru...?",
+    "ro_opts": [
+      "Tron",
+      "Sanctuar",
+      "Templu",
+      "Munte"
+    ],
+    "ru_q": "Louvai a Deus no seu...?\n\n**Хвалите Бога в его...?**",
+    "ru_opts": [
+      "Трон",
+      "Святилище",
+      "Храм",
+      "Гора"
     ]
   },
   {
@@ -5400,6 +7279,20 @@
       "José et Maria",
       "Pedro et Ana",
       "Tiago et Sara"
+    ],
+    "ro_q": "Cine au fost părinții lui Iisus?",
+    "ro_opts": [
+      "Ioan și Maria",
+      "Iosif și Maria",
+      "Petru și Ana",
+      "Iacov și Sara"
+    ],
+    "ru_q": "Кто были родители Иисуса?",
+    "ru_opts": [
+      "Жоау и Мария",
+      "Жозе и Мария",
+      "Педру и Ана",
+      "Тиагу и Сара"
     ]
   },
   {
@@ -5436,6 +7329,20 @@
       "18"
     ],
     "fr_opts": [
+      "10",
+      "12",
+      "15",
+      "18"
+    ],
+    "ro_q": "Câți ani avea Isus când a mers la templu?",
+    "ro_opts": [
+      "10",
+      "12",
+      "15",
+      "18"
+    ],
+    "ru_q": "Сколько лет было Иисусу, когда он пошел в храм?",
+    "ru_opts": [
       "10",
       "12",
       "15",
@@ -5480,6 +7387,20 @@
       "Paul",
       "Jean-Baptiste",
       "Jacques"
+    ],
+    "ro_q": "Cine l-a botezat pe Isus?",
+    "ro_opts": [
+      "Pedro",
+      "Paulo",
+      "Ioan Botezătorul",
+      "Iacov"
+    ],
+    "ru_q": "Кто крестил Иисуса?",
+    "ru_opts": [
+      "Педро",
+      "Павел",
+      "Иоанн Креститель",
+      "Иаков"
     ]
   },
   {
@@ -5520,6 +7441,20 @@
       "Désert",
       "Montagne",
       "Fleuve"
+    ],
+    "ro_q": "Unde a fost ispitit Isus?",
+    "ro_opts": [
+      "Templu",
+      "Deşert",
+      "Munte",
+      "Râu"
+    ],
+    "ru_q": "Где Иисус был искушаем?",
+    "ru_opts": [
+      "Храм",
+      "Пустыня",
+      "Гора",
+      "Река"
     ]
   },
   {
@@ -5556,6 +7491,20 @@
       "4"
     ],
     "fr_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "ro_q": "De câte ori a fost ispitit Isus în deșert?",
+    "ro_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "ru_q": "Сколько раз Иисус был искушаем в пустыне?",
+    "ru_opts": [
       "1",
       "2",
       "3",
@@ -5600,6 +7549,20 @@
       "Guérison d'un lépreux",
       "Multiplication des pains",
       "L'eau changée en vin"
+    ],
+    "ro_q": "Care a fost primul miracol al lui Iisus în Matei?",
+    "ro_opts": [
+      "Vindecarea unui orb",
+      "Vindecarea unui lepros",
+      "Înmulțirea pâinilor",
+      "Apă în vin"
+    ],
+    "ru_q": "Какое было первое чудо Иисуса в Евангелии от Матфея?",
+    "ru_opts": [
+      "Исцеление слепого",
+      "Исцеление прокажённого",
+      "Умножение хлебов",
+      "Вода в вино"
     ]
   },
   {
@@ -5636,6 +7599,20 @@
       "12"
     ],
     "fr_opts": [
+      "2",
+      "4",
+      "6",
+      "12"
+    ],
+    "ro_q": "Câți ucenici a chemat Isus mai întâi?",
+    "ro_opts": [
+      "2",
+      "4",
+      "6",
+      "12"
+    ],
+    "ru_q": "Сколько учеников Иисус призвал первыми?",
+    "ru_opts": [
       "2",
       "4",
       "6",
@@ -5680,6 +7657,20 @@
       "Matthieu",
       "Jean",
       "Jacques"
+    ],
+    "ro_q": "Cine era colector de impozite și a devenit ucenic?",
+    "ro_opts": [
+      "Pedro",
+      "Matei",
+      "Ioan",
+      "Iacov"
+    ],
+    "ru_q": "Кто был сборщиком налогов и стал учеником?",
+    "ru_opts": [
+      "Педро",
+      "Матфей",
+      "Иоанн",
+      "Иаков"
     ]
   },
   {
@@ -5720,6 +7711,20 @@
       "Aimer Dieu",
       "Honorer les parents",
       "Ne pas voler"
+    ],
+    "ro_q": "Care este cea mai mare poruncă potrivit lui Iisus?",
+    "ro_opts": [
+      "Nu ucide",
+      "Iubi pe Dumnezeu",
+      "Cinsti părinții",
+      "Nu furi"
+    ],
+    "ru_q": "Какая самая большая заповедь, по словам Иисуса?",
+    "ru_opts": [
+      "Не убивать",
+      "Любить Бога",
+      "Чтить родителей",
+      "Не воровать"
     ]
   },
   {
@@ -5756,6 +7761,20 @@
       "5000"
     ],
     "fr_opts": [
+      "2000",
+      "3000",
+      "4000",
+      "5000"
+    ],
+    "ro_q": "Câți oameni a hrănit Iisus cu 5 pâini?",
+    "ro_opts": [
+      "2000",
+      "3000",
+      "4000",
+      "5000"
+    ],
+    "ru_q": "Сколько людей Иисус накормил пятью хлебами?",
+    "ru_opts": [
       "2000",
       "3000",
       "4000",
@@ -5800,6 +7819,20 @@
       "Tiago",
       "Pedro",
       "Paulo"
+    ],
+    "ro_q": "Cine a umblat pe apele cu Isus?",
+    "ro_opts": [
+      "Ioan",
+      "Tiago",
+      "Petru",
+      "Paul"
+    ],
+    "ru_q": "Кто ходил по воде с Иисусом?",
+    "ru_opts": [
+      "Жоау",
+      "Тиагу",
+      "Педру",
+      "Паулу"
     ]
   },
   {
@@ -5840,6 +7873,20 @@
       "2 jours",
       "3 jours",
       "7 jours"
+    ],
+    "ro_q": "Cât timp a stat Isus în mormânt?",
+    "ro_opts": [
+      "1 zi",
+      "2 zile",
+      "3 zile",
+      "7 zile"
+    ],
+    "ru_q": "Сколько времени Иисус пробыл в гробнице?",
+    "ru_opts": [
+      "1 день",
+      "2 дня",
+      "3 дня",
+      "7 дней"
     ]
   },
   {
@@ -5880,6 +7927,20 @@
       "Jean",
       "Judas",
       "Jacques"
+    ],
+    "ro_q": "Cine l-a trădat pe Iisus?",
+    "ro_opts": [
+      "Pedro",
+      "João",
+      "Judas",
+      "Tiago"
+    ],
+    "ru_q": "Кто предал Иисуса?",
+    "ru_opts": [
+      "Педро",
+      "Жоау",
+      "Иуда",
+      "Тиагу"
     ]
   },
   {
@@ -5920,6 +7981,20 @@
       "20 pièces",
       "30 pièces",
       "50 pièces"
+    ],
+    "ro_q": "Pentru cât a vândut Iuda pe Isus?",
+    "ro_opts": [
+      "10 monede",
+      "20 monede",
+      "30 monede",
+      "50 monede"
+    ],
+    "ru_q": "За сколько Иуда продал Иисуса?",
+    "ru_opts": [
+      "10 монет",
+      "20 монет",
+      "30 монет",
+      "50 монет"
     ]
   },
   {
@@ -5960,6 +8035,20 @@
       "Tiago",
       "Judas",
       "Pierre"
+    ],
+    "ro_q": "Cine L-a negat pe Isus de trei ori?",
+    "ro_opts": [
+      "Ioan",
+      "Iacov",
+      "Iuda",
+      "Petru"
+    ],
+    "ru_q": "Кто трижды отрекся от Иисуса?",
+    "ru_opts": [
+      "Иоанн",
+      "Тиаго",
+      "Иуда",
+      "Пётр"
     ]
   },
   {
@@ -6000,6 +8089,20 @@
       "Golgotha",
       "Nazareth",
       "Gethsémani"
+    ],
+    "ro_q": "Unde a fost crucificat Isus?",
+    "ro_opts": [
+      "Betleem",
+      "Golgota",
+      "Nazaret",
+      "Getsimani"
+    ],
+    "ru_q": "Где был распят Иисус?",
+    "ru_opts": [
+      "Вифлеем",
+      "Голгофа",
+      "Назарет",
+      "Гефсимания"
     ]
   },
   {
@@ -6040,6 +8143,20 @@
       "Simon de Cyrène",
       "Jean",
       "Nicodème"
+    ],
+    "ro_q": "Cine a ajutat pe Isus să poarte crucea?",
+    "ro_opts": [
+      "Pedro",
+      "Simeon din Cirena",
+      "Ioan",
+      "Nicodim"
+    ],
+    "ru_q": "Кто помог Иисусу нести крест?",
+    "ru_opts": [
+      "Педро",
+      "Симон Киринеянин",
+      "Иоанн",
+      "Никодим"
     ]
   },
   {
@@ -6080,6 +8197,20 @@
       "Couronne d'épines",
       "Voile",
       "Manteau"
+    ],
+    "ro_q": "Ce a fost pus pe capul lui Isus?",
+    "ro_opts": [
+      "Coroană de flori",
+      "Coroană de spini",
+      "Văl",
+      "Manta"
+    ],
+    "ru_q": "Что было возложено на голову Иисуса?",
+    "ru_opts": [
+      "Венок из цветов",
+      "Венок из шипов",
+      "Вуаль",
+      "Плащ"
     ]
   },
   {
@@ -6120,6 +8251,20 @@
       "Joseph d'Arimathie",
       "Jean",
       "Nicodème"
+    ],
+    "ro_q": "Cine a cerut trupul lui Iisus?",
+    "ro_opts": [
+      "Pedro",
+      "Iosif din Arimateea",
+      "Ioan",
+      "Nicodem"
+    ],
+    "ru_q": "Кто просил тело Иисуса?",
+    "ru_opts": [
+      "Педро",
+      "Иосиф из Аримафеи",
+      "Иоанн",
+      "Никодим"
     ]
   },
   {
@@ -6160,6 +8305,20 @@
       "Fils de Dieu",
       "Sauveur",
       "Messie"
+    ],
+    "ro_q": "Care era titlul scris pe cruce?",
+    "ro_opts": [
+      "Regele Jidovilor",
+      "Fiul lui Dumnezeu",
+      "Mântuitor",
+      "Mesia"
+    ],
+    "ru_q": "Какое было название, написанное на кресте?",
+    "ru_opts": [
+      "Царь Иудейский",
+      "Сын Божий",
+      "Спаситель",
+      "Мессия"
     ]
   },
   {
@@ -6200,6 +8359,20 @@
       "Pilate",
       "César",
       "Caïphe"
+    ],
+    "ro_q": "Cine a fost guvernatorul care l-a condamnat pe Iisus?",
+    "ro_opts": [
+      "Irod",
+      "Pilat",
+      "Cezar",
+      "Caifa"
+    ],
+    "ru_q": "Кто был губернатором, который осудил Иисуса?",
+    "ru_opts": [
+      "Ирод",
+      "Пилат",
+      "Цезарь",
+      "Каифа"
     ]
   },
   {
@@ -6240,6 +8413,20 @@
       "Ave Maria",
       "Credo",
       "Magnificat"
+    ],
+    "ro_q": "Care este rugăciunea pe care a predat-o Iisus?",
+    "ro_opts": [
+      "Tatăl Nostru",
+      "Vous Maria",
+      "Crez",
+      "Magnificat"
+    ],
+    "ru_q": "Какая молитва была научена Иисусом?",
+    "ru_opts": [
+      "Отче наш",
+      "Радуйся, Мария",
+      "Верую",
+      "Величит душа моя Господа"
     ]
   },
   {
@@ -6280,6 +8467,20 @@
       "Béatitudes",
       "Paraboles",
       "Prophéties"
+    ],
+    "ro_q": "Începutul Sermon pe Munte cu...?",
+    "ro_opts": [
+      "Rugăciuni",
+      "Fericiri",
+      "Parabole",
+      "Profeții"
+    ],
+    "ru_q": "Проповедь на горе начинается с...?",
+    "ru_opts": [
+      "Молитвы",
+      "Блаженства",
+      "Притчи",
+      "Пророчества"
     ]
   },
   {
@@ -6316,6 +8517,20 @@
       "9"
     ],
     "fr_opts": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "ro_q": "Câte binecuvântări sunt în Predica de pe Munte?",
+    "ro_opts": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "ru_q": "Сколько блаженств в Нагорной проповеди?",
+    "ru_opts": [
       "6",
       "7",
       "8",
@@ -6360,6 +8575,20 @@
       "Rois Mages",
       "Disciples",
       "Pharisiens"
+    ],
+    "ro_q": "Cine a venit să viziteze pe Iisus nou-născut din Orient?",
+    "ro_opts": [
+      "Păstori",
+      "Regi Magi",
+      "Ucenici",
+      "Farisei"
+    ],
+    "ru_q": "Кто пришел навестить новорожденного Иисуса с Востока?",
+    "ru_opts": [
+      "Пастухи",
+      "Волхвы",
+      "Ученики",
+      "Фарисеи"
     ]
   },
   {
@@ -6400,6 +8629,20 @@
       "Étoile de Bethléem",
       "Lune",
       "Comète"
+    ],
+    "ro_q": "Ce stea i-a călăuzit pe magi?",
+    "ro_opts": [
+      "Steaua Nordului",
+      "Steaua din Betleem",
+      "Lună",
+      "Cometă"
+    ],
+    "ru_q": "Какая звезда вела магов?",
+    "ru_opts": [
+      "Северная звезда",
+      "Вифлеемская звезда",
+      "Луна",
+      "Комета"
     ]
   },
   {
@@ -6440,6 +8683,20 @@
       "Pilate",
       "Hérode",
       "Caïphe"
+    ],
+    "ro_q": "Cine a ordonat uciderea băieților din Betleem?",
+    "ro_opts": [
+      "Cezar",
+      "Pilat",
+      "Irod",
+      "Caifa"
+    ],
+    "ru_q": "Кто приказал убить младенцев Вифлеема?",
+    "ru_opts": [
+      "Цезарь",
+      "Пилат",
+      "Ирод",
+      "Каиафа"
     ]
   },
   {
@@ -6480,6 +8737,20 @@
       "Grèce",
       "Égypte",
       "Syrie"
+    ],
+    "ro_q": "Pentru unde a fugit Isus când era copil?",
+    "ro_opts": [
+      "Roma",
+      "Grecia",
+      "Egipt",
+      "Siria"
+    ],
+    "ru_q": "Куда Иисус бежал в детстве?",
+    "ru_opts": [
+      "Рим",
+      "Греция",
+      "Египет",
+      "Сирия"
     ]
   },
   {
@@ -6520,6 +8791,20 @@
       "Étroit",
       "Moyen",
       "Long"
+    ],
+    "ro_q": "Ce a spus Isus că este calea și viața?",
+    "ro_opts": [
+      "Larg",
+      "Îngust",
+      "Mediu",
+      "Lung"
+    ],
+    "ru_q": "Что Иисус сказал быть путём и жизнью?",
+    "ru_opts": [
+      "Широкий",
+      "Узкий",
+      "Средний",
+      "Длинный"
     ]
   },
   {
@@ -6560,6 +8845,20 @@
       "Semeur",
       "Talents",
       "Brebis perdue"
+    ],
+    "ro_q": "Care parabolă vorbește despre un fiu care s-a întors la tatăl său?",
+    "ro_opts": [
+      "Fiul risipitor",
+      "Semănătorul",
+      "Talentele",
+      "Oaia pierdută"
+    ],
+    "ru_q": "Какая притча рассказывает о сыне, который вернулся к отцу?",
+    "ru_opts": [
+      "Блудный сын",
+      "Сеятель",
+      "Таланты",
+      "Заблудшая овца"
     ]
   },
   {
@@ -6596,6 +8895,20 @@
       "20"
     ],
     "fr_opts": [
+      "2",
+      "5",
+      "10",
+      "20"
+    ],
+    "ro_q": "Câți talenti a primit servul care a câștigat mai mult?",
+    "ro_opts": [
+      "2",
+      "5",
+      "10",
+      "20"
+    ],
+    "ru_q": "Сколько талантов получил раб, который выиграл больше всего?",
+    "ru_opts": [
       "2",
       "5",
       "10",
@@ -6640,6 +8953,20 @@
       "Entra dans un âne",
       "Prêcha",
       "Guérit les aveugles"
+    ],
+    "ro_q": "Ce a făcut Isus la intrarea în Ierusalim?",
+    "ro_opts": [
+      "Plânse",
+      "A intrat pe un măgar",
+      "A predicat",
+      "A vindecat orbii"
+    ],
+    "ru_q": "Что Иисус делал при входе в Иерусалим?",
+    "ru_opts": [
+      "Хороу",
+      "Вошел на осла",
+      "Проповедовал",
+      "Исцелил слепых"
     ]
   },
   {
@@ -6680,6 +9007,20 @@
       "Marchands",
       "Soldats",
       "Disciples"
+    ],
+    "ro_q": "Ce a alungat Isus din templu?",
+    "ro_opts": [
+      "Fariseul",
+      "Vânzătorii",
+      "Soldații",
+      "Discipolii"
+    ],
+    "ru_q": "Что Иисус изгнал из храма?",
+    "ru_opts": [
+      "Фарисеи",
+      "Торговцы",
+      "Солдаты",
+      "Ученики"
     ]
   },
   {
@@ -6720,6 +9061,20 @@
       "Gethsémani",
       "Mont des Oliviers",
       "Golgotha"
+    ],
+    "ro_q": "Unde a rugat Isus înainte de a fi arestat?",
+    "ro_opts": [
+      "Templu",
+      "Getsemani",
+      "Muntele Măslinilor",
+      "Golgota"
+    ],
+    "ru_q": "Где Иисус молился перед арестом?",
+    "ru_opts": [
+      "Храм",
+      "Гефсимания",
+      "Гора Масличная",
+      "Голгофа"
     ]
   },
   {
@@ -6760,6 +9115,20 @@
       "Pilate",
       "Caïphe",
       "César"
+    ],
+    "ro_q": "Cine a spus că este nevinovat de sângele lui Isus?",
+    "ro_opts": [
+      "Irod",
+      "Pilat",
+      "Caiafa",
+      "Cezar"
+    ],
+    "ru_q": "Кто сказал, что невинен в крови Иисуса?",
+    "ru_opts": [
+      "Ирод",
+      "Пилат",
+      "Каиафа",
+      "Цезарь"
     ]
   },
   {
@@ -6800,6 +9169,20 @@
       "Voile du temple",
       "Rideau du palais",
       "Vêtement de Jésus"
+    ],
+    "ro_q": "Ce s-a rupt când a murit Iisus?",
+    "ro_opts": [
+      "Mantia templului",
+      "Velul templului",
+      "Cortina palatului",
+      "Haina lui Isus"
+    ],
+    "ru_q": "Что разорвалось, когда умер Иисус?",
+    "ru_opts": [
+      "Мантия храма",
+      "Завеса храма",
+      "Завеса дворца",
+      "Одежда Иисуса"
     ]
   },
   {
@@ -6840,6 +9223,20 @@
       "Allez et faites des disciples",
       "Aimez-vous",
       "Jeûnez"
+    ],
+    "ro_q": "Care a fost ultimul mandat al lui Iisus în Matei?",
+    "ro_opts": [
+      "Orai sempre",
+      "Mergeți și faceți ucenici",
+      "Iubiți-vă",
+      "Postiti"
+    ],
+    "ru_q": "Какой была последняя заповедь Иисуса в Евангелии от Матфея?",
+    "ru_opts": [
+      "Молитесь всегда",
+      "Идите и делайте учеников",
+      "Любите друг друга",
+      "Поститесь"
     ]
   },
   {
@@ -6880,6 +9277,20 @@
       "L'accomplissement des siècles",
       "Le jour du jugement",
       "Toujours"
+    ],
+    "ro_q": "Isus a spus că va fi cu ai săi până...?",
+    "ro_opts": [
+      "Sfârșitul anului",
+      "Consumarea secolelor",
+      "Ziua judecății",
+      "Întotdeauna"
+    ],
+    "ru_q": "Иисус сказал быть с его народом до...?",
+    "ru_opts": [
+      "Конец года",
+      "Завершение веков",
+      "День суда",
+      "Всегда"
     ]
   },
   {
@@ -6920,6 +9331,20 @@
       "Compréhension",
       "Bras",
       "Effort"
+    ],
+    "ro_q": "Încrede-te în Domnul cu toată inima ta și nu te bizui pe propria ta...",
+    "ro_opts": [
+      "Inimă",
+      "Înțelegere",
+      "Braț",
+      "Efort"
+    ],
+    "ru_q": "Уповай на Господа всем сердцем твоим и не полагайся на разум твой собственный...?",
+    "ru_opts": [
+      "Сердце",
+      "Понимание",
+      "Рука",
+      "Усилие"
     ]
   },
   {
@@ -6960,6 +9385,20 @@
       "Père",
       "Ami",
       "Roi"
+    ],
+    "ro_q": "Fiul înțelept veselește pe...?",
+    "ro_opts": [
+      "Frate",
+      "Tată",
+      "Prieten",
+      "Rege"
+    ],
+    "ru_q": "Мудрый сын радует...?",
+    "ru_opts": [
+      "Брат",
+      "Отец",
+      "Друг",
+      "Король"
     ]
   },
   {
@@ -7000,6 +9439,20 @@
       "Beaucoup d'amis",
       "Peu de foi",
       "Grande famille"
+    ],
+    "ro_q": "Mai bine este săracul care umblă în integritate decât bogatul care...?",
+    "ro_opts": [
+      "Caracter pervers",
+      "Mulți prieteni",
+      "Puțină credință",
+      "Familie mare"
+    ],
+    "ru_q": "Лучше бедный, который ходит в целостности, чем богатый...?",
+    "ru_opts": [
+      "Извращенный характер",
+      "Много друзей",
+      "Мало веры",
+      "Большая семья"
     ]
   },
   {
@@ -7046,6 +9499,20 @@
       "Rubis",
       "Argent",
       "Diamants"
+    ],
+    "ro_q": "O femeie virtuoasă, cine o va găsi? Valoarea ei depășește pe cea de...?",
+    "ro_opts": [
+      "Aur",
+      "Rubii",
+      "Argint",
+      "Diamante"
+    ],
+    "ru_q": "Добродетельная жена, кто её найдёт? Её достоинство превосходит...?",
+    "ru_opts": [
+      "Золото",
+      "Рубины",
+      "Серебро",
+      "Алмазы"
     ]
   },
   {
@@ -7086,6 +9553,20 @@
       "Ne s'en détournera pas",
       "Sera riche",
       "Sera roi"
+    ],
+    "ro_q": "Învață copilul pe calea pe care trebuie să meargă și când se va îmbătrâni...?",
+    "ro_opts": [
+      "Va învăța pe alții",
+      "Nu se va abate",
+      "Va fi bogat",
+      "Va fi rege"
+    ],
+    "ru_q": "Обучай ребенка пути, по которому он должен идти, и когда он состарится...?",
+    "ru_opts": [
+      "Будет учить других",
+      "Не отступит",
+      "Будет богат",
+      "Будет королём"
     ]
   },
   {
@@ -7126,6 +9607,20 @@
       "Eaux",
       "Fleuve",
       "Blessure"
+    ],
+    "ro_q": "Începutul confruntării este ca o deschidere de...?",
+    "ro_opts": [
+      "Ușă",
+      "Ape",
+      "Râu",
+      "Rană"
+    ],
+    "ru_q": "Начало спора и как открытие...?",
+    "ru_opts": [
+      "Дверь",
+      "Воды",
+      "Река",
+      "Рана"
     ]
   },
   {
@@ -7166,6 +9661,20 @@
       "Frère",
       "Voisin",
       "Roi"
+    ],
+    "ro_q": "Hai prietene mai apropiat decât un...?",
+    "ro_opts": [
+      "Tată",
+      "Frate",
+      "Vecin",
+      "Rege"
+    ],
+    "ru_q": "Мой самый близкий друг, чем...?",
+    "ru_opts": [
+      "Отец",
+      "Брат",
+      "Сосед",
+      "Король"
     ]
   },
   {
@@ -7206,6 +9715,20 @@
       "Visage de l'ami",
       "Cœur",
       "Compréhension"
+    ],
+    "ro_q": "I appreciate your question, but the text you provided doesn't appear to be complete Portuguese, and some words seem unclear or possibly misspelled (like \"agucar\" repeated). Could you please provide the complete and correctly spelled text? This will help me give you an accurate translation to Romanian.",
+    "ro_opts": [
+      "Spirit",
+      "Fața prietenului",
+      "Inimă",
+      "Înțelegere"
+    ],
+    "ru_q": "Как сахарить сахарить железо, так же как человек сахарить...?\n\nNote: This text appears to be incomplete or unclear in Portuguese. The repetition of \"agucar\" and the fragmented ending make it difficult to provide a fully accurate translation. If you could provide the complete or corrected text, I can give you a better translation.",
+    "ru_opts": [
+      "Дух",
+      "Лицо друга",
+      "Сердце",
+      "Понимание"
     ]
   },
   {
@@ -7246,6 +9769,20 @@
       "Jérémie",
       "Proverbes",
       "Isaïe"
+    ],
+    "ro_q": "Inima omului este mai înșelătoare decât toate lucrurile conform...?",
+    "ro_opts": [
+      "Salomon",
+      "Ieremia",
+      "Proverbe",
+      "Isaia"
+    ],
+    "ru_q": "Сердце человека обманчивее всех вещей согласно...?",
+    "ru_opts": [
+      "Соломон",
+      "Иеремия",
+      "Притчи",
+      "Исайя"
     ]
   },
   {
@@ -7286,6 +9823,20 @@
       "Tempête",
       "Rien",
       "Paix"
+    ],
+    "ro_q": "Cine seamănă vânt va culege...?",
+    "ro_opts": [
+      "Ploaie",
+      "Furtună",
+      "Nimic",
+      "Pace"
+    ],
+    "ru_q": "Кто сеет ветер, пожинает...?",
+    "ru_opts": [
+      "Дождь",
+      "Буря",
+      "Ничего",
+      "Мир"
     ]
   },
   {
@@ -7326,6 +9877,20 @@
       "Cœur",
       "Esprit",
       "Âme"
+    ],
+    "ro_q": "Speranța amânată îmbolnăvește sufletul...?",
+    "ro_opts": [
+      "Corp",
+      "Inimă",
+      "Duh",
+      "Suflet"
+    ],
+    "ru_q": "Надежда отложенная болит...",
+    "ru_opts": [
+      "Тело",
+      "Сердце",
+      "Дух",
+      "Душа"
     ]
   },
   {
@@ -7366,6 +9931,20 @@
       "Jours",
       "Amis",
       "Fils"
+    ],
+    "ro_q": "Teamă de Domnul prelungește viața...?",
+    "ro_opts": [
+      "Bunuri",
+      "Zile",
+      "Prieteni",
+      "Fii"
+    ],
+    "ru_q": "Страх Господень продлевает...?",
+    "ru_opts": [
+      "Благо",
+      "Дни",
+      "Друзья",
+      "Сыновья"
     ]
   },
   {
@@ -7406,6 +9985,20 @@
       "Pain de mensonge",
       "Amour",
       "Vin"
+    ],
+    "ro_q": "Ce este dulce pentru om și apoi amar?",
+    "ro_opts": [
+      "Bogăție",
+      "Pâine de minciună",
+      "Iubire",
+      "Vin"
+    ],
+    "ru_q": "Что сладко для человека, а потом горько?",
+    "ru_opts": [
+      "Богатство",
+      "Хлеб лжи",
+      "Любовь",
+      "Вино"
     ]
   },
   {
@@ -7449,6 +10042,20 @@
       "Tu as ce qu'il faut donner",
       "Que tu veuilles",
       "Que tu puisses"
+    ],
+    "ro_q": "Nu spune aproapelui tău \"du-te și revino mâine și ți voi da când...?\"",
+    "ro_opts": [
+      "Timp de dăruit",
+      "Ai ce să dai",
+      "Dacă vrei",
+      "Dacă poți"
+    ],
+    "ru_q": "Не говори ближнему твоему: \"Иди и приди завтра, и я дам тебе\", когда...?",
+    "ru_opts": [
+      "Темп Тивереса",
+      "У тебя есть что дать",
+      "Пожелаешь",
+      "Сможешь"
     ]
   },
   {
@@ -7489,6 +10096,20 @@
       "Punition",
       "Honte",
       "Fin"
+    ],
+    "ro_q": "Mărturia falsă nu va rămâne fără...?",
+    "ro_opts": [
+      "Recompensă",
+      "Pedeapsă",
+      "Rușine",
+      "Sfârșit"
+    ],
+    "ru_q": "Ложное свидетельство не останется без...?",
+    "ru_opts": [
+      "Награда",
+      "Наказание",
+      "Позор",
+      "Конец"
     ]
   },
   {
@@ -7529,6 +10150,20 @@
       "Biens",
       "Travaux",
       "Enfants"
+    ],
+    "ro_q": "Onorează pe Domnul cu avutul tău...?",
+    "ro_opts": [
+      "Elogii",
+      "Bunuri",
+      "Lucrări",
+      "Copii"
+    ],
+    "ru_q": "Честь Господу с твоим...?",
+    "ru_opts": [
+      "Хвалы",
+      "Блага",
+      "Работы",
+      "Дети"
     ]
   },
   {
@@ -7569,6 +10204,20 @@
       "Forte",
       "Bela",
       "Santa"
+    ],
+    "ro_q": "Numele Domnului este un turn...?",
+    "ro_opts": [
+      "Înalt",
+      "Puternic",
+      "Frumos",
+      "Sfânt"
+    ],
+    "ru_q": "Имя Господа - крепкая башня...?",
+    "ru_opts": [
+      "Высокая",
+      "Сильная",
+      "Красивая",
+      "Святая"
     ]
   },
   {
@@ -7609,6 +10258,20 @@
       "Monsieur",
       "Prochain",
       "Riche"
+    ],
+    "ro_q": "Cine dă săracului împrumută lui...?",
+    "ro_opts": [
+      "Rege",
+      "Domn",
+      "Următorul",
+      "Bogat"
+    ],
+    "ru_q": "Кто дает бедному, дает...?",
+    "ru_opts": [
+      "Король",
+      "Господин",
+      "Следующий",
+      "Богатый"
     ]
   },
   {
@@ -7649,6 +10312,20 @@
       "Pourrit",
       "S'est trompé",
       "Est tombé"
+    ],
+    "ro_q": "Fără viziune poporul...?",
+    "ro_opts": [
+      "Pierde",
+      "Piere",
+      "Gresește",
+      "Cade"
+    ],
+    "ru_q": "Без видения народ...?",
+    "ru_opts": [
+      "Пека",
+      "Переце",
+      "Эрра",
+      "Каи"
     ]
   },
   {
@@ -7689,6 +10366,20 @@
       "Pourriture des os",
       "Tristesse",
       "Mort"
+    ],
+    "ro_q": "Un inimă liniștită aduce viață trupului, dar invidia și...?",
+    "ro_opts": [
+      "Slăbiciune",
+      "Putrefacția oaselor",
+      "Tristețe",
+      "Moarte"
+    ],
+    "ru_q": "Спокойное сердце дает жизнь телу, но зависть и...?",
+    "ru_opts": [
+      "Слабость",
+      "Гниение костей",
+      "Печаль",
+      "Смерть"
     ]
   },
   {
@@ -7729,6 +10420,20 @@
       "Causes de sa correction",
       "Honteux",
       "Rebelles"
+    ],
+    "ro_q": "Fiul meu, nu respinge disciplina Domnului nici nu te...?",
+    "ro_opts": [
+      "Îndepărtezi",
+      "Obosești din corectarea ei",
+      "Rușinezi",
+      "Rebeli"
+    ],
+    "ru_q": "Мой сын, не отвергай наставления Господа и не...?",
+    "ru_opts": [
+      "Афасты",
+      "Причины его исправления",
+      "Стыдишься",
+      "Мятежники"
     ]
   },
   {
@@ -7769,6 +10474,20 @@
       "Maison",
       "Tour",
       "Famille"
+    ],
+    "ro_q": "Înțelepciunea și-a construit casa...?",
+    "ro_opts": [
+      "Oraș",
+      "Casă",
+      "Turn",
+      "Familie"
+    ],
+    "ru_q": "Премудрость созидала свой...?",
+    "ru_opts": [
+      "Город",
+      "Дом",
+      "Башня",
+      "Семья"
     ]
   },
   {
@@ -7809,6 +10528,20 @@
       "Monsieur",
       "Peuple",
       "Père"
+    ],
+    "ro_q": "Cine află soție află o lucru bun și capătă favoarea lui...?",
+    "ro_opts": [
+      "Rege",
+      "Domnul",
+      "Popor",
+      "Tată"
+    ],
+    "ru_q": "Кто находит жену, находит благо и получает благодать от...?",
+    "ru_opts": [
+      "Король",
+      "Господин",
+      "Народ",
+      "Отец"
     ]
   },
   {
@@ -7849,6 +10582,20 @@
       "Dirige les pas",
       "Bénit",
       "Guide"
+    ],
+    "ro_q": "Omul și-a plănuit calea, dar Domnul...?",
+    "ro_opts": [
+      "Aprobă",
+      "Dirijează pașii",
+      "Binecuvântează",
+      "Ghidează"
+    ],
+    "ru_q": "Человек спланировал свой путь, но Господь...?",
+    "ru_opts": [
+      "Одобряет",
+      "Направляет шаги",
+      "Благословляет",
+      "Направляет"
     ]
   },
   {
@@ -7889,6 +10636,20 @@
       "Orgueilleux",
       "Triste",
       "Vide"
+    ],
+    "ro_q": "Domnul urăşte inima...?",
+    "ro_opts": [
+      "Rece",
+      "Mândru",
+      "Trist",
+      "Gol"
+    ],
+    "ru_q": "Господь ненавидит сердце...?",
+    "ru_opts": [
+      "Холодный",
+      "Гордый",
+      "Грустный",
+      "Пустой"
     ]
   },
   {
@@ -7929,6 +10690,20 @@
       "Haine",
       "Orgueil",
       "Fausseté"
+    ],
+    "ro_q": "Mai bine un fel de mâncare cu ierburi făcut cu iubire decât un bou îngrășat cu...?",
+    "ro_opts": [
+      "Bogăție",
+      "Ură",
+      "Mândrie",
+      "Falsitate"
+    ],
+    "ru_q": "Лучше блюдо из зелени с любовью, чем откормленный бык с...?",
+    "ru_opts": [
+      "Богатство",
+      "Ненависть",
+      "Гордость",
+      "Ложь"
     ]
   },
   {
@@ -7969,6 +10744,20 @@
       "Mal",
       "Péché",
       "Châtiment"
+    ],
+    "ro_q": "Domnul a făcut totul pentru scopul Său, chiar și pe cel rău pentru ziua...?",
+    "ro_opts": [
+      "Judecată",
+      "Rău",
+      "Păcat",
+      "Pedeapsă"
+    ],
+    "ru_q": "Господь создал всё для своей цели, даже нечестивца для дня...?",
+    "ru_opts": [
+      "Суд",
+      "Зло",
+      "Грех",
+      "Наказание"
     ]
   },
   {
@@ -8009,6 +10798,20 @@
       "Orgueilleux",
       "Vide",
       "Perdu"
+    ],
+    "ro_q": "Înainte de ruină vine mândria și înainte de cădere spiritul...?",
+    "ro_opts": [
+      "Slab",
+      "Mândru",
+      "Gol",
+      "Pierdut"
+    ],
+    "ru_q": "Перед падением идёт гордыня, и перед крахом — высокомерие...?",
+    "ru_opts": [
+      "Слабый",
+      "Гордый",
+      "Пустой",
+      "Потерянный"
     ]
   },
   {
@@ -8049,6 +10852,20 @@
       "Paulo",
       "João",
       "Tiago"
+    ],
+    "ro_q": "Cine a primit Apocalipsa?",
+    "ro_opts": [
+      "Pedro",
+      "Paulo",
+      "João",
+      "Tiago"
+    ],
+    "ru_q": "Кто получил откровение Апокалипсиса?",
+    "ru_opts": [
+      "Педро",
+      "Паулу",
+      "Жуау",
+      "Тиагу"
     ]
   },
   {
@@ -8089,6 +10906,20 @@
       "Malte",
       "Patmos",
       "Crète"
+    ],
+    "ro_q": "Pe care insulă se afla João când a primit viziunea?",
+    "ro_opts": [
+      "Cipru",
+      "Malta",
+      "Patmos",
+      "Creta"
+    ],
+    "ru_q": "На каком острове находился Жуан, когда получил видение?",
+    "ru_opts": [
+      "Кипр",
+      "Мальта",
+      "Патмос",
+      "Крит"
     ]
   },
   {
@@ -8125,6 +10956,20 @@
       "8"
     ],
     "fr_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "ro_q": "Câte biserici sunt menționate în Apocalipsă?",
+    "ro_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "ru_q": "Сколько церквей упоминается в Откровении?",
+    "ru_opts": [
       "5",
       "6",
       "7",
@@ -8169,6 +11014,20 @@
       "999",
       "666",
       "777"
+    ],
+    "ro_q": "Care este numărul fiarei?",
+    "ro_opts": [
+      "616",
+      "999",
+      "666",
+      "777"
+    ],
+    "ru_q": "Какой номер зверя?",
+    "ru_opts": [
+      "616",
+      "999",
+      "666",
+      "777"
     ]
   },
   {
@@ -8205,6 +11064,20 @@
       "7"
     ],
     "fr_opts": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "ro_q": "Câte timbre are cartea în viziune?",
+    "ro_opts": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "ru_q": "Сколько марок в книге в видении?",
+    "ru_opts": [
       "4",
       "5",
       "6",
@@ -8249,6 +11122,20 @@
       "Éphèse",
       "Laodicée",
       "Philadelphie"
+    ],
+    "ro_q": "Care este prima biserică menționată în Apocalips?",
+    "ro_opts": [
+      "Smirna",
+      "Efes",
+      "Laodicea",
+      "Philadelphia"
+    ],
+    "ru_q": "Какая первая церковь упоминается в Откровении?",
+    "ru_opts": [
+      "Смирна",
+      "Эфес",
+      "Лаодикея",
+      "Филадельфия"
     ]
   },
   {
@@ -8289,6 +11176,20 @@
       "Révélation",
       "Jugement",
       "Prophétie"
+    ],
+    "ro_q": "Ce înseamnă Apocalipsă în greacă?",
+    "ro_opts": [
+      "Sfârşit",
+      "Revelaţie",
+      "Judecată",
+      "Profeţie"
+    ],
+    "ru_q": "Что означает Апокалипсис на греческом?",
+    "ru_opts": [
+      "Конец",
+      "Откровение",
+      "Суд",
+      "Пророчество"
     ]
   },
   {
@@ -8325,6 +11226,20 @@
       "5"
     ],
     "fr_opts": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "ro_q": "Câți călăreți ai Apocalipsului există?",
+    "ro_opts": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "ru_q": "Сколько всадников Апокалипсиса существует?",
+    "ru_opts": [
       "2",
       "3",
       "4",
@@ -8369,6 +11284,20 @@
       "Rouge",
       "Noir",
       "Jaune"
+    ],
+    "ro_q": "Ce culoare este calul morții?",
+    "ro_opts": [
+      "Alb",
+      "Roșu",
+      "Negru",
+      "Galben"
+    ],
+    "ru_q": "Какого цвета конь смерти?",
+    "ru_opts": [
+      "Белый",
+      "Красный",
+      "Чёрный",
+      "Жёлтый"
     ]
   },
   {
@@ -8409,6 +11338,20 @@
       "Rome",
       "Athènes",
       "Éphèse"
+    ],
+    "ro_q": "Ce oraș este numit Babilon în Apocalipsă?",
+    "ro_opts": [
+      "Ierusalim",
+      "Roma",
+      "Atena",
+      "Efes"
+    ],
+    "ru_q": "Какой город называется Вавилоном в Откровении?",
+    "ru_opts": [
+      "Иерусалим",
+      "Рим",
+      "Афины",
+      "Эфес"
     ]
   },
   {
@@ -8445,6 +11388,20 @@
       "8"
     ],
     "fr_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "ro_q": "Câte trâmbite sunt suflate în Apocalipsă?",
+    "ro_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "ru_q": "Сколько труб звучит в Апокалипсисе?",
+    "ru_opts": [
       "5",
       "6",
       "7",
@@ -8489,6 +11446,20 @@
       "Deuxième mort",
       "Enfer",
       "Purgatoire"
+    ],
+    "ro_q": "Ce este lacul de foc în Apocalipsă?",
+    "ro_opts": [
+      "Rio",
+      "A doua moarte",
+      "Iad",
+      "Purgatoriu"
+    ],
+    "ru_q": "Что такое озеро огня в Апокалипсисе?",
+    "ru_opts": [
+      "Рио",
+      "Вторая смерть",
+      "Ад",
+      "Чистилище"
     ]
   },
   {
@@ -8529,6 +11500,20 @@
       "Nouvelle Jérusalem",
       "Nouvelle Rome",
       "Nouvelle Siao"
+    ],
+    "ro_q": "Care este noua cetate care coboară din cer?",
+    "ro_opts": [
+      "Noua Babilon",
+      "Noua Ierusalem",
+      "Noua Romă",
+      "Noua Siam"
+    ],
+    "ru_q": "Какой новый город нисходит с неба?",
+    "ru_opts": [
+      "Новая Вавилония",
+      "Новый Иерусалим",
+      "Новый Рим",
+      "Новый Сиам"
     ]
   },
   {
@@ -8565,6 +11550,20 @@
       "14"
     ],
     "fr_opts": [
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "ro_q": "Câte porți are Noua Ierusalim?",
+    "ro_opts": [
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "ru_q": "Сколько врат у Нового Иерусалима?",
+    "ru_opts": [
       "8",
       "10",
       "12",
@@ -8609,6 +11608,20 @@
       "Lune",
       "Gloire de Dieu",
       "Étoiles"
+    ],
+    "ro_q": "Ce iluminează Noua Ierusalem?",
+    "ro_opts": [
+      "Soare",
+      "Lună",
+      "Gloria lui Dumnezeu",
+      "Stele"
+    ],
+    "ru_q": "Что освещает Новый Иерусалим?",
+    "ru_opts": [
+      "Солнце",
+      "Луна",
+      "Слава Божья",
+      "Звёзды"
     ]
   },
   {
@@ -8645,6 +11658,20 @@
       "48"
     ],
     "fr_opts": [
+      "12",
+      "24",
+      "36",
+      "48"
+    ],
+    "ro_q": "Câți angyali sunt în jurul tronului?",
+    "ro_opts": [
+      "12",
+      "24",
+      "36",
+      "48"
+    ],
+    "ru_q": "Сколько ангелов стоят вокруг трона?",
+    "ru_opts": [
       "12",
       "24",
       "36",
@@ -8689,6 +11716,20 @@
       "Saint saint saint",
       "Gloire à Dieu",
       "Amen"
+    ],
+    "ro_q": "Ce spun cele patru fiinţe vii zi şi noapte?",
+    "ro_opts": [
+      "Aleluia",
+      "Sfânt sfânt sfânt",
+      "Gloria lui Dumnezeu",
+      "Amin"
+    ],
+    "ru_q": "Что говорят четыре живых существа день и ночь?",
+    "ru_opts": [
+      "Аллилуия",
+      "Свят, свят, свят",
+      "Слава Богу",
+      "Аминь"
     ]
   },
   {
@@ -8729,6 +11770,20 @@
       "Jésus",
       "Prophète",
       "Roi"
+    ],
+    "ro_q": "Cine este Alfa și Omega?",
+    "ro_opts": [
+      "Înger",
+      "Isus",
+      "Profet",
+      "Rege"
+    ],
+    "ru_q": "Кто такие Альфа и Омега?",
+    "ru_opts": [
+      "Ангел",
+      "Иисус",
+      "Пророк",
+      "Король"
     ]
   },
   {
@@ -8769,6 +11824,20 @@
       "Mort et enfer",
       "Diables seulement",
       "Bête seulement"
+    ],
+    "ro_q": "Ce este aruncat în lacul de foc la sfârșit?",
+    "ro_opts": [
+      "Numai păcători",
+      "Moarte și iad",
+      "Numai demoni",
+      "Numai fiara"
+    ],
+    "ru_q": "Что бросается в озеро огня в конце?",
+    "ru_opts": [
+      "Только грешники",
+      "Смерть и ад",
+      "Только дьяволы",
+      "Только зверь"
     ]
   },
   {
@@ -8809,6 +11878,20 @@
       "Smyrne",
       "Laodicée",
       "Philadelphie"
+    ],
+    "ro_q": "Ce biserică se numește mornă?",
+    "ro_opts": [
+      "Efes",
+      "Smirna",
+      "Laodicea",
+      "Philadelphia"
+    ],
+    "ru_q": "Какая церковь называется молчаливой?",
+    "ru_opts": [
+      "Эфес",
+      "Смирна",
+      "Лаодикия",
+      "Филадельфия"
     ]
   },
   {
@@ -8849,6 +11932,20 @@
       "Porte ouverte",
       "Manne cachée",
       "Étoile du matin"
+    ],
+    "ro_q": "Care este promisiunea pentru biserica din Filadelfia?",
+    "ro_opts": [
+      "Coroana vieții",
+      "Ușa deschisă",
+      "Mană ascunsă",
+      "Steaua dimineții"
+    ],
+    "ru_q": "Какое обещание дано церкви Филадельфии?",
+    "ru_opts": [
+      "Корона жизни",
+      "Открытая дверь",
+      "Скрытая манна",
+      "Утренняя звезда"
     ]
   },
   {
@@ -8889,6 +11986,20 @@
       "Livre",
       "Pain",
       "Miel"
+    ],
+    "ro_q": "Ce a mâncat João care era dulce în gură și amar în burtă?",
+    "ro_opts": [
+      "Fruct",
+      "Carte",
+      "Pâine",
+      "Miere"
+    ],
+    "ru_q": "Что Жоао съел, что было сладким во рту и горьким в животе?",
+    "ru_opts": [
+      "Фрукт",
+      "Книга",
+      "Хлеб",
+      "Мёд"
     ]
   },
   {
@@ -8925,6 +12036,20 @@
       "2000"
     ],
     "fr_opts": [
+      "100",
+      "500",
+      "1000",
+      "2000"
+    ],
+    "ro_q": "Câți ani are domnia lui Hristos menționată?",
+    "ro_opts": [
+      "100",
+      "500",
+      "1000",
+      "2000"
+    ],
+    "ru_q": "Сколько лет длилось царство Христа, о котором упоминается?",
+    "ru_opts": [
       "100",
       "500",
       "1000",
@@ -8969,6 +12094,20 @@
       "Satan",
       "Antéchrist",
       "Faux prophète"
+    ],
+    "ro_q": "Cine este dragonul din Apocalipsă?",
+    "ro_opts": [
+      "Fiara",
+      "Satana",
+      "Antiehrist",
+      "Fals profet"
+    ],
+    "ru_q": "Кто такой дракон в Апокалипсисе?",
+    "ru_opts": [
+      "Зверь",
+      "Сатана",
+      "Антихрист",
+      "Лжепророк"
     ]
   },
   {
@@ -9009,6 +12148,20 @@
       "Rio da vida",
       "Rio de cristal",
       "Rio eterno"
+    ],
+    "ro_q": "Ce râu curge din Orașul lui Dumnezeu?",
+    "ro_opts": [
+      "Rio do Jordão",
+      "Rio da vida",
+      "Rio de cristal",
+      "Rio eterno"
+    ],
+    "ru_q": "Какая река течёт из города Бога?",
+    "ru_opts": [
+      "Риу-ду-Жордан",
+      "Река жизни",
+      "Река хрусталя",
+      "Вечная река"
     ]
   },
   {
@@ -9049,6 +12202,20 @@
       "Larmes ni mort",
       "Louange",
       "Lumière"
+    ],
+    "ro_q": "Ce nu va mai fi în Noua Ierusalim?",
+    "ro_opts": [
+      "Bucurie",
+      "Lacrimi nici moarte",
+      "Laudă",
+      "Lumină"
+    ],
+    "ru_q": "Что больше не будет в Новом Иерусалиме?",
+    "ru_opts": [
+      "Радость",
+      "Слёзы не смерть",
+      "Хвала",
+      "Свет"
     ]
   },
   {
@@ -9089,6 +12256,20 @@
       "Prophétie",
       "Histoire",
       "Révélation"
+    ],
+    "ro_q": "Fericit cine citește și păzește cuvintele acestei...",
+    "ro_opts": [
+      "Legi",
+      "Profeție",
+      "Istorie",
+      "Revelație"
+    ],
+    "ru_q": "Блаженны читающий и хранящие слова этого...",
+    "ru_opts": [
+      "Закон",
+      "Пророчество",
+      "История",
+      "Откровение"
     ]
   },
   {
@@ -9129,6 +12310,20 @@
       "Alléluia",
       "Gloire",
       "Maranata"
+    ],
+    "ro_q": "Care este ultimul cuvânt al Bibliei?",
+    "ro_opts": [
+      "Amin",
+      "Aleluia",
+      "Slavă",
+      "Maranata"
+    ],
+    "ru_q": "Какое последнее слово в Библии?",
+    "ru_opts": [
+      "Аминь",
+      "Аллилуия",
+      "Слава",
+      "Маранафа"
     ]
   },
   {
@@ -9169,6 +12364,20 @@
       "Logo",
       "Déjà",
       "En possession"
+    ],
+    "ro_q": "Isus spune: Iată că vin...?",
+    "ro_opts": [
+      "În curând",
+      "Logo",
+      "Deja",
+      "În putere"
+    ],
+    "ru_q": "Иисус говорит: Вот, Я приду...?",
+    "ru_opts": [
+      "Скоро",
+      "Логотип",
+      "Уже",
+      "В руках"
     ]
   },
   {
@@ -9209,6 +12418,20 @@
       "Smyrne",
       "Pergame",
       "Thyatire"
+    ],
+    "ro_q": "Cine câștigă primește coroana vieții în biserica lui...?",
+    "ro_opts": [
+      "Efes",
+      "Smirna",
+      "Pergam",
+      "Tiatira"
+    ],
+    "ru_q": "Кто победит, получит корону жизни в церкви...?",
+    "ru_opts": [
+      "Эфес",
+      "Смирна",
+      "Пергам",
+      "Фиатира"
     ]
   },
   {
@@ -9249,6 +12472,20 @@
       "Arbre de vie",
       "Arbre du bien",
       "Arbre éternel"
+    ],
+    "ro_q": "Care este copacul care produce fructe în fiecare lună?",
+    "ro_opts": [
+      "Pomul Edenului",
+      "Pomul vieții",
+      "Pomul binelui",
+      "Pomul etern"
+    ],
+    "ru_q": "Какое дерево плодоносит все месяцы?",
+    "ru_opts": [
+      "Дерево Эдема",
+      "Дерево жизни",
+      "Дерево добра",
+      "Вечное дерево"
     ]
   },
   {
@@ -9289,6 +12526,20 @@
       "72000",
       "144000",
       "1000000\n\n(Numbers remain the same in French - only the formatting/separators might differ by locale, but the digits are identical)"
+    ],
+    "ro_q": "Câți sunt pecetele triburilor lui Israel?",
+    "ro_opts": [
+      "12000",
+      "72000",
+      "144000",
+      "1000000"
+    ],
+    "ru_q": "Сколько печатей у колен Израиля?",
+    "ru_opts": [
+      "12000",
+      "72000",
+      "144000",
+      "1000000"
     ]
   },
   {
@@ -9329,6 +12580,20 @@
       "Justice et vengeance",
       "Paix",
       "Miséricorde"
+    ],
+    "ro_q": "Ce strigau martirii de sub altar?",
+    "ro_opts": [
+      "Glorie",
+      "Justiție și răzbunare",
+      "Pace",
+      "Milă"
+    ],
+    "ru_q": "Что взывали мученики под жертвенником?",
+    "ru_opts": [
+      "Слава",
+      "Справедливость и мщение",
+      "Мир",
+      "Милосердие"
     ]
   },
   {
@@ -9369,6 +12634,20 @@
       "Avec 7 têtes",
       "Avec 10 têtes",
       "Avec 7 têtes et 10 cornes"
+    ],
+    "ro_q": "Ce fiară se ridică din mare?",
+    "ro_opts": [
+      "Cu 5 capete",
+      "Cu 7 capete",
+      "Cu 10 capete",
+      "Cu 7 capete și 10 coarne"
+    ],
+    "ru_q": "Какой зверь поднимается из моря?",
+    "ru_opts": [
+      "С 5 головами",
+      "С 7 головами",
+      "С 10 головами",
+      "С 7 головами и 10 рогами"
     ]
   },
   {
@@ -9409,6 +12688,20 @@
       "La grande Babylone",
       "Mort",
       "Perdition"
+    ],
+    "ro_q": "Ce este scris pe fruntea prostituatei?",
+    "ro_opts": [
+      "666",
+      "Babilonia cea mare",
+      "Moarte",
+      "Perdition"
+    ],
+    "ru_q": "Что написано на лбу проститутки?",
+    "ru_opts": [
+      "666",
+      "Вавилон великий",
+      "Смерть",
+      "Погибель"
     ]
   },
   {
@@ -9449,6 +12742,20 @@
       "L'Agneau",
       "Armée du ciel",
       "Tous"
+    ],
+    "ro_q": "Cine se luptă împotriva fiarei la Armaghedon?",
+    "ro_opts": [
+      "Îngeri",
+      "Mielul",
+      "Armata cerului",
+      "Toți"
+    ],
+    "ru_q": "Кто борется против зверя в Армагеддоне?",
+    "ru_opts": [
+      "Ангелы",
+      "Агнец",
+      "Армия небес",
+      "Все"
     ]
   },
   {
@@ -9489,6 +12796,20 @@
       "Saint",
       "Puissant",
       "Éternel"
+    ],
+    "ro_q": "Care este numele calului alb al câștigătorului?",
+    "ro_opts": [
+      "Fidel și Adevărat",
+      "Sfânt",
+      "Puternic",
+      "Etern"
+    ],
+    "ru_q": "Как зовут белого коня победителя?",
+    "ru_opts": [
+      "Верный и Истинный",
+      "Святой",
+      "Могущественный",
+      "Вечный"
     ]
   },
   {
@@ -9529,6 +12850,20 @@
       "Mer aussi",
       "Mort seulement",
       "Ténèbres seulement"
+    ],
+    "ro_q": "Ce elimină Dumnezeu în noua creaţie?",
+    "ro_opts": [
+      "Doar păcat",
+      "Și mare",
+      "Doar moarte",
+      "Doar întuneric"
+    ],
+    "ru_q": "Что Бог устраняет в новом творении?",
+    "ru_opts": [
+      "Грех только",
+      "Море тоже",
+      "Смерть только",
+      "Тьма только"
     ]
   },
   {
@@ -9569,6 +12904,20 @@
       "Israël",
       "Nouvelle Jérusalem",
       "Marie"
+    ],
+    "ro_q": "Cine este soția Mielului?",
+    "ro_opts": [
+      "Biserica",
+      "Israel",
+      "Noua Ierusalem",
+      "Maria"
+    ],
+    "ru_q": "Кто является женой Агнца?",
+    "ru_opts": [
+      "Церковь",
+      "Израиль",
+      "Новый Иерусалим",
+      "Мария"
     ]
   }
 ]
