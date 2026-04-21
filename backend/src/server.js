@@ -437,6 +437,7 @@ const path = require('path');
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // Routes
+const quizRoutes = require('./routes/quiz');
 app.use('/api/quiz', quizRoutes);
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/prayers', require('./routes/prayer'));
