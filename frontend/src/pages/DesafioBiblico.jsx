@@ -139,19 +139,7 @@ export default function DesafioBiblico() {
   const btn=(onClick,bg2,txt,mb=10)=><button onClick={onClick} style={{width:'100%',maxWidth:320,padding:14,borderRadius:14,border:'none',background:bg2,color:'white',fontSize:15,fontWeight:700,cursor:'pointer',marginBottom:mb}}>{txt}</button>;
 
   if(tela==='lobby') return (
-    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#1a0a3e,#2d1054)',display:'flex',color:'white'}}>
-      <div style={{width:200,padding:'20px 12px',borderRight:'1px solid rgba(255,255,255,0.1)',display:'flex',flexDirection:'column'}}>
-        <p style={{fontSize:12,fontWeight:700,opacity:0.7,marginBottom:12}}>🏆 TOP JOGADORES</p>
-        {ranking.slice(0,5).map((j,i)=>(
-          <div key={j.id} style={{display:'flex',alignItems:'center',gap:8,marginBottom:10}}>
-            <span style={{fontSize:14,width:20}}>{i<3?['🥇','🥈','🥉'][i]:'#'+(i+1)}</span>
-            {j.avatar_url?<img src={j.avatar_url} style={{width:28,height:28,borderRadius:'50%',objectFit:'cover'}}/>:<div style={{width:28,height:28,borderRadius:'50%',background:'#6c47d4',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,color:'white',fontWeight:700}}>{j.full_name?.charAt(0)}</div>}
-            <div style={{flex:1,minWidth:0}}><p style={{fontSize:11,margin:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{j.full_name}</p><p style={{fontSize:10,color:'#f0c040',margin:0}}>{j.total_pontos} pts</p></div>
-          </div>
-        ))}
-        {ranking.length===0 && <p style={{fontSize:11,opacity:0.5}}>Joga para aparecer!</p>}
-      </div>
-      <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24}}>  
+    <div style={bg}>
       <div style={{fontSize:60,marginBottom:12}}>🏆</div>
       <h1 style={{fontSize:26,fontWeight:900,marginBottom:6,textAlign:'center'}}>{t('desafio.title')}</h1>
       <p style={{opacity:0.7,marginBottom:16,fontSize:14,textAlign:'center'}}>{t('desafio.subtitle')}</p>
@@ -167,7 +155,6 @@ export default function DesafioBiblico() {
       {esperando ? <div style={{textAlign:'center',marginBottom:10}}><p style={{opacity:0.8,marginBottom:8}}>A aguardar um adversario...</p><button onClick={cancelarFila} style={{padding:'8px 20px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer'}}>Cancelar</button></div> : btn(jogarAleatorio,'#e74c3c',t('desafio.playalone'))}
       {btn(desafiar,'#25D366',t('desafio.challenge'))}
       <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
-      </div>
     </div>
   );
 
