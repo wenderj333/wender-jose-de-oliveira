@@ -7,7 +7,7 @@ import { useWebSocket } from "./context/WebSocketContext";
 import {
   Home, User, MessageCircle, Heart, Globe, LogOut,
   Menu, X, Bell, Music, BookOpen, Users,
-  Calendar, Shield, PlayCircle, Sun, Mail
+  Calendar, Shield, PlayCircle, Sun, Mail, Trophy
 } from "lucide-react";
 
 // Pages
@@ -31,6 +31,7 @@ import LiveStream from './pages/LiveStream';
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
 import DesafioBiblico from "./pages/DesafioBiblico";
+import Ranking from './pages/Ranking';
 import AjudaUmaVida from "./pages/AjudaUmaVida";
 import Chat from "./pages/Chat";
 import Churches from "./pages/Churches";
@@ -227,6 +228,7 @@ export default function App() {
               ['/reflexao', <Sun size={20}/>, t('nav.reflection')],
               ['/curso-biblico', <BookOpen size={20}/>, t('course.title')],
               ['/ajuda-uma-vida', <Heart size={20}/>, t('nav.help_life')],
+              ['/ranking', <Trophy size={20}/>, t('nav.ranking', 'Ranking')],
               ['/journeys', <Globe size={20}/>, t('nav.journeys')],
               ['/live', <PlayCircle size={20}/>, 'ðŸ”´ Directo'],
               ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
@@ -337,7 +339,7 @@ export default function App() {
             <Route path="/musica" element={<MusicLibrary />} />
             <Route path="/consagracao" element={<Consecration />} />
             <Route path="/reflexao" element={<Reflection />} />
-            <Route path="/desafio-biblico" element={<DesafioBiblico />} /><Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
+            <Route path="/desafio-biblico" element={<DesafioBiblico />} /><Route path="/ranking" element={<Ranking/>} /><Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
             <Route path="/mensagens" element={<Chat />} />
             <Route path="/mensagens/:userId" element={<Chat />} />
             <Route path="/amigos" element={<Friends />} />
