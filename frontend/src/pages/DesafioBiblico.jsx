@@ -189,7 +189,7 @@ export default function DesafioBiblico() {
           </div>
           <p style={{fontSize:17,fontWeight:700,lineHeight:1.5,textAlign:'center',margin:0}}>{perg[lang + '_q'] || perg.q}</p>
         </div>
-        {pausado && <div style={{textAlign:'center',fontSize:18,marginBottom:12,opacity:0.8}}>Jogo pausado</div>}
+        {pausado && <div style={{textAlign:'center',fontSize:18,marginBottom:12,opacity:0.8}}>{t('desafio.paused')}</div>}
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:14}}>
           {(perg[lang + '_opts'] || perg.opts).map((opt,i)=>{
             let bg2='rgba(255,255,255,0.1)';
