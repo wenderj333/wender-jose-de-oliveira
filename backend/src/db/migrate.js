@@ -405,6 +405,20 @@ async function migrate() {
   `);
 
   console.log('✅ Migração PostgreSQL concluída com sucesso! (20+ tabelas criadas)');
+  await pool.query(    CREATE TABLE IF NOT EXISTS quiz_resultados (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+      pontos INTEGER DEFAULT 0,
+      perguntas_corretas INTEGER DEFAULT 5,
+      perguntas_total INTEGER DEFAULT 5,
+      livro VARCHAR(50) DEFAULT 'Todos',
+      tempo_medio FLOAT DEFAULT 0,
+      criado_em TIMESTAMP DEFAULT NOW()
+    )
+  \);
+  console.log('quiz_resultados OK');
+
+
   await pool.end();
 }
 
