@@ -98,11 +98,11 @@ export default function DesafioBiblico() {
   }
 
   function guardarResultado(pts, totalCorretas, tempoMedio) {
-    const token = localStorage.getItem(' + chr(39) + 'token' + chr(39) + ');
+    const token = localStorage.getItem('token');
     if (!token) return;
-    fetch((import.meta.env.VITE_API_URL || ' + chr(39) + chr(39) + ') + ' + chr(39) + '/api/quiz/resultado' + chr(39) + ', {
-      method: ' + chr(39) + 'POST' + chr(39) + ',
-      headers: { ' + chr(39) + 'Content-Type' + chr(39) + ': ' + chr(39) + 'application/json' + chr(39) + ', Authorization: ' + chr(39) + 'Bearer ' + chr(39) + ' + token },
+    fetch((import.meta.env.VITE_API_URL || '') + '/api/quiz/resultado', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
       body: JSON.stringify({ pontos: pts, perguntas_corretas: totalCorretas, perguntas_total: 5, livro, tempo_medio: tempoMedio })
     }).catch(() => {});
   }
