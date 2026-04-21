@@ -18,7 +18,6 @@ function filtrar(livro) {
 }
 
 export default function DesafioBiblico() {
-  const { t } = useTranslation();
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.substring(0,2) || 'pt';
   const { user } = useAuth();
