@@ -138,13 +138,13 @@ export default function DesafioBiblico() {
       <div style={{display:'flex',flexWrap:'wrap',gap:8,justifyContent:'center',marginBottom:20,maxWidth:360}}>
         {LIVROS.map(l=><button key={l} onClick={()=>setLivro(l)} style={{padding:'6px 14px',borderRadius:20,border:'none',background:livro===l?'#f0c040':'rgba(255,255,255,0.15)',color:livro===l?'#1a0a3e':'white',fontWeight:700,cursor:'pointer',fontSize:13}}>{l}</button>)}
       </div>
-      {btn(criarSala,'linear-gradient(135deg,#6c47d4,#4A2270)','+ Criar Sala')}
+      {btn(criarSala,'linear-gradient(135deg,#6c47d4,#4A2270)',t('desafio.createsala'))}
       <div style={{width:'100%',maxWidth:320,display:'flex',gap:10,marginBottom:10}}>
         <input value={cInput} onChange={e=>setCInput(e.target.value.toUpperCase())} placeholder='Codigo da sala...' style={{flex:1,padding:12,borderRadius:12,border:'none',background:'rgba(255,255,255,0.15)',color:'white',fontSize:15,outline:'none'}} />
         <button onClick={entrarSala} style={{padding:'12px 18px',borderRadius:12,border:'none',background:'#27ae60',color:'white',fontWeight:700,cursor:'pointer',fontSize:15}}>Entrar</button>
       </div>
-      {esperando ? <div style={{textAlign:'center',marginBottom:10}}><p style={{opacity:0.8,marginBottom:8}}>A aguardar um adversario...</p><button onClick={cancelarFila} style={{padding:'8px 20px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer'}}>Cancelar</button></div> : btn(jogarAleatorio,'#e74c3c','Jogar com alguem')}
-      {btn(desafiar,'#25D366','Desafiar um amigo')}
+      {esperando ? <div style={{textAlign:'center',marginBottom:10}}><p style={{opacity:0.8,marginBottom:8}}>A aguardar um adversario...</p><button onClick={cancelarFila} style={{padding:'8px 20px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer'}}>Cancelar</button></div> : btn(jogarAleatorio,'#e74c3c',t('desafio.playalone'))}
+      {btn(desafiar,'#25D366',t('desafio.challenge'))}
       <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
   );
@@ -165,7 +165,7 @@ export default function DesafioBiblico() {
           <span style={{opacity:0.5,fontSize:13}}>{t('desafio.waitingplayer')}</span>
         </div>
       </div>
-      {btn(iniciar,'linear-gradient(135deg,#e74c3c,#c0392b)','Iniciar Jogo!')}
+      {btn(iniciar,'linear-gradient(135deg,#e74c3c,#c0392b)',t('desafio.start'))}
       <button onClick={()=>setTela('lobby')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
   );
@@ -219,9 +219,9 @@ export default function DesafioBiblico() {
       <h2 style={{fontSize:26,fontWeight:900,marginBottom:8}}>{t('desafio.result')}</h2>
       <div style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:8}}>{pontos} pts</div>
       <p style={{opacity:0.7,marginBottom:28}}>{pontos>=40?'Mestre Biblico!':pontos>=25?'Muito bem!':'Continue estudando!'}</p>
-      {btn(()=>share(pontos),'#25D366','Partilhar resultado')}
-      {btn(desafiar,'#6c47d4','Desafiar um amigo')}
-      {btn(()=>{setIdx(0);setPontos(0);setTela('lobby');},'rgba(255,255,255,0.2)','Jogar de novo')}
+      {btn(()=>share(pontos),'#25D366',t('desafio.shareresult'))}
+      {btn(desafiar,'#6c47d4',t('desafio.challenge'))}
+      {btn(()=>{setIdx(0);setPontos(0);setTela('lobby');},'rgba(255,255,255,0.2)',t('desafio.playagain'))}
       <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
   );
