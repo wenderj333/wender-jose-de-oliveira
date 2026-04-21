@@ -19,6 +19,8 @@ function filtrar(livro) {
 
 export default function DesafioBiblico() {
   const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language?.substring(0,2) || 'pt';
   const { user } = useAuth();
   const navigate = useNavigate();
   const [tela, setTela] = useState('lobby');
@@ -186,11 +188,11 @@ export default function DesafioBiblico() {
           <div style={{width:'100%',height:6,background:'rgba(255,255,255,0.2)',borderRadius:3,marginBottom:12}}>
             <div style={{width:(tempo/TEMPO*100)+'%',height:'100%',background:tempo<=3?'#e74c3c':'#6c47d4',borderRadius:3,transition:'width 1s linear'}} />
           </div>
-          <p style={{fontSize:17,fontWeight:700,lineHeight:1.5,textAlign:'center',margin:0}}>{perg.q}</p>
+          <p style={{fontSize:17,fontWeight:700,lineHeight:1.5,textAlign:'center',margin:0}}>{perg[lang + '_q'] || perg.q}</p>
         </div>
         {pausado && <div style={{textAlign:'center',fontSize:18,marginBottom:12,opacity:0.8}}>Jogo pausado</div>}
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:14}}>
-          {perg.opts.map((opt,i)=>{
+          {(perg[lang + '_opts'] || perg.opts).map((opt,i)=>{
             let bg2='rgba(255,255,255,0.1)';
             if(resp!==null){if(i===perg.r)bg2='#27ae60';else if(i===resp)bg2='#e74c3c';}
             return <button key={i} onClick={()=>responder(i)} style={{padding:'14px 10px',borderRadius:12,border:'1px solid rgba(255,255,255,0.2)',background:bg2,color:'white',fontSize:14,fontWeight:600,cursor:'pointer',transition:'background 0.3s'}}>{opt}</button>;
