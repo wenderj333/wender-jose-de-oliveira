@@ -69,10 +69,6 @@ export default function RightSidebar({ showInstall, onInstall, activeLive }) {
   const { t } = useTranslation();
   const { user, token } = useAuth();
   const navigate = useNavigate();
-  useEffect(() => {
-    const url = (import.meta.env.VITE_API_URL||'')+ '/api/quiz/ranking?periodo='+periodo;
-    fetch(url).then(r=>r.json()).then(d=>{if(Array.isArray(d))setRanking(d);}).catch(()=>{});
-  }, [periodo]);
 
   const today = new Date();
   const verseIdx = (today.getDate() + today.getMonth() * 31) % VERSES.length;
@@ -265,26 +261,6 @@ export default function RightSidebar({ showInstall, onInstall, activeLive }) {
         </div>
       </div>
 
-
-      <div style={{background:'var(--card)',borderRadius:14,padding:16,marginBottom:16,border:'1px solid var(--border)'}}>
-        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
-          <h3 style={{fontSize:13,fontWeight:700,margin:0}}>🏆 Ranking Biblico</h3>
-          <div style={{display:'flex',gap:4}}>
-            {['hoje','semana','mes'].map(p=>(<button key={p} onClick={()=>setPeriodo(p)} style={{padding:'2px 8px',borderRadius:10,border:'none',background:periodo===p?'#6c47d4':'var(--bg)',color:periodo===p?'white':'var(--muted)',fontSize:10,cursor:'pointer',fontWeight:600}}>{p}</button>))}
-          </div>
-        </div>
-        {ranking.length===0
-          ?<p style={{fontSize:12,color:'var(--muted)',textAlign:'center'}}>🎮 Joga para aparecer!</p>
-          :ranking.map((j,i)=>(
-            <div key={j.id} style={{display:'flex',alignItems:'center',gap:8,padding:'6px 4px',borderBottom:i<ranking.length-1?'1px solid var(--border)':'none',background:user?.id===j.id?'rgba(108,71,212,0.1)':'transparent',borderRadius:8}}>
-              <span style={{fontSize:16,width:24,textAlign:'center'}}>{i<3?['🥇','🥈','🥉'][i]:'#'+(i+1)}</span>
-              {j.avatar_url?<img src={j.avatar_url} style={{width:28,height:28,borderRadius:'50%',objectFit:'cover'}}/>:<div style={{width:28,height:28,borderRadius:'50%',background:'#6c47d4',display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,color:'white',fontWeight:700}}>{j.full_name?.charAt(0)}</div>}
-              <div style={{flex:1,minWidth:0}}><p style={{fontSize:12,fontWeight:700,color:user?.id===j.id?'#6c47d4':'var(--text)',margin:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{j.full_name}</p></div>
-              <div style={{textAlign:'right'}}><p style={{fontSize:12,fontWeight:700,color:'#f0c040',margin:0}}>{j.total_pontos} pts</p><p style={{fontSize:10,color:'var(--muted)',margin:0}}>⚡{j.tempo_medio}s</p></div>
-            </div>
-          ))
-        }
-      </div>
     </div>
   );
 }
