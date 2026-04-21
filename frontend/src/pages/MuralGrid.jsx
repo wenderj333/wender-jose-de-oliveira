@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Grid, List, Volume2, VolumeX, Search, Flag } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -788,6 +788,7 @@ export default function MuralGrid() {
         ))}
       </div>
 
+      <button onClick={()=>window.location.href='/desafio-biblico'} style={{padding:'8px 16px',borderRadius:20,border:'none',background:'linear-gradient(135deg,#6c47d4,#e74c3c)',color:'white',cursor:'pointer',fontSize:13,fontWeight:700,marginBottom:16,display:'flex',alignItems:'center',gap:6}}>🎮 {t('nav.challenge','Desafio Biblico')}</button>
       {/* Loading */}
       {loading && <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>{t('common.loading')}</div>}
 
