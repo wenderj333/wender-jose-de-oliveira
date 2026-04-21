@@ -97,9 +97,18 @@ export default function DesafioBiblico() {
     setTimeout(avancar, 1500);
   }
 
+  function guardarResultado(pts, totalCorretas, tempoMedio) {
+    const token = localStorage.getItem(' + chr(39) + 'token' + chr(39) + ');
+    if (!token) return;
+    fetch((import.meta.env.VITE_API_URL || ' + chr(39) + chr(39) + ') + ' + chr(39) + '/api/quiz/resultado' + chr(39) + ', {
+      method: ' + chr(39) + 'POST' + chr(39) + ',
+      headers: { ' + chr(39) + 'Content-Type' + chr(39) + ': ' + chr(39) + 'application/json' + chr(39) + ', Authorization: ' + chr(39) + 'Bearer ' + chr(39) + ' + token },
+      body: JSON.stringify({ pontos: pts, perguntas_corretas: totalCorretas, perguntas_total: 5, livro, tempo_medio: tempoMedio })
+    }).catch(() => {});
+  }
   function avancar() {
     setFeedback(null); setResp(null);
-    if(idx+1>=perguntas.length) setTela('resultado');
+    if(idx+1>=perguntas.length) { guardarResultado(pontos, pontos > 0 ? Math.ceil(pontos/7.5) : 0, TEMPO - tRef.current); setTela('resultado'); }
     else setIdx(prev=>prev+1);
   }
 
