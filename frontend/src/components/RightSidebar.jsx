@@ -69,6 +69,7 @@ export default function RightSidebar({ showInstall, onInstall, activeLive }) {
   const { t } = useTranslation();
   const { user, token } = useAuth();
   const navigate = useNavigate();
+  useEffect(() => { fetch((import.meta.env.VITE_API_URL||'')+ '/api/quiz/ranking?periodo='+periodo).then(r=>r.json()).then(d=>{if(Array.isArray(d))setRanking(d);}).catch(()=>{}); }, [periodo]);
 
   const today = new Date();
   const verseIdx = (today.getDate() + today.getMonth() * 31) % VERSES.length;
@@ -261,6 +262,34 @@ export default function RightSidebar({ showInstall, onInstall, activeLive }) {
         </div>
       </div>
 
+
+      <div style={{ background: ' + chr(39) + 'var(--card)' + chr(39) + ', borderRadius: 14, padding: 16, marginBottom: 16, border: ' + chr(39) + '1px solid var(--border)' + chr(39) + ' }}>
+        <div style={{ display: ' + chr(39) + 'flex' + chr(39) + ', alignItems: ' + chr(39) + 'center' + chr(39) + ', justifyContent: ' + chr(39) + 'space-between' + chr(39) + ', marginBottom: 12 }}>
+          <h3 style={{ fontSize: 13, fontWeight: 700, margin: 0 }}>🏆 {t(' + chr(39) + 'quiz.ranking' + chr(39) + ', ' + chr(39) + 'Ranking Biblico' + chr(39) + ')}</h3>
+          <div style={{ display: ' + chr(39) + 'flex' + chr(39) + ', gap: 4 }}>
+            {[' + chr(39) + 'hoje' + chr(39) + ',' + chr(39) + 'semana' + chr(39) + ',' + chr(39) + 'mes' + chr(39) + '].map(p => (
+              <button key={p} onClick={() => setPeriodo(p)} style={{ padding: ' + chr(39) + '2px 8px' + chr(39) + ', borderRadius: 10, border: ' + chr(39) + 'none' + chr(39) + ', background: periodo===p ? ' + chr(39) + '#6c47d4' + chr(39) + ' : ' + chr(39) + 'var(--bg)' + chr(39) + ', color: periodo===p ? ' + chr(39) + 'white' + chr(39) + ' : ' + chr(39) + 'var(--muted)' + chr(39) + ', fontSize: 10, cursor: ' + chr(39) + 'pointer' + chr(39) + ', fontWeight: 600 }}>
+                {p}
+              </button>
+            ))}
+          </div>
+        </div>
+        {ranking.length === 0 ? (
+          <p style={{ fontSize: 12, color: ' + chr(39) + 'var(--muted)' + chr(39) + ', textAlign: ' + chr(39) + 'center' + chr(39) + ' }}>🎮 Joga para aparecer!</p>
+        ) : ranking.map((j, i) => (
+          <div key={j.id} style={{ display: ' + chr(39) + 'flex' + chr(39) + ', alignItems: ' + chr(39) + 'center' + chr(39) + ', gap: 8, padding: ' + chr(39) + '6px 0' + chr(39) + ', borderBottom: i < ranking.length-1 ? ' + chr(39) + '1px solid var(--border)' + chr(39) + ' : ' + chr(39) + 'none' + chr(39) + ', background: user?.id === j.id ? ' + chr(39) + 'rgba(108,71,212,0.1)' + chr(39) + ' : ' + chr(39) + 'transparent' + chr(39) + ', borderRadius: 8, paddingLeft: 4 }}>
+            <span style={{ fontSize: 16, width: 24 }}>{i < 3 ? [' + chr(39) + '🥇' + chr(39) + ',' + chr(39) + '🥈' + chr(39) + ',' + chr(39) + '🥉' + chr(39) + '][i] : ' + chr(39) + '#' + chr(39) + '+(i+1)}</span>
+            {j.avatar_url ? <img src={j.avatar_url} style={{ width: 28, height: 28, borderRadius: ' + chr(39) + '50%' + chr(39) + ', objectFit: ' + chr(39) + 'cover' + chr(39) + ' }} /> : <div style={{ width: 28, height: 28, borderRadius: ' + chr(39) + '50%' + chr(39) + ', background: ' + chr(39) + '#6c47d4' + chr(39) + ', display: ' + chr(39) + 'flex' + chr(39) + ', alignItems: ' + chr(39) + 'center' + chr(39) + ', justifyContent: ' + chr(39) + 'center' + chr(39) + ', fontSize: 12, color: ' + chr(39) + 'white' + chr(39) + ', fontWeight: 700 }}>{j.full_name?.charAt(0)}</div>}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ fontSize: 12, fontWeight: user?.id === j.id ? 700 : 600, color: user?.id === j.id ? ' + chr(39) + '#6c47d4' + chr(39) + ' : ' + chr(39) + 'var(--text)' + chr(39) + ', margin: 0, overflow: ' + chr(39) + 'hidden' + chr(39) + ', textOverflow: ' + chr(39) + 'ellipsis' + chr(39) + ', whiteSpace: ' + chr(39) + 'nowrap' + chr(39) + ' }}>{j.full_name}</p>
+            </div>
+            <div style={{ textAlign: ' + chr(39) + 'right' + chr(39) + ' }}>
+              <p style={{ fontSize: 12, fontWeight: 700, color: ' + chr(39) + '#f0c040' + chr(39) + ', margin: 0 }}>{j.total_pontos} pts</p>
+              <p style={{ fontSize: 10, color: ' + chr(39) + 'var(--muted)' + chr(39) + ', margin: 0 }}>⚡ {j.tempo_medio}s</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
