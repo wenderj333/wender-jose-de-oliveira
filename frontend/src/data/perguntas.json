@@ -13,7 +13,31 @@
     "es_q": "¿Quién fue el primer hombre?",
     "en_q": "Who was the first man?",
     "de_q": "Wer war der erste Mann?",
-    "fr_q": "Qui a été le premier homme ?"
+    "fr_q": "Qui a été le premier homme ?",
+    "es_opts": [
+      "Noé",
+      "Adán",
+      "Abraham",
+      "Moisés"
+    ],
+    "en_opts": [
+      "Noah",
+      "Adam",
+      "Abraham",
+      "Moses"
+    ],
+    "de_opts": [
+      "Noe",
+      "Adam",
+      "Abraham",
+      "Mose"
+    ],
+    "fr_opts": [
+      "Noé",
+      "Adam",
+      "Abraham",
+      "Moïse"
+    ]
   },
   {
     "livro": "Genesis",
@@ -29,7 +53,31 @@
     "es_q": "¿Quién construyó el arca?",
     "en_q": "Who built the ark?",
     "de_q": "Wer baute die Arche?",
-    "fr_q": "Qui a construit l'arche ?"
+    "fr_q": "Qui a construit l'arche ?",
+    "es_opts": [
+      "Abraham",
+      "Noé",
+      "Lot",
+      "Isaac"
+    ],
+    "en_opts": [
+      "Abraham",
+      "Noah",
+      "Lot",
+      "Isaac"
+    ],
+    "de_opts": [
+      "Abraham",
+      "Noah",
+      "Lot",
+      "Isaak"
+    ],
+    "fr_opts": [
+      "Abraham",
+      "Noé",
+      "Lot",
+      "Isaac"
+    ]
   },
   {
     "livro": "Exodo",
@@ -45,7 +93,31 @@
     "es_q": "¿Quién abrió el mar?",
     "en_q": "Who opened the sea?",
     "de_q": "Wer öffnete das Meer?",
-    "fr_q": "Qui a ouvert la mer ?"
+    "fr_q": "Qui a ouvert la mer ?",
+    "es_opts": [
+      "Noé",
+      "Moisés",
+      "David",
+      "José"
+    ],
+    "en_opts": [
+      "Noah",
+      "Moses",
+      "David",
+      "Joseph"
+    ],
+    "de_opts": [
+      "Noe",
+      "Mose",
+      "David",
+      "Josef"
+    ],
+    "fr_opts": [
+      "Noé",
+      "Moïse",
+      "David",
+      "Joseph"
+    ]
   },
   {
     "livro": "Mateus",
@@ -61,7 +133,31 @@
     "es_q": "¿Dónde nació Jesús?",
     "en_q": "Where was Jesus born?",
     "de_q": "Wo wurde Jesus geboren?",
-    "fr_q": "Où Jésus est-il né ?"
+    "fr_q": "Où Jésus est-il né ?",
+    "es_opts": [
+      "Jerusalén",
+      "Belén",
+      "Nazaret",
+      "Roma"
+    ],
+    "en_opts": [
+      "Jerusalem",
+      "Bethlehem",
+      "Nazareth",
+      "Rome"
+    ],
+    "de_opts": [
+      "Jerusalem",
+      "Bethlehem",
+      "Nazareth",
+      "Rom"
+    ],
+    "fr_opts": [
+      "Jérusalem",
+      "Bélem",
+      "Nazaré",
+      "Rome"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -77,7 +173,31 @@
     "es_q": "¿Quién tuvo la visión del Apocalipsis?",
     "en_q": "Who had the vision of the Apocalypse?",
     "de_q": "Wer hatte die Vision der Offenbarung?",
-    "fr_q": "Qui a eu la vision de l'Apocalypse ?"
+    "fr_q": "Qui a eu la vision de l'Apocalypse ?",
+    "es_opts": [
+      "Pedro",
+      "João",
+      "Paulo",
+      "Tiago"
+    ],
+    "en_opts": [
+      "Pedro",
+      "Joao",
+      "Paulo",
+      "Tiago"
+    ],
+    "de_opts": [
+      "Pedro",
+      "João",
+      "Paulo",
+      "Tiago"
+    ],
+    "fr_opts": [
+      "Pedro",
+      "João",
+      "Paulo",
+      "Tiago"
+    ]
   },
   {
     "livro": "Genesis",
@@ -93,7 +213,31 @@
     "es_q": "¿Quién fue la primera mujer?",
     "en_q": "Who was the first woman?",
     "de_q": "Wer war die erste Frau?",
-    "fr_q": "Qui a été la première femme ?"
+    "fr_q": "Qui a été la première femme ?",
+    "es_opts": [
+      "Sara",
+      "Eva",
+      "Rebeca",
+      "Raquel"
+    ],
+    "en_opts": [
+      "Sara",
+      "Eva",
+      "Rebecca",
+      "Raquel"
+    ],
+    "de_opts": [
+      "Sara",
+      "Eva",
+      "Rebeca",
+      "Raquel"
+    ],
+    "fr_opts": [
+      "Sara",
+      "Eva",
+      "Rébecca",
+      "Raquel"
+    ]
   },
   {
     "livro": "Genesis",
@@ -109,7 +253,31 @@
     "es_q": "¿Cuántos días duró el diluvio de lluvia?",
     "en_q": "How many days did the rainfall flood last?",
     "de_q": "Wie viele Tage dauerte die Regenflut?",
-    "fr_q": "Combien de jours a duré le déluge de pluie ?"
+    "fr_q": "Combien de jours a duré le déluge de pluie ?",
+    "es_opts": [
+      "30",
+      "40",
+      "50",
+      "60"
+    ],
+    "en_opts": [
+      "30",
+      "40",
+      "50",
+      "60"
+    ],
+    "de_opts": [
+      "30",
+      "40",
+      "50",
+      "60"
+    ],
+    "fr_opts": [
+      "30",
+      "40",
+      "50",
+      "60"
+    ]
   },
   {
     "livro": "Genesis",
@@ -125,7 +293,31 @@
     "es_q": "¿Quién fue vendido por los hermanos?",
     "en_q": "Who was sold by his brothers?",
     "de_q": "Wer wurde von seinen Brüdern verkauft?",
-    "fr_q": "Qui a été vendu par ses frères ?"
+    "fr_q": "Qui a été vendu par ses frères ?",
+    "es_opts": [
+      "Isaac",
+      "José",
+      "Jacob",
+      "Esaú"
+    ],
+    "en_opts": [
+      "Isaac",
+      "Joseph",
+      "Jacob",
+      "Esau"
+    ],
+    "de_opts": [
+      "Isaak",
+      "Josef",
+      "Jakob",
+      "Esau"
+    ],
+    "fr_opts": [
+      "Isaac",
+      "Joseph",
+      "Jacob",
+      "Ésau"
+    ]
   },
   {
     "livro": "Exodo",
@@ -141,7 +333,31 @@
     "es_q": "¿Quién liberó al pueblo de Egipto?",
     "en_q": "Who freed the people from Egypt?",
     "de_q": "Wer befreite das Volk aus Ägypten?",
-    "fr_q": "Qui a libéré le peuple d'Égypte ?"
+    "fr_q": "Qui a libéré le peuple d'Égypte ?",
+    "es_opts": [
+      "Abraham",
+      "Moisés",
+      "David",
+      "José"
+    ],
+    "en_opts": [
+      "Abraham",
+      "Moses",
+      "David",
+      "Joseph"
+    ],
+    "de_opts": [
+      "Abraham",
+      "Moses",
+      "David",
+      "Joseph"
+    ],
+    "fr_opts": [
+      "Abraham",
+      "Moïse",
+      "David",
+      "Joseph"
+    ]
   },
   {
     "livro": "Exodo",
@@ -157,7 +373,31 @@
     "es_q": "¿Qué mar fue abierto?",
     "en_q": "Which sea was opened?",
     "de_q": "Welches Meer wurde geöffnet?",
-    "fr_q": "Quel mar a été ouvert ?"
+    "fr_q": "Quel mar a été ouvert ?",
+    "es_opts": [
+      "Mar Muerto",
+      "Mar Rojo",
+      "Mar Negro",
+      "Mar Azul"
+    ],
+    "en_opts": [
+      "Dead Sea",
+      "Red Sea",
+      "Black Sea",
+      "Blue Sea"
+    ],
+    "de_opts": [
+      "Totes Meer",
+      "Rotes Meer",
+      "Schwarzes Meer",
+      "Blaues Meer"
+    ],
+    "fr_opts": [
+      "Mer Morte",
+      "Mer Rouge",
+      "Mer Noire",
+      "Mer Bleue"
+    ]
   },
   {
     "livro": "Exodo",
@@ -173,7 +413,31 @@
     "es_q": "¿Cuántos mandamientos dio Dios?",
     "en_q": "How many commandments did God give?",
     "de_q": "Wie viele Gebote gab Gott?",
-    "fr_q": "Combien de commandements Dieu a-t-il donnés ?"
+    "fr_q": "Combien de commandements Dieu a-t-il donnés ?",
+    "es_opts": [
+      "5",
+      "10",
+      "12",
+      "15"
+    ],
+    "en_opts": [
+      "5",
+      "10",
+      "12",
+      "15"
+    ],
+    "de_opts": [
+      "5",
+      "10",
+      "12",
+      "15"
+    ],
+    "fr_opts": [
+      "5",
+      "10",
+      "12",
+      "15"
+    ]
   },
   {
     "livro": "Exodo",
@@ -189,7 +453,31 @@
     "es_q": "¿Dónde Moisés recibió los mandamientos?",
     "en_q": "Where did Moses receive the commandments?",
     "de_q": "Wo erhielt Mose die Gebote?",
-    "fr_q": "Où Moïse a-t-il reçu les commandements ?"
+    "fr_q": "Où Moïse a-t-il reçu les commandements ?",
+    "es_opts": [
+      "Monte Sinaí",
+      "Monte Carmelo",
+      "Monte Siao",
+      "Monte Horeb"
+    ],
+    "en_opts": [
+      "Mount Sinai",
+      "Mount Carmel",
+      "Mount Siao",
+      "Mount Horeb"
+    ],
+    "de_opts": [
+      "Berg Sinai",
+      "Berg Karmel",
+      "Berg Siao",
+      "Berg Horeb"
+    ],
+    "fr_opts": [
+      "Mont Sinaï",
+      "Mont Carmel",
+      "Mont Siao",
+      "Mont Horeb"
+    ]
   },
   {
     "livro": "Salmos",
@@ -205,7 +493,31 @@
     "es_q": "¿Quién escribió muchos Salmos?",
     "en_q": "Who wrote many Psalms?",
     "de_q": "Wer hat viele Psalmen geschrieben?",
-    "fr_q": "Qui a écrit beaucoup de Psaumes ?"
+    "fr_q": "Qui a écrit beaucoup de Psaumes ?",
+    "es_opts": [
+      "Moisés",
+      "David",
+      "Salomón",
+      "Elías"
+    ],
+    "en_opts": [
+      "Moses",
+      "David",
+      "Solomon",
+      "Elijah"
+    ],
+    "de_opts": [
+      "Mose",
+      "David",
+      "Salomo",
+      "Elia"
+    ],
+    "fr_opts": [
+      "Moïse",
+      "David",
+      "Salomon",
+      "Élie"
+    ]
   },
   {
     "livro": "Salmos",
@@ -221,7 +533,31 @@
     "es_q": "El Señor es mi...",
     "en_q": "The Lord is my...?",
     "de_q": "Der Herr ist mein...?",
-    "fr_q": "Le Seigneur est mon...?"
+    "fr_q": "Le Seigneur est mon...?",
+    "es_opts": [
+      "Rey",
+      "Pastor",
+      "Juez",
+      "Amigo"
+    ],
+    "en_opts": [
+      "King",
+      "Pastor",
+      "Judge",
+      "Friend"
+    ],
+    "de_opts": [
+      "König",
+      "Pfarrer",
+      "Richter",
+      "Freund"
+    ],
+    "fr_opts": [
+      "Roi",
+      "Pasteur",
+      "Juge",
+      "Ami"
+    ]
   },
   {
     "livro": "Salmos",
@@ -237,7 +573,31 @@
     "es_q": "¿Qué no le faltará al que confía en Dios?",
     "en_q": "What will not be lacking to those who trust in God?",
     "de_q": "Was wird dem nicht fehlen, der auf Gott vertraut?",
-    "fr_q": "Ce qui ne manquera pas à celui qui fait confiance en Dieu?"
+    "fr_q": "Ce qui ne manquera pas à celui qui fait confiance en Dieu?",
+    "es_opts": [
+      "Nada",
+      "Dinero",
+      "Comida",
+      "Fuerza"
+    ],
+    "en_opts": [
+      "Nothing",
+      "Money",
+      "Food",
+      "Strength"
+    ],
+    "de_opts": [
+      "Nichts",
+      "Geld",
+      "Essen",
+      "Kraft"
+    ],
+    "fr_opts": [
+      "Rien",
+      "Argent",
+      "Nourriture",
+      "Force"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -253,7 +613,31 @@
     "es_q": "¿Quién escribió muchos proverbios?",
     "en_q": "Who wrote many proverbs?",
     "de_q": "Wer schrieb viele Sprichwörter?",
-    "fr_q": "Qui a écrit beaucoup de proverbes ?"
+    "fr_q": "Qui a écrit beaucoup de proverbes ?",
+    "es_opts": [
+      "Davi",
+      "Salomón",
+      "Moisés",
+      "Elías"
+    ],
+    "en_opts": [
+      "David",
+      "Solomon",
+      "Moses",
+      "Elijah"
+    ],
+    "de_opts": [
+      "Davi",
+      "Salomão",
+      "Moisés",
+      "Elias"
+    ],
+    "fr_opts": [
+      "Davi",
+      "Salomon",
+      "Moïse",
+      "Élie"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -269,7 +653,31 @@
     "es_q": "El temor del Señor es el principio de ¿qué?",
     "en_q": "The fear of the Lord is the beginning of what?",
     "de_q": "Die Furcht des Herrn ist der Anfang von was?",
-    "fr_q": "La crainte du Seigneur est le principe de quoi ?"
+    "fr_q": "La crainte du Seigneur est le principe de quoi ?",
+    "es_opts": [
+      "Sabiduría",
+      "Fuerza",
+      "Riqueza",
+      "Amor"
+    ],
+    "en_opts": [
+      "Wisdom",
+      "Strength",
+      "Wealth",
+      "Love"
+    ],
+    "de_opts": [
+      "Weisheit",
+      "Kraft",
+      "Reichtum",
+      "Liebe"
+    ],
+    "fr_opts": [
+      "Sagesse",
+      "Force",
+      "Richesse",
+      "Amour"
+    ]
   },
   {
     "livro": "Genesis",
@@ -285,7 +693,31 @@
     "es_q": "¿Quién mató a Abel?",
     "en_q": "Who killed Abel?",
     "de_q": "Wer tötete Abel?",
-    "fr_q": "Qui a tué Abel ?"
+    "fr_q": "Qui a tué Abel ?",
+    "es_opts": [
+      "Caín",
+      "Noé",
+      "Adán",
+      "Set"
+    ],
+    "en_opts": [
+      "Cain",
+      "Noah",
+      "Adam",
+      "Seth"
+    ],
+    "de_opts": [
+      "Kain",
+      "Noah",
+      "Adam",
+      "Set"
+    ],
+    "fr_opts": [
+      "Caïm",
+      "Noé",
+      "Adam",
+      "Seth"
+    ]
   },
   {
     "livro": "Genesis",
@@ -301,7 +733,31 @@
     "es_q": "¿Cuál fue el signo de la alianza después del diluvio?",
     "en_q": "What was the sign of the covenant after the flood?",
     "de_q": "Welches Zeichen des Bundes gab es nach der Sintflut?",
-    "fr_q": "Quel fut le signe de l'alliance après le déluge ?"
+    "fr_q": "Quel fut le signe de l'alliance après le déluge ?",
+    "es_opts": [
+      "Estrella",
+      "Arcoíris",
+      "Fuego",
+      "Nube"
+    ],
+    "en_opts": [
+      "Star",
+      "Rainbow",
+      "Fire",
+      "Cloud"
+    ],
+    "de_opts": [
+      "Stern",
+      "Regenbogen",
+      "Feuer",
+      "Wolke"
+    ],
+    "fr_opts": [
+      "Étoile",
+      "Arc-en-ciel",
+      "Feu",
+      "Nuage"
+    ]
   },
   {
     "livro": "Genesis",
@@ -317,7 +773,31 @@
     "es_q": "¿Quién fue el padre de Abraham?",
     "en_q": "Who was the father of Abraham?",
     "de_q": "Wer war der Vater Abrahams?",
-    "fr_q": "Qui était le père d'Abraham ?"
+    "fr_q": "Qui était le père d'Abraham ?",
+    "es_opts": [
+      "Tera",
+      "Isaac",
+      "Lo",
+      "Jaco"
+    ],
+    "en_opts": [
+      "Terra",
+      "Isaac",
+      "Lo",
+      "Jacob"
+    ],
+    "de_opts": [
+      "Tera",
+      "Isaak",
+      "Lo",
+      "Jakob"
+    ],
+    "fr_opts": [
+      "Tera",
+      "Isaque",
+      "Lo",
+      "Jaco"
+    ]
   },
   {
     "livro": "Genesis",
@@ -333,7 +813,31 @@
     "es_q": "¿Cuál es el nombre de la esposa de Abraham?",
     "en_q": "What is the name of Abraham's wife?",
     "de_q": "Wie heißt die Ehefrau von Abraham?",
-    "fr_q": "Quel est le nom de la femme d'Abraham ?"
+    "fr_q": "Quel est le nom de la femme d'Abraham ?",
+    "es_opts": [
+      "Rebeca",
+      "Sara",
+      "Raquel",
+      "Miriam"
+    ],
+    "en_opts": [
+      "Rebecca",
+      "Sarah",
+      "Rachel",
+      "Miriam"
+    ],
+    "de_opts": [
+      "Rebeca",
+      "Sara",
+      "Raquel",
+      "Miria"
+    ],
+    "fr_opts": [
+      "Rebeca",
+      "Sara",
+      "Raquel",
+      "Miria"
+    ]
   },
   {
     "livro": "Genesis",
@@ -349,7 +853,31 @@
     "es_q": "¿Quién casi fue sacrificado por Abraham?",
     "en_q": "Who was almost sacrificed by Abraham?",
     "de_q": "Wer wäre fast von Abraham geopfert worden?",
-    "fr_q": "Qui a failli être sacrifié par Abraham ?"
+    "fr_q": "Qui a failli être sacrifié par Abraham ?",
+    "es_opts": [
+      "Isaac",
+      "Jacob",
+      "José",
+      "Esaú"
+    ],
+    "en_opts": [
+      "Isaac",
+      "Jacob",
+      "Joseph",
+      "Esau"
+    ],
+    "de_opts": [
+      "Isaak",
+      "Jakob",
+      "Josef",
+      "Esau"
+    ],
+    "fr_opts": [
+      "Isaac",
+      "Jacob",
+      "Joseph",
+      "Esau"
+    ]
   },
   {
     "livro": "Genesis",
@@ -365,7 +893,31 @@
     "es_q": "¿Cuántos hijos tuvo Jacob?",
     "en_q": "How many children did Jacob have?",
     "de_q": "Wie viele Kinder hatte Jakob?",
-    "fr_q": "Combien d'enfants Jacob a-t-il eu ?"
+    "fr_q": "Combien d'enfants Jacob a-t-il eu ?",
+    "es_opts": [
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "en_opts": [
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "de_opts": [
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "fr_opts": [
+      "10",
+      "11",
+      "12",
+      "13"
+    ]
   },
   {
     "livro": "Genesis",
@@ -381,7 +933,31 @@
     "es_q": "¿Quién interpretaba los sueños en Egipto?",
     "en_q": "Who interpreted dreams in Egypt?",
     "de_q": "Wer interpretierte Träume im alten Ägypten?",
-    "fr_q": "Qui interprétait les rêves en Égypte ?"
+    "fr_q": "Qui interprétait les rêves en Égypte ?",
+    "es_opts": [
+      "Moisés",
+      "José",
+      "Arao",
+      "Faraón"
+    ],
+    "en_opts": [
+      "Moises",
+      "Jose",
+      "Arao",
+      "Farao\n\n(These are proper names that remain the same in English:\n- Moises = Moses\n- Jose = Joseph\n- Arao = Aaron\n- Farao = Pharaoh)"
+    ],
+    "de_opts": [
+      "Moises",
+      "Jose",
+      "Arao",
+      "Farao\n\n(These are proper names that remain the same in German)"
+    ],
+    "fr_opts": [
+      "Moïses",
+      "José",
+      "Arao",
+      "Pharaon"
+    ]
   },
   {
     "livro": "Genesis",
@@ -397,7 +973,31 @@
     "es_q": "¿Cuál era el nombre del hermano de José?",
     "en_q": "What was the name of Jose's brother?",
     "de_q": "Wie war der Name von Josés Bruder?",
-    "fr_q": "Quel était le nom du frère de José ?"
+    "fr_q": "Quel était le nom du frère de José ?",
+    "es_opts": [
+      "Judá",
+      "Moisés",
+      "Arao",
+      "Samuel"
+    ],
+    "en_opts": [
+      "Judah",
+      "Moses",
+      "Arao",
+      "Samuel"
+    ],
+    "de_opts": [
+      "Juda",
+      "Mose",
+      "Arao",
+      "Samuel"
+    ],
+    "fr_opts": [
+      "Juda",
+      "Moïse",
+      "Arao",
+      "Samuel"
+    ]
   },
   {
     "livro": "Genesis",
@@ -413,7 +1013,31 @@
     "es_q": "¿Dónde Dios puso a Adán y Eva?",
     "en_q": "Where did God place Adam and Eve?",
     "de_q": "Wo hat Gott Adam und Eva platziert?",
-    "fr_q": "Où Dieu a-t-il placé Adam et Ève ?"
+    "fr_q": "Où Dieu a-t-il placé Adam et Ève ?",
+    "es_opts": [
+      "Desierto",
+      "Jardín del Edén",
+      "Monte",
+      "Río"
+    ],
+    "en_opts": [
+      "Desert",
+      "Garden of Eden",
+      "Mountain",
+      "River"
+    ],
+    "de_opts": [
+      "Wüste",
+      "Garten Eden",
+      "Berg",
+      "Fluss"
+    ],
+    "fr_opts": [
+      "Désert",
+      "Jardin d'Éden",
+      "Montagne",
+      "Fleuve"
+    ]
   },
   {
     "livro": "Genesis",
@@ -429,7 +1053,31 @@
     "es_q": "¿Quién luchó con el ángel?",
     "en_q": "Who wrestled with the angel?",
     "de_q": "Wer kämpfte mit dem Engel?",
-    "fr_q": "Qui a lutté avec l'ange ?"
+    "fr_q": "Qui a lutté avec l'ange ?",
+    "es_opts": [
+      "Abraham",
+      "Jacob",
+      "Isaac",
+      "José"
+    ],
+    "en_opts": [
+      "Abraham",
+      "Jacob",
+      "Isaac",
+      "Joseph"
+    ],
+    "de_opts": [
+      "Abraham",
+      "Jakob",
+      "Isaak",
+      "Josef"
+    ],
+    "fr_opts": [
+      "Abraham",
+      "Jacob",
+      "Isaac",
+      "Joseph"
+    ]
   },
   {
     "livro": "Exodo",
@@ -445,7 +1093,31 @@
     "es_q": "¿Quién era el hermano de Moisés?",
     "en_q": "Who was Moses's brother?",
     "de_q": "Wer war der Bruder des Mose?",
-    "fr_q": "Qui était le frère de Moïse ?"
+    "fr_q": "Qui était le frère de Moïse ?",
+    "es_opts": [
+      "José",
+      "Araó",
+      "David",
+      "Samuel"
+    ],
+    "en_opts": [
+      "Jose",
+      "Arao",
+      "Davi",
+      "Samuel"
+    ],
+    "de_opts": [
+      "José",
+      "Araó",
+      "Davi",
+      "Samuel"
+    ],
+    "fr_opts": [
+      "José",
+      "Arao",
+      "Davi",
+      "Samuel"
+    ]
   },
   {
     "livro": "Exodo",
@@ -461,7 +1133,31 @@
     "es_q": "¿Quién era la hermana de Moisés?",
     "en_q": "Who was Moses' sister?",
     "de_q": "Wer war die Schwester von Mose?",
-    "fr_q": "Qui était la sœur de Moïse?"
+    "fr_q": "Qui était la sœur de Moïse?",
+    "es_opts": [
+      "Marta",
+      "Miria",
+      "Sara",
+      "Ana"
+    ],
+    "en_opts": [
+      "Marta",
+      "Miria",
+      "Sara",
+      "Ana"
+    ],
+    "de_opts": [
+      "Marta",
+      "Miria",
+      "Sara",
+      "Ana"
+    ],
+    "fr_opts": [
+      "Marta",
+      "Miria",
+      "Sara",
+      "Ana"
+    ]
   },
   {
     "livro": "Exodo",
@@ -477,7 +1173,31 @@
     "es_q": "¿Qué envió Dios para alimentar al pueblo?",
     "en_q": "What did God send to feed the people?",
     "de_q": "Was hat Gott dem Volk zum Essen geschickt?",
-    "fr_q": "Qu'est-ce que Dieu a envoyé pour nourrir le peuple ?"
+    "fr_q": "Qu'est-ce que Dieu a envoyé pour nourrir le peuple ?",
+    "es_opts": [
+      "Carne",
+      "Maná",
+      "Pez",
+      "Pan"
+    ],
+    "en_opts": [
+      "Meat",
+      "Mana",
+      "Fish",
+      "Bread"
+    ],
+    "de_opts": [
+      "Fleisch",
+      "Mana",
+      "Fisch",
+      "Brot"
+    ],
+    "fr_opts": [
+      "Viande",
+      "Mana",
+      "Poisson",
+      "Pain"
+    ]
   },
   {
     "livro": "Exodo",
@@ -493,7 +1213,31 @@
     "es_q": "¿Qué salió de la roca?",
     "en_q": "What came out of the rock?",
     "de_q": "Was kam aus dem Felsen?",
-    "fr_q": "Qu'est-ce qui est sorti du rocher ?"
+    "fr_q": "Qu'est-ce qui est sorti du rocher ?",
+    "es_opts": [
+      "Fuego",
+      "Agua",
+      "Arena",
+      "Aceite"
+    ],
+    "en_opts": [
+      "Fire",
+      "Water",
+      "Sand",
+      "Oil"
+    ],
+    "de_opts": [
+      "Feuer",
+      "Wasser",
+      "Sand",
+      "Öl"
+    ],
+    "fr_opts": [
+      "Feu",
+      "Eau",
+      "Sable",
+      "Huile"
+    ]
   },
   {
     "livro": "Exodo",
@@ -509,7 +1253,31 @@
     "es_q": "¿Quién endureció el corazón?",
     "en_q": "Who hardened the heart?",
     "de_q": "Wer hat das Herz verhärtet?",
-    "fr_q": "Qui a endurci le cœur ?"
+    "fr_q": "Qui a endurci le cœur ?",
+    "es_opts": [
+      "Moisés",
+      "Faraón",
+      "Araña",
+      "José"
+    ],
+    "en_opts": [
+      "Moses",
+      "Pharaoh",
+      "Plow",
+      "Joseph"
+    ],
+    "de_opts": [
+      "Mose",
+      "Pharao",
+      "Adler",
+      "Josef"
+    ],
+    "fr_opts": [
+      "Moïse",
+      "Pharaon",
+      "Aram",
+      "Joseph"
+    ]
   },
   {
     "livro": "Exodo",
@@ -525,7 +1293,31 @@
     "es_q": "¿Cuántas plagas hubo en Egipto?",
     "en_q": "How many plagues were there in Egypt?",
     "de_q": "Wie viele Plagen gab es in Ägypten?",
-    "fr_q": "Combien de plaies y a-t-il eu en Égypte ?"
+    "fr_q": "Combien de plaies y a-t-il eu en Égypte ?",
+    "es_opts": [
+      "7",
+      "10",
+      "12",
+      "15"
+    ],
+    "en_opts": [
+      "7",
+      "10",
+      "12",
+      "15"
+    ],
+    "de_opts": [
+      "7",
+      "10",
+      "12",
+      "15"
+    ],
+    "fr_opts": [
+      "7",
+      "10",
+      "12",
+      "15"
+    ]
   },
   {
     "livro": "Exodo",
@@ -541,7 +1333,31 @@
     "es_q": "¿Qué animal fue sacrificado en la Pascua?",
     "en_q": "What animal was sacrificed at Easter?",
     "de_q": "Welches Tier wurde zu Ostern geopfert?",
-    "fr_q": "Quel animal a été sacrifié à Pâques ?"
+    "fr_q": "Quel animal a été sacrifié à Pâques ?",
+    "es_opts": [
+      "Cordero",
+      "Buey",
+      "Paloma",
+      "Cabra"
+    ],
+    "en_opts": [
+      "Lamb",
+      "Ox",
+      "Dove",
+      "Goat"
+    ],
+    "de_opts": [
+      "Lamm",
+      "Rind",
+      "Taube",
+      "Ziege"
+    ],
+    "fr_opts": [
+      "Agneau",
+      "Boeuf",
+      "Pigeon",
+      "Chèvre"
+    ]
   },
   {
     "livro": "Exodo",
@@ -557,7 +1373,31 @@
     "es_q": "¿Quién habló con Dios en la zarza ardiente?",
     "en_q": "Who spoke with God in the burning bush?",
     "de_q": "Wer sprach mit Gott im brennenden Dornbusch?",
-    "fr_q": "Qui a parlé à Dieu dans le buisson ardent ?"
+    "fr_q": "Qui a parlé à Dieu dans le buisson ardent ?",
+    "es_opts": [
+      "Arao",
+      "Moisés",
+      "David",
+      "Abraham"
+    ],
+    "en_opts": [
+      "Arao",
+      "Moses",
+      "David",
+      "Abraham"
+    ],
+    "de_opts": [
+      "Arao",
+      "Moises",
+      "Davi",
+      "Abraao"
+    ],
+    "fr_opts": [
+      "Arao",
+      "Moïse",
+      "David",
+      "Abraham"
+    ]
   },
   {
     "livro": "Exodo",
@@ -573,7 +1413,31 @@
     "es_q": "¿Qué guiaba al pueblo de noche?",
     "en_q": "What guided the people at night?",
     "de_q": "Was guidethe people at night?",
-    "fr_q": "Qu'est-ce qui guidait le peuple la nuit ?"
+    "fr_q": "Qu'est-ce qui guidait le peuple la nuit ?",
+    "es_opts": [
+      "Lua",
+      "Columna de fuego",
+      "Estrella",
+      "Antorcha"
+    ],
+    "en_opts": [
+      "Moon",
+      "Fire Column",
+      "Star",
+      "Torch"
+    ],
+    "de_opts": [
+      "Lua",
+      "Feuerstrahl",
+      "Stern",
+      "Fackel"
+    ],
+    "fr_opts": [
+      "Lua",
+      "Colonne de feu",
+      "Étoile",
+      "Torche"
+    ]
   },
   {
     "livro": "Exodo",
@@ -589,7 +1453,31 @@
     "es_q": "¿Qué guiaba al pueblo de día?",
     "en_q": "What guided the people by day?",
     "de_q": "Was guided the people by day?",
-    "fr_q": "Qu'est-ce qui guidait le peuple de jour ?"
+    "fr_q": "Qu'est-ce qui guidait le peuple de jour ?",
+    "es_opts": [
+      "Sol",
+      "Nube",
+      "Viento",
+      "Fuego"
+    ],
+    "en_opts": [
+      "Sun",
+      "Cloud",
+      "Wind",
+      "Fire"
+    ],
+    "de_opts": [
+      "Sonne",
+      "Wolke",
+      "Wind",
+      "Feuer"
+    ],
+    "fr_opts": [
+      "Soleil",
+      "Nuage",
+      "Vent",
+      "Feu"
+    ]
   },
   {
     "livro": "Salmos",
@@ -605,7 +1493,31 @@
     "es_q": "¿Qué instrumento tocaba David?",
     "en_q": "What instrument did David play?",
     "de_q": "Welches Instrument spielte David?",
-    "fr_q": "Quel instrument David jouait-il ?"
+    "fr_q": "Quel instrument David jouait-il ?",
+    "es_opts": [
+      "Flauta",
+      "Arpa",
+      "Tambor",
+      "Violín"
+    ],
+    "en_opts": [
+      "Flute",
+      "Harp",
+      "Drum",
+      "Violin"
+    ],
+    "de_opts": [
+      "Flöte",
+      "Harfe",
+      "Trommel",
+      "Violine"
+    ],
+    "fr_opts": [
+      "Flûte",
+      "Harpe",
+      "Tambour",
+      "Violon"
+    ]
   },
   {
     "livro": "Salmos",
@@ -621,7 +1533,31 @@
     "es_q": "¿Quién es nuestro refugio?",
     "en_q": "Who is our refuge?",
     "de_q": "Wer ist unsere Zuflucht?",
-    "fr_q": "Qui est notre refuge ?"
+    "fr_q": "Qui est notre refuge ?",
+    "es_opts": [
+      "Rey",
+      "Dios",
+      "Ángel",
+      "Hombre"
+    ],
+    "en_opts": [
+      "King",
+      "God",
+      "Angel",
+      "Man"
+    ],
+    "de_opts": [
+      "König",
+      "Gott",
+      "Engel",
+      "Mensch"
+    ],
+    "fr_opts": [
+      "Roi",
+      "Dieu",
+      "Ange",
+      "Homme"
+    ]
   },
   {
     "livro": "Salmos",
@@ -637,7 +1573,31 @@
     "es_q": "El Señor es bueno y su...?",
     "en_q": "The Lord is good and his...?",
     "de_q": "Der Herr ist gut und sein...?",
-    "fr_q": "Le Seigneur est bon et sa...?"
+    "fr_q": "Le Seigneur est bon et sa...?",
+    "es_opts": [
+      "Ley",
+      "La Misericordia Dura Para Siempre",
+      "Fuerza",
+      "Justicia"
+    ],
+    "en_opts": [
+      "Law",
+      "Mercy lasts forever",
+      "Strength",
+      "Justice"
+    ],
+    "de_opts": [
+      "Gesetz",
+      "Barmherzigkeit währt ewig",
+      "Kraft",
+      "Gerechtigkeit"
+    ],
+    "fr_opts": [
+      "Loi",
+      "La Miséricorde dure pour toujours",
+      "Force",
+      "Justice"
+    ]
   },
   {
     "livro": "Salmos",
@@ -653,7 +1613,31 @@
     "es_q": "¿En dónde confiaba David?",
     "en_q": "Where did David trust?",
     "de_q": "Worauf vertraute David?",
-    "fr_q": "En qui David confiait-il ?"
+    "fr_q": "En qui David confiait-il ?",
+    "es_opts": [
+      "Espada",
+      "Dios",
+      "Rey",
+      "Ejército"
+    ],
+    "en_opts": [
+      "Sword",
+      "God",
+      "King",
+      "Army"
+    ],
+    "de_opts": [
+      "Schwert",
+      "Gott",
+      "König",
+      "Armee"
+    ],
+    "fr_opts": [
+      "Épée",
+      "Dieu",
+      "Roi",
+      "Armée"
+    ]
   },
   {
     "livro": "Salmos",
@@ -669,7 +1653,31 @@
     "es_q": "¿Quién conoce el corazón?",
     "en_q": "Who knows the heart?",
     "de_q": "Wer kennt das Herz?",
-    "fr_q": "Qui connaît le cœur?"
+    "fr_q": "Qui connaît le cœur?",
+    "es_opts": [
+      "Hombre",
+      "Dios",
+      "Ángel",
+      "Profeta"
+    ],
+    "en_opts": [
+      "Man",
+      "God",
+      "Angel",
+      "Prophet"
+    ],
+    "de_opts": [
+      "Mann",
+      "Gott",
+      "Engel",
+      "Prophet"
+    ],
+    "fr_opts": [
+      "Homme",
+      "Dieu",
+      "Ange",
+      "Prophète"
+    ]
   },
   {
     "livro": "Salmos",
@@ -685,7 +1693,31 @@
     "es_q": "El Señor es mi... y salvación.",
     "en_q": "\"The Lord is my... and salvation?\"",
     "de_q": "Der Herr ist mein... und Heil?",
-    "fr_q": "Le Seigneur est ma... et mon salut?"
+    "fr_q": "Le Seigneur est ma... et mon salut?",
+    "es_opts": [
+      "Luz",
+      "Fuerza",
+      "Casa",
+      "Vida"
+    ],
+    "en_opts": [
+      "Light",
+      "Strength",
+      "House",
+      "Life"
+    ],
+    "de_opts": [
+      "Licht",
+      "Kraft",
+      "Haus",
+      "Leben"
+    ],
+    "fr_opts": [
+      "Lumière",
+      "Force",
+      "Maison",
+      "Vie"
+    ]
   },
   {
     "livro": "Salmos",
@@ -701,7 +1733,31 @@
     "es_q": "¿Quién creó los cielos?",
     "en_q": "Who created the skies?",
     "de_q": "Wer hat die Himmel erschaffen?",
-    "fr_q": "Qui a créé les cieux ?"
+    "fr_q": "Qui a créé les cieux ?",
+    "es_opts": [
+      "Hombre",
+      "Dios",
+      "Rey",
+      "Ángel"
+    ],
+    "en_opts": [
+      "Man",
+      "God",
+      "King",
+      "Angel"
+    ],
+    "de_opts": [
+      "Mann",
+      "Gott",
+      "König",
+      "Engel"
+    ],
+    "fr_opts": [
+      "Homme",
+      "Dieu",
+      "Roi",
+      "Ange"
+    ]
   },
   {
     "livro": "Salmos",
@@ -717,7 +1773,31 @@
     "es_q": "¿Qué debemos hacer al Señor?",
     "en_q": "What should we do to the Lord?",
     "de_q": "Was sollen wir dem Herrn tun?",
-    "fr_q": "Que devons-nous faire au Seigneur?"
+    "fr_q": "Que devons-nous faire au Seigneur?",
+    "es_opts": [
+      "Ignorar",
+      "Alabar",
+      "Temer a los hombres",
+      "Huir"
+    ],
+    "en_opts": [
+      "Ignore",
+      "Praise",
+      "Fear men",
+      "Flee"
+    ],
+    "de_opts": [
+      "Ignorieren",
+      "Loben",
+      "Männer fürchten",
+      "Fliehen"
+    ],
+    "fr_opts": [
+      "Ignorer",
+      "Louer",
+      "Craindre les hommes",
+      "Fuir"
+    ]
   },
   {
     "livro": "Salmos",
@@ -733,7 +1813,31 @@
     "es_q": "¿Quién protege?",
     "en_q": "Who protects?",
     "de_q": "Wer schützt?",
-    "fr_q": "Qui protège?"
+    "fr_q": "Qui protège?",
+    "es_opts": [
+      "Soldado",
+      "Dios",
+      "Rey",
+      "Padre"
+    ],
+    "en_opts": [
+      "Soldier",
+      "God",
+      "King",
+      "Father"
+    ],
+    "de_opts": [
+      "Soldat",
+      "Gott",
+      "König",
+      "Vater"
+    ],
+    "fr_opts": [
+      "Soldat",
+      "Dieu",
+      "Roi",
+      "Père"
+    ]
   },
   {
     "livro": "Salmos",
@@ -749,7 +1853,31 @@
     "es_q": "¿El Señor escucha...?",
     "en_q": "The Lord hears the...?",
     "de_q": "Der Herr hört...?",
-    "fr_q": "Le Seigneur entend...?"
+    "fr_q": "Le Seigneur entend...?",
+    "es_opts": [
+      "Música",
+      "Oración",
+      "Guerra",
+      "Ley"
+    ],
+    "en_opts": [
+      "Music",
+      "Prayer",
+      "War",
+      "Law"
+    ],
+    "de_opts": [
+      "Musik",
+      "Gebet",
+      "Krieg",
+      "Gesetz"
+    ],
+    "fr_opts": [
+      "Musique",
+      "Prière",
+      "Guerre",
+      "Loi"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -765,7 +1893,31 @@
     "es_q": "La respuesta blanda ¿desvía qué?",
     "en_q": "The soft answer turns away what?",
     "de_q": "Die sanfte Antwort weicht ab von was?",
-    "fr_q": "La réponse molle dévie quoi ?"
+    "fr_q": "La réponse molle dévie quoi ?",
+    "es_opts": [
+      "Amor",
+      "Furia",
+      "Paz",
+      "Miedo"
+    ],
+    "en_opts": [
+      "Love",
+      "Fury",
+      "Peace",
+      "Fear"
+    ],
+    "de_opts": [
+      "Liebe",
+      "Wut",
+      "Frieden",
+      "Angst"
+    ],
+    "fr_opts": [
+      "Amour",
+      "Fureur",
+      "Paix",
+      "Peur"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -781,7 +1933,31 @@
     "es_q": "¿Quién busca sabiduría encuentra?",
     "en_q": "Who seeks wisdom finds?",
     "de_q": "Wer Weisheit sucht, findet?",
-    "fr_q": "Qui cherche la sagesse trouve?"
+    "fr_q": "Qui cherche la sagesse trouve?",
+    "es_opts": [
+      "Vida",
+      "Problema",
+      "Error",
+      "Dolor"
+    ],
+    "en_opts": [
+      "Life",
+      "Problem",
+      "Error",
+      "Pain"
+    ],
+    "de_opts": [
+      "Leben",
+      "Problem",
+      "Fehler",
+      "Schmerz"
+    ],
+    "fr_opts": [
+      "Vie",
+      "Problème",
+      "Erreur",
+      "Douleur"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -797,7 +1973,31 @@
     "es_q": "El orgullo precede a...?",
     "en_q": "Pride precedes the...?",
     "de_q": "Der Stolz geht dem... voraus?",
-    "fr_q": "L'orgueil précède la...?"
+    "fr_q": "L'orgueil précède la...?",
+    "es_opts": [
+      "Victoria",
+      "Queda",
+      "Alegría",
+      "Paz"
+    ],
+    "en_opts": [
+      "Victory",
+      "Fall",
+      "Joy",
+      "Peace"
+    ],
+    "de_opts": [
+      "Sieg",
+      "Fall",
+      "Freude",
+      "Frieden"
+    ],
+    "fr_opts": [
+      "Victoire",
+      "Chute",
+      "Joie",
+      "Paix"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -813,7 +2013,31 @@
     "es_q": "¿Mejor y poco con...?",
     "en_q": "Better and little with...?",
     "de_q": "Besser und wenig mit...?",
-    "fr_q": "Mieux et peu avec...?"
+    "fr_q": "Mieux et peu avec...?",
+    "es_opts": [
+      "Riqueza",
+      "Justicia",
+      "Rabia",
+      "Poder"
+    ],
+    "en_opts": [
+      "Wealth",
+      "Justice",
+      "Anger",
+      "Power"
+    ],
+    "de_opts": [
+      "Reichtum",
+      "Gerechtigkeit",
+      "Wut",
+      "Macht"
+    ],
+    "fr_opts": [
+      "Richesse",
+      "Justice",
+      "Colère",
+      "Pouvoir"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -829,7 +2053,31 @@
     "es_q": "¿Quién guarda la boca preserva...?",
     "en_q": "Who guards the mouth preserves...?",
     "de_q": "Wer seinen Mund bewacht, bewahrt...?",
-    "fr_q": "Qui garde sa bouche préserve...?"
+    "fr_q": "Qui garde sa bouche préserve...?",
+    "es_opts": [
+      "Vida",
+      "Dinero",
+      "Amigos",
+      "Tiempo"
+    ],
+    "en_opts": [
+      "Life",
+      "Money",
+      "Friends",
+      "Time"
+    ],
+    "de_opts": [
+      "Leben",
+      "Geld",
+      "Freunde",
+      "Zeit"
+    ],
+    "fr_opts": [
+      "Vie",
+      "Argent",
+      "Amis",
+      "Temps"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -845,7 +2093,31 @@
     "es_q": "El corazón alegre ¿hace qué?",
     "en_q": "A happy heart does what?\n\n(The full saying is: \"O coração alegre faz bem como remédio\" - A happy heart is good medicine/works like a remedy)",
     "de_q": "Das fröhliche Herz tut was?",
-    "fr_q": "Le cœur joyeux fait quoi?"
+    "fr_q": "Le cœur joyeux fait quoi?",
+    "es_opts": [
+      "Llorar",
+      "Bien",
+      "Mal",
+      "Dormir"
+    ],
+    "en_opts": [
+      "Cry",
+      "Well",
+      "Bad",
+      "Sleep"
+    ],
+    "de_opts": [
+      "Weinen",
+      "Gut",
+      "Schlecht",
+      "Schlafen"
+    ],
+    "fr_opts": [
+      "Pleurer",
+      "Bien",
+      "Mal",
+      "Dormir"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -861,7 +2133,31 @@
     "es_q": "La lengua tiene el poder de...?",
     "en_q": "The language has the power to...?",
     "de_q": "Die Zunge hat die Kraft zu...?",
-    "fr_q": "La langue a le pouvoir de...?"
+    "fr_q": "La langue a le pouvoir de...?",
+    "es_opts": [
+      "Vida y muerte",
+      "Dinero",
+      "Tiempo",
+      "Fuerza"
+    ],
+    "en_opts": [
+      "Life and death",
+      "Money",
+      "Time",
+      "Force"
+    ],
+    "de_opts": [
+      "Leben und Tod",
+      "Geld",
+      "Zeit",
+      "Kraft"
+    ],
+    "fr_opts": [
+      "Vie et mort",
+      "Argent",
+      "Temps",
+      "Force"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -877,7 +2173,31 @@
     "es_q": "¿Quién anda con sabios será...?",
     "en_q": "Who walks with the wise will be...?",
     "de_q": "Wer mit Weisen wandelt wird...?",
-    "fr_q": "Qui marche avec les sages sera...?"
+    "fr_q": "Qui marche avec les sages sera...?",
+    "es_opts": [
+      "Rico",
+      "Sabio",
+      "Fuerte",
+      "Rey"
+    ],
+    "en_opts": [
+      "Rich",
+      "Wise",
+      "Strong",
+      "King"
+    ],
+    "de_opts": [
+      "Reich",
+      "Weise",
+      "Stark",
+      "König"
+    ],
+    "fr_opts": [
+      "Riche",
+      "Sage",
+      "Fort",
+      "Roi"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -893,7 +2213,31 @@
     "es_q": "El perezoso desea y no tiene.",
     "en_q": "The lazy person wishes and does not have?",
     "de_q": "Der Faule wünscht sich und hat nichts?",
-    "fr_q": "Le paresseux désire et n'a pas ?"
+    "fr_q": "Le paresseux désire et n'a pas ?",
+    "es_opts": [
+      "Nada",
+      "Todo",
+      "Paz",
+      "Fuerza"
+    ],
+    "en_opts": [
+      "Nothing",
+      "Everything",
+      "Peace",
+      "Strength"
+    ],
+    "de_opts": [
+      "Nichts",
+      "Alles",
+      "Frieden",
+      "Kraft"
+    ],
+    "fr_opts": [
+      "Rien",
+      "Tout",
+      "Paix",
+      "Force"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -909,7 +2253,31 @@
     "es_q": "El justo es como la luz de...?",
     "en_q": "The just man is like the light of...?",
     "de_q": "Der Gerechte ist wie das Licht des...?",
-    "fr_q": "Le juste est comme la lumière de...?"
+    "fr_q": "Le juste est comme la lumière de...?",
+    "es_opts": [
+      "Noche",
+      "Aurora",
+      "Luna",
+      "Estrella"
+    ],
+    "en_opts": [
+      "Night",
+      "Dawn",
+      "Moon",
+      "Star"
+    ],
+    "de_opts": [
+      "Nacht",
+      "Morgenröte",
+      "Mond",
+      "Stern"
+    ],
+    "fr_opts": [
+      "Nuit",
+      "Aurore",
+      "Lune",
+      "Étoile"
+    ]
   },
   {
     "livro": "Genesis",
@@ -925,7 +2293,31 @@
     "es_q": "¿Quién fue el hijo más joven de Jacob?",
     "en_q": "Who was Jacob's youngest son?",
     "de_q": "Wer war Jakobs jüngster Sohn?",
-    "fr_q": "Qui était le fils le plus jeune de Jacob ?"
+    "fr_q": "Qui était le fils le plus jeune de Jacob ?",
+    "es_opts": [
+      "José",
+      "Benjamín",
+      "Judá",
+      "Rubén"
+    ],
+    "en_opts": [
+      "Jose",
+      "Benjamin",
+      "Judah",
+      "Reuben"
+    ],
+    "de_opts": [
+      "Jose",
+      "Benjamin",
+      "Juda",
+      "Ruben"
+    ],
+    "fr_opts": [
+      "José",
+      "Benjamin",
+      "Juda",
+      "Ruben"
+    ]
   },
   {
     "livro": "Genesis",
@@ -941,7 +2333,31 @@
     "es_q": "¿Quién fue transformada en estatua de sal?",
     "en_q": "Who was transformed into a statue of salt?",
     "de_q": "Wer wurde in eine Salzsäule verwandelt?",
-    "fr_q": "Qui a été transformée en statue de sel?"
+    "fr_q": "Qui a été transformée en statue de sel?",
+    "es_opts": [
+      "Sara",
+      "Mujer de Lo",
+      "Rebeca",
+      "Raquel"
+    ],
+    "en_opts": [
+      "Sara",
+      "Lo's wife",
+      "Rebecca",
+      "Rachel"
+    ],
+    "de_opts": [
+      "Sara",
+      "Frau von Lo",
+      "Rebeka",
+      "Rahel"
+    ],
+    "fr_opts": [
+      "Sara",
+      "Femme de Lo",
+      "Rébecca",
+      "Rachel"
+    ]
   },
   {
     "livro": "Genesis",
@@ -957,7 +2373,31 @@
     "es_q": "¿Qué ciudad fue destruida junto con Sodoma?",
     "en_q": "What city was destroyed along with Sodom?",
     "de_q": "Welche Stadt wurde zusammen mit Sodom zerstört?",
-    "fr_q": "Quelle ville a été détruite avec Sodome ?"
+    "fr_q": "Quelle ville a été détruite avec Sodome ?",
+    "es_opts": [
+      "Jericó",
+      "Gomorra",
+      "Babel",
+      "Nínive"
+    ],
+    "en_opts": [
+      "Jericho",
+      "Gomorrah",
+      "Babel",
+      "Nineveh"
+    ],
+    "de_opts": [
+      "Jericho",
+      "Gomorra",
+      "Babel",
+      "Ninive"
+    ],
+    "fr_opts": [
+      "Jéricho",
+      "Gomorrhe",
+      "Babel",
+      "Ninive"
+    ]
   },
   {
     "livro": "Genesis",
@@ -973,7 +2413,31 @@
     "es_q": "¿Quién engañó a Isaac para darle la bendición?",
     "en_q": "Who deceived Isaac to give the blessing?",
     "de_q": "Wer täuschte Isaak, um den Segen zu geben?",
-    "fr_q": "Qui a trompé Isaac pour lui donner la bénédiction ?"
+    "fr_q": "Qui a trompé Isaac pour lui donner la bénédiction ?",
+    "es_opts": [
+      "Esaú",
+      "Jacob",
+      "José",
+      "Lo"
+    ],
+    "en_opts": [
+      "Esau",
+      "Jacob",
+      "Joseph",
+      "Lo"
+    ],
+    "de_opts": [
+      "Esau",
+      "Jakob",
+      "Josef",
+      "Lo"
+    ],
+    "fr_opts": [
+      "Ésaü",
+      "Jacob",
+      "Joseph",
+      "Lo"
+    ]
   },
   {
     "livro": "Genesis",
@@ -989,7 +2453,31 @@
     "es_q": "¿Quién era el hermano de Esaú?",
     "en_q": "Who was Esau's brother?",
     "de_q": "Wer war der Bruder von Esau?",
-    "fr_q": "Qui était le frère d'Ésau ?"
+    "fr_q": "Qui était le frère d'Ésau ?",
+    "es_opts": [
+      "José",
+      "Jaco",
+      "Isaac",
+      "Abrahán"
+    ],
+    "en_opts": [
+      "Joseph",
+      "James",
+      "Isaac",
+      "Abraham"
+    ],
+    "de_opts": [
+      "Jose",
+      "Jaco",
+      "Isaque",
+      "Abraão"
+    ],
+    "fr_opts": [
+      "José",
+      "Jacques",
+      "Isaac",
+      "Abraham"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1005,7 +2493,31 @@
     "es_q": "¿Quién tuvo un sueño con una escalera hasta el cielo?",
     "en_q": "Who had a dream about a ladder to heaven?",
     "de_q": "Wer träumte von einer Leiter bis zum Himmel?",
-    "fr_q": "Qui a eu un rêve avec une échelle jusqu'au ciel ?"
+    "fr_q": "Qui a eu un rêve avec une échelle jusqu'au ciel ?",
+    "es_opts": [
+      "Abraham",
+      "Jacob",
+      "José",
+      "Noé"
+    ],
+    "en_opts": [
+      "Abraham",
+      "Jacob",
+      "Joseph",
+      "Noah"
+    ],
+    "de_opts": [
+      "Abraham",
+      "Jakob",
+      "Josef",
+      "Noah"
+    ],
+    "fr_opts": [
+      "Abraham",
+      "Jacob",
+      "Joseph",
+      "Noé"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1021,7 +2533,31 @@
     "es_q": "¿Quién fue el hijo prometido a Abraham?",
     "en_q": "Who was the promised son to Abraham?",
     "de_q": "Wer war der verheißene Sohn Abrahams?",
-    "fr_q": "Qui était le fils promis à Abraham ?"
+    "fr_q": "Qui était le fils promis à Abraham ?",
+    "es_opts": [
+      "Ismael",
+      "Isaac",
+      "Jacob",
+      "José"
+    ],
+    "en_opts": [
+      "Ishmael",
+      "Isaac",
+      "Jacob",
+      "Joseph"
+    ],
+    "de_opts": [
+      "Ismael",
+      "Isaak",
+      "Jakob",
+      "Josef"
+    ],
+    "fr_opts": [
+      "Ismaël",
+      "Isaac",
+      "Jacob",
+      "Joseph"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1037,7 +2573,31 @@
     "es_q": "¿Quién fue la madre de Isaac?",
     "en_q": "Who was Isaac's mother?",
     "de_q": "Wer war die Mutter von Isaak?",
-    "fr_q": "Qui était la mère d'Isaac ?"
+    "fr_q": "Qui était la mère d'Isaac ?",
+    "es_opts": [
+      "Sara",
+      "Rebeca",
+      "Raquel",
+      "Lea"
+    ],
+    "en_opts": [
+      "Sara",
+      "Rebecca",
+      "Raquel",
+      "Lea"
+    ],
+    "de_opts": [
+      "Sara",
+      "Rebeca",
+      "Raquel",
+      "Lea"
+    ],
+    "fr_opts": [
+      "Sara",
+      "Rebeca",
+      "Raquel",
+      "Léa"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1053,7 +2613,31 @@
     "es_q": "¿Quién fue vendido por 20 monedas?",
     "en_q": "Who was sold for 20 coins?",
     "de_q": "Wer wurde für 20 Münzen verkauft?",
-    "fr_q": "Qui a été vendu pour 20 pièces?"
+    "fr_q": "Qui a été vendu pour 20 pièces?",
+    "es_opts": [
+      "José",
+      "Jaco",
+      "Esaú",
+      "Isaac"
+    ],
+    "en_opts": [
+      "Jose",
+      "Jack",
+      "Esau",
+      "Isaac"
+    ],
+    "de_opts": [
+      "Jose",
+      "Jaco",
+      "Esau",
+      "Isaak"
+    ],
+    "fr_opts": [
+      "José",
+      "Jaco",
+      "Ésau",
+      "Isaac"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1069,7 +2653,31 @@
     "es_q": "¿Quién gobernaba Egipto cuando José llegó?",
     "en_q": "Who ruled Egypt when Joseph arrived?",
     "de_q": "Wer regierte Ägypten, als Josef ankam?",
-    "fr_q": "Qui gouvernait l'Égypte quand Joseph est arrivé ?"
+    "fr_q": "Qui gouvernait l'Égypte quand Joseph est arrivé ?",
+    "es_opts": [
+      "Rey",
+      "Faraón",
+      "Emperador",
+      "Sacerdote"
+    ],
+    "en_opts": [
+      "King",
+      "Pharaoh",
+      "Emperor",
+      "Priest"
+    ],
+    "de_opts": [
+      "König",
+      "Pharao",
+      "Kaiser",
+      "Priester"
+    ],
+    "fr_opts": [
+      "Roi",
+      "Pharaon",
+      "Empereur",
+      "Prêtre"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1085,7 +2693,31 @@
     "es_q": "¿Cuántos años vivió Matusalén?",
     "en_q": "How many years did Methuselah live?",
     "de_q": "Wie viele Jahre lebte Methuselah?",
-    "fr_q": "Combien d'années Mathusalem a-t-il vécu ?"
+    "fr_q": "Combien d'années Mathusalem a-t-il vécu ?",
+    "es_opts": [
+      "777",
+      "969",
+      "888",
+      "950"
+    ],
+    "en_opts": [
+      "I appreciate your message, but \"777",
+      "969",
+      "888",
+      "950\" appears to be a sequence of numbers rather than text in another language that can be translated to English.\n\nIf these numbers have a specific meaning or context you'd like me to help with, please provide more information."
+    ],
+    "de_opts": [
+      "777",
+      "969",
+      "888",
+      "950"
+    ],
+    "fr_opts": [
+      "777",
+      "969",
+      "888",
+      "950"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1101,7 +2733,31 @@
     "es_q": "¿Quién fue el padre de Noé?",
     "en_q": "Who was Noah's father?",
     "de_q": "Wer war der Vater von Noah?",
-    "fr_q": "Qui a été le père de Noé ?"
+    "fr_q": "Qui a été le père de Noé ?",
+    "es_opts": [
+      "Lameque",
+      "Sete",
+      "Adán",
+      "Enoc"
+    ],
+    "en_opts": [
+      "Lameque",
+      "Sethh",
+      "Adam",
+      "Enoch"
+    ],
+    "de_opts": [
+      "Lamech",
+      "Seth",
+      "Adam",
+      "Henoch"
+    ],
+    "fr_opts": [
+      "Lameque",
+      "Sète",
+      "Adao",
+      "Énoch"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1117,7 +2773,31 @@
     "es_q": "¿Cuál fue la señal que Dios puso en Caín?",
     "en_q": "What sign did God place on Cain?",
     "de_q": "Welches Zeichen setzte Gott auf Kain?",
-    "fr_q": "Quel était le signe que Dieu a placé sur Caïn ?"
+    "fr_q": "Quel était le signe que Dieu a placé sur Caïn ?",
+    "es_opts": [
+      "Marca",
+      "Luz",
+      "Fuego",
+      "Corona"
+    ],
+    "en_opts": [
+      "Brand",
+      "Light",
+      "Fire",
+      "Crown"
+    ],
+    "de_opts": [
+      "Marke",
+      "Licht",
+      "Feuer",
+      "Krone"
+    ],
+    "fr_opts": [
+      "Marque",
+      "Lumière",
+      "Feu",
+      "Couronne"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1133,7 +2813,31 @@
     "es_q": "¿Quién fue el abuelo de Jacob?",
     "en_q": "Who was Jacob's grandfather?",
     "de_q": "Wer war der Großvater von Jakob?",
-    "fr_q": "Qui était le grand-père de Jacob ?"
+    "fr_q": "Qui était le grand-père de Jacob ?",
+    "es_opts": [
+      "Abraham",
+      "Isaac",
+      "José",
+      "Noé"
+    ],
+    "en_opts": [
+      "Abraham",
+      "Isaac",
+      "Joseph",
+      "Noah"
+    ],
+    "de_opts": [
+      "Abraham",
+      "Isaak",
+      "Josef",
+      "Noah"
+    ],
+    "fr_opts": [
+      "Abraham",
+      "Isaac",
+      "Joseph",
+      "Noé"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1149,7 +2853,31 @@
     "es_q": "¿Quién tuvo doce hijos que formaron las tribus?",
     "en_q": "Who had twelve children that formed the tribes?",
     "de_q": "Wer hatte zwölf Söhne, die die Stämme bildeten?",
-    "fr_q": "Qui a eu douze enfants qui ont formé les tribus ?"
+    "fr_q": "Qui a eu douze enfants qui ont formé les tribus ?",
+    "es_opts": [
+      "Abraham",
+      "Jacob",
+      "Isaac",
+      "José"
+    ],
+    "en_opts": [
+      "Abraham",
+      "Jacob",
+      "Isaac",
+      "Joseph"
+    ],
+    "de_opts": [
+      "Abraham",
+      "Jakob",
+      "Isaak",
+      "Josef"
+    ],
+    "fr_opts": [
+      "Abraham",
+      "Jacob",
+      "Isaac",
+      "Joseph"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1165,7 +2893,31 @@
     "es_q": "¿Quién encontró a Moisés en el río?",
     "en_q": "Who found Moses in the river?",
     "de_q": "Wer fand Mose am Fluss?",
-    "fr_q": "Qui a trouvé Moïse au fleuve ?"
+    "fr_q": "Qui a trouvé Moïse au fleuve ?",
+    "es_opts": [
+      "Hija del Faraón",
+      "Miriam",
+      "Sara",
+      "Rebeca"
+    ],
+    "en_opts": [
+      "Daughter of Pharaoh",
+      "Miriam",
+      "Sarah",
+      "Rebecca"
+    ],
+    "de_opts": [
+      "Tochter des Pharao",
+      "Mirjam",
+      "Sara",
+      "Rebekka"
+    ],
+    "fr_opts": [
+      "Fille du Pharaon",
+      "Miria",
+      "Sara",
+      "Rébecca"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1181,7 +2933,31 @@
     "es_q": "¿Quién habló con Moisés en la zarza ardiente?",
     "en_q": "Who spoke with Moses in the burning bush?",
     "de_q": "Wer sprach mit Mose im brennenden Dornbusch?",
-    "fr_q": "Qui a parlé à Moïse dans le buisson ardent ?"
+    "fr_q": "Qui a parlé à Moïse dans le buisson ardent ?",
+    "es_opts": [
+      "Ángel",
+      "Dios",
+      "Arcángel",
+      "Profeta"
+    ],
+    "en_opts": [
+      "Angel",
+      "God",
+      "Araoh",
+      "Prophet"
+    ],
+    "de_opts": [
+      "Engel",
+      "Gott",
+      "Aar",
+      "Prophet"
+    ],
+    "fr_opts": [
+      "Ange",
+      "Dieu",
+      "Archange",
+      "Prophète"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1197,7 +2973,31 @@
     "es_q": "¿Cuál fue la primera plaga?",
     "en_q": "What was the first plague?",
     "de_q": "Was war die erste Plage?",
-    "fr_q": "Quelle a été la première plaie ?"
+    "fr_q": "Quelle a été la première plaie ?",
+    "es_opts": [
+      "Ratas",
+      "Sangre",
+      "Moscas",
+      "Oscuridad"
+    ],
+    "en_opts": [
+      "Rats",
+      "Blood",
+      "Flies",
+      "Darkness"
+    ],
+    "de_opts": [
+      "Ratten",
+      "Blut",
+      "Fliegen",
+      "Finsternis"
+    ],
+    "fr_opts": [
+      "Rats",
+      "Sang",
+      "Mouches",
+      "Obscurité"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1213,7 +3013,31 @@
     "es_q": "¿Quién ayudaba a Moisés a hablar?",
     "en_q": "Who helped Moses speak?",
     "de_q": "Wer half Mose zu sprechen?",
-    "fr_q": "Qui aidait Moïse à parler ?"
+    "fr_q": "Qui aidait Moïse à parler ?",
+    "es_opts": [
+      "José",
+      "Araó",
+      "Davíd",
+      "Samuel"
+    ],
+    "en_opts": [
+      "Jose",
+      "Arao",
+      "Davi",
+      "Samuel"
+    ],
+    "de_opts": [
+      "Jose",
+      "Arao",
+      "Davi",
+      "Samuel"
+    ],
+    "fr_opts": [
+      "José",
+      "Araô",
+      "Davi",
+      "Samuel"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1229,7 +3053,31 @@
     "es_q": "¿Qué cubría el monte Sinaí?",
     "en_q": "What covered Mount Sinai?",
     "de_q": "Was den Berg Sinai bedeckte?",
-    "fr_q": "Qu'est-ce qui couvrait le mont Sinaï ?"
+    "fr_q": "Qu'est-ce qui couvrait le mont Sinaï ?",
+    "es_opts": [
+      "Nieve",
+      "Fuego y nube",
+      "Agua",
+      "Arena"
+    ],
+    "en_opts": [
+      "Snow",
+      "Fire and cloud",
+      "Water",
+      "Sand"
+    ],
+    "de_opts": [
+      "Schnee",
+      "Feuer und Wolke",
+      "Wasser",
+      "Sand"
+    ],
+    "fr_opts": [
+      "Neige",
+      "Feu et nuage",
+      "Eau",
+      "Sable"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1245,7 +3093,31 @@
     "es_q": "¿Cuántos días Moisés estuvo en el monte?",
     "en_q": "How many days did Moses stay on the mountain?",
     "de_q": "Wie viele Tage blieb Mose auf dem Berg?",
-    "fr_q": "Combien de jours Moïse est-il resté sur la montagne ?"
+    "fr_q": "Combien de jours Moïse est-il resté sur la montagne ?",
+    "es_opts": [
+      "10",
+      "20",
+      "40",
+      "50"
+    ],
+    "en_opts": [
+      "10",
+      "20",
+      "40",
+      "50"
+    ],
+    "de_opts": [
+      "10",
+      "20",
+      "40",
+      "50"
+    ],
+    "fr_opts": [
+      "10",
+      "20",
+      "40",
+      "50"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1261,7 +3133,31 @@
     "es_q": "¿Qué hizo la gente mientras Moisés estaba en la montaña?",
     "en_q": "What did the people do while Moses was on the mountain?",
     "de_q": "Was hat das Volk getan, während Mose auf dem Berg war?",
-    "fr_q": "Que faisait le peuple pendant que Moïse était sur la montagne ?"
+    "fr_q": "Que faisait le peuple pendant que Moïse était sur la montagne ?",
+    "es_opts": [
+      "Orou",
+      "Construyó un becerro de oro",
+      "Durmió",
+      "Huyó"
+    ],
+    "en_opts": [
+      "Orou",
+      "Built golden calf",
+      "Slept",
+      "Fled"
+    ],
+    "de_opts": [
+      "Orou",
+      "Baute ein goldenes Kalb",
+      "Schlief",
+      "Floh"
+    ],
+    "fr_opts": [
+      "Orou",
+      "Construisit un veau d'or",
+      "Dormit",
+      "S'enfuit"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1277,7 +3173,31 @@
     "es_q": "¿Quién hizo el becerro de oro?",
     "en_q": "Who made the golden calf?",
     "de_q": "Wer machte das goldene Kalb?",
-    "fr_q": "Qui a fait le veau d'or ?"
+    "fr_q": "Qui a fait le veau d'or ?",
+    "es_opts": [
+      "Arao",
+      "Moisés",
+      "Josué",
+      "Faraón"
+    ],
+    "en_opts": [
+      "Arao",
+      "Moises",
+      "Josue",
+      "Pharaoh"
+    ],
+    "de_opts": [
+      "Arao",
+      "Moisés",
+      "Josué",
+      "Pharao"
+    ],
+    "fr_opts": [
+      "Arao",
+      "Moïse",
+      "Josué",
+      "Pharaon"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1293,7 +3213,31 @@
     "es_q": "¿Qué escribió Dios en las tablas?",
     "en_q": "What did God write on the tablets?",
     "de_q": "Was hat Gott auf die Tafeln geschrieben?",
-    "fr_q": "Qu'est-ce que Dieu a écrit sur les tables ?"
+    "fr_q": "Qu'est-ce que Dieu a écrit sur les tables ?",
+    "es_opts": [
+      "Leyes",
+      "Historia",
+      "Nombres",
+      "Cantos"
+    ],
+    "en_opts": [
+      "Laws",
+      "History",
+      "Names",
+      "Songs"
+    ],
+    "de_opts": [
+      "Gesetze",
+      "Geschichte",
+      "Namen",
+      "Gesänge"
+    ],
+    "fr_opts": [
+      "Lois",
+      "Histoire",
+      "Noms",
+      "Chants"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1309,7 +3253,34 @@
     "es_q": "¿Quién subió con Moisés al monte?",
     "en_q": "Who went up with Moses to the mountain?",
     "de_q": "Wer stieg mit Mose auf den Berg?",
-    "fr_q": "Qui est monté avec Moïse sur la montagne ?"
+    "fr_q": "Qui est monté avec Moïse sur la montagne ?",
+    "es_opts": [
+      "Arao",
+      "Josué",
+      "David",
+      "Samuel"
+    ],
+    "en_opts": [
+      "Arao",
+      "Josue",
+      "Davi",
+      "Samuel\n\n(These are proper names that remain the same in English: Aaron",
+      "Joshua",
+      "David",
+      "Samuel)"
+    ],
+    "de_opts": [
+      "Arao",
+      "Josue",
+      "Davi",
+      "Samuel"
+    ],
+    "fr_opts": [
+      "Arao",
+      "Josué",
+      "David",
+      "Samuel"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1325,7 +3296,31 @@
     "es_q": "¿Qué era el maná?",
     "en_q": "What was mana?",
     "de_q": "Was war Mana?",
-    "fr_q": "Qu'était le mana ?"
+    "fr_q": "Qu'était le mana ?",
+    "es_opts": [
+      "Carne",
+      "Pan del cielo",
+      "Pescado",
+      "Fruta"
+    ],
+    "en_opts": [
+      "Meat",
+      "Bread of Heaven",
+      "Fish",
+      "Fruit"
+    ],
+    "de_opts": [
+      "Fleisch",
+      "Himmelsbrot",
+      "Fisch",
+      "Frucht"
+    ],
+    "fr_opts": [
+      "Viande",
+      "Pain du ciel",
+      "Poisson",
+      "Fruit"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1341,7 +3336,31 @@
     "es_q": "¿Dónde caminó el pueblo 40 años?",
     "en_q": "Where did the people walk for 40 years?",
     "de_q": "Wo wanderte das Volk 40 Jahre lang?",
-    "fr_q": "Où le peuple a-t-il marché pendant 40 ans?"
+    "fr_q": "Où le peuple a-t-il marché pendant 40 ans?",
+    "es_opts": [
+      "Ciudad",
+      "Desierto",
+      "Montaña",
+      "Río"
+    ],
+    "en_opts": [
+      "City",
+      "Desert",
+      "Mountain",
+      "River"
+    ],
+    "de_opts": [
+      "Stadt",
+      "Wüste",
+      "Berg",
+      "Fluss"
+    ],
+    "fr_opts": [
+      "Ville",
+      "Désert",
+      "Montagne",
+      "Rivière"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1357,7 +3376,31 @@
     "es_q": "¿Quién era el líder de Egipto?",
     "en_q": "Who was the leader of Egypt?",
     "de_q": "Wer war der Anführer Ägyptens?",
-    "fr_q": "Qui était le leader de l'Égypte ?"
+    "fr_q": "Qui était le leader de l'Égypte ?",
+    "es_opts": [
+      "Rey",
+      "Faraón",
+      "Emperador",
+      "General"
+    ],
+    "en_opts": [
+      "King",
+      "Pharaoh",
+      "Emperor",
+      "General"
+    ],
+    "de_opts": [
+      "König",
+      "Pharao",
+      "Kaiser",
+      "General"
+    ],
+    "fr_opts": [
+      "Roi",
+      "Pharaon",
+      "Empereur",
+      "Général"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1373,7 +3416,31 @@
     "es_q": "¿Qué instrumento usaba Moisés?",
     "en_q": "What instrument did Moses use?",
     "de_q": "Welches Instrument benutzte Moses?",
-    "fr_q": "Quel instrument Moïse utilisait-il ?"
+    "fr_q": "Quel instrument Moïse utilisait-il ?",
+    "es_opts": [
+      "Espada",
+      "Vara",
+      "Escudo",
+      "Arco"
+    ],
+    "en_opts": [
+      "Sword",
+      "Staff",
+      "Shield",
+      "Bow"
+    ],
+    "de_opts": [
+      "Schwert",
+      "Stab",
+      "Schild",
+      "Bogen"
+    ],
+    "fr_opts": [
+      "Épée",
+      "Bâton",
+      "Bouclier",
+      "Arc"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1389,7 +3456,31 @@
     "es_q": "¿Qué envió Dios contra Egipto?",
     "en_q": "What did God send against Egypt?",
     "de_q": "Was hat Gott gegen Ägypten gesandt?",
-    "fr_q": "Qu'a envoyé Dieu contre l'Égypte ?"
+    "fr_q": "Qu'a envoyé Dieu contre l'Égypte ?",
+    "es_opts": [
+      "Lluvia",
+      "Plagas",
+      "Viento",
+      "Fuego"
+    ],
+    "en_opts": [
+      "Rain",
+      "Pests",
+      "Wind",
+      "Fire"
+    ],
+    "de_opts": [
+      "Regen",
+      "Schädlinge",
+      "Wind",
+      "Feuer"
+    ],
+    "fr_opts": [
+      "Pluie",
+      "Parasites",
+      "Vent",
+      "Feu"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1405,7 +3496,31 @@
     "es_q": "¿Cuál fue la última plaga?",
     "en_q": "What was the last plague?",
     "de_q": "Was war die letzte Plage?",
-    "fr_q": "Quelle a été la dernière plaie ?"
+    "fr_q": "Quelle a été la dernière plaie ?",
+    "es_opts": [
+      "Plagas",
+      "Muerte de los primogénitos",
+      "Sangre",
+      "Oscuridad"
+    ],
+    "en_opts": [
+      "Plague of Darkness",
+      "Death of the Firstborn",
+      "Blood",
+      "Darkness"
+    ],
+    "de_opts": [
+      "Ras",
+      "Tod der Erstgeborenen",
+      "Blut",
+      "Finsternis"
+    ],
+    "fr_opts": [
+      "Rê",
+      "Mort des premiers-nés",
+      "Sang",
+      "Obscurité"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1421,7 +3536,31 @@
     "es_q": "¿Quién salió de Egipto?",
     "en_q": "Who left Egypt?",
     "de_q": "Wer ist aus Ägypten ausgezogen?",
-    "fr_q": "Qui a quitté l'Égypte?"
+    "fr_q": "Qui a quitté l'Égypte?",
+    "es_opts": [
+      "Israelitas",
+      "Egipcios",
+      "Romanos",
+      "Griegos"
+    ],
+    "en_opts": [
+      "Israelites",
+      "Egyptians",
+      "Romans",
+      "Greeks"
+    ],
+    "de_opts": [
+      "Israeliten",
+      "Ägypter",
+      "Römer",
+      "Griechen"
+    ],
+    "fr_opts": [
+      "Israélites",
+      "Égyptiens",
+      "Romains",
+      "Grecs"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1437,7 +3576,31 @@
     "es_q": "¿Quién guiaba al pueblo?",
     "en_q": "Who guided the people?",
     "de_q": "Wer führte das Volk?",
-    "fr_q": "Qui guidait le peuple ?"
+    "fr_q": "Qui guidait le peuple ?",
+    "es_opts": [
+      "Moisés",
+      "Arao",
+      "Josué",
+      "David"
+    ],
+    "en_opts": [
+      "Moses",
+      "Arao",
+      "Joshua",
+      "David"
+    ],
+    "de_opts": [
+      "Mose",
+      "Arao",
+      "Josua",
+      "David"
+    ],
+    "fr_opts": [
+      "Moïse",
+      "Arao",
+      "Josué",
+      "Davi"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1453,7 +3616,31 @@
     "es_q": "¿Qué le dio Dios al pueblo en el desierto?",
     "en_q": "What did God give to the people in the desert?",
     "de_q": "Was gab Gott dem Volk in der Wüste?",
-    "fr_q": "Que Dieu a donné au peuple dans le désert ?"
+    "fr_q": "Que Dieu a donné au peuple dans le désert ?",
+    "es_opts": [
+      "Agua y comida",
+      "Oro",
+      "Armas",
+      "Ropa"
+    ],
+    "en_opts": [
+      "Water and food",
+      "Gold",
+      "Weapons",
+      "Clothes"
+    ],
+    "de_opts": [
+      "Wasser und Essen",
+      "Gold",
+      "Waffen",
+      "Kleidung"
+    ],
+    "fr_opts": [
+      "Eau et nourriture",
+      "Or",
+      "Armes",
+      "Vêtements"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1469,7 +3656,31 @@
     "es_q": "¿Cuál monte Dios habló con Moisés?",
     "en_q": "Which mountain did God speak to Moses?",
     "de_q": "Welcher Berg sprach Gott mit Mose?",
-    "fr_q": "Sur quel mont Dieu a-t-il parlé à Moïse ?"
+    "fr_q": "Sur quel mont Dieu a-t-il parlé à Moïse ?",
+    "es_opts": [
+      "Sinaí",
+      "Carmelo",
+      "Siao",
+      "Oliveiras"
+    ],
+    "en_opts": [
+      "Sinai",
+      "Carmelo",
+      "Siao",
+      "Oliveiras"
+    ],
+    "de_opts": [
+      "Sinai",
+      "Carmelo",
+      "Siao",
+      "Oliveiras"
+    ],
+    "fr_opts": [
+      "Sinaï",
+      "Carmelo",
+      "Siao",
+      "Oliveiras"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1485,7 +3696,31 @@
     "es_q": "¿Quién escribió la ley?",
     "en_q": "Who wrote the law?",
     "de_q": "Wer hat das Gesetz geschrieben?",
-    "fr_q": "Qui a écrit la loi ?"
+    "fr_q": "Qui a écrit la loi ?",
+    "es_opts": [
+      "Moisés",
+      "Araó",
+      "Josué",
+      "David"
+    ],
+    "en_opts": [
+      "Moses",
+      "Arao",
+      "Joshua",
+      "David"
+    ],
+    "de_opts": [
+      "Moise",
+      "Arao",
+      "Josua",
+      "David"
+    ],
+    "fr_opts": [
+      "Moïse",
+      "Arao",
+      "Josué",
+      "David"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1501,7 +3736,31 @@
     "es_q": "¿Qué protegía al pueblo en la noche?",
     "en_q": "What protected the people at night?",
     "de_q": "Was schützte die Menschen nachts?",
-    "fr_q": "Ce qui protégeait le peuple la nuit?"
+    "fr_q": "Ce qui protégeait le peuple la nuit?",
+    "es_opts": [
+      "Lua",
+      "Fuego",
+      "Nube",
+      "Viento"
+    ],
+    "en_opts": [
+      "Fire",
+      "Fire",
+      "Cloud",
+      "Wind"
+    ],
+    "de_opts": [
+      "Mond",
+      "Feuer",
+      "Wolke",
+      "Wind"
+    ],
+    "fr_opts": [
+      "Lua",
+      "Feu",
+      "Nuage",
+      "Vent"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1517,7 +3776,31 @@
     "es_q": "¿Qué protegía al pueblo de día?",
     "en_q": "What protected the people during the day?",
     "de_q": "Was schützte das Volk tagsüber?",
-    "fr_q": "Qu'est-ce qui protégeait le peuple de jour?"
+    "fr_q": "Qu'est-ce qui protégeait le peuple de jour?",
+    "es_opts": [
+      "Sol",
+      "Nube",
+      "Fuego",
+      "Arena"
+    ],
+    "en_opts": [
+      "Sun",
+      "Cloud",
+      "Fire",
+      "Sand"
+    ],
+    "de_opts": [
+      "Sonne",
+      "Wolke",
+      "Feuer",
+      "Sand"
+    ],
+    "fr_opts": [
+      "Soleil",
+      "Nuage",
+      "Feu",
+      "Sable"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1533,7 +3816,31 @@
     "es_q": "¿Quién construyó el tabernáculo?",
     "en_q": "Who built the tabernacle?",
     "de_q": "Wer baute die Stiftshütte?",
-    "fr_q": "Qui a construit le tabernacle ?"
+    "fr_q": "Qui a construit le tabernacle ?",
+    "es_opts": [
+      "Pueblo",
+      "Rey",
+      "Soldados",
+      "Profetas"
+    ],
+    "en_opts": [
+      "People",
+      "King",
+      "Soldiers",
+      "Prophets"
+    ],
+    "de_opts": [
+      "Volk",
+      "König",
+      "Soldaten",
+      "Propheten"
+    ],
+    "fr_opts": [
+      "Peuple",
+      "Roi",
+      "Soldats",
+      "Prophètes"
+    ]
   },
   {
     "livro": "Exodo",
@@ -1549,7 +3856,31 @@
     "es_q": "¿Dónde estaban guardadas las tablas?",
     "en_q": "Where were the tablets stored?",
     "de_q": "Wo waren die Tafeln aufbewahrt?",
-    "fr_q": "Où étaient gardées les tablettes ?"
+    "fr_q": "Où étaient gardées les tablettes ?",
+    "es_opts": [
+      "Arca",
+      "Templo",
+      "Casa",
+      "Monte"
+    ],
+    "en_opts": [
+      "Ark",
+      "Temple",
+      "House",
+      "Mount"
+    ],
+    "de_opts": [
+      "Arca",
+      "Tempel",
+      "Haus",
+      "Berg"
+    ],
+    "fr_opts": [
+      "Arca",
+      "Temple",
+      "Maison",
+      "Mont"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1565,7 +3896,31 @@
     "es_q": "¿Cuál era el nombre del jardín donde Dios puso al hombre?",
     "en_q": "What was the name of the garden where God placed man?",
     "de_q": "Wie hieß der Garten, in den Gott den Menschen setzte?",
-    "fr_q": "Quel était le nom du jardin où Dieu a placé l'homme ?"
+    "fr_q": "Quel était le nom du jardin où Dieu a placé l'homme ?",
+    "es_opts": [
+      "Edén",
+      "Babel",
+      "Ur",
+      "Canaán"
+    ],
+    "en_opts": [
+      "Eden",
+      "Babel",
+      "Ur",
+      "Canaan"
+    ],
+    "de_opts": [
+      "Eden",
+      "Babel",
+      "Ur",
+      "Kanaan"
+    ],
+    "fr_opts": [
+      "Éden",
+      "Babel",
+      "Ur",
+      "Canaan"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1581,7 +3936,31 @@
     "es_q": "¿Qué río NO es mencionado en el Edén?",
     "en_q": "Which river is NOT mentioned in Eden?",
     "de_q": "Welcher Fluss wird in Eden NICHT erwähnt?",
-    "fr_q": "Quel fleuve N'EST PAS mentionné dans l'Éden ?"
+    "fr_q": "Quel fleuve N'EST PAS mentionné dans l'Éden ?",
+    "es_opts": [
+      "Tigris",
+      "Éufrates",
+      "Nilo",
+      "Pisón"
+    ],
+    "en_opts": [
+      "Tigris",
+      "Euphrates",
+      "Nile",
+      "Pishon"
+    ],
+    "de_opts": [
+      "Tiger",
+      "Euphrat",
+      "Nil",
+      "Pischon"
+    ],
+    "fr_opts": [
+      "Tigre",
+      "Euphrate",
+      "Nil",
+      "Pison"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1597,7 +3976,31 @@
     "es_q": "¿Quién fue el padre de todos los que tocan arpa y flauta?",
     "en_q": "Who was the father of all those who play the harp and flute?",
     "de_q": "Wer war der Vater aller, die Harfe und Flöte spielen?",
-    "fr_q": "Qui fut le père de tous ceux qui jouent de la harpe et de la flûte ?"
+    "fr_q": "Qui fut le père de tous ceux qui jouent de la harpe et de la flûte ?",
+    "es_opts": [
+      "Jubal",
+      "Jabal",
+      "Tubalcaín",
+      "Enoc"
+    ],
+    "en_opts": [
+      "Jubal",
+      "Jabal",
+      "Tubalcain",
+      "Enoch"
+    ],
+    "de_opts": [
+      "Jubal",
+      "Jabal",
+      "Tubalcain",
+      "Henoch"
+    ],
+    "fr_opts": [
+      "Jubal",
+      "Jabal",
+      "Tubalcaïn",
+      "Énoch"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1613,7 +4016,31 @@
     "es_q": "¿Quién fue el padre de los que habitan en tiendas y crían ganado?",
     "en_q": "Who was the father of those who dwell in tents and raise livestock?",
     "de_q": "Wer war der Vater derer, die in Zelten wohnen und Vieh züchten?",
-    "fr_q": "Qui était le père de ceux qui habitent dans des tentes et élèvent du bétail?"
+    "fr_q": "Qui était le père de ceux qui habitent dans des tentes et élèvent du bétail?",
+    "es_opts": [
+      "Jubal",
+      "Jabal",
+      "Caín",
+      "Set"
+    ],
+    "en_opts": [
+      "Jubal",
+      "Jabal",
+      "Cain",
+      "Seth"
+    ],
+    "de_opts": [
+      "Jubal",
+      "Jabal",
+      "Kain",
+      "Seth"
+    ],
+    "fr_opts": [
+      "Jubal",
+      "Jabal",
+      "Caïn",
+      "Seth"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1629,7 +4056,31 @@
     "es_q": "¿Quién forjó instrumentos de bronce y hierro?",
     "en_q": "Who forged instruments of bronze and iron?",
     "de_q": "Wer schmiedete Bronzewerkzeuge und Eisenwerkzeuge?",
-    "fr_q": "Qui a forgé les instruments de bronze et de fer ?"
+    "fr_q": "Qui a forgé les instruments de bronze et de fer ?",
+    "es_opts": [
+      "Jabal",
+      "Tubalcaín",
+      "Jubal",
+      "Lamec"
+    ],
+    "en_opts": [
+      "Jabal",
+      "Tubalcain",
+      "Jubal",
+      "Lamech"
+    ],
+    "de_opts": [
+      "Jabal",
+      "Tubalkaim",
+      "Jubal",
+      "Lamech"
+    ],
+    "fr_opts": [
+      "Jabal",
+      "Tubalcaïn",
+      "Jubal",
+      "Lémek"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1645,7 +4096,31 @@
     "es_q": "¿Cuál era el nombre de la esposa de Abraham antes de ser cambiado?",
     "en_q": "What was the name of Abraham's wife before it was changed?",
     "de_q": "Wie war der Name von Abrahams Ehefrau, bevor er geändert wurde?",
-    "fr_q": "Quel était le nom de l'épouse d'Abraham avant qu'il ne soit changé ?"
+    "fr_q": "Quel était le nom de l'épouse d'Abraham avant qu'il ne soit changé ?",
+    "es_opts": [
+      "Sara",
+      "Sarai",
+      "Rebeca",
+      "Raquel"
+    ],
+    "en_opts": [
+      "Sara",
+      "Sarah",
+      "Rebecca",
+      "Rachel"
+    ],
+    "de_opts": [
+      "Sara",
+      "Sarai",
+      "Rebekka",
+      "Rahel"
+    ],
+    "fr_opts": [
+      "Sara",
+      "Saraï",
+      "Rebecca",
+      "Rachel"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1661,7 +4136,31 @@
     "es_q": "¿Cuál era el nombre de Abrahán antes de que Dios lo cambiara?",
     "en_q": "What was Abraham's name before God changed it?",
     "de_q": "Welchen Namen hatte Abraham, bevor Gott ihn änderte?",
-    "fr_q": "Quel était le nom d'Abraham avant que Dieu le change?"
+    "fr_q": "Quel était le nom d'Abraham avant que Dieu le change?",
+    "es_opts": [
+      "Abrao",
+      "Abraao",
+      "Abarao",
+      "Abel"
+    ],
+    "en_opts": [
+      "Abraham",
+      "Abraham",
+      "Abraham",
+      "Abel"
+    ],
+    "de_opts": [
+      "Abram",
+      "Abraham",
+      "Abarao",
+      "Abel"
+    ],
+    "fr_opts": [
+      "Abraham",
+      "Abraham",
+      "Abraham",
+      "Abel"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1677,7 +4176,31 @@
     "es_q": "¿Quién era el sacerdote que bendijo a Abraham?",
     "en_q": "Who was the priest who blessed Abraham?",
     "de_q": "Wer war der Priester, der Abraham segnete?",
-    "fr_q": "Qui était le prêtre qui a béni Abraham ?"
+    "fr_q": "Qui était le prêtre qui a béni Abraham ?",
+    "es_opts": [
+      "Melquisedec",
+      "Araó",
+      "Moisés",
+      "Samuel"
+    ],
+    "en_opts": [
+      "Melchizedek",
+      "Arao",
+      "Moses",
+      "Samuel"
+    ],
+    "de_opts": [
+      "Melchisedek",
+      "Arao",
+      "Mose",
+      "Samuel"
+    ],
+    "fr_opts": [
+      "Melchisédech",
+      "Arao",
+      "Moïse",
+      "Samuel"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1693,7 +4216,31 @@
     "es_q": "¿Cuántos justos pidió Abraham como mínimo para salvar a Sodoma?",
     "en_q": "How many righteous people did Abraham ask God to spare Sodom for at minimum?",
     "de_q": "Wie viele Gerechte bat Abraham mindestens um, um Sodom zu retten?",
-    "fr_q": "Combien de justes Abraham a-t-il demandé au minimum pour sauver Sodome ?"
+    "fr_q": "Combien de justes Abraham a-t-il demandé au minimum pour sauver Sodome ?",
+    "es_opts": [
+      "5",
+      "10",
+      "20",
+      "50"
+    ],
+    "en_opts": [
+      "5",
+      "10",
+      "20",
+      "50"
+    ],
+    "de_opts": [
+      "5",
+      "10",
+      "20",
+      "50"
+    ],
+    "fr_opts": [
+      "5",
+      "10",
+      "20",
+      "50"
+    ]
   },
   {
     "livro": "Genesis",
@@ -1709,7 +4256,31 @@
     "es_q": "¿Quién le dio el nombre de Benoni al hijo, que luego fue cambiado?",
     "en_q": "Who gave the name Benoni to his son, which was later changed?",
     "de_q": "Wer gab dem Sohn den Namen Benoni, der später geändert wurde?",
-    "fr_q": "Qui a donné le nom de Benoni au fils, puis changé ?"
+    "fr_q": "Qui a donné le nom de Benoni au fils, puis changé ?",
+    "es_opts": [
+      "Raquel",
+      "Lea",
+      "Sara",
+      "Rebeca"
+    ],
+    "en_opts": [
+      "Raquel",
+      "Lea",
+      "Sara",
+      "Rebecca"
+    ],
+    "de_opts": [
+      "Raquel",
+      "Lea",
+      "Sara",
+      "Rebeca"
+    ],
+    "fr_opts": [
+      "Raquel",
+      "Léa",
+      "Sara",
+      "Rébecca"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1725,7 +4296,31 @@
     "es_q": "¿Cuál es el Salmo más largo de la Biblia?",
     "en_q": "What is the longest Psalm in the Bible?",
     "de_q": "Welcher ist der längste Psalm der Bibel?",
-    "fr_q": "Quel est le Psaume le plus long de la Bible ?"
+    "fr_q": "Quel est le Psaume le plus long de la Bible ?",
+    "es_opts": [
+      "Salmo 23",
+      "Salmo 91",
+      "Salmo 119",
+      "Salmo 150"
+    ],
+    "en_opts": [
+      "Psalm 23",
+      "Psalm 91",
+      "Psalm 119",
+      "Psalm 150"
+    ],
+    "de_opts": [
+      "Psalm 23",
+      "Psalm 91",
+      "Psalm 119",
+      "Psalm 150"
+    ],
+    "fr_opts": [
+      "Psaume 23",
+      "Psaume 91",
+      "Psaume 119",
+      "Psaume 150"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1741,7 +4336,31 @@
     "es_q": "¿Cuál es el Salmo más corto de la Biblia?",
     "en_q": "What is the shortest Psalm in the Bible?",
     "de_q": "Welcher ist der kürzeste Psalm der Bibel?",
-    "fr_q": "Quel est le Psaume le plus court de la Bible ?"
+    "fr_q": "Quel est le Psaume le plus court de la Bible ?",
+    "es_opts": [
+      "Salmo 1",
+      "Salmo 117",
+      "Salmo 23",
+      "Salmo 100"
+    ],
+    "en_opts": [
+      "Psalm 1",
+      "Psalm 117",
+      "Psalm 23",
+      "Psalm 100"
+    ],
+    "de_opts": [
+      "Psalm 1",
+      "Psalm 117",
+      "Psalm 23",
+      "Psalm 100"
+    ],
+    "fr_opts": [
+      "Psaume 1",
+      "Psaume 117",
+      "Psaume 23",
+      "Psaume 100"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1757,7 +4376,31 @@
     "es_q": "¿Cuántos Salmos existen en la Biblia?",
     "en_q": "How many Psalms are there in the Bible?",
     "de_q": "Wie viele Psalmen gibt es in der Bibel?",
-    "fr_q": "Combien de Psaumes existe-t-il dans la Bible ?"
+    "fr_q": "Combien de Psaumes existe-t-il dans la Bible ?",
+    "es_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "en_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "de_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "fr_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1773,7 +4416,31 @@
     "es_q": "El Señor es mi pastor y nada me falta.",
     "en_q": "The Lord is my shepherd and I lack nothing.\n\n(This is the beginning of Psalm 23)",
     "de_q": "Der Herr ist mein Hirte und mir wird nichts mangeln.",
-    "fr_q": "Le Seigneur est mon berger et je ne manque de rien."
+    "fr_q": "Le Seigneur est mon berger et je ne manque de rien.",
+    "es_opts": [
+      "Faltará",
+      "Asustará",
+      "Vencerá",
+      "Separará"
+    ],
+    "en_opts": [
+      "Will lack",
+      "Will frighten",
+      "Will overcome",
+      "Will separate"
+    ],
+    "de_opts": [
+      "Wird fehlen",
+      "Wird erschrecken",
+      "Wird besiegen",
+      "Wird trennen"
+    ],
+    "fr_opts": [
+      "Manquera",
+      "Effrayera",
+      "Vainquera",
+      "Séparera"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1789,7 +4456,31 @@
     "es_q": "¿En qué Salmo David dice Dios es mi luz y mi salvación?",
     "en_q": "In which Psalm does David say God is my light and salvation?",
     "de_q": "In welchem Psalm sagt David \"Gott ist mein Licht und meine Rettung\"?",
-    "fr_q": "En quel Psaume David dit-il Dieu est ma lumière et mon salut ?"
+    "fr_q": "En quel Psaume David dit-il Dieu est ma lumière et mon salut ?",
+    "es_opts": [
+      "Salmo 23",
+      "Salmo 27",
+      "Salmo 91",
+      "Salmo 100"
+    ],
+    "en_opts": [
+      "Psalm 23",
+      "Psalm 27",
+      "Psalm 91",
+      "Psalm 100"
+    ],
+    "de_opts": [
+      "Psalm 23",
+      "Psalm 27",
+      "Psalm 91",
+      "Psalm 100"
+    ],
+    "fr_opts": [
+      "Psaume 23",
+      "Psaume 27",
+      "Psaume 91",
+      "Psaume 100"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1805,7 +4496,31 @@
     "es_q": "¿Quién es el escudo de los que confían en Dios?",
     "en_q": "Who is the shield of those who trust in God?",
     "de_q": "Wer ist der Schild derer, die auf Gott vertrauen?",
-    "fr_q": "Qui est le bouclier de ceux qui ont confiance en Dieu ?"
+    "fr_q": "Qui est le bouclier de ceux qui ont confiance en Dieu ?",
+    "es_opts": [
+      "Ángel",
+      "Rey",
+      "Dios",
+      "Profeta"
+    ],
+    "en_opts": [
+      "Angel",
+      "King",
+      "God",
+      "Prophet"
+    ],
+    "de_opts": [
+      "Engel",
+      "König",
+      "Gott",
+      "Prophet"
+    ],
+    "fr_opts": [
+      "Ange",
+      "Roi",
+      "Dieu",
+      "Prophète"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1821,7 +4536,31 @@
     "es_q": "¿Qué le pide David a Dios en el Salmo 51?",
     "en_q": "What does David ask God for in Psalm 51?",
     "de_q": "Was bittet David Gott in Psalm 51?",
-    "fr_q": "Que demande David à Dieu dans le Psaume 51 ?"
+    "fr_q": "Que demande David à Dieu dans le Psaume 51 ?",
+    "es_opts": [
+      "Riqueza",
+      "Pérdida de enemigos",
+      "Perdón y limpieza",
+      "Fuerza"
+    ],
+    "en_opts": [
+      "Wealth",
+      "Loss of enemies",
+      "Forgiveness and cleansing",
+      "Strength"
+    ],
+    "de_opts": [
+      "Reichtum",
+      "Vernichtung von Feinden",
+      "Vergebung und Reinigung",
+      "Kraft"
+    ],
+    "fr_opts": [
+      "Richesse",
+      "Perte d'ennemis",
+      "Pardon et purification",
+      "Force"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1837,7 +4576,31 @@
     "es_q": "¿Quién habita en el escondite del Altísimo?",
     "en_q": "Who dwells in the shelter of the Most High?",
     "de_q": "Wer wohnt in der Zuflucht des Höchsten?",
-    "fr_q": "Qui habite au refuge du Très-Haut?"
+    "fr_q": "Qui habite au refuge du Très-Haut?",
+    "es_opts": [
+      "Profeta",
+      "Quien confía en Dios",
+      "Rey",
+      "Sacerdote"
+    ],
+    "en_opts": [
+      "Prophet",
+      "Who trusts in God",
+      "King",
+      "Priest"
+    ],
+    "de_opts": [
+      "Prophet",
+      "Wer Gott vertraut",
+      "König",
+      "Priester"
+    ],
+    "fr_opts": [
+      "Prophète",
+      "Celui qui fait confiance en Dieu",
+      "Roi",
+      "Prêtre"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1853,7 +4616,31 @@
     "es_q": "Alabad al Señor a todos los...",
     "en_q": "\"Praise the Lord all the...?\"\n\n(This appears to be the beginning of a phrase, likely \"Praise the Lord all the earth\" or similar, but the complete thought is cut off by the \"...?\")",
     "de_q": "Lobt den Herrn alle...?",
-    "fr_q": "Louai au Seigneur tous les...?"
+    "fr_q": "Louai au Seigneur tous les...?",
+    "es_opts": [
+      "Tribus",
+      "Naciones",
+      "Montañas",
+      "Estrellas"
+    ],
+    "en_opts": [
+      "Tribes",
+      "Nations",
+      "Mountains",
+      "Stars"
+    ],
+    "de_opts": [
+      "Stämme",
+      "Nationen",
+      "Berge",
+      "Sterne"
+    ],
+    "fr_opts": [
+      "Tribus",
+      "Nations",
+      "Montagnes",
+      "Étoiles"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1869,7 +4656,31 @@
     "es_q": "¿Qué animal se menciona en el Salmo 22?",
     "en_q": "What animal is mentioned in Psalm 22?",
     "de_q": "Welches Tier wird in Psalm 22 erwähnt?",
-    "fr_q": "Quel animal est mentionné dans le Psaume 22 ?"
+    "fr_q": "Quel animal est mentionné dans le Psaume 22 ?",
+    "es_opts": [
+      "León",
+      "Águila",
+      "Toro",
+      "Cordero"
+    ],
+    "en_opts": [
+      "Lion",
+      "Eagle",
+      "Bull",
+      "Lamb"
+    ],
+    "de_opts": [
+      "Löwe",
+      "Adler",
+      "Stier",
+      "Lamm"
+    ],
+    "fr_opts": [
+      "Lion",
+      "Aigle",
+      "Taureau",
+      "Agneau"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1885,7 +4696,31 @@
     "es_q": "Los cielos declaran la gloria de...?",
     "en_q": "The heavens declare the glory of...?",
     "de_q": "Die Himmel verkünden die Herrlichkeit von...?",
-    "fr_q": "Les cieux déclarent la gloire de...?"
+    "fr_q": "Les cieux déclarent la gloire de...?",
+    "es_opts": [
+      "Rey",
+      "Profeta",
+      "Dios",
+      "Hombre"
+    ],
+    "en_opts": [
+      "King",
+      "Prophet",
+      "God",
+      "Man"
+    ],
+    "de_opts": [
+      "König",
+      "Prophet",
+      "Gott",
+      "Mensch"
+    ],
+    "fr_opts": [
+      "Roi",
+      "Prophète",
+      "Dieu",
+      "Homme"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1901,7 +4736,31 @@
     "es_q": "¿Quién escribió el Salmo 90?",
     "en_q": "Who wrote Psalm 90?",
     "de_q": "Wer schrieb Psalm 90?",
-    "fr_q": "Qui a écrit le Psaume 90 ?"
+    "fr_q": "Qui a écrit le Psaume 90 ?",
+    "es_opts": [
+      "Davi",
+      "Salomón",
+      "Moisés",
+      "Elías"
+    ],
+    "en_opts": [
+      "David",
+      "Solomon",
+      "Moses",
+      "Elijah"
+    ],
+    "de_opts": [
+      "Davi",
+      "Salomão",
+      "Moisés",
+      "Elias"
+    ],
+    "fr_opts": [
+      "Davi",
+      "Salomon",
+      "Moïse",
+      "Élie"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1917,7 +4776,31 @@
     "es_q": "¿Qué palabra comienza el Salmo 1?",
     "en_q": "What word begins Psalm 1?",
     "de_q": "Welches Wort beginnt Psalm 1?",
-    "fr_q": "Quel mot commence le Psaume 1?"
+    "fr_q": "Quel mot commence le Psaume 1?",
+    "es_opts": [
+      "Alabado",
+      "Bienaventurado",
+      "Santo",
+      "Fuerte"
+    ],
+    "en_opts": [
+      "Praised",
+      "Blessed",
+      "Holy",
+      "Strong"
+    ],
+    "de_opts": [
+      "Gelobt",
+      "Seliggepriesen",
+      "Heilig",
+      "Stark"
+    ],
+    "fr_opts": [
+      "Loué",
+      "Bienheureux",
+      "Saint",
+      "Fort"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1933,7 +4816,31 @@
     "es_q": "El justo es como árbol plantado junto a...?",
     "en_q": "The just one is like a tree planted beside...?",
     "de_q": "Der Gerechte ist wie ein Baum, der neben...?",
-    "fr_q": "Le juste est comme un arbre planté près de...?"
+    "fr_q": "Le juste est comme un arbre planté près de...?",
+    "es_opts": [
+      "Monte",
+      "Aguas",
+      "Desierto",
+      "Ciudad"
+    ],
+    "en_opts": [
+      "Mountain",
+      "Waters",
+      "Desert",
+      "City"
+    ],
+    "de_opts": [
+      "Berg",
+      "Wässer",
+      "Wüste",
+      "Stadt"
+    ],
+    "fr_opts": [
+      "Mont",
+      "Eaux",
+      "Désert",
+      "Ville"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1949,7 +4856,31 @@
     "es_q": "Alegraos en el Señor vos...?",
     "en_q": "\"Rejoice in the Lord you...?\"\n\n(This appears to be the beginning of Philippians 4:4 in Portuguese: \"Alegrai-vos no Senhor sempre\" = \"Rejoice in the Lord always\")",
     "de_q": "Freuet euch im Herrn allezeit...?",
-    "fr_q": "Réjouissez-vous dans le Seigneur vous...?"
+    "fr_q": "Réjouissez-vous dans le Seigneur vous...?",
+    "es_opts": [
+      "Profetas",
+      "Reyes",
+      "Justos",
+      "Sacerdotes"
+    ],
+    "en_opts": [
+      "Prophets",
+      "Kings",
+      "Righteous",
+      "Priests"
+    ],
+    "de_opts": [
+      "Propheten",
+      "Könige",
+      "Gerechte",
+      "Priester"
+    ],
+    "fr_opts": [
+      "Prophètes",
+      "Rois",
+      "Justes",
+      "Prêtres"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1965,7 +4896,31 @@
     "es_q": "¿Quién es el rey de la gloria?",
     "en_q": "Who is the King of glory?",
     "de_q": "Wer ist der König der Herrlichkeit?",
-    "fr_q": "Qui est le roi de la gloire?"
+    "fr_q": "Qui est le roi de la gloire?",
+    "es_opts": [
+      "Davi",
+      "Dios",
+      "Ángel",
+      "Profeta"
+    ],
+    "en_opts": [
+      "David",
+      "God",
+      "Angel",
+      "Prophet"
+    ],
+    "de_opts": [
+      "Davi",
+      "Gott",
+      "Engel",
+      "Prophet"
+    ],
+    "fr_opts": [
+      "Davi",
+      "Dieu",
+      "Ange",
+      "Prophète"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1981,7 +4936,31 @@
     "es_q": "Buscad al Señor mientras se puede...?",
     "en_q": "\"Seek the Lord while he may be found...?\"",
     "de_q": "Sucht den Herrn, während er sich finden lässt...?",
-    "fr_q": "Cherchez le Seigneur tandis qu'on peut...?"
+    "fr_q": "Cherchez le Seigneur tandis qu'on peut...?",
+    "es_opts": [
+      "Encontrar",
+      "Ver",
+      "Oír",
+      "Sentir"
+    ],
+    "en_opts": [
+      "Find",
+      "See",
+      "Hear",
+      "Feel"
+    ],
+    "de_opts": [
+      "Finden",
+      "Sehen",
+      "Hören",
+      "Fühlen"
+    ],
+    "fr_opts": [
+      "Trouver",
+      "Voir",
+      "Écouter",
+      "Sentir"
+    ]
   },
   {
     "livro": "Salmos",
@@ -1997,7 +4976,31 @@
     "es_q": "¿Qué instrumento se menciona en el Salmo 150?",
     "en_q": "What instrument is mentioned in Psalm 150?",
     "de_q": "Welche Instrumente werden in Psalm 150 erwähnt?",
-    "fr_q": "Quel instrument est mentionné dans le Psaume 150 ?"
+    "fr_q": "Quel instrument est mentionné dans le Psaume 150 ?",
+    "es_opts": [
+      "Violín",
+      "Trompeta",
+      "Guitarra",
+      "Piano"
+    ],
+    "en_opts": [
+      "Violin",
+      "Trumpet",
+      "Guitar",
+      "Piano"
+    ],
+    "de_opts": [
+      "Violine",
+      "Trompete",
+      "Gitarre",
+      "Klavier"
+    ],
+    "fr_opts": [
+      "Violon",
+      "Trompette",
+      "Guitare",
+      "Piano"
+    ]
   },
   {
     "livro": "Salmos",
@@ -2013,7 +5016,31 @@
     "es_q": "El Salmo 23 dice que Dios prepara una mesa en la presencia de los...?",
     "en_q": "Psalm 23 says that God prepares a table in the presence of...?",
     "de_q": "Psalm 23 sagt, dass Gott einen Tisch in der Gegenwart der...?",
-    "fr_q": "Le Psaume 23 dit que Dieu prépare une table en présence des...?"
+    "fr_q": "Le Psaume 23 dit que Dieu prépare une table en présence des...?",
+    "es_opts": [
+      "Amigos",
+      "Enemigos",
+      "Ángeles",
+      "Reyes"
+    ],
+    "en_opts": [
+      "Friends",
+      "Enemies",
+      "Angels",
+      "Kings"
+    ],
+    "de_opts": [
+      "Freunde",
+      "Feinde",
+      "Engel",
+      "Könige"
+    ],
+    "fr_opts": [
+      "Amis",
+      "Ennemis",
+      "Anges",
+      "Rois"
+    ]
   },
   {
     "livro": "Salmos",
@@ -2029,7 +5056,31 @@
     "es_q": "¿Cómo describe David la Palabra de Dios en el Salmo 119?",
     "en_q": "How does David describe the Word of God in Psalm 119?",
     "de_q": "Wie beschreibt David das Wort Gottes in Psalm 119?",
-    "fr_q": "Comment David décrit-il la Parole de Dieu dans le Psaume 119 ?"
+    "fr_q": "Comment David décrit-il la Parole de Dieu dans le Psaume 119 ?",
+    "es_opts": [
+      "Pesada",
+      "Lámpara para mis pies",
+      "Difícil",
+      "Antigua"
+    ],
+    "en_opts": [
+      "Heavy",
+      "Lamp for my feet",
+      "Difficult",
+      "Old"
+    ],
+    "de_opts": [
+      "Schwer",
+      "Lampe für meine Füße",
+      "Schwierig",
+      "Alt"
+    ],
+    "fr_opts": [
+      "Lourde",
+      "Lampe pour mes pieds",
+      "Difficile",
+      "Ancienne"
+    ]
   },
   {
     "livro": "Salmos",
@@ -2045,7 +5096,31 @@
     "es_q": "¿Quién sube al monte del Señor?",
     "en_q": "Who ascends to the mountain of the Lord?",
     "de_q": "Wer erhebt sich auf den Berg des Herrn?",
-    "fr_q": "Qui monte sur la montagne du Seigneur ?"
+    "fr_q": "Qui monte sur la montagne du Seigneur ?",
+    "es_opts": [
+      "Cualquiera",
+      "El de manos limpias",
+      "El rico",
+      "El sacerdote"
+    ],
+    "en_opts": [
+      "Anyone",
+      "The one with clean hands",
+      "The rich man",
+      "The priest"
+    ],
+    "de_opts": [
+      "Jeder",
+      "Der mit sauberen Händen",
+      "Der Reiche",
+      "Der Priester"
+    ],
+    "fr_opts": [
+      "N'importe qui",
+      "Celui aux mains propres",
+      "Le riche",
+      "Le prêtre"
+    ]
   },
   {
     "livro": "Salmos",
@@ -2061,7 +5136,31 @@
     "es_q": "¿De dónde viene mi auxilio?",
     "en_q": "Where does my help come from?",
     "de_q": "Woher kommt meine Hilfe?",
-    "fr_q": "D'où vient mon secours ?"
+    "fr_q": "D'où vient mon secours ?",
+    "es_opts": [
+      "Del rey",
+      "Del Señor",
+      "Del ejército",
+      "Del profeta"
+    ],
+    "en_opts": [
+      "Of the king",
+      "Of the Lord",
+      "Of the army",
+      "Of the prophet"
+    ],
+    "de_opts": [
+      "Von dem König",
+      "Von dem Herrn",
+      "Von der Armee",
+      "Von dem Propheten"
+    ],
+    "fr_opts": [
+      "Du roi",
+      "Du Seigneur",
+      "De l'armée",
+      "Du prophète"
+    ]
   },
   {
     "livro": "Salmos",
@@ -2077,7 +5176,31 @@
     "es_q": "¿Con qué frase comienza el Salmo 22?",
     "en_q": "Psalm 22 begins with which phrase?",
     "de_q": "Psalm 22 beginnt mit welchem Satz?",
-    "fr_q": "Le Psaume 22 commence par quelle phrase ?"
+    "fr_q": "Le Psaume 22 commence par quelle phrase ?",
+    "es_opts": [
+      "El Señor es mi pastor",
+      "Dios mío, ¿por qué me has abandonado?",
+      "Alabad al Señor",
+      "Alegraos"
+    ],
+    "en_opts": [
+      "The Lord is my shepherd",
+      "My God why have you forsaken me",
+      "Praise the Lord",
+      "Rejoice"
+    ],
+    "de_opts": [
+      "Der Herr ist mein Hirte",
+      "Mein Gott, warum hast du mich verlassen",
+      "Lobt den Herrn",
+      "Freut euch"
+    ],
+    "fr_opts": [
+      "Le Seigneur est mon berger",
+      "Mon Dieu pourquoi m'as-tu abandonné",
+      "Louez le Seigneur",
+      "Réjouissez-vous"
+    ]
   },
   {
     "livro": "Salmos",
@@ -2093,7 +5216,31 @@
     "es_q": "¿Cuántos Salmos se atribuyen a David?",
     "en_q": "How many Psalms are attributed to David?",
     "de_q": "Wie viele Psalmen werden David zugeordnet?",
-    "fr_q": "Combien de Psaumes sont attribués à David ?"
+    "fr_q": "Combien de Psaumes sont attribués à David ?",
+    "es_opts": [
+      "50",
+      "73",
+      "100",
+      "150"
+    ],
+    "en_opts": [
+      "50",
+      "73",
+      "100",
+      "150"
+    ],
+    "de_opts": [
+      "50",
+      "73",
+      "100",
+      "150"
+    ],
+    "fr_opts": [
+      "50",
+      "73",
+      "100",
+      "150"
+    ]
   },
   {
     "livro": "Salmos",
@@ -2109,7 +5256,31 @@
     "es_q": "¿Qué hacía David cuando tocaba el arpa para Saúl?",
     "en_q": "What did David do when he played the harp for Saul?",
     "de_q": "Was spielte Davi auf der Harfe für Saul?",
-    "fr_q": "Que faisait David quand il jouait de la harpe pour Saül ?"
+    "fr_q": "Que faisait David quand il jouait de la harpe pour Saül ?",
+    "es_opts": [
+      "Bailaba",
+      "Oraba",
+      "Calmaba el espíritu",
+      "Cantaba"
+    ],
+    "en_opts": [
+      "Danced",
+      "Prayed",
+      "Calmed the spirit",
+      "Sang"
+    ],
+    "de_opts": [
+      "Tanzte",
+      "Webte",
+      "Besänftigte den Geist",
+      "Sang"
+    ],
+    "fr_opts": [
+      "Dansait",
+      "Travaillait",
+      "Calmait l'esprit",
+      "Chantait"
+    ]
   },
   {
     "livro": "Salmos",
@@ -2125,7 +5296,31 @@
     "es_q": "¿Cuál Salmo es cantado en las subidas al templo?",
     "en_q": "Which Psalm is sung on the ascents to the temple?",
     "de_q": "Welcher Psalm wird beim Aufstieg zum Tempel gesungen?",
-    "fr_q": "Quel Psaume est chanté dans les montées au temple ?"
+    "fr_q": "Quel Psaume est chanté dans les montées au temple ?",
+    "es_opts": [
+      "Salmo 1",
+      "Salmo 120",
+      "Salmo 23",
+      "Salmo 91"
+    ],
+    "en_opts": [
+      "Psalm 1",
+      "Psalm 120",
+      "Psalm 23",
+      "Psalm 91"
+    ],
+    "de_opts": [
+      "Psalm 1",
+      "Psalm 120",
+      "Psalm 23",
+      "Psalm 91"
+    ],
+    "fr_opts": [
+      "Psaume 1",
+      "Psaume 120",
+      "Psaume 23",
+      "Psaume 91"
+    ]
   },
   {
     "livro": "Salmos",
@@ -2141,7 +5336,31 @@
     "es_q": "Alaba a Dios en tu...?",
     "en_q": "Praise God in your...?",
     "de_q": "Lobt Gott in eurem...?",
-    "fr_q": "Je louais Dieu en son...?"
+    "fr_q": "Je louais Dieu en son...?",
+    "es_opts": [
+      "Trono",
+      "Santuario",
+      "Templo",
+      "Monte"
+    ],
+    "en_opts": [
+      "Throne",
+      "Sanctuary",
+      "Temple",
+      "Mountain"
+    ],
+    "de_opts": [
+      "Thron",
+      "Heiligtum",
+      "Tempel",
+      "Berg"
+    ],
+    "fr_opts": [
+      "Trône",
+      "Sanctuaire",
+      "Temple",
+      "Mont"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2157,7 +5376,31 @@
     "es_q": "¿Quiénes fueron los padres de Jesús?",
     "en_q": "Who were the parents of Jesus?",
     "de_q": "Wer waren die Eltern Jesu?",
-    "fr_q": "Qui étaient les parents de Jésus ?"
+    "fr_q": "Qui étaient les parents de Jésus ?",
+    "es_opts": [
+      "João y María",
+      "José y María",
+      "Pedro y Ana",
+      "Tiago y Sara"
+    ],
+    "en_opts": [
+      "John and Mary",
+      "Joseph and Mary",
+      "Peter and Anne",
+      "James and Sarah"
+    ],
+    "de_opts": [
+      "João und Maria",
+      "José und Maria",
+      "Pedro und Ana",
+      "Tiago und Sara"
+    ],
+    "fr_opts": [
+      "João et Maria",
+      "José et Maria",
+      "Pedro et Ana",
+      "Tiago et Sara"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2173,7 +5416,31 @@
     "es_q": "¿Cuántos años tenía Jesús cuando fue al templo?",
     "en_q": "How old was Jesus when he went to the temple?",
     "de_q": "Wie alt war Jesus, als er zum Tempel ging?",
-    "fr_q": "Quel âge avait Jésus quand il est allé au temple ?"
+    "fr_q": "Quel âge avait Jésus quand il est allé au temple ?",
+    "es_opts": [
+      "10",
+      "12",
+      "15",
+      "18"
+    ],
+    "en_opts": [
+      "10",
+      "12",
+      "15",
+      "18"
+    ],
+    "de_opts": [
+      "10",
+      "12",
+      "15",
+      "18"
+    ],
+    "fr_opts": [
+      "10",
+      "12",
+      "15",
+      "18"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2189,7 +5456,31 @@
     "es_q": "¿Quién bautizó a Jesús?",
     "en_q": "Who baptized Jesus?",
     "de_q": "Wer taufte Jesus?",
-    "fr_q": "Qui a baptisé Jésus ?"
+    "fr_q": "Qui a baptisé Jésus ?",
+    "es_opts": [
+      "Pedro",
+      "Paulo",
+      "Juan Bautista",
+      "Santiago"
+    ],
+    "en_opts": [
+      "Peter",
+      "Paul",
+      "John the Baptist",
+      "James"
+    ],
+    "de_opts": [
+      "Pedro",
+      "Paulo",
+      "João Baptist",
+      "Jakobus"
+    ],
+    "fr_opts": [
+      "Pierre",
+      "Paul",
+      "Jean-Baptiste",
+      "Jacques"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2205,7 +5496,31 @@
     "es_q": "¿Dónde fue tentado Jesús?",
     "en_q": "Where was Jesus tempted?",
     "de_q": "Wo wurde Jesus versucht?",
-    "fr_q": "Où Jésus a-t-il été tenté ?"
+    "fr_q": "Où Jésus a-t-il été tenté ?",
+    "es_opts": [
+      "Templo",
+      "Desierto",
+      "Monte",
+      "Río"
+    ],
+    "en_opts": [
+      "Temple",
+      "Desert",
+      "Mountain",
+      "River"
+    ],
+    "de_opts": [
+      "Tempel",
+      "Wüste",
+      "Berg",
+      "Fluss"
+    ],
+    "fr_opts": [
+      "Temple",
+      "Désert",
+      "Montagne",
+      "Fleuve"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2221,7 +5536,31 @@
     "es_q": "¿Cuántas veces fue tentado Jesús en el desierto?",
     "en_q": "How many times was Jesus tempted in the desert?",
     "de_q": "Wie oft wurde Jesus in der Wüste versucht?",
-    "fr_q": "Combien de fois Jésus a-t-il été tenté dans le désert ?"
+    "fr_q": "Combien de fois Jésus a-t-il été tenté dans le désert ?",
+    "es_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "en_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "de_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "fr_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2237,7 +5576,31 @@
     "es_q": "¿Cuál fue el primer milagro de Jesús en Mateo?",
     "en_q": "What was Jesus' first miracle in Matthew?",
     "de_q": "Welches war das erste Wunder Jesu bei Matthäus?",
-    "fr_q": "Quel a été le premier miracle de Jésus dans Matthieu ?"
+    "fr_q": "Quel a été le premier miracle de Jésus dans Matthieu ?",
+    "es_opts": [
+      "Curación de ciego",
+      "Curación de leproso",
+      "Multiplicación de panes",
+      "Agua en vino"
+    ],
+    "en_opts": [
+      "Healing of the blind",
+      "Healing of the leper",
+      "Multiplication of loaves",
+      "Water into wine"
+    ],
+    "de_opts": [
+      "Heilung eines Blinden",
+      "Heilung eines Aussätzigen",
+      "Brotvermehrung",
+      "Wasser zu Wein"
+    ],
+    "fr_opts": [
+      "Guérison d'un aveugle",
+      "Guérison d'un lépreux",
+      "Multiplication des pains",
+      "L'eau changée en vin"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2253,7 +5616,31 @@
     "es_q": "¿Cuántos discípulos llamó Jesús primero?",
     "en_q": "How many disciples did Jesus call first?",
     "de_q": "Wie viele Jünger rief Jesus zuerst?",
-    "fr_q": "Combien de disciples Jésus a-t-il d'abord appelés ?"
+    "fr_q": "Combien de disciples Jésus a-t-il d'abord appelés ?",
+    "es_opts": [
+      "2",
+      "4",
+      "6",
+      "12"
+    ],
+    "en_opts": [
+      "2",
+      "4",
+      "6",
+      "12"
+    ],
+    "de_opts": [
+      "2",
+      "4",
+      "6",
+      "12"
+    ],
+    "fr_opts": [
+      "2",
+      "4",
+      "6",
+      "12"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2269,7 +5656,31 @@
     "es_q": "¿Quién era cobrador de impuestos y se convirtió en discípulo?",
     "en_q": "Who was a tax collector and became a disciple?",
     "de_q": "Wer war ein Steuereintreiber und wurde zum Jünger?",
-    "fr_q": "Qui était percepteur d'impôts et devenu disciple?"
+    "fr_q": "Qui était percepteur d'impôts et devenu disciple?",
+    "es_opts": [
+      "Pedro",
+      "Mateo",
+      "Juan",
+      "Santiago"
+    ],
+    "en_opts": [
+      "Peter",
+      "Matthew",
+      "John",
+      "James"
+    ],
+    "de_opts": [
+      "Pedro",
+      "Matthäus",
+      "Johannes",
+      "Jakobus"
+    ],
+    "fr_opts": [
+      "Pedro",
+      "Matthieu",
+      "Jean",
+      "Jacques"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2285,7 +5696,31 @@
     "es_q": "¿Cuál es el mayor mandamiento según Jesús?",
     "en_q": "What is the greatest commandment according to Jesus?",
     "de_q": "Was ist das größte Gebot nach Jesus?",
-    "fr_q": "Quel est le plus grand commandement selon Jésus ?"
+    "fr_q": "Quel est le plus grand commandement selon Jésus ?",
+    "es_opts": [
+      "No matar",
+      "Amar a Dios",
+      "Honrar padres",
+      "No robar"
+    ],
+    "en_opts": [
+      "Do not kill",
+      "Love God",
+      "Honor parents",
+      "Do not steal"
+    ],
+    "de_opts": [
+      "Nicht töten",
+      "Gott lieben",
+      "Eltern ehren",
+      "Nicht stehlen"
+    ],
+    "fr_opts": [
+      "Ne pas tuer",
+      "Aimer Dieu",
+      "Honorer les parents",
+      "Ne pas voler"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2301,7 +5736,31 @@
     "es_q": "¿Cuántas personas alimentó Jesús con 5 panes?",
     "en_q": "How many people did Jesus feed with 5 loaves?",
     "de_q": "Wie viele Menschen speiste Jesus mit 5 Broten?",
-    "fr_q": "Combien de personnes Jésus a-t-il nourries avec 5 pains ?"
+    "fr_q": "Combien de personnes Jésus a-t-il nourries avec 5 pains ?",
+    "es_opts": [
+      "2000",
+      "3000",
+      "4000",
+      "5000"
+    ],
+    "en_opts": [
+      "2000",
+      "3000",
+      "4000",
+      "5000"
+    ],
+    "de_opts": [
+      "2000",
+      "3000",
+      "4000",
+      "5000"
+    ],
+    "fr_opts": [
+      "2000",
+      "3000",
+      "4000",
+      "5000"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2317,7 +5776,31 @@
     "es_q": "¿Quién caminó sobre las aguas con Jesús?",
     "en_q": "Who walked on the water with Jesus?",
     "de_q": "Wer wandelte über die Wasser mit Jesus?",
-    "fr_q": "Qui a marché sur les eaux avec Jésus ?"
+    "fr_q": "Qui a marché sur les eaux avec Jésus ?",
+    "es_opts": [
+      "João",
+      "Tiago",
+      "Pedro",
+      "Paulo"
+    ],
+    "en_opts": [
+      "John",
+      "Tiago",
+      "Peter",
+      "Paul"
+    ],
+    "de_opts": [
+      "João",
+      "Tiago",
+      "Pedro",
+      "Paulo"
+    ],
+    "fr_opts": [
+      "João",
+      "Tiago",
+      "Pedro",
+      "Paulo"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2333,7 +5816,31 @@
     "es_q": "¿Cuánto tiempo Jesús estuvo en el sepulcro?",
     "en_q": "How long did Jesus stay in the tomb?",
     "de_q": "Wie lange blieb Jesus im Grab?",
-    "fr_q": "Combien de temps Jésus a-t-il passé dans le tombeau ?"
+    "fr_q": "Combien de temps Jésus a-t-il passé dans le tombeau ?",
+    "es_opts": [
+      "1 día",
+      "2 días",
+      "3 días",
+      "7 días"
+    ],
+    "en_opts": [
+      "1 day",
+      "2 days",
+      "3 days",
+      "7 days"
+    ],
+    "de_opts": [
+      "1 Tag",
+      "2 Tage",
+      "3 Tage",
+      "7 Tage"
+    ],
+    "fr_opts": [
+      "1 jour",
+      "2 jours",
+      "3 jours",
+      "7 jours"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2349,7 +5856,31 @@
     "es_q": "¿Quién traicionó a Jesús?",
     "en_q": "Who betrayed Jesus?",
     "de_q": "Wer verriet Jesus?",
-    "fr_q": "Qui a trahi Jésus ?"
+    "fr_q": "Qui a trahi Jésus ?",
+    "es_opts": [
+      "Pedro",
+      "João",
+      "Judas",
+      "Santiago"
+    ],
+    "en_opts": [
+      "Peter",
+      "John",
+      "Judas",
+      "James"
+    ],
+    "de_opts": [
+      "Pedro",
+      "João",
+      "Judas",
+      "Tiago"
+    ],
+    "fr_opts": [
+      "Pierre",
+      "Jean",
+      "Judas",
+      "Jacques"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2365,7 +5896,31 @@
     "es_q": "¿Por cuánto Judas vendió a Jesús?",
     "en_q": "For how much did Judas sell Jesus?",
     "de_q": "Für wie viel verkaufte Judas Jesus?",
-    "fr_q": "Pour combien Judas a-t-il vendu Jésus ?"
+    "fr_q": "Pour combien Judas a-t-il vendu Jésus ?",
+    "es_opts": [
+      "10 monedas",
+      "20 monedas",
+      "30 monedas",
+      "50 monedas"
+    ],
+    "en_opts": [
+      "10 coins",
+      "20 coins",
+      "30 coins",
+      "50 coins"
+    ],
+    "de_opts": [
+      "10 Münzen",
+      "20 Münzen",
+      "30 Münzen",
+      "50 Münzen"
+    ],
+    "fr_opts": [
+      "10 pièces",
+      "20 pièces",
+      "30 pièces",
+      "50 pièces"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2381,7 +5936,31 @@
     "es_q": "¿Quién negó a Jesús tres veces?",
     "en_q": "Who denied Jesus three times?",
     "de_q": "Wer hat Jesus drei Mal verleugnet?",
-    "fr_q": "Qui a renié Jésus trois fois ?"
+    "fr_q": "Qui a renié Jésus trois fois ?",
+    "es_opts": [
+      "João",
+      "Tiago",
+      "Judas",
+      "Pedro"
+    ],
+    "en_opts": [
+      "John",
+      "James",
+      "Judas",
+      "Peter"
+    ],
+    "de_opts": [
+      "João",
+      "Tiago",
+      "Judas",
+      "Petrus"
+    ],
+    "fr_opts": [
+      "João",
+      "Tiago",
+      "Judas",
+      "Pierre"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2397,7 +5976,31 @@
     "es_q": "¿Dónde fue crucificado Jesús?",
     "en_q": "Where was Jesus crucified?",
     "de_q": "Wo wurde Jesus gekreuzigt?",
-    "fr_q": "Où Jésus a-t-il été crucifié ?"
+    "fr_q": "Où Jésus a-t-il été crucifié ?",
+    "es_opts": [
+      "Belén",
+      "Gólgota",
+      "Nazaret",
+      "Getsemaní"
+    ],
+    "en_opts": [
+      "Bethlehem",
+      "Golgotha",
+      "Nazareth",
+      "Gethsemane"
+    ],
+    "de_opts": [
+      "Bethlehem",
+      "Golgatha",
+      "Nazareth",
+      "Gethsemane"
+    ],
+    "fr_opts": [
+      "Belém",
+      "Golgotha",
+      "Nazareth",
+      "Gethsémani"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2413,7 +6016,31 @@
     "es_q": "¿Quién ayudó a Jesús a llevar la cruz?",
     "en_q": "Who helped Jesus carry the cross?",
     "de_q": "Wer half Jesus, das Kreuz zu tragen?",
-    "fr_q": "Qui a aidé Jésus à porter la croix ?"
+    "fr_q": "Qui a aidé Jésus à porter la croix ?",
+    "es_opts": [
+      "Pedro",
+      "Simeón de Cirene",
+      "Juan",
+      "Nicodemo"
+    ],
+    "en_opts": [
+      "Peter",
+      "Simon of Cyrene",
+      "John",
+      "Nicodemus"
+    ],
+    "de_opts": [
+      "Pedro",
+      "Simon von Kyrene",
+      "Johannes",
+      "Nikodemus"
+    ],
+    "fr_opts": [
+      "Pedro",
+      "Simon de Cyrène",
+      "Jean",
+      "Nicodème"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2429,7 +6056,31 @@
     "es_q": "¿Qué fue colocado en la cabeza de Jesús?",
     "en_q": "What was placed on Jesus's head?",
     "de_q": "Was wurde Jesus auf den Kopf gelegt?",
-    "fr_q": "Qu'est-ce qui a été mis sur la tête de Jésus?"
+    "fr_q": "Qu'est-ce qui a été mis sur la tête de Jésus?",
+    "es_opts": [
+      "Corona de flores",
+      "Corona de espinas",
+      "Velo",
+      "Manto"
+    ],
+    "en_opts": [
+      "Flower crown",
+      "Crown of thorns",
+      "Veil",
+      "Mantle"
+    ],
+    "de_opts": [
+      "Blumenkrone",
+      "Dornenkrone",
+      "Schleier",
+      "Mantel"
+    ],
+    "fr_opts": [
+      "Couronne de fleurs",
+      "Couronne d'épines",
+      "Voile",
+      "Manteau"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2445,7 +6096,31 @@
     "es_q": "¿Quién pidió el cuerpo de Jesús?",
     "en_q": "Who asked for the body of Jesus?",
     "de_q": "Wer forderte den Leichnam Jesu an?",
-    "fr_q": "Qui a demandé le corps de Jésus ?"
+    "fr_q": "Qui a demandé le corps de Jésus ?",
+    "es_opts": [
+      "Pedro",
+      "José de Arimatea",
+      "Juan",
+      "Nicodemo"
+    ],
+    "en_opts": [
+      "Peter",
+      "Joseph of Arimathea",
+      "John",
+      "Nicodemus"
+    ],
+    "de_opts": [
+      "Pedro",
+      "Josef von Arimathäa",
+      "Johannes",
+      "Nikodemus"
+    ],
+    "fr_opts": [
+      "Pedro",
+      "Joseph d'Arimathie",
+      "Jean",
+      "Nicodème"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2461,7 +6136,31 @@
     "es_q": "¿Cuál era el título escrito en la cruz?",
     "en_q": "What was the title written on the cross?",
     "de_q": "Welcher Titel stand auf dem Kreuz geschrieben?",
-    "fr_q": "Quel était le titre écrit sur la croix ?"
+    "fr_q": "Quel était le titre écrit sur la croix ?",
+    "es_opts": [
+      "Rey de los Judíos",
+      "Hijo de Dios",
+      "Salvador",
+      "Mesías"
+    ],
+    "en_opts": [
+      "King of the Jews",
+      "Son of God",
+      "Savior",
+      "Messiah"
+    ],
+    "de_opts": [
+      "König der Juden",
+      "Sohn Gottes",
+      "Erlöser",
+      "Messias"
+    ],
+    "fr_opts": [
+      "Roi des Juifs",
+      "Fils de Dieu",
+      "Sauveur",
+      "Messie"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2477,7 +6176,31 @@
     "es_q": "¿Quién fue el gobernador que condenó a Jesús?",
     "en_q": "Who was the governor that condemned Jesus?",
     "de_q": "Wer war der Gouverneur, der Jesus verurteilte?",
-    "fr_q": "Qui était le gouverneur qui a condamné Jésus ?"
+    "fr_q": "Qui était le gouverneur qui a condamné Jésus ?",
+    "es_opts": [
+      "Herodes",
+      "Pilatos",
+      "César",
+      "Caifás"
+    ],
+    "en_opts": [
+      "Herod",
+      "Pilate",
+      "Caesar",
+      "Caiaphas"
+    ],
+    "de_opts": [
+      "Herodes",
+      "Pilatus",
+      "Cäsar",
+      "Kajaphas"
+    ],
+    "fr_opts": [
+      "Hérode",
+      "Pilate",
+      "César",
+      "Caïphe"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2493,7 +6216,31 @@
     "es_q": "¿Cuál es la oración que Jesús enseñó?",
     "en_q": "What is the prayer that Jesus taught?",
     "de_q": "Welches Gebet lehrte Jesus?",
-    "fr_q": "Quelle est la prière que Jésus a enseignée ?"
+    "fr_q": "Quelle est la prière que Jésus a enseignée ?",
+    "es_opts": [
+      "Padrenuestro",
+      "Avemaría",
+      "Credo",
+      "Magníficat"
+    ],
+    "en_opts": [
+      "Our Father",
+      "Hail Mary",
+      "Creed",
+      "Magnificat"
+    ],
+    "de_opts": [
+      "Vaterunser",
+      "Ave Maria",
+      "Glaubensbekenntnis",
+      "Magnificat"
+    ],
+    "fr_opts": [
+      "Pater Noster",
+      "Ave Maria",
+      "Credo",
+      "Magnificat"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2509,7 +6256,31 @@
     "es_q": "¿El Sermón de la Montaña comienza con las...?",
     "en_q": "The Sermon on the Mount begins with the...?",
     "de_q": "Die Bergpredigt beginnt mit den...?",
-    "fr_q": "Le Sermon sur la Montagne commence par les...?"
+    "fr_q": "Le Sermon sur la Montagne commence par les...?",
+    "es_opts": [
+      "Oraciones",
+      "Bienaventuranzas",
+      "Parábolas",
+      "Profecías"
+    ],
+    "en_opts": [
+      "Prayers",
+      "Beatitudes",
+      "Parables",
+      "Prophecies"
+    ],
+    "de_opts": [
+      "Gebete",
+      "Seligpreisungen",
+      "Gleichnisse",
+      "Prophezeiungen"
+    ],
+    "fr_opts": [
+      "Prières",
+      "Béatitudes",
+      "Paraboles",
+      "Prophéties"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2525,7 +6296,31 @@
     "es_q": "¿Cuántas bienaventuranzas hay en el Sermão de la Montaña?",
     "en_q": "How many beatitudes are there in the Sermon on the Mount?",
     "de_q": "Wie viele Seligpreisungen gibt es in der Bergpredigt?",
-    "fr_q": "Combien de béatitudes y a-t-il dans le Sermon sur la montagne ?"
+    "fr_q": "Combien de béatitudes y a-t-il dans le Sermon sur la montagne ?",
+    "es_opts": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "en_opts": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "de_opts": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "fr_opts": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2541,7 +6336,31 @@
     "es_q": "¿Quién vino a visitar a Jesús recién nacido desde Oriente?",
     "en_q": "Who came from the East to visit the newborn Jesus?",
     "de_q": "Wer besuchte das neugeborene Jesus aus dem Osten?",
-    "fr_q": "Qui est venu visiter Jésus nouveau-né de l'Orient ?"
+    "fr_q": "Qui est venu visiter Jésus nouveau-né de l'Orient ?",
+    "es_opts": [
+      "Pastores",
+      "Reyes Magos",
+      "Discípulos",
+      "Fariseos"
+    ],
+    "en_opts": [
+      "Shepherds",
+      "Wise Men",
+      "Disciples",
+      "Pharisees"
+    ],
+    "de_opts": [
+      "Hirten",
+      "Heilige Drei Könige",
+      "Jünger",
+      "Pharisäer"
+    ],
+    "fr_opts": [
+      "Bergers",
+      "Rois Mages",
+      "Disciples",
+      "Pharisiens"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2557,7 +6376,31 @@
     "es_q": "¿Qué estrella guió a los magos?",
     "en_q": "What star guided the wise men?",
     "de_q": "Welcher Stern führte die Magier?",
-    "fr_q": "Quelle étoile a guidé les mages ?"
+    "fr_q": "Quelle étoile a guidé les mages ?",
+    "es_opts": [
+      "Estrella del Norte",
+      "Estrella de Belén",
+      "Luna",
+      "Cometa"
+    ],
+    "en_opts": [
+      "North Star",
+      "Star of Bethlehem",
+      "Moon",
+      "Comet"
+    ],
+    "de_opts": [
+      "Nordstern",
+      "Stern von Bethlehem",
+      "Mond",
+      "Komet"
+    ],
+    "fr_opts": [
+      "Étoile du Nord",
+      "Étoile de Bethléem",
+      "Lune",
+      "Comète"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2573,7 +6416,31 @@
     "es_q": "¿Quién ordenó matar a los niños de Belén?",
     "en_q": "Who ordered the killing of the boys of Bethlehem?",
     "de_q": "Wer befahl, die Jungen von Bethlehem zu töten?",
-    "fr_q": "Qui a ordonné de tuer les enfants de Bethléem ?"
+    "fr_q": "Qui a ordonné de tuer les enfants de Bethléem ?",
+    "es_opts": [
+      "César",
+      "Pilato",
+      "Herodes",
+      "Caifás"
+    ],
+    "en_opts": [
+      "Caesar",
+      "Pilate",
+      "Herod",
+      "Caiaphas"
+    ],
+    "de_opts": [
+      "Caesar",
+      "Pilatus",
+      "Herodes",
+      "Kaiphas"
+    ],
+    "fr_opts": [
+      "César",
+      "Pilate",
+      "Hérode",
+      "Caïphe"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2589,7 +6456,31 @@
     "es_q": "¿A dónde huyó Jesús cuando era niño?",
     "en_q": "Where did Jesus flee to as a child?",
     "de_q": "Wohin floh Jesus als Kind?",
-    "fr_q": "Où Jésus s'est-il enfui quand il était enfant ?"
+    "fr_q": "Où Jésus s'est-il enfui quand il était enfant ?",
+    "es_opts": [
+      "Roma",
+      "Grecia",
+      "Egipto",
+      "Siria"
+    ],
+    "en_opts": [
+      "Rome",
+      "Greece",
+      "Egypt",
+      "Syria"
+    ],
+    "de_opts": [
+      "Rom",
+      "Griechenland",
+      "Ägypten",
+      "Syrien"
+    ],
+    "fr_opts": [
+      "Rome",
+      "Grèce",
+      "Égypte",
+      "Syrie"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2605,7 +6496,31 @@
     "es_q": "¿Qué dijo Jesús que es el camino, la verdad y la vida?",
     "en_q": "What did Jesus say was the way and the life?",
     "de_q": "Was hat Jesus gesagt, dass der Weg und das Leben ist?",
-    "fr_q": "Qu'a dit Jésus être le chemin, la vérité et la vie ?"
+    "fr_q": "Qu'a dit Jésus être le chemin, la vérité et la vie ?",
+    "es_opts": [
+      "Largo",
+      "Estrecho",
+      "Medio",
+      "Largo"
+    ],
+    "en_opts": [
+      "Wide",
+      "Narrow",
+      "Medium",
+      "Long"
+    ],
+    "de_opts": [
+      "Breit",
+      "Eng",
+      "Mittel",
+      "Lang"
+    ],
+    "fr_opts": [
+      "Large",
+      "Étroit",
+      "Moyen",
+      "Long"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2621,7 +6536,31 @@
     "es_q": "¿Cuál es la parábola que habla de un hijo que regresó al padre?",
     "en_q": "Which parable talks about a son who returned to his father?",
     "de_q": "Welche Parabel spricht von einem Sohn, der zum Vater zurückkehrte?",
-    "fr_q": "Quelle parabole parle d'un fils qui est revenu à son père ?"
+    "fr_q": "Quelle parabole parle d'un fils qui est revenu à son père ?",
+    "es_opts": [
+      "Hijo perdido",
+      "Sembrador",
+      "Talentos",
+      "Oveja perdida"
+    ],
+    "en_opts": [
+      "Lost Son",
+      "Sower",
+      "Talents",
+      "Lost Sheep"
+    ],
+    "de_opts": [
+      "Verlorener Sohn",
+      "Sämann",
+      "Talente",
+      "Verlorenes Schaf"
+    ],
+    "fr_opts": [
+      "Fils perdu",
+      "Semeur",
+      "Talents",
+      "Brebis perdue"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2637,7 +6576,31 @@
     "es_q": "¿Cuántos talentos recibió el siervo que ganó más?",
     "en_q": "How many talents did the servant who gained the most receive?",
     "de_q": "Wie viele Talente erhielt der Sklave, der am meisten gewann?",
-    "fr_q": "Combien de talents a reçu le serviteur qui en a gagné le plus ?"
+    "fr_q": "Combien de talents a reçu le serviteur qui en a gagné le plus ?",
+    "es_opts": [
+      "2",
+      "5",
+      "10",
+      "20"
+    ],
+    "en_opts": [
+      "2",
+      "5",
+      "10",
+      "20"
+    ],
+    "de_opts": [
+      "2",
+      "5",
+      "10",
+      "20"
+    ],
+    "fr_opts": [
+      "2",
+      "5",
+      "10",
+      "20"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2653,7 +6616,31 @@
     "es_q": "¿Qué hizo Jesús en la entrada de Jerusalén?",
     "en_q": "What did Jesus do at the entrance of Jerusalem?",
     "de_q": "Was tat Jesus beim Einzug in Jerusalem?",
-    "fr_q": "Qu'a fait Jésus à l'entrée de Jérusalem ?"
+    "fr_q": "Qu'a fait Jésus à l'entrée de Jérusalem ?",
+    "es_opts": [
+      "Lloró",
+      "Entró en un burro",
+      "Predicó",
+      "Curó ciegos"
+    ],
+    "en_opts": [
+      "Wept",
+      "Entered a donkey",
+      "Preached",
+      "Healed the blind"
+    ],
+    "de_opts": [
+      "Weinte",
+      "Stieg auf einen Esel",
+      "Predigte",
+      "Heilte Blinde"
+    ],
+    "fr_opts": [
+      "Pleura",
+      "Entra dans un âne",
+      "Prêcha",
+      "Guérit les aveugles"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2669,7 +6656,31 @@
     "es_q": "¿Qué expulsó Jesús del templo?",
     "en_q": "What did Jesus drive out of the temple?",
     "de_q": "Was hat Jesus aus dem Tempel vertrieben?",
-    "fr_q": "Qu'est-ce que Jésus a expulsé du temple ?"
+    "fr_q": "Qu'est-ce que Jésus a expulsé du temple ?",
+    "es_opts": [
+      "Fariseos",
+      "Vendedores",
+      "Soldados",
+      "Discípulos"
+    ],
+    "en_opts": [
+      "Pharisees",
+      "Money changers",
+      "Soldiers",
+      "Disciples"
+    ],
+    "de_opts": [
+      "Pharisäer",
+      "Verkäufer",
+      "Soldaten",
+      "Jünger"
+    ],
+    "fr_opts": [
+      "Pharisiens",
+      "Marchands",
+      "Soldats",
+      "Disciples"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2685,7 +6696,31 @@
     "es_q": "¿Dónde oró Jesús antes de ser arrestado?",
     "en_q": "Where did Jesus pray before being arrested?",
     "de_q": "Wo betete Jesus, bevor er verhaftet wurde?",
-    "fr_q": "Où Jésus a-t-il prié avant d'être arrêté ?"
+    "fr_q": "Où Jésus a-t-il prié avant d'être arrêté ?",
+    "es_opts": [
+      "Templo",
+      "Getsemaní",
+      "Monte de los Olivos",
+      "Gólgota"
+    ],
+    "en_opts": [
+      "Temple",
+      "Gethsemane",
+      "Mount of Olives",
+      "Golgotha"
+    ],
+    "de_opts": [
+      "Tempel",
+      "Getsemani",
+      "Ölberg",
+      "Golgota"
+    ],
+    "fr_opts": [
+      "Temple",
+      "Gethsémani",
+      "Mont des Oliviers",
+      "Golgotha"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2701,7 +6736,31 @@
     "es_q": "¿Quién dijo ser inocente de la sangre de Jesús?",
     "en_q": "Who said they were innocent of the blood of Jesus?",
     "de_q": "Wer sagte, unschuldig am Blut Jesu zu sein?",
-    "fr_q": "Qui a dit être innocent du sang de Jésus ?"
+    "fr_q": "Qui a dit être innocent du sang de Jésus ?",
+    "es_opts": [
+      "Herodes",
+      "Pilato",
+      "Caifás",
+      "César"
+    ],
+    "en_opts": [
+      "Herod",
+      "Pilate",
+      "Caiaphas",
+      "Caesar"
+    ],
+    "de_opts": [
+      "Herodes",
+      "Pilatus",
+      "Kaiphas",
+      "Caesar"
+    ],
+    "fr_opts": [
+      "Hérodes",
+      "Pilate",
+      "Caïphe",
+      "César"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2717,7 +6776,31 @@
     "es_q": "¿Qué se rasgó cuando Jesús murió?",
     "en_q": "What tore when Jesus died?",
     "de_q": "Was zerriss, als Jesus starb?",
-    "fr_q": "Qu'est-ce qui s'est déchiré quand Jésus est mort ?"
+    "fr_q": "Qu'est-ce qui s'est déchiré quand Jésus est mort ?",
+    "es_opts": [
+      "Manto del templo",
+      "Velo del templo",
+      "Cortina del palacio",
+      "Ropa de Jesús"
+    ],
+    "en_opts": [
+      "Temple cloak",
+      "Temple veil",
+      "Palace curtain",
+      "Jesus's garment"
+    ],
+    "de_opts": [
+      "Manteltuch des Tempels",
+      "Schleier des Tempels",
+      "Vorhang des Palastes",
+      "Jesu Kleidung"
+    ],
+    "fr_opts": [
+      "Manteau du temple",
+      "Voile du temple",
+      "Rideau du palais",
+      "Vêtement de Jésus"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2733,7 +6816,31 @@
     "es_q": "¿Cuál fue el último mandato de Jesús en Mateo?",
     "en_q": "What was the last command of Jesus in Matthew?",
     "de_q": "Was war Jesu letztes Gebot in Matthäus?",
-    "fr_q": "Quel fut le dernier mandat de Jésus dans Matthieu ?"
+    "fr_q": "Quel fut le dernier mandat de Jésus dans Matthieu ?",
+    "es_opts": [
+      "Orad siempre",
+      "Id y haced discípulos",
+      "Amaos",
+      "Ayunad"
+    ],
+    "en_opts": [
+      "Always pray",
+      "Go and make disciples",
+      "Love one another",
+      "Fast"
+    ],
+    "de_opts": [
+      "Betet immer",
+      "Geht hin und macht zu Jüngern",
+      "Liebt euch",
+      "Fastet"
+    ],
+    "fr_opts": [
+      "Priez toujours",
+      "Allez et faites des disciples",
+      "Aimez-vous",
+      "Jeûnez"
+    ]
   },
   {
     "livro": "Mateus",
@@ -2749,7 +6856,31 @@
     "es_q": "Jesús dijo estar con los suyos hasta...?",
     "en_q": "Jesus said he would be with his people until...?",
     "de_q": "Jesus sagte, bei seinen zu sein bis...?",
-    "fr_q": "Jésus a dit être avec les siens jusqu'à...?"
+    "fr_q": "Jésus a dit être avec les siens jusqu'à...?",
+    "es_opts": [
+      "El fin del año",
+      "La consumación de los siglos",
+      "El día del juicio",
+      "Siempre"
+    ],
+    "en_opts": [
+      "The end of the year",
+      "The consummation of the centuries",
+      "The day of judgment",
+      "Forever"
+    ],
+    "de_opts": [
+      "Das Ende des Jahres",
+      "Die Vollendung der Jahrhunderte",
+      "Der Tag des Gerichts",
+      "Immer"
+    ],
+    "fr_opts": [
+      "La fin de l'année",
+      "L'accomplissement des siècles",
+      "Le jour du jugement",
+      "Toujours"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2765,7 +6896,31 @@
     "es_q": "Confía en el Señor de todo tu corazón y no te apoyes en tu propia...",
     "en_q": "Trust in the Lord with all your heart and lean not on your own...",
     "de_q": "Vertraue dem Herrn von ganzem Herzen und verlasse dich nicht auf deine eigene...",
-    "fr_q": "Fais confiance au Seigneur de tout ton cœur et ne t'appuie pas sur ta propre..."
+    "fr_q": "Fais confiance au Seigneur de tout ton cœur et ne t'appuie pas sur ta propre...",
+    "es_opts": [
+      "Corazón",
+      "Comprensión",
+      "Brazo",
+      "Esfuerzo"
+    ],
+    "en_opts": [
+      "Heart",
+      "Understanding",
+      "Arm",
+      "Effort"
+    ],
+    "de_opts": [
+      "Herz",
+      "Verständnis",
+      "Arm",
+      "Anstrengung"
+    ],
+    "fr_opts": [
+      "Cœur",
+      "Compréhension",
+      "Bras",
+      "Effort"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2781,7 +6936,31 @@
     "es_q": "El hijo sabio alegra al...?",
     "en_q": "The wise son brings joy to the...?",
     "de_q": "Der weise Sohn erfreut den...?",
-    "fr_q": "Le fils sage réjouit le...?"
+    "fr_q": "Le fils sage réjouit le...?",
+    "es_opts": [
+      "Hermano",
+      "Padre",
+      "Amigo",
+      "Rey"
+    ],
+    "en_opts": [
+      "Brother",
+      "Father",
+      "Friend",
+      "King"
+    ],
+    "de_opts": [
+      "Bruder",
+      "Vater",
+      "Freund",
+      "König"
+    ],
+    "fr_opts": [
+      "Frère",
+      "Père",
+      "Ami",
+      "Roi"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2797,7 +6976,31 @@
     "es_q": "Mejor es el pobre que anda en integridad que el rico de...?",
     "en_q": "\"Better is the poor who walks in integrity than the rich...?\"\n\n(This appears to be an incomplete Bible verse, likely from Proverbs 28:6)",
     "de_q": "Besser ist der Arme, der in Integrität wandelt, als der Reiche...?",
-    "fr_q": "Mieux vaut le pauvre qui marche dans l'intégrité que le riche qui...?"
+    "fr_q": "Mieux vaut le pauvre qui marche dans l'intégrité que le riche qui...?",
+    "es_opts": [
+      "Carácter perverso",
+      "Muchos amigos",
+      "Poca fe",
+      "Familia grande"
+    ],
+    "en_opts": [
+      "Perverse character",
+      "Many friends",
+      "Little faith",
+      "Large family"
+    ],
+    "de_opts": [
+      "Verdorbener Charakter",
+      "Viele Freunde",
+      "Wenig Glaube",
+      "Große Familie"
+    ],
+    "fr_opts": [
+      "Caractère pervers",
+      "Beaucoup d'amis",
+      "Peu de foi",
+      "Grande famille"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2813,7 +7016,37 @@
     "es_q": "La mujer virtuosa, ¿quién la hallará? ¿Su valor excede el de...?",
     "en_q": "\"Who can find a virtuous woman? Her value exceeds that of...?\"",
     "de_q": "Die tugendhafte Frau, wer wird sie finden? Ihr Wert übersteigt den von...?",
-    "fr_q": "La femme vertueuse, qui la trouvera? Sa valeur dépasse celle de...?"
+    "fr_q": "La femme vertueuse, qui la trouvera? Sa valeur dépasse celle de...?",
+    "es_opts": [
+      "Oro",
+      "Rubíes",
+      "Plata",
+      "Diamantes"
+    ],
+    "en_opts": [
+      "Gold",
+      "Rubies",
+      "Silver",
+      "Diamonds"
+    ],
+    "de_opts": [
+      "Gold",
+      "Rubies",
+      "Silver",
+      "Diamonds\n\nOuro",
+      "Rubis",
+      "Prata",
+      "Diamantes\n\nWait, let me correct that - you asked for German:\n\nGold",
+      "Rubine",
+      "Silber",
+      "Diamanten"
+    ],
+    "fr_opts": [
+      "Or",
+      "Rubis",
+      "Argent",
+      "Diamants"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2829,7 +7062,31 @@
     "es_q": "Enseña al niño en el camino en que debe andar y cuando envejezca...?",
     "en_q": "Teach a child in the way they should go, and when they grow old...?",
     "de_q": "Lehre das Kind auf dem Weg, auf dem es gehen soll, und wenn es alt wird...?",
-    "fr_q": "Enseigne à l'enfant le chemin dans lequel il doit marcher et quand il vieillira...?"
+    "fr_q": "Enseigne à l'enfant le chemin dans lequel il doit marcher et quand il vieillira...?",
+    "es_opts": [
+      "Enseñará a otros",
+      "No se desviará",
+      "Será rico",
+      "Será rey"
+    ],
+    "en_opts": [
+      "Will teach others",
+      "Will not deviate",
+      "Will be rich",
+      "Will be king"
+    ],
+    "de_opts": [
+      "Andere unterrichten",
+      "Wird nicht abweichen",
+      "Wird reich sein",
+      "Wird König sein"
+    ],
+    "fr_opts": [
+      "Enseignera les autres",
+      "Ne s'en détournera pas",
+      "Sera riche",
+      "Sera roi"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2845,7 +7102,31 @@
     "es_q": "El inicio de la contienda y como una apertura de...?",
     "en_q": "The beginning of the dispute is like an opening of...?",
     "de_q": "Der Anfang des Streits ist wie eine Öffnung von...?",
-    "fr_q": "Le début du différend et comme une ouverture de...?"
+    "fr_q": "Le début du différend et comme une ouverture de...?",
+    "es_opts": [
+      "Puerta",
+      "Aguas",
+      "Río",
+      "Herida"
+    ],
+    "en_opts": [
+      "Door",
+      "Waters",
+      "River",
+      "Wound"
+    ],
+    "de_opts": [
+      "Tor",
+      "Wasser",
+      "Fluss",
+      "Wunde"
+    ],
+    "fr_opts": [
+      "Porte",
+      "Eaux",
+      "Fleuve",
+      "Blessure"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2861,7 +7142,31 @@
     "es_q": "¿Ha amigo más cercano que un...?",
     "en_q": "\"Hey buddy, closer than a...?\"\n\n(This appears to be an incomplete phrase in Portuguese. The full expression is typically \"Ha amigo mais chegado que um irmão\" = \"A friend closer than a brother\")",
     "de_q": "Hat ein Freund, der näher ist als ein...?",
-    "fr_q": "Ha amigo mais chegado que um irmão.\n\n(French translation:)\n\nAh mon ami plus proche qu'un frère."
+    "fr_q": "Ha amigo mais chegado que um irmão.\n\n(French translation:)\n\nAh mon ami plus proche qu'un frère.",
+    "es_opts": [
+      "Padre",
+      "Hermano",
+      "Vecino",
+      "Rey"
+    ],
+    "en_opts": [
+      "Father",
+      "Brother",
+      "Neighbor",
+      "King"
+    ],
+    "de_opts": [
+      "Vater",
+      "Bruder",
+      "Nachbar",
+      "König"
+    ],
+    "fr_opts": [
+      "Père",
+      "Frère",
+      "Voisin",
+      "Roi"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2877,7 +7182,31 @@
     "es_q": "Como el acero endurece el acero, así el hombre endurece al...?\n\n(Note: \"agucar\" doesn't appear to be a standard Portuguese word. I interpreted it as \"açar\" or a variation meaning \"to harden/strengthen.\" If you meant a different word, please clarify.)",
     "en_q": "I can see this appears to be Portuguese text, but it seems incomplete or contains unclear/repeated words (\"agucar\" appears multiple times). \n\nA literal attempt would be something like:\n\"How to sugar sugar the iron thus the man sugar the...?\"\n\nHowever, this doesn't form coherent meaning. Could you please:\n1. Verify the original text is correct?\n2. Provide the complete sentence?\n3. Clarify what \"agucar\" should be (perhaps \"açúcar\" meaning sugar, or another word)?\n\nThis would help me provide an accurate translation.",
     "de_q": "Wie man Zucker Zucker das Eisen so der Mann Zucker das...?",
-    "fr_q": "Je ne peux pas traduire ce texte car il ne constitue pas une phrase claire ou complète en portugais. Le texte semble contenir des répétitions et des mots peu clairs (\"agucar\" n'est pas un mot portugais standard).\n\nPourriez-vous vérifier l'orthographe ou fournir le texte complet ?"
+    "fr_q": "Je ne peux pas traduire ce texte car il ne constitue pas une phrase claire ou complète en portugais. Le texte semble contenir des répétitions et des mots peu clairs (\"agucar\" n'est pas un mot portugais standard).\n\nPourriez-vous vérifier l'orthographe ou fournir le texte complet ?",
+    "es_opts": [
+      "Espíritu",
+      "Rostro del amigo",
+      "Corazón",
+      "Entendimiento"
+    ],
+    "en_opts": [
+      "Spirit",
+      "Friend's Face",
+      "Heart",
+      "Understanding"
+    ],
+    "de_opts": [
+      "Geist",
+      "Gesicht des Freundes",
+      "Herz",
+      "Verständnis"
+    ],
+    "fr_opts": [
+      "Esprit",
+      "Visage de l'ami",
+      "Cœur",
+      "Compréhension"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2893,7 +7222,31 @@
     "es_q": "El corazón del hombre es más engañoso que todas las cosas según...?",
     "en_q": "The heart of man is more deceitful than all things according to...?",
     "de_q": "Das Herz des Menschen ist trügerischer als alle Dinge, laut...?",
-    "fr_q": "Le cœur de l'homme est plus trompeur que toutes choses selon...?"
+    "fr_q": "Le cœur de l'homme est plus trompeur que toutes choses selon...?",
+    "es_opts": [
+      "Salomón",
+      "Jeremías",
+      "Proverbios",
+      "Isaías"
+    ],
+    "en_opts": [
+      "Solomon",
+      "Jeremiah",
+      "Proverbs",
+      "Isaiah"
+    ],
+    "de_opts": [
+      "Salomon",
+      "Jeremia",
+      "Sprichwörter",
+      "Jesaja"
+    ],
+    "fr_opts": [
+      "Salomon",
+      "Jérémie",
+      "Proverbes",
+      "Isaïe"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2909,7 +7262,31 @@
     "es_q": "¿Quién siembra viento cosechará...?",
     "en_q": "\"He who sows wind will reap...?\"\n\n(This is part of the Portuguese proverb \"Quem semeia vento colherá tempestade\" - \"He who sows wind will reap a whirlwind\")",
     "de_q": "Wer Wind sät, wird Sturm ernten...?",
-    "fr_q": "Qui sème le vent récoltera...?"
+    "fr_q": "Qui sème le vent récoltera...?",
+    "es_opts": [
+      "Lluvia",
+      "Tormenta",
+      "Nada",
+      "Paz"
+    ],
+    "en_opts": [
+      "Rain",
+      "Storm",
+      "Nothing",
+      "Peace"
+    ],
+    "de_opts": [
+      "Regen",
+      "Sturm",
+      "Nichts",
+      "Frieden"
+    ],
+    "fr_opts": [
+      "Pluie",
+      "Tempête",
+      "Rien",
+      "Paix"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2925,7 +7302,31 @@
     "es_q": "La esperanza aplazada enferma el...?",
     "en_q": "\"Hope deferred makes the...\"\n\n(This is the beginning of a famous proverb from the Bible: \"Hope deferred makes the heart sick\" - Proverbs 13:12)",
     "de_q": "Die aufgeschobene Hoffnung macht den...?",
-    "fr_q": "L'espoir ajourné rend malade le...?"
+    "fr_q": "L'espoir ajourné rend malade le...?",
+    "es_opts": [
+      "Cuerpo",
+      "Corazón",
+      "Espíritu",
+      "Alma"
+    ],
+    "en_opts": [
+      "Body",
+      "Heart",
+      "Spirit",
+      "Soul"
+    ],
+    "de_opts": [
+      "Körper",
+      "Herz",
+      "Geist",
+      "Seele"
+    ],
+    "fr_opts": [
+      "Corps",
+      "Cœur",
+      "Esprit",
+      "Âme"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2941,7 +7342,31 @@
     "es_q": "El temor del Señor prolonga los...?",
     "en_q": "The fear of the Lord prolongs...?",
     "de_q": "Die Furcht des Herrn verlängert die...?",
-    "fr_q": "La crainte du Seigneur prolonge les...?"
+    "fr_q": "La crainte du Seigneur prolonge les...?",
+    "es_opts": [
+      "Bienes",
+      "Días",
+      "Amigos",
+      "Hijos"
+    ],
+    "en_opts": [
+      "Goods",
+      "Days",
+      "Friends",
+      "Children"
+    ],
+    "de_opts": [
+      "Güter",
+      "Tage",
+      "Freunde",
+      "Söhne"
+    ],
+    "fr_opts": [
+      "Biens",
+      "Jours",
+      "Amis",
+      "Fils"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2957,7 +7382,31 @@
     "es_q": "¿Qué es dulce para el hombre y después amargo?",
     "en_q": "What is sweet to a man and then bitter?",
     "de_q": "Was ist für den Mann süß und dann bitter?",
-    "fr_q": "Ce qui est doux pour l'homme et ensuite amer?"
+    "fr_q": "Ce qui est doux pour l'homme et ensuite amer?",
+    "es_opts": [
+      "Riqueza",
+      "Pan de mentira",
+      "Amor",
+      "Vino"
+    ],
+    "en_opts": [
+      "Wealth",
+      "Bread of lies",
+      "Love",
+      "Wine"
+    ],
+    "de_opts": [
+      "Reichtum",
+      "Lügenbrot",
+      "Liebe",
+      "Wein"
+    ],
+    "fr_opts": [
+      "Richesse",
+      "Pain de mensonge",
+      "Amour",
+      "Vin"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2973,7 +7422,34 @@
     "es_q": "No digas a tu prójimo \"vete y vuelve mañana y te daré cuando...?\"",
     "en_q": "\"Do not say to your neighbor, 'Go and come back tomorrow and I will give you,' when...?\"",
     "de_q": "Sag deinem Nächsten nicht \"geh und komm morgen zurück und ich werde dir geben, wenn...?\"",
-    "fr_q": "Ne dis pas à ton prochain : va et reviens demain, et je te donnerai quand...?"
+    "fr_q": "Ne dis pas à ton prochain : va et reviens demain, et je te donnerai quand...?",
+    "es_opts": [
+      "Tienes tiempo",
+      "Tienes lo que dar",
+      "Quieras",
+      "Puedas"
+    ],
+    "en_opts": [
+      "Tiveres tempo",
+      "Tens o que dar",
+      "Quiseres",
+      "Puder\n\nIf you have time",
+      "You have something to give",
+      "If you wish",
+      "If you can"
+    ],
+    "de_opts": [
+      "Du hast Zeit",
+      "Du hast, was du geben kannst",
+      "Du wünschst dir",
+      "Du kannst"
+    ],
+    "fr_opts": [
+      "Temps qui passe",
+      "Tu as ce qu'il faut donner",
+      "Que tu veuilles",
+      "Que tu puisses"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -2989,7 +7465,31 @@
     "es_q": "El falso testimonio no quedará sin...?",
     "en_q": "\"False testimony will not go unpunished...?\"",
     "de_q": "Der falsche Zeugnis wird nicht bleiben ohne...?",
-    "fr_q": "Le faux témoignage ne restera pas sans...?"
+    "fr_q": "Le faux témoignage ne restera pas sans...?",
+    "es_opts": [
+      "Recompensa",
+      "Castigo",
+      "Vergüenza",
+      "Fin"
+    ],
+    "en_opts": [
+      "Reward",
+      "Punishment",
+      "Shame",
+      "End"
+    ],
+    "de_opts": [
+      "Belohnung",
+      "Strafe",
+      "Schande",
+      "Ende"
+    ],
+    "fr_opts": [
+      "Récompense",
+      "Punition",
+      "Honte",
+      "Fin"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3005,7 +7505,31 @@
     "es_q": "Honra al Señor con tus...",
     "en_q": "Honor the Lord with your...?",
     "de_q": "Ehre den Herrn mit deinem...?",
-    "fr_q": "Honre o Seigneur avec tes..."
+    "fr_q": "Honre o Seigneur avec tes...",
+    "es_opts": [
+      "Alabanzas",
+      "Bienes",
+      "Trabajos",
+      "Hijos"
+    ],
+    "en_opts": [
+      "Praise",
+      "Goods",
+      "Works",
+      "Children"
+    ],
+    "de_opts": [
+      "Lob",
+      "Güter",
+      "Arbeiten",
+      "Kinder"
+    ],
+    "fr_opts": [
+      "Louanges",
+      "Biens",
+      "Travaux",
+      "Enfants"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3021,7 +7545,31 @@
     "es_q": "El nombre del Señor es una torre...",
     "en_q": "The name of the Lord is a tower...?",
     "de_q": "Der Name des Herrn ist ein Turm...?",
-    "fr_q": "Le nom du Seigneur est une tour...?"
+    "fr_q": "Le nom du Seigneur est une tour...?",
+    "es_opts": [
+      "Alta",
+      "Fuerte",
+      "Bella",
+      "Santa"
+    ],
+    "en_opts": [
+      "High",
+      "Strong",
+      "Beautiful",
+      "Holy"
+    ],
+    "de_opts": [
+      "Hoch",
+      "Stark",
+      "Schön",
+      "Heilig"
+    ],
+    "fr_opts": [
+      "Alta",
+      "Forte",
+      "Bela",
+      "Santa"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3037,7 +7585,31 @@
     "es_q": "¿Quién da al pobre presta al...?",
     "en_q": "Who gives to the poor lends to...?",
     "de_q": "Wer dem Armen gibt, leiht dem...?",
-    "fr_q": "Qui donne au pauvre prête à...?"
+    "fr_q": "Qui donne au pauvre prête à...?",
+    "es_opts": [
+      "Rey",
+      "Señor",
+      "Próximo",
+      "Rico"
+    ],
+    "en_opts": [
+      "King",
+      "Sir",
+      "Next",
+      "Rich"
+    ],
+    "de_opts": [
+      "König",
+      "Herr",
+      "Nächster",
+      "Reich"
+    ],
+    "fr_opts": [
+      "Roi",
+      "Monsieur",
+      "Prochain",
+      "Riche"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3053,7 +7625,31 @@
     "es_q": "Sin visión el pueblo...?",
     "en_q": "\"Without vision the people...?\"",
     "de_q": "Ohne Vision das Volk...?",
-    "fr_q": "Sans vision, le peuple...?"
+    "fr_q": "Sans vision, le peuple...?",
+    "es_opts": [
+      "Peca",
+      "Perece",
+      "Erra",
+      "Cai"
+    ],
+    "en_opts": [
+      "Sins",
+      "Perishes",
+      "Errs",
+      "Falls"
+    ],
+    "de_opts": [
+      "Stück",
+      "Verdirbt",
+      "Irrt",
+      "Fällt"
+    ],
+    "fr_opts": [
+      "Peca",
+      "Pourrit",
+      "S'est trompé",
+      "Est tombé"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3069,7 +7665,31 @@
     "es_q": "El corazón tranquilo da vida al cuerpo pero la envidia...?",
     "en_q": "A peaceful heart gives life to the body, but envy and...?",
     "de_q": "O coração tranquilo e vida para o corpo mas a inveja e...?\n\nDas ruhige Herz ist Leben für den Körper, aber der Neid und...?",
-    "fr_q": "Le cœur tranquille apporte la vie au corps, mais l'envie et...?"
+    "fr_q": "Le cœur tranquille apporte la vie au corps, mais l'envie et...?",
+    "es_opts": [
+      "Debilidad",
+      "Pudrición de los huesos",
+      "Tristeza",
+      "Muerte"
+    ],
+    "en_opts": [
+      "Weakness",
+      "Bone rot",
+      "Sadness",
+      "Death"
+    ],
+    "de_opts": [
+      "Schwäche",
+      "Knochenfäule",
+      "Traurigkeit",
+      "Tod"
+    ],
+    "fr_opts": [
+      "Faiblesse",
+      "Pourriture des os",
+      "Tristesse",
+      "Mort"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3085,7 +7705,31 @@
     "es_q": "Hijo mío, no rechaces la disciplina del Señor ni te...?",
     "en_q": "\"My son, do not reject the discipline of the Lord, nor...\"",
     "de_q": "Mein Sohn, lehne die Zucht des Herrn nicht ab und...?",
-    "fr_q": "Mon fils, ne rejette pas la discipline du Seigneur et ne te...?"
+    "fr_q": "Mon fils, ne rejette pas la discipline du Seigneur et ne te...?",
+    "es_opts": [
+      "Alejas",
+      "Canses de su corrección",
+      "Avergüenzas",
+      "Rebeldes"
+    ],
+    "en_opts": [
+      "Distance",
+      "Tires of your correction",
+      "Shames",
+      "Rebels"
+    ],
+    "de_opts": [
+      "Entfernst",
+      "Ermüdest von seiner Korrektur",
+      "Beschämst",
+      "Rebellen"
+    ],
+    "fr_opts": [
+      "Éloignés",
+      "Causes de sa correction",
+      "Honteux",
+      "Rebelles"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3101,7 +7745,31 @@
     "es_q": "La sabiduría edificó su...?",
     "en_q": "\"Wisdom has built her...\"\n\n(This appears to be the beginning of a verse, likely from Proverbs 9:1 in Portuguese, which continues with \"house\" or \"home\" in English.)",
     "de_q": "Die Weisheit hat ihr Haus gebaut...?",
-    "fr_q": "La sagesse a construit sa...?"
+    "fr_q": "La sagesse a construit sa...?",
+    "es_opts": [
+      "Ciudad",
+      "Casa",
+      "Torre",
+      "Familia"
+    ],
+    "en_opts": [
+      "City",
+      "House",
+      "Tower",
+      "Family"
+    ],
+    "de_opts": [
+      "Stadt",
+      "Haus",
+      "Turm",
+      "Familie"
+    ],
+    "fr_opts": [
+      "Ville",
+      "Maison",
+      "Tour",
+      "Famille"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3117,7 +7785,31 @@
     "es_q": "Quien encuentra esposa encuentra una cosa buena y alcanza el favor del...?",
     "en_q": "\"Whoever finds a wife finds a good thing and obtains favor from the...?\"",
     "de_q": "Wer eine Frau findet, findet etwas Gutes und erlangt die Gunst des...?",
-    "fr_q": "Qui trouve une épouse trouve une bonne chose et obtient la faveur du...?"
+    "fr_q": "Qui trouve une épouse trouve une bonne chose et obtient la faveur du...?",
+    "es_opts": [
+      "Rey",
+      "Señor",
+      "Pueblo",
+      "Padre"
+    ],
+    "en_opts": [
+      "King",
+      "Lord",
+      "People",
+      "Father"
+    ],
+    "de_opts": [
+      "König",
+      "Herr",
+      "Volk",
+      "Vater"
+    ],
+    "fr_opts": [
+      "Roi",
+      "Monsieur",
+      "Peuple",
+      "Père"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3133,7 +7825,31 @@
     "es_q": "El hombre proyectó su camino pero el Señor...?",
     "en_q": "The man planned his path but the Lord...?",
     "de_q": "Der Mann plante seinen Weg, aber der Herr...?",
-    "fr_q": "L'homme a planifié son chemin mais le Seigneur...?"
+    "fr_q": "L'homme a planifié son chemin mais le Seigneur...?",
+    "es_opts": [
+      "Aprueba",
+      "Dirige los pasos",
+      "Bendice",
+      "Guía"
+    ],
+    "en_opts": [
+      "Approves",
+      "Directs the steps",
+      "Blesses",
+      "Guides"
+    ],
+    "de_opts": [
+      "Genehmigt",
+      "Lenkt die Schritte",
+      "Segnet",
+      "Führt"
+    ],
+    "fr_opts": [
+      "Approuve",
+      "Dirige les pas",
+      "Bénit",
+      "Guide"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3149,7 +7865,31 @@
     "es_q": "El Señor aborrece el corazón...?",
     "en_q": "The Lord abhors the heart...?",
     "de_q": "Der Herr hasst das Herz...?",
-    "fr_q": "Le Seigneur déteste le coeur...?"
+    "fr_q": "Le Seigneur déteste le coeur...?",
+    "es_opts": [
+      "Frío",
+      "Soberbio",
+      "Triste",
+      "Vacío"
+    ],
+    "en_opts": [
+      "Cold",
+      "Arrogant",
+      "Sad",
+      "Empty"
+    ],
+    "de_opts": [
+      "Kalt",
+      "Hochmütig",
+      "Traurig",
+      "Leer"
+    ],
+    "fr_opts": [
+      "Froid",
+      "Orgueilleux",
+      "Triste",
+      "Vide"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3165,7 +7905,31 @@
     "es_q": "Mejor es un plato de hierbas con amor que buey engordado con...?",
     "en_q": "\"Better a plate of herbs with love than a fattened ox with...?\"",
     "de_q": "Besser ein Gericht aus Kräutern mit Liebe als ein gemästeter Stier mit...?",
-    "fr_q": "Mieux vaut un plat d'herbes avec amour qu'un bœuf engraissé avec...?"
+    "fr_q": "Mieux vaut un plat d'herbes avec amour qu'un bœuf engraissé avec...?",
+    "es_opts": [
+      "Riqueza",
+      "Odio",
+      "Orgullo",
+      "Falsedad"
+    ],
+    "en_opts": [
+      "Wealth",
+      "Hate",
+      "Pride",
+      "Falsehood"
+    ],
+    "de_opts": [
+      "Reichtum",
+      "Hass",
+      "Stolz",
+      "Falschheit"
+    ],
+    "fr_opts": [
+      "Richesse",
+      "Haine",
+      "Orgueil",
+      "Fausseté"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3181,7 +7945,31 @@
     "es_q": "El Señor hizo todo para su propósito, hasta el impío para el día del...",
     "en_q": "The Lord has made everything for his purpose, even the wicked for the day of...?",
     "de_q": "Der Herr hat alles für seinen Zweck gemacht, sogar den Bösen für den Tag der...?",
-    "fr_q": "Le Seigneur a tout fait pour son objectif, même le méchant pour le jour du...?"
+    "fr_q": "Le Seigneur a tout fait pour son objectif, même le méchant pour le jour du...?",
+    "es_opts": [
+      "Juicio",
+      "Mal",
+      "Pecado",
+      "Castigo"
+    ],
+    "en_opts": [
+      "Judgment",
+      "Evil",
+      "Sin",
+      "Punishment"
+    ],
+    "de_opts": [
+      "Urteil",
+      "Böses",
+      "Sünde",
+      "Strafe"
+    ],
+    "fr_opts": [
+      "Jugement",
+      "Mal",
+      "Péché",
+      "Châtiment"
+    ]
   },
   {
     "livro": "Proverbios",
@@ -3197,7 +7985,31 @@
     "es_q": "Antes de la ruina viene el orgullo y antes de la caída el espíritu...?",
     "en_q": "Before ruin comes pride and before the fall the spirit...?",
     "de_q": "Vor dem Untergang kommt der Hochmut und vor dem Fall der Geist...?",
-    "fr_q": "Avant la ruine vient l'orgueil et avant la chute l'esprit...?"
+    "fr_q": "Avant la ruine vient l'orgueil et avant la chute l'esprit...?",
+    "es_opts": [
+      "Fraco",
+      "Soberbio",
+      "Vacío",
+      "Perdido"
+    ],
+    "en_opts": [
+      "Weak",
+      "Proud",
+      "Empty",
+      "Lost"
+    ],
+    "de_opts": [
+      "Schwach",
+      "Hochmütig",
+      "Leer",
+      "Verloren"
+    ],
+    "fr_opts": [
+      "Faible",
+      "Orgueilleux",
+      "Vide",
+      "Perdu"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3213,7 +8025,31 @@
     "es_q": "¿Quién recibió la revelación del Apocalipsis?",
     "en_q": "Who received the revelation of the Apocalypse?",
     "de_q": "Wer erhielt die Offenbarung der Apokalypse?",
-    "fr_q": "Qui a reçu la révélation de l'Apocalypse ?"
+    "fr_q": "Qui a reçu la révélation de l'Apocalypse ?",
+    "es_opts": [
+      "Pedro",
+      "Paulo",
+      "João",
+      "Tiago"
+    ],
+    "en_opts": [
+      "Peter",
+      "Paul",
+      "John",
+      "Thiago"
+    ],
+    "de_opts": [
+      "Pedro",
+      "Paulo",
+      "João",
+      "Tiago"
+    ],
+    "fr_opts": [
+      "Pedro",
+      "Paulo",
+      "João",
+      "Tiago"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3229,7 +8065,31 @@
     "es_q": "¿En cuál isla Juan estaba cuando recibió la visión?",
     "en_q": "On which island was João when he received the vision?",
     "de_q": "Auf welcher Insel war João, als er die Vision erhielt?",
-    "fr_q": "Sur quelle île Jean était-il quand il a reçu la vision ?"
+    "fr_q": "Sur quelle île Jean était-il quand il a reçu la vision ?",
+    "es_opts": [
+      "Chipre",
+      "Malta",
+      "Patmos",
+      "Creta"
+    ],
+    "en_opts": [
+      "Cyprus",
+      "Malta",
+      "Patmos",
+      "Crete"
+    ],
+    "de_opts": [
+      "Zypern",
+      "Malta",
+      "Patmos",
+      "Kreta"
+    ],
+    "fr_opts": [
+      "Chypre",
+      "Malte",
+      "Patmos",
+      "Crète"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3245,7 +8105,31 @@
     "es_q": "¿Cuántas iglesias se mencionan en el Apocalipsis?",
     "en_q": "How many churches are mentioned in the Revelation?",
     "de_q": "Wie viele Kirchen werden in der Offenbarung erwähnt?",
-    "fr_q": "Combien d'églises sont mentionnées dans l'Apocalypse?"
+    "fr_q": "Combien d'églises sont mentionnées dans l'Apocalypse?",
+    "es_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "en_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "de_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "fr_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3261,7 +8145,31 @@
     "es_q": "¿Cuál es el número de la bestia?",
     "en_q": "What is the number of the beast?",
     "de_q": "Welche Nummer des Tieres ist es?",
-    "fr_q": "Quel est le numéro de la bête ?"
+    "fr_q": "Quel est le numéro de la bête ?",
+    "es_opts": [
+      "616",
+      "999",
+      "666",
+      "777"
+    ],
+    "en_opts": [
+      "616",
+      "999",
+      "666",
+      "777\n\n(These are numbers, not text requiring translation)"
+    ],
+    "de_opts": [
+      "616",
+      "999",
+      "666",
+      "777"
+    ],
+    "fr_opts": [
+      "616",
+      "999",
+      "666",
+      "777"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3277,7 +8185,31 @@
     "es_q": "¿Cuántos sellos tiene el libro en la visión?",
     "en_q": "How many stamps does the book have in the vision?",
     "de_q": "Wie viele Briefmarken hat das Buch in der Sicht?",
-    "fr_q": "Combien de timbres le livre a-t-il dans la vision ?"
+    "fr_q": "Combien de timbres le livre a-t-il dans la vision ?",
+    "es_opts": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "en_opts": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "de_opts": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "fr_opts": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3293,7 +8225,31 @@
     "es_q": "¿Cuál es la primera iglesia mencionada en el Apocalipsis?",
     "en_q": "What is the first church mentioned in Revelation?",
     "de_q": "Welche ist die erste Kirche, die in der Offenbarung erwähnt wird?",
-    "fr_q": "Quelle est la première église mentionnée dans l'Apocalypse ?"
+    "fr_q": "Quelle est la première église mentionnée dans l'Apocalypse ?",
+    "es_opts": [
+      "Esmirna",
+      "Efeso",
+      "Laodicea",
+      "Filadelfia"
+    ],
+    "en_opts": [
+      "Smyrna",
+      "Ephesus",
+      "Laodicea",
+      "Philadelphia"
+    ],
+    "de_opts": [
+      "Smyrna",
+      "Ephesus",
+      "Laodizea",
+      "Philadelphia"
+    ],
+    "fr_opts": [
+      "Smyrne",
+      "Éphèse",
+      "Laodicée",
+      "Philadelphie"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3309,7 +8265,31 @@
     "es_q": "¿Qué significa Apocalipsis en griego?",
     "en_q": "What does Apocalypse mean in Greek?",
     "de_q": "Was bedeutet Apokalypse im Griechischen?",
-    "fr_q": "Que signifie Apocalypse en grec ?"
+    "fr_q": "Que signifie Apocalypse en grec ?",
+    "es_opts": [
+      "Fin",
+      "Revelación",
+      "Juicio",
+      "Profecía"
+    ],
+    "en_opts": [
+      "End",
+      "Revelation",
+      "Judgment",
+      "Prophecy"
+    ],
+    "de_opts": [
+      "Ende",
+      "Offenbarung",
+      "Urteil",
+      "Prophezeiung"
+    ],
+    "fr_opts": [
+      "Fin",
+      "Révélation",
+      "Jugement",
+      "Prophétie"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3325,7 +8305,31 @@
     "es_q": "¿Cuántos jinetes del Apocalipsis existen?",
     "en_q": "How many horsemen of the Apocalypse are there?",
     "de_q": "Wie viele Reiter der Apokalypse gibt es?",
-    "fr_q": "Combien de cavaliers de l'Apocalypse y a-t-il ?"
+    "fr_q": "Combien de cavaliers de l'Apocalypse y a-t-il ?",
+    "es_opts": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "en_opts": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "de_opts": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "fr_opts": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3341,7 +8345,31 @@
     "es_q": "¿Cuál es el color del caballo de la muerte?",
     "en_q": "What color is the horse of death?",
     "de_q": "Welche Farbe hat das Pferd des Todes?",
-    "fr_q": "Quelle couleur est le cheval de la mort ?"
+    "fr_q": "Quelle couleur est le cheval de la mort ?",
+    "es_opts": [
+      "Blanco",
+      "Rojo",
+      "Negro",
+      "Amarillo"
+    ],
+    "en_opts": [
+      "White",
+      "Red",
+      "Black",
+      "Yellow"
+    ],
+    "de_opts": [
+      "Weiß",
+      "Rot",
+      "Schwarz",
+      "Gelb"
+    ],
+    "fr_opts": [
+      "Blanc",
+      "Rouge",
+      "Noir",
+      "Jaune"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3357,7 +8385,31 @@
     "es_q": "¿Qué ciudad es llamada Babilonia en el Apocalipsis?",
     "en_q": "Which city is called Babylon in the Revelation?",
     "de_q": "Welche Stadt wird in der Offenbarung Babylon genannt?",
-    "fr_q": "Quelle ville est appelée Babylone dans l'Apocalypse ?"
+    "fr_q": "Quelle ville est appelée Babylone dans l'Apocalypse ?",
+    "es_opts": [
+      "Jerusalén",
+      "Roma",
+      "Atenas",
+      "Éfeso"
+    ],
+    "en_opts": [
+      "Jerusalem",
+      "Rome",
+      "Athens",
+      "Ephesus"
+    ],
+    "de_opts": [
+      "Jerusalem",
+      "Rom",
+      "Athen",
+      "Ephesus"
+    ],
+    "fr_opts": [
+      "Jérusalem",
+      "Rome",
+      "Athènes",
+      "Éphèse"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3373,7 +8425,31 @@
     "es_q": "¿Cuántas trompetas se tocan en el Apocalipsis?",
     "en_q": "How many trumpets are sounded in the Revelation?",
     "de_q": "Wie viele Trompeten werden in der Offenbarung geblasen?",
-    "fr_q": "Combien de trompettes sont jouées dans l'Apocalypse ?"
+    "fr_q": "Combien de trompettes sont jouées dans l'Apocalypse ?",
+    "es_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "en_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "de_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "fr_opts": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3389,7 +8465,31 @@
     "es_q": "¿Qué es el lago de fuego en el Apocalipsis?",
     "en_q": "What is the lake of fire in the Apocalypse?",
     "de_q": "Was ist der Feuersee in der Offenbarung?",
-    "fr_q": "Qu'est-ce que le lac de feu dans l'Apocalypse ?"
+    "fr_q": "Qu'est-ce que le lac de feu dans l'Apocalypse ?",
+    "es_opts": [
+      "Río",
+      "Segunda muerte",
+      "Infierno",
+      "Purgatorio"
+    ],
+    "en_opts": [
+      "Rio",
+      "Second death",
+      "Hell",
+      "Purgatory"
+    ],
+    "de_opts": [
+      "Rio",
+      "Zweiter Tod",
+      "Hölle",
+      "Läuterungsberg"
+    ],
+    "fr_opts": [
+      "Rio",
+      "Deuxième mort",
+      "Enfer",
+      "Purgatoire"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3405,7 +8505,31 @@
     "es_q": "¿Cuál es la nueva ciudad que desciende del cielo?",
     "en_q": "What is the new city that descends from heaven?",
     "de_q": "Welche ist die neue Stadt, die vom Himmel herabkommt?",
-    "fr_q": "Quelle est la nouvelle ville qui descend du ciel ?"
+    "fr_q": "Quelle est la nouvelle ville qui descend du ciel ?",
+    "es_opts": [
+      "Nueva Babilonia",
+      "Nueva Jerusalén",
+      "Nueva Roma",
+      "Nueva Siao"
+    ],
+    "en_opts": [
+      "New Babylon",
+      "New Jerusalem",
+      "New Rome",
+      "New Siam"
+    ],
+    "de_opts": [
+      "Neu-Babylonien",
+      "Neu-Jerusalem",
+      "Neu-Rom",
+      "Neu-Siam"
+    ],
+    "fr_opts": [
+      "Nouvelle Babylone",
+      "Nouvelle Jérusalem",
+      "Nouvelle Rome",
+      "Nouvelle Siao"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3421,7 +8545,31 @@
     "es_q": "¿Cuántas puertas tiene la Nueva Jerusalén?",
     "en_q": "How many doors does the New Jerusalem have?",
     "de_q": "Wie viele Tore hat das Neue Jerusalem?",
-    "fr_q": "Combien de portes a la Nouvelle Jérusalem ?"
+    "fr_q": "Combien de portes a la Nouvelle Jérusalem ?",
+    "es_opts": [
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "en_opts": [
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "de_opts": [
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "fr_opts": [
+      "8",
+      "10",
+      "12",
+      "14"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3437,7 +8585,31 @@
     "es_q": "¿Qué ilumina la Nueva Jerusalén?",
     "en_q": "What illuminates the New Jerusalem?",
     "de_q": "Was erleuchtet das Neue Jerusalem?",
-    "fr_q": "Qu'est-ce qui illumine la Nouvelle Jérusalem?"
+    "fr_q": "Qu'est-ce qui illumine la Nouvelle Jérusalem?",
+    "es_opts": [
+      "Sol",
+      "Luna",
+      "Gloria de Dios",
+      "Estrellas"
+    ],
+    "en_opts": [
+      "Sun",
+      "Moon",
+      "Glory of God",
+      "Stars"
+    ],
+    "de_opts": [
+      "Sonne",
+      "Mond",
+      "Herrlichkeit Gottes",
+      "Sterne"
+    ],
+    "fr_opts": [
+      "Soleil",
+      "Lune",
+      "Gloire de Dieu",
+      "Étoiles"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3453,7 +8625,31 @@
     "es_q": "¿Cuántos ancianos están alrededor del trono?",
     "en_q": "How many ancients are around the throne?",
     "de_q": "Wie viele Älteste sind um den Thron herum?",
-    "fr_q": "Combien d'anges sont autour du trône ?"
+    "fr_q": "Combien d'anges sont autour du trône ?",
+    "es_opts": [
+      "12",
+      "24",
+      "36",
+      "48"
+    ],
+    "en_opts": [
+      "12",
+      "24",
+      "36",
+      "48"
+    ],
+    "de_opts": [
+      "12",
+      "24",
+      "36",
+      "48"
+    ],
+    "fr_opts": [
+      "12",
+      "24",
+      "36",
+      "48"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3469,7 +8665,31 @@
     "es_q": "¿Qué dicen los cuatro seres vivientes día y noche?",
     "en_q": "What do the four living beings say day and night?",
     "de_q": "Was sagen die vier lebenden Wesen Tag und Nacht?",
-    "fr_q": "Que disent les quatre êtres vivants jour et nuit ?"
+    "fr_q": "Que disent les quatre êtres vivants jour et nuit ?",
+    "es_opts": [
+      "Aleluya",
+      "Santo santo santo",
+      "Gloria a Dios",
+      "Amén"
+    ],
+    "en_opts": [
+      "Alleluia",
+      "Holy holy holy",
+      "Glory to God",
+      "Amen"
+    ],
+    "de_opts": [
+      "Halleluja",
+      "Heilig heilig heilig",
+      "Ehre sei Gott",
+      "Amen"
+    ],
+    "fr_opts": [
+      "Alléluia",
+      "Saint saint saint",
+      "Gloire à Dieu",
+      "Amen"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3485,7 +8705,31 @@
     "es_q": "¿Quién es el Alfa y la Omega?",
     "en_q": "Who is the Alpha and the Omega?",
     "de_q": "Wer ist der Alfa und der Omega?",
-    "fr_q": "Qui est l'Alpha et l'Oméga ?"
+    "fr_q": "Qui est l'Alpha et l'Oméga ?",
+    "es_opts": [
+      "Ángel",
+      "Jesús",
+      "Profeta",
+      "Rey"
+    ],
+    "en_opts": [
+      "Angel",
+      "Jesus",
+      "Prophet",
+      "King"
+    ],
+    "de_opts": [
+      "Engel",
+      "Jesus",
+      "Prophet",
+      "König"
+    ],
+    "fr_opts": [
+      "Ange",
+      "Jésus",
+      "Prophète",
+      "Roi"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3501,7 +8745,31 @@
     "es_q": "¿Qué es lanzado al lago de fuego al final?",
     "en_q": "What is cast into the lake of fire at the end?",
     "de_q": "Was wird am Ende in den Feuersee geworfen?",
-    "fr_q": "Qu'est-ce qui est jeté dans le lac de feu à la fin ?"
+    "fr_q": "Qu'est-ce qui est jeté dans le lac de feu à la fin ?",
+    "es_opts": [
+      "Apenas pecadores",
+      "Muerte e infierno",
+      "Apenas diablos",
+      "Apenas bestia"
+    ],
+    "en_opts": [
+      "Sinners only",
+      "Death and hell",
+      "Devils only",
+      "Beast only"
+    ],
+    "de_opts": [
+      "Nur Sünder",
+      "Tod und Hölle",
+      "Nur Teufel",
+      "Nur Bestie"
+    ],
+    "fr_opts": [
+      "Pécheurs seulement",
+      "Mort et enfer",
+      "Diables seulement",
+      "Bête seulement"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3517,7 +8785,31 @@
     "es_q": "¿Qué iglesia es llamada de morna?",
     "en_q": "Which church is called morna?",
     "de_q": "Welche Kirche wird Morna genannt?",
-    "fr_q": "Quelle église est appelée la morna?"
+    "fr_q": "Quelle église est appelée la morna?",
+    "es_opts": [
+      "Efeso",
+      "Esmirna",
+      "Laodicea",
+      "Filadelfia"
+    ],
+    "en_opts": [
+      "Ephesus",
+      "Smyrna",
+      "Laodicea",
+      "Philadelphia"
+    ],
+    "de_opts": [
+      "Ephesus",
+      "Smyrna",
+      "Laodizea",
+      "Philadelphia"
+    ],
+    "fr_opts": [
+      "Éphèse",
+      "Smyrne",
+      "Laodicée",
+      "Philadelphie"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3533,7 +8825,31 @@
     "es_q": "¿Cuál es la promesa para la iglesia de Filadelfia?",
     "en_q": "What is the promise for the church of Philadelphia?",
     "de_q": "Was ist die Verheißung für die Gemeinde von Philadelphia?",
-    "fr_q": "Quelle est la promesse pour l'église de Philadelphie?"
+    "fr_q": "Quelle est la promesse pour l'église de Philadelphie?",
+    "es_opts": [
+      "Corona de vida",
+      "Puerta abierta",
+      "Maná escondido",
+      "Estrella de la mañana"
+    ],
+    "en_opts": [
+      "Crown of life",
+      "Open door",
+      "Hidden manna",
+      "Morning star"
+    ],
+    "de_opts": [
+      "Krone des Lebens",
+      "Offene Tür",
+      "Verborgenes Manna",
+      "Morgenstern"
+    ],
+    "fr_opts": [
+      "Couronne de la vie",
+      "Porte ouverte",
+      "Manne cachée",
+      "Étoile du matin"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3549,7 +8865,31 @@
     "es_q": "¿Qué comió João que era dulce en la boca y amargo en el vientre?",
     "en_q": "What did João eat that was sweet in the mouth and bitter in the belly?",
     "de_q": "Was hat João gegessen, das süß im Mund und bitter im Bauch war?",
-    "fr_q": "Qu'a mangé João qui était doux en bouche et amer au ventre ?"
+    "fr_q": "Qu'a mangé João qui était doux en bouche et amer au ventre ?",
+    "es_opts": [
+      "Fruta",
+      "Libro",
+      "Pan",
+      "Miel"
+    ],
+    "en_opts": [
+      "Fruit",
+      "Book",
+      "Bread",
+      "Honey"
+    ],
+    "de_opts": [
+      "Frucht",
+      "Buch",
+      "Brot",
+      "Honig"
+    ],
+    "fr_opts": [
+      "Fruit",
+      "Livre",
+      "Pain",
+      "Miel"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3565,7 +8905,31 @@
     "es_q": "¿Cuántos años tiene el reinado de Cristo mencionado?",
     "en_q": "How many years is the reign of Christ mentioned?",
     "de_q": "Wie viele Jahre dauerte die Herrschaft Christi, die erwähnt wird?",
-    "fr_q": "Combien d'années dure le règne du Christ mentionné ?"
+    "fr_q": "Combien d'années dure le règne du Christ mentionné ?",
+    "es_opts": [
+      "100",
+      "500",
+      "1000",
+      "2000"
+    ],
+    "en_opts": [
+      "100",
+      "500",
+      "1000",
+      "2000"
+    ],
+    "de_opts": [
+      "100",
+      "500",
+      "1000",
+      "2000"
+    ],
+    "fr_opts": [
+      "100",
+      "500",
+      "1000",
+      "2000"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3581,7 +8945,31 @@
     "es_q": "¿Quién es el dragón en el Apocalipsis?",
     "en_q": "Who is the dragon in the Apocalypse?",
     "de_q": "Wer ist der Drache in der Offenbarung?",
-    "fr_q": "Qui est le dragon dans l'Apocalypse ?"
+    "fr_q": "Qui est le dragon dans l'Apocalypse ?",
+    "es_opts": [
+      "Bestia",
+      "Satanás",
+      "Anticristo",
+      "Falso profeta"
+    ],
+    "en_opts": [
+      "Beast",
+      "Satan",
+      "Antichrist",
+      "False prophet"
+    ],
+    "de_opts": [
+      "Bestie",
+      "Satan",
+      "Antichrist",
+      "Falscher Prophet"
+    ],
+    "fr_opts": [
+      "Bête",
+      "Satan",
+      "Antéchrist",
+      "Faux prophète"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3597,7 +8985,31 @@
     "es_q": "¿Qué río fluye desde la ciudad de Dios?",
     "en_q": "Which river flows from the City of God?",
     "de_q": "Welcher Fluss fließt aus der Stadt Gottes?",
-    "fr_q": "Quel fleuve coule de la Cité de Dieu ?"
+    "fr_q": "Quel fleuve coule de la Cité de Dieu ?",
+    "es_opts": [
+      "Río del Jordán",
+      "Río de la vida",
+      "Río de cristal",
+      "Río eterno"
+    ],
+    "en_opts": [
+      "Jordan River",
+      "River of Life",
+      "Crystal River",
+      "Eternal River"
+    ],
+    "de_opts": [
+      "Rio do Jordão",
+      "Rio da vida",
+      "Rio de cristal",
+      "Rio eterno"
+    ],
+    "fr_opts": [
+      "Rio do Jordão",
+      "Rio da vida",
+      "Rio de cristal",
+      "Rio eterno"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3613,7 +9025,31 @@
     "es_q": "¿Qué no habrá más en la Nueva Jerusalén?",
     "en_q": "What will no longer exist in the New Jerusalem?",
     "de_q": "Was wird es im Neuen Jerusalem nicht mehr geben?",
-    "fr_q": "Qu'est-ce qui n'existera plus dans la Nouvelle Jérusalem?"
+    "fr_q": "Qu'est-ce qui n'existera plus dans la Nouvelle Jérusalem?",
+    "es_opts": [
+      "Alegría",
+      "Lágrimas ni muerte",
+      "Alabanza",
+      "Luz"
+    ],
+    "en_opts": [
+      "Joy",
+      "Tears not death",
+      "Praise",
+      "Light"
+    ],
+    "de_opts": [
+      "Freude",
+      "Tränen noch nicht Tod",
+      "Lob",
+      "Licht"
+    ],
+    "fr_opts": [
+      "Joie",
+      "Larmes ni mort",
+      "Louange",
+      "Lumière"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3629,7 +9065,31 @@
     "es_q": "Bienaventurado quien lee y guarda las palabras de esta...",
     "en_q": "Blessed is the one who reads and keeps the words of this...?",
     "de_q": "Selig, wer die Worte dieser liest und bewahrt...?",
-    "fr_q": "Bienheureux celui qui lit et garde les paroles de ce..."
+    "fr_q": "Bienheureux celui qui lit et garde les paroles de ce...",
+    "es_opts": [
+      "Ley",
+      "Profecía",
+      "Historia",
+      "Revelación"
+    ],
+    "en_opts": [
+      "Law",
+      "Prophecy",
+      "History",
+      "Revelation"
+    ],
+    "de_opts": [
+      "Gesetz",
+      "Prophezeiung",
+      "Geschichte",
+      "Offenbarung"
+    ],
+    "fr_opts": [
+      "Loi",
+      "Prophétie",
+      "Histoire",
+      "Révélation"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3645,7 +9105,31 @@
     "es_q": "¿Cuál es la última palabra de la Biblia?",
     "en_q": "What is the last word of the Bible?",
     "de_q": "Welche ist das letzte Wort der Bibel?",
-    "fr_q": "Quelle est le dernier mot de la Bible?"
+    "fr_q": "Quelle est le dernier mot de la Bible?",
+    "es_opts": [
+      "Amén",
+      "Aleluya",
+      "Gloria",
+      "Maranata"
+    ],
+    "en_opts": [
+      "Amen",
+      "Alleluia",
+      "Glory",
+      "Maranatha"
+    ],
+    "de_opts": [
+      "Amen",
+      "Halleluja",
+      "Gloria",
+      "Maranata"
+    ],
+    "fr_opts": [
+      "Amen",
+      "Alléluia",
+      "Gloire",
+      "Maranata"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3661,7 +9145,31 @@
     "es_q": "Jesús dice: He aquí que vengo...",
     "en_q": "\"Jesus says, 'Behold, I come...'\"",
     "de_q": "Jesus sagt: Siehe, ich komme...?",
-    "fr_q": "Jésus dit : Voici que je viens...?"
+    "fr_q": "Jésus dit : Voici que je viens...?",
+    "es_opts": [
+      "Pronto",
+      "Logotipo",
+      "Ya",
+      "En poder"
+    ],
+    "en_opts": [
+      "Soon",
+      "Logo",
+      "Already",
+      "In power"
+    ],
+    "de_opts": [
+      "In Kürze",
+      "Logo",
+      "Ja",
+      "In Besitz"
+    ],
+    "fr_opts": [
+      "Bientôt",
+      "Logo",
+      "Déjà",
+      "En possession"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3677,7 +9185,31 @@
     "es_q": "¿Quién vence recibe la corona de la vida en la iglesia de...?",
     "en_q": "Who wins receives the crown of life in the church of...?",
     "de_q": "Wer gewinnt, erhält die Krone des Lebens in der Kirche von...?",
-    "fr_q": "Qui gagne reçoit la couronne de la vie dans l'église de...?"
+    "fr_q": "Qui gagne reçoit la couronne de la vie dans l'église de...?",
+    "es_opts": [
+      "Éfeso",
+      "Esmirna",
+      "Pérgamo",
+      "Tiatira"
+    ],
+    "en_opts": [
+      "Ephesus",
+      "Smyrna",
+      "Pergamum",
+      "Thyatira"
+    ],
+    "de_opts": [
+      "Ephesus",
+      "Smyrna",
+      "Pergamon",
+      "Thyatira"
+    ],
+    "fr_opts": [
+      "Éphèse",
+      "Smyrne",
+      "Pergame",
+      "Thyatire"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3693,7 +9225,31 @@
     "es_q": "¿Cuál es el árbol que da frutos todos los meses?",
     "en_q": "What is the tree that bears fruit every month?",
     "de_q": "Welcher Baum trägt das ganze Jahr über Früchte?",
-    "fr_q": "Quel est l'arbre qui produit des fruits tous les mois ?"
+    "fr_q": "Quel est l'arbre qui produit des fruits tous les mois ?",
+    "es_opts": [
+      "Árbol del Edén",
+      "Árbol de la vida",
+      "Árbol del bien",
+      "Árbol eterno"
+    ],
+    "en_opts": [
+      "Tree of Eden",
+      "Tree of Life",
+      "Tree of Good",
+      "Eternal Tree"
+    ],
+    "de_opts": [
+      "Baum des Eden",
+      "Baum des Lebens",
+      "Baum des Guten",
+      "Ewiger Baum"
+    ],
+    "fr_opts": [
+      "Arbre d'Éden",
+      "Arbre de vie",
+      "Arbre du bien",
+      "Arbre éternel"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3709,7 +9265,31 @@
     "es_q": "¿Cuántos son los sellados de las tribus de Israel?",
     "en_q": "How many are the sealed ones of the tribes of Israel?",
     "de_q": "Wie viele sind die Versiegelten der Stämme Israels?",
-    "fr_q": "Combien y a-t-il de scellés des tribus d'Israël ?"
+    "fr_q": "Combien y a-t-il de scellés des tribus d'Israël ?",
+    "es_opts": [
+      "12000",
+      "72000",
+      "144000",
+      "1000000"
+    ],
+    "en_opts": [
+      "12000",
+      "72000",
+      "144000",
+      "1000000"
+    ],
+    "de_opts": [
+      "12000",
+      "72000",
+      "144000",
+      "1000000"
+    ],
+    "fr_opts": [
+      "12000",
+      "72000",
+      "144000",
+      "1000000\n\n(Numbers remain the same in French - only the formatting/separators might differ by locale, but the digits are identical)"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3725,7 +9305,31 @@
     "es_q": "¿Qué clamaban los mártires debajo del altar?",
     "en_q": "What were the martyrs crying out under the altar?",
     "de_q": "Was schrieen die Märtyrer unter dem Altar?",
-    "fr_q": "Que criaient les martyrs sous l'autel ?"
+    "fr_q": "Que criaient les martyrs sous l'autel ?",
+    "es_opts": [
+      "Gloria",
+      "Justicia y venganza",
+      "Paz",
+      "Misericordia"
+    ],
+    "en_opts": [
+      "Glory",
+      "Justice and vengeance",
+      "Peace",
+      "Mercy"
+    ],
+    "de_opts": [
+      "Ruhm",
+      "Gerechtigkeit und Rache",
+      "Frieden",
+      "Barmherzigkeit"
+    ],
+    "fr_opts": [
+      "Gloire",
+      "Justice et vengeance",
+      "Paix",
+      "Miséricorde"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3741,7 +9345,31 @@
     "es_q": "¿Cuál bestia sube del mar?",
     "en_q": "What beast rises from the sea?",
     "de_q": "Welch Ungeheuer steigt aus dem Meer?",
-    "fr_q": "Quelle bête sort de la mer ?"
+    "fr_q": "Quelle bête sort de la mer ?",
+    "es_opts": [
+      "Con 5 cabezas",
+      "Con 7 cabezas",
+      "Con 10 cabezas",
+      "Con 7 cabezas y 10 cuernos"
+    ],
+    "en_opts": [
+      "With 5 heads",
+      "With 7 heads",
+      "With 10 heads",
+      "With 7 heads and 10 horns"
+    ],
+    "de_opts": [
+      "Mit 5 Köpfen",
+      "Mit 7 Köpfen",
+      "Mit 10 Köpfen",
+      "Mit 7 Köpfen und 10 Hörnern"
+    ],
+    "fr_opts": [
+      "Avec 5 têtes",
+      "Avec 7 têtes",
+      "Avec 10 têtes",
+      "Avec 7 têtes et 10 cornes"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3757,7 +9385,31 @@
     "es_q": "¿Qué está escrito en la frente de la prostituta?",
     "en_q": "\"What is written on the prostitute's forehead?\"",
     "de_q": "Was steht auf der Stirn der Prostituierten geschrieben?",
-    "fr_q": "Qu'est-ce qui est écrit sur le front de la prostituée ?"
+    "fr_q": "Qu'est-ce qui est écrit sur le front de la prostituée ?",
+    "es_opts": [
+      "666",
+      "Babilonia la grande",
+      "Muerte",
+      "Perdición"
+    ],
+    "en_opts": [
+      "666",
+      "Babylon the great",
+      "Death",
+      "Damnation"
+    ],
+    "de_opts": [
+      "666",
+      "Das große Babylon",
+      "Tod",
+      "Verdammnis"
+    ],
+    "fr_opts": [
+      "666",
+      "La grande Babylone",
+      "Mort",
+      "Perdition"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3773,7 +9425,31 @@
     "es_q": "¿Quién lucha contra la bestia en Armagedón?",
     "en_q": "Who fights against the beast at Armageddon?",
     "de_q": "Wer kämpft gegen das Tier bei Harmagedon?",
-    "fr_q": "Qui combattra la bête à l'Armaguédon?"
+    "fr_q": "Qui combattra la bête à l'Armaguédon?",
+    "es_opts": [
+      "Ángeles",
+      "El Cordero",
+      "Ejército del cielo",
+      "Todos"
+    ],
+    "en_opts": [
+      "Angels",
+      "The Lamb",
+      "Army of Heaven",
+      "All"
+    ],
+    "de_opts": [
+      "Engel",
+      "Das Lamm",
+      "Himmelsheer",
+      "Alle"
+    ],
+    "fr_opts": [
+      "Anges",
+      "L'Agneau",
+      "Armée du ciel",
+      "Tous"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3789,7 +9465,31 @@
     "es_q": "¿Cuál es el nombre del caballo blanco del ganador?",
     "en_q": "What is the name of the winner's white horse?",
     "de_q": "Was ist der Name des weißen Pferdes des Siegers?",
-    "fr_q": "Quel est le nom du cheval blanc du vainqueur ?"
+    "fr_q": "Quel est le nom du cheval blanc du vainqueur ?",
+    "es_opts": [
+      "Fiel y Verdadero",
+      "Santo",
+      "Poderoso",
+      "Eterno"
+    ],
+    "en_opts": [
+      "Faithful and True",
+      "Holy",
+      "Mighty",
+      "Eternal"
+    ],
+    "de_opts": [
+      "Treu und Wahrhaftig",
+      "Heilig",
+      "Mächtig",
+      "Ewig"
+    ],
+    "fr_opts": [
+      "Fidèle et Véritable",
+      "Saint",
+      "Puissant",
+      "Éternel"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3805,7 +9505,31 @@
     "es_q": "¿Qué elimina Dios en la nueva creación?",
     "en_q": "What does God eliminate in the new creation?",
     "de_q": "Was eliminiert Gott in der neuen Schöpfung?",
-    "fr_q": "Qu'est-ce que Dieu élimine dans la nouvelle création ?"
+    "fr_q": "Qu'est-ce que Dieu élimine dans la nouvelle création ?",
+    "es_opts": [
+      "Pecado apenas",
+      "Mar también",
+      "Muerte apenas",
+      "Tinieblas apenas"
+    ],
+    "en_opts": [
+      "Sin alone",
+      "Sea also",
+      "Death alone",
+      "Darkness alone"
+    ],
+    "de_opts": [
+      "Nur Sünde",
+      "Auch Meer",
+      "Nur Tod",
+      "Nur Finsternis"
+    ],
+    "fr_opts": [
+      "Péché seulement",
+      "Mer aussi",
+      "Mort seulement",
+      "Ténèbres seulement"
+    ]
   },
   {
     "livro": "Apocalipse",
@@ -3821,6 +9545,30 @@
     "es_q": "¿Cuál es la esposa del Cordero?",
     "en_q": "Who is the wife of the Lamb?",
     "de_q": "Wer ist die Braut des Lammes?",
-    "fr_q": "Qui est l'épouse de l'Agneau?"
+    "fr_q": "Qui est l'épouse de l'Agneau?",
+    "es_opts": [
+      "Iglesia",
+      "Israel",
+      "Nueva Jerusalén",
+      "María"
+    ],
+    "en_opts": [
+      "Church",
+      "Israel",
+      "New Jerusalem",
+      "Mary"
+    ],
+    "de_opts": [
+      "Kirche",
+      "Israel",
+      "Neues Jerusalem",
+      "Maria"
+    ],
+    "fr_opts": [
+      "Église",
+      "Israël",
+      "Nouvelle Jérusalem",
+      "Marie"
+    ]
   }
 ]
