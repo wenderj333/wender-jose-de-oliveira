@@ -37,7 +37,7 @@ router.get('/ranking', async (req, res) => {
       JOIN users u ON r.user_id = u.id
       ${filtro}
       GROUP BY u.id, u.full_name, u.avatar_url
-      HAVING COUNT(r.id) >= 3
+      HAVING COUNT(r.id) >= 1
       ORDER BY score DESC
       LIMIT 10
     `);

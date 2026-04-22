@@ -553,10 +553,19 @@ function handleGameQueue(ws, msg) {
     if (idx !== -1) {
       const outro = gameQueue.splice(idx, 1)[0];
       const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
-      const matchMsg1 = JSON.stringify({ type: 'game_matched', roomId, livro, adversario: { userName: msg.userName, avatar: msg.avatar } });
-      const matchMsg2 = JSON.stringify({ type: 'game_matched', roomId, livro, adversario: { userName: outro.userName, avatar: outro.avatar } });
+      let perguntas = [];
+      try { perguntas = (() => {
+        const pj = require('../data/perguntas.json');
+        let p = pj.filter(x => livro === 'Todos' || x.livro === livro);
+        if (!p.length) p = pj;
+        const sh = a => a.sort(() => Math.random() - 0.5);
+        return [...sh(p.filter(x=>x.nivel==='facil')).slice(0,2), ...sh(p.filter(x=>x.nivel==='medio')).slice(0,2), ...sh(p.filter(x=>x.nivel==='dificil')).slice(0,1)];
+      })(); } catch(e) {}
+      const matchMsg1 = JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: { userId: msg.userId, userName: msg.userName, avatar: msg.avatar } });
+      const matchMsg2 = JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: { userId: outro.userId, userName: outro.userName, avatar: outro.avatar } });
       if (outro.ws.readyState === 1) outro.ws.send(matchMsg1);
       if (ws.readyState === 1) ws.send(matchMsg2);
+      gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, jogadores: [{ userId: outro.userId, userName: outro.userName, avatar: outro.avatar, pontos: 0, ws: outro.ws }, { userId, userName, avatar, pontos: 0, ws }] });
     } else {
       gameQueue.push({ userId, userName, avatar, livro, ws });
       if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'game_queued' }));
