@@ -21,6 +21,21 @@ export default function DesafioBiblico() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.substring(0,2) || 'pt';
   const { user } = useAuth();
+  const ADMIN_EMAIL = 'wenderj333@gmail.com';
+  const isAdmin = user?.email === ADMIN_EMAIL;
+  const audioRef = React.useRef(null);
+  const [musicUrl, setMusicUrl] = React.useState(()=>localStorage.getItem('desafio_music')||'');
+  const [musicPlaying, setMusicPlaying] = React.useState(false);
+  const [musicVolume, setMusicVolume] = React.useState(0.4);
+  const [showMusicAdmin, setShowMusicAdmin] = React.useState(false);
+
+  React.useEffect(()=>{
+    if(audioRef.current){
+      audioRef.current.volume = musicVolume;
+      if(musicPlaying){ audioRef.current.play().catch(()=>{}); }
+      else { audioRef.current.pause(); }
+    }
+  },[musicPlaying, musicVolume]);
   const navigate = useNavigate();
   const [tela, setTela] = useState('lobby');
   const [livro, setLivro] = useState('Todos');
@@ -281,5 +296,38 @@ export default function DesafioBiblico() {
     </div>
   );
 
-  return null;
+  const musicBar = musicUrl ? (
+    <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:9999,background:'linear-gradient(135deg,#1a0a3e,#2d1054)',borderTop:'1px solid rgba(108,71,212,0.4)',padding:'8px 16px',display:'flex',alignItems:'center',gap:12}}>
+      <audio ref={audioRef} src={musicUrl} loop onEnded={()=>setMusicPlaying(false)}/>
+      <span style={{fontSize:13,color:'#a78bfa',fontWeight:700}}>🎵 Desafio Bíblico</span>
+      <button onClick={()=>setMusicPlaying(p=>!p)} style={{padding:'6px 14px',borderRadius:20,border:'none',background:'#6c47d4',color:'white',cursor:'pointer',fontWeight:700,fontSize:13}}>{musicPlaying?'⏸️':'▶️'}</button>
+      <input type='range' min={0} max={1} step={0.05} value={musicVolume} onChange={e=>setMusicVolume(Number(e.target.value))} style={{width:80,accentColor:'#a78bfa'}}/>
+      <span style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>🔊</span>
+      {isAdmin && <button onClick={()=>setShowMusicAdmin(p=>!p)} style={{marginLeft:'auto',padding:'4px 10px',borderRadius:12,border:'1px solid rgba(255,255,255,0.2)',background:'transparent',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:11}}>⚙️ Admin</button>}
+    </div>
+  ) : isAdmin ? (
+    <div style={{position:'fixed',bottom:16,right:16,zIndex:9999}}>
+      <button onClick={()=>setShowMusicAdmin(p=>!p)} style={{padding:'8px 16px',borderRadius:20,border:'none',background:'#6c47d4',color:'white',cursor:'pointer',fontWeight:700,fontSize:12}}>🎵 Adicionar Música</button>
+    </div>
+  ) : null;
+
+  const musicAdmin = showMusicAdmin && isAdmin ? (
+    <div style={{position:'fixed',bottom:60,right:16,zIndex:10000,background:'#1a0a3e',border:'1px solid #6c47d4',borderRadius:16,padding:20,width:300,boxShadow:'0 8px 32px rgba(0,0,0,0.5)'}}>
+      <p style={{color:'white',fontWeight:700,marginBottom:12}}>🎵 Música do Desafio</p>
+      <p style={{color:'rgba(255,255,255,0.6)',fontSize:12,marginBottom:8}}>Cola o URL directo do MP3 (Cloudinary, etc):</p>
+      <input
+        type='text'
+        placeholder='https://... .mp3'
+        defaultValue={musicUrl}
+        id='music_url_input'
+        style={{width:'100%',padding:'8px 12px',borderRadius:10,border:'1px solid #6c47d4',background:'rgba(255,255,255,0.1)',color:'white',fontSize:13,marginBottom:8,boxSizing:'border-box',outline:'none'}}
+      />
+      <div style={{display:'flex',gap:8}}>
+        <button onClick={()=>{const v=document.getElementById('music_url_input').value.trim();if(v){setMusicUrl(v);localStorage.setItem('desafio_music',v);setMusicPlaying(true);setShowMusicAdmin(false);}}} style={{flex:1,padding:'8px',borderRadius:10,border:'none',background:'#6c47d4',color:'white',cursor:'pointer',fontWeight:700,fontSize:13}}>✅ Guardar</button>
+        <button onClick={()=>{setMusicUrl('');localStorage.removeItem('desafio_music');setMusicPlaying(false);setShowMusicAdmin(false);}} style={{padding:'8px 12px',borderRadius:10,border:'none',background:'#e74c3c',color:'white',cursor:'pointer',fontSize:13}}>🗑️</button>
+      </div>
+    </div>
+  ) : null;
+
+  return <>{musicBar}{musicAdmin}</>;
 }
