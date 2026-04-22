@@ -42,6 +42,8 @@ export default function DesafioBiblico() {
   const [musicPlaying, setMusicPlaying] = React.useState(false);
   const [musicVolume, setMusicVolume] = React.useState(0.4);
   const [showMusicAdmin, setShowMusicAdmin] = React.useState(false);
+  const [musicInputVal, setMusicInputVal] = React.useState(()=>localStorage.getItem('desafio_music')||'');
+  const [showConquistasModal, setShowConquistasModal] = React.useState(false);
 
   React.useEffect(()=>{
     if(audioRef.current){
@@ -247,7 +249,7 @@ export default function DesafioBiblico() {
           <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
             {CONQUISTAS_DEF.map(c=>{
               const tem=conquistas.includes(c.id);
-              return <div key={c.id} title={c.nome+': '+c.desc} style={{fontSize:18,opacity:tem?1:0.2,cursor:'default'}}>{c.icon}</div>;
+              return <div key={c.id} title={c.nome+': '+c.desc} style={{fontSize:18,opacity:tem?1:0.2,cursor:'pointer'}} onClick={()=>setShowConquistasModal(true)}>{c.icon}</div>;
             })}
           </div>
           <p style={{fontSize:9,color:'rgba(255,255,255,0.3)',marginTop:4}}>{conquistas.length}/{CONQUISTAS_DEF.length} desbloqueadas</p>
@@ -397,11 +399,11 @@ export default function DesafioBiblico() {
         type='text'
         placeholder='https://... .mp3'
         defaultValue={musicUrl}
-        id='music_url_input'
+        value={musicInputVal} onChange={e=>setMusicInputVal(e.target.value)}
         style={{width:'100%',padding:'8px 12px',borderRadius:10,border:'1px solid #6c47d4',background:'rgba(255,255,255,0.1)',color:'white',fontSize:13,marginBottom:8,boxSizing:'border-box',outline:'none'}}
       />
       <div style={{display:'flex',gap:8}}>
-        <button onClick={()=>{const v=document.getElementById('music_url_input').value.trim();if(v){setMusicUrl(v);localStorage.setItem('desafio_music',v);setMusicPlaying(true);setShowMusicAdmin(false);}}} style={{flex:1,padding:'8px',borderRadius:10,border:'none',background:'#6c47d4',color:'white',cursor:'pointer',fontWeight:700,fontSize:13}}>✅ Guardar</button>
+        <button onClick={()=>{if(musicInputVal.trim()){setMusicUrl(musicInputVal.trim());localStorage.setItem('desafio_music',musicInputVal.trim());setMusicPlaying(true);setShowMusicAdmin(false);}}} style={{flex:1,padding:'8px',borderRadius:10,border:'none',background:'#6c47d4',color:'white',cursor:'pointer',fontWeight:700,fontSize:13}}>✅ Guardar</button>
         <button onClick={()=>{setMusicUrl('');localStorage.removeItem('desafio_music');setMusicPlaying(false);setShowMusicAdmin(false);}} style={{padding:'8px 12px',borderRadius:10,border:'none',background:'#e74c3c',color:'white',cursor:'pointer',fontSize:13}}>🗑️</button>
       </div>
     </div>
