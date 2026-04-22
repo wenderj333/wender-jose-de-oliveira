@@ -43,6 +43,9 @@ export default function DesafioBiblico() {
   const [cInput, setCInput] = useState('');
   const [esperando, setEsperando] = useState(false);
   const [ranking, setRanking] = useState([]);
+  const [streak, setStreak] = useState(0);
+  const [maxStreak, setMaxStreak] = useState(0);
+  const [showStreak, setShowStreak] = useState(false);
   const [adversario, setAdversario] = useState(null);
   useEffect(() => {
     fetch((import.meta.env.VITE_API_URL||'')+ '/api/quiz/ranking?periodo=semana')
@@ -106,6 +109,7 @@ export default function DesafioBiblico() {
     const ps = filtrar(livro);
     setPerguntas(ps); setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
     setTela('jogo');
+    setStreak(0); setMaxStreak(0); setShowStreak(false);
   }
 
   function responder(i) {
@@ -117,6 +121,16 @@ export default function DesafioBiblico() {
     const pts=ok?(tRef.current>=10?10:5):0;
     setFeedback({ok,pts});
     setPontos(prev=>prev+pts);
+    if(ok){
+      setStreak(prev=>{
+        const ns=prev+1;
+        setMaxStreak(m=>Math.max(m,ns));
+        if(ns>=3){ setShowStreak(true); setTimeout(()=>setShowStreak(false),2000); }
+        return ns;
+      });
+    } else {
+      setStreak(0);
+    }
     setTimeout(avancar, 1500);
   }
 
@@ -258,6 +272,7 @@ export default function DesafioBiblico() {
             <div style={{width:(tempo/TEMPO*100)+'%',height:'100%',background:tempo<=3?'#e74c3c':'#6c47d4',borderRadius:3,transition:'width 1s linear'}} />
           </div>
           <p style={{fontSize:17,fontWeight:700,lineHeight:1.5,textAlign:'center',margin:0}}>{perg[lang + '_q'] || perg.q}</p>
+          {streak>=2&&<div style={{textAlign:'center',marginTop:8,fontSize:13,color:'#f0c040',fontWeight:700}}>{'🔥'.repeat(Math.min(streak,5))} {streak} seguidas!</div>}
         </div>
         {pausado && <div style={{textAlign:'center',fontSize:18,marginBottom:12,opacity:0.8}}>{t('desafio.paused')}</div>}
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:14}}>
@@ -289,6 +304,7 @@ export default function DesafioBiblico() {
       <h2 style={{fontSize:26,fontWeight:900,marginBottom:8}}>{t('desafio.result')}</h2>
       <div style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:8}}>{pontos} pts</div>
       <p style={{opacity:0.7,marginBottom:28}}>{pontos>=40?'Mestre Biblico!':pontos>=25?'Muito bem!':'Continue estudando!'}</p>
+      {maxStreak>=3&&<div style={{background:'rgba(240,192,64,0.15)',border:'1px solid #f0c040',borderRadius:12,padding:'10px 20px',marginBottom:12,textAlign:'center'}}><span style={{fontSize:20}}>🔥</span><span style={{color:'#f0c040',fontWeight:700,fontSize:15}}> Melhor streak: {maxStreak} seguidas!</span></div>}
       {btn(()=>share(pontos),'#25D366',t('desafio.shareresult'))}
       {btn(desafiar,'#6c47d4',t('desafio.challenge'))}
       {btn(()=>{setIdx(0);setPontos(0);setTela('lobby');},'rgba(255,255,255,0.2)',t('desafio.playagain'))}
@@ -329,5 +345,13 @@ export default function DesafioBiblico() {
     </div>
   ) : null;
 
-  return <>{musicBar}{musicAdmin}</>;
+  const streakAnim = showStreak ? (
+    <div style={{position:'fixed',top:'50%',left:'50%',transform:'translate(-50%,-50%)',zIndex:9998,pointerEvents:'none',textAlign:'center',animation:'fadeInOut 2s ease'}}>
+      <div style={{fontSize:60}}>🔥</div>
+      <div style={{fontSize:28,fontWeight:900,color:'#f0c040',textShadow:'0 0 20px #f0c040'}}>{streak} SEGUIDAS!</div>
+      <style>{`@keyframes fadeInOut{0%{opacity:0;transform:translate(-50%,-50%) scale(0.5)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(0.8)}}`}</style>
+    </div>
+  ) : null;
+
+  return <>{musicBar}{musicAdmin}{streakAnim}</>;
 }
