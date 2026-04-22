@@ -146,28 +146,21 @@ export default function DesafioBiblico() {
 
   if(tela==='lobby') return (
     <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#1a0a3e,#2d1054)',display:'flex',color:'white'}}>
-      <div style={{width:200,background:'rgba(0,0,0,0.3)',borderRight:'1px solid rgba(255,255,255,0.1)',padding:'24px 14px',display:'flex',flexDirection:'column'}}>
+      <div style={{width:200,background:'rgba(0,0,0,0.3)',borderRight:'1px solid rgba(255,255,255,0.1)',padding:'24px 14px',display:'flex',flexDirection:'column',overflowY:'auto'}}>
         <p style={{fontSize:11,fontWeight:800,color:'#f0c040',letterSpacing:1.5,textTransform:'uppercase',marginBottom:16}}>🏆 Top Jogadores</p>
         {ranking.slice(0,10).map((j,i)=>(
-          <div key={j.id} style={{display:'flex',alignItems:'center',gap:8,padding:'7px 6px',borderRadius:10,marginBottom:3,background:user?.id===j.id?'rgba(108,71,212,0.2)':'transparent',border:user?.id===j.id?'1px solid rgba(108,71,212,0.4)':'1px solid transparent'}}>
-            <span style={{fontSize:i<3?15:11,width:22,textAlign:'center'}}>{i<3?['🥇','🥈','🥉'][i]:'#'+(i+1)}</span>
-            {j.avatar_url?<img src={j.avatar_url} style={{width:30,height:30,borderRadius:'50%',objectFit:'cover',flexShrink:0}}/>:<div style={{width:30,height:30,borderRadius:'50%',background:'#6c47d4',display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,color:'white',fontWeight:700,flexShrink:0}}>{j.full_name?.charAt(0)}</div>}
+          <div key={j.id||i} style={{display:'flex',alignItems:'center',gap:6,padding:'6px 4px',borderRadius:10,marginBottom:3,background:user?.id===j.id?'rgba(108,71,212,0.2)':'transparent',border:user?.id===j.id?'1px solid rgba(108,71,212,0.4)':'1px solid transparent'}}>
+            <span style={{fontSize:i<3?14:10,width:20,textAlign:'center'}}>{i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</span>
+            {j.avatar_url?<img src={j.avatar_url} style={{width:28,height:28,borderRadius:'50%',objectFit:'cover',flexShrink:0}}/>:<div style={{width:28,height:28,borderRadius:'50%',background:'#6c47d4',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,color:'white',fontWeight:700,flexShrink:0}}>{j.full_name?.charAt(0)||'?'}</div>}
             <div style={{flex:1,minWidth:0}}>
-              <p style={{fontSize:11,color:user?.id===j.id?'#a78bfa':'white',fontWeight:600,margin:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{j.full_name}</p>
-              <p style={{fontSize:10,color:'#f0c040',margin:0,fontWeight:700}}>{j.total_pontos} pts</p>
-              <p style={{fontSize:9,color:'rgba(255,255,255,0.4)',margin:0}}>⚡ {j.tempo_medio}s</p>
+              <p style={{fontSize:10,color:user?.id===j.id?'#a78bfa':'white',fontWeight:600,margin:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{j.full_name}</p>
+              <p style={{fontSize:9,color:'#f0c040',margin:0,fontWeight:700}}>{j.total_pontos} pts</p>
             </div>
           </div>
         ))}
-        {ranking.length===0 && <p style={{fontSize:11,opacity:0.4,textAlign:'center',marginTop:20}}>Joga para aparecer!</p>}
-        <div style={{display:'flex',gap:4,marginTop:'auto',paddingTop:12}}>
-          {['hoje','semana','mes'].map(p=>(
-            <button key={p} onClick={()=>fetch((import.meta.env.VITE_API_URL||'')+'/api/quiz/ranking?periodo='+p).then(r=>r.json()).then(d=>{if(Array.isArray(d))setRanking(d);})} style={{flex:1,padding:'4px 2px',borderRadius:8,border:'none',background:p==='semana'?'#6c47d4':'rgba(255,255,255,0.1)',color:p==='semana'?'white':'rgba(255,255,255,0.5)',fontSize:9,fontWeight:700,cursor:'pointer'}}>{p}</button>
-          ))}
-        </div>
+        {ranking.length===0&&<p style={{fontSize:11,opacity:0.4,textAlign:'center',marginTop:20}}>Joga para aparecer!</p>}
       </div>
-      <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px 24px'}}>
-    <div style={bg}>
+      <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px 16px',overflowY:'auto'}}>
       <div style={{fontSize:60,marginBottom:12}}>🏆</div>
       <h1 style={{fontSize:26,fontWeight:900,marginBottom:6,textAlign:'center'}}>{t('desafio.title')}</h1>
       <p style={{opacity:0.7,marginBottom:16,fontSize:14,textAlign:'center'}}>{t('desafio.subtitle')}</p>
