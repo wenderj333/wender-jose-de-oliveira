@@ -52,12 +52,12 @@ router.get('/stats/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     const result = await pool.query(
-      SELECT COUNT(id) as partidas, SUM(pontos) as total_pontos,
+      `SELECT COUNT(id) as partidas, SUM(pontos) as total_pontos,
         ROUND(AVG(tempo_medio)::numeric, 1) as tempo_medio,
         ROUND(AVG(perguntas_corretas::float / perguntas_total * 100)::numeric, 1) as precisao,
         MAX(pontos) as melhor_pontuacao
-      FROM quiz_resultados WHERE user_id = 
-    , [userId]);
+      FROM quiz_resultados WHERE user_id = $1`,
+      [userId]);
     res.json(result.rows[0]);
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
