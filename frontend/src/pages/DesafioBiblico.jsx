@@ -398,8 +398,8 @@ export default function DesafioBiblico() {
       <input
         type='text'
         placeholder='https://... .mp3'
-        defaultValue={musicUrl}
-        value={musicInputVal} onChange={e=>setMusicInputVal(e.target.value)}
+        value={musicInputVal}
+        onChange={e=>setMusicInputVal(e.target.value)}
         style={{width:'100%',padding:'8px 12px',borderRadius:10,border:'1px solid #6c47d4',background:'rgba(255,255,255,0.1)',color:'white',fontSize:13,marginBottom:8,boxSizing:'border-box',outline:'none'}}
       />
       <div style={{display:'flex',gap:8}}>
