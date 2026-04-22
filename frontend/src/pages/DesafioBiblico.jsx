@@ -43,6 +43,36 @@ export default function DesafioBiblico() {
   const [cInput, setCInput] = useState('');
   const [esperando, setEsperando] = useState(false);
   const [ranking, setRanking] = useState([]);
+  const [conquistas, setConquistas] = useState(()=>JSON.parse(localStorage.getItem('desafio_conquistas')||'[]'));
+  const [novaConquista, setNovaConquista] = useState(null);
+
+  const CONQUISTAS_DEF = [
+    {id:'first',icon:'⭐',nome:'Primeira Vitória',desc:'Completa o teu primeiro jogo',check:(pts,livro,streak,total)=>total>=1},
+    {id:'streak3',icon:'🔥',nome:'Em Chamas',desc:'3 respostas certas seguidas',check:(pts,livro,streak)=>streak>=3},
+    {id:'streak5',icon:'💥',nome:'Imparável',desc:'5 respostas certas seguidas',check:(pts,livro,streak)=>streak>=5},
+    {id:'perfeito',icon:'🏆',nome:'Jogo Perfeito',desc:'50 pontos num jogo',check:(pts)=>pts>=50},
+    {id:'genesis',icon:'📖',nome:'Mestre do Genesis',desc:'Joga 3x com Genesis',check:(pts,livro,streak,total,stats)=>stats?.genesis>=3},
+    {id:'salmos',icon:'🎵',nome:'Rei dos Salmos',desc:'Joga 3x com Salmos',check:(pts,livro,streak,total,stats)=>stats?.salmos>=3},
+    {id:'velocista',icon:'⚡',nome:'Velocista',desc:'Responde em menos de 3s',check:(pts,livro,streak,total,stats)=>stats?.tempoMin<=3},
+    {id:'devoto',icon:'🙏',nome:'Devoto',desc:'Joga 10 partidas',check:(pts,livro,streak,total,stats)=>stats?.totalJogos>=10},
+  ];
+
+  function verificarConquistas(pts, livro, streakAtual, stats) {
+    const total = (stats?.totalJogos||0) + 1;
+    const novas = [];
+    CONQUISTAS_DEF.forEach(c => {
+      if(!conquistas.includes(c.id) && c.check(pts, livro, streakAtual, total, stats)) {
+        novas.push(c);
+      }
+    });
+    if(novas.length > 0) {
+      const ids = [...conquistas, ...novas.map(c=>c.id)];
+      setConquistas(ids);
+      localStorage.setItem('desafio_conquistas', JSON.stringify(ids));
+      setNovaConquista(novas[0]);
+      setTimeout(()=>setNovaConquista(null), 4000);
+    }
+  }
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
   const [showStreak, setShowStreak] = useState(false);
@@ -142,6 +172,12 @@ export default function DesafioBiblico() {
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
       body: JSON.stringify({ pontos: pts, perguntas_corretas: totalCorretas, perguntas_total: 5, livro, tempo_medio: tempoMedio })
     }).catch(() => {});
+    const stats = JSON.parse(localStorage.getItem('desafio_stats')||'{}');
+    stats.totalJogos = (stats.totalJogos||0) + 1;
+    stats[livro.toLowerCase()] = (stats[livro.toLowerCase()]||0) + 1;
+    if(tempoMedio < (stats.tempoMin||99)) stats.tempoMin = tempoMedio;
+    localStorage.setItem('desafio_stats', JSON.stringify(stats));
+    verificarConquistas(pts, livro, maxStreak, stats);
   }
   function avancar() {
     setFeedback(null); setResp(null);
@@ -190,6 +226,16 @@ export default function DesafioBiblico() {
           </div>
         ))}
         {ranking.length===0&&<p style={{fontSize:11,opacity:0.4,textAlign:'center',marginTop:20}}>Joga para aparecer!</p>}
+        <div style={{marginTop:16,borderTop:'1px solid rgba(255,255,255,0.1)',paddingTop:12}}>
+          <p style={{fontSize:10,fontWeight:800,color:'#a78bfa',letterSpacing:1,textTransform:'uppercase',marginBottom:8}}>🏅 Conquistas</p>
+          <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
+            {CONQUISTAS_DEF.map(c=>{
+              const tem=conquistas.includes(c.id);
+              return <div key={c.id} title={c.nome+': '+c.desc} style={{fontSize:18,opacity:tem?1:0.2,cursor:'default'}}>{c.icon}</div>;
+            })}
+          </div>
+          <p style={{fontSize:9,color:'rgba(255,255,255,0.3)',marginTop:4}}>{conquistas.length}/{CONQUISTAS_DEF.length} desbloqueadas</p>
+        </div>
       </div>
       <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px 16px',overflowY:'auto'}}>
       <div style={{fontSize:60,marginBottom:12}}>🏆</div>
@@ -353,5 +399,15 @@ export default function DesafioBiblico() {
     </div>
   ) : null;
 
-  return <>{musicBar}{musicAdmin}{streakAnim}</>;
+  const conquistaAnim = novaConquista ? (
+    <div style={{position:'fixed',top:80,left:'50%',transform:'translateX(-50%)',zIndex:9997,background:'linear-gradient(135deg,#1a0a3e,#2d1054)',border:'2px solid #f0c040',borderRadius:20,padding:'16px 28px',textAlign:'center',boxShadow:'0 8px 32px rgba(240,192,64,0.4)',animation:'slideDown 0.5s ease'}}>
+      <div style={{fontSize:40}}>{novaConquista.icon}</div>
+      <p style={{color:'#f0c040',fontWeight:900,fontSize:15,margin:'4px 0'}}>Conquista Desbloqueada!</p>
+      <p style={{color:'white',fontWeight:700,fontSize:14,margin:0}}>{novaConquista.nome}</p>
+      <p style={{color:'rgba(255,255,255,0.6)',fontSize:11,margin:'2px 0 0'}}>{novaConquista.desc}</p>
+      <style>{`@keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}`}</style>
+    </div>
+  ) : null;
+
+  return <>{musicBar}{musicAdmin}{streakAnim}{conquistaAnim}</>;
 }
