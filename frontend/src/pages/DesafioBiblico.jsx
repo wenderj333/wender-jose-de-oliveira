@@ -21,6 +21,20 @@ export default function DesafioBiblico() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.substring(0,2) || 'pt';
   const { user } = useAuth();
+
+  function playSound(type) {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      if(type==='click'){o.frequency.value=600;g.gain.setValueAtTime(0.1,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.1);o.start();o.stop(ctx.currentTime+0.1);}
+      else if(type==='certo'){o.type='sine';o.frequency.setValueAtTime(523,ctx.currentTime);o.frequency.setValueAtTime(659,ctx.currentTime+0.1);o.frequency.setValueAtTime(784,ctx.currentTime+0.2);g.gain.setValueAtTime(0.2,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.4);o.start();o.stop(ctx.currentTime+0.4);}
+      else if(type==='errado'){o.type='sawtooth';o.frequency.setValueAtTime(200,ctx.currentTime);o.frequency.setValueAtTime(150,ctx.currentTime+0.1);g.gain.setValueAtTime(0.15,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.3);o.start();o.stop(ctx.currentTime+0.3);}
+      else if(type==='conquista'){o.type='sine';o.frequency.setValueAtTime(784,ctx.currentTime);o.frequency.setValueAtTime(988,ctx.currentTime+0.15);o.frequency.setValueAtTime(1175,ctx.currentTime+0.3);g.gain.setValueAtTime(0.25,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.6);o.start();o.stop(ctx.currentTime+0.6);}
+      else if(type==='fim'){o.type='sine';o.frequency.setValueAtTime(523,ctx.currentTime);o.frequency.setValueAtTime(659,ctx.currentTime+0.2);o.frequency.setValueAtTime(523,ctx.currentTime+0.4);g.gain.setValueAtTime(0.2,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.7);o.start();o.stop(ctx.currentTime+0.7);}
+    } catch(e){}
+  }
   const ADMIN_EMAIL = 'wenderj333@gmail.com';
   const isAdmin = user?.email === ADMIN_EMAIL;
   const audioRef = React.useRef(null);
@@ -70,6 +84,7 @@ export default function DesafioBiblico() {
       setConquistas(ids);
       localStorage.setItem('desafio_conquistas', JSON.stringify(ids));
       setNovaConquista(novas[0]);
+      playSound('conquista');
       setTimeout(()=>setNovaConquista(null), 4000);
     }
   }
@@ -149,6 +164,7 @@ export default function DesafioBiblico() {
     const p=perguntas[idx];
     const ok=i===p.r;
     const pts=ok?(tRef.current>=10?10:5):0;
+    playSound(ok?'certo':'errado');
     setFeedback({ok,pts});
     setPontos(prev=>prev+pts);
     if(ok){
@@ -181,7 +197,7 @@ export default function DesafioBiblico() {
   }
   function avancar() {
     setFeedback(null); setResp(null);
-    if(idx+1>=perguntas.length) { guardarResultado(pontos, pontos > 0 ? Math.ceil(pontos/7.5) : 0, TEMPO - tRef.current); setTela('resultado'); }
+    if(idx+1>=perguntas.length) { guardarResultado(pontos, pontos > 0 ? Math.ceil(pontos/7.5) : 0, TEMPO - tRef.current); playSound('fim'); setTela('resultado'); }
     else setIdx(prev=>prev+1);
   }
 
@@ -209,7 +225,7 @@ export default function DesafioBiblico() {
   const av=user?.photo_url||user?.avatar_url;
   const nm=user?.full_name||'Jogador';
   const perg=perguntas[idx];
-  const btn=(onClick,bg2,txt,mb=10)=><button onClick={onClick} style={{width:'100%',maxWidth:320,padding:14,borderRadius:14,border:'none',background:bg2,color:'white',fontSize:15,fontWeight:700,cursor:'pointer',marginBottom:mb}}>{txt}</button>;
+  const btn=(onClick,bg2,txt,mb=10)=><button onClick={()=>{playSound('click');onClick();}} style={{width:'100%',maxWidth:320,padding:14,borderRadius:14,border:'none',background:bg2,color:'white',fontSize:15,fontWeight:700,cursor:'pointer',marginBottom:mb}}>{txt}</button>;
 
   if(tela==='lobby') return (
     <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#1a0a3e,#2d1054)',display:'flex',color:'white'}}>
