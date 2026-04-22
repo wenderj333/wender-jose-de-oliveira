@@ -141,8 +141,15 @@ export default function DesafioBiblico() {
         setEsperando(false);
         setCodigo(msg.roomId);
         if (msg.adversario) setAdversario(msg.adversario);
-        setTela('vs');
-        setTimeout(iniciar, 3000);
+        if (msg.perguntas && msg.perguntas.length > 0) {
+          setPerguntas(msg.perguntas);
+          setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
+          setTela('vs');
+          setTimeout(()=>setTela('jogo'), 3000);
+        } else {
+          setTela('vs');
+          setTimeout(iniciar, 3000);
+        }
       }
     };
     ws.onerror = () => { setEsperando(false); alert('Erro ao conectar. Tenta de novo!'); };
