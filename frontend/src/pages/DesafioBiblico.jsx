@@ -28,6 +28,7 @@ export default function DesafioBiblico() {
   const [cInput, setCInput] = useState('');
   const [esperando, setEsperando] = useState(false);
   const [ranking, setRanking] = useState([]);
+  const [adversario, setAdversario] = useState(null);
   useEffect(() => {
     fetch((import.meta.env.VITE_API_URL||'')+ '/api/quiz/ranking?periodo=semana')
       .then(r=>r.json()).then(d=>{if(Array.isArray(d))setRanking(d);}).catch(()=>{});
@@ -75,7 +76,8 @@ export default function DesafioBiblico() {
         setEsperando(false);
         setCodigo(msg.roomId);
         if (msg.adversario) setAdversario(msg.adversario);
-        iniciar();
+        setTela('vs');
+        setTimeout(iniciar, 3000);
       }
     };
     ws.onerror = () => { setEsperando(false); alert('Erro ao conectar. Tenta de novo!'); };
@@ -192,12 +194,34 @@ export default function DesafioBiblico() {
           <span style={{flex:1}}>{nm}</span><span style={{fontSize:11,opacity:0.7}}>{t('desafio.host')}</span>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 16px',background:'rgba(255,255,255,0.05)',borderRadius:10,border:'1px dashed rgba(255,255,255,0.2)'}}>
-          <div style={{width:40,height:40,borderRadius:'50%',background:'rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center'}}>?</div>
-          <span style={{opacity:0.5,fontSize:13}}>{t('desafio.waitingplayer')}</span>
+          {adversario
+            ? <>{adversario.avatar?<img src={adversario.avatar} style={{width:40,height:40,borderRadius:'50%',objectFit:'cover'}}/>:<div style={{width:40,height:40,borderRadius:'50%',background:'#e74c3c',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700}}>{adversario.name?.charAt(0)||'?'}</div>}<span style={{flex:1,fontWeight:600}}>{adversario.name}</span><span style={{fontSize:11,color:'#27ae60',fontWeight:700}}>✓ Pronto</span></>
+            : <><div style={{width:40,height:40,borderRadius:'50%',background:'rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center'}}>?</div><span style={{opacity:0.5,fontSize:13}}>{t('desafio.waitingplayer')}</span></>
+          }
         </div>
       </div>
       {btn(iniciar,'linear-gradient(135deg,#e74c3c,#c0392b)',t('desafio.start'))}
       <button onClick={()=>setTela('lobby')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
+    </div>
+  );
+
+  if(tela==='vs') return (
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#1a0a3e,#2d1054)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:'white'}}>
+      <p style={{fontSize:13,opacity:0.6,marginBottom:24,letterSpacing:2,textTransform:'uppercase'}}>Desafio Bíblico</p>
+      <div style={{display:'flex',alignItems:'center',gap:24}}>
+        <div style={{textAlign:'center'}}>
+          {av?<img src={av} style={{width:80,height:80,borderRadius:'50%',objectFit:'cover',border:'3px solid #6c47d4'}}/>:<div style={{width:80,height:80,borderRadius:'50%',background:'#6c47d4',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,fontWeight:700}}>{nm.charAt(0)}</div>}
+          <p style={{marginTop:8,fontWeight:700,fontSize:15}}>{nm}</p>
+          <p style={{fontSize:11,color:'#a78bfa'}}>Tu</p>
+        </div>
+        <div style={{fontSize:36,fontWeight:900,color:'#f0c040'}}>VS</div>
+        <div style={{textAlign:'center'}}>
+          {adversario?.avatar?<img src={adversario.avatar} style={{width:80,height:80,borderRadius:'50%',objectFit:'cover',border:'3px solid #e74c3c'}}/>:<div style={{width:80,height:80,borderRadius:'50%',background:'#e74c3c',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,fontWeight:700}}>{adversario?.name?.charAt(0)||'?'}</div>}
+          <p style={{marginTop:8,fontWeight:700,fontSize:15}}>{adversario?.name||'Adversário'}</p>
+          <p style={{fontSize:11,color:'#f87171'}}>Adversário</p>
+        </div>
+      </div>
+      <p style={{marginTop:32,fontSize:13,opacity:0.6,animation:'pulse 1s infinite'}}>A iniciar em 3 segundos...</p>
     </div>
   );
 
