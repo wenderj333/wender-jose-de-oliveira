@@ -384,11 +384,11 @@ export default function DesafioBiblico() {
         </div>
       )}
       <div style={{fontSize:60,marginBottom:12}}>🏆</div>
-      <h1 style={{fontSize:26,fontWeight:900,marginBottom:6,textAlign:'center'}}>{t('desafio.title')}</h1>
+      <h1 style={{fontSize:28,fontWeight:900,marginBottom:6,textAlign:'center',color:'#f0c040',textShadow:'0 2px 10px rgba(240,192,64,0.5)',fontStyle:'italic',letterSpacing:1}}>{t('desafio.title')}</h1>
       <p style={{opacity:0.7,marginBottom:16,fontSize:14,textAlign:'center'}}>{t('desafio.subtitle')}</p>
       <p style={{fontSize:13,opacity:0.8,marginBottom:8}}>📖 {t('desafio.choosebook')||'Escolhe o livro:'}</p>
       <div style={{display:'flex',flexWrap:'wrap',gap:8,justifyContent:'center',marginBottom:20,maxWidth:360}}>
-        {LIVROS.map(l=><button key={l} onClick={()=>setLivro(l)} style={{padding:'6px 14px',borderRadius:20,border:'none',background:livro===l?'#f0c040':'rgba(255,255,255,0.15)',color:livro===l?'#1a0a3e':'white',fontWeight:700,cursor:'pointer',fontSize:13}}>{t('desafio.livros.'+l)||l}</button>)}
+        {LIVROS.map(l=><button key={l} onClick={()=>setLivro(l)} style={{padding:'6px 14px',borderRadius:20,border:'none',background:livro===l?'linear-gradient(135deg,#f0c040,#e67e22)':'rgba(255,255,255,0.15)',color:livro===l?'#1a0a3e':'white',boxShadow:livro===l?'0 4px 15px rgba(240,192,64,0.4)':'none',fontWeight:700,cursor:'pointer',fontSize:13}}>{t('desafio.livros.'+l)||l}</button>)}
       </div>
       {btn(criarSala,'linear-gradient(135deg,#6c47d4,#4A2270)',t('desafio.createsala'))}
       <div style={{width:'100%',maxWidth:320,display:'flex',gap:10,marginBottom:10}}>
