@@ -4,6 +4,8 @@ const User = require('../models/User');
 const { generateToken, authenticate } = require('../middleware/auth');
 
 // POST /api/auth/register
+const { sendWelcomeEmail } = require('../services/email');
+
 router.post('/register', async (req, res) => {
   try {
     const { email, password, full_name, role, avatar_url } = req.body;
@@ -27,6 +29,7 @@ router.post('/register', async (req, res) => {
     }
 
     const token = generateToken(user);
+    sendWelcomeEmail(email, full_name).catch(()=>{});
     res.status(201).json({ user, token });
   } catch (err) {
     console.error('Erro no registro:', err);
