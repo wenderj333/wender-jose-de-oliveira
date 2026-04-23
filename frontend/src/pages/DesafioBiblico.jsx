@@ -44,6 +44,9 @@ export default function DesafioBiblico() {
   const [showMusicAdmin, setShowMusicAdmin] = React.useState(false);
   const [musicInputVal, setMusicInputVal] = React.useState(()=>localStorage.getItem('desafio_music')||'');
   const [showConquistasModal, setShowConquistasModal] = React.useState(false);
+  const [evento, setEvento] = React.useState(()=>JSON.parse(localStorage.getItem('desafio_evento')||'null'));
+  const [showEventoAdmin, setShowEventoAdmin] = React.useState(false);
+  const [eventoInput, setEventoInput] = React.useState({premio:'100',descricao:'Competicao Biblica',dataFim:''});
 
   React.useEffect(()=>{
     if(audioRef.current){
@@ -263,6 +266,15 @@ export default function DesafioBiblico() {
         </div>
       </div>
       <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px 16px',overflowY:'auto'}}>
+      {evento?.ativo && (
+        <div style={{width:'100%',maxWidth:400,background:'linear-gradient(135deg,#f0c040,#e67e22)',borderRadius:16,padding:'16px 20px',marginBottom:20,textAlign:'center',boxShadow:'0 4px 20px rgba(240,192,64,0.4)'}}>
+          <div style={{fontSize:28}}>🏆</div>
+          <p style={{color:'#1a0a3e',fontWeight:900,fontSize:16,margin:'4px 0'}}>{evento.descricao}</p>
+          <p style={{color:'#1a0a3e',fontWeight:700,fontSize:20,margin:'4px 0'}}>€{evento.premio} em jogo!</p>
+          {evento.dataFim&&<p style={{color:'#1a0a3e',fontSize:12,margin:'4px 0'}}>Termina: {evento.dataFim}</p>}
+          <p style={{color:'#1a0a3e',fontSize:11,margin:'4px 0',opacity:0.8}}>Joga e entra no ranking para ganhar!</p>
+        </div>
+      )}
       <div style={{fontSize:60,marginBottom:12}}>🏆</div>
       <h1 style={{fontSize:26,fontWeight:900,marginBottom:6,textAlign:'center'}}>{t('desafio.title')}</h1>
       <p style={{opacity:0.7,marginBottom:16,fontSize:14,textAlign:'center'}}>{t('desafio.subtitle')}</p>
@@ -434,5 +446,31 @@ export default function DesafioBiblico() {
     </div>
   ) : null;
 
-  return <>{musicBar}{musicAdmin}{streakAnim}{conquistaAnim}</>;
+  const eventoAdminBtn = isAdmin ? (
+    <div style={{position:'fixed',bottom:60,left:16,zIndex:9999}}>
+      <button onClick={()=>setShowEventoAdmin(p=>!p)} style={{padding:'8px 16px',borderRadius:20,border:'none',background:evento?.ativo?'#e74c3c':'#27ae60',color:'white',cursor:'pointer',fontWeight:700,fontSize:12}}>{evento?.ativo?'🔴 Evento ON':'🟢 Criar Evento'}</button>
+    </div>
+  ) : null;
+
+  const eventoAdminPanel = showEventoAdmin && isAdmin ? (
+    <div style={{position:'fixed',bottom:110,left:16,zIndex:10000,background:'#1a0a3e',border:'1px solid #f0c040',borderRadius:16,padding:20,width:300,boxShadow:'0 8px 32px rgba(0,0,0,0.5)'}}>
+      <p style={{color:'#f0c040',fontWeight:900,fontSize:15,marginBottom:12}}>🏆 Painel Evento</p>
+      {evento?.ativo ? (
+        <>
+          <p style={{color:'white',fontSize:13,marginBottom:8}}>Evento: <strong>{evento.descricao}</strong></p>
+          <p style={{color:'#f0c040',fontSize:13,marginBottom:12}}>Premio: EUR{evento.premio}</p>
+          <button onClick={()=>{const e={...evento,ativo:false};setEvento(e);localStorage.setItem('desafio_evento',JSON.stringify(e));setShowEventoAdmin(false);}} style={{width:'100%',padding:'10px',borderRadius:10,border:'none',background:'#e74c3c',color:'white',cursor:'pointer',fontWeight:700}}>🔴 Desativar Evento</button>
+        </>
+      ) : (
+        <>
+          <input placeholder="Descricao" value={eventoInput.descricao} onChange={e=>setEventoInput(p=>({...p,descricao:e.target.value}))} style={{width:'100%',padding:'8px',borderRadius:8,border:'1px solid #6c47d4',background:'rgba(255,255,255,0.1)',color:'white',fontSize:12,marginBottom:8,boxSizing:'border-box'}}/>
+          <input placeholder="Premio euros" value={eventoInput.premio} onChange={e=>setEventoInput(p=>({...p,premio:e.target.value}))} style={{width:'100%',padding:'8px',borderRadius:8,border:'1px solid #6c47d4',background:'rgba(255,255,255,0.1)',color:'white',fontSize:12,marginBottom:8,boxSizing:'border-box'}}/>
+          <input placeholder="Data fim (ex: 30/05/2026)" value={eventoInput.dataFim} onChange={e=>setEventoInput(p=>({...p,dataFim:e.target.value}))} style={{width:'100%',padding:'8px',borderRadius:8,border:'1px solid #6c47d4',background:'rgba(255,255,255,0.1)',color:'white',fontSize:12,marginBottom:8,boxSizing:'border-box'}}/>
+          <button onClick={()=>{const e={ativo:true,premio:eventoInput.premio,descricao:eventoInput.descricao,dataFim:eventoInput.dataFim,inicio:new Date().toLocaleDateString()};setEvento(e);localStorage.setItem('desafio_evento',JSON.stringify(e));setShowEventoAdmin(false);}} style={{width:'100%',padding:'10px',borderRadius:10,border:'none',background:'#27ae60',color:'white',cursor:'pointer',fontWeight:700}}>🟢 Ativar Evento</button>
+        </>
+      )}
+    </div>
+  ) : null;
+
+  return <>{musicBar}{musicAdmin}{streakAnim}{conquistaAnim}{eventoAdminBtn}{eventoAdminPanel}</>;
 }
