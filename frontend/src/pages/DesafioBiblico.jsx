@@ -6,7 +6,7 @@ import PERGUNTAS_JSON from '../data/perguntas.json';
 
 const LIVROS = ['Todos','Genesis','Exodo','Salmos','Proverbios','Mateus','Apocalipse'];
 const TEMPO = 15;
-const bg = { minHeight:'100vh', background:'linear-gradient(135deg,#1a0a3e,#2d1054)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:24, color:'white' };
+const bg = { minHeight:'100vh', backgroundImage:'url(/fundo-desafio.jpg)', backgroundSize:'cover', backgroundPosition:'center', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:24, color:'white' };
 
 function filtrar(livro) {
   let p = PERGUNTAS_JSON.filter(x => livro==='Todos' || x.livro===livro);
@@ -348,7 +348,7 @@ export default function DesafioBiblico() {
   const btn=(onClick,bg2,txt,mb=10)=><button onClick={()=>{playSound('click');onClick();}} style={{width:'100%',maxWidth:320,padding:14,borderRadius:14,border:'none',background:bg2,color:'white',fontSize:15,fontWeight:700,cursor:'pointer',marginBottom:mb}}>{txt}</button>;
 
   if(tela==='lobby') return (
-    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#1a0a3e,#2d1054)',display:'flex',color:'white'}}>
+    <div style={{minHeight:'100vh',backgroundImage:'url(/fundo-desafio.jpg)',backgroundSize:'cover',backgroundPosition:'center',display:'flex',color:'white'}}>
       <div style={{width:200,background:'rgba(0,0,0,0.3)',borderRight:'1px solid rgba(255,255,255,0.1)',padding:'24px 14px',display:'flex',flexDirection:'column',overflowY:'auto'}}>
         <p style={{fontSize:11,fontWeight:800,color:'#f0c040',letterSpacing:1.5,textTransform:'uppercase',marginBottom:16}}>🏆 Top Jogadores</p>
         {ranking.slice(0,10).map((j,i)=>(
