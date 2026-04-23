@@ -1321,14 +1321,15 @@
     "enter_chat": "Chat betreten"
   },
   "auth": {
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "login": "Anmelden"
   },
   "landing": {
     "subtitle": "Hast du dich allein gefuehlt? Hier ist immer jemand fuer dich.",
     "register": "Kostenloses Konto erstellen",
     "login": "Einloggen",
     "verse": "\"Denn wo zwei oder drei in meinem Namen versammelt sind, da bin ich mitten unter ihnen.\" — Mt 18:20",
-    "createFree": "✨ Kostenloses Konto erstellen",
+    "createFree": "✅ Kostenloses Konto erstellen",
     "haveAccount": "Ich habe bereits ein Konto →",
     "featuresTitle": "Alles, was Sie brauchen, um im Glauben zu wachsen",
     "featuresSection": "FUNKTIONEN",
@@ -1398,7 +1399,15 @@
     "notCasual": "Du bist nicht zufaellig hier",
     "ctaFinalText": "Gott kann diesen Moment nutzen, um etwas in deinem Leben zu veraendern.",
     "ctaFinal": "Jetzt kostenloses Konto erstellen",
-    "joinFree": "Kostenloses Konto erstellen"
+    "joinFree": "Kostenloses Konto erstellen",
+    "playFree": "🎮 Gratis spielen",
+    "soloTitle": "Kostenloses Bibelquiz!",
+    "soloDesc": "Teste dein Bibelwissen!",
+    "soloFree": "Verbleibende Gratisrunden",
+    "startGame": "🎮 Jetzt spielen!",
+    "soloUsed": "Hat es dir gefallen?",
+    "soloRegister": "Registriere dich kostenlos und spiele unbegrenzt!",
+    "soloBonus": "Kostenlos • Keine Karte • Sofort losspielen"
   },
   "locale": "de-DE",
   "report": {

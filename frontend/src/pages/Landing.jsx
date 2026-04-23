@@ -48,7 +48,7 @@ export default function Landing() {
       <nav style={{ background:'white', padding:'12px 32px', display:'flex', justifyContent:'space-between', alignItems:'center', boxShadow:'0 2px 8px rgba(0,0,0,0.08)', position:'sticky', top:0, zIndex:100 }}>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
           <img src='/logo-new.png' alt='Logo' style={{ height:36, width:36, borderRadius:8 }} />
-          <span style={{ fontSize:'clamp(16px,2vw,22px)', fontWeight:800, color:'#6C3FA0' }}>Sigo com FÃ©</span>
+          <span style={{ fontSize:'clamp(16px,2vw,22px)', fontWeight:800, color:'#6C3FA0' }}>Sigo com Fé</span>
         </div>
         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
           <LanguageSelector variant="light" />
