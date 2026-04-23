@@ -1565,6 +1565,15 @@
     "playagain": "Joaca din nou",
     "master": "Maestru Biblic!",
     "good": "Foarte bine!",
-    "study": "Continua sa studiezi!"
+    "study": "Continua sa studiezi!",
+    "livros": {
+      "Todos": "Toate",
+      "Genesis": "Geneza",
+      "Exodo": "Exod",
+      "Salmos": "Psalmi",
+      "Proverbios": "Proverbe",
+      "Mateus": "Matei",
+      "Apocalipse": "Apocalipsa"
+    }
   }
 }

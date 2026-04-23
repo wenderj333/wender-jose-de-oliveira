@@ -1564,6 +1564,15 @@
     "playagain": "Play again",
     "master": "Bible Master!",
     "good": "Very good!",
-    "study": "Keep studying!"
+    "study": "Keep studying!",
+    "livros": {
+      "Todos": "All",
+      "Genesis": "Genesis",
+      "Exodo": "Exodus",
+      "Salmos": "Psalms",
+      "Proverbios": "Proverbs",
+      "Mateus": "Matthew",
+      "Apocalipse": "Revelation"
+    }
   }
 }

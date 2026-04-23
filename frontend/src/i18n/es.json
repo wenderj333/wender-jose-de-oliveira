@@ -1564,6 +1564,15 @@
     "playagain": "Jugar de nuevo",
     "master": "Maestro Biblico!",
     "good": "Muy bien!",
-    "study": "Sigue estudiando!"
+    "study": "Sigue estudiando!",
+    "livros": {
+      "Todos": "Todos",
+      "Genesis": "Génesis",
+      "Exodo": "Éxodo",
+      "Salmos": "Salmos",
+      "Proverbios": "Proverbios",
+      "Mateus": "Mateo",
+      "Apocalipse": "Apocalipsis"
+    }
   }
 }
