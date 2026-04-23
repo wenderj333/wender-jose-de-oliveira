@@ -9,6 +9,8 @@ export default function Landing() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [online, setOnline] = useState(Math.floor(Math.random()*80)+100);
+  const [soloPartidas, setSoloPartidas] = useState(()=>parseInt(localStorage.getItem('solo_partidas')||'0'));
+  const [showSolo, setShowSolo] = useState(false);
   const [prayer, setPrayer] = useState('');
   const [prayerSent, setPrayerSent] = useState(false);
 
@@ -50,6 +52,7 @@ export default function Landing() {
         </div>
         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
           <LanguageSelector variant="light" />
+          <button onClick={()=>setShowSolo(true)} style={{ padding:'8px 18px', borderRadius:8, border:'none', background:'linear-gradient(135deg,#f0c040,#e67e22)', color:'#1a0a3e', fontWeight:700, cursor:'pointer' }}>🎮 {t('landing.playFree','Jogar Grátis')}</button>
           <button onClick={() => navigate('/login')} style={{ padding:'8px 18px', borderRadius:8, border:'1px solid #6C3FA0', background:'white', color:'#6C3FA0', fontWeight:600, cursor:'pointer' }}>{t('auth.login','Entrar')}</button>
           <button onClick={() => navigate('/register')} style={{ padding:'8px 18px', borderRadius:8, border:'none', background:'#6C3FA0', color:'white', fontWeight:600, cursor:'pointer' }}>{t('landing.joinFree','Crear cuenta gratis')}</button>
         </div>
@@ -121,6 +124,45 @@ export default function Landing() {
         <h2 style={{ color:'white', fontSize:32, fontWeight:900, margin:'0 0 12px' }}>{t('landing.ctaFinalText','Dios puede usar este momento para cambiar algo en tu vida.')}</h2>
         <button onClick={() => navigate('/register')} style={{ padding:'18px 48px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#6C3FA0,#4A2270)', color:'white', fontWeight:900, cursor:'pointer', fontSize:'clamp(16px,2vw,22px)', marginTop:16 }}>{t('landing.ctaFinal','Crear cuenta gratis ahora')}</button>
       </div>
+      {showSolo && (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.7)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center',padding:24}}>
+          <div style={{background:'linear-gradient(135deg,#1a0a3e,#2d1054)',borderRadius:20,padding:32,maxWidth:420,width:'100%',color:'white',textAlign:'center',boxShadow:'0 20px 60px rgba(0,0,0,0.5)'}}>
+            {soloPartidas < 2 ? (
+              <>
+                <div style={{fontSize:48,marginBottom:12}}>🎮</div>
+                <h2 style={{fontSize:22,fontWeight:900,marginBottom:8}}>{t('landing.soloTitle','Desafio Bíblico Grátis!')}</h2>
+                <p style={{opacity:0.8,marginBottom:8,fontSize:14}}>{t('landing.soloDesc','Testa os teus conhecimentos da Bíblia!')}</p>
+                <div style={{background:'rgba(240,192,64,0.2)',border:'1px solid #f0c040',borderRadius:12,padding:'10px 16px',marginBottom:20}}>
+                  <p style={{color:'#f0c040',fontWeight:700,fontSize:13,margin:0}}>✨ {t('landing.soloFree','Partidas grátis restantes')}: {2 - soloPartidas}/2</p>
+                </div>
+                <button onClick={()=>{
+                  const p = soloPartidas + 1;
+                  localStorage.setItem('solo_partidas', p);
+                  setSoloPartidas(p);
+                  setShowSolo(false);
+                  navigate('/desafio-biblico?modo=solo');
+                }} style={{width:'100%',padding:'14px',borderRadius:12,border:'none',background:'linear-gradient(135deg,#f0c040,#e67e22)',color:'#1a0a3e',fontWeight:900,cursor:'pointer',fontSize:16,marginBottom:10}}>
+                  🎮 {t('landing.startGame','Jogar Agora!')}
+                </button>
+                <button onClick={()=>setShowSolo(false)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Fechar</button>
+              </>
+            ) : (
+              <>
+                <div style={{fontSize:48,marginBottom:12}}>🏆</div>
+                <h2 style={{fontSize:22,fontWeight:900,marginBottom:8}}>{t('landing.soloUsed','Gostaste do jogo?')}</h2>
+                <p style={{opacity:0.8,marginBottom:16,fontSize:14}}>{t('landing.soloRegister','Regista-te grátis para jogar ilimitado e entrar no ranking!')}</p>
+                <div style={{background:'rgba(39,174,96,0.2)',border:'1px solid #27ae60',borderRadius:12,padding:'12px 16px',marginBottom:20}}>
+                  <p style={{color:'#27ae60',fontWeight:700,fontSize:13,margin:0}}>🎁 {t('landing.soloBonus','Registo grátis • Sem cartão • Acesso imediato')}</p>
+                </div>
+                <button onClick={()=>navigate('/register')} style={{width:'100%',padding:'14px',borderRadius:12,border:'none',background:'#27ae60',color:'white',fontWeight:900,cursor:'pointer',fontSize:16,marginBottom:10}}>
+                  ✅ {t('landing.createFree','Criar conta grátis')}
+                </button>
+                <button onClick={()=>setShowSolo(false)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Fechar</button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import PERGUNTAS_JSON from '../data/perguntas.json';
@@ -57,6 +57,113 @@ export default function DesafioBiblico() {
     }
   },[musicPlaying, musicVolume]);
   const navigate = useNavigate();
+  const location = useLocation();
+  const modoSolo = new URLSearchParams(location.search).get('modo') === 'solo';
+  const [soloIdx, setSoloIdx] = React.useState(0);
+  const [soloPerguntas, setSoloPerguntas] = React.useState([]);
+  const [soloResp, setSoloResp] = React.useState(null);
+  const [soloFeedback, setSoloFeedback] = React.useState(null);
+  const [soloPontos, setSoloPontos] = React.useState(0);
+  const [soloTela, setSoloTela] = React.useState('jogo');
+  const [soloTempo, setSoloTempo] = React.useState(15);
+  const soloTimerRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (modoSolo) {
+      setSoloPerguntas(filtrar('Todos'));
+      setSoloIdx(0); setSoloResp(null); setSoloFeedback(null); setSoloPontos(0); setSoloTela('jogo');
+    }
+  }, [modoSolo]);
+
+  React.useEffect(() => {
+    if (!modoSolo || soloTela !== 'jogo' || soloResp !== null) return;
+    setSoloTempo(15);
+    clearInterval(soloTimerRef.current);
+    soloTimerRef.current = setInterval(() => {
+      setSoloTempo(prev => {
+        if (prev <= 1) { clearInterval(soloTimerRef.current); soloAvancar(null); return 0; }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(soloTimerRef.current);
+  }, [soloIdx, modoSolo, soloTela, soloResp]);
+
+  function soloResponder(i) {
+    if (soloResp !== null) return;
+    clearInterval(soloTimerRef.current);
+    setSoloResp(i);
+    const q = soloPerguntas[soloIdx];
+    const certo = i === q.certa;
+    setSoloFeedback(certo);
+    if (certo) { playSound('certo'); setSoloPontos(p => p + 10); }
+    else playSound('errado');
+    setTimeout(() => soloAvancar(i), 1500);
+  }
+
+  function soloAvancar(resposta) {
+    const next = soloIdx + 1;
+    if (next >= soloPerguntas.length) {
+      setSoloTela('fim');
+    } else {
+      setSoloIdx(next); setSoloResp(null); setSoloFeedback(null);
+    }
+  }
+
+  if (modoSolo) {
+    const q = soloPerguntas[soloIdx];
+    const perguntaTexto = q ? (lang === 'es' ? q.pergunta_es || q.pergunta : lang === 'en' ? q.pergunta_en || q.pergunta : q.pergunta) : '';
+    if (soloTela === 'fim') return (
+      <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#1a0a3e,#2d1054)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24,color:'white',textAlign:'center'}}>
+        <div style={{fontSize:60,marginBottom:16}}>🏆</div>
+        <h2 style={{fontSize:28,fontWeight:900,marginBottom:8}}>Resultado Final!</h2>
+        <p style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:8}}>{soloPontos} pts</p>
+        <p style={{opacity:0.7,marginBottom:32,fontSize:15}}>{soloPerguntas.length} perguntas respondidas</p>
+        <div style={{background:'rgba(39,174,96,0.2)',border:'2px solid #27ae60',borderRadius:16,padding:24,maxWidth:360,marginBottom:24}}>
+          <p style={{color:'#27ae60',fontWeight:800,fontSize:16,marginBottom:8}}>🎁 Regista-te grátis!</p>
+          <p style={{fontSize:14,opacity:0.9,marginBottom:16}}>Guarda os teus pontos, entra no ranking e joga contra outros cristãos!</p>
+          <button onClick={()=>navigate('/register')} style={{width:'100%',padding:'14px',borderRadius:12,border:'none',background:'#27ae60',color:'white',fontWeight:900,cursor:'pointer',fontSize:16,marginBottom:8}}>
+            ✅ Criar conta grátis
+          </button>
+          <button onClick={()=>navigate('/')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Voltar ao início</button>
+        </div>
+      </div>
+    );
+    if (!q) return <div style={{color:'white',textAlign:'center',padding:40}}>A carregar...</div>;
+    return (
+      <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#1a0a3e,#2d1054)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24,color:'white'}}>
+        <div style={{width:'100%',maxWidth:480}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
+            <span style={{fontSize:13,opacity:0.7}}>Pergunta {soloIdx+1}/{soloPerguntas.length}</span>
+            <span style={{fontSize:13,fontWeight:700,color:'#f0c040'}}>⭐ {soloPontos} pts</span>
+            <span style={{fontSize:13,fontWeight:700,color:soloTempo<=5?'#e74c3c':'white'}}>⏱ {soloTempo}s</span>
+          </div>
+          <div style={{background:'rgba(255,255,255,0.05)',borderRadius:16,padding:24,marginBottom:16}}>
+            <p style={{fontSize:18,fontWeight:700,lineHeight:1.5,margin:0,textAlign:'center'}}>{perguntaTexto}</p>
+          </div>
+          <div style={{display:'flex',flexDirection:'column',gap:10}}>
+            {(q.opcoes||[]).map((op,i) => {
+              const opTexto = lang==='es'?(q.opcoes_es||q.opcoes)[i]||op : lang==='en'?(q.opcoes_en||q.opcoes)[i]||op : op;
+              let bg = 'rgba(255,255,255,0.1)';
+              if (soloResp !== null) {
+                if (i === q.certa) bg = '#27ae60';
+                else if (i === soloResp && i !== q.certa) bg = '#e74c3c';
+              }
+              return (
+                <button key={i} onClick={()=>soloResponder(i)} disabled={soloResp!==null} style={{padding:'14px 18px',borderRadius:12,border:'none',background:bg,color:'white',fontWeight:600,cursor:soloResp!==null?'default':'pointer',fontSize:15,textAlign:'left',transition:'background 0.3s'}}>
+                  {opTexto}
+                </button>
+              );
+            })}
+          </div>
+          {soloFeedback !== null && (
+            <div style={{textAlign:'center',marginTop:16,fontSize:24}}>
+              {soloFeedback ? '✅ Certo! +10 pts' : '❌ Errado!'}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
   const [tela, setTela] = useState('lobby');
   const [livro, setLivro] = useState('Todos');
   const [codigo, setCodigo] = useState('');
