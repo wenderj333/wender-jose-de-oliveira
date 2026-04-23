@@ -367,7 +367,7 @@ export default function DesafioBiblico() {
           <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
             {CONQUISTAS_DEF.map(c=>{
               const tem=conquistas.includes(c.id);
-              return <div key={c.id} title={c.nome+': '+c.desc} style={{fontSize:18,opacity:tem?1:0.2,cursor:'pointer'}} onClick={()=>setShowConquistasModal(true)}>{c.icon}</div>;
+              return <div key={c.id} title={c.nome+': '+c.desc} style={{fontSize:18,opacity:tem?1:0.5,cursor:'pointer',filter:tem?'drop-shadow(0 0 4px #f0c040)':'grayscale(1)',transition:'all 0.3s'}} onClick={()=>setShowConquistasModal(true)}>{c.icon}</div>;
             })}
           </div>
           <p style={{fontSize:9,color:'rgba(255,255,255,0.3)',marginTop:4}}>{conquistas.length}/{CONQUISTAS_DEF.length} desbloqueadas</p>
