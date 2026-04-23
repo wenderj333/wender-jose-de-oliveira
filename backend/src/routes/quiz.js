@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { pool } = require('../db/connection');
+const db = require('../db/connection');
+const pool = db;
 const { authenticate: auth } = require('../middleware/auth');
 
 // Guardar resultado do jogo
