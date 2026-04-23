@@ -32,7 +32,7 @@ router.get('/ranking', async (req, res) => {
         SUM(r.pontos) as total_pontos,
         COUNT(r.id) as partidas,
         ROUND(AVG(r.tempo_medio)::numeric, 1) as tempo_medio,
-        ROUND((SUM(r.pontos) + SUM(100.0 / NULLIF(r.tempo_medio, 0)))::numeric, 1) as score
+        SUM(r.pontos) as score
       FROM quiz_resultados r
       JOIN users u ON r.user_id = u.id
       ${filtro}
