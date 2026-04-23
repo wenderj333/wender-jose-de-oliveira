@@ -345,7 +345,7 @@ export default function DesafioBiblico() {
   const av=user?.photo_url||user?.avatar_url;
   const nm=user?.full_name||'Jogador';
   const perg=perguntas[idx];
-  const btn=(onClick,bg2,txt,mb=10)=><button onClick={()=>{playSound('click');onClick();}} style={{width:'100%',maxWidth:320,padding:14,borderRadius:14,border:'none',background:bg2,color:'white',fontSize:15,fontWeight:700,cursor:'pointer',marginBottom:mb}}>{txt}</button>;
+  const btn=(onClick,bg2,txt,mb=10)=><button onClick={()=>{playSound('click');onClick();}} style={{width:'100%',maxWidth:320,padding:14,borderRadius:14,border:'none',background:bg2,color:'white',fontSize:15,fontWeight:800,cursor:'pointer',marginBottom:mb,boxShadow:'0 4px 20px rgba(0,0,0,0.4)',textShadow:'0 1px 3px rgba(0,0,0,0.3)',letterSpacing:0.5,transition:'transform 0.1s'}}>{txt}</button>;
 
   if(tela==='lobby') return (
     <div style={{minHeight:'100vh',backgroundImage:'url(/fundo-desafio.jpg)',backgroundSize:'cover',backgroundPosition:'center',display:'flex',color:'white'}}>
@@ -390,7 +390,7 @@ export default function DesafioBiblico() {
       <div style={{display:'flex',flexWrap:'wrap',gap:8,justifyContent:'center',marginBottom:20,maxWidth:360}}>
         {LIVROS.map(l=><button key={l} onClick={()=>setLivro(l)} style={{padding:'6px 14px',borderRadius:20,border:'none',background:livro===l?'linear-gradient(135deg,#f0c040,#e67e22)':'rgba(255,255,255,0.15)',color:livro===l?'#1a0a3e':'white',boxShadow:livro===l?'0 4px 15px rgba(240,192,64,0.4)':'none',fontWeight:700,cursor:'pointer',fontSize:13}}>{t('desafio.livros.'+l)||l}</button>)}
       </div>
-      {btn(criarSala,'linear-gradient(135deg,#6c47d4,#4A2270)',t('desafio.createsala'))}
+      {btn(criarSala,'linear-gradient(135deg,#f0c040,#e67e22)',t('desafio.createsala'))}
       <div style={{width:'100%',maxWidth:320,display:'flex',gap:10,marginBottom:10}}>
         <input value={cInput} onChange={e=>setCInput(e.target.value.toUpperCase())} placeholder='Codigo da sala...' style={{flex:1,padding:12,borderRadius:12,border:'none',background:'rgba(255,255,255,0.15)',color:'white',fontSize:15,outline:'none'}} />
         <button onClick={entrarSala} style={{padding:'12px 18px',borderRadius:12,border:'none',background:'#27ae60',color:'white',fontWeight:700,cursor:'pointer',fontSize:15}}>Entrar</button>
