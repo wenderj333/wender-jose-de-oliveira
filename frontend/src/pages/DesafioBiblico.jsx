@@ -448,7 +448,7 @@ export default function DesafioBiblico() {
   ) : null;
 
   const eventoAdminBtn = isAdmin ? (
-    <div style={{position:'fixed',bottom:60,left:16,zIndex:9999}}>
+    <div style={{position:'fixed',bottom:80,right:80,zIndex:9999}}>
       <button onClick={()=>setShowEventoAdmin(p=>!p)} style={{padding:'8px 16px',borderRadius:20,border:'none',background:evento?.ativo?'#e74c3c':'#27ae60',color:'white',cursor:'pointer',fontWeight:700,fontSize:12}}>{evento?.ativo?'🔴 Evento ON':'🟢 Criar Evento'}</button>
     </div>
   ) : null;
