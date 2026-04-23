@@ -1320,14 +1320,15 @@
     "enter_chat": "Entrar al chat"
   },
   "auth": {
-    "logout": "Salir"
+    "logout": "Salir",
+    "login": "Entrar"
   },
   "landing": {
     "subtitle": "Te has sentido solo? Aqui siempre hay alguien para ti.",
     "register": "Crear cuenta gratuita",
     "login": "Entrar",
     "verse": "\"Porque donde dos o tres se reúnen en mi nombre, allí estoy yo en medio de ellos.\" — Mt 18:20",
-    "createFree": "✨ Crear cuenta gratuita",
+    "createFree": "Crear cuenta gratis",
     "haveAccount": "Ya tengo una cuenta →",
     "featuresTitle": "Todo lo que necesitas para crecer en la fe",
     "featuresSection": "FUNCIONALIDADES",
@@ -1396,7 +1397,15 @@
     "notCasual": "No llegaste aqui por casualidad",
     "ctaFinalText": "Dios puede usar este momento para cambiar algo en tu vida.",
     "ctaFinal": "Crear cuenta gratis ahora",
-    "joinFree": "Crear cuenta gratis"
+    "joinFree": "Crear cuenta gratis",
+    "playFree": "Jugar Gratis",
+    "soloTitle": "Quiz Biblico Gratis!",
+    "soloDesc": "Pon a prueba tu conocimiento biblico!",
+    "soloFree": "Partidas gratis restantes",
+    "startGame": "Jugar Ahora!",
+    "soloUsed": "Te gusto el juego?",
+    "soloRegister": "Registrate gratis y juega sin limites!",
+    "soloBonus": "Gratis - Sin tarjeta - Acceso inmediato"
   },
   "locale": "es-ES",
   "report": {

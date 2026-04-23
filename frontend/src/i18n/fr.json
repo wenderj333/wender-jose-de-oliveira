@@ -1320,14 +1320,15 @@
     "enter_chat": "Entrer dans le chat"
   },
   "auth": {
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "login": "Se connecter"
   },
   "landing": {
     "subtitle": "Tu te sens seul, sans personne avec qui prier? Ici il y a toujours quelquun pour toi.",
     "register": "Créer un compte gratuit",
     "login": "Se connecter",
     "verse": "\"Car là où deux ou trois sont réunis en mon nom, je suis au milieu d'eux.\" — Mt 18:20",
-    "createFree": "✨ Créer un compte gratuit",
+    "createFree": "Creer un compte gratuit",
     "haveAccount": "J'ai déjà un compte →",
     "featuresTitle": "Tout ce dont vous avez besoin pour grandir dans la foi",
     "featuresSection": "FONCTIONNALITÉS",
@@ -1396,7 +1397,15 @@
     "notCasual": "Tu nes pas arrive ici par hasard",
     "ctaFinalText": "Dieu peut utiliser ce moment pour changer quelque chose dans ta vie.",
     "ctaFinal": "Creer un compte gratuit maintenant",
-    "joinFree": "Creer un compte gratuit"
+    "joinFree": "Creer un compte gratuit",
+    "playFree": "Jouer Gratuitement",
+    "soloTitle": "Quiz Biblique Gratuit!",
+    "soloDesc": "Testez vos connaissances bibliques!",
+    "soloFree": "Parties gratuites restantes",
+    "startGame": "Jouer Maintenant!",
+    "soloUsed": "Vous avez aime?",
+    "soloRegister": "Inscrivez-vous gratuitement!",
+    "soloBonus": "Gratuit - Sans carte - Acces immediat"
   },
   "locale": "fr-FR",
   "report": {

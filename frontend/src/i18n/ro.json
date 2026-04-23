@@ -1321,14 +1321,15 @@
     "enter_chat": "Intra in chat"
   },
   "auth": {
-    "logout": "Deconectare"
+    "logout": "Deconectare",
+    "login": "Autentificare"
   },
   "landing": {
     "subtitle": "Te-ai simtit singur, fara cineva cu care sa te rogi? Aici intotdeauna e cineva pentru tine.",
     "register": "Creează cont gratuit",
     "login": "Autentificare",
     "verse": "\"Căci acolo unde doi sau trei sunt adunați în Numele Meu, sunt și Eu în mijlocul lor.\" — Mt 18:20",
-    "createFree": "✨ Creează cont gratuit",
+    "createFree": "Creaza cont gratuit",
     "haveAccount": "Am deja un cont →",
     "featuresTitle": "Tot ce ai nevoie pentru a crește în credință",
     "featuresSection": "FUNCȚIONALITĂȚI",
@@ -1397,7 +1398,15 @@
     "notCasual": "Nu ai ajuns aici intamplator",
     "ctaFinalText": "Dumnezeu poate folosi acest moment pentru a schimba ceva in viata ta.",
     "ctaFinal": "Creeaza cont gratuit acum",
-    "joinFree": "Creeaza cont gratuit"
+    "joinFree": "Creeaza cont gratuit",
+    "playFree": "Joaca Gratuit",
+    "soloTitle": "Quiz Biblic Gratuit!",
+    "soloDesc": "Testeaza cunostintele tale biblice!",
+    "soloFree": "Runde gratuite ramase",
+    "startGame": "Joaca Acum!",
+    "soloUsed": "Ti-a placut jocul?",
+    "soloRegister": "Inregistreaza-te gratuit!",
+    "soloBonus": "Gratuit - Fara card - Acces imediat"
   },
   "locale": "ro-RO",
   "report": {

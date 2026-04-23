@@ -1320,14 +1320,15 @@
     "enter_chat": "Enter chat"
   },
   "auth": {
-    "logout": "Logout"
+    "logout": "Logout",
+    "login": "Log In"
   },
   "landing": {
     "subtitle": "Have you felt alone, with no one to pray with? Here there is always someone for you.",
     "register": "Create free account",
     "login": "Login",
     "verse": "\"For where two or three gather in my name, there am I with them.\" — Mt 18:20",
-    "createFree": "✨ Create free account",
+    "createFree": "Create free account",
     "haveAccount": "I already have an account →",
     "featuresTitle": "Everything you need to grow in faith",
     "featuresSection": "FEATURES",
@@ -1396,7 +1397,15 @@
     "notCasual": "You did not arrive here by chance",
     "ctaFinalText": "God can use this moment to change something in your life.",
     "ctaFinal": "Create free account now",
-    "joinFree": "Create free account"
+    "joinFree": "Create free account",
+    "playFree": "Play Free",
+    "soloTitle": "Free Bible Quiz!",
+    "soloDesc": "Test your Bible knowledge!",
+    "soloFree": "Free rounds remaining",
+    "startGame": "Play Now!",
+    "soloUsed": "Did you enjoy it?",
+    "soloRegister": "Register free and play unlimited!",
+    "soloBonus": "Free - No card - Instant access"
   },
   "locale": "en-GB",
   "report": {
