@@ -491,10 +491,19 @@ export default function DesafioBiblico() {
 
   if(tela==='resultado') return (
     <div style={bg}>
-      <div style={{fontSize:60,marginBottom:12}}>🏆</div>
-      <h2 style={{fontSize:26,fontWeight:900,marginBottom:8}}>{t('desafio.result')}</h2>
-      <div style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:8}}>{pontos} pts</div>
-      <p style={{opacity:0.7,marginBottom:28}}>{pontos>=40?'Mestre Biblico!':pontos>=25?'Muito bem!':'Continue estudando!'}</p>
+      <div style={{fontSize:60,marginBottom:8}}>🏆</div>
+      <h2 style={{fontSize:26,fontWeight:900,marginBottom:8,color:'#f0c040',textShadow:'0 2px 10px rgba(240,192,64,0.5)'}}>{t('desafio.result')}</h2>
+      {adversario&&<div style={{background:'rgba(255,255,255,0.1)',borderRadius:16,padding:'12px 24px',marginBottom:12,textAlign:'center',width:'100%',maxWidth:320}}>
+        <p style={{fontSize:13,opacity:0.7,marginBottom:8}}>Resultado Final</p>
+        <div style={{display:'flex',justifyContent:'space-around',alignItems:'center'}}>
+          <div style={{textAlign:'center'}}><p style={{fontWeight:800,fontSize:15}}>{user?.full_name?.split(' ')[0]||'Tu'}</p><p style={{fontSize:32,fontWeight:900,color:'#f0c040'}}>{pontos}</p><p style={{fontSize:11,opacity:0.7}}>pts</p></div>
+          <div style={{fontSize:24}}>⚔️</div>
+          <div style={{textAlign:'center'}}><p style={{fontWeight:800,fontSize:15}}>{adversario?.nome?.split(' ')[0]||'Adversario'}</p><p style={{fontSize:32,fontWeight:900,color:'#e74c3c'}}>{adversario?.pontos||0}</p><p style={{fontSize:11,opacity:0.7}}>pts</p></div>
+        </div>
+        <p style={{marginTop:8,fontWeight:800,fontSize:16,color:pontos>(adversario?.pontos||0)?'#27ae60':'#e74c3c'}}>{pontos>(adversario?.pontos||0)?'🎉 Ganhaste!':pontos===(adversario?.pontos||0)?'🤝 Empate!':'😔 Perdeste!'}</p>
+      </div>}
+      <div style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:4}}>{pontos} pts</div>
+      <p style={{opacity:0.7,marginBottom:16}}>{pontos>=40?'🏆 Mestre Biblico!':pontos>=25?'⭐ Muito bem!':'📖 Continue estudando!'}</p>
       {maxStreak>=3&&<div style={{background:'rgba(240,192,64,0.15)',border:'1px solid #f0c040',borderRadius:12,padding:'10px 20px',marginBottom:12,textAlign:'center'}}><span style={{fontSize:20}}>🔥</span><span style={{color:'#f0c040',fontWeight:700,fontSize:15}}> Melhor streak: {maxStreak} seguidas!</span></div>}
       {btn(()=>share(pontos),'#25D366',t('desafio.shareresult'))}
       {btn(desafiar,'#6c47d4',t('desafio.challenge'))}
