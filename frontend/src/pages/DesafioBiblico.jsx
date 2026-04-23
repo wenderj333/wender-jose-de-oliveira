@@ -206,7 +206,7 @@ export default function DesafioBiblico() {
   const [showStreak, setShowStreak] = useState(false);
   const [adversario, setAdversario] = useState(null);
   useEffect(() => {
-    fetch((import.meta.env.VITE_API_URL||'')+ '/api/quiz/ranking?periodo=semana')
+    fetch((import.meta.env.VITE_API_URL||'')+ '/api/quiz/ranking')
       .then(r=>r.json()).then(d=>{if(Array.isArray(d))setRanking(d);}).catch(()=>{});
   }, []);
   const wsRef = useRef(null);
