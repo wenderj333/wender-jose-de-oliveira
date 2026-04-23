@@ -36,7 +36,8 @@ export default function DesafioBiblico() {
     } catch(e){}
   }
   const ADMIN_EMAIL = 'wenderj333@gmail.com';
-  const isAdmin = user?.email === ADMIN_EMAIL;
+  const isAdmin = user?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  if(user) console.log('USER EMAIL:', user.email, 'IS ADMIN:', isAdmin);
   const audioRef = React.useRef(null);
   const [musicUrl, setMusicUrl] = React.useState(()=>localStorage.getItem('desafio_music')||'');
   const [musicPlaying, setMusicPlaying] = React.useState(false);
