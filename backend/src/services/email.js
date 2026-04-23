@@ -1,11 +1,12 @@
 const { Resend } = require('resend');
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const T = {pt:{s:'🙏 Bem-vindo ao Sigo com Fe!',g:'Bem-vindo',m:'Estamos felizes por teres entrado na maior rede social crista!'},en:{s:'🙏 Welcome to Sigo com Fe!',g:'Welcome',m:'We are happy to have you in the largest Christian social network!'},de:{s:'🙏 Willkommen bei Sigo com Fe!',g:'Willkommen',m:'Wir freuen uns dass du dabei bist!'},fr:{s:'🙏 Bienvenue sur Sigo com Fe!',g:'Bienvenue',m:'Nous sommes heureux que vous ayez rejoint!'},es:{s:'🙏 Bienvenido a Sigo com Fe!',g:'Bienvenido',m:'Estamos felices de que te hayas unido!'},ro:{s:'🙏 Bun venit la Sigo com Fe!',g:'Bun venit',m:'Suntem bucurosi ca ai intrat!'},ru:{s:'🙏 Dobro pozhalovat!',g:'Dobro pozhalovat',m:'My rady chto vy prisoedinilis!'}};
 
 async function sendWelcomeEmail(email, nome, lang='pt') {
   const txt = T[lang] || T['pt'];
   try {
+    if(!resend) return;
     await resend.emails.send({
       from: 'Sigo com Fe <onboarding@resend.dev>',
       to: email,
@@ -36,6 +37,7 @@ async function sendWelcomeEmail(email, nome, lang='pt') {
 
 async function sendChallengeEmail(email, nome, desafiante) {
   try {
+    if(!resend) return;
     await resend.emails.send({
       from: 'Sigo com Fe <onboarding@resend.dev>',
       to: email,
@@ -57,6 +59,7 @@ async function sendChallengeEmail(email, nome, desafiante) {
 
 async function sendEventoEmail(email, nome, premio, dataFim) {
   try {
+    if(!resend) return;
     await resend.emails.send({
       from: 'Sigo com Fe <onboarding@resend.dev>',
       to: email,
