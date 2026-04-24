@@ -375,6 +375,10 @@ export default function DesafioBiblico() {
     // Enviar pontos ao servidor se WebSocket activo
     if (wsRef.current && wsRef.current.readyState === 1 && codigo) {
       wsRef.current.send(JSON.stringify({ type: 'game_answer', roomId: codigo, userId: user?.id, pontos: pts }));
+      // Se ultima pergunta enviar game_end
+      if (idx+1 >= perguntas.length) {
+        setTimeout(()=>{ if(wsRef.current && wsRef.current.readyState===1) wsRef.current.send(JSON.stringify({ type: 'game_end', roomId: codigo, userId: user?.id })); }, 1600);
+      }
     }
   }
 
