@@ -233,7 +233,12 @@ export default function DesafioBiblico() {
     timerRef.current = setInterval(() => {
       setTempo(prev => {
         tRef.current = prev-1;
-        if(prev<=1){ clearInterval(timerRef.current); avancar(); return 0; }
+        if(prev<=1){ clearInterval(timerRef.current);
+          // Tempo esgotado - enviar resposta vazia ao servidor
+          if (wsRef.current && wsRef.current.readyState === 1 && codigo) {
+            wsRef.current.send(JSON.stringify({ type: 'game_answer', roomId: codigo, userId: user?.id, pontos: 0 }));
+          }
+          avancar(); return 0; }
         return prev-1;
       });
     }, 1000);
