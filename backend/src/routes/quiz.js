@@ -9,7 +9,7 @@ db.query('CREATE TABLE IF NOT EXISTS quiz_resultados (id UUID PRIMARY KEY DEFAUL
 // Rota para criar tabela manualmente
 router.get('/setup', async (req, res) => {
   try {
-    await db.query(CREATE TABLE IF NOT EXISTS quiz_resultados (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID REFERENCES users(id) ON DELETE CASCADE, pontos INTEGER DEFAULT 0, perguntas_corretas INTEGER DEFAULT 5, perguntas_total INTEGER DEFAULT 5, livro VARCHAR(50) DEFAULT 'Todos', tempo_medio FLOAT DEFAULT 0, criado_em TIMESTAMP DEFAULT NOW()));
+    await db.query('CREATE TABLE IF NOT EXISTS quiz_resultados (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID REFERENCES users(id) ON DELETE CASCADE, pontos INTEGER DEFAULT 0, perguntas_corretas INTEGER DEFAULT 5, perguntas_total INTEGER DEFAULT 5, livro VARCHAR(50), tempo_medio FLOAT DEFAULT 0, criado_em TIMESTAMP DEFAULT NOW())');
     res.json({ ok: true, msg: 'Tabela criada!' });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
