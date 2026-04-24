@@ -297,7 +297,12 @@ export default function DesafioBiblico() {
     } else {
       setStreak(0);
     }
-    setTimeout(avancar, 1500);
+    // Enviar resposta ao servidor se estiver em modo sala
+    if (wsRef.current && wsRef.current.readyState === 1 && codigo) {
+      wsRef.current.send(JSON.stringify({ type: 'game_answer', roomId: codigo, userId: user?.id, pontos: pts }));
+    } else {
+      setTimeout(avancar, 1500);
+    }
   }
 
   function guardarResultado(pts, totalCorretas, tempoMedio) {
