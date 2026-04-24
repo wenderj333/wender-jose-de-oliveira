@@ -438,9 +438,9 @@ function handleGame(ws, msg) {
       const adv1 = { userId: room.jogadores[0].userId, userName: room.jogadores[0].userName, avatar: room.jogadores[0].avatar, pontos: 0 };
       const adv2 = { userId: room.jogadores[1].userId, userName: room.jogadores[1].userName, avatar: room.jogadores[1].avatar, pontos: 0 };
       setTimeout(() => {
-        if (room.jogadores[0].ws.readyState === 1) room.jogadores[0].ws.send(JSON.stringify({ type: 'game_matched', roomId, perguntas: room.perguntas, adversario: adv2 }));
-        if (room.jogadores[1].ws.readyState === 1) room.jogadores[1].ws.send(JSON.stringify({ type: 'game_matched', roomId, perguntas: room.perguntas, adversario: adv1 }));
-      }, 500);
+        if (room.jogadores[0].ws.readyState === 1) room.jogadores[0].ws.send(JSON.stringify({ type: 'game_matched', roomId: roomId, perguntas: room.perguntas, adversario: adv2 }));
+        if (room.jogadores[1].ws.readyState === 1) room.jogadores[1].ws.send(JSON.stringify({ type: 'game_matched', roomId: roomId, perguntas: room.perguntas, adversario: adv1 }));
+      }, 1000);
     }
   }
 
