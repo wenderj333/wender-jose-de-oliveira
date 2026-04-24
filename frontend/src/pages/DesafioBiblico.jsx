@@ -389,10 +389,10 @@ export default function DesafioBiblico() {
           <p style={{color:'#1a0a3e',fontSize:11,margin:'4px 0',opacity:0.8}}>Joga e entra no ranking para ganhar!</p>
         </div>
       )}
-      <div style={{position:'relative',marginBottom:12,display:'flex',justifyContent:'center',alignItems:'center'}}>
-        <style dangerouslySetInnerHTML={{__html:'@keyframes spin{0%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}100%{transform:rotate(-10deg)}} @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}'}} />
-        {ranking[0]?.avatar_url && <img src={ranking[0].avatar_url} style={{position:'absolute',width:70,height:70,borderRadius:'50%',objectFit:'cover',border:'3px solid #f0c040',boxShadow:'0 0 20px rgba(240,192,64,0.6)',zIndex:0,opacity:0.5}}/>}
-        <div style={{fontSize:70,animation:'spin 2s ease-in-out infinite',zIndex:1,filter:'drop-shadow(0 0 15px rgba(240,192,64,0.8))',animation:'spin 2s ease-in-out infinite, pulse 1.5s ease-in-out infinite'}}>🏆</div>
+      <style dangerouslySetInnerHTML={{__html:'@keyframes spin{0%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}100%{transform:rotate(-10deg)}} @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}'}} />
+      <div style={{display:'flex',justifyContent:'center',alignItems:'center',gap:16,marginBottom:12}}>
+        {ranking[0]?.avatar_url && <div style={{textAlign:'center'}}><img src={ranking[0].avatar_url} style={{width:60,height:60,borderRadius:'50%',objectFit:'cover',border:'3px solid #f0c040',boxShadow:'0 0 15px rgba(240,192,64,0.6)'}}/><p style={{fontSize:10,color:'#f0c040',fontWeight:700,margin:'4px 0 0'}}>🥇 {ranking[0]?.full_name?.split(' ')[0]}</p></div>}
+        <div style={{fontSize:70,filter:'drop-shadow(0 0 15px rgba(240,192,64,0.8))',animation:'spin 2s ease-in-out infinite'}}>🏆</div>
       </div>
       <h1 style={{fontSize:28,fontWeight:900,marginBottom:6,textAlign:'center',color:'#f0c040',textShadow:'0 2px 10px rgba(240,192,64,0.5)',fontStyle:'italic',letterSpacing:1}}>{t('desafio.title')}</h1>
       <p style={{opacity:0.7,marginBottom:16,fontSize:14,textAlign:'center'}}>{t('desafio.subtitle')}</p>
