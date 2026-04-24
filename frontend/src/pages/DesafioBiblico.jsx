@@ -268,7 +268,43 @@ export default function DesafioBiblico() {
   }
   function cancelarFila() { wsRef.current?.close(); setEsperando(false); }
   function gerar() { return Math.random().toString(36).substring(2,8).toUpperCase(); }
-  function criarSala() { setCodigo(gerar()); setTela('sala'); }
+  function criarSala() {
+    const roomId = gerar();
+    setCodigo(roomId);
+    // Conectar WebSocket como jogador 1
+    const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
+    wsRef.current = ws;
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ type: 'game_create', roomId, userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
+    };
+    ws.onmessage = (e) => {
+      const msg = JSON.parse(e.data);
+      if (msg.type === 'game_joined') {
+        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
+        if (adv) setAdversario({nome: adv.userName, avatar: adv.avatar, userId: adv.userId, pontos: 0});
+      }
+      if (msg.type === 'game_started') {
+        if (msg.perguntas && msg.perguntas.length > 0) setPerguntas(msg.perguntas);
+        setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
+        setTela('vs');
+        setTimeout(()=>setTela('jogo'), 3000);
+      }
+      if (msg.type === 'game_score') {
+        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
+        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
+      }
+      if (msg.type === 'game_next_question') {
+        setIdx(msg.idx); setResp(null); setFeedback(null);
+      }
+      if (msg.type === 'game_finished') {
+        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
+        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
+        setTela('resultado');
+      }
+    };
+    ws.onerror = () => {};
+    setTela('sala');
+  }
   function entrarSala() {
     if(!cInput.trim()) return;
     const roomId = cInput.toUpperCase();
@@ -507,35 +543,11 @@ export default function DesafioBiblico() {
         </div>
       </div>
       {btn(()=>{
-        // Conectar WebSocket e sincronizar jogo
-        const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
-        wsRef.current = ws;
-        ws.onopen = () => {
-          ws.send(JSON.stringify({ type: 'game_create', roomId: codigo, userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
-          setTimeout(() => ws.send(JSON.stringify({ type: 'game_start', roomId: codigo })), 500);
-        };
-        ws.onmessage = (e) => {
-          const msg = JSON.parse(e.data);
-          if (msg.type === 'game_started') {
-            if (msg.perguntas && msg.perguntas.length > 0) setPerguntas(msg.perguntas);
-            setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
-            setTela('vs');
-            setTimeout(()=>setTela('jogo'), 3000);
-          }
-          if (msg.type === 'game_score') {
-            const adv = msg.jogadores?.find(j => j.userId !== user?.id);
-            if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
-          }
-          if (msg.type === 'game_next_question') {
-            setIdx(msg.idx); setResp(null); setFeedback(null);
-          }
-          if (msg.type === 'game_finished') {
-            const adv = msg.jogadores?.find(j => j.userId !== user?.id);
-            if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
-            setTela('resultado');
-          }
-        };
-        ws.onerror = () => iniciar();
+        if (wsRef.current && wsRef.current.readyState === 1) {
+          wsRef.current.send(JSON.stringify({ type: 'game_start', roomId: codigo }));
+        } else {
+          iniciar();
+        }
       },'linear-gradient(135deg,#e74c3c,#c0392b)',t('desafio.start'))}
       <button onClick={()=>setTela('lobby')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
