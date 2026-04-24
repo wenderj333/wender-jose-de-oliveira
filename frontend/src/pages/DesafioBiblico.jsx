@@ -390,7 +390,7 @@ export default function DesafioBiblico() {
         </div>
       )}
       <div style={{position:'relative',marginBottom:12,display:'flex',justifyContent:'center',alignItems:'center'}}>
-        <style>{@keyframes spin{0%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}100%{transform:rotate(-10deg)}} @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}}</style>
+        <style dangerouslySetInnerHTML={{__html:'@keyframes spin{0%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}100%{transform:rotate(-10deg)}} @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}'}} />
         {ranking[0]?.avatar_url && <img src={ranking[0].avatar_url} style={{position:'absolute',width:70,height:70,borderRadius:'50%',objectFit:'cover',border:'3px solid #f0c040',boxShadow:'0 0 20px rgba(240,192,64,0.6)',zIndex:0,opacity:0.5}}/>}
         <div style={{fontSize:70,animation:'spin 2s ease-in-out infinite',zIndex:1,filter:'drop-shadow(0 0 15px rgba(240,192,64,0.8))',animation:'spin 2s ease-in-out infinite, pulse 1.5s ease-in-out infinite'}}>🏆</div>
       </div>
