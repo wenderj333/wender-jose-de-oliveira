@@ -424,6 +424,24 @@ function handleGame(ws, msg) {
     room.jogadores.push({ userId, userName, avatar: msg.avatar, pontos: 0, pronto: false, ws });
     const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
     room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_joined', roomId, jogadores: jogadoresPublico })); });
+    // Auto iniciar quando 2 jogadores estiverem na sala
+    if (room.jogadores.length >= 2) {
+      room.iniciado = true;
+      room.perguntaIdx = 0;
+      const PALL = require('../frontend/src/data/perguntas.json');
+      let p = PALL.filter(x => room.livro==='Todos' || x.livro===room.livro);
+      if(!p.length) p = PALL;
+      const f=p.filter(x=>x.nivel==='facil').sort(()=>Math.random()-0.5).slice(0,2);
+      const m=p.filter(x=>x.nivel==='medio').sort(()=>Math.random()-0.5).slice(0,2);
+      const d=p.filter(x=>x.nivel==='dificil').sort(()=>Math.random()-0.5).slice(0,1);
+      room.perguntas = [...f,...m,...d];
+      const adv1 = { userId: room.jogadores[0].userId, userName: room.jogadores[0].userName, avatar: room.jogadores[0].avatar, pontos: 0 };
+      const adv2 = { userId: room.jogadores[1].userId, userName: room.jogadores[1].userName, avatar: room.jogadores[1].avatar, pontos: 0 };
+      setTimeout(() => {
+        if (room.jogadores[0].ws.readyState === 1) room.jogadores[0].ws.send(JSON.stringify({ type: 'game_matched', roomId, perguntas: room.perguntas, adversario: adv2 }));
+        if (room.jogadores[1].ws.readyState === 1) room.jogadores[1].ws.send(JSON.stringify({ type: 'game_matched', roomId, perguntas: room.perguntas, adversario: adv1 }));
+      }, 500);
+    }
   }
 
   else if (msg.type === 'game_ready') {
