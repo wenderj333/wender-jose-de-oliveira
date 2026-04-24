@@ -4,7 +4,7 @@ const db = require('../db/connection');
 const pool = db;
 
 // Criar tabela se nao existir
-db.query(CREATE TABLE IF NOT EXISTS quiz_resultados (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID REFERENCES users(id) ON DELETE CASCADE, pontos INTEGER DEFAULT 0, perguntas_corretas INTEGER DEFAULT 5, perguntas_total INTEGER DEFAULT 5, livro VARCHAR(50) DEFAULT 'Todos', tempo_medio FLOAT DEFAULT 0, criado_em TIMESTAMP DEFAULT NOW())).then(()=>console.log('quiz_resultados OK')).catch(e=>console.log('Erro quiz_resultados:', e.message));
+db.query('CREATE TABLE IF NOT EXISTS quiz_resultados (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID REFERENCES users(id) ON DELETE CASCADE, pontos INTEGER DEFAULT 0, perguntas_corretas INTEGER DEFAULT 5, perguntas_total INTEGER DEFAULT 5, livro VARCHAR(50), tempo_medio FLOAT DEFAULT 0, criado_em TIMESTAMP DEFAULT NOW())').then(()=>console.log('quiz_resultados OK')).catch(e=>console.log('Erro quiz_resultados:', e.message));
 
 // Rota para criar tabela manualmente
 router.get('/setup', async (req, res) => {
