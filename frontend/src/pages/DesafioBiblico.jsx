@@ -349,8 +349,8 @@ export default function DesafioBiblico() {
     setTela('sala');
   }
 
-  function iniciar() {
-    const ps = filtrar(livro);
+  function iniciar(perguntasServidor) {
+    const ps = perguntasServidor && perguntasServidor.length > 0 ? perguntasServidor : filtrar(livro);
     setPerguntas(ps); setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
     setTela('jogo');
     setStreak(0); setMaxStreak(0); setShowStreak(false);
