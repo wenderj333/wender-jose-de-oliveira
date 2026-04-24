@@ -269,7 +269,44 @@ export default function DesafioBiblico() {
   function cancelarFila() { wsRef.current?.close(); setEsperando(false); }
   function gerar() { return Math.random().toString(36).substring(2,8).toUpperCase(); }
   function criarSala() { setCodigo(gerar()); setTela('sala'); }
-  function entrarSala() { if(!cInput.trim()) return; setCodigo(cInput.toUpperCase()); setTela('sala'); }
+  function entrarSala() {
+    if(!cInput.trim()) return;
+    const roomId = cInput.toUpperCase();
+    setCodigo(roomId);
+    // Conectar WebSocket como jogador 2
+    const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
+    wsRef.current = ws;
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ type: 'game_join', roomId, userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url }));
+    };
+    ws.onmessage = (e) => {
+      const msg = JSON.parse(e.data);
+      if (msg.type === 'game_joined') {
+        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
+        if (adv) setAdversario({nome: adv.userName, avatar: adv.avatar, userId: adv.userId, pontos: 0});
+      }
+      if (msg.type === 'game_started') {
+        if (msg.perguntas && msg.perguntas.length > 0) setPerguntas(msg.perguntas);
+        setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
+        setTela('vs');
+        setTimeout(()=>setTela('jogo'), 3000);
+      }
+      if (msg.type === 'game_score') {
+        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
+        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
+      }
+      if (msg.type === 'game_next_question') {
+        setIdx(msg.idx); setResp(null); setFeedback(null);
+      }
+      if (msg.type === 'game_finished') {
+        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
+        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
+        setTela('resultado');
+      }
+    };
+    ws.onerror = () => {};
+    setTela('sala');
+  }
 
   function iniciar() {
     const ps = filtrar(livro);
