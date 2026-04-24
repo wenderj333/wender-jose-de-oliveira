@@ -1584,6 +1584,21 @@
       "Proverbios": "Sprichwörter",
       "Mateus": "Matthäus",
       "Apocalipse": "Offenbarung"
-    }
+    },
+    "howtoplay": "Wie spielt man?",
+    "manualTitle": "Spielanleitung",
+    "m1title": "Wie spielt man",
+    "m1desc": "5 Bibelfragen beantworten. Du hast 15 Sekunden pro Frage. Je schneller du antwortest, desto mehr Punkte bekommst du!",
+    "m2title": "Punktzahl",
+    "m2desc": "Schnelle richtige Antwort = 10 Pkt. Langsame richtige Antwort = 5 Pkt. Falsche Antwort = 0 Pkt. Maximum 50 Pkt pro Spiel!",
+    "m3title": "Spielmodi",
+    "m3desc": "Raum erstellen: erstelle einen Raum und teile den Code mit einem Freund. Beitreten: gib einen Raumcode ein. Mit jemandem spielen: finde einen zufälligen Gegner!",
+    "m4title": "Rangliste",
+    "m4desc": "Deine Punkte sammeln sich bei jedem Spiel an. Spiele mehr, um in der Rangliste aufzusteigen und Bibelmeister zu werden!",
+    "m5title": "Errungenschaften",
+    "m5desc": "Schalte besondere Errungenschaften frei! Mache Antwortreihen, spiele perfekte Spiele und vieles mehr!",
+    "m6title": "Bucher der Bibel",
+    "m6desc": "Wahle ein bestimmtes Buch zum Uben oder spiele mit Allen Buchern!",
+    "gotit": "Verstanden!"
   }
 }

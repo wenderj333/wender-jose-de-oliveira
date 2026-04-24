@@ -1582,6 +1582,21 @@
       "Proverbios": "Proverbes",
       "Mateus": "Matthieu",
       "Apocalipse": "Apocalypse"
-    }
+    },
+    "howtoplay": "Comment jouer?",
+    "manualTitle": "Manuel du jeu",
+    "m1title": "Comment jouer",
+    "m1desc": "Repondez a 5 questions bibliques. Vous avez 15 secondes par question. Plus vite vous repondez, plus vous gagnez de points!",
+    "m2title": "Score",
+    "m2desc": "Reponse correcte rapide = 10 pts. Reponse correcte lente = 5 pts. Mauvaise reponse = 0 pts. Maximum 50 pts par jeu!",
+    "m3title": "Modes de jeu",
+    "m3desc": "Creer une salle: creez une salle et partagez le code avec un ami. Rejoindre: entrez un code de salle. Jouer avec quelquun: trouvez un adversaire aleatoire!",
+    "m4title": "Classement",
+    "m4desc": "Vos points saccumulent a chaque partie. Jouez plus pour monter dans le classement et devenir le Maitre Biblique!",
+    "m5title": "Succes",
+    "m5desc": "Debloquez des succes speciaux en jouant! Faites des series de bonnes reponses, jouez des parties parfaites et bien plus!",
+    "m6title": "Livres de la Bible",
+    "m6desc": "Choisissez un livre specifique pour vous entrainer ou jouez avec Tous les livres!",
+    "gotit": "Compris!"
   }
 }

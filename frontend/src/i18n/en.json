@@ -1582,6 +1582,21 @@
       "Proverbios": "Proverbs",
       "Mateus": "Matthew",
       "Apocalipse": "Revelation"
-    }
+    },
+    "howtoplay": "How to Play?",
+    "manualTitle": "Game Manual",
+    "m1title": "How to Play",
+    "m1desc": "Answer 5 Bible questions. You have 15 seconds per question. The faster you answer, the more points you earn!",
+    "m2title": "Scoring",
+    "m2desc": "Fast correct answer = 10 pts. Slow correct answer = 5 pts. Wrong answer = 0 pts. Maximum 50 pts per game!",
+    "m3title": "Game Modes",
+    "m3desc": "Create Room: create a room and share the code with a friend. Join: enter a room code. Play with someone: find a random opponent!",
+    "m4title": "Ranking",
+    "m4desc": "Your points accumulate each game. Play more to climb the ranking and become the Bible Master!",
+    "m5title": "Achievements",
+    "m5desc": "Unlock special achievements by playing! Get answer streaks, play perfect games and much more!",
+    "m6title": "Bible Books",
+    "m6desc": "Choose a specific book to practice or play with All books!",
+    "gotit": "Got it!"
   }
 }

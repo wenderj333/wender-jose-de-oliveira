@@ -45,6 +45,7 @@ export default function DesafioBiblico() {
   const [showMusicAdmin, setShowMusicAdmin] = React.useState(false);
   const [musicInputVal, setMusicInputVal] = React.useState(()=>localStorage.getItem('desafio_music')||'');
   const [showConquistasModal, setShowConquistasModal] = React.useState(false);
+  const [showManual, setShowManual] = React.useState(false);
   const [evento, setEvento] = React.useState(()=>JSON.parse(localStorage.getItem('desafio_evento')||'null'));
   const [showEventoAdmin, setShowEventoAdmin] = React.useState(false);
   const [eventoInput, setEventoInput] = React.useState({premio:'100',descricao:'Competicao Biblica',dataFim:''});
@@ -406,7 +407,47 @@ export default function DesafioBiblico() {
       </div>
       {esperando ? <div style={{textAlign:'center',marginBottom:10}}><p style={{opacity:0.8,marginBottom:8}}>A aguardar um adversario...</p><button onClick={cancelarFila} style={{padding:'8px 20px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer'}}>Cancelar</button></div> : btn(jogarAleatorio,'#e74c3c',t('desafio.playalone'))}
       {btn(desafiar,'#25D366',t('desafio.challenge'))}
+      <button onClick={()=>setShowManual(true)} style={{background:'none',border:'1px solid rgba(255,255,255,0.3)',color:'rgba(255,255,255,0.8)',cursor:'pointer',fontSize:13,borderRadius:20,padding:'6px 16px',marginBottom:8}}>❓ {t('desafio.howtoplay','Como Jogar?')}</button>
       <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
+      {showManual && (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center',padding:16,overflowY:'auto'}} onClick={()=>setShowManual(false)}>
+          <div style={{background:'linear-gradient(135deg,#1a0a3e,#2d1054)',borderRadius:20,padding:28,maxWidth:480,width:'100%',color:'white',border:'1px solid rgba(240,192,64,0.3)'}} onClick={e=>e.stopPropagation()}>
+            <div style={{textAlign:'center',marginBottom:16}}>
+              <div style={{fontSize:40}}>📖</div>
+              <h2 style={{color:'#f0c040',fontWeight:900,fontSize:20,margin:'8px 0'}}>{t('desafio.manualTitle','Manual do Jogo')}</h2>
+            </div>
+            <div style={{display:'flex',flexDirection:'column',gap:12}}>
+              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
+                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>🎮 {t('desafio.m1title','Como Jogar')}</p>
+                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m1desc','Responde a 5 perguntas bíblicas. Tens 15 segundos por pergunta. Quanto mais rápido responderes, mais pontos ganhas!')}</p>
+              </div>
+              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
+                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>⭐ {t('desafio.m2title','Pontuação')}</p>
+                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m2desc','Resposta certa rápida = 10 pts. Resposta certa lenta = 5 pts. Resposta errada = 0 pts. Máximo 50 pts por jogo!')}</p>
+              </div>
+              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
+                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>👥 {t('desafio.m3title','Modos de Jogo')}</p>
+                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m3desc','Criar Sala: crias uma sala e partilhas o código com um amigo. Entrar: inseris o código de uma sala. Jogar com alguém: encontra um adversário aleatório!')}</p>
+              </div>
+              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
+                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>🏆 {t('desafio.m4title','Ranking')}</p>
+                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m4desc','Os teus pontos acumulam a cada partida. Joga mais para subir no ranking e tornar-te o Mestre Bíblico!')}</p>
+              </div>
+              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
+                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>🏅 {t('desafio.m5title','Conquistas')}</p>
+                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m5desc','Desbloqueia conquistas especiais jogando! Faz streak de respostas certas, joga partidas perfeitas e muito mais!')}</p>
+              </div>
+              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
+                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>📖 {t('desafio.m6title','Livros da Bíblia')}</p>
+                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m6desc','Escolhe um livro específico para treinar (Génesis, Êxodo, Salmos...) ou joga com Todos os livros!')}</p>
+              </div>
+            </div>
+            <button onClick={()=>setShowManual(false)} style={{width:'100%',marginTop:16,padding:'12px',borderRadius:12,border:'none',background:'linear-gradient(135deg,#f0c040,#e67e22)',color:'#1a0a3e',fontWeight:900,cursor:'pointer',fontSize:15}}>
+              ✅ {t('desafio.gotit','Entendido!')}
+            </button>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );

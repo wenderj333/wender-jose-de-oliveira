@@ -1583,6 +1583,21 @@
       "Proverbios": "Proverbe",
       "Mateus": "Matei",
       "Apocalipse": "Apocalipsa"
-    }
+    },
+    "howtoplay": "Cum se joaca?",
+    "manualTitle": "Manualul jocului",
+    "m1title": "Cum se joaca",
+    "m1desc": "Raspunde la 5 intrebari biblice. Ai 15 secunde pe intrebare. Cu cat raspunzi mai repede, cu atat castigi mai multe puncte!",
+    "m2title": "Punctaj",
+    "m2desc": "Raspuns corect rapid = 10 pct. Raspuns corect lent = 5 pct. Raspuns gresit = 0 pct. Maximum 50 pct pe joc!",
+    "m3title": "Moduri de joc",
+    "m3desc": "Creaza camera: creezi o camera si imparti codul cu un prieten. Intra: introduci codul camerei. Joaca cu cineva: gaseste un adversar aleatoriu!",
+    "m4title": "Clasament",
+    "m4desc": "Punctele tale se acumuleaza la fiecare joc. Joaca mai mult pentru a urca in clasament!",
+    "m5title": "Realizari",
+    "m5desc": "Deblocheza realizari speciale jucand! Fa serii de raspunsuri corecte si multe altele!",
+    "m6title": "Cartile Bibliei",
+    "m6desc": "Alege o carte specifica pentru antrenament sau joaca cu Toate cartile!",
+    "gotit": "Inteles!"
   }
 }
