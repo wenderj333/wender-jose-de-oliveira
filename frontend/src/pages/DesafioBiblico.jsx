@@ -298,8 +298,10 @@ export default function DesafioBiblico() {
     } else {
       setStreak(0);
     }
-    // Enviar resposta ao servidor se estiver em modo sala com WebSocket activo
-    if (wsRef.current && wsRef.current.readyState === 1 && codigo && adversario) {
+    // Enviar resposta ao servidor se estiver em modo sala com adversario real
+    const wsActivo = wsRef.current && wsRef.current.readyState === 1;
+    const temAdversario = adversario && adversario.userId;
+    if (wsActivo && temAdversario) {
       wsRef.current.send(JSON.stringify({ type: 'game_answer', roomId: codigo, userId: user?.id, pontos: pts }));
     } else {
       setTimeout(avancar, 1500);
