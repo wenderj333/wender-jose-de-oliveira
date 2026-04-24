@@ -484,7 +484,7 @@ function handleGame(ws, msg) {
         room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores: jogadoresPublico, vencedor })); });
         gameRooms.delete(msg.roomId);
       } else {
-        setTimeout(()=>{ room.jogadores.forEach(j => { if (j.ws && j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_next_question', idx: room.perguntaIdx })); }); }, 2000);
+        setTimeout(()=>{ room.jogadores.forEach(j => { if (j.ws && j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_next_question', idx: room.perguntaIdx })); }); }, 1500);
       }
     }
   }
