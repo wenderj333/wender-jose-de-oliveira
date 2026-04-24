@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sigo com Fé — Rede Social Cristã</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="Sigo com Fé é a rede social cristã gratuita...">
+    <meta name="keywords" content="cristão, oração, igreja, fé, comunidade cristã, pastor, evangelização, rede social cristã">
+    <meta name="author" content="Sigo com Fé">
+    <meta name="theme-color" content="#1a0a3e">
+    <!-- permite tradução automática do navegador como fallback -->
+    <!-- Open Graph -->
+    <meta property="og:title" content="🙏 Sigo com Fé — A Rede Social Cristã que está a crescer!">
+    <meta property="og:description" content="✝️ Conecte-se com cristãos do mundo inteiro. Ore, partilhe testemunhos, encontre a sua igreja e cresça na fé. 100% gratuito — entra agora! 🙏">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sigo-com-fe.vercel.app">
+    <meta property="og:image" content="https://sigo-com-fe.vercel.app/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="pt_BR">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="🙏 Sigo com Fé — A Rede Social Cristã que está a crescer!">
+    <meta name="twitter:description" content="✝️ Conecte-se com cristãos do mundo inteiro. Ore, partilhe testemunhos e encontre a sua igreja. 100% gratuito!">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0KMESL9M5Z"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0KMESL9M5Z');
+    </script>
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <!-- Idioma detectado automaticamente via i18n -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
+    </script>
+  </body>
+</html>

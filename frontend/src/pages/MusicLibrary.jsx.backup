@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   Music, Play, Pause, Heart, Upload, X, ChevronLeft, ChevronRight,
   Volume2, Search, LayoutGrid, List, Image, Lock, Trash2, Share2,
+  MessageCircle, TrendingUp, Clock, ThumbsUp,
 } from 'lucide-react';
 
 const CLOUD_NAME = 'degxiuf43';
@@ -19,6 +20,145 @@ const iconBtn = {
   borderRadius: 8, padding: '6px 8px', cursor: 'pointer', display: 'flex',
   alignItems: 'center', justifyContent: 'center', color: 'var(--text, #333)',
 };
+
+// ─── Equalizer Animation ─────────────────────────────────────────────────────
+function Equalizer() {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 16 }}>
+      {[0, 1, 2, 3].map(i => (
+        <div key={i} style={{
+          width: 3, background: '#fff', borderRadius: 2,
+          animation: `eq-bar ${0.6 + i * 0.1}s ease-in-out infinite alternate`,
+          animationDelay: `${i * 0.1}s`,
+        }} />
+      ))}
+      <style>{`
+        @keyframes eq-bar {
+          0% { height: 4px; }
+          100% { height: 14px; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// ─── Comments Modal ──────────────────────────────────────────────────────────
+function CommentsModal({ song, onClose, token, user }) {
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchComments();
+  }, []);
+
+  const fetchComments = async () => {
+    try {
+      const res = await fetch(`${API}/music/${song.id}/comments`);
+      const data = await res.json();
+      setComments(data.comments || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!newComment.trim() || !user) return;
+    
+    try {
+      const res = await fetch(`${API}/music/${song.id}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ comment: newComment.trim() }),
+      });
+      const data = await res.json();
+      setComments([data.comment, ...comments]);
+      setNewComment('');
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao enviar comentário');
+    }
+  };
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, padding: 16,
+    }} onClick={e => e.target === e.currentTarget && onClose()}>
+      <div style={{ background: 'var(--card, #fff)', borderRadius: 20, padding: 24, width: '100%', maxWidth: 500, maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+          <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>💬 Comentários</h3>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+            <X size={20} color="#888" />
+          </button>
+        </div>
+
+        <div style={{ marginBottom: 12, padding: 12, background: 'var(--bg, #f8f9fa)', borderRadius: 12 }}>
+          <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: 'var(--text)' }}>{song.title}</p>
+          <p style={{ margin: '2px 0 0', fontSize: 12, color: '#888' }}>{song.artist || song.user_name}</p>
+        </div>
+
+        {user && (
+          <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+            <input
+              value={newComment}
+              onChange={e => setNewComment(e.target.value)}
+              placeholder="Escreve um comentário..."
+              style={{
+                flex: 1, padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border, #e2e8f0)',
+                outline: 'none', fontSize: 14, background: 'var(--bg, #fff)', color: 'var(--text)',
+              }}
+            />
+            <button type="submit" disabled={!newComment.trim()} style={{
+              padding: '10px 16px', borderRadius: 10, border: 'none',
+              background: newComment.trim() ? 'var(--fb, #4a80d4)' : '#ccc',
+              color: '#fff', fontWeight: 600, cursor: newComment.trim() ? 'pointer' : 'not-allowed',
+            }}>
+              Enviar
+            </button>
+          </form>
+        )}
+
+        <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {loading ? (
+            <p style={{ textAlign: 'center', color: '#888' }}>Carregando...</p>
+          ) : comments.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+              <MessageCircle size={40} style={{ margin: '0 auto 12px', opacity: 0.5 }} />
+              <p>Nenhum comentário ainda.<br />Sê o primeiro! 💬</p>
+            </div>
+          ) : (
+            comments.map(c => (
+              <div key={c.id} style={{ display: 'flex', gap: 10, padding: 12, background: 'var(--bg, #f8f9fa)', borderRadius: 12 }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
+                  background: c.user_avatar ? undefined : 'linear-gradient(135deg, #4a80d4, #764ba2)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 16, color: '#fff', overflow: 'hidden',
+                }}>
+                  {c.user_avatar ? <img src={c.user_avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : c.user_name?.[0]?.toUpperCase()}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ margin: 0, fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>{c.user_name}</p>
+                  <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--text, #333)' }}>{c.comment}</p>
+                  <p style={{ margin: '4px 0 0', fontSize: 11, color: '#999' }}>
+                    {new Date(c.created_at).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' })}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ─── Mini Audio Player (fixed bottom bar) ────────────────────────────────────
 function MiniPlayer({ songs, currentIdx, setCurrentIdx, audioRef, playing, setPlaying }) {
@@ -66,7 +206,6 @@ function MiniPlayer({ songs, currentIdx, setCurrentIdx, audioRef, playing, setPl
     if (audioRef.current) audioRef.current.volume = v;
   };
 
-  // Don't show mini player for video songs (they have inline player)
   if (!song || isVideoUrl(song.url)) return null;
 
   return (
@@ -138,7 +277,6 @@ function UploadModal({ onClose, onUploaded, token }) {
     setFile(f);
     setDurationError(false);
     setFileDuration(null);
-    // Try to get duration client-side
     const url = URL.createObjectURL(f);
     const media = isVideo ? document.createElement('video') : document.createElement('audio');
     media.preload = 'metadata';
@@ -225,7 +363,6 @@ function UploadModal({ onClose, onUploaded, token }) {
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}><X size={20} /></button>
         </div>
 
-        {/* Drag & drop area */}
         <div
           onDrop={handleDrop}
           onDragOver={e => { e.preventDefault(); setDragOver(true); }}
@@ -257,11 +394,7 @@ function UploadModal({ onClose, onUploaded, token }) {
             </>
           )}
         </div>
-        {durationError && (
-          <p style={{ color: '#e11d48', fontSize: 12, marginBottom: 10, marginTop: 0 }}>{t('music.tooLong')}</p>
-        )}
 
-        {/* Fields */}
         <input value={title} onChange={e => setTitle(e.target.value)}
           placeholder={t('music.uploadTitle')}
           style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border, #e2e8f0)', marginBottom: 10, fontSize: 14, outline: 'none', boxSizing: 'border-box', background: 'var(--bg, #fff)', color: 'var(--text, #333)' }} />
@@ -269,7 +402,6 @@ function UploadModal({ onClose, onUploaded, token }) {
           placeholder={t('music.uploadArtist')}
           style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border, #e2e8f0)', marginBottom: 10, fontSize: 14, outline: 'none', boxSizing: 'border-box', background: 'var(--bg, #fff)', color: 'var(--text, #333)' }} />
 
-        {/* Cover image upload */}
         <input ref={coverRef} type="file" accept="image/*" style={{ display: 'none' }}
           onChange={e => handleCoverChange(e.target.files?.[0])} />
         <div onClick={() => coverRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 10, border: '1px dashed var(--border, #e2e8f0)', marginBottom: 10, cursor: 'pointer', background: 'var(--bg, #f8f9fa)' }}>
@@ -293,7 +425,6 @@ function UploadModal({ onClose, onUploaded, token }) {
           ))}
         </select>
 
-        {/* Visibility toggle */}
         <div style={{ marginBottom: 16, padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border, #e2e8f0)', background: 'var(--bg, #f8f9fa)' }}>
           <p style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 600, color: 'var(--text, #333)' }}>{t('music.visibility')}</p>
           <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', marginBottom: 6 }}>
@@ -332,7 +463,7 @@ function UploadModal({ onClose, onUploaded, token }) {
 }
 
 // ─── Song Card ────────────────────────────────────────────────────────────────
-function SongCard({ song, isPlaying, onPlay, onLike, onDelete, onPublish, token, user, t }) {
+function SongCard({ song, isPlaying, onPlay, onDelete, onPublish, onComment, token, user, t }) {
   const [likeCount, setLikeCount] = useState(song.like_count || 0);
   const [liked, setLiked] = useState(false);
   const [publishMsg, setPublishMsg] = useState(null);
@@ -345,11 +476,11 @@ function SongCard({ song, isPlaying, onPlay, onLike, onDelete, onPublish, token,
     if (!user) { alert(t('music.loginToLike')); return; }
     try {
       await onPublish(song);
-      setPublishMsg('✅ Publicado no Mural!');
-      setTimeout(() => setPublishMsg(null), 3000);
+      setPublishMsg('✅ Publicado!');
+      setTimeout(() => setPublishMsg(null), 2000);
     } catch {
-      setPublishMsg('❌ Erro ao publicar');
-      setTimeout(() => setPublishMsg(null), 3000);
+      setPublishMsg('❌ Erro');
+      setTimeout(() => setPublishMsg(null), 2000);
     }
   };
 
@@ -381,11 +512,9 @@ function SongCard({ song, isPlaying, onPlay, onLike, onDelete, onPublish, token,
       padding: 14,
       cursor: 'pointer',
       boxShadow: isPlaying ? '0 0 0 4px rgba(74,128,212,0.15)' : '0 2px 8px rgba(0,0,0,0.04)',
-      animation: isPlaying && !isVideo ? 'pulse-border 2s infinite' : 'none',
       transition: 'all 0.2s',
       position: 'relative',
     }}>
-      {/* Private badge */}
       {isPrivate && (
         <div style={{
           position: 'absolute', top: 10, right: 10, zIndex: 2,
@@ -393,11 +522,21 @@ function SongCard({ song, isPlaying, onPlay, onLike, onDelete, onPublish, token,
           display: 'flex', alignItems: 'center', gap: 4,
         }}>
           <Lock size={11} color="#fff" />
-          <span style={{ fontSize: 10, color: '#fff', fontWeight: 600 }}>🔒</span>
         </div>
       )}
 
-      {/* Cover / Video */}
+      {/* Equalizer overlay when playing */}
+      {isPlaying && !isVideo && (
+        <div style={{
+          position: 'absolute', top: 14, left: 14, zIndex: 3,
+          background: 'var(--fb, #4a80d4)', borderRadius: 8, padding: '4px 8px',
+          display: 'flex', alignItems: 'center', gap: 6,
+        }}>
+          <Equalizer />
+          <span style={{ fontSize: 10, color: '#fff', fontWeight: 600 }}>TOCANDO</span>
+        </div>
+      )}
+
       {isVideo ? (
         <div style={{ width: '100%', borderRadius: 12, overflow: 'hidden', marginBottom: 10, background: '#000' }}>
           <video
@@ -432,7 +571,17 @@ function SongCard({ song, isPlaying, onPlay, onLike, onDelete, onPublish, token,
           </span>
         )}
       </div>
-      <div style={{ fontSize: 11, color: '#888', marginBottom: 8 }}>{song.artist || song.user_name}</div>
+      <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>{song.artist || song.user_name}</div>
+
+      {/* Stats row */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 8, fontSize: 11, color: '#888' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+          <Play size={11} /> {song.play_count || 0}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+          <Heart size={11} /> {likeCount}
+        </div>
+      </div>
 
       {/* Genre badge */}
       <div style={{ marginBottom: 10 }}>
@@ -443,35 +592,33 @@ function SongCard({ song, isPlaying, onPlay, onLike, onDelete, onPublish, token,
 
       {/* Actions */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {/* Row 1: like + play */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <button onClick={handleLike} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'none', border: 'none', cursor: 'pointer', color: liked ? '#e11d48' : '#888', fontSize: 12, padding: 0 }}>
             <Heart size={14} fill={liked ? '#e11d48' : 'none'} color={liked ? '#e11d48' : '#888'} />
-            {likeCount} {t('music.likes')}
+          </button>
+          <button onClick={(e) => { e.stopPropagation(); onComment(song); }} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'none', border: '1px solid var(--border)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#888', fontSize: 11, fontWeight: 600 }}>
+            <MessageCircle size={12} /> Comentar
           </button>
           {!isVideo && (
             <button onClick={(e) => { e.stopPropagation(); onPlay(song); }} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'var(--fb, #4a80d4)', border: 'none', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: '#fff', fontSize: 12, fontWeight: 600 }}>
               {isPlaying ? <Pause size={13} /> : <Play size={13} />}
-              {isPlaying ? t('music.pause') : t('music.play')}
             </button>
           )}
         </div>
 
-        {/* Row 2: publish to Mural + delete */}
         {user && (
           <div style={{ display: 'flex', gap: 6 }}>
-            <button onClick={handlePublishClick} title="Publicar no Mural" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.3)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#9333ea', fontSize: 11, fontWeight: 600 }}>
-              <Share2 size={12} /> 📤 Mural
+            <button onClick={handlePublishClick} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.3)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#9333ea', fontSize: 11, fontWeight: 600 }}>
+              <Share2 size={12} /> Mural
             </button>
             {canDelete && (
-              <button onClick={handleDeleteClick} title="Apagar música" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(225,29,72,0.08)', border: '1px solid rgba(225,29,72,0.2)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#e11d48', fontSize: 11, fontWeight: 600 }}>
-                <Trash2 size={12} /> 🗑️
+              <button onClick={handleDeleteClick} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(225,29,72,0.08)', border: '1px solid rgba(225,29,72,0.2)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#e11d48', fontSize: 11, fontWeight: 600 }}>
+                <Trash2 size={12} />
               </button>
             )}
           </div>
         )}
 
-        {/* Feedback */}
         {publishMsg && (
           <div style={{ textAlign: 'center', fontSize: 11, fontWeight: 600, color: publishMsg.startsWith('✅') ? '#16a34a' : '#e11d48', padding: '4px 8px', borderRadius: 6, background: publishMsg.startsWith('✅') ? 'rgba(22,163,74,0.1)' : 'rgba(225,29,72,0.1)' }}>
             {publishMsg}
@@ -490,42 +637,50 @@ export default function MusicLibrary() {
   const [songs, setSongs] = useState([]);
   const [loadingSongs, setLoadingSongs] = useState(false);
   const [activeGenre, setActiveGenre] = useState('all');
+  const [sortBy, setSortBy] = useState('recent');
   const [search, setSearch] = useState('');
   const [showUpload, setShowUpload] = useState(false);
+  const [showComments, setShowComments] = useState(null);
   const [viewMode, setViewMode] = useState('grid');
 
-  // Audio player
   const audioRef = useRef(new Audio());
   const [currentIdx, setCurrentIdx] = useState(null);
   const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     fetchSongs();
-  }, []);
+  }, [sortBy]);
 
   const fetchSongs = useCallback(async () => {
     setLoadingSongs(true);
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await fetch(`${API}/music`, { headers });
+      const res = await fetch(`${API}/music?sort=${sortBy}`, { headers });
       const data = await res.json();
       setSongs(Array.isArray(data.songs) ? data.songs : []);
     } catch (err) { console.error(err); }
     finally { setLoadingSongs(false); }
-  }, [token]);
+  }, [token, sortBy]);
 
-  // Filter songs — hide private songs from other users
   const filteredSongs = songs.filter(s => {
-    // Hide private songs that don't belong to current user
     if (!s.is_public && s.user_id !== user?.id) return false;
     const matchGenre = activeGenre === 'all' || s.genre === activeGenre;
     const matchSearch = !search || s.title.toLowerCase().includes(search.toLowerCase()) || (s.artist || '').toLowerCase().includes(search.toLowerCase());
     return matchGenre && matchSearch;
   });
 
-  const handlePlay = (song) => {
-    if (isVideoUrl(song.url)) return; // videos are inline
+  const handlePlay = async (song) => {
+    if (isVideoUrl(song.url)) return;
     const idx = filteredSongs.findIndex(s => s.id === song.id);
+    
+    // Increment play count
+    try {
+      await fetch(`${API}/music/${song.id}/play`, { method: 'POST' });
+      setSongs(prev => prev.map(s => s.id === song.id ? { ...s, play_count: (s.play_count || 0) + 1 } : s));
+    } catch (err) {
+      console.error('Error incrementing play:', err);
+    }
+    
     if (idx === currentIdx) {
       if (playing) { audioRef.current.pause(); setPlaying(false); }
       else { audioRef.current.play().catch(() => {}); setPlaying(true); }
@@ -578,7 +733,6 @@ export default function MusicLibrary() {
     if (!res.ok) throw new Error('Erro ao publicar');
   };
 
-  // Auto-advance (audio only)
   useEffect(() => {
     const audio = audioRef.current;
     const onEnded = () => {
@@ -614,7 +768,7 @@ export default function MusicLibrary() {
 
       <div style={{ maxWidth: 600, margin: '0 auto', padding: '0 0 5rem' }}>
 
-        {/* ── Hero ── */}
+        {/* Hero */}
         <div style={{
           background: 'linear-gradient(135deg, var(--fb, #4a80d4) 0%, #764ba2 60%, var(--gold, #a07820) 100%)',
           padding: '2rem 1.5rem 1.5rem',
@@ -645,7 +799,7 @@ export default function MusicLibrary() {
           </div>
         </div>
 
-        {/* ── Filter bar ── */}
+        {/* Filter bar */}
         <div style={{ padding: '0 1rem', marginBottom: '1rem' }}>
           <div style={{ position: 'relative', marginBottom: 12 }}>
             <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#999' }} />
@@ -659,6 +813,28 @@ export default function MusicLibrary() {
               }}
             />
           </div>
+
+          {/* Sort dropdown */}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+            <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={{
+              padding: '8px 12px', borderRadius: 10, border: '1px solid var(--border, #e2e8f0)',
+              fontSize: 13, fontWeight: 600, background: 'var(--card, #fff)', color: 'var(--text)',
+              cursor: 'pointer', outline: 'none',
+            }}>
+              <option value="recent">🕒 Mais recentes</option>
+              <option value="plays">🔥 Mais tocadas</option>
+              <option value="likes">❤️ Mais curtidas</option>
+            </select>
+            <div style={{ marginLeft: 'auto', flexShrink: 0, display: 'flex', gap: 4, background: 'var(--card,#fff)', border: '1px solid var(--border)', borderRadius: 10, padding: 3 }}>
+              <button onClick={() => setViewMode('grid')} style={{ padding: '5px 8px', borderRadius: 8, border: 'none', cursor: 'pointer', background: viewMode === 'grid' ? 'var(--fb,#4a80d4)' : 'transparent', color: viewMode === 'grid' ? 'white' : '#888' }}>
+                <LayoutGrid size={14} />
+              </button>
+              <button onClick={() => setViewMode('list')} style={{ padding: '5px 8px', borderRadius: 8, border: 'none', cursor: 'pointer', background: viewMode === 'list' ? 'var(--fb,#4a80d4)' : 'transparent', color: viewMode === 'list' ? 'white' : '#888' }}>
+                <List size={14} />
+              </button>
+            </div>
+          </div>
+
           <div style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch', paddingBottom: 4, alignItems: 'center' }}>
             {genre_chips.map(chip => (
               <button key={chip.key} onClick={() => setActiveGenre(chip.key)} style={{
@@ -671,19 +847,10 @@ export default function MusicLibrary() {
                 {chip.label}
               </button>
             ))}
-            {/* View toggle */}
-            <div style={{ marginLeft: 'auto', flexShrink: 0, display: 'flex', gap: 4, background: 'var(--card,#fff)', border: '1px solid var(--border)', borderRadius: 10, padding: 3 }}>
-              <button onClick={() => setViewMode('grid')} style={{ padding: '5px 8px', borderRadius: 8, border: 'none', cursor: 'pointer', background: viewMode === 'grid' ? 'var(--fb,#4a80d4)' : 'transparent', color: viewMode === 'grid' ? 'white' : '#888' }}>
-                <LayoutGrid size={14} />
-              </button>
-              <button onClick={() => setViewMode('list')} style={{ padding: '5px 8px', borderRadius: 8, border: 'none', cursor: 'pointer', background: viewMode === 'list' ? 'var(--fb,#4a80d4)' : 'transparent', color: viewMode === 'list' ? 'white' : '#888' }}>
-                <List size={14} />
-              </button>
-            </div>
           </div>
         </div>
 
-        {/* ── Songs ── */}
+        {/* Songs */}
         <div style={{ padding: '0 1rem', marginBottom: '1.5rem' }}>
           {loadingSongs ? (
             <div style={{ textAlign: 'center', padding: '3rem', color: '#888' }}>🎵</div>
@@ -702,11 +869,21 @@ export default function MusicLibrary() {
           ) : viewMode === 'grid' ? (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
               {filteredSongs.map((song, idx) => (
-                <SongCard key={song.id} song={song} isPlaying={currentIdx === idx && playing && !isVideoUrl(song.url)} onPlay={handlePlay} onLike={() => {}} onDelete={handleDelete} onPublish={handlePublish} token={token} user={user} t={t} />
+                <SongCard 
+                  key={song.id} 
+                  song={song} 
+                  isPlaying={currentIdx === idx && playing && !isVideoUrl(song.url)} 
+                  onPlay={handlePlay} 
+                  onDelete={handleDelete} 
+                  onPublish={handlePublish} 
+                  onComment={(s) => setShowComments(s)}
+                  token={token} 
+                  user={user} 
+                  t={t} 
+                />
               ))}
             </div>
           ) : (
-            /* LIST VIEW */
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {filteredSongs.map((song, idx) => {
                 const isActive = currentIdx === idx && playing;
@@ -715,7 +892,6 @@ export default function MusicLibrary() {
                 return (
                   <div key={song.id} style={{ borderRadius: 12, overflow: 'hidden', background: isActive ? 'rgba(74,128,212,0.08)' : 'var(--card,#fff)', border: isActive ? '1.5px solid var(--fb,#4a80d4)' : '1px solid var(--border,#e2e8f0)', transition: 'all 0.15s' }}>
                     {isVid ? (
-                      /* Inline video for list mode */
                       <div>
                         <video src={song.url} poster={song.cover_url || undefined} controls playsInline
                           style={{ width: '100%', maxHeight: 200, objectFit: 'contain', display: 'block', background: '#000' }} />
@@ -730,18 +906,24 @@ export default function MusicLibrary() {
                     ) : (
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <div onClick={() => handlePlay(song)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', cursor: 'pointer' }}>
-                          <div style={{ width: 48, height: 48, borderRadius: 10, flexShrink: 0, overflow: 'hidden', background: 'linear-gradient(135deg,#4a80d4,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
+                          <div style={{ width: 48, height: 48, borderRadius: 10, flexShrink: 0, overflow: 'hidden', background: 'linear-gradient(135deg,#4a80d4,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, position: 'relative' }}>
                             {song.cover_url ? <img src={song.cover_url} alt={song.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '🎵'}
+                            {isActive && (
+                              <div style={{ position: 'absolute', inset: 0, background: 'rgba(74,128,212,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Equalizer />
+                              </div>
+                            )}
                           </div>
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <p style={{ margin: 0, fontWeight: 600, fontSize: '0.88rem', color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</p>
-                            <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#888' }}>{song.artist || song.user_name} · {song.genre ? t(`music.genre.${song.genre}`, song.genre) : ''}</p>
+                            <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#888' }}>{song.artist || song.user_name}</p>
+                            <div style={{ display: 'flex', gap: 8, marginTop: 2, fontSize: '0.7rem', color: '#999' }}>
+                              <span>▶️ {song.play_count || 0}</span>
+                              <span>❤️ {song.like_count || 0}</span>
+                            </div>
                           </div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
                             {isPrivate && <Lock size={13} color="#888" />}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: '0.72rem', color: '#888' }}>
-                              <Heart size={12} /> {song.like_count || 0}
-                            </div>
                             <div style={{ width: 32, height: 32, borderRadius: '50%', background: isActive ? 'var(--fb,#4a80d4)' : 'var(--bg,#f0f4ff)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                               {isActive ? <Pause size={14} color="white" /> : <Play size={14} color="var(--fb,#4a80d4)" />}
                             </div>
@@ -749,12 +931,15 @@ export default function MusicLibrary() {
                         </div>
                         {user && (
                           <div style={{ display: 'flex', gap: 6, padding: '0 14px 10px' }}>
-                            <button onClick={() => handlePublish(song).then(() => alert('✅ Publicado no Mural!')).catch(() => alert('❌ Erro ao publicar'))} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.3)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#9333ea', fontSize: 11, fontWeight: 600 }}>
-                              <Share2 size={12} /> 📤 Publicar no Mural
+                            <button onClick={() => setShowComments(song)} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(74,128,212,0.1)', border: '1px solid rgba(74,128,212,0.3)', borderRadius: 8, padding: '5px 10px', cursor: 'pointer', color: 'var(--fb)', fontSize: 11, fontWeight: 600 }}>
+                              <MessageCircle size={12} /> Comentar
+                            </button>
+                            <button onClick={() => handlePublish(song).then(() => alert('✅ Publicado no Mural!')).catch(() => alert('❌ Erro'))} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.3)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#9333ea', fontSize: 11, fontWeight: 600 }}>
+                              <Share2 size={12} /> Mural
                             </button>
                             {(song.user_id === user.id || user.role === 'admin' || user.role === 'pastor') && (
                               <button onClick={() => { if (window.confirm(`Apagar "${song.title}"?`)) handleDelete(song.id); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(225,29,72,0.08)', border: '1px solid rgba(225,29,72,0.2)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#e11d48', fontSize: 11, fontWeight: 600 }}>
-                                <Trash2 size={12} /> 🗑️
+                                <Trash2 size={12} />
                               </button>
                             )}
                           </div>
@@ -769,12 +954,14 @@ export default function MusicLibrary() {
         </div>
       </div>
 
-      {/* Upload Modal */}
       {showUpload && (
         <UploadModal onClose={() => setShowUpload(false)} onUploaded={handleUploaded} token={token} />
       )}
 
-      {/* Mini Audio Player */}
+      {showComments && (
+        <CommentsModal song={showComments} onClose={() => setShowComments(null)} token={token} user={user} />
+      )}
+
       {playerSong && !isVideoUrl(playerSong.url) && (
         <MiniPlayer
           songs={playerSongs}

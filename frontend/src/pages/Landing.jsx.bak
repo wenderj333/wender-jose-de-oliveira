@@ -97,6 +97,25 @@ export default function Landing() {
         <p style={{ color:'white', fontSize:22, fontWeight:700, marginBottom:20 }}>{t('landing.urgency','Ahora mismo hay personas esperando para orar contigo')}</p>
         <button onClick={() => navigate('/register')} style={{ padding:'16px 40px', borderRadius:12, border:'none', background:'#27ae60', color:'white', fontWeight:800, cursor:'pointer', fontSize:18 }}>{t('landing.joinNow','Unirme ahora')}</button>
       </div>
+      
+      <div style={{ background:'white', padding:'40px 24px', textAlign:'center' }}>
+        <p style={{ fontSize:18, fontWeight:700, color:'#1a0a3e', marginBottom:8 }}>Partilha com os teus amigos cristãos 🙏</p>
+        <p style={{ fontSize:14, color:'#888', marginBottom:24 }}>Cada pessoa que convidas é uma bênção para a comunidade</p>
+        <div style={{ display:'flex', justifyContent:'center', gap:12, flexWrap:'wrap' }}>
+          <a href={'https://wa.me/?text=Encontrei esta rede social cristã gratuita! Entra e conecta-te com cristãos do mundo inteiro https://sigo-com-fe.vercel.app'} target='_blank' rel='noreferrer' style={{ padding:'12px 20px', borderRadius:12, background:'#25D366', color:'white', fontWeight:700, fontSize:15, textDecoration:'none', display:'flex', alignItems:'center', gap:8 }}>
+            📱 WhatsApp
+          </a>
+          <a href={'https://t.me/share/url?url=https://sigo-com-fe.vercel.app&text=Encontrei esta rede social cristã gratuita! Entra e conecta-te com cristãos do mundo inteiro'} target='_blank' rel='noreferrer' style={{ padding:'12px 20px', borderRadius:12, background:'#0088cc', color:'white', fontWeight:700, fontSize:15, textDecoration:'none', display:'flex', alignItems:'center', gap:8 }}>
+            ✈️ Telegram
+          </a>
+          <a href={'https://www.facebook.com/sharer/sharer.php?u=https://sigo-com-fe.vercel.app'} target='_blank' rel='noreferrer' style={{ padding:'12px 20px', borderRadius:12, background:'#1877F2', color:'white', fontWeight:700, fontSize:15, textDecoration:'none', display:'flex', alignItems:'center', gap:8 }}>
+            👍 Facebook
+          </a>
+          <button onClick={() => { navigator.clipboard.writeText('https://sigo-com-fe.vercel.app'); alert('Link copiado!'); }} style={{ padding:'12px 20px', borderRadius:12, background:'#6C3FA0', color:'white', fontWeight:700, fontSize:15, border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:8 }}>
+            🔗 Copiar link
+          </button>
+        </div>
+      </div>
       <div style={{ background:'#1a0a3e', padding:'60px 24px', textAlign:'center' }}>
         <p style={{ color:'rgba(255,255,255,0.7)', fontSize:14, marginBottom:8 }}>{t('landing.notCasual','No llegaste aqui por casualidad')}</p>
         <h2 style={{ color:'white', fontSize:32, fontWeight:900, margin:'0 0 12px' }}>{t('landing.ctaFinalText','Dios puede usar este momento para cambiar algo en tu vida.')}</h2>

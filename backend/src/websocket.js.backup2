@@ -28,6 +28,28 @@ function setupWebSocket(server) {
         const msg = JSON.parse(data);
 
         switch (msg.type) {
+          case 'game_create':
+          case 'game_join':
+          case 'game_ready':
+          case 'game_start':
+          case 'game_answer':
+          case 'game_chat':
+          case 'game_end':
+            handleGame(ws, msg);
+            break;
+          case 'game_create':
+          case 'game_join':
+          case 'game_ready':
+          case 'game_start':
+          case 'game_answer':
+          case 'game_chat':
+          case 'game_end':
+            handleGame(ws, msg);
+            break;
+          case 'game_queue':
+          case 'game_cancel_queue':
+            handleGameQueue(ws, msg);
+            break;
           case 'identify':
             clients.set(ws, { userId: msg.userId, churchId: msg.churchId });
             // Send current live sessions
@@ -374,4 +396,176 @@ function broadcastToStream(wss, streamId, data, excludeWs) {
   }
 }
 
+
+const gameRooms = new Map();
+
+function handleGame(ws, msg) {
+  const client = clients.get(ws);
+  const userId = client?.userId || msg.userId;
+  const userName = msg.userName || 'Jogador';
+
+  if (msg.type === 'game_create') {
+    const roomId = msg.roomId;
+    gameRooms.set(roomId, {
+      id: roomId,
+      livro: msg.livro || 'Todos',
+      jogadores: [{ userId, userName, avatar: msg.avatar, pontos: 0, pronto: false, ws }],
+      iniciado: false,
+      perguntaIdx: 0,
+    });
+    ws.send(JSON.stringify({ type: 'game_joined', roomId, jogadores: gameRooms.get(roomId).jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto })) }));
+  }
+
+  else if (msg.type === 'game_join') {
+    const roomId = msg.roomId;
+    const room = gameRooms.get(roomId);
+    if (!room) { ws.send(JSON.stringify({ type: 'game_error', message: 'Sala nao encontrada' })); return; }
+    if (room.iniciado) { ws.send(JSON.stringify({ type: 'game_error', message: 'Jogo ja iniciado' })); return; }
+    room.jogadores.push({ userId, userName, avatar: msg.avatar, pontos: 0, pronto: false, ws });
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_joined', roomId, jogadores: jogadoresPublico })); });
+  }
+
+  else if (msg.type === 'game_ready') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const j = room.jogadores.find(j => j.userId === userId);
+    if (j) j.pronto = true;
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_update', jogadores: jogadoresPublico })); });
+  }
+
+  else if (msg.type === 'game_start') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    room.iniciado = true;
+    room.perguntaIdx = 0;
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_started', livro: room.livro })); });
+  }
+
+  else if (msg.type === 'game_answer') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const j = room.jogadores.find(j => j.userId === userId);
+    if (j) j.pontos += msg.pontos || 0;
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_score', jogadores: jogadoresPublico })); });
+  }
+
+  else if (msg.type === 'game_chat') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_chat_msg', userName, texto: msg.texto })); });
+  }
+
+  else if (msg.type === 'game_end') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores: jogadoresPublico })); });
+    gameRooms.delete(msg.roomId);
+  }
+}
+
+
+
+
+function handleGame(ws, msg) {
+  const client = clients.get(ws);
+  const userId = client?.userId || msg.userId;
+  const userName = msg.userName || 'Jogador';
+
+  if (msg.type === 'game_create') {
+    const roomId = msg.roomId;
+    gameRooms.set(roomId, {
+      id: roomId,
+      livro: msg.livro || 'Todos',
+      jogadores: [{ userId, userName, avatar: msg.avatar, pontos: 0, pronto: false, ws }],
+      iniciado: false,
+      perguntaIdx: 0,
+    });
+    ws.send(JSON.stringify({ type: 'game_joined', roomId, jogadores: gameRooms.get(roomId).jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto })) }));
+  }
+
+  else if (msg.type === 'game_join') {
+    const roomId = msg.roomId;
+    const room = gameRooms.get(roomId);
+    if (!room) { ws.send(JSON.stringify({ type: 'game_error', message: 'Sala nao encontrada' })); return; }
+    if (room.iniciado) { ws.send(JSON.stringify({ type: 'game_error', message: 'Jogo ja iniciado' })); return; }
+    room.jogadores.push({ userId, userName, avatar: msg.avatar, pontos: 0, pronto: false, ws });
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_joined', roomId, jogadores: jogadoresPublico })); });
+  }
+
+  else if (msg.type === 'game_ready') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const j = room.jogadores.find(j => j.userId === userId);
+    if (j) j.pronto = true;
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_update', jogadores: jogadoresPublico })); });
+  }
+
+  else if (msg.type === 'game_start') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    room.iniciado = true;
+    room.perguntaIdx = 0;
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_started', livro: room.livro })); });
+  }
+
+  else if (msg.type === 'game_answer') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const j = room.jogadores.find(j => j.userId === userId);
+    if (j) j.pontos += msg.pontos || 0;
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_score', jogadores: jogadoresPublico })); });
+  }
+
+  else if (msg.type === 'game_chat') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_chat_msg', userName, texto: msg.texto })); });
+  }
+
+  else if (msg.type === 'game_end') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores: jogadoresPublico })); });
+    gameRooms.delete(msg.roomId);
+  }
+}
+
+
+const gameQueue = [];
+
+function handleGameQueue(ws, msg) {
+  const userId = msg.userId;
+  const userName = msg.userName || 'Jogador';
+  const avatar = msg.avatar || '';
+  const livro = msg.livro || 'Todos';
+
+  if (msg.type === 'game_queue') {
+    // Procurar alguem na fila
+    const idx = gameQueue.findIndex(p => p.userId !== userId);
+    if (idx !== -1) {
+      const outro = gameQueue.splice(idx, 1)[0];
+      const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
+      const matchMsg1 = JSON.stringify({ type: 'game_matched', roomId, livro, adversario: { userName: msg.userName, avatar: msg.avatar } });
+      const matchMsg2 = JSON.stringify({ type: 'game_matched', roomId, livro, adversario: { userName: outro.userName, avatar: outro.avatar } });
+      if (outro.ws.readyState === 1) outro.ws.send(matchMsg1);
+      if (ws.readyState === 1) ws.send(matchMsg2);
+    } else {
+      gameQueue.push({ userId, userName, avatar, livro, ws });
+      if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'game_queued' }));
+    }
+  }
+
+  if (msg.type === 'game_cancel_queue') {
+    const idx = gameQueue.findIndex(p => p.userId === userId);
+    if (idx !== -1) gameQueue.splice(idx, 1);
+  }
+}
 module.exports = { setupWebSocket };
