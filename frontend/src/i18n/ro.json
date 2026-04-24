@@ -192,7 +192,7 @@
   "prayerFeed": {
     "victoryWall": "Peretele Victoriilor",
     "prayerRequests": "Cereri de Rugăciune",
-    "newRequest": "Cerere Nouă",
+    "newRequest": "Cerere nouă",
     "allRequests": "Toate Cererile",
     "answeredPrayers": "Rugăciuni Ascultate",
     "newPrayerRequest": "Cerere Nouă de Rugăciune",
@@ -215,7 +215,15 @@
       "emotional": "Emoțional",
       "decisions": "Decizii",
       "other": "Altele"
-    }
+    },
+    "photoOptional": "Fotografie (opțională)",
+    "photoDesc": "Adaugă o fotografie la cererea ta",
+    "addPhoto": "Adaugă fotografie",
+    "prayForPhoto": "Roagă-te pentru această fotografie",
+    "prayerWall": "Zidul rugăciunii",
+    "prayerWallDesc": "Roagă-te pentru fotografiile fraților tăi",
+    "submitBtn": "Trimite cererea 🙏",
+    "photoWall": "Perete foto"
   },
   "livePrayer": {
     "title": "Rugăciune Live",

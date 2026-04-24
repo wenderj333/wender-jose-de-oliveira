@@ -215,7 +215,15 @@
       "emotional": "Emotional",
       "decisions": "Decisions",
       "other": "Other"
-    }
+    },
+    "photoOptional": "Photo (optional)",
+    "photoDesc": "Add a photo to your request",
+    "addPhoto": "Add photo",
+    "prayForPhoto": "Pray for this photo",
+    "prayerWall": "Prayer Wall",
+    "prayerWallDesc": "Pray for your brothers photos",
+    "submitBtn": "Send Request 🙏",
+    "photoWall": "Photo Wall"
   },
   "livePrayer": {
     "title": "Live Prayer",

@@ -192,7 +192,7 @@
   "prayerFeed": {
     "victoryWall": "Mural de Victorias",
     "prayerRequests": "Pedidos de Oración",
-    "newRequest": "Nuevo Pedido",
+    "newRequest": "Nueva Petición",
     "allRequests": "Todos los Pedidos",
     "answeredPrayers": "Oraciones Contestadas",
     "newPrayerRequest": "Nuevo Pedido de Oración",
@@ -215,7 +215,15 @@
       "emotional": "Emocional",
       "decisions": "Decisiones",
       "other": "Otros"
-    }
+    },
+    "photoOptional": "Foto (opcional)",
+    "photoDesc": "Añade una foto a tu petición",
+    "addPhoto": "Añadir foto",
+    "prayForPhoto": "Orar por esta foto",
+    "prayerWall": "Mural de Oración",
+    "prayerWallDesc": "Ora por las fotos de tus hermanos",
+    "submitBtn": "Enviar Petición 🙏",
+    "photoWall": "Mural de Fotos"
   },
   "livePrayer": {
     "title": "Oración en Vivo",

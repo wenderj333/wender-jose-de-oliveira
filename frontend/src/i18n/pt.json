@@ -215,7 +215,15 @@
       "emotional": "Emocional",
       "decisions": "Decisões",
       "other": "Outros"
-    }
+    },
+    "photoOptional": "Foto (opcional)",
+    "photoDesc": "Adiciona uma foto ao teu pedido",
+    "addPhoto": "Adicionar foto",
+    "prayForPhoto": "Orar por esta foto",
+    "prayerWall": "Mural de Oração",
+    "prayerWallDesc": "Ora pelas fotos dos teus irmãos",
+    "submitBtn": "Enviar Pedido 🙏",
+    "photoWall": "Mural de Fotos"
   },
   "livePrayer": {
     "title": "Oração ao Vivo",

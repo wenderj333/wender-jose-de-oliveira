@@ -193,7 +193,7 @@
   "prayerFeed": {
     "victoryWall": "Victory Wall",
     "prayerRequests": "Prayer Requests",
-    "newRequest": "New Request",
+    "newRequest": "Neue Anfrage",
     "allRequests": "All Requests",
     "answeredPrayers": "Answered Prayers",
     "newPrayerRequest": "New Prayer Request",
@@ -216,7 +216,15 @@
       "emotional": "Emotional",
       "decisions": "Decisions",
       "other": "Other"
-    }
+    },
+    "photoOptional": "Foto (optional)",
+    "photoDesc": "Füge ein Foto zu deiner Anfrage hinzu",
+    "addPhoto": "Foto hinzufügen",
+    "prayForPhoto": "Für dieses Foto beten",
+    "prayerWall": "Gebetswand",
+    "prayerWallDesc": "Bete für die Fotos deiner Geschwister",
+    "submitBtn": "Anfrage senden 🙏",
+    "photoWall": "Fotowand"
   },
   "livePrayer": {
     "title": "Live Prayer",

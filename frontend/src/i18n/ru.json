@@ -1177,7 +1177,7 @@
   "prayerFeed": {
     "victoryWall": "Mural de Vitórias",
     "prayerRequests": "Pedidos de Oração",
-    "newRequest": "Novo Pedido",
+    "newRequest": "Новая просьба",
     "allRequests": "Todos os Pedidos",
     "answeredPrayers": "Orações Respondidas",
     "newPrayerRequest": "Novo Pedido de Oração",
@@ -1200,7 +1200,15 @@
       "emotional": "Emocional",
       "decisions": "Decisões",
       "other": "Outros"
-    }
+    },
+    "photoOptional": "Фото (необязательно)",
+    "photoDesc": "Добавьте фото к вашей просьбе",
+    "addPhoto": "Добавить фото",
+    "prayForPhoto": "Молиться за это фото",
+    "prayerWall": "Стена молитвы",
+    "prayerWallDesc": "Молитесь за фотографии братьев",
+    "submitBtn": "Отправить просьбу 🙏",
+    "photoWall": "Фотостена"
   },
   "livePrayer": {
     "title": "Oração ao Vivo",
