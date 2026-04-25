@@ -398,7 +398,8 @@ export default function DesafioBiblico() {
     } else {
       setStreak(0);
     }
-    setTimeout(avancar, 1500);
+    // So avancar sozinho se nao ha adversario
+    if (!adversario?.userId) setTimeout(avancar, 1500);
     // Enviar pontos ao servidor se WebSocket activo
     if (wsRef.current && wsRef.current.readyState === 1 && codigo) {
       wsRef.current.send(JSON.stringify({ type: 'game_answer', roomId: codigo, userId: user?.id, pontos: pts }));
