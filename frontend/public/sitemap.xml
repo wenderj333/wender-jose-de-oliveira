@@ -1,11 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://sigo-com-fe.vercel.app/</loc><priority>1.0</priority></url>
-  <url><loc>https://sigo-com-fe.vercel.app/desafio-biblico</loc><priority>0.9</priority></url>
-  <url><loc>https://sigo-com-fe.vercel.app/oracao</loc><priority>0.9</priority></url>
-  <url><loc>https://sigo-com-fe.vercel.app/igrejas</loc><priority>0.8</priority></url>
-  <url><loc>https://sigo-com-fe.vercel.app/musica</loc><priority>0.8</priority></url>
-  <url><loc>https://sigo-com-fe.vercel.app/biblia-ai</loc><priority>0.8</priority></url>
-  <url><loc>https://sigo-com-fe.vercel.app/curso-teologia</loc><priority>0.7</priority></url>
-  <url><loc>https://sigo-com-fe.vercel.app/comunidade</loc><priority>0.7</priority></url>
+  <url>
+    <loc>https://sigo-com-fe.vercel.app/</loc>
+    <priority>1.0</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://sigo-com-fe.vercel.app/desafio-biblico</loc>
+    <priority>0.9</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://sigo-com-fe.vercel.app/reflexao</loc>
+    <priority>0.8</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://sigo-com-fe.vercel.app/pedidos-ajuda</loc>
+    <priority>0.8</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://sigo-com-fe.vercel.app/mural</loc>
+    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://sigo-com-fe.vercel.app/register</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
 </urlset>
