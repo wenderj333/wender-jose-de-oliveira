@@ -283,6 +283,8 @@ export default function DesafioBiblico() {
   function criarSala() {
     const roomId = gerar();
     setCodigo(roomId);
+    // Fechar WebSocket anterior se existir
+    if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
     // Conectar WebSocket como jogador 1
     const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
     wsRef.current = ws;
@@ -328,6 +330,8 @@ export default function DesafioBiblico() {
     if(!cInput.trim()) return;
     const roomId = cInput.toUpperCase();
     setCodigo(roomId);
+    // Fechar WebSocket anterior se existir
+    if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
     // Conectar WebSocket como jogador 2
     const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
     wsRef.current = ws;
