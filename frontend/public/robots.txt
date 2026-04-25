@@ -1,3 +1,11 @@
-User-agent: *
+﻿User-agent: *
 Allow: /
+
 Sitemap: https://sigo-com-fe.vercel.app/sitemap.xml
+
+# Paginas prioritarias
+Allow: /desafio-biblico
+Allow: /pedidos-ajuda
+Allow: /reflexao
+Allow: /mural
+Allow: /register
