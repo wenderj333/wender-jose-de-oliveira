@@ -144,7 +144,7 @@ export default function Consecration() {
 
   return (
     <div style={{maxWidth:700,margin:'0 auto',padding:'0.5rem',fontFamily:'Segoe UI,sans-serif'}}>
-      <style>{
+      <style>{`
         @keyframes flameRise{0%{transform:translateY(0) scale(1);opacity:0.8}50%{transform:translateY(-80px) scale(1.3);opacity:1}100%{transform:translateY(-160px) scale(0.6);opacity:0}}
         @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
         @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
@@ -152,7 +152,7 @@ export default function Consecration() {
         .cons-btn{border:none;border-radius:20px;padding:12px 18px;cursor:pointer;font-weight:700;font-size:14px;transition:all 0.2s;color:white;}
         .cons-btn:hover{transform:scale(1.08);}
         .cons-btn:active{transform:scale(0.95);}
-      }</style>
+      `}</style>
 
       {/* HERO */}
       <div style={{position:'relative',width:'100%',height:'88vh',minHeight:500,maxHeight:720,overflow:'hidden',borderRadius:16,backgroundImage:'url(/fundo-consagracao.png)',backgroundSize:'cover',backgroundPosition:'center'}}>
