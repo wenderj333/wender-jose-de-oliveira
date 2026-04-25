@@ -67,7 +67,7 @@ export default function Reflection() {
             ))}
           </div>
           <div style={{background:'rgba(255,255,255,0.2)',borderRadius:20,height:8,marginBottom:8}}>
-            <div style={{background:'#f0c040',borderRadius:20,height:8,width:+""+${(progress/3)*100}%+""+,transition:'width 0.5s'}}/>
+            <div style={{background:'#f0c040',borderRadius:20,height:8,width:`${(progress/3)*100}%`,transition:'width 0.5s'}}/>
           </div>
           <p style={{margin:0,fontSize:'0.8rem',opacity:0.8}}>{progress}/3 {t('reflection.rotateNote','perguntas respondidas')}</p>
         </div>
