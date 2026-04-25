@@ -75,7 +75,7 @@ export default function Reflection() {
       <div style={{padding:'0 16px',marginBottom:28}}>
         <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:12}}>
           {guias.map((g,i)=>(
-            <div key={i} style={{background:'white',borderRadius:16,padding:16,boxShadow:'0 2px 12px rgba(108,63,160,0.08)',border:+""+2px solid 22+""+}}>
+            <div key={i} style={{background:'white',borderRadius:16,padding:16,boxShadow:'0 2px 12px rgba(108,63,160,0.08)',border:'2px solid #e8e0f5'}}>
               <div style={{fontSize:28,marginBottom:8}}>{g.icon}</div>
               <p style={{color:g.color,fontWeight:800,margin:'0 0 4px',fontSize:'0.9rem'}}>{g.title}</p>
               <p style={{color:'#888',fontSize:'0.78rem',margin:0}}>{g.desc}</p>
@@ -86,7 +86,7 @@ export default function Reflection() {
 
 ﻿      <div style={{padding:'0 16px',marginBottom:20}}>
         <button onClick={startTimer} style={{display:'flex',alignItems:'center',gap:8,padding:'10px 20px',borderRadius:20,border:'2px solid #6C3FA0',background:timer?'#6C3FA0':'white',color:timer?'white':'#6C3FA0',cursor:'pointer',fontWeight:700,fontSize:'0.85rem'}}>
-          {timer?+""+${Math.floor(timerSec/60)}: - +""+:t('reflection.timerBtn','Pausa de 2 minutos')}
+          {timer?`${Math.floor(timerSec/60)}:${String(timerSec%60).padStart(2,'0')}`:t('reflection.timerBtn','Pausa de 2 minutos')}
         </button>
       </div>
       <div style={{padding:'0 16px'}}>
