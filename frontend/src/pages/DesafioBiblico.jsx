@@ -235,9 +235,8 @@ export default function DesafioBiblico() {
       setTempo(prev => {
         tRef.current = prev-1;
         if(prev<=1){ clearInterval(timerRef.current);
-          // Tempo esgotado - enviar resposta vazia ao servidor
+          // Tempo esgotado - so envia se ainda nao respondeu
           if (wsRef.current && wsRef.current.readyState === 1 && codigo) {
-            wsRef.current.send(JSON.stringify({ type: 'game_answer', roomId: codigo, userId: user?.id, pontos: 0 }));
             // Se nao ha adversario ativo, avancar sozinho
             if (!adversario?.userId) setTimeout(avancar, 1500);
           } else {
@@ -443,6 +442,8 @@ export default function DesafioBiblico() {
   }
   function avancar() {
     setFeedback(null); setResp(null);
+    // Se tem adversario real, esperar servidor
+    if (wsRef.current && wsRef.current.readyState === 1 && adversario?.userId) return;
     if(idx+1>=perguntas.length) { guardarResultado(pontos, pontos > 0 ? Math.ceil(pontos/7.5) : 0, TEMPO - tRef.current); playSound('fim'); setTela('resultado'); }
     else setIdx(prev=>prev+1);
   }
