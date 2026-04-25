@@ -45,7 +45,6 @@ export default function DesafioBiblico() {
   const [showMusicAdmin, setShowMusicAdmin] = React.useState(false);
   const [musicInputVal, setMusicInputVal] = React.useState(()=>localStorage.getItem('desafio_music')||'');
   const [showConquistasModal, setShowConquistasModal] = React.useState(false);
-  const [showManual, setShowManual] = React.useState(false);
   const [evento, setEvento] = React.useState(()=>JSON.parse(localStorage.getItem('desafio_evento')||'null'));
   const [showEventoAdmin, setShowEventoAdmin] = React.useState(false);
   const [eventoInput, setEventoInput] = React.useState({premio:'100',descricao:'Competicao Biblica',dataFim:''});
@@ -207,7 +206,7 @@ export default function DesafioBiblico() {
   const [showStreak, setShowStreak] = useState(false);
   const [adversario, setAdversario] = useState(null);
   useEffect(() => {
-    fetch((import.meta.env.VITE_API_URL||'')+ '/api/quiz/ranking')
+    fetch((import.meta.env.VITE_API_URL||'')+ '/api/quiz/ranking?periodo=semana')
       .then(r=>r.json()).then(d=>{if(Array.isArray(d))setRanking(d);}).catch(()=>{});
   }, []);
   const wsRef = useRef(null);
@@ -221,7 +220,6 @@ export default function DesafioBiblico() {
   const [chat, setChat] = useState([]);
   const [chatMsg, setChatMsg] = useState('');
   const timerRef = useRef(null);
-  const filaTimeoutRef = useRef(null);
   const tRef = useRef(TEMPO);
   const chatEnd = useRef(null);
 
@@ -234,15 +232,7 @@ export default function DesafioBiblico() {
     timerRef.current = setInterval(() => {
       setTempo(prev => {
         tRef.current = prev-1;
-        if(prev<=1){ clearInterval(timerRef.current);
-          // Tempo esgotado - so envia se ainda nao respondeu
-          if (wsRef.current && wsRef.current.readyState === 1 && codigo) {
-            // Se nao ha adversario ativo, avancar sozinho
-            if (!adversario?.userId) setTimeout(avancar, 1500);
-          } else {
-            avancar();
-          }
-          return 0; }
+        if(prev<=1){ clearInterval(timerRef.current); avancar(); return 0; }
         return prev-1;
       });
     }, 1000);
@@ -253,22 +243,12 @@ export default function DesafioBiblico() {
     const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
     wsRef.current = ws;
     setEsperando(true);
-    // Timeout 20s - se nao encontrar adversario, joga sozinho
-    if (filaTimeoutRef.current) clearTimeout(filaTimeoutRef.current);
-    filaTimeoutRef.current = setTimeout(() => {
-      if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
-      setEsperando(false);
-      filaTimeoutRef.current = null;
-      iniciar();
-    }, 10000);
     ws.onopen = () => {
       ws.send(JSON.stringify({ type: 'game_queue', userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
     };
-    // Nao limpar timeout aqui - deixar correr
     ws.onmessage = (e) => {
       const msg = JSON.parse(e.data);
       if (msg.type === 'game_matched') {
-        if (filaTimeoutRef.current) { clearTimeout(filaTimeoutRef.current); filaTimeoutRef.current = null; }
         setEsperando(false);
         setCodigo(msg.roomId);
         if (msg.adversario) setAdversario(msg.adversario);
@@ -282,112 +262,16 @@ export default function DesafioBiblico() {
           setTimeout(iniciar, 3000);
         }
       }
-      if (msg.type === 'game_score') {
-        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
-        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
-      }
-      if (msg.type === 'game_next_question') {
-        setIdx(msg.idx); setResp(null); setFeedback(null);
-      }
-      if (msg.type === 'game_finished') {
-        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
-        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
-        setTela('resultado');
-      }
     };
     ws.onerror = () => { setEsperando(false); alert('Erro ao conectar. Tenta de novo!'); };
   }
-  function cancelarFila() { wsRef.current?.close(); setEsperando(false); if (filaTimeoutRef.current) { clearTimeout(filaTimeoutRef.current); filaTimeoutRef.current = null; } }
+  function cancelarFila() { wsRef.current?.close(); setEsperando(false); }
   function gerar() { return Math.random().toString(36).substring(2,8).toUpperCase(); }
-  function criarSala() {
-    const roomId = gerar();
-    setCodigo(roomId);
-    // Fechar WebSocket anterior se existir
-    if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
-    // Conectar WebSocket como jogador 1
-    const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
-    wsRef.current = ws;
-    ws.onopen = () => {
-      ws.send(JSON.stringify({ type: 'game_create', roomId, userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
-    };
-    ws.onmessage = (e) => {
-      const msg = JSON.parse(e.data);
-      if (msg.type === 'game_joined') {
-        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
-        if (adv) setAdversario({nome: adv.userName, avatar: adv.avatar, userId: adv.userId, pontos: 0});
-      }
-      if (msg.type === 'game_matched') {
-        if (msg.adversario) setAdversario({nome: msg.adversario.userName, avatar: msg.adversario.avatar, userId: msg.adversario.userId, pontos: 0});
-        if (msg.perguntas && msg.perguntas.length > 0) setPerguntas(msg.perguntas);
-        setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false);
-        setTela('vs');
-        setTimeout(()=>setTela('jogo'), 3000);
-      }
-      if (msg.type === 'game_started') {
-        if (msg.perguntas && msg.perguntas.length > 0) setPerguntas(msg.perguntas);
-        setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
-        setTela('vs');
-        setTimeout(()=>setTela('jogo'), 3000);
-      }
-      if (msg.type === 'game_score') {
-        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
-        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
-      }
-      if (msg.type === 'game_next_question') {
-        setIdx(msg.idx); setResp(null); setFeedback(null);
-      }
-      if (msg.type === 'game_finished') {
-        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
-        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
-        setTela('resultado');
-      }
-    };
-    ws.onerror = () => {};
-    setTela('sala');
-  }
-  function entrarSala() {
-    if(!cInput.trim()) return;
-    const roomId = cInput.toUpperCase();
-    setCodigo(roomId);
-    // Fechar WebSocket anterior se existir
-    if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
-    // Conectar WebSocket como jogador 2
-    const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
-    wsRef.current = ws;
-    ws.onopen = () => {
-      ws.send(JSON.stringify({ type: 'game_join', roomId, userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url }));
-    };
-    ws.onmessage = (e) => {
-      const msg = JSON.parse(e.data);
-      if (msg.type === 'game_joined') {
-        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
-        if (adv) setAdversario({nome: adv.userName, avatar: adv.avatar, userId: adv.userId, pontos: 0});
-      }
-      if (msg.type === 'game_started') {
-        if (msg.perguntas && msg.perguntas.length > 0) setPerguntas(msg.perguntas);
-        setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
-        setTela('vs');
-        setTimeout(()=>setTela('jogo'), 3000);
-      }
-      if (msg.type === 'game_score') {
-        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
-        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
-      }
-      if (msg.type === 'game_next_question') {
-        setIdx(msg.idx); setResp(null); setFeedback(null);
-      }
-      if (msg.type === 'game_finished') {
-        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
-        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
-        setTela('resultado');
-      }
-    };
-    ws.onerror = () => {};
-    setTela('sala');
-  }
+  function criarSala() { setCodigo(gerar()); setTela('sala'); }
+  function entrarSala() { if(!cInput.trim()) return; setCodigo(cInput.toUpperCase()); setTela('sala'); }
 
-  function iniciar(perguntasServidor) {
-    const ps = perguntasServidor && perguntasServidor.length > 0 ? perguntasServidor : filtrar(livro);
+  function iniciar() {
+    const ps = filtrar(livro);
     setPerguntas(ps); setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
     setTela('jogo');
     setStreak(0); setMaxStreak(0); setShowStreak(false);
@@ -413,16 +297,7 @@ export default function DesafioBiblico() {
     } else {
       setStreak(0);
     }
-    // So avancar sozinho se nao ha adversario
-    if (!adversario?.userId) setTimeout(avancar, 1500);
-    // Enviar pontos ao servidor se WebSocket activo
-    if (wsRef.current && wsRef.current.readyState === 1 && codigo) {
-      wsRef.current.send(JSON.stringify({ type: 'game_answer', roomId: codigo, userId: user?.id, pontos: pts }));
-      // Se ultima pergunta enviar game_end
-      if (idx+1 >= perguntas.length) {
-        setTimeout(()=>{ if(wsRef.current && wsRef.current.readyState===1) wsRef.current.send(JSON.stringify({ type: 'game_end', roomId: codigo, userId: user?.id })); }, 1600);
-      }
-    }
+    setTimeout(avancar, 1500);
   }
 
   function guardarResultado(pts, totalCorretas, tempoMedio) {
@@ -442,8 +317,6 @@ export default function DesafioBiblico() {
   }
   function avancar() {
     setFeedback(null); setResp(null);
-    // Se tem adversario real, esperar servidor
-    if (wsRef.current && wsRef.current.readyState === 1 && adversario?.userId) return;
     if(idx+1>=perguntas.length) { guardarResultado(pontos, pontos > 0 ? Math.ceil(pontos/7.5) : 0, TEMPO - tRef.current); playSound('fim'); setTela('resultado'); }
     else setIdx(prev=>prev+1);
   }
@@ -472,7 +345,7 @@ export default function DesafioBiblico() {
   const av=user?.photo_url||user?.avatar_url;
   const nm=user?.full_name||'Jogador';
   const perg=perguntas[idx];
-  const btn=(onClick,bg2,txt,mb=10)=><button onClick={()=>{playSound('click');onClick();}} style={{width:'100%',maxWidth:320,padding:14,borderRadius:14,border:'none',background:bg2,color:'white',fontSize:15,fontWeight:800,cursor:'pointer',marginBottom:mb,boxShadow:'0 4px 20px rgba(0,0,0,0.4)',textShadow:'0 1px 3px rgba(0,0,0,0.3)',letterSpacing:0.5,transition:'transform 0.1s'}}>{txt}</button>;
+  const btn=(onClick,bg2,txt,mb=10)=><button onClick={()=>{playSound('click');onClick();}} style={{width:'100%',maxWidth:320,padding:14,borderRadius:14,border:'none',background:bg2,color:'white',fontSize:15,fontWeight:700,cursor:'pointer',marginBottom:mb}}>{txt}</button>;
 
   if(tela==='lobby') return (
     <div style={{minHeight:'100vh',backgroundImage:'url(/fundo-desafio.jpg)',backgroundSize:'cover',backgroundPosition:'center',display:'flex',color:'white'}}>
@@ -494,7 +367,7 @@ export default function DesafioBiblico() {
           <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
             {CONQUISTAS_DEF.map(c=>{
               const tem=conquistas.includes(c.id);
-              return <div key={c.id} title={c.nome+': '+c.desc} style={{fontSize:18,opacity:tem?1:0.5,cursor:'pointer',filter:tem?'drop-shadow(0 0 4px #f0c040)':'grayscale(1)',transition:'all 0.3s'}} onClick={()=>setShowConquistasModal(true)}>{c.icon}</div>;
+              return <div key={c.id} title={c.nome+': '+c.desc} style={{fontSize:18,opacity:tem?1:0.2,cursor:'pointer'}} onClick={()=>setShowConquistasModal(true)}>{c.icon}</div>;
             })}
           </div>
           <p style={{fontSize:9,color:'rgba(255,255,255,0.3)',marginTop:4}}>{conquistas.length}/{CONQUISTAS_DEF.length} desbloqueadas</p>
@@ -510,65 +383,21 @@ export default function DesafioBiblico() {
           <p style={{color:'#1a0a3e',fontSize:11,margin:'4px 0',opacity:0.8}}>Joga e entra no ranking para ganhar!</p>
         </div>
       )}
-      <style dangerouslySetInnerHTML={{__html:'@keyframes spin{0%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}100%{transform:rotate(-10deg)}} @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}'}} />
-      <div style={{display:'flex',justifyContent:'center',alignItems:'center',gap:16,marginBottom:12}}>
-        {ranking[0]?.avatar_url && <div style={{textAlign:'center'}}><img src={ranking[0].avatar_url} style={{width:60,height:60,borderRadius:'50%',objectFit:'cover',border:'3px solid #f0c040',boxShadow:'0 0 15px rgba(240,192,64,0.6)'}}/><p style={{fontSize:10,color:'#f0c040',fontWeight:700,margin:'4px 0 0'}}>🥇 {ranking[0]?.full_name?.split(' ')[0]}</p></div>}
-        <div style={{fontSize:70,filter:'drop-shadow(0 0 15px rgba(240,192,64,0.8))',animation:'spin 2s ease-in-out infinite'}}>🏆</div>
-      </div>
-      <h1 style={{fontSize:28,fontWeight:900,marginBottom:6,textAlign:'center',color:'#f0c040',textShadow:'0 2px 10px rgba(240,192,64,0.5)',fontStyle:'italic',letterSpacing:1}}>{t('desafio.title')}</h1>
+      <div style={{fontSize:60,marginBottom:12}}>🏆</div>
+      <h1 style={{fontSize:26,fontWeight:900,marginBottom:6,textAlign:'center'}}>{t('desafio.title')}</h1>
       <p style={{opacity:0.7,marginBottom:16,fontSize:14,textAlign:'center'}}>{t('desafio.subtitle')}</p>
       <p style={{fontSize:13,opacity:0.8,marginBottom:8}}>📖 {t('desafio.choosebook')||'Escolhe o livro:'}</p>
       <div style={{display:'flex',flexWrap:'wrap',gap:8,justifyContent:'center',marginBottom:20,maxWidth:360}}>
-        {LIVROS.map(l=><button key={l} onClick={()=>setLivro(l)} style={{padding:'6px 14px',borderRadius:20,border:'none',background:livro===l?'linear-gradient(135deg,#f0c040,#e67e22)':'rgba(255,255,255,0.15)',color:livro===l?'#1a0a3e':'white',boxShadow:livro===l?'0 4px 15px rgba(240,192,64,0.4)':'none',fontWeight:700,cursor:'pointer',fontSize:13}}>{t('desafio.livros.'+l)||l}</button>)}
+        {LIVROS.map(l=><button key={l} onClick={()=>setLivro(l)} style={{padding:'6px 14px',borderRadius:20,border:'none',background:livro===l?'#f0c040':'rgba(255,255,255,0.15)',color:livro===l?'#1a0a3e':'white',fontWeight:700,cursor:'pointer',fontSize:13}}>{t('desafio.livros.'+l)||l}</button>)}
       </div>
-      {btn(criarSala,'linear-gradient(135deg,#f0c040,#e67e22)',t('desafio.createsala'))}
+      {btn(criarSala,'linear-gradient(135deg,#6c47d4,#4A2270)',t('desafio.createsala'))}
       <div style={{width:'100%',maxWidth:320,display:'flex',gap:10,marginBottom:10}}>
         <input value={cInput} onChange={e=>setCInput(e.target.value.toUpperCase())} placeholder='Codigo da sala...' style={{flex:1,padding:12,borderRadius:12,border:'none',background:'rgba(255,255,255,0.15)',color:'white',fontSize:15,outline:'none'}} />
         <button onClick={entrarSala} style={{padding:'12px 18px',borderRadius:12,border:'none',background:'#27ae60',color:'white',fontWeight:700,cursor:'pointer',fontSize:15}}>Entrar</button>
       </div>
       {esperando ? <div style={{textAlign:'center',marginBottom:10}}><p style={{opacity:0.8,marginBottom:8}}>A aguardar um adversario...</p><button onClick={cancelarFila} style={{padding:'8px 20px',borderRadius:20,border:'1px solid rgba(255,255,255,0.4)',background:'transparent',color:'white',cursor:'pointer'}}>Cancelar</button></div> : btn(jogarAleatorio,'#e74c3c',t('desafio.playalone'))}
       {btn(desafiar,'#25D366',t('desafio.challenge'))}
-      <button onClick={()=>setShowManual(true)} style={{background:'none',border:'1px solid rgba(255,255,255,0.3)',color:'rgba(255,255,255,0.8)',cursor:'pointer',fontSize:13,borderRadius:20,padding:'6px 16px',marginBottom:8}}>❓ {t('desafio.howtoplay','Como Jogar?')}</button>
       <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
-      {showManual && (
-        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center',padding:16,overflowY:'auto'}} onClick={()=>setShowManual(false)}>
-          <div style={{background:'linear-gradient(135deg,#1a0a3e,#2d1054)',borderRadius:20,padding:28,maxWidth:480,width:'100%',color:'white',border:'1px solid rgba(240,192,64,0.3)'}} onClick={e=>e.stopPropagation()}>
-            <div style={{textAlign:'center',marginBottom:16}}>
-              <div style={{fontSize:40}}>📖</div>
-              <h2 style={{color:'#f0c040',fontWeight:900,fontSize:20,margin:'8px 0'}}>{t('desafio.manualTitle','Manual do Jogo')}</h2>
-            </div>
-            <div style={{display:'flex',flexDirection:'column',gap:12}}>
-              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
-                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>🎮 {t('desafio.m1title','Como Jogar')}</p>
-                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m1desc','Responde a 5 perguntas bíblicas. Tens 15 segundos por pergunta. Quanto mais rápido responderes, mais pontos ganhas!')}</p>
-              </div>
-              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
-                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>⭐ {t('desafio.m2title','Pontuação')}</p>
-                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m2desc','Resposta certa rápida = 10 pts. Resposta certa lenta = 5 pts. Resposta errada = 0 pts. Máximo 50 pts por jogo!')}</p>
-              </div>
-              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
-                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>👥 {t('desafio.m3title','Modos de Jogo')}</p>
-                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m3desc','Criar Sala: crias uma sala e partilhas o código com um amigo. Entrar: inseris o código de uma sala. Jogar com alguém: encontra um adversário aleatório!')}</p>
-              </div>
-              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
-                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>🏆 {t('desafio.m4title','Ranking')}</p>
-                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m4desc','Os teus pontos acumulam a cada partida. Joga mais para subir no ranking e tornar-te o Mestre Bíblico!')}</p>
-              </div>
-              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
-                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>🏅 {t('desafio.m5title','Conquistas')}</p>
-                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m5desc','Desbloqueia conquistas especiais jogando! Faz streak de respostas certas, joga partidas perfeitas e muito mais!')}</p>
-              </div>
-              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:'12px 16px'}}>
-                <p style={{color:'#f0c040',fontWeight:800,fontSize:14,marginBottom:4}}>📖 {t('desafio.m6title','Livros da Bíblia')}</p>
-                <p style={{fontSize:13,opacity:0.9,lineHeight:1.5}}>{t('desafio.m6desc','Escolhe um livro específico para treinar (Génesis, Êxodo, Salmos...) ou joga com Todos os livros!')}</p>
-              </div>
-            </div>
-            <button onClick={()=>setShowManual(false)} style={{width:'100%',marginTop:16,padding:'12px',borderRadius:12,border:'none',background:'linear-gradient(135deg,#f0c040,#e67e22)',color:'#1a0a3e',fontWeight:900,cursor:'pointer',fontSize:15}}>
-              ✅ {t('desafio.gotit','Entendido!')}
-            </button>
-          </div>
-        </div>
-      )}
       </div>
     </div>
   );
@@ -591,15 +420,7 @@ export default function DesafioBiblico() {
           }
         </div>
       </div>
-      {btn(()=>{
-        if (wsRef.current && wsRef.current.readyState === 1) {
-          wsRef.current.send(JSON.stringify({ type: 'game_start', roomId: codigo }));
-        } else {
-          iniciar();
-        }
-      },'linear-gradient(135deg,#e74c3c,#c0392b)',t('desafio.start'))}
-      {btn(iniciar,'rgba(255,255,255,0.15)','🎮 Jogar Sozinho')}
-      {btn(iniciar,'rgba(255,255,255,0.15)','🎮 Jogar Sozinho')}
+      {btn(iniciar,'linear-gradient(135deg,#e74c3c,#c0392b)',t('desafio.start'))}
       <button onClick={()=>setTela('lobby')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
   );
@@ -670,24 +491,14 @@ export default function DesafioBiblico() {
 
   if(tela==='resultado') return (
     <div style={bg}>
-      <div style={{fontSize:60,marginBottom:8}}>🏆</div>
-      <h2 style={{fontSize:26,fontWeight:900,marginBottom:8,color:'#f0c040',textShadow:'0 2px 10px rgba(240,192,64,0.5)'}}>{t('desafio.result')}</h2>
-      {adversario&&<div style={{background:'rgba(255,255,255,0.1)',borderRadius:16,padding:'12px 24px',marginBottom:12,textAlign:'center',width:'100%',maxWidth:320}}>
-        <p style={{fontSize:13,opacity:0.7,marginBottom:8}}>Resultado Final</p>
-        <div style={{display:'flex',justifyContent:'space-around',alignItems:'center'}}>
-          <div style={{textAlign:'center'}}><p style={{fontWeight:800,fontSize:15}}>{user?.full_name?.split(' ')[0]||'Tu'}</p><p style={{fontSize:32,fontWeight:900,color:'#f0c040'}}>{pontos}</p><p style={{fontSize:11,opacity:0.7}}>pts</p></div>
-          <div style={{fontSize:24}}>⚔️</div>
-          <div style={{textAlign:'center'}}><p style={{fontWeight:800,fontSize:15}}>{adversario?.nome?.split(' ')[0]||'Adversario'}</p><p style={{fontSize:32,fontWeight:900,color:'#e74c3c'}}>{adversario?.pontos||0}</p><p style={{fontSize:11,opacity:0.7}}>pts</p></div>
-        </div>
-        <p style={{marginTop:8,fontWeight:800,fontSize:16,color:pontos>(adversario?.pontos||0)?'#27ae60':'#e74c3c'}}>{pontos>(adversario?.pontos||0)?'🎉 Ganhaste!':pontos===(adversario?.pontos||0)?'🤝 Empate!':'😔 Perdeste!'}</p>
-      </div>}
-      <div style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:4}}>{pontos} pts</div>
-      <p style={{opacity:0.7,marginBottom:16}}>{pontos>=40?'🏆 Mestre Biblico!':pontos>=25?'⭐ Muito bem!':'📖 Continue estudando!'}</p>
+      <div style={{fontSize:60,marginBottom:12}}>🏆</div>
+      <h2 style={{fontSize:26,fontWeight:900,marginBottom:8}}>{t('desafio.result')}</h2>
+      <div style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:8}}>{pontos} pts</div>
+      <p style={{opacity:0.7,marginBottom:28}}>{pontos>=40?'Mestre Biblico!':pontos>=25?'Muito bem!':'Continue estudando!'}</p>
       {maxStreak>=3&&<div style={{background:'rgba(240,192,64,0.15)',border:'1px solid #f0c040',borderRadius:12,padding:'10px 20px',marginBottom:12,textAlign:'center'}}><span style={{fontSize:20}}>🔥</span><span style={{color:'#f0c040',fontWeight:700,fontSize:15}}> Melhor streak: {maxStreak} seguidas!</span></div>}
       {btn(()=>share(pontos),'#25D366',t('desafio.shareresult'))}
       {btn(desafiar,'#6c47d4',t('desafio.challenge'))}
       {btn(()=>{setIdx(0);setPontos(0);setTela('lobby');},'rgba(255,255,255,0.2)',t('desafio.playagain'))}
-      {btn(()=>navigate('/pedidos-ajuda'),'#27ae60','🙏 '+t('desafio.prayAbout','Ora sobre isto'))}
       <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
   );
