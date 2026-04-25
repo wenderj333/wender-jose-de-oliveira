@@ -254,7 +254,7 @@ export default function DesafioBiblico() {
       if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
       setEsperando(false);
       iniciar();
-    }, 20000);
+    }, 10000);
     ws.onopen = () => {
       ws.send(JSON.stringify({ type: 'game_queue', userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
     };
