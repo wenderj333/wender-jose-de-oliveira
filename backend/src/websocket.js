@@ -476,6 +476,7 @@ function handleGame(ws, msg) {
     if (j) { j.pontos += msg.pontos || 0; j.respondeu = true; }
     const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos }));
     room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_score', jogadores: jogadoresPublico })); });
+    console.log('jogadores:', room.jogadores.length, 'responderam:', room.jogadores.filter(j=>j.respondeu).length);
     const todosResponderem = room.jogadores.every(j => j.respondeu) || room.jogadores.length === 1;
     if (todosResponderem) {
       room.jogadores.forEach(j => j.respondeu = false);
