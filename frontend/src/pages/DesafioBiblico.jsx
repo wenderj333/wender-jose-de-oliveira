@@ -258,7 +258,7 @@ export default function DesafioBiblico() {
     ws.onopen = () => {
       ws.send(JSON.stringify({ type: 'game_queue', userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
     };
-    ws.addEventListener('message', () => clearTimeout(filaTimeout));
+    // Nao limpar timeout aqui - deixar correr
     ws.onmessage = (e) => {
       const msg = JSON.parse(e.data);
       if (msg.type === 'game_matched') {
