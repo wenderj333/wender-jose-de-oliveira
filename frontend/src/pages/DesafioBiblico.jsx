@@ -411,6 +411,8 @@ export default function DesafioBiblico() {
   }
   function avancar() {
     setFeedback(null); setResp(null);
+    // Se WebSocket activo, esperar servidor para avancar
+    if (wsRef.current && wsRef.current.readyState === 1 && adversario?.userId) return;
     if(idx+1>=perguntas.length) { guardarResultado(pontos, pontos > 0 ? Math.ceil(pontos/7.5) : 0, TEMPO - tRef.current); playSound('fim'); setTela('resultado'); }
     else setIdx(prev=>prev+1);
   }
