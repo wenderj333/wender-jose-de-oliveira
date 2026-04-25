@@ -295,6 +295,13 @@ export default function DesafioBiblico() {
         const adv = msg.jogadores?.find(j => j.userId !== user?.id);
         if (adv) setAdversario({nome: adv.userName, avatar: adv.avatar, userId: adv.userId, pontos: 0});
       }
+      if (msg.type === 'game_matched') {
+        if (msg.adversario) setAdversario({nome: msg.adversario.userName, avatar: msg.adversario.avatar, userId: msg.adversario.userId, pontos: 0});
+        if (msg.perguntas && msg.perguntas.length > 0) setPerguntas(msg.perguntas);
+        setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false);
+        setTela('vs');
+        setTimeout(()=>setTela('jogo'), 3000);
+      }
       if (msg.type === 'game_started') {
         if (msg.perguntas && msg.perguntas.length > 0) setPerguntas(msg.perguntas);
         setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
