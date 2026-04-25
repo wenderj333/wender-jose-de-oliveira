@@ -89,7 +89,7 @@ export default function Consecration() {
     backgroundImage: 'url(/fundo-consagracao.png)', backgroundSize:'cover', backgroundPosition:'center',
     background: isActive
       ? 'linear-gradient(180deg,rgba(0,10,20,0.5) 0%,rgba(0,14,30,0.5) 35%,rgba(0,20,40,0.5) 65%,rgba(0,14,30,0.5) 100%)'
-      : 'linear-gradient(180deg,rgba(1,10,24,0.5) 0%,rgba(2,20,40,0.5) 35%,#031e3e 65%,#042450 100%)',
+      : 'linear-gradient(180deg,rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.2) 35%,rgba(0,0,0,0.3) 65%,rgba(0,0,0,0.4) 100%)',
     transition:'background 1s ease',
   };
 
