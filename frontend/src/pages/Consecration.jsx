@@ -93,7 +93,7 @@ export default function Consecration() {
   };
 
   return (
-    <div style={{maxWidth:700,margin:'0 auto',padding:'0.5rem',position:'relative'}}>
+    <div style={{maxWidth:700,margin:'0 auto',padding:'0.5rem',position:'relative',backgroundImage:'url(/fundo-consagracao.png)',backgroundSize:'cover',backgroundPosition:'center',backgroundAttachment:'fixed',borderRadius:16}}>
 
       <style>{`
         @keyframes fadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
