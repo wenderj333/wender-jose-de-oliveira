@@ -43,15 +43,6 @@ function setupWebSocket(server) {
           case 'game_end':
             handleGame(ws, msg);
             break;
-          case 'game_create':
-          case 'game_join':
-          case 'game_ready':
-          case 'game_start':
-          case 'game_answer':
-          case 'game_chat':
-          case 'game_end':
-            handleGame(ws, msg);
-            break;
           case 'game_queue':
           case 'game_cancel_queue':
             handleGameQueue(ws, msg);
@@ -455,8 +446,12 @@ function handleGame(ws, msg) {
     if (!room) return;
     const j = room.jogadores.find(j => j.userId === userId);
     if (j) j.pronto = true;
+    const todosprontos = room.jogadores.every(j => j.pronto);
     const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
     room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_update', jogadores: jogadoresPublico })); });
+    if (todosprontos) {
+      room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_started', livro: room.livro, perguntas: room.perguntas })); });
+    }
   }
 
   else if (msg.type === 'game_start') {
