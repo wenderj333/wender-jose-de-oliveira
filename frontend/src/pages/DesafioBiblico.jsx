@@ -283,6 +283,18 @@ export default function DesafioBiblico() {
           setTimeout(iniciar, 3000);
         }
       }
+      if (msg.type === 'game_score') {
+        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
+        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
+      }
+      if (msg.type === 'game_next_question') {
+        setIdx(msg.idx); setResp(null); setFeedback(null);
+      }
+      if (msg.type === 'game_finished') {
+        const adv = msg.jogadores?.find(j => j.userId !== user?.id);
+        if (adv) setAdversario(prev => ({...prev, pontos: adv.pontos}));
+        setTela('resultado');
+      }
     };
     ws.onerror = () => { setEsperando(false); alert('Erro ao conectar. Tenta de novo!'); };
   }
