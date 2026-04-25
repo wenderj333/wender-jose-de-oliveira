@@ -1215,7 +1215,10 @@
     "touched": "Beruehrt!",
     "prayerClose": "Beende mit einem Gebet",
     "prayerBtn": "Mein Gebet sprechen",
-    "saveJournal": "Im Tagebuch speichern"
+    "saveJournal": "Im Tagebuch speichern",
+    "gameBtn": "🎮 Bibelspiel spielen",
+    "gameDesc": "Moechtest du tiefer in Gottes Wort eintauchen?",
+    "prayBtn": "Bete darueber 🙏"
   },
   "ajudaProximo": {
     "title": "Hilf deinem Nächsten",

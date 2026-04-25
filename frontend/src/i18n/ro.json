@@ -1215,7 +1215,10 @@
     "touched": "M-a atins!",
     "prayerClose": "Incheie cu o rugaciune",
     "prayerBtn": "Face rugaciunea mea",
-    "saveJournal": "Salveaza in jurnal"
+    "saveJournal": "Salveaza in jurnal",
+    "gameBtn": "🎮 Joaca Provocarea Biblica",
+    "gameDesc": "Vrei sa aprofundezi Cuvantul lui Dumnezeu?",
+    "prayBtn": "Roaga-te pentru asta 🙏"
   },
   "ajudaProximo": {
     "title": "Ajută Aproapele",

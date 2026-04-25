@@ -1214,7 +1214,10 @@
     "touched": "Touched me!",
     "prayerClose": "End with a prayer",
     "prayerBtn": "Make my prayer",
-    "saveJournal": "Save to diary"
+    "saveJournal": "Save to diary",
+    "gameBtn": "🎮 Play Bible Challenge",
+    "gameDesc": "Want to go deeper into the Word of God?",
+    "prayBtn": "Pray about this 🙏"
   },
   "ajudaProximo": {
     "title": "Help Your Neighbor",

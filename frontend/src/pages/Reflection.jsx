@@ -122,6 +122,12 @@ export default function Reflection() {
           <button onClick={()=>navigate('/pedidos-ajuda')} style={{padding:'14px 32px',borderRadius:14,border:'none',background:'linear-gradient(135deg,#f0c040,#e67e22)',color:'#1a0a3e',fontWeight:900,cursor:'pointer',fontSize:'1rem'}}>{t('reflection.prayerBtn','Fazer a minha oracao')} 🙏</button>
         </div>
       </div>
+      <div style={{padding:'0 16px',marginTop:20}}>
+        <div style={{background:'linear-gradient(135deg,#f8f0ff,#ede0ff)',borderRadius:20,padding:24,textAlign:'center',border:'2px solid #6C3FA0'}}>
+          <p style={{color:'#6C3FA0',fontWeight:700,fontSize:'1rem',marginBottom:8}}>📖 {t('reflection.gameDesc','Quer aprofundar mais na Palavra de Deus?')}</p>
+          <button onClick={()=>navigate('/desafio-biblico')} style={{padding:'14px 32px',borderRadius:14,border:'none',background:'linear-gradient(135deg,#6C3FA0,#4A2270)',color:'white',fontWeight:900,cursor:'pointer',fontSize:'1rem',boxShadow:'0 4px 15px rgba(108,63,160,0.4)'}}>{t('reflection.gameBtn','Jogar Desafio Biblico')} 🎮</button>
+        </div>
+      </div>
     </div>
   );
 }

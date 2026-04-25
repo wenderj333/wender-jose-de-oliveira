@@ -662,6 +662,7 @@ export default function DesafioBiblico() {
       {btn(()=>share(pontos),'#25D366',t('desafio.shareresult'))}
       {btn(desafiar,'#6c47d4',t('desafio.challenge'))}
       {btn(()=>{setIdx(0);setPontos(0);setTela('lobby');},'rgba(255,255,255,0.2)',t('desafio.playagain'))}
+      {btn(()=>navigate('/pedidos-ajuda'),'#27ae60','🙏 '+t('desafio.prayAbout','Ora sobre isto'))}
       <button onClick={()=>navigate(-1)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
   );

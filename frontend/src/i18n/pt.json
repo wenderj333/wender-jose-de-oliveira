@@ -1195,7 +1195,10 @@
     "touched": "Tocou-me!",
     "prayerClose": "Termine com uma oracao",
     "prayerBtn": "Fazer a minha oracao",
-    "saveJournal": "Guardar no diario"
+    "saveJournal": "Guardar no diario",
+    "gameBtn": "🎮 Jogar Desafio Biblico",
+    "gameDesc": "Quer aprofundar mais na Palavra de Deus?",
+    "prayBtn": "Ora sobre isto 🙏"
   },
   "ajudaProximo": {
     "title": "Ajude o Próximo",

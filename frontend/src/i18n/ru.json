@@ -748,7 +748,10 @@
     "touched": "Tronulo!",
     "prayerClose": "Zavershite razmyshlenie molitvoy",
     "prayerBtn": "Sdelat moyu molitvu",
-    "saveJournal": "Sokhranit v dnevnik"
+    "saveJournal": "Sokhranit v dnevnik",
+    "gameBtn": "🎮 Igrat Bibleyskiy Vyzov",
+    "gameDesc": "Khochesh glubzhe uznat Slovo Bozhye?",
+    "prayBtn": "Pomolis ob etom 🙏"
   },
   "ajudaProximo": {
     "title": "Помоги ближнему",

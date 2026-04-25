@@ -1214,7 +1214,10 @@
     "touched": "Touche!",
     "prayerClose": "Terminez par une priere",
     "prayerBtn": "Faire ma priere",
-    "saveJournal": "Enregistrer dans journal"
+    "saveJournal": "Enregistrer dans journal",
+    "gameBtn": "🎮 Jouer au Defi Biblique",
+    "gameDesc": "Voulez-vous approfondir la Parole de Dieu?",
+    "prayBtn": "Priez pour cela 🙏"
   },
   "ajudaProximo": {
     "title": "Aidez votre prochain",
