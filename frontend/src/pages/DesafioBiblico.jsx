@@ -221,6 +221,7 @@ export default function DesafioBiblico() {
   const [chat, setChat] = useState([]);
   const [chatMsg, setChatMsg] = useState('');
   const timerRef = useRef(null);
+  const filaTimeoutRef = useRef(null);
   const tRef = useRef(TEMPO);
   const chatEnd = useRef(null);
 
@@ -250,9 +251,11 @@ export default function DesafioBiblico() {
     wsRef.current = ws;
     setEsperando(true);
     // Timeout 20s - se nao encontrar adversario, joga sozinho
-    const filaTimeout = setTimeout(() => {
+    if (filaTimeoutRef.current) clearTimeout(filaTimeoutRef.current);
+    filaTimeoutRef.current = setTimeout(() => {
       if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
       setEsperando(false);
+      filaTimeoutRef.current = null;
       iniciar();
     }, 10000);
     ws.onopen = () => {
@@ -262,6 +265,7 @@ export default function DesafioBiblico() {
     ws.onmessage = (e) => {
       const msg = JSON.parse(e.data);
       if (msg.type === 'game_matched') {
+        if (filaTimeoutRef.current) { clearTimeout(filaTimeoutRef.current); filaTimeoutRef.current = null; }
         setEsperando(false);
         setCodigo(msg.roomId);
         if (msg.adversario) setAdversario(msg.adversario);
@@ -278,7 +282,7 @@ export default function DesafioBiblico() {
     };
     ws.onerror = () => { setEsperando(false); alert('Erro ao conectar. Tenta de novo!'); };
   }
-  function cancelarFila() { wsRef.current?.close(); setEsperando(false); }
+  function cancelarFila() { wsRef.current?.close(); setEsperando(false); if (filaTimeoutRef.current) { clearTimeout(filaTimeoutRef.current); filaTimeoutRef.current = null; } }
   function gerar() { return Math.random().toString(36).substring(2,8).toUpperCase(); }
   function criarSala() {
     const roomId = gerar();
