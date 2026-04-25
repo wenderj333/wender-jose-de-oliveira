@@ -238,8 +238,12 @@ export default function DesafioBiblico() {
           // Tempo esgotado - enviar resposta vazia ao servidor
           if (wsRef.current && wsRef.current.readyState === 1 && codigo) {
             wsRef.current.send(JSON.stringify({ type: 'game_answer', roomId: codigo, userId: user?.id, pontos: 0 }));
+            // Se nao ha adversario ativo, avancar sozinho
+            if (!adversario?.userId) setTimeout(avancar, 1500);
+          } else {
+            avancar();
           }
-          avancar(); return 0; }
+          return 0; }
         return prev-1;
       });
     }, 1000);
