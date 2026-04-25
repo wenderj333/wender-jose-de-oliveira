@@ -86,9 +86,10 @@ export default function Consecration() {
   const sceneStyle = {
     position:'relative', width:'100%', height:'85vh', minHeight:500, maxHeight:700,
     overflow:'hidden', borderRadius:16,
+    backgroundImage: 'url(/fundo-consagracao.png)', backgroundSize:'cover', backgroundPosition:'center',
     background: isActive
-      ? 'linear-gradient(180deg,#000a14 0%,#000e1e 35%,#001428 65%,#000e1e 100%)'
-      : 'linear-gradient(180deg,#010a18 0%,#021428 35%,#031e3e 65%,#042450 100%)',
+      ? 'linear-gradient(180deg,rgba(0,10,20,0.5) 0%,rgba(0,14,30,0.5) 35%,rgba(0,20,40,0.5) 65%,rgba(0,14,30,0.5) 100%)'
+      : 'linear-gradient(180deg,rgba(1,10,24,0.5) 0%,rgba(2,20,40,0.5) 35%,#031e3e 65%,#042450 100%)',
     transition:'background 1s ease',
   };
 
