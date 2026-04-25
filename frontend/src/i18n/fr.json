@@ -734,7 +734,22 @@
     "dayGuide_4": "Jeune un repas",
     "dayGuide_5": "Partage quelque chose de bien",
     "dayGuide_6": "Demande a Dieu une parole",
-    "dayGuide_7": "Remercie pour 3 choses"
+    "dayGuide_7": "Remercie pour 3 choses",
+    "notAlone": "Tu n est pas seul.",
+    "godHere": "Dieu est ici.",
+    "comeBack": "Reviens demain (Jour {{day}})",
+    "prayedToday": "Tu as prie {{count}} fois aujourd hui",
+    "consecDays": "Tu as maintenu {{days}} jours de consecration",
+    "timerTitle": "Temps de Priere",
+    "timerStart": "Demarrer",
+    "timerStop": "Arreter",
+    "flame1": "🕯️",
+    "flame2": "🔥",
+    "flame3": "🔥🔥",
+    "flame4": "🔥🔥🔥",
+    "justNow": "Maintenant",
+    "minutesAgo": "il y a {{min}} min",
+    "prayingCount": "{{count}} personnes prient pour ceci"
   },
   "notifications": {
     "title": "Notifications",

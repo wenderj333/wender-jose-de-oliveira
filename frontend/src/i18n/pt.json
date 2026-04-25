@@ -729,7 +729,22 @@
     "dayGuide_4": "Jejua uma refeicao",
     "dayGuide_5": "Partilha algo bom com alguem",
     "dayGuide_6": "Pede a Deus uma palavra",
-    "dayGuide_7": "Agradece por 3 coisas"
+    "dayGuide_7": "Agradece por 3 coisas",
+    "notAlone": "Tu nao estas sozinho.",
+    "godHere": "Deus esta aqui.",
+    "comeBack": "Volta amanha para continuar a tua consagracao (Dia {{day}})",
+    "prayedToday": "Oraste {{count}} vezes hoje",
+    "consecDays": "Mantiveste {{days}} dias de consagracao",
+    "timerTitle": "Tempo de Oracao",
+    "timerStart": "Iniciar temporizador",
+    "timerStop": "Parar",
+    "flame1": "🕯️",
+    "flame2": "🔥",
+    "flame3": "🔥🔥",
+    "flame4": "🔥🔥🔥",
+    "justNow": "Agora mesmo",
+    "minutesAgo": "ha {{min}} min",
+    "prayingCount": "{{count}} pessoas orando por este pedido"
   },
   "notifications": {
     "title": "Notificações",

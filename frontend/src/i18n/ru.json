@@ -391,7 +391,22 @@
     "dayGuide_4": "Postis ot odnog priyoma pishchi",
     "dayGuide_5": "Podelisya chem-to khoroshim",
     "dayGuide_6": "Poprosi Boga o slove",
-    "dayGuide_7": "Blagodarit za 3 veshchi"
+    "dayGuide_7": "Blagodarit za 3 veshchi",
+    "notAlone": "Ty ne odin.",
+    "godHere": "Bog zdes.",
+    "comeBack": "Vernis zavtra (Den {{day}})",
+    "prayedToday": "Ty pomolilsya {{count}} raz segodnya",
+    "consecDays": "Ty sohranyal {{days}} dney posvyashcheniya",
+    "timerTitle": "Vremya Molitvy",
+    "timerStart": "Zapustit taymer",
+    "timerStop": "Ostanovit",
+    "flame1": "🕯️",
+    "flame2": "🔥",
+    "flame3": "🔥🔥",
+    "flame4": "🔥🔥🔥",
+    "justNow": "Pryamo seychas",
+    "minutesAgo": "{{min}} min nazad",
+    "prayingCount": "{{count}} chelovek molyatsya ob etom"
   },
   "biblicalCourse": {
     "themes": [

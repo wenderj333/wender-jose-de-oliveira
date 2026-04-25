@@ -79,14 +79,17 @@ export default function Consecration() {
   const handleExit = async () => {
     setIsActive(false); setEntered(false);
     localStorage.setItem('consecration_active', 'false');
+    setTimeout(()=>alert(t('consecration.comeBack','Volta amanha Dia {{day}}').replace('{{day}}',dayCount+1)),500);
     try {
       await fetch(API+'/api/consecration/toggle', { method:'DELETE', headers:{'Authorization':'Bearer '+token} });
       fetch(API+'/api/consecration/stats').then(r=>r.json()).then(d=>setStats(d)).catch(()=>{});
     } catch(e){}
   };
 
+  const [prayCount, setPrayCount] = React.useState(()=>parseInt(localStorage.getItem('pray_today')||'0'));
   const handleAction = (key) => {
     setActionAnim(key);
+    const nc = prayCount+1; setPrayCount(nc); localStorage.setItem('pray_today',nc);
     setActionMsg(t('consecration.actionAdded','+1 alma orando contigo!'));
     if (navigator.vibrate) navigator.vibrate(50);
     setTimeout(() => { setActionMsg(''); setActionAnim(''); }, 3000);
@@ -133,7 +136,7 @@ export default function Consecration() {
       <div style={{position:'absolute',inset:0,background:'rgba(0,0,0,0.75)',transition:'opacity 1s'}}/>
       <div style={{position:'relative',zIndex:1}}>
         <div style={{fontSize:60,marginBottom:20,animation:'fadeIn 1s ease'}}>🔥</div>
-        <h2 style={{fontSize:22,fontWeight:900,marginBottom:12,animation:'fadeIn 1s ease 0.3s both'}}>{t('consecration.enterMsg','Estas a entrar num momento com Deus...')}</h2>
+        <h2 style={{fontSize:22,fontWeight:900,marginBottom:12,animation:'fadeIn 1s ease 0.3s both'}}>{t('consecration.enterMsg','Estas a entrar num momento com Deus...')}</h2><p style={{fontSize:20,fontWeight:700,color:'#f0c040',margin:'8px 0',animation:'fadeIn 1s ease 0.5s both'}}>{t('consecration.notAlone','Tu nao estas sozinho.')}</p><p style={{fontSize:18,fontWeight:700,color:'white',margin:'4px 0',animation:'fadeIn 1s ease 0.7s both'}}>{t('consecration.godHere','Deus esta aqui.')}</p>
         <p style={{opacity:0.7,fontSize:14,fontStyle:'italic',animation:'fadeIn 1s ease 0.6s both'}}>{t('consecration.bibleRef','Como Jesus se retirou ao Deserto da Judeia...')}</p>
       </div>
     </div>

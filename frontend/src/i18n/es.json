@@ -734,7 +734,22 @@
     "dayGuide_4": "Ayuna una comida",
     "dayGuide_5": "Comparte algo bueno con alguien",
     "dayGuide_6": "Pide a Dios una palabra",
-    "dayGuide_7": "Agradece por 3 cosas"
+    "dayGuide_7": "Agradece por 3 cosas",
+    "notAlone": "No estas solo.",
+    "godHere": "Dios esta aqui.",
+    "comeBack": "Vuelve manana para continuar tu consagracion (Dia {{day}})",
+    "prayedToday": "Oraste {{count}} veces hoy",
+    "consecDays": "Mantuviste {{days}} dias de consagracion",
+    "timerTitle": "Tiempo de Oracion",
+    "timerStart": "Iniciar temporizador",
+    "timerStop": "Detener",
+    "flame1": "🕯️",
+    "flame2": "🔥",
+    "flame3": "🔥🔥",
+    "flame4": "🔥🔥🔥",
+    "justNow": "Ahora mismo",
+    "minutesAgo": "hace {{min}} min",
+    "prayingCount": "{{count}} personas orando por esto"
   },
   "notifications": {
     "title": "Notificaciones",

@@ -735,7 +735,22 @@
     "dayGuide_4": "Posteste o masa",
     "dayGuide_5": "Impartaseste ceva bun cu cineva",
     "dayGuide_6": "Cere lui Dumnezeu un cuvant",
-    "dayGuide_7": "Multumeste pentru 3 lucruri"
+    "dayGuide_7": "Multumeste pentru 3 lucruri",
+    "notAlone": "Nu esti singur.",
+    "godHere": "Dumnezeu este aici.",
+    "comeBack": "Intoarce-te maine (Ziua {{day}})",
+    "prayedToday": "Te-ai rugat de {{count}} ori azi",
+    "consecDays": "Ai mentinut {{days}} zile de consacrare",
+    "timerTitle": "Timp de Rugaciune",
+    "timerStart": "Porneste cronometrul",
+    "timerStop": "Opreste",
+    "flame1": "🕯️",
+    "flame2": "🔥",
+    "flame3": "🔥🔥",
+    "flame4": "🔥🔥🔥",
+    "justNow": "Chiar acum",
+    "minutesAgo": "acum {{min}} min",
+    "prayingCount": "{{count}} persoane se roaga pentru asta"
   },
   "notifications": {
     "title": "Notificări",

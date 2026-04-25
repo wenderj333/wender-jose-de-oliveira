@@ -734,7 +734,22 @@
     "dayGuide_4": "Fast one meal",
     "dayGuide_5": "Share something good with someone",
     "dayGuide_6": "Ask God for a word",
-    "dayGuide_7": "Give thanks for 3 things"
+    "dayGuide_7": "Give thanks for 3 things",
+    "notAlone": "You are not alone.",
+    "godHere": "God is here.",
+    "comeBack": "Come back tomorrow to continue your consecration (Day {{day}})",
+    "prayedToday": "You prayed {{count}} times today",
+    "consecDays": "You maintained {{days}} days of consecration",
+    "timerTitle": "Prayer Time",
+    "timerStart": "Start timer",
+    "timerStop": "Stop",
+    "flame1": "🕯️",
+    "flame2": "🔥",
+    "flame3": "🔥🔥",
+    "flame4": "🔥🔥🔥",
+    "justNow": "Just now",
+    "minutesAgo": "{{min}} min ago",
+    "prayingCount": "{{count}} people praying for this"
   },
   "notifications": {
     "title": "Notifications",

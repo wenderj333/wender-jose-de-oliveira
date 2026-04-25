@@ -735,7 +735,22 @@
     "dayGuide_4": "Faste eine Mahlzeit",
     "dayGuide_5": "Teile etwas Gutes mit jemandem",
     "dayGuide_6": "Bitte Gott um ein Wort",
-    "dayGuide_7": "Danke fur 3 Dinge"
+    "dayGuide_7": "Danke fur 3 Dinge",
+    "notAlone": "Du bist nicht allein.",
+    "godHere": "Gott ist hier.",
+    "comeBack": "Komm morgen wieder (Tag {{day}})",
+    "prayedToday": "Du hast heute {{count}} mal gebetet",
+    "consecDays": "Du hast {{days}} Tage Weihe aufrechterhalten",
+    "timerTitle": "Gebetszeit",
+    "timerStart": "Timer starten",
+    "timerStop": "Stoppen",
+    "flame1": "🕯️",
+    "flame2": "🔥",
+    "flame3": "🔥🔥",
+    "flame4": "🔥🔥🔥",
+    "justNow": "Gerade jetzt",
+    "minutesAgo": "vor {{min}} Min",
+    "prayingCount": "{{count}} Personen beten dafur"
   },
   "notifications": {
     "title": "Notifications",
