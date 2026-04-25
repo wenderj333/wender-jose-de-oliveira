@@ -1131,7 +1131,7 @@
     "q3verse": "Yo soy la resurrección y la vida - Juan 11:25",
     "placeholder": "Escribe tu reflexión aquí...",
     "save": "Guardar Reflexión",
-    "saved": "¡Reflexión guardada!",
+    "saved": "Guardado!",
     "journal": "Tu Diario Espiritual (Opcional)",
     "saveBtn": "Compartir Reflexión",
     "loginRequired": "Inicia sesión para escribir y compartir tu reflexión.",
@@ -1195,7 +1195,26 @@
         "q3verse": "Bástate mi gracia, porque mi poder se perfecciona en la debilidad — 2 Corintios 12:9"
       }
     ],
-    "rotateNote": "Las preguntas cambian automáticamente cada día 🙏"
+    "rotateNote": "Las preguntas cambian automáticamente cada día 🙏",
+    "guidTitle1": "Busca a Dios",
+    "guidDesc1": "Reserva este momento para El",
+    "guidTitle2": "Se honesto",
+    "guidDesc2": "Dios conoce tu corazon",
+    "guidTitle3": "Crece en fe",
+    "guidDesc3": "Reflexiona profundamente",
+    "guidTitle4": "Ponlo en practica",
+    "guidDesc4": "Aplicalo en tu dia",
+    "tipLabel": "Consejo de reflexion",
+    "tip1": "Piensa en momentos donde Dios te hablo",
+    "tip2": "Recuerda situaciones de la semana",
+    "tip3": "Reflexiona sobre tus emociones",
+    "timerBtn": "Pausa de 2 minutos",
+    "timerRunning": "Reflexionando...",
+    "touchedBtn": "Esto me toco",
+    "touched": "Me toco!",
+    "prayerClose": "Termina con una oracion",
+    "prayerBtn": "Hacer mi oracion",
+    "saveJournal": "Guardar en diario"
   },
   "ajudaProximo": {
     "title": "Ayuda al Prójimo",

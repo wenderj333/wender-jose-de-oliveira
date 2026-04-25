@@ -1112,7 +1112,7 @@
     "q3verse": "Eu sou a ressurreição e a vida - João 11:25",
     "placeholder": "Escreve a tua reflexão aqui...",
     "save": "Guardar Reflexão",
-    "saved": "Reflexão guardada!",
+    "saved": "Guardado!",
     "journal": "Seu Diário Espiritual (Opcional)",
     "saveBtn": "Partilhar Reflexão",
     "loginRequired": "Faça login para escrever e compartilhar sua reflexão.",
@@ -1176,7 +1176,26 @@
         "q3verse": "Basta-te a minha graça, porque o meu poder se aperfeiçoa — 2 Coríntios 12:9"
       }
     ],
-    "rotateNote": "As perguntas mudam automaticamente a cada dia 🙏"
+    "rotateNote": "As perguntas mudam automaticamente a cada dia 🙏",
+    "guidTitle1": "Busque a Deus",
+    "guidDesc1": "Reserve este momento so para Ele",
+    "guidTitle2": "Seja honesto",
+    "guidDesc2": "Deus conhece o seu coracao",
+    "guidTitle3": "Cresca na fe",
+    "guidDesc3": "Reflita profundamente",
+    "guidTitle4": "Coloque em pratica",
+    "guidDesc4": "Aplique no seu dia",
+    "tipLabel": "Dica de reflexao",
+    "tip1": "Pense em momentos onde Deus falou contigo",
+    "tip2": "Recorda situacoes da ultima semana",
+    "tip3": "Reflite sobre as tuas emocoes",
+    "timerBtn": "Pausa de 2 minutos",
+    "timerRunning": "A reflectir...",
+    "touchedBtn": "Isto tocou-me",
+    "touched": "Tocou-me!",
+    "prayerClose": "Termine com uma oracao",
+    "prayerBtn": "Fazer a minha oracao",
+    "saveJournal": "Guardar no diario"
   },
   "ajudaProximo": {
     "title": "Ajude o Próximo",

@@ -665,7 +665,7 @@
     "q3verse": "Я есмь воскресение и жизнь - Иоанна 11:25",
     "placeholder": "Напишите здесь своё размышление...",
     "save": "Сохранить размышление",
-    "saved": "Размышление сохранено!",
+    "saved": "Sokhraneno!",
     "journal": "Ваш Духовный Дневник (По желанию)",
     "saveBtn": "Поделиться размышлением",
     "loginRequired": "Войдите, чтобы написать и поделиться своим размышлением.",
@@ -729,7 +729,26 @@
         "q3verse": "Довольно для тебя благодати Моей, ибо сила Моя совершается в немощи — 2 Коринфянам 12:9"
       }
     ],
-    "rotateNote": "Вопросы меняются автоматически каждый день 🙏"
+    "rotateNote": "Вопросы меняются автоматически каждый день 🙏",
+    "guidTitle1": "Ishi Boga",
+    "guidDesc1": "Posvyati etot moment Emu",
+    "guidTitle2": "Bud chestnym",
+    "guidDesc2": "Bog znaet tvoyo serdtse",
+    "guidTitle3": "Rasti v vere",
+    "guidDesc3": "Razmyshlyay gluboko",
+    "guidTitle4": "Primenyay na praktike",
+    "guidDesc4": "Primenyay eto v svoem dne",
+    "tipLabel": "Sovet dlya razmyshleniya",
+    "tip1": "Vspomni momenty gde Bog govoril s toboy",
+    "tip2": "Vspomni situatsii proshloynedeli",
+    "tip3": "Porazmysli nad svoimi chuvstvami",
+    "timerBtn": "Pauza 2 minuty",
+    "timerRunning": "Razmyshlyayu...",
+    "touchedBtn": "Eto tronulo menya",
+    "touched": "Tronulo!",
+    "prayerClose": "Zavershite razmyshlenie molitvoy",
+    "prayerBtn": "Sdelat moyu molitvu",
+    "saveJournal": "Sokhranit v dnevnik"
   },
   "ajudaProximo": {
     "title": "Помоги ближнему",

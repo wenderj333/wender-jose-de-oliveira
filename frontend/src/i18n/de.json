@@ -1132,7 +1132,7 @@
     "q3verse": "Ich bin die Auferstehung und das Leben - Johannes 11:25",
     "placeholder": "Schreibe deine Besinnung hier...",
     "save": "Besinnung speichern",
-    "saved": "Besinnung gespeichert!",
+    "saved": "Gespeichert!",
     "journal": "Dein spirituelles Tagebuch (Optional)",
     "saveBtn": "Reflexion teilen",
     "loginRequired": "Melde dich an, um deine Reflexion zu schreiben und zu teilen.",
@@ -1196,7 +1196,26 @@
         "q3verse": "Meine Gnade genügt dir, denn meine Kraft wird in Schwachheit vollkommen — 2. Korinther 12:9"
       }
     ],
-    "rotateNote": "Die Fragen ändern sich täglich automatisch 🙏"
+    "rotateNote": "Die Fragen ändern sich täglich automatisch 🙏",
+    "guidTitle1": "Suche Gott",
+    "guidDesc1": "Reserviere diesen Moment fuer Ihn",
+    "guidTitle2": "Sei ehrlich",
+    "guidDesc2": "Gott kennt dein Herz",
+    "guidTitle3": "Wachse im Glauben",
+    "guidDesc3": "Reflektiere tief",
+    "guidTitle4": "In die Tat umsetzen",
+    "guidDesc4": "Wende es auf deinen Tag an",
+    "tipLabel": "Reflexionstipp",
+    "tip1": "Denke an Momente wo Gott zu dir sprach",
+    "tip2": "Erinnere dich an letzte Woche",
+    "tip3": "Reflektiere ueber deine Gefuehle",
+    "timerBtn": "2-Minuten-Pause",
+    "timerRunning": "Reflektiere...",
+    "touchedBtn": "Das hat mich beruehrt",
+    "touched": "Beruehrt!",
+    "prayerClose": "Beende mit einem Gebet",
+    "prayerBtn": "Mein Gebet sprechen",
+    "saveJournal": "Im Tagebuch speichern"
   },
   "ajudaProximo": {
     "title": "Hilf deinem Nächsten",

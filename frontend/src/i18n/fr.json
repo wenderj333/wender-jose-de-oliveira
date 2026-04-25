@@ -1131,7 +1131,7 @@
     "q3verse": "Je suis la résurrection et la vie - Jean 11:25",
     "placeholder": "Écrivez votre réflexion ici...",
     "save": "Enregistrer la Réflexion",
-    "saved": "Réflexion enregistrée !",
+    "saved": "Enregistre!",
     "journal": "Votre Journal Spirituel (Optionnel)",
     "saveBtn": "Partager la Réflexion",
     "loginRequired": "Connectez-vous pour écrire et partager votre réflexion.",
@@ -1195,7 +1195,26 @@
         "q3verse": "Ma grâce te suffit, car ma puissance s'accomplit dans la faiblesse — 2 Corinthiens 12:9"
       }
     ],
-    "rotateNote": "Les questions changent automatiquement chaque jour 🙏"
+    "rotateNote": "Les questions changent automatiquement chaque jour 🙏",
+    "guidTitle1": "Cherchez Dieu",
+    "guidDesc1": "Reservez ce moment pour Lui",
+    "guidTitle2": "Soyez honnete",
+    "guidDesc2": "Dieu connait votre coeur",
+    "guidTitle3": "Grandissez dans la foi",
+    "guidDesc3": "Reflechissez profondement",
+    "guidTitle4": "Mettez en pratique",
+    "guidDesc4": "Appliquez a votre journee",
+    "tipLabel": "Conseil de reflexion",
+    "tip1": "Pensez aux moments ou Dieu vous a parle",
+    "tip2": "Rappelez-vous de la semaine",
+    "tip3": "Reflechissez a vos emotions",
+    "timerBtn": "Pause de 2 minutes",
+    "timerRunning": "En reflexion...",
+    "touchedBtn": "Cela m a touche",
+    "touched": "Touche!",
+    "prayerClose": "Terminez par une priere",
+    "prayerBtn": "Faire ma priere",
+    "saveJournal": "Enregistrer dans journal"
   },
   "ajudaProximo": {
     "title": "Aidez votre prochain",

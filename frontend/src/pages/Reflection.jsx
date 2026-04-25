@@ -1,250 +1,126 @@
-import React, { useState } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-
+import { useNavigate } from 'react-router-dom';
 const API = import.meta.env.VITE_API_URL || '';
-
 const DAY_NAMES = {
-  pt: ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'],
-  de: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
-  en: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-  es: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
-  fr: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-  ro: ['Duminică','Luni','Marți','Miercuri','Joi','Vineri','Sâmbătă'],
-  ru: ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'],
+  pt:['Domingo','Segunda','Terca','Quarta','Quinta','Sexta','Sabado'],
+  en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+  es:['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'],
+  de:['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+  fr:['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+  ro:['Duminica','Luni','Marti','Miercuri','Joi','Vineri','Sambata'],
+  ru:['Voskresenye','Ponedelnik','Vtornik','Sreda','Chetverg','Pyatnitsa','Subbota'],
 };
-
 export default function Reflection() {
   const { t, i18n } = useTranslation();
   const { user, token } = useAuth();
-  const [answers, setAnswers] = useState(['', '', '']);
+  const navigate = useNavigate();
+  const lang = i18n.language?.substring(0,2) || 'pt';
+  const today = new Date().getDay();
+  const [selDay, setSelDay] = useState(today);
+  const [answers, setAnswers] = useState(['','','']);
   const [saved, setSaved] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [isPublic, setIsPublic] = useState(false);
-  const [error, setError] = useState('');
-
-  const dayIndex = new Date().getDay();
-  const lang = i18n.language?.substring(0, 2) || 'pt';
-
-  const allDays = t('reflection.days', { returnObjects: true });
-  const today = Array.isArray(allDays) && allDays[dayIndex] ? allDays[dayIndex] : null;
-
-  const dayNames = DAY_NAMES[lang] || DAY_NAMES['en'];
-  const todayName = dayNames[dayIndex];
-
-  const questions = today
-    ? [
-        { q: today.q1, verse: today.q1verse },
-        { q: today.q2, verse: today.q2verse },
-        { q: today.q3, verse: today.q3verse },
-      ]
-    : [
-        { q: t('reflection.q1'), verse: t('reflection.q1verse') },
-        { q: t('reflection.q2'), verse: t('reflection.q2verse') },
-        { q: t('reflection.q3'), verse: t('reflection.q3verse') },
-      ];
-
-  const hasAnswers = answers.some(a => a.trim().length > 0);
-
-  const handleSave = async () => {
-    if (!hasAnswers) return;
-    if (!token) {
-      setError(t('reflection.loginRequired', 'Faça login para guardar a reflexão.'));
-      return;
-    }
-
-    setSaving(true);
-    setError('');
-
-    try {
-      // Montar conteúdo da reflexão
-      const lines = [`🕊️ ${t('reflection.title', 'Reflexão com Deus')} — ${todayName}\n`];
-      questions.forEach((item, idx) => {
-        if (answers[idx].trim()) {
-          lines.push(`❓ ${item.q}`);
-          if (item.verse) lines.push(`📖 ${item.verse}`);
-          lines.push(`✍️ ${answers[idx].trim()}`);
-          lines.push('');
-        }
-      });
-      const content = lines.join('\n');
-
-      if (isPublic) {
-        // Publicar no Mural (usar FormData para compatibilidade com multer)
-        const fd = new FormData();
-        fd.append('content', content);
-        fd.append('category', 'reflexao');
-        fd.append('visibility', 'public');
-        const res = await fetch(`${API}/api/feed`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${token}` },
-          body: fd,
-        });
-        if (!res.ok) throw new Error('Erro ao publicar no Mural');
-      } else {
-        // Guardar privado nas jornadas de fé
-        await fetch(`${API}/api/journeys`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            title: `${t('reflection.title', 'Reflexão')} — ${todayName}`,
-            content,
-            is_public: false,
-          }),
-        }).catch(() => {}); // falha silenciosa se endpoint não existir
-      }
-
-      setSaved(true);
-      setTimeout(() => setSaved(false), 4000);
-    } catch (e) {
-      setError(e.message || 'Erro ao guardar. Tente novamente.');
-    }
-
-    setSaving(false);
+  const [touched, setTouched] = useState([false,false,false]);
+  const [timer, setTimer] = useState(false);
+  const [timerSec, setTimerSec] = useState(120);
+  const [activeQ, setActiveQ] = useState(0);
+  const timerRef = useRef(null);
+  const days = t('reflection.days', { returnObjects: true }) || [];
+  const currentDay = Array.isArray(days) ? days[selDay] : {};
+  const questions = currentDay ? [
+    { q: currentDay.q1, verse: currentDay.q1verse, tip: t('reflection.tip1','Pense em momentos onde Deus falou contigo') },
+    { q: currentDay.q2, verse: currentDay.q2verse, tip: t('reflection.tip2','Recorda situacoes da ultima semana') },
+    { q: currentDay.q3, verse: currentDay.q3verse, tip: t('reflection.tip3','Reflite sobre as tuas emocoes') },
+  ] : [];
+  const guias = [
+    { icon:'🔍', title:t('reflection.guidTitle1','Busque a Deus'), desc:t('reflection.guidDesc1','Reserve este momento so para Ele'), color:'#6C3FA0' },
+    { icon:'💬', title:t('reflection.guidTitle2','Seja honesto'), desc:t('reflection.guidDesc2','Deus conhece o seu coracao'), color:'#e67e22' },
+    { icon:'🌱', title:t('reflection.guidTitle3','Cresca na fe'), desc:t('reflection.guidDesc3','Reflita profundamente'), color:'#27ae60' },
+    { icon:'✨', title:t('reflection.guidTitle4','Coloque em pratica'), desc:t('reflection.guidDesc4','Aplique no seu dia'), color:'#3498db' },
+  ];
+  const startTimer = () => {
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current=null; setTimer(false); setTimerSec(120); return; }
+    setTimerSec(120); setTimer(true);
+    timerRef.current = setInterval(() => {
+      setTimerSec(prev => { if(prev<=1){ clearInterval(timerRef.current); timerRef.current=null; setTimer(false); return 120; } return prev-1; });
+    }, 1000);
   };
+  const handleSave = async () => {
+    if(!user) return;
+    try { await fetch(API+'/api/reflection', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body:JSON.stringify({answers,day:selDay,lang}) }); } catch(e){}
+    setSaved(true); setTimeout(()=>setSaved(false), 3000);
+  };
+  const progress = answers.filter(a=>a.trim().length>0).length;
 
-  return (
-    <div style={{maxWidth:640,margin:'0 auto',padding:'20px 16px'}}>
-      {/* Header */}
-      <div style={{textAlign:'center',marginBottom:28}}>
-        <div style={{fontSize:'2.2rem',marginBottom:8}}>🕊️</div>
-        <h1 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.8rem',fontWeight:700,color:'var(--text)',marginBottom:6}}>
-          {t('reflection.title')}
-        </h1>
-        <p style={{color:'var(--muted)',fontSize:'0.95rem',marginBottom:8}}>
-          {t('reflection.subtitle')}
-        </p>
-        <div style={{display:'inline-flex',alignItems:'center',gap:8,background:'var(--fb,#4a80d4)',color:'white',borderRadius:20,padding:'5px 16px',fontSize:'0.78rem',fontWeight:600,letterSpacing:'0.04em'}}>
-          <span>📅</span>
-          <span>{todayName}</span>
-          <div style={{display:'flex',gap:3,marginLeft:4}}>
-            {Array.from({length:7}).map((_,i) => (
-              <div key={i} style={{width:6,height:6,borderRadius:'50%',background: i === dayIndex ? 'white' : 'rgba(255,255,255,0.3)'}}/>
+﻿  return (
+    <div style={{maxWidth:720,margin:'0 auto',padding:'0 0 80px',fontFamily:'Segoe UI,sans-serif'}}>
+      <style>{'.rtextarea{width:100%;border:2px solid #e8e0f5;border-radius:14px;padding:14px 16px;font-size:.95rem;resize:none;outline:none;transition:border 0.2s;box-sizing:border-box;background:#fdfaff;color:#1a0a3e}.rtextarea:focus{border-color:#6C3FA0;background:white}'}</style>
+      <div style={{background:'linear-gradient(135deg,#6C3FA0,#4A2270,#2d0a5e)',padding:'36px 24px 28px',borderRadius:'0 0 32px 32px',marginBottom:28,color:'white',position:'relative',overflow:'hidden'}}>
+        <div style={{position:'absolute',top:0,right:0,fontSize:120,opacity:0.07,lineHeight:1}}>🕊️</div>
+        <div style={{position:'relative',zIndex:1}}>
+          <p style={{margin:'0 0 6px',fontSize:'0.8rem',opacity:0.7,letterSpacing:2,textTransform:'uppercase'}}>✨ {t('reflection.subtitle','Alguns minutos com Deus')}</p>
+          <h1 style={{margin:'0 0 16px',fontSize:'clamp(1.4rem,4vw,2rem)',fontWeight:900}}>{t('reflection.title','Reflexao com Deus')}</h1>
+          <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:16}}>
+            {(DAY_NAMES[lang]||DAY_NAMES.pt).map((d,i)=>(
+              <button key={i} onClick={()=>{setSelDay(i);setAnswers(['','','']);}} style={{padding:'6px 12px',borderRadius:20,border:'none',background:selDay===i?'white':'rgba(255,255,255,0.15)',color:selDay===i?'#6C3FA0':'white',fontWeight:700,cursor:'pointer',fontSize:'0.75rem'}}>{d}</button>
             ))}
           </div>
+          <div style={{background:'rgba(255,255,255,0.2)',borderRadius:20,height:8,marginBottom:8}}>
+            <div style={{background:'#f0c040',borderRadius:20,height:8,width:+""+${(progress/3)*100}%+""+,transition:'width 0.5s'}}/>
+          </div>
+          <p style={{margin:0,fontSize:'0.8rem',opacity:0.8}}>{progress}/3 {t('reflection.rotateNote','perguntas respondidas')}</p>
+        </div>
+      </div>
+      <div style={{padding:'0 16px',marginBottom:28}}>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:12}}>
+          {guias.map((g,i)=>(
+            <div key={i} style={{background:'white',borderRadius:16,padding:16,boxShadow:'0 2px 12px rgba(108,63,160,0.08)',border:+""+2px solid 22+""+}}>
+              <div style={{fontSize:28,marginBottom:8}}>{g.icon}</div>
+              <p style={{color:g.color,fontWeight:800,margin:'0 0 4px',fontSize:'0.9rem'}}>{g.title}</p>
+              <p style={{color:'#888',fontSize:'0.78rem',margin:0}}>{g.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Questions */}
-      <div style={{display:'flex',flexDirection:'column',gap:16}}>
-        {questions.map((item, idx) => (
-          <div key={idx} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:14,padding:20,boxShadow:'0 2px 10px rgba(74,128,212,0.06)'}}>
-            <div style={{display:'flex',gap:10,marginBottom:10}}>
-              <div style={{width:26,height:26,borderRadius:'50%',background:'linear-gradient(135deg,var(--fb,#4a80d4),var(--fb2,#3568b8))',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontSize:'0.75rem',fontWeight:700,flexShrink:0}}>
-                {idx + 1}
+﻿      <div style={{padding:'0 16px',marginBottom:20}}>
+        <button onClick={startTimer} style={{display:'flex',alignItems:'center',gap:8,padding:'10px 20px',borderRadius:20,border:'2px solid #6C3FA0',background:timer?'#6C3FA0':'white',color:timer?'white':'#6C3FA0',cursor:'pointer',fontWeight:700,fontSize:'0.85rem'}}>
+          {timer?+""+${Math.floor(timerSec/60)}: - +""+:t('reflection.timerBtn','Pausa de 2 minutos')}
+        </button>
+      </div>
+      <div style={{padding:'0 16px'}}>
+        {questions.map((q,i)=>q.q&&(
+          <div key={i} style={{marginBottom:24}} onClick={()=>setActiveQ(i)}>
+            <div style={{background:'white',borderRadius:20,padding:24,boxShadow:'0 4px 20px rgba(108,63,160,0.08)',border:activeQ===i?'2px solid #6C3FA0':'2px solid #f0ebff'}}>
+              <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:16}}>
+                <div style={{width:36,height:36,borderRadius:'50%',background:'linear-gradient(135deg,#6C3FA0,#4A2270)',color:'white',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:900,fontSize:'1rem',flexShrink:0}}>{i+1}</div>
+                <div style={{flex:1,background:'#f0ebff',borderRadius:20,height:6}}>
+                  <div style={{background:'linear-gradient(135deg,#6C3FA0,#f0c040)',borderRadius:20,height:6,width:answers[i]?.trim()?'100%':'0%',transition:'width 0.5s'}}/>
+                </div>
               </div>
-              <div>
-                <p style={{fontWeight:600,color:'var(--text)',fontSize:'0.95rem',lineHeight:1.5,margin:0}}>
-                  {item.q}
-                </p>
-                <p style={{fontSize:'0.78rem',color:'var(--gold,#a07820)',fontStyle:'italic',marginTop:4}}>
-                  {item.verse}
-                </p>
+              <p style={{color:'#1a0a3e',fontWeight:700,fontSize:'1rem',lineHeight:1.6,margin:'0 0 12px'}}>{q.q}</p>
+              {q.verse&&<div style={{background:'linear-gradient(135deg,#f8f0ff,#ede0ff)',borderRadius:12,padding:'10px 14px',marginBottom:14,borderLeft:'3px solid #6C3FA0'}}><p style={{color:'#6C3FA0',fontSize:'0.82rem',fontStyle:'italic',margin:0}}>📖 {q.verse}</p></div>}
+              <div style={{background:'#fffbf0',borderRadius:12,padding:'10px 14px',marginBottom:14,border:'1px solid rgba(240,192,64,0.3)'}}>
+                <p style={{color:'#e67e22',fontSize:'0.78rem',fontWeight:700,margin:'0 0 2px'}}>💡 {t('reflection.tipLabel','Dica')}</p>
+                <p style={{color:'#888',fontSize:'0.78rem',margin:0}}>{q.tip}</p>
               </div>
+              <textarea className="rtextarea" rows={4} value={answers[i]} onChange={e=>{const a=[...answers];a[i]=e.target.value;setAnswers(a);}} placeholder={t('reflection.placeholder','Escreve a tua reflexao aqui...')}/>
+              <button onClick={e=>{e.stopPropagation();const t2=[...touched];t2[i]=!t2[i];setTouched(t2);}} style={{marginTop:10,padding:'6px 14px',borderRadius:20,border:'none',background:touched[i]?'#e74c3c':'#f8f9ff',color:touched[i]?'white':'#aaa',cursor:'pointer',fontWeight:700,fontSize:'0.78rem'}}>
+                {touched[i]?'❤️ '+t('reflection.touched','Tocou-me!'):t('reflection.touchedBtn','Isto tocou-me')}
+              </button>
             </div>
-            <textarea
-              value={answers[idx]}
-              onChange={e => {
-                const updated = [...answers];
-                updated[idx] = e.target.value;
-                setAnswers(updated);
-              }}
-              placeholder={t('reflection.placeholder')}
-              rows={3}
-              style={{
-                width:'100%',
-                background:'var(--input-bg,#f8faff)',
-                border:'1px solid var(--border)',
-                borderRadius:10,
-                padding:'10px 12px',
-                color:'var(--text)',
-                fontSize:'0.9rem',
-                resize:'vertical',
-                outline:'none',
-                boxSizing:'border-box',
-                fontFamily:'inherit',
-              }}
-            />
           </div>
         ))}
       </div>
-
-      {/* Visibility toggle */}
-      <div style={{marginTop:20,background:'var(--card)',border:'1px solid var(--border)',borderRadius:12,padding:'14px 18px'}}>
-        <p style={{fontWeight:600,fontSize:'0.85rem',color:'var(--text)',marginBottom:12}}>
-          {t('reflection.shareLabel', 'Onde guardar a reflexão?')}
-        </p>
-        <div style={{display:'flex',gap:10}}>
-          <button
-            onClick={() => setIsPublic(false)}
-            style={{
-              flex:1,padding:'10px 12px',borderRadius:10,cursor:'pointer',fontWeight:600,fontSize:'0.82rem',
-              background: !isPublic ? 'var(--fb-light,#edf2fc)' : 'transparent',
-              border: !isPublic ? '2px solid var(--fb,#4a80d4)' : '1px solid var(--border)',
-              color: !isPublic ? 'var(--fb,#4a80d4)' : 'var(--muted)',
-            }}
-          >
-            🔒 {t('reflection.privateOption', 'Privado')}
-            <div style={{fontSize:'0.72rem',fontWeight:400,marginTop:2,opacity:0.75}}>
-              {t('reflection.privateDesc', 'Só você vê')}
-            </div>
-          </button>
-          <button
-            onClick={() => setIsPublic(true)}
-            style={{
-              flex:1,padding:'10px 12px',borderRadius:10,cursor:'pointer',fontWeight:600,fontSize:'0.82rem',
-              background: isPublic ? 'var(--fb-light,#edf2fc)' : 'transparent',
-              border: isPublic ? '2px solid var(--fb,#4a80d4)' : '1px solid var(--border)',
-              color: isPublic ? 'var(--fb,#4a80d4)' : 'var(--muted)',
-            }}
-          >
-            🌍 {t('reflection.publicOption', 'Público')}
-            <div style={{fontSize:'0.72rem',fontWeight:400,marginTop:2,opacity:0.75}}>
-              {t('reflection.publicDesc', 'Aparece no Mural')}
-            </div>
-          </button>
+      {user&&(<div style={{padding:'0 16px',marginBottom:20}}><button onClick={handleSave} style={{width:'100%',padding:14,borderRadius:14,border:'none',background:saved?'#27ae60':'linear-gradient(135deg,#6C3FA0,#4A2270)',color:'white',fontWeight:900,cursor:'pointer',fontSize:'1rem'}}>{saved?t('reflection.saved','Guardado!'):t('reflection.saveJournal','Guardar no diario espiritual')}</button></div>)}
+      <div style={{padding:'0 16px'}}>
+        <div style={{background:'linear-gradient(135deg,#1a0a3e,#2d1054)',borderRadius:20,padding:28,textAlign:'center',color:'white'}}>
+          <div style={{fontSize:48,marginBottom:12}}>🙏</div>
+          <p style={{fontWeight:800,fontSize:'1.1rem',marginBottom:8}}>{t('reflection.prayerClose','Termine com uma oracao')}</p>
+          <p style={{opacity:0.7,fontSize:'0.85rem',marginBottom:20}}>"Buscai o Senhor enquanto pode ser achado" - Isaias 55:6</p>
+          <button onClick={()=>navigate('/pedidos-ajuda')} style={{padding:'14px 32px',borderRadius:14,border:'none',background:'linear-gradient(135deg,#f0c040,#e67e22)',color:'#1a0a3e',fontWeight:900,cursor:'pointer',fontSize:'1rem'}}>{t('reflection.prayerBtn','Fazer a minha oracao')} 🙏</button>
         </div>
-        {isPublic && (
-          <p style={{marginTop:8,fontSize:'0.75rem',color:'#6c47d4',fontStyle:'italic'}}>
-            ✨ {t('reflection.publicNote', 'A tua reflexão vai inspirar outros membros!')}
-          </p>
-        )}
-      </div>
-
-      {/* Error */}
-      {error && <p style={{color:'#dc2626',fontSize:'0.82rem',textAlign:'center',marginTop:10}}>{error}</p>}
-
-      {/* Save button */}
-      <div style={{textAlign:'center',marginTop:20}}>
-        <button
-          onClick={handleSave}
-          disabled={saving || !hasAnswers}
-          style={{
-            padding:'11px 40px',
-            borderRadius:12,
-            background: saved
-              ? 'linear-gradient(135deg,#22c55e,#16a34a)'
-              : 'linear-gradient(135deg,var(--fb,#4a80d4),var(--fb2,#3568b8))',
-            color:'white',
-            fontSize:'0.95rem',
-            fontWeight:700,
-            border:'none',
-            cursor: hasAnswers ? 'pointer' : 'not-allowed',
-            opacity: hasAnswers ? 1 : 0.6,
-            transition:'all 0.3s',
-            boxShadow:'0 4px 14px rgba(74,128,212,0.3)',
-          }}
-        >
-          {saving ? '⏳ ...' : saved
-            ? (isPublic ? `✓ ${t('reflection.sharedMural', 'Publicado no Mural!')}` : `✓ ${t('reflection.saved')}`)
-            : (isPublic ? `🌍 ${t('reflection.shareInMural', 'Publicar no Mural')}` : t('reflection.save'))}
-        </button>
-        <p style={{marginTop:10,fontSize:'0.75rem',color:'var(--muted)'}}>
-          🔄 {t('reflection.rotateNote') || 'As perguntas mudam automaticamente a cada dia'}
-        </p>
       </div>
     </div>
   );

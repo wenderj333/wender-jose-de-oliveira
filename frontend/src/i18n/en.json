@@ -1131,7 +1131,7 @@
     "q3verse": "I am the resurrection and the life - John 11:25",
     "placeholder": "Write your reflection here...",
     "save": "Save Reflection",
-    "saved": "Reflection saved!",
+    "saved": "Saved!",
     "journal": "Your Spiritual Journal (Optional)",
     "saveBtn": "Share Reflection",
     "loginRequired": "Log in to write and share your reflection.",
@@ -1195,7 +1195,26 @@
         "q3verse": "My grace is sufficient for you, for my power is made perfect in weakness — 2 Corinthians 12:9"
       }
     ],
-    "rotateNote": "Questions change automatically every day 🙏"
+    "rotateNote": "Questions change automatically every day 🙏",
+    "guidTitle1": "Seek God",
+    "guidDesc1": "Reserve this moment for Him",
+    "guidTitle2": "Be honest",
+    "guidDesc2": "God knows your heart",
+    "guidTitle3": "Grow in faith",
+    "guidDesc3": "Reflect deeply",
+    "guidTitle4": "Put into practice",
+    "guidDesc4": "Apply it to your day",
+    "tipLabel": "Reflection tip",
+    "tip1": "Think of moments God spoke to you",
+    "tip2": "Remember situations from last week",
+    "tip3": "Reflect on your emotions",
+    "timerBtn": "2-minute pause",
+    "timerRunning": "Reflecting...",
+    "touchedBtn": "This touched me",
+    "touched": "Touched me!",
+    "prayerClose": "End with a prayer",
+    "prayerBtn": "Make my prayer",
+    "saveJournal": "Save to diary"
   },
   "ajudaProximo": {
     "title": "Help Your Neighbor",

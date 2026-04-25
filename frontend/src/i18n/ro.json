@@ -1132,7 +1132,7 @@
     "q3verse": "Eu sunt învierea și viața - Ioan 11:25",
     "placeholder": "Scrie-ți reflecția aici...",
     "save": "Salvează Reflecția",
-    "saved": "Reflecție salvată!",
+    "saved": "Salvat!",
     "journal": "Jurnalul tău spiritual (Opțional)",
     "saveBtn": "Partajează Reflecția",
     "loginRequired": "Autentifică-te pentru a scrie și a-ți partaja reflecția.",
@@ -1196,7 +1196,26 @@
         "q3verse": "Harul Meu îți este de ajuns, pentru că puterea Mea se desăvârșește în slăbiciune — 2 Corinteni 12:9"
       }
     ],
-    "rotateNote": "Întrebările se schimbă automat în fiecare zi 🙏"
+    "rotateNote": "Întrebările se schimbă automat în fiecare zi 🙏",
+    "guidTitle1": "Cauta-L pe Dumnezeu",
+    "guidDesc1": "Rezerva acest moment pentru El",
+    "guidTitle2": "Fii sincer",
+    "guidDesc2": "Dumnezeu iti cunoaste inima",
+    "guidTitle3": "Creste in credinta",
+    "guidDesc3": "Reflecteaza profund",
+    "guidTitle4": "Pune in practica",
+    "guidDesc4": "Aplica-l in ziua ta",
+    "tipLabel": "Sfat de reflectie",
+    "tip1": "Gandeste-te la momentele cand Dumnezeu ti-a vorbit",
+    "tip2": "Aminteste-ti situatii din saptamana",
+    "tip3": "Reflecteaza asupra emotiilor",
+    "timerBtn": "Pauza de 2 minute",
+    "timerRunning": "Reflectand...",
+    "touchedBtn": "Asta m-a atins",
+    "touched": "M-a atins!",
+    "prayerClose": "Incheie cu o rugaciune",
+    "prayerBtn": "Face rugaciunea mea",
+    "saveJournal": "Salveaza in jurnal"
   },
   "ajudaProximo": {
     "title": "Ajută Aproapele",
