@@ -355,7 +355,27 @@
     "disciplineFaith": "Физическая дисциплина с вечной целью",
     "breakFasting": "ПРЕРЫВАНИЕ ПОСТА",
     "breakSimplicity": "С простотой и благодарностью",
-    "breakGlory": "Всё для славы Бога"
+    "breakGlory": "Всё для славы Бога",
+    "prayBtn": "🙏 Molitsya",
+    "consecBtn": "🔥 Posvyatit",
+    "faithBtn": "✝ Ukrepit veru",
+    "liberBtn": "🛡 Prosit osvobozhdeniya",
+    "familyBtn": "❤ Molitsya za semyu",
+    "muralTitle": "🕊 Dukhovnaya stena",
+    "prayingFor": "Molyus",
+    "strengthFor": "🔥 Sila",
+    "amenFor": "✝ Amin",
+    "peaceFor": "🕊 Mir",
+    "postPlaceholder": "Podelisya tem chto Bog delaet v tebe...",
+    "postBtn": "Opublikovat",
+    "enterDesert": "🏔 Voyti v Posvyashchenie",
+    "prayingNow": "chelovek molyatsya seychas",
+    "fastingNow": "chelovek postyatsya seychas",
+    "actionAdded": "+1 dusha molitsya s toboy!",
+    "muralEmpty": "Bud pervym kto podelitsya!",
+    "type_prayer": "Molitvennaya prosba",
+    "type_testimony": "Svidetelstvo",
+    "type_reflection": "Razmyshlenie"
   },
   "biblicalCourse": {
     "themes": [
