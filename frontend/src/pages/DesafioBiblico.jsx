@@ -249,9 +249,16 @@ export default function DesafioBiblico() {
     const ws = new WebSocket((window.location.protocol === 'https:' ? 'wss' : 'ws') + '://sigo-com-fe-api.onrender.com/ws');
     wsRef.current = ws;
     setEsperando(true);
+    // Timeout 20s - se nao encontrar adversario, joga sozinho
+    const filaTimeout = setTimeout(() => {
+      if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
+      setEsperando(false);
+      iniciar();
+    }, 20000);
     ws.onopen = () => {
       ws.send(JSON.stringify({ type: 'game_queue', userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
     };
+    ws.addEventListener('message', () => clearTimeout(filaTimeout));
     ws.onmessage = (e) => {
       const msg = JSON.parse(e.data);
       if (msg.type === 'game_matched') {
