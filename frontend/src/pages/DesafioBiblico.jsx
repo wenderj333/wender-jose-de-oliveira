@@ -584,6 +584,7 @@ export default function DesafioBiblico() {
         }
       },'linear-gradient(135deg,#e74c3c,#c0392b)',t('desafio.start'))}
       {btn(iniciar,'rgba(255,255,255,0.15)','🎮 Jogar Sozinho')}
+      {btn(iniciar,'rgba(255,255,255,0.15)','🎮 Jogar Sozinho')}
       <button onClick={()=>setTela('lobby')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>{t('desafio.back')}</button>
     </div>
   );
