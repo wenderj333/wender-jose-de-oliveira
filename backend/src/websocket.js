@@ -19,6 +19,12 @@ const liveStreams = new Map(); // streamId -> { id, broadcasterId, broadcasterNa
 
 function setupWebSocket(server) {
   const wss = new WebSocketServer({ server, path: '/ws' });
+  // Ping para manter conexoes activas
+  setInterval(() => {
+    wss.clients.forEach(ws => {
+      if (ws.readyState === 1) ws.ping();
+    });
+  }, 25000);
 
   wss.on('connection', (ws) => {
     console.log('🔌 Nova conexão WebSocket');
