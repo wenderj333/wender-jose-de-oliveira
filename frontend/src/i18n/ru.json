@@ -375,7 +375,23 @@
     "muralEmpty": "Bud pervym kto podelitsya!",
     "type_prayer": "Molitvennaya prosba",
     "type_testimony": "Svidetelstvo",
-    "type_reflection": "Razmyshlenie"
+    "type_reflection": "Razmyshlenie",
+    "enterMsg": "Ty vkhodish v moment s Bogom...",
+    "flameMsg": "Tvoy ogon zazhzhyon 🔥",
+    "silentMode": "🌙 Molit sya v Tishine",
+    "silentBack": "Nazad",
+    "soulsNow": "dush ishchut Boga seychas",
+    "fastingLabel": "dush postyatsya seychas",
+    "dailyTitle": "Ezhednevnoye Rukovodstvo",
+    "dailyAction": "Deystviye segodnya",
+    "bibleRef": "Kak Iisus udalilsya v Iudeyskoyu Pustynyu...",
+    "dayGuide_1": "Prostit kogo-to segodnya",
+    "dayGuide_2": "Pomolis za svoyu semyu",
+    "dayGuide_3": "Prochti psalom vslukh",
+    "dayGuide_4": "Postis ot odnog priyoma pishchi",
+    "dayGuide_5": "Podelisya chem-to khoroshim",
+    "dayGuide_6": "Poprosi Boga o slove",
+    "dayGuide_7": "Blagodarit za 3 veshchi"
   },
   "biblicalCourse": {
     "themes": [
