@@ -160,7 +160,7 @@ export default function Consecration() {
         
         {/* CHAMAS */}
         {flames.map(f => (
-          <div key={f.id} style={{position:'absolute',bottom:80,left:${f.x}%,textAlign:'center',animation:'flameRise 3s ease-out forwards',zIndex:3}}>
+          <div key={f.id} style={{position:'absolute',bottom:80,left:`${f.x}%`,textAlign:'center',animation:'flameRise 3s ease-out forwards',zIndex:3}}>
             <div style={{fontSize:32}}>🔥</div>
             <div style={{fontSize:10,color:'#f0c040',fontWeight:700,whiteSpace:'nowrap'}}>{f.name}</div>
           </div>
