@@ -1680,5 +1680,29 @@
     "m6title": "Cartile Bibliei",
     "m6desc": "Alege o carte specifica pentru antrenament sau joaca cu Toate cartile!",
     "gotit": "Inteles!"
+  },
+  "ajuda": {
+    "title": "🕊 Ajuta o Viata",
+    "subtitle": "Fii raspuns la rugaciune",
+    "helpingNow": "persoane care ajuta acum",
+    "activeRequests": "cereri active",
+    "prayingFor": "persoane care se roaga",
+    "prayNow": "🙏 Roaga-te acum",
+    "thankyou": "Multumesc. Aceasta persoana nu este singura.",
+    "askHelp": "Cere ajutor acum",
+    "offerHelp": "Ofera ajutor",
+    "shareTestimony": "Impartaseste marturie",
+    "prayForSomeone": "Roaga-te pentru cineva",
+    "urgent": "Urgent",
+    "recent": "Recent",
+    "all": "Toti",
+    "requests": "Cereri",
+    "testimonies": "Marturii",
+    "gratitude": "Recunostinta",
+    "notAlone": "Nu esti singur",
+    "godWorks": "Dumnezeu lucreaza prin oameni",
+    "submitBtn": "Publica",
+    "anonBtn": "Anonim",
+    "placeholder": "Impartaseste cererea sau marturie..."
   }
 }

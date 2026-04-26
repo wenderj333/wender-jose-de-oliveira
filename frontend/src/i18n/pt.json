@@ -1646,5 +1646,29 @@
     "m6title": "Livros da Biblia",
     "m6desc": "Escolhe um livro especifico para treinar ou joga com Todos os livros!",
     "gotit": "Entendido!"
+  },
+  "ajuda": {
+    "title": "🕊 Ajuda uma Vida",
+    "subtitle": "Seja resposta de oracao na vida de alguem",
+    "helpingNow": "pessoas ajudando agora",
+    "activeRequests": "pedidos ativos",
+    "prayingFor": "pessoas orando",
+    "prayNow": "🙏 Orar agora",
+    "thankyou": "Obrigado. Esta pessoa nao esta sozinha.",
+    "askHelp": "Pedir ajuda agora",
+    "offerHelp": "Oferecer ajuda",
+    "shareTestimony": "Partilhar testemunho",
+    "prayForSomeone": "Orar por alguem",
+    "urgent": "Urgente",
+    "recent": "Recente",
+    "all": "Todos",
+    "requests": "Peticoes",
+    "testimonies": "Testemunhos",
+    "gratitude": "Gratidao",
+    "notAlone": "Tu nao estas sozinho",
+    "godWorks": "Deus age atraves de pessoas",
+    "submitBtn": "Publicar",
+    "anonBtn": "Anonimo",
+    "placeholder": "Partilha o teu pedido ou testemunho..."
   }
 }

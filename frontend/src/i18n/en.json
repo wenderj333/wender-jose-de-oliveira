@@ -1679,5 +1679,29 @@
     "m6title": "Bible Books",
     "m6desc": "Choose a specific book to practice or play with All books!",
     "gotit": "Got it!"
+  },
+  "ajuda": {
+    "title": "🕊 Help a Life",
+    "subtitle": "Be an answer to prayer in someones life",
+    "helpingNow": "people helping now",
+    "activeRequests": "active requests",
+    "prayingFor": "people praying",
+    "prayNow": "🙏 Pray now",
+    "thankyou": "Thank you. This person is not alone.",
+    "askHelp": "Ask for help now",
+    "offerHelp": "Offer help",
+    "shareTestimony": "Share testimony",
+    "prayForSomeone": "Pray for someone",
+    "urgent": "Urgent",
+    "recent": "Recent",
+    "all": "All",
+    "requests": "Requests",
+    "testimonies": "Testimonies",
+    "gratitude": "Gratitude",
+    "notAlone": "You are not alone",
+    "godWorks": "God works through people",
+    "submitBtn": "Publish",
+    "anonBtn": "Anonymous",
+    "placeholder": "Share your request or testimony..."
   }
 }

@@ -1679,5 +1679,29 @@
     "m6title": "Книги Библии",
     "m6desc": "Выберите конкретную книгу для тренировки или играйте со Всеми книгами!",
     "gotit": "Понятно!"
+  },
+  "ajuda": {
+    "title": "🕊 Pomogi Zhizni",
+    "subtitle": "Bud otvetom na molitvu",
+    "helpingNow": "lyudey pomogayut seychas",
+    "activeRequests": "aktivnykh prosb",
+    "prayingFor": "lyudey molyatsya",
+    "prayNow": "🙏 Pomolis seychas",
+    "thankyou": "Spasibo. Etot chelovek ne odin.",
+    "askHelp": "Poprosit pomoshchi",
+    "offerHelp": "Predlozhit pomoshch",
+    "shareTestimony": "Podelitsya svidetelstvom",
+    "prayForSomeone": "Pomolitsya za kogo-to",
+    "urgent": "Srochno",
+    "recent": "Nedavnie",
+    "all": "Vse",
+    "requests": "Prosyby",
+    "testimonies": "Svidetelstva",
+    "gratitude": "Blagodarnost",
+    "notAlone": "Ty ne odin",
+    "godWorks": "Bog deystvuet cherez lyudey",
+    "submitBtn": "Opublikovat",
+    "anonBtn": "Anonimno",
+    "placeholder": "Podelisya prosboy ili svidetelstvom..."
   }
 }

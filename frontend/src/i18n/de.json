@@ -1681,5 +1681,29 @@
     "m6title": "Bucher der Bibel",
     "m6desc": "Wahle ein bestimmtes Buch zum Uben oder spiele mit Allen Buchern!",
     "gotit": "Verstanden!"
+  },
+  "ajuda": {
+    "title": "🕊 Hilf einem Leben",
+    "subtitle": "Sei eine Antwort auf Gebet",
+    "helpingNow": "Personen helfen jetzt",
+    "activeRequests": "aktive Gebetsanliegen",
+    "prayingFor": "Personen beten",
+    "prayNow": "🙏 Jetzt beten",
+    "thankyou": "Danke. Diese Person ist nicht allein.",
+    "askHelp": "Jetzt um Hilfe bitten",
+    "offerHelp": "Hilfe anbieten",
+    "shareTestimony": "Zeugnis teilen",
+    "prayForSomeone": "Fur jemanden beten",
+    "urgent": "Dringend",
+    "recent": "Aktuell",
+    "all": "Alle",
+    "requests": "Anliegen",
+    "testimonies": "Zeugnisse",
+    "gratitude": "Dankbarkeit",
+    "notAlone": "Du bist nicht allein",
+    "godWorks": "Gott wirkt durch Menschen",
+    "submitBtn": "Veroffentlichen",
+    "anonBtn": "Anonym",
+    "placeholder": "Teile dein Anliegen oder Zeugnis..."
   }
 }

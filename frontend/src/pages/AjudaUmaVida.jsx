@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 
@@ -8,41 +8,23 @@ function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
   if (mins < 1) return "agora";
-  if (mins < 60) return `${mins} min`;
+  if (mins < 60) return mins + " min";
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h`;
-  return `${Math.floor(hours / 24)}d`;
+  if (hours < 24) return hours + "h";
+  return Math.floor(hours / 24) + "d";
 }
 
-const TABS = [
-  { key: "all",       label: "🕊️ Todos" },
-  { key: "request",   label: "🙏 Petições" },
-  { key: "testimony", label: "💛 Testemunhos" },
-  { key: "offer",     label: "❤️ Ajuda" },
-  { key: "gratitude", label: "✨ Gratidão" },
-];
-
 const TYPE_CONFIG = {
-  request:   { label: "🙏 Petição",     color: "#6c47d4", bg: "#f3eeff" },
-  testimony: { label: "💛 Testemunho",  color: "#c9a84c", bg: "#fffbec" },
-  gratitude: { label: "✨ Gratidão",    color: "#1e8a5a", bg: "#edfff5" },
-  offer:     { label: "❤️ Ajuda",       color: "#d44747", bg: "#fff0f0" },
+  request:   { label: "🙏 Peticao",    color: "#6c47d4", bg: "#f3eeff" },
+  testimony: { label: "💛 Testemunho", color: "#c9a84c", bg: "#fffbec" },
+  gratitude: { label: "✨ Gratidao",   color: "#1e8a5a", bg: "#edfff5" },
+  offer:     { label: "❤️ Ajuda",      color: "#d44747", bg: "#fff0f0" },
 };
-
-const QUICK_ACTIONS = [
-  { icon: "🙏", image: "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=400&q=80", label: "Pedir oração",    desc: "Alguém vai orar por ti",        type: "request"   },
-  { icon: "🕊️", image: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=400&q=80", label: "Orar por alguém", desc: "Responde com oração",           type: null, scroll: true },
-  { icon: "🤝", image: "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&q=80", label: "Oferecer ajuda",  desc: "Apoia alguém da comunidade",    type: "offer"     },
-  { icon: "💛", image: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&q=80", label: "Testemunho",      desc: "Partilha o que Deus fez",        type: "testimony" },
-];
-
-const EMOJIS = ["🙏","❤️","✝️","😢","😊","🔥","✨","🕊️","💛","🫂","🙌","💪","😭","🤲","👐"];
 
 export default function AjudaUmaVida() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
   const feedRef = useRef(null);
-  const fileRef = useRef(null);
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -51,186 +33,191 @@ export default function AjudaUmaVida() {
   const [postType, setPostType] = useState("request");
   const [isAnon, setIsAnon] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [mediaPreview, setMediaPreview] = useState(null);
-  const [showEmojis, setShowEmojis] = useState(false);
   const [prayedIds, setPrayedIds] = useState(new Set());
-  const [charCount, setCharCount] = useState(0);
   const [successMsg, setSuccessMsg] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [stats, setStats] = useState({ total: 0, prayers: 0, helping: 0 });
 
-  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+  const authHeaders = token ? { Authorization: "Bearer " + token } : {};
 
-  async function loadPosts() {
+  useEffect(() => { loadPosts(); }, [activeTab]);
+
+  const loadPosts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/help-posts`, { headers: authHeaders });
+      const url = activeTab === "all" ? API+"/help-posts" : API+"/help-posts?type="+activeTab;
+      const res = await fetch(url, { headers: authHeaders });
       const data = await res.json();
-      setPosts(data.posts || []);
-    } catch (e) {}
-    finally { setLoading(false); }
-  }
+      setPosts(Array.isArray(data) ? data : []);
+      setStats({ total: data.length||0, prayers: data.reduce((a,p)=>a+(p.prayer_count||0),0), helping: 0 });
+    } catch(e) { setPosts([]); }
+    setLoading(false);
+  };
 
-  useEffect(() => { loadPosts(); }, []);
+  const handlePray = async (postId) => {
+    if (!user) return alert("Faz login para orar!");
+    try {
+      await fetch(API+"/help-posts/"+postId+"/pray", { method:"POST", headers:authHeaders });
+      setPrayedIds(prev => new Set([...prev, postId]));
+      setPosts(prev => prev.map(p => p.id===postId ? {...p, prayer_count:(p.prayer_count||0)+1} : p));
+      setSuccessMsg("Obrigado. Esta pessoa nao esta sozinha.");
+      setTimeout(() => setSuccessMsg(""), 4000);
+      if (navigator.vibrate) navigator.vibrate(50);
+    } catch(e) {}
+  };
 
-  const filteredPosts = activeTab === "all" ? posts : posts.filter(p => p.post_type === activeTab);
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (!user) { alert("Faz login para publicar"); return; }
-    if (!content.trim()) { alert("Escreve algo antes de publicar"); return; }
+  const handleSubmit = async () => {
+    if (!content.trim()) return;
+    if (!user) return alert("Faz login para publicar!");
     setSubmitting(true);
     try {
-      const res = await fetch(`${API}/help-posts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...authHeaders },
-        body: JSON.stringify({ content, post_type: postType, is_anonymous: isAnon, media_url: mediaPreview || null }),
-      });
-      if (res.ok) {
-        setContent(""); setCharCount(0); setMediaPreview(null); setIsAnon(false); setShowEmojis(false);
-        setSuccessMsg("Publicado! A comunidade vai orar por ti 🙏");
-        setTimeout(() => setSuccessMsg(""), 4000);
-        await loadPosts();
-        feedRef.current?.scrollIntoView({ behavior: "smooth" });
-      }
-    } catch(e) { alert("Erro de rede"); }
-    finally { setSubmitting(false); }
-  }
-
-  async function handlePray(postId) {
-    if (!user) { alert("Faz login para orar"); return; }
-    if (prayedIds.has(postId)) return;
-    setPrayedIds(prev => new Set([...prev, postId]));
-    try {
-      await fetch(`${API}/help-posts/${postId}/pray`, { method: "POST", headers: authHeaders });
-      setPosts(prev => prev.map(p => p.id === postId ? { ...p, prayer_count: (p.prayer_count || 0) + 1 } : p));
+      const res = await fetch(API+"/help-posts", { method:"POST", headers:{...authHeaders,"Content-Type":"application/json"}, body:JSON.stringify({content, type:postType, is_anonymous:isAnon}) });
+      setContent(""); setShowForm(false);
+      await loadPosts();
     } catch(e) {}
-  }
+    setSubmitting(false);
+  };
+
+  const TABS = [
+    { key:"all", label:"Todos" },
+    { key:"request", label:"Peticoes" },
+    { key:"testimony", label:"Testemunhos" },
+    { key:"gratitude", label:"Gratidao" },
+  ];
+
+  const QUICK = [
+    { icon:"🙏", label:"Pedir ajuda agora", color:"#6c47d4", action:()=>{setPostType("request");setShowForm(true);} },
+    { icon:"🤲", label:"Orar por alguem", color:"#e67e22", action:()=>setActiveTab("request") },
+    { icon:"🤝", label:"Oferecer ajuda", color:"#27ae60", action:()=>{setPostType("offer");setShowForm(true);} },
+    { icon:"💛", label:"Partilhar testemunho", color:"#c9a84c", action:()=>{setPostType("testimony");setShowForm(true);} },
+  ];
 
   return (
-    <div style={{ maxWidth: 680, margin: "0 auto", padding: "0 16px 40px" }}>
+    <div style={{maxWidth:680,margin:"0 auto",padding:"0 0 40px",fontFamily:"Segoe UI,sans-serif"}}>
 
-      {/* HEADER */}
-      <div style={{ backgroundImage: "url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800)", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "0 0 24px 24px", padding: "32px 24px", textAlign: "center", marginBottom: 24, color: "white" }}>
-        <h1 style={{ fontSize: 28, fontWeight: 900, margin: "0 0 8px" }}>🕊️ Ajuda uma Vida</h1>
-        <p style={{ fontSize: 14, opacity: 0.85, margin: "0 0 4px" }}>Um lugar onde ninguém ora sozinho</p>
-        <p style={{ fontSize: 12, opacity: 0.6, fontStyle: "italic" }}>"Carregai os fardos uns dos outros" — Gál 6:2</p>
+      {/* HERO */}
+      <div style={{background:"linear-gradient(135deg,#1a0a3e,#4A2270,#6c47d4)",borderRadius:"0 0 28px 28px",padding:"32px 24px 28px",textAlign:"center",color:"white",marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,right:0,fontSize:120,opacity:0.06,lineHeight:1}}>🕊️</div>
+        <div style={{position:"relative",zIndex:1}}>
+          <p style={{margin:"0 0 6px",fontSize:"0.75rem",opacity:0.7,letterSpacing:2,textTransform:"uppercase"}}>✨ Sigo com Fe</p>
+          <h1 style={{margin:"0 0 8px",fontSize:"clamp(1.4rem,4vw,2rem)",fontWeight:900}}>🕊️ Ajuda uma Vida</h1>
+          <p style={{opacity:0.85,fontSize:14,margin:"0 0 16px"}}>Seja resposta de oracao na vida de alguem</p>
+          <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
+            <div style={{background:"rgba(255,255,255,0.15)",borderRadius:20,padding:"6px 16px",fontSize:13,fontWeight:700}}>
+              🔥 {stats.helping} pessoas ajudando agora
+            </div>
+            <div style={{background:"rgba(255,255,255,0.15)",borderRadius:20,padding:"6px 16px",fontSize:13,fontWeight:700}}>
+              🙏 {stats.prayers} oracoes hoje
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* ACOES RAPIDAS */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
-        {QUICK_ACTIONS.map((a) => (
-          <div key={a.label} onClick={() => { if (a.scroll) { feedRef.current?.scrollIntoView({ behavior: "smooth" }); } else { setPostType(a.type); document.getElementById("ajuda-form")?.scrollIntoView({ behavior: "smooth" }); } }}
-            style={{ background: "white", borderRadius: 16, padding: 16, cursor: "pointer", border: "2px solid #f0eaff", textAlign: "center", transition: "all 0.2s", boxShadow: "0 2px 8px rgba(108,71,212,0.08)" }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = "#6c47d4"}
-            onMouseLeave={e => e.currentTarget.style.borderColor = "#f0eaff"}>
-            {a.image ? <img src={a.image} alt={a.label} style={{ width:'100%', height:90, objectFit:'cover', borderRadius:10, marginBottom:8 }} onError={e => e.target.style.display='none'} /> : <div style={{ fontSize:32, marginBottom:8 }}>{a.icon}</div>}
-            <p style={{ fontSize: 14, fontWeight: 700, color: "#1a0a3e", margin: "0 0 4px" }}>{a.label}</p>
-            <p style={{ fontSize: 12, color: "#888", margin: 0 }}>{a.desc}</p>
-          </div>
+      {/* MENSAGEM SUCESSO */}
+      {successMsg && (
+        <div style={{background:"linear-gradient(135deg,#27ae60,#1e8a5a)",borderRadius:14,padding:"14px 20px",marginBottom:16,color:"white",fontWeight:700,textAlign:"center",fontSize:15}}>
+          {successMsg}
+        </div>
+      )}
+
+      {/* 4 ACOES RAPIDAS */}
+      <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:12,padding:"0 16px",marginBottom:20}}>
+        {QUICK.map((q,i) => (
+          <button key={i} onClick={q.action} style={{background:"white",borderRadius:16,padding:16,border:"2px solid "+q.color+"33",cursor:"pointer",textAlign:"left",boxShadow:"0 2px 12px rgba(0,0,0,0.06)",transition:"all 0.2s"}}
+            onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"}
+            onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
+            <div style={{fontSize:28,marginBottom:6}}>{q.icon}</div>
+            <p style={{color:q.color,fontWeight:800,margin:0,fontSize:13}}>{q.label}</p>
+          </button>
         ))}
       </div>
 
       {/* FORMULARIO */}
-      <div id="ajuda-form" style={{ background: "white", borderRadius: 20, padding: 20, marginBottom: 24, boxShadow: "0 4px 20px rgba(108,71,212,0.1)", border: "1px solid #f0eaff" }}>
-        <h2 style={{ fontSize: 16, fontWeight: 700, color: "#1a0a3e", margin: "0 0 14px", display: "flex", alignItems: "center", gap: 8 }}>✍️ Compartilhar</h2>
-        <textarea
-          value={content}
-          onChange={e => { setContent(e.target.value); setCharCount(e.target.value.length); }}
-          placeholder="Escreve o teu pedido, testemunho ou mensagem..."
-          style={{ width: "100%", minHeight: 100, border: "1.5px solid #e0d0ff", borderRadius: 12, padding: 14, fontSize: 14, resize: "vertical", outline: "none", fontFamily: "inherit", boxSizing: "border-box", lineHeight: 1.5 }}
-        />
-        <div style={{ display: "flex", justifyContent: "flex-end", fontSize: 11, color: charCount > 400 ? "#e74c3c" : "#aaa", marginBottom: 10 }}>{charCount}/500</div>
-
-        {showEmojis && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, padding: "8px 0 12px" }}>
-            {EMOJIS.map(e => (
-              <button key={e} type="button" onClick={() => { setContent(prev => prev + e); setShowEmojis(false); }} style={{ fontSize: 22, background: "none", border: "none", cursor: "pointer", padding: 2 }}>{e}</button>
+      {showForm && (
+        <div style={{background:"linear-gradient(135deg,#1a0a3e,#2d1054)",borderRadius:16,padding:20,margin:"0 16px 20px",color:"white"}}>
+          <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
+            {["request","testimony","gratitude","offer"].map(type => (
+              <button key={type} onClick={()=>setPostType(type)} style={{padding:"6px 14px",borderRadius:20,border:"none",background:postType===type?"#f0c040":"rgba(255,255,255,0.15)",color:postType===type?"#1a0a3e":"white",fontWeight:700,cursor:"pointer",fontSize:12}}>
+                {TYPE_CONFIG[type]?.label || type}
+              </button>
             ))}
           </div>
-        )}
-
-        {mediaPreview && (
-          <div style={{ position: "relative", marginBottom: 12 }}>
-            <img src={mediaPreview} alt="preview" style={{ width: "100%", maxHeight: 180, objectFit: "cover", borderRadius: 10 }} />
-            <button type="button" onClick={() => setMediaPreview(null)} style={{ position: "absolute", top: 6, right: 6, background: "rgba(0,0,0,0.6)", border: "none", borderRadius: "50%", width: 28, height: 28, color: "white", cursor: "pointer", fontSize: 16 }}>✕</button>
+          <textarea value={content} onChange={e=>setContent(e.target.value)} placeholder="Partilha o teu pedido ou testemunho..." style={{width:"100%",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:12,color:"white",fontSize:14,resize:"none",outline:"none",boxSizing:"border-box"}} rows={4}/>
+          <div style={{display:"flex",gap:10,marginTop:10,alignItems:"center"}}>
+            <label style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer",fontSize:13,color:"rgba(255,255,255,0.8)"}}>
+              <input type="checkbox" checked={isAnon} onChange={e=>setIsAnon(e.target.checked)}/> Anonimo
+            </label>
+            <button onClick={handleSubmit} disabled={submitting} style={{flex:1,padding:"10px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#f0c040,#e67e22)",color:"#1a0a3e",fontWeight:900,cursor:"pointer",fontSize:14}}>
+              {submitting ? "..." : "Publicar 🙏"}
+            </button>
+            <button onClick={()=>setShowForm(false)} style={{padding:"10px 16px",borderRadius:12,border:"1px solid rgba(255,255,255,0.3)",background:"transparent",color:"white",cursor:"pointer",fontSize:13}}>✕</button>
           </div>
-        )}
-
-        <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
-          <button type="button" onClick={() => fileRef.current?.click()} style={{ padding: "6px 12px", borderRadius: 20, border: "1.5px solid #6c47d4", background: "white", color: "#6c47d4", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>📷 Foto</button>
-          <button type="button" onClick={() => setShowEmojis(v => !v)} style={{ padding: "6px 12px", borderRadius: 20, border: "1.5px solid #6c47d4", background: "white", color: "#6c47d4", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>😊 Emoji</button>
-          <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = ev => setMediaPreview(ev.target.result); r.readAsDataURL(f); }} />
         </div>
+      )}
 
-        <p style={{ fontSize: 12, color: "#888", marginBottom: 8 }}>Tipo:</p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 14 }}>
-          {Object.entries(TYPE_CONFIG).map(([key, cfg]) => (
-            <button key={key} type="button" onClick={() => setPostType(key)} style={{ padding: "8px 12px", borderRadius: 10, border: `2px solid ${postType === key ? cfg.color : "#eee"}`, background: postType === key ? cfg.bg : "white", color: cfg.color, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>{cfg.label}</button>
-          ))}
+      {/* BOTAO PUBLICAR */}
+      {!showForm && (
+        <div style={{padding:"0 16px",marginBottom:16,textAlign:"center"}}>
+          <button onClick={()=>setShowForm(true)} style={{padding:"12px 32px",borderRadius:14,border:"none",background:"linear-gradient(135deg,#6c47d4,#4A2270)",color:"white",fontWeight:900,cursor:"pointer",fontSize:15,boxShadow:"0 4px 15px rgba(108,71,212,0.4)"}}>
+            ✍️ Partilhar pedido ou testemunho
+          </button>
         </div>
+      )}
 
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-          <div onClick={() => setIsAnon(v => !v)} style={{ width: 40, height: 22, borderRadius: 11, background: isAnon ? "#6c47d4" : "#ddd", cursor: "pointer", position: "relative", transition: "background 0.2s" }}>
-            <div style={{ width: 18, height: 18, borderRadius: "50%", background: "white", position: "absolute", top: 2, left: isAnon ? 20 : 2, transition: "left 0.2s" }} />
-          </div>
-          <span style={{ fontSize: 13, color: "#555" }}>🔒 Publicar anonimamente</span>
-        </div>
-
-        {successMsg && <div style={{ background: "#edfff5", color: "#1e8a5a", borderRadius: 10, padding: "10px 14px", marginBottom: 12, fontSize: 13, fontWeight: 600 }}>{successMsg}</div>}
-
-        <button onClick={handleSubmit} disabled={submitting || !content.trim()} style={{ width: "100%", padding: 14, borderRadius: 12, border: "none", background: submitting ? "#aaa" : "linear-gradient(135deg,#6c47d4,#4A2270)", color: "white", fontSize: 15, fontWeight: 700, cursor: submitting ? "not-allowed" : "pointer" }}>
-          {submitting ? "A publicar..." : "✍️ Publicar"}
-        </button>
+      {/* FILTROS */}
+      <div style={{display:"flex",gap:8,padding:"0 16px",marginBottom:16,overflowX:"auto"}}>
+        {TABS.map(tab => (
+          <button key={tab.key} onClick={()=>setActiveTab(tab.key)} style={{padding:"8px 16px",borderRadius:20,border:"none",background:activeTab===tab.key?"linear-gradient(135deg,#6c47d4,#4A2270)":"rgba(108,71,212,0.1)",color:activeTab===tab.key?"white":"#6c47d4",fontWeight:700,cursor:"pointer",fontSize:13,whiteSpace:"nowrap"}}>
+            {tab.label}
+          </button>
+        ))}
       </div>
 
-      {/* FEED */}
-      <div ref={feedRef}>
-        <h2 style={{ fontSize: 18, fontWeight: 800, color: "#1a0a3e", marginBottom: 16 }}>🕊️ Comunidade</h2>
-
-        {/* ABAS */}
-        <div style={{ display: "flex", gap: 8, overflowX: "auto", marginBottom: 20, paddingBottom: 4 }}>
-          {TABS.map(tab => (
-            <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{ padding: "6px 14px", borderRadius: 20, border: "none", background: activeTab === tab.key ? "#6c47d4" : "#f0eaff", color: activeTab === tab.key ? "white" : "#6c47d4", fontSize: 13, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 }}>{tab.label}</button>
-          ))}
-        </div>
-
+      {/* LISTA DE POSTS */}
+      <div ref={feedRef} style={{padding:"0 16px"}}>
         {loading ? (
-          <div style={{ textAlign: "center", padding: 40, color: "#888" }}>A carregar... 🙏</div>
-        ) : filteredPosts.length === 0 ? (
-          <div style={{ textAlign: "center", padding: 40, color: "#888" }}>
-            <p style={{ fontSize: 32 }}>🕊️</p>
-            <p>Nenhuma publicação ainda. Sê o primeiro!</p>
+          <div style={{textAlign:"center",padding:40,color:"#6c47d4"}}>🙏 A carregar...</div>
+        ) : posts.length === 0 ? (
+          <div style={{textAlign:"center",padding:40,color:"#aaa",background:"white",borderRadius:16}}>
+            <div style={{fontSize:40,marginBottom:12}}>🕊️</div>
+            <p>Nenhum pedido ainda. Sê o primeiro!</p>
           </div>
-        ) : filteredPosts.map(post => {
-          const cfg = TYPE_CONFIG[post.post_type] || TYPE_CONFIG.request;
+        ) : posts.map(post => {
+          const cfg = TYPE_CONFIG[post.type] || TYPE_CONFIG.request;
           const prayed = prayedIds.has(post.id);
           return (
-            <div key={post.id} style={{ background: "white", borderRadius: 16, padding: 16, marginBottom: 14, boxShadow: "0 2px 12px rgba(0,0,0,0.06)", border: "1px solid #f0eaff" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                <div style={{ width: 38, height: 38, borderRadius: "50%", background: "linear-gradient(135deg,#6c47d4,#4A2270)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 700, fontSize: 14, flexShrink: 0 }}>
-                  {post.is_anonymous ? "?" : (post.author_name || "?").charAt(0).toUpperCase()}
+            <div key={post.id} style={{background:"white",borderRadius:16,padding:16,marginBottom:14,boxShadow:"0 2px 12px rgba(0,0,0,0.06)",border:"1px solid #f0eaff"}}>
+              <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+                {post.avatar_url ? (
+                  <img src={post.avatar_url} style={{width:38,height:38,borderRadius:"50%",objectFit:"cover"}}/>
+                ) : (
+                  <div style={{width:38,height:38,borderRadius:"50%",background:"linear-gradient(135deg,#6c47d4,#4A2270)",display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontWeight:700,fontSize:16,flexShrink:0}}>
+                    {post.is_anonymous ? "?" : (post.full_name||"?").charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <div style={{flex:1}}>
+                  <p style={{fontWeight:700,margin:0,fontSize:14,color:"#1a0a3e"}}>{post.is_anonymous ? "Anonimo" : (post.full_name||"Anonimo")}</p>
+                  <p style={{color:"#aaa",margin:0,fontSize:11}}>{timeAgo(post.created_at)}</p>
                 </div>
-                <div style={{ flex: 1 }}>
-                  <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#1a0a3e" }}>{post.is_anonymous ? "Anónimo" : (post.author_name || "Utilizador")}</p>
-                  <p style={{ margin: 0, fontSize: 11, color: "#aaa" }}>{timeAgo(post.created_at)}</p>
-                </div>
-                <span style={{ padding: "3px 10px", borderRadius: 20, background: cfg.bg, color: cfg.color, fontSize: 11, fontWeight: 700 }}>{cfg.label}</span>
+                <span style={{background:cfg.bg,color:cfg.color,fontSize:11,fontWeight:700,padding:"3px 10px",borderRadius:20}}>{cfg.label}</span>
               </div>
-
-              {post.media_url && <img src={post.media_url} alt="" style={{ width: "100%", maxHeight: 200, objectFit: "cover", borderRadius: 10, marginBottom: 10 }} />}
-
-              <p style={{ fontSize: 14, color: "#333", lineHeight: 1.6, margin: "0 0 12px" }}>{post.content}</p>
-
-              <div style={{ display: "flex", gap: 8 }}>
-                <button onClick={() => handlePray(post.id)} style={{ padding: "7px 16px", borderRadius: 20, border: `1.5px solid ${prayed ? "#6c47d4" : "#ddd"}`, background: prayed ? "#f3eeff" : "white", color: prayed ? "#6c47d4" : "#555", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
-                  🙏 {prayed ? "Orado" : "Orar"} {post.prayer_count > 0 && `(${post.prayer_count})`}
-                </button>
-                <button onClick={() => { setContent("@" + (post.author_name || "alguem") + " "); document.getElementById("ajuda-form")?.scrollIntoView({ behavior: "smooth" }); }} style={{ padding: "7px 16px", borderRadius: 20, border: "1.5px solid #ddd", background: "white", color: "#555", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
-                  💬 Responder
+              <p style={{color:"#333",fontSize:14,lineHeight:1.6,margin:"0 0 12px"}}>{post.content}</p>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                <span style={{color:"#aaa",fontSize:12}}>🙏 {post.prayer_count||0} pessoas orando</span>
+                <button onClick={()=>handlePray(post.id)} disabled={prayed} style={{padding:"8px 18px",borderRadius:20,border:"none",background:prayed?"#eee":"linear-gradient(135deg,#6c47d4,#4A2270)",color:prayed?"#aaa":"white",fontWeight:700,cursor:prayed?"default":"pointer",fontSize:13,transition:"all 0.2s"}}>
+                  {prayed ? "✓ Orei" : "🙏 Orar agora"}
                 </button>
               </div>
             </div>
           );
         })}
+      </div>
+
+      {/* RODAPE ESPIRITUAL */}
+      <div style={{margin:"24px 16px 0",background:"linear-gradient(135deg,#1a0a3e,#2d1054)",borderRadius:20,padding:24,textAlign:"center",color:"white"}}>
+        <div style={{fontSize:36,marginBottom:8}}>🕊️</div>
+        <p style={{fontWeight:800,fontSize:16,margin:"0 0 6px"}}>Tu nao estas sozinho</p>
+        <p style={{opacity:0.7,fontSize:13,margin:0}}>Deus age atraves de pessoas</p>
       </div>
     </div>
   );

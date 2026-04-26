@@ -1679,5 +1679,29 @@
     "m6title": "Livres de la Bible",
     "m6desc": "Choisissez un livre specifique pour vous entrainer ou jouez avec Tous les livres!",
     "gotit": "Compris!"
+  },
+  "ajuda": {
+    "title": "🕊 Aide une Vie",
+    "subtitle": "Sois une reponse a la priere",
+    "helpingNow": "personnes aidant maintenant",
+    "activeRequests": "demandes actives",
+    "prayingFor": "personnes prient",
+    "prayNow": "🙏 Prier maintenant",
+    "thankyou": "Merci. Cette personne n est pas seule.",
+    "askHelp": "Demander de l aide",
+    "offerHelp": "Offrir de l aide",
+    "shareTestimony": "Partager temoignage",
+    "prayForSomeone": "Prier pour quelqu un",
+    "urgent": "Urgent",
+    "recent": "Recent",
+    "all": "Tous",
+    "requests": "Demandes",
+    "testimonies": "Temoignages",
+    "gratitude": "Gratitude",
+    "notAlone": "Tu n es pas seul",
+    "godWorks": "Dieu agit a travers les gens",
+    "submitBtn": "Publier",
+    "anonBtn": "Anonyme",
+    "placeholder": "Partage ta demande ou temoignage..."
   }
 }
