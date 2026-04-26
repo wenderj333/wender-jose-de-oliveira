@@ -89,17 +89,17 @@ export default function AjudaUmaVida() {
   };
 
   const TABS = [
-    { key:"all", label:"Todos" },
-    { key:"request", label:"Peticoes" },
-    { key:"testimony", label:"Testemunhos" },
-    { key:"gratitude", label:"Gratidao" },
+    { key:"all", label:t("ajuda.all","Todos") },
+    { key:"request", label:t("ajuda.requests","Peticoes") },
+    { key:"testimony", label:t("ajuda.testimonies","Testemunhos") },
+    { key:"gratitude", label:t("ajuda.gratitude","Gratidao") },
   ];
 
   const QUICK = [
-    { icon:"🙏", label:"Pedir ajuda agora", color:"#6c47d4", action:()=>{setPostType("request");setShowForm(true);} },
-    { icon:"🤲", label:"Orar por alguem", color:"#e67e22", action:()=>setActiveTab("request") },
-    { icon:"🤝", label:"Oferecer ajuda", color:"#27ae60", action:()=>{setPostType("offer");setShowForm(true);} },
-    { icon:"💛", label:"Partilhar testemunho", color:"#c9a84c", action:()=>{setPostType("testimony");setShowForm(true);} },
+    { icon:"🙏", label:t("ajuda.askHelp","Pedir ajuda agora"), color:"#6c47d4", action:()=>{setPostType("request");setShowForm(true);} },
+    { icon:"🤲", label:t("ajuda.prayForSomeone","Orar por alguem"), color:"#e67e22", action:()=>setActiveTab("request") },
+    { icon:"🤝", label:t("ajuda.offerHelp","Oferecer ajuda"), color:"#27ae60", action:()=>{setPostType("offer");setShowForm(true);} },
+    { icon:"💛", label:t("ajuda.shareTestimony","Partilhar testemunho"), color:"#c9a84c", action:()=>{setPostType("testimony");setShowForm(true);} },
   ];
 
   return (
