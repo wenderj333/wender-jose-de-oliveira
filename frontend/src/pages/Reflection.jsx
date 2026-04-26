@@ -56,7 +56,7 @@ export default function Reflection() {
 ﻿  return (
     <div style={{maxWidth:720,margin:'0 auto',padding:'0 0 80px',fontFamily:'Segoe UI,sans-serif'}}>
       <style>{'.rtextarea{width:100%;border:2px solid #e8e0f5;border-radius:14px;padding:14px 16px;font-size:.95rem;resize:none;outline:none;transition:border 0.2s;box-sizing:border-box;background:#fdfaff;color:#1a0a3e}.rtextarea:focus{border-color:#6C3FA0;background:white}'}</style>
-      <div style={{background:'linear-gradient(135deg,#6C3FA0,#4A2270,#2d0a5e)',padding:'36px 24px 28px',borderRadius:'0 0 32px 32px',marginBottom:28,color:'white',position:'relative',overflow:'hidden'}}>
+      <div style={{backgroundImage:'url(https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80)',backgroundSize:'cover',backgroundPosition:'center',background:'linear-gradient(135deg,rgba(108,63,160,0.7),rgba(74,34,112,0.8))',padding:'36px 24px 28px',borderRadius:'0 0 32px 32px',marginBottom:28,color:'white',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:0,right:0,fontSize:120,opacity:0.07,lineHeight:1}}>🕊️</div>
         <div style={{position:'relative',zIndex:1}}>
           <p style={{margin:'0 0 6px',fontSize:'0.8rem',opacity:0.7,letterSpacing:2,textTransform:'uppercase'}}>✨ {t('reflection.subtitle','Alguns minutos com Deus')}</p>
