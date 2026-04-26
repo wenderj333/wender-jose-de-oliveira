@@ -143,7 +143,7 @@ export default function AjudaUmaVida() {
         ))}
       </div>
 
-      {showContinue && (<div style={{background:"linear-gradient(135deg,#27ae60,#1e8a5a)",borderRadius:14,padding:"14px 20px",margin:"0 16px 16px",color:"white",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}><p style={{margin:0,fontWeight:700,fontSize:14}}>Queres orar por mais alguem?</p><button onClick={()=>{setShowContinue(false);window.scrollTo({top:400,behavior:"smooth"});}} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"white",color:"#27ae60",fontWeight:700,cursor:"pointer",fontSize:13}}>Continuar 🙏</button></div>)}
+      {showContinue && (<div style={{background:"linear-gradient(135deg,#27ae60,#1e8a5a)",borderRadius:14,padding:"14px 20px",margin:"0 16px 16px",color:"white",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}><p style={{margin:0,fontWeight:700,fontSize:14}}>Ainda ha pessoas que precisam de ti agora 🙏</p><button onClick={()=>{setShowContinue(false);window.scrollTo({top:400,behavior:"smooth"});}} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"white",color:"#27ae60",fontWeight:700,cursor:"pointer",fontSize:13}}>Continuar 🙏</button></div>)}
       {/* FORMULARIO */}
       {showForm && (
         <div style={{background:"linear-gradient(135deg,#1a0a3e,#2d1054)",borderRadius:16,padding:20,margin:"0 16px 20px",color:"white"}}>
@@ -219,7 +219,7 @@ export default function AjudaUmaVida() {
               </div>
               <p style={{color:"#333",fontSize:14,lineHeight:1.6,margin:"0 0 12px"}}>{post.content}</p>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                <span style={{color:"#aaa",fontSize:12}}>🙏 {post.prayer_count||0} pessoas orando</span>
+                <span style={{color:"#6c47d4",fontSize:12,fontWeight:600}}>🙏 {post.prayer_count||0} pessoas contigo nesta oracao</span>
                 <button onClick={()=>handlePray(post.id)} disabled={prayed} style={{padding:"8px 18px",borderRadius:20,border:"none",background:prayed?"#eee":"linear-gradient(135deg,#6c47d4,#4A2270)",color:prayed?"#aaa":"white",fontWeight:700,cursor:prayed?"default":"pointer",fontSize:13,transition:"all 0.2s"}}>
                   {prayed ? "✓ Orei" : "🙏 Orar agora"}
                 </button>
@@ -234,6 +234,7 @@ export default function AjudaUmaVida() {
         <div style={{fontSize:36,marginBottom:8}}>🕊️</div>
         <p style={{fontWeight:800,fontSize:16,margin:"0 0 6px"}}>Tu nao estas sozinho</p>
         <p style={{opacity:0.7,fontSize:13,margin:0}}>Deus age atraves de pessoas</p>
+        <p style={{opacity:0.5,fontSize:12,margin:0,fontStyle:'italic'}}>Cada oracao faz diferenca 🙏</p>
       </div>
     </div>
   );

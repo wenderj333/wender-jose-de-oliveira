@@ -1721,6 +1721,14 @@
     "livesTouched": "vieti atinse",
     "waitingPrayer": "persoane care asteapta rugaciune",
     "answeredPrayer": "Rugaciunea mea a fost raspunsa!",
-    "answeredMsg": "Ce bucurie! Marturie ta va incuraja pe altii."
+    "answeredMsg": "Ce bucurie! Marturie ta va incuraja pe altii.",
+    "answeredShare": "Dumnezeu a raspuns! Vrei sa impartasesti marturie?",
+    "shareTestimonyBtn": "Impartaseste marturie",
+    "stillNeed": "Inca sunt persoane care au nevoie de tine acum",
+    "prayerDifference": "Fiecare rugaciune face o diferenta",
+    "answeredStories": "Povesti de Credinta",
+    "beforeAfter": "Cereri care au fost raspunse",
+    "prayingTogether": "persoane sunt cu tine in aceasta rugaciune",
+    "rewardMsg": "O cerere pentru care te-ai rugat a fost raspunsa!"
   }
 }

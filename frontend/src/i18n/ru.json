@@ -1720,6 +1720,14 @@
     "livesTouched": "zhizney zatronutykh",
     "waitingPrayer": "lyudey zhduschikh molitvy",
     "answeredPrayer": "Moya molitva byla uslyshana!",
-    "answeredMsg": "Kakaya radost! Tvoe svidetelstvo podbarit drugikh."
+    "answeredMsg": "Kakaya radost! Tvoe svidetelstvo podbarit drugikh.",
+    "answeredShare": "Bog otvetil! Khochesh podelitsya svidetelstvom?",
+    "shareTestimonyBtn": "Podelitsya svidetelstvom",
+    "stillNeed": "Eshcho est lyudi kotorye nuzhayutsya v tebe seychas",
+    "prayerDifference": "Kazhdaya molitva imeet znachenie",
+    "answeredStories": "Istorii Very",
+    "beforeAfter": "Prosyby kotorye byli uslyshany",
+    "prayingTogether": "lyudey vmeste s toboy v etoy molitve",
+    "rewardMsg": "Prosba za kotoruyu ty molilsya byla uslyshana!"
   }
 }

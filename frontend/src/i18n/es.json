@@ -1720,6 +1720,14 @@
     "livesTouched": "vidas tocadas",
     "waitingPrayer": "personas esperando oracion",
     "answeredPrayer": "Mi peticion fue respondida!",
-    "answeredMsg": "Que alegria! Tu testimonio animara a otros."
+    "answeredMsg": "Que alegria! Tu testimonio animara a otros.",
+    "answeredShare": "Dios respondio! Quieres compartir el testimonio?",
+    "shareTestimonyBtn": "Compartir testimonio",
+    "stillNeed": "Todavia hay personas que te necesitan ahora",
+    "prayerDifference": "Cada oracion hace la diferencia",
+    "answeredStories": "Historias de Fe",
+    "beforeAfter": "Peticiones que fueron respondidas",
+    "prayingTogether": "personas estan contigo en esta oracion",
+    "rewardMsg": "Una peticion por la que oraste fue respondida!"
   }
 }

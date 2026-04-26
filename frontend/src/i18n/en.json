@@ -1720,6 +1720,14 @@
     "livesTouched": "lives touched",
     "waitingPrayer": "people waiting for prayer",
     "answeredPrayer": "My prayer was answered!",
-    "answeredMsg": "What joy! Your testimony will encourage others."
+    "answeredMsg": "What joy! Your testimony will encourage others.",
+    "answeredShare": "God answered! Do you want to share the testimony?",
+    "shareTestimonyBtn": "Share testimony",
+    "stillNeed": "There are still people who need you now",
+    "prayerDifference": "Every prayer makes a difference",
+    "answeredStories": "Faith Stories",
+    "beforeAfter": "Requests that were answered",
+    "prayingTogether": "people are with you in this prayer",
+    "rewardMsg": "A request you prayed for was answered!"
   }
 }

@@ -1720,6 +1720,14 @@
     "livesTouched": "vies touchees",
     "waitingPrayer": "personnes attendant la priere",
     "answeredPrayer": "Ma priere a ete exaucee!",
-    "answeredMsg": "Quelle joie! Ton temoignage encouragera les autres."
+    "answeredMsg": "Quelle joie! Ton temoignage encouragera les autres.",
+    "answeredShare": "Dieu a repondu! Veux-tu partager le temoignage?",
+    "shareTestimonyBtn": "Partager temoignage",
+    "stillNeed": "Il y a encore des personnes qui ont besoin de toi maintenant",
+    "prayerDifference": "Chaque priere fait une difference",
+    "answeredStories": "Histoires de Foi",
+    "beforeAfter": "Demandes qui ont ete exaucees",
+    "prayingTogether": "personnes sont avec toi dans cette priere",
+    "rewardMsg": "Une demande pour laquelle tu as prie a ete exaucee!"
   }
 }

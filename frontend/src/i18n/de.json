@@ -1722,6 +1722,14 @@
     "livesTouched": "Leben beruehrt",
     "waitingPrayer": "Menschen warten auf Gebet",
     "answeredPrayer": "Mein Gebet wurde erhort!",
-    "answeredMsg": "Welche Freude! Dein Zeugnis wird andere ermutigen."
+    "answeredMsg": "Welche Freude! Dein Zeugnis wird andere ermutigen.",
+    "answeredShare": "Gott hat geantwortet! Moechtest du das Zeugnis teilen?",
+    "shareTestimonyBtn": "Zeugnis teilen",
+    "stillNeed": "Es gibt noch Menschen die dich jetzt brauchen",
+    "prayerDifference": "Jedes Gebet macht einen Unterschied",
+    "answeredStories": "Glaubensgeschichten",
+    "beforeAfter": "Gebete die erhort wurden",
+    "prayingTogether": "Personen sind bei dir in diesem Gebet",
+    "rewardMsg": "Eine Bitte fuer die du gebetet hast wurde erhort!"
   }
 }
