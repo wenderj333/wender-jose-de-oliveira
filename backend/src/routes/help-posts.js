@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
+const { createNotification } = require('./notifications');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
@@ -166,6 +167,14 @@ router.post('/:id/pray', authenticate, async (req, res) => {
         [id]
       );
       prayed = true;
+      // Notificar dono do pedido
+      try {
+        const postOwner = await db.query(`SELECT user_id, content FROM help_posts WHERE id = $1`, [id]);
+        if (postOwner.rows.length > 0 && postOwner.rows[0].user_id !== userId) {
+          const preview = postOwner.rows[0].content?.substring(0,50);
+          await createNotification(postOwner.rows[0].user_id, 'prayer', 'Alguem orou pelo teu pedido 🙏', `Mais uma pessoa esta contigo nesta oracao: ${preview}...`, { postId: id });
+        }
+      } catch(ne) {}
     }
 
     const postResult = await db.query(
