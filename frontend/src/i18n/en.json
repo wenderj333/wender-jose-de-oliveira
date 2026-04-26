@@ -1711,6 +1711,15 @@
     "justAsked": "Someone just asked for help",
     "todayPrayers": "prayers today",
     "prayChain": "Prayer chain",
-    "youHelped": "You helped"
+    "youHelped": "You helped",
+    "comeBack": "There are still people who need prayer",
+    "continueHelp": "Continue helping",
+    "moreRequests": "Do you want to pray for someone else?",
+    "urgentTop": "urgent requests need you",
+    "collectiveImpact": "prayers made by the community today",
+    "livesTouched": "lives touched",
+    "waitingPrayer": "people waiting for prayer",
+    "answeredPrayer": "My prayer was answered!",
+    "answeredMsg": "What joy! Your testimony will encourage others."
   }
 }

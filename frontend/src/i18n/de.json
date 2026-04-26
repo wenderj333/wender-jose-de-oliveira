@@ -1713,6 +1713,15 @@
     "justAsked": "Jemand hat gerade um Hilfe gebeten",
     "todayPrayers": "Gebete heute",
     "prayChain": "Gebetskette",
-    "youHelped": "Du hast geholfen"
+    "youHelped": "Du hast geholfen",
+    "comeBack": "Es gibt noch Menschen die Gebet brauchen",
+    "continueHelp": "Weiter helfen",
+    "moreRequests": "Moechtest du fuer jemanden beten?",
+    "urgentTop": "dringende Anliegen brauchen dich",
+    "collectiveImpact": "Gebete der Gemeinschaft heute",
+    "livesTouched": "Leben beruehrt",
+    "waitingPrayer": "Menschen warten auf Gebet",
+    "answeredPrayer": "Mein Gebet wurde erhort!",
+    "answeredMsg": "Welche Freude! Dein Zeugnis wird andere ermutigen."
   }
 }

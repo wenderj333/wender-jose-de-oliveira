@@ -1711,6 +1711,15 @@
     "justAsked": "Alguien acaba de pedir ayuda",
     "todayPrayers": "oraciones hoy",
     "prayChain": "Cadena de oracion",
-    "youHelped": "Ayudaste"
+    "youHelped": "Ayudaste",
+    "comeBack": "Todavia hay personas que necesitan oracion",
+    "continueHelp": "Continuar ayudando",
+    "moreRequests": "Quieres orar por alguien mas?",
+    "urgentTop": "peticiones urgentes te necesitan",
+    "collectiveImpact": "oraciones hechas por la comunidad hoy",
+    "livesTouched": "vidas tocadas",
+    "waitingPrayer": "personas esperando oracion",
+    "answeredPrayer": "Mi peticion fue respondida!",
+    "answeredMsg": "Que alegria! Tu testimonio animara a otros."
   }
 }

@@ -33,7 +33,8 @@ export default function AjudaUmaVida() {
   const [postType, setPostType] = useState("request");
   const [isAnon, setIsAnon] = useState(false);
   const [isUrgent, setIsUrgent] = useState(false);
-  const [helpedCount] = useState(()=>parseInt(localStorage.getItem("helped_count")||"0"));
+  const [helpedCount, setHelpedCount] = useState(()=>parseInt(localStorage.getItem("helped_count")||"0"));
+  const [showContinue, setShowContinue] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [prayedIds, setPrayedIds] = useState(new Set());
   const [successMsg, setSuccessMsg] = useState("");
@@ -67,6 +68,9 @@ export default function AjudaUmaVida() {
       if (navigator.vibrate) navigator.vibrate(50);
       const hc = parseInt(localStorage.getItem("helped_count")||"0")+1;
       localStorage.setItem("helped_count", hc);
+      setHelpedCount(hc);
+      setShowContinue(true);
+      setTimeout(()=>setShowContinue(false), 8000);
     } catch(e) {}
   };
 
@@ -108,7 +112,7 @@ export default function AjudaUmaVida() {
           <p style={{margin:"0 0 6px",fontSize:"0.75rem",opacity:0.7,letterSpacing:2,textTransform:"uppercase"}}>✨ Sigo com Fe</p>
           <h1 style={{margin:"0 0 8px",fontSize:"clamp(1.4rem,4vw,2rem)",fontWeight:900}}>🕊️ Ajuda uma Vida</h1>
           <p style={{opacity:0.85,fontSize:14,margin:"0 0 16px"}}>Seja resposta de oracao na vida de alguem</p>
-          {helpedCount > 0 && <p style={{color:"#f0c040",fontWeight:700,fontSize:13,margin:"0 0 8px"}}>✨ Hoje ajudaste {helpedCount} {helpedCount===1?"pessoa":"pessoas"}</p>}
+          {helpedCount > 0 && <p style={{color:"#f0c040",fontWeight:700,fontSize:13,margin:"0 0 8px"}}>✨ Hoje tocaste {helpedCount} {helpedCount===1?"vida":"vidas"}</p>}
           <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
             <div style={{background:"rgba(255,255,255,0.15)",borderRadius:20,padding:"6px 16px",fontSize:13,fontWeight:700}}>
               🔥 {stats.helping} pessoas ajudando agora
@@ -139,6 +143,7 @@ export default function AjudaUmaVida() {
         ))}
       </div>
 
+      {showContinue && (<div style={{background:"linear-gradient(135deg,#27ae60,#1e8a5a)",borderRadius:14,padding:"14px 20px",margin:"0 16px 16px",color:"white",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}><p style={{margin:0,fontWeight:700,fontSize:14}}>Queres orar por mais alguem?</p><button onClick={()=>{setShowContinue(false);window.scrollTo({top:400,behavior:"smooth"});}} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"white",color:"#27ae60",fontWeight:700,cursor:"pointer",fontSize:13}}>Continuar 🙏</button></div>)}
       {/* FORMULARIO */}
       {showForm && (
         <div style={{background:"linear-gradient(135deg,#1a0a3e,#2d1054)",borderRadius:16,padding:20,margin:"0 16px 20px",color:"white"}}>

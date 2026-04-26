@@ -1711,6 +1711,15 @@
     "justAsked": "Kto-to tol ko chto poprosil pomoshchi",
     "todayPrayers": "molitv segodnya",
     "prayChain": "Tsep molitvy",
-    "youHelped": "Ty pomog"
+    "youHelped": "Ty pomog",
+    "comeBack": "Eshcho est lyudi kotorye nuzhayutsya v molitve",
+    "continueHelp": "Prodolzhat pomogat",
+    "moreRequests": "Khochesh pomolitsya za kogo-to eshche?",
+    "urgentTop": "srochnykh prosb nuzhday-utsya v tebe",
+    "collectiveImpact": "molitv sdelannykh soobshchestvom segodnya",
+    "livesTouched": "zhizney zatronutykh",
+    "waitingPrayer": "lyudey zhduschikh molitvy",
+    "answeredPrayer": "Moya molitva byla uslyshana!",
+    "answeredMsg": "Kakaya radost! Tvoe svidetelstvo podbarit drugikh."
   }
 }

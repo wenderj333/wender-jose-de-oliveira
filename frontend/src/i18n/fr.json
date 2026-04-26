@@ -1711,6 +1711,15 @@
     "justAsked": "Quelqu un vient de demander de l aide",
     "todayPrayers": "prieres aujourd hui",
     "prayChain": "Chaine de priere",
-    "youHelped": "Tu as aide"
+    "youHelped": "Tu as aide",
+    "comeBack": "Il y a encore des personnes qui ont besoin de priere",
+    "continueHelp": "Continuer a aider",
+    "moreRequests": "Veux-tu prier pour quelqu un d autre?",
+    "urgentTop": "demandes urgentes ont besoin de toi",
+    "collectiveImpact": "prieres faites par la communaute aujourd hui",
+    "livesTouched": "vies touchees",
+    "waitingPrayer": "personnes attendant la priere",
+    "answeredPrayer": "Ma priere a ete exaucee!",
+    "answeredMsg": "Quelle joie! Ton temoignage encouragera les autres."
   }
 }

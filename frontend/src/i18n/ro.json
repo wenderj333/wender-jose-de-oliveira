@@ -1712,6 +1712,15 @@
     "justAsked": "Cineva tocmai a cerut ajutor",
     "todayPrayers": "rugaciuni azi",
     "prayChain": "Lant de rugaciune",
-    "youHelped": "Ai ajutat"
+    "youHelped": "Ai ajutat",
+    "comeBack": "Inca sunt persoane care au nevoie de rugaciune",
+    "continueHelp": "Continua sa ajuti",
+    "moreRequests": "Vrei sa te rogi pentru altcineva?",
+    "urgentTop": "cereri urgente au nevoie de tine",
+    "collectiveImpact": "rugaciuni facute de comunitate azi",
+    "livesTouched": "vieti atinse",
+    "waitingPrayer": "persoane care asteapta rugaciune",
+    "answeredPrayer": "Rugaciunea mea a fost raspunsa!",
+    "answeredMsg": "Ce bucurie! Marturie ta va incuraja pe altii."
   }
 }
