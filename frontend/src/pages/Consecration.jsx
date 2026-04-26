@@ -164,6 +164,7 @@ export default function Consecration() {
       <div style={{position:'relative',width:'100%',minHeight:'92vh',borderRadius:16,overflow:'hidden',backgroundImage:'url(/fundo-consagracao.png)',backgroundSize:'cover',backgroundPosition:'center'}}>
         <div style={{position:'absolute',inset:0,background:isActive?'rgba(0,0,0,0.3)':'rgba(0,0,0,0.55)',borderRadius:16,transition:'background 1s'}}/>
         <div style={{position:'relative',zIndex:2,height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'space-between',padding:'20px 16px'}}>
+          <button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} style={{position:'absolute',top:12,left:12,padding:'8px 16px',borderRadius:20,border:'none',background:'rgba(0,0,0,0.5)',color:'white',cursor:'pointer',fontWeight:700,fontSize:13,backdropFilter:'blur(8px)',zIndex:10}}>⬆️ Topo</button>
 
           <div style={{textAlign:'center',color:'white',width:'100%'}}>
             <div style={{display:'flex',gap:10,justifyContent:'center',marginBottom:12,flexWrap:'wrap'}}>
@@ -254,9 +255,6 @@ export default function Consecration() {
       )}
 
       <div style={{marginTop:16,marginBottom:40}}>
-        <button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} style={{display:'block',margin:'0 auto 16px',padding:'10px 24px',borderRadius:20,border:'none',background:'rgba(255,255,255,0.1)',color:'white',cursor:'pointer',fontWeight:700,fontSize:14,backdropFilter:'blur(8px)'}}>
-          ⬆️ {t('consecration.backTop','Voltar ao topo')}
-        </button>
         <h3 style={{color:'white',fontWeight:800,fontSize:18,margin:'0 0 16px',textAlign:'center'}}>{t('consecration.muralTitle','🕊 Mural Espiritual')}</h3>
         {muralPosts.length===0 ? (
           <div style={{textAlign:'center',padding:40,color:'rgba(255,255,255,0.5)',background:'rgba(255,255,255,0.05)',borderRadius:16,border:'1px solid rgba(255,255,255,0.1)'}}>
