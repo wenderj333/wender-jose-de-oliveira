@@ -42,9 +42,9 @@ const VERSES = [
 ];
 
 const MOCK_PRAYERS = [
-  { id: 1, name: "Ana Costa", text: "sidebar.prayerText1", count: 12, avatar: "AC" },
-  { id: 2, name: "Carlos M.", text: "sidebar.prayerText2", count: 8, avatar: "CM" },
-  { id: 3, name: "Maria S.", text: "sidebar.prayerText3", count: 5, avatar: "MS" },
+  { id: 1, name: "Ana Costa", text: "pede saude", count: 12, avatar: "AC" },
+  { id: 2, name: "Carlos M.", text: "pede paz", count: 8, avatar: "CM" },
+  { id: 3, name: "Maria S.", text: "pede emprego", count: 5, avatar: "MS" },
   { id: 4, name: "Joao P.", text: "sidebar.prayerText4", count: 19, avatar: "JP" },
   { id: 5, name: "Lucia R.", text: "agradece a Deus", count: 23, avatar: "LR" },
 ];
