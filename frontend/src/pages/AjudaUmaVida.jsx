@@ -32,6 +32,8 @@ export default function AjudaUmaVida() {
   const [content, setContent] = useState("");
   const [postType, setPostType] = useState("request");
   const [isAnon, setIsAnon] = useState(false);
+  const [isUrgent, setIsUrgent] = useState(false);
+  const [helpedCount] = useState(()=>parseInt(localStorage.getItem("helped_count")||"0"));
   const [submitting, setSubmitting] = useState(false);
   const [prayedIds, setPrayedIds] = useState(new Set());
   const [successMsg, setSuccessMsg] = useState("");
@@ -60,9 +62,11 @@ export default function AjudaUmaVida() {
       await fetch(API+"/help-posts/"+postId+"/pray", { method:"POST", headers:authHeaders });
       setPrayedIds(prev => new Set([...prev, postId]));
       setPosts(prev => prev.map(p => p.id===postId ? {...p, prayer_count:(p.prayer_count||0)+1} : p));
-      setSuccessMsg("Obrigado. Esta pessoa nao esta sozinha.");
+      setSuccessMsg(t("ajuda.prayerSent","+1 oracao enviada. Esta pessoa nao esta sozinha."));
       setTimeout(() => setSuccessMsg(""), 4000);
       if (navigator.vibrate) navigator.vibrate(50);
+      const hc = parseInt(localStorage.getItem("helped_count")||"0")+1;
+      localStorage.setItem("helped_count", hc);
     } catch(e) {}
   };
 
@@ -71,8 +75,10 @@ export default function AjudaUmaVida() {
     if (!user) return alert("Faz login para publicar!");
     setSubmitting(true);
     try {
-      const res = await fetch(API+"/help-posts", { method:"POST", headers:{...authHeaders,"Content-Type":"application/json"}, body:JSON.stringify({content, type:postType, is_anonymous:isAnon}) });
+      const res = await fetch(API+"/help-posts", { method:"POST", headers:{...authHeaders,"Content-Type":"application/json"}, body:JSON.stringify({content, type:postType, is_anonymous:isAnon, is_urgent:isUrgent}) });
       setContent(""); setShowForm(false);
+      setSuccessMsg(t("ajuda.requestReceived","O teu pedido foi recebido. Pessoas vao orar por ti."));
+      setTimeout(()=>setSuccessMsg(""),5000);
       await loadPosts();
     } catch(e) {}
     setSubmitting(false);
@@ -102,6 +108,7 @@ export default function AjudaUmaVida() {
           <p style={{margin:"0 0 6px",fontSize:"0.75rem",opacity:0.7,letterSpacing:2,textTransform:"uppercase"}}>✨ Sigo com Fe</p>
           <h1 style={{margin:"0 0 8px",fontSize:"clamp(1.4rem,4vw,2rem)",fontWeight:900}}>🕊️ Ajuda uma Vida</h1>
           <p style={{opacity:0.85,fontSize:14,margin:"0 0 16px"}}>Seja resposta de oracao na vida de alguem</p>
+          {helpedCount > 0 && <p style={{color:"#f0c040",fontWeight:700,fontSize:13,margin:"0 0 8px"}}>✨ Hoje ajudaste {helpedCount} {helpedCount===1?"pessoa":"pessoas"}</p>}
           <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
             <div style={{background:"rgba(255,255,255,0.15)",borderRadius:20,padding:"6px 16px",fontSize:13,fontWeight:700}}>
               🔥 {stats.helping} pessoas ajudando agora
@@ -147,6 +154,9 @@ export default function AjudaUmaVida() {
             <label style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer",fontSize:13,color:"rgba(255,255,255,0.8)"}}>
               <input type="checkbox" checked={isAnon} onChange={e=>setIsAnon(e.target.checked)}/> Anonimo
             </label>
+            <label style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer",fontSize:13,color:"rgba(255,100,100,0.9)"}}>
+              <input type="checkbox" checked={isUrgent} onChange={e=>setIsUrgent(e.target.checked)}/> 🔴 Urgente
+            </label>
             <button onClick={handleSubmit} disabled={submitting} style={{flex:1,padding:"10px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#f0c040,#e67e22)",color:"#1a0a3e",fontWeight:900,cursor:"pointer",fontSize:14}}>
               {submitting ? "..." : "Publicar 🙏"}
             </button>
@@ -186,7 +196,8 @@ export default function AjudaUmaVida() {
           const cfg = TYPE_CONFIG[post.type] || TYPE_CONFIG.request;
           const prayed = prayedIds.has(post.id);
           return (
-            <div key={post.id} style={{background:"white",borderRadius:16,padding:16,marginBottom:14,boxShadow:"0 2px 12px rgba(0,0,0,0.06)",border:"1px solid #f0eaff"}}>
+            <div key={post.id} style={{background:"white",borderRadius:16,padding:16,marginBottom:14,boxShadow:"0 2px 12px rgba(0,0,0,0.06)",border:post.is_urgent?"2px solid #e74c3c":"1px solid #f0eaff",position:"relative"}}>
+              {post.is_urgent && <div style={{background:"#e74c3c",color:"white",fontSize:11,fontWeight:700,padding:"2px 10px",borderRadius:20,marginBottom:8,display:"inline-block"}}>🔴 URGENTE</div>}
               <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
                 {post.avatar_url ? (
                   <img src={post.avatar_url} style={{width:38,height:38,borderRadius:"50%",objectFit:"cover"}}/>

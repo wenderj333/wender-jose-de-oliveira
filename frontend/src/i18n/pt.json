@@ -1669,6 +1669,15 @@
     "godWorks": "Deus age atraves de pessoas",
     "submitBtn": "Publicar",
     "anonBtn": "Anonimo",
-    "placeholder": "Partilha o teu pedido ou testemunho..."
+    "placeholder": "Partilha o teu pedido ou testemunho...",
+    "prayerSent": "+1 oracao enviada. Esta pessoa nao esta sozinha.",
+    "requestReceived": "O teu pedido foi recebido. Pessoas vao orar por ti.",
+    "urgentLabel": "URGENTE",
+    "helpedToday": "Hoje ajudaste {{count}} pessoas",
+    "prayingNow": "pessoas orando agora",
+    "justAsked": "Alguem acabou de pedir ajuda",
+    "todayPrayers": "oracoes feitas hoje",
+    "prayChain": "Cadeia de oracao",
+    "youHelped": "Tu ajudaste"
   }
 }

@@ -1703,6 +1703,15 @@
     "godWorks": "Dumnezeu lucreaza prin oameni",
     "submitBtn": "Publica",
     "anonBtn": "Anonim",
-    "placeholder": "Impartaseste cererea sau marturie..."
+    "placeholder": "Impartaseste cererea sau marturie...",
+    "prayerSent": "+1 rugaciune trimisa. Aceasta persoana nu este singura.",
+    "requestReceived": "Cererea ta a fost primita.",
+    "urgentLabel": "URGENT",
+    "helpedToday": "Azi ai ajutat {{count}} persoane",
+    "prayingNow": "persoane care se roaga acum",
+    "justAsked": "Cineva tocmai a cerut ajutor",
+    "todayPrayers": "rugaciuni azi",
+    "prayChain": "Lant de rugaciune",
+    "youHelped": "Ai ajutat"
   }
 }

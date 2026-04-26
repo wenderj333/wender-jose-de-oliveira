@@ -1702,6 +1702,15 @@
     "godWorks": "Dios actua a traves de personas",
     "submitBtn": "Publicar",
     "anonBtn": "Anonimo",
-    "placeholder": "Comparte tu peticion o testimonio..."
+    "placeholder": "Comparte tu peticion o testimonio...",
+    "prayerSent": "+1 oracion enviada. Esta persona no esta sola.",
+    "requestReceived": "Tu peticion fue recibida. Las personas oraran por ti.",
+    "urgentLabel": "URGENTE",
+    "helpedToday": "Hoy ayudaste a {{count}} personas",
+    "prayingNow": "personas orando ahora",
+    "justAsked": "Alguien acaba de pedir ayuda",
+    "todayPrayers": "oraciones hoy",
+    "prayChain": "Cadena de oracion",
+    "youHelped": "Ayudaste"
   }
 }

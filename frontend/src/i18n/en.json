@@ -1702,6 +1702,15 @@
     "godWorks": "God works through people",
     "submitBtn": "Publish",
     "anonBtn": "Anonymous",
-    "placeholder": "Share your request or testimony..."
+    "placeholder": "Share your request or testimony...",
+    "prayerSent": "+1 prayer sent. This person is not alone.",
+    "requestReceived": "Your request was received. People will pray for you.",
+    "urgentLabel": "URGENT",
+    "helpedToday": "Today you helped {{count}} people",
+    "prayingNow": "people praying now",
+    "justAsked": "Someone just asked for help",
+    "todayPrayers": "prayers today",
+    "prayChain": "Prayer chain",
+    "youHelped": "You helped"
   }
 }

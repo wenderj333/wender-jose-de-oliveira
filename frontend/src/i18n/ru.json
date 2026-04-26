@@ -1702,6 +1702,15 @@
     "godWorks": "Bog deystvuet cherez lyudey",
     "submitBtn": "Opublikovat",
     "anonBtn": "Anonimno",
-    "placeholder": "Podelisya prosboy ili svidetelstvom..."
+    "placeholder": "Podelisya prosboy ili svidetelstvom...",
+    "prayerSent": "+1 molitva otpravlena. Etot chelovek ne odin.",
+    "requestReceived": "Tvoya prosba poluchena.",
+    "urgentLabel": "SROCHNO",
+    "helpedToday": "Segodnya ty pomog {{count}} lyudyam",
+    "prayingNow": "lyudey molyatsya seychas",
+    "justAsked": "Kto-to tol ko chto poprosil pomoshchi",
+    "todayPrayers": "molitv segodnya",
+    "prayChain": "Tsep molitvy",
+    "youHelped": "Ty pomog"
   }
 }

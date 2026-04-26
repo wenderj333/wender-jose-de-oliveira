@@ -1702,6 +1702,15 @@
     "godWorks": "Dieu agit a travers les gens",
     "submitBtn": "Publier",
     "anonBtn": "Anonyme",
-    "placeholder": "Partage ta demande ou temoignage..."
+    "placeholder": "Partage ta demande ou temoignage...",
+    "prayerSent": "+1 priere envoyee. Cette personne n est pas seule.",
+    "requestReceived": "Ta demande a ete recue.",
+    "urgentLabel": "URGENT",
+    "helpedToday": "Aujourd hui tu as aide {{count}} personnes",
+    "prayingNow": "personnes prient maintenant",
+    "justAsked": "Quelqu un vient de demander de l aide",
+    "todayPrayers": "prieres aujourd hui",
+    "prayChain": "Chaine de priere",
+    "youHelped": "Tu as aide"
   }
 }

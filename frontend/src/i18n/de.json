@@ -1704,6 +1704,15 @@
     "godWorks": "Gott wirkt durch Menschen",
     "submitBtn": "Veroffentlichen",
     "anonBtn": "Anonym",
-    "placeholder": "Teile dein Anliegen oder Zeugnis..."
+    "placeholder": "Teile dein Anliegen oder Zeugnis...",
+    "prayerSent": "+1 Gebet gesendet. Diese Person ist nicht allein.",
+    "requestReceived": "Deine Bitte wurde empfangen.",
+    "urgentLabel": "DRINGEND",
+    "helpedToday": "Heute hast du {{count}} Menschen geholfen",
+    "prayingNow": "Personen beten jetzt",
+    "justAsked": "Jemand hat gerade um Hilfe gebeten",
+    "todayPrayers": "Gebete heute",
+    "prayChain": "Gebetskette",
+    "youHelped": "Du hast geholfen"
   }
 }
