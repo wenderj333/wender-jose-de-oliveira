@@ -30,7 +30,15 @@ export default function Consecration() {
   const [postType, setPostType] = useState('prayer');
   const [showForm, setShowForm] = useState(false);
   const [dayCount, setDayCount] = useState(1);
-  const [prayCount, setPrayCount] = useState(0);
+  const [prayCount, setPrayCount] = useState(()=>{
+    const today = new Date().toDateString();
+    if (localStorage.getItem('pray_date') !== today) {
+      localStorage.setItem('pray_date', today);
+      localStorage.setItem('pray_today', '0');
+      return 0;
+    }
+    return parseInt(localStorage.getItem('pray_today')||'0');
+  });
   const [timerSec, setTimerSec] = useState(0);
   const [timerActive, setTimerActive] = useState(false);
   const timerRef = useRef(null);
