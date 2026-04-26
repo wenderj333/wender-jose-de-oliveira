@@ -254,6 +254,9 @@ export default function Consecration() {
       )}
 
       <div style={{marginTop:16,marginBottom:40}}>
+        <button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} style={{display:'block',margin:'0 auto 16px',padding:'10px 24px',borderRadius:20,border:'none',background:'rgba(255,255,255,0.1)',color:'white',cursor:'pointer',fontWeight:700,fontSize:14,backdropFilter:'blur(8px)'}}>
+          ⬆️ {t('consecration.backTop','Voltar ao topo')}
+        </button>
         <h3 style={{color:'white',fontWeight:800,fontSize:18,margin:'0 0 16px',textAlign:'center'}}>{t('consecration.muralTitle','🕊 Mural Espiritual')}</h3>
         {muralPosts.length===0 ? (
           <div style={{textAlign:'center',padding:40,color:'rgba(255,255,255,0.5)',background:'rgba(255,255,255,0.05)',borderRadius:16,border:'1px solid rgba(255,255,255,0.1)'}}>
