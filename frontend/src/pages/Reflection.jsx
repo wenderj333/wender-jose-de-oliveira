@@ -25,6 +25,7 @@ export default function Reflection() {
   const [timer, setTimer] = useState(false);
   const [timerSec, setTimerSec] = useState(120);
   const [activeQ, setActiveQ] = useState(0);
+  const [activeGuia, setActiveGuia] = useState(null);
   const timerRef = useRef(null);
   const days = t('reflection.days', { returnObjects: true }) || [];
   const currentDay = Array.isArray(days) ? days[selDay] : {};
@@ -75,10 +76,11 @@ export default function Reflection() {
       <div style={{padding:'0 16px',marginBottom:28}}>
         <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:12}}>
           {guias.map((g,i)=>(
-            <div key={i} style={{background:'white',borderRadius:16,padding:16,boxShadow:'0 2px 12px rgba(108,63,160,0.08)',border:'2px solid #e8e0f5'}}>
+            <div key={i} onClick={()=>setActiveGuia(activeGuia===i?null:i)} style={{background:activeGuia===i?g.color:'white',borderRadius:16,padding:16,boxShadow:'0 2px 12px rgba(108,63,160,0.08)',border:activeGuia===i?'2px solid '+g.color:'2px solid #e8e0f5',cursor:'pointer',transition:'all 0.3s'}}>
               <div style={{fontSize:28,marginBottom:8}}>{g.icon}</div>
-              <p style={{color:g.color,fontWeight:800,margin:'0 0 4px',fontSize:'0.9rem'}}>{g.title}</p>
-              <p style={{color:'#888',fontSize:'0.78rem',margin:0}}>{g.desc}</p>
+              <p style={{color:activeGuia===i?'white':g.color,fontWeight:800,margin:'0 0 4px',fontSize:'0.9rem'}}>{g.title}</p>
+              <p style={{color:activeGuia===i?'rgba(255,255,255,0.85)':'#888',fontSize:'0.78rem',margin:0}}>{g.desc}</p>
+              {activeGuia===i && <p style={{color:'white',fontSize:'0.82rem',marginTop:8,lineHeight:1.5,fontStyle:'italic'}}>✨ {g.desc}</p>}
             </div>
           ))}
         </div>
