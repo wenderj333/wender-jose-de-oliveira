@@ -1595,7 +1595,15 @@
     "verse": "VERSETUL ZILEI",
     "prayers": "CERERI DE RUGACIUNE",
     "online": "ONLINE ACUM",
-    "events": "EVENIMENTE"
+    "events": "EVENIMENTE",
+    "prayerRequests": "Cereri de Rugaciune",
+    "pray": "Roaga-te",
+    "upcomingEvents": "Evenimente Viitoare",
+    "prayerText1": "cere sanatate pentru familie",
+    "prayerText2": "cere pace acasa",
+    "prayerText3": "cere un loc de munca",
+    "prayerText4": "cere vindecare",
+    "prayerText5": "cere putere"
   },
   "menu": {
     "principal": "PRINCIPAL",

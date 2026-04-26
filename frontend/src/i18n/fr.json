@@ -1594,7 +1594,15 @@
     "verse": "VERSET DU JOUR",
     "prayers": "DEMANDES DE PRIÈRE",
     "online": "EN LIGNE",
-    "events": "ÉVÉNEMENTS"
+    "events": "ÉVÉNEMENTS",
+    "prayerRequests": "Demandes de Priere",
+    "pray": "Prier",
+    "upcomingEvents": "Evenements a Venir",
+    "prayerText1": "demande la sante pour la famille",
+    "prayerText2": "demande la paix a la maison",
+    "prayerText3": "demande un emploi",
+    "prayerText4": "demande la guerison",
+    "prayerText5": "demande la force"
   },
   "menu": {
     "principal": "PRINCIPAL",

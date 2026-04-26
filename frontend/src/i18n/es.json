@@ -1591,10 +1591,18 @@
     "demo3": "Encontrei minha igreja local e agora sou membro ativo da comunidade cristã online e presencial."
   },
   "sidebar": {
-    "verse": "VERSÍCULO DEL DÍA",
+    "verse": "VERSICULO DEL DIA",
     "prayers": "PETICIONES DE ORACIÓN",
     "online": "EN LÍNEA AHORA",
-    "events": "PRÓXIMOS EVENTOS"
+    "events": "PRÓXIMOS EVENTOS",
+    "prayerRequests": "Peticiones de Oracion",
+    "pray": "Orar",
+    "upcomingEvents": "Proximos Eventos",
+    "prayerText1": "pide salud para la familia",
+    "prayerText2": "pide paz en el hogar",
+    "prayerText3": "pide empleo",
+    "prayerText4": "pide sanacion",
+    "prayerText5": "pide fuerza"
   },
   "menu": {
     "principal": "PRINCIPAL",

@@ -1558,10 +1558,18 @@
     "t5text": "Voce pode apagar sua conta a qualquer momento."
   },
   "sidebar": {
-    "verse": "VERSÍCULO DO DIA",
+    "verse": "VERSICULO DO DIA",
     "prayers": "PETIÇÕES DE ORAÇÃO",
     "online": "ONLINE AGORA",
-    "events": "PRÓXIMOS EVENTOS"
+    "events": "PRÓXIMOS EVENTOS",
+    "prayerRequests": "Pedidos de Oracao",
+    "pray": "Orar",
+    "upcomingEvents": "Proximos Eventos",
+    "prayerText1": "pede saude para a familia",
+    "prayerText2": "pede paz no lar",
+    "prayerText3": "pede emprego",
+    "prayerText4": "pede cura",
+    "prayerText5": "pede forca"
   },
   "menu": {
     "principal": "PRINCIPAL",

@@ -42,10 +42,10 @@ const VERSES = [
 ];
 
 const MOCK_PRAYERS = [
-  { id: 1, name: "Ana Costa", text: "pede saude para a familia", count: 12, avatar: "AC" },
-  { id: 2, name: "Carlos M.", text: "pede paz no lar", count: 8, avatar: "CM" },
-  { id: 3, name: "Maria S.", text: "pede emprego", count: 5, avatar: "MS" },
-  { id: 4, name: "João P.", text: "pede cura", count: 19, avatar: "JP" },
+  { id: 1, name: "Ana Costa", text: "sidebar.prayerText1", count: 12, avatar: "AC" },
+  { id: 2, name: "Carlos M.", text: "sidebar.prayerText2", count: 8, avatar: "CM" },
+  { id: 3, name: "Maria S.", text: "sidebar.prayerText3", count: 5, avatar: "MS" },
+  { id: 4, name: "Joao P.", text: "sidebar.prayerText4", count: 19, avatar: "JP" },
   { id: 5, name: "Lucia R.", text: "agradece a Deus", count: 23, avatar: "LR" },
 ];
 
@@ -76,7 +76,7 @@ export default function RightSidebar({ showInstall, onInstall, activeLive }) {
 
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [prayers, setPrayers] = useState(MOCK_PRAYERS);
+  const [prayers, setPrayers] = useState([]);
   const [prayedIds, setPrayedIds] = useState([]);
   const [showAllPrayers, setShowAllPrayers] = useState(false);
   const [online, setOnline] = useState(Math.floor(Math.random() * 40) + 60);
@@ -86,6 +86,13 @@ export default function RightSidebar({ showInstall, onInstall, activeLive }) {
     getRandomActivity(),
   ]);
   const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    fetch(API+'/help-posts?limit=3').then(r=>r.json()).then(data=>{
+      if(Array.isArray(data) && data.length>0) setPrayers(data.slice(0,3).map(p=>({id:p.id,name:p.is_anonymous?'Anonimo':(p.full_name||'Anonimo'),text:p.content?.substring(0,40)||'...',count:p.prayer_count||0,avatar:(p.full_name||'?').charAt(0)})));
+      else setPrayers(MOCK_PRAYERS.slice(0,3));
+    }).catch(()=>setPrayers(MOCK_PRAYERS.slice(0,3)));
+  },[]);
 
   useEffect(() => {
     const i = setInterval(() => {
@@ -195,7 +202,7 @@ export default function RightSidebar({ showInstall, onInstall, activeLive }) {
             </div>
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: 12, color: "var(--text)", lineHeight: 1.4 }}>
-                <b style={{ color: "#3568b8" }}>{p.name}</b> {p.text}
+                <b style={{ color: "#3568b8" }}>{p.name}</b> {p.text?.startsWith("sidebar.") ? t(p.text, p.text) : p.text}
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
                 <button onClick={() => handlePray(p.id)} style={{ padding: "3px 10px", borderRadius: 10, fontSize: 11, fontWeight: 600, border: "1px solid #e8c04060", background: prayedIds.includes(p.id) ? "#fff3cd" : "#fffbec", color: "#a07820", cursor: "pointer", transition: "all 0.2s" }}>

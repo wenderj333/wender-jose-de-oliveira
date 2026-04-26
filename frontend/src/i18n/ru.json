@@ -1591,10 +1591,18 @@
     "demo3": "Encontrei minha igreja local e agora sou membro ativo da comunidade cristã online e presencial."
   },
   "sidebar": {
-    "verse": "СТИХ ДНЯ",
+    "verse": "STIKH DNYA",
     "prayers": "МОЛИТВЕННЫЕ НУЖДЫ",
     "online": "ОНЛАЙН",
-    "events": "СОБЫТИЯ"
+    "events": "СОБЫТИЯ",
+    "prayerRequests": "Molitvennye Prosyby",
+    "pray": "Pomolitsya",
+    "upcomingEvents": "Predstoyashchie Sobytiya",
+    "prayerText1": "prosit zdorovya dlya semi",
+    "prayerText2": "prosit mira doma",
+    "prayerText3": "prosit rabotu",
+    "prayerText4": "prosit istseleniya",
+    "prayerText5": "prosit sily"
   },
   "menu": {
     "principal": "ГЛАВНОЕ",

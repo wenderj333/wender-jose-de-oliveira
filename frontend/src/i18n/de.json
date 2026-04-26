@@ -1596,7 +1596,15 @@
     "verse": "TAGESVERS",
     "prayers": "GEBETSANLIEGEN",
     "online": "JETZT ONLINE",
-    "events": "KOMMENDE EVENTS"
+    "events": "KOMMENDE EVENTS",
+    "prayerRequests": "Gebetsanliegen",
+    "pray": "Beten",
+    "upcomingEvents": "Nachste Ereignisse",
+    "prayerText1": "bittet um Gesundheit fur die Familie",
+    "prayerText2": "bittet um Frieden zu Hause",
+    "prayerText3": "bittet um Arbeit",
+    "prayerText4": "bittet um Heilung",
+    "prayerText5": "bittet um Kraft"
   },
   "menu": {
     "principal": "HAUPTMENÜ",

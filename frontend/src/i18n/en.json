@@ -1594,7 +1594,15 @@
     "verse": "VERSE OF THE DAY",
     "prayers": "PRAYER REQUESTS",
     "online": "ONLINE NOW",
-    "events": "UPCOMING EVENTS"
+    "events": "UPCOMING EVENTS",
+    "prayerRequests": "Prayer Requests",
+    "pray": "Pray",
+    "upcomingEvents": "Upcoming Events",
+    "prayerText1": "asks for health for the family",
+    "prayerText2": "asks for peace at home",
+    "prayerText3": "asks for a job",
+    "prayerText4": "asks for healing",
+    "prayerText5": "asks for strength"
   },
   "menu": {
     "principal": "MAIN",
