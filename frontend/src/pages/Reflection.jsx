@@ -34,6 +34,50 @@ export default function Reflection() {
     { q: currentDay.q2, verse: currentDay.q2verse, tip: t('reflection.tip2','Recorda situacoes da ultima semana') },
     { q: currentDay.q3, verse: currentDay.q3verse, tip: t('reflection.tip3','Reflite sobre as tuas emocoes') },
   ] : [];
+  const hora = new Date().getHours();
+  const periodo = hora < 12 ? 0 : 1;
+  const diaSemana = new Date().getDay();
+  const idx_guia = (diaSemana * 2 + periodo) % 7;
+
+  const REFLEXOES = {
+    guidTitle1: [
+      "Fecha os olhos por 1 minuto. Respira fundo. Deus esta aqui contigo agora.",
+      "O que te impede de confiar completamente em Deus hoje?",
+      "Imagina Deus olhando para ti com amor. O que sentes?",
+      "Existe algo que guardas so para ti e nao partilhas com Deus?",
+      "Em que area da tua vida precisas mais da presenca de Deus?",
+      "O que significa para ti 'buscar a Deus de todo o coracao'?",
+      "Quando foi a ultima vez que sentiste Deus muito perto de ti?",
+    ],
+    guidTitle2: [
+      "Qual e o pensamento que mais te preocupa hoje? Entrega-o a Deus.",
+      "Existe algo que fizeste e ainda nao perdoaste a ti mesmo?",
+      "O que e que Deus sabe sobre ti que ninguem mais sabe?",
+      "Qual e a tua maior luta interior neste momento?",
+      "Tens sido honesto contigo mesmo sobre o teu estado espiritual?",
+      "O que evitas pensar porque te causa dor ou vergonha?",
+      "Deus ja conhece tudo. Podes ser completamente honesto. O que dizes?",
+    ],
+    guidTitle3: [
+      "O que aprendeste sobre Deus esta semana que nao sabias antes?",
+      "Qual e a area da tua vida onde mais cresceste nos ultimos meses?",
+      "O que a Biblia te tem dito ultimamente que ainda nao aplicaste?",
+      "Que habito espiritual queres desenvolver nos proximos 30 dias?",
+      "Como seria a tua vida se confiances 100% em Deus?",
+      "O que te faz recuar quando se trata de crescer na fe?",
+      "Que versículo tem falado mais ao teu coracao ultimamente?",
+    ],
+    guidTitle4: [
+      "O que vais fazer de diferente hoje por causa da tua fe?",
+      "Quem na tua vida precisa ver Cristo atraves de ti hoje?",
+      "Qual e uma acao concreta que podes fazer hoje para amar alguem?",
+      "O que Deus te tem pedido que ainda nao fizeste?",
+      "Como podes ser uma bencao para alguem antes do fim do dia?",
+      "Qual e um habito que precisas abandonar para crescer espiritualmente?",
+      "Se hoje fosse o ultimo dia, o que farias de diferente?",
+    ],
+  };
+
   const guias = [
     { icon:'🔍', title:t('reflection.guidTitle1','Busque a Deus'), desc:t('reflection.guidDesc1','Reserve este momento so para Ele'), color:'#6C3FA0' },
     { icon:'💬', title:t('reflection.guidTitle2','Seja honesto'), desc:t('reflection.guidDesc2','Deus conhece o seu coracao'), color:'#e67e22' },
@@ -80,7 +124,7 @@ export default function Reflection() {
               <div style={{fontSize:28,marginBottom:8}}>{g.icon}</div>
               <p style={{color:activeGuia===i?'white':g.color,fontWeight:800,margin:'0 0 4px',fontSize:'0.9rem'}}>{g.title}</p>
               <p style={{color:activeGuia===i?'rgba(255,255,255,0.85)':'#888',fontSize:'0.78rem',margin:0}}>{g.desc}</p>
-              {activeGuia===i && <p style={{color:'white',fontSize:'0.82rem',marginTop:8,lineHeight:1.5,fontStyle:'italic'}}>✨ {g.desc}</p>}
+              {activeGuia===i && <p style={{color:'white',fontSize:'0.88rem',marginTop:10,lineHeight:1.6,fontStyle:'italic',background:'rgba(255,255,255,0.15)',borderRadius:10,padding:'10px 12px'}}>✨ {REFLEXOES[g.key]?.[idx_guia] || g.desc}</p>}
             </div>
           ))}
         </div>
