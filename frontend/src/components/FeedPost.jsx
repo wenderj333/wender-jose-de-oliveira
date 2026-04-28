@@ -10,7 +10,8 @@ const TYPE_STYLES = {
   reflexao: { borderColor: 'var(--gray-500)', icon: BookOpen, iconColor: 'var(--primary)' },
 };
 
-export default function FeedPost({ post, isPlaying, onVideoPlay }) {
+// Adicionamos onImageClick para abrir o Zoom
+export default function FeedPost({ post, isPlaying, onVideoPlay, onImageClick }) {
   const { t } = useTranslation();
   const audioRef = useRef(null);
   const [amem, setAmem] = useState(false);
@@ -30,10 +31,9 @@ export default function FeedPost({ post, isPlaying, onVideoPlay }) {
   }, [isPlaying]);
 
   const renderContent = () => {
-    // Esta parte recupera a foto ou vídeo real do post
     if (post.type === 'louvor' || post.video_url) {
       return (
-        <div className="feed-post__media">
+        <div className="feed-post__media" onClick={() => onVideoPlay(post.id)}>
           <video src={post.video_url} className="feed-post__video" poster={post.thumbnail_url} />
           {!isPlaying && <Play className="feed-post__play-icon" size={48} />}
         </div>
@@ -42,8 +42,13 @@ export default function FeedPost({ post, isPlaying, onVideoPlay }) {
 
     if (post.type === 'foto' || post.image_url) {
       return (
-        <div className="feed-post__media">
-          <img src={post.image_url} alt="Post" className="feed-post__image" />
+        <div className="feed-post__media" onClick={() => onImageClick && onImageClick(post.image_url)}>
+          <img 
+            src={post.image_url} 
+            alt="Post" 
+            className="feed-post__image" 
+            style={{ cursor: 'zoom-in' }} 
+          />
         </div>
       );
     }
@@ -77,7 +82,6 @@ export default function FeedPost({ post, isPlaying, onVideoPlay }) {
       <div className="feed-post__content" style={{ position: 'relative' }}>
         {renderContent()}
         
-        {/* Áudio em segundo plano */}
         {post.bg_music_url && (
           <div 
             onClick={(e) => { e.stopPropagation(); onVideoPlay(isPlaying ? null : post.id); }}
