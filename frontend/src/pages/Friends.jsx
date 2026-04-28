@@ -1,233 +1,86 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { Users, UserPlus, UserCheck, Search } from 'lucide-react';
+import { Users, UserMinus, MessageCircle, Search, UserCheck, Clock } from 'lucide-react';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
-const API = `${API_BASE}/api`;
+const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
 export default function Friends() {
   const { t } = useTranslation();
   const { token } = useAuth();
-  const [tab, setTab] = useState('friends');
+  const navigate = useNavigate();
   const [friends, setFriends] = useState([]);
-  const [requests, setRequests] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-
-  const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
-
-  const fetchFriends = async () => {
-    try {
-      const res = await fetch(`${API}/friends`, { headers });
-      const data = await res.json();
-      setFriends(data.friends || []);
-    } catch (e) { console.error(e); }
-  };
-
-  const fetchRequests = async () => {
-    try {
-      const res = await fetch(`${API}/friends/requests`, { headers });
-      const data = await res.json();
-      setRequests(data.requests || []);
-    } catch (e) { console.error(e); }
-  };
-
-  useEffect(() => {
-    if (token) {
-      fetchFriends();
-      fetchRequests();
-    }
-  }, [token]);
-
-  const handleSearch = async () => {
-    if (searchQuery.length < 2) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`${API}/friends/search?q=${encodeURIComponent(searchQuery)}`, { headers });
-      const data = await res.json();
-      setSearchResults(data.users || []);
-    } catch (e) { console.error(e); }
-    setLoading(false);
-  };
-
-  const sendRequest = async (addresseeId) => {
-    try {
-      const res = await fetch(`${API}/friends/request`, {
-        method: 'POST', headers, body: JSON.stringify({ addressee_id: addresseeId }),
-      });
-      if (res.ok) {
-        setMessage(t('friends.requestSent'));
-        handleSearch(); // refresh results
-      }
-    } catch (e) { console.error(e); }
-    setTimeout(() => setMessage(''), 3000);
-  };
-
-  const acceptRequest = async (friendshipId) => {
-    try {
-      const res = await fetch(`${API}/friends/accept/${friendshipId}`, { method: 'PUT', headers });
-      if (res.ok) {
-        setMessage(t('friends.friendAdded'));
-        fetchRequests();
-        fetchFriends();
-      }
-    } catch (e) { console.error(e); }
-    setTimeout(() => setMessage(''), 3000);
-  };
-
-  const rejectRequest = async (friendshipId) => {
-    try {
-      await fetch(`${API}/friends/reject/${friendshipId}`, { method: 'PUT', headers });
-      fetchRequests();
-    } catch (e) { console.error(e); }
-  };
-
-  const removeFriend = async (friendshipId) => {
-    try {
-      const res = await fetch(`${API}/friends/${friendshipId}`, { method: 'DELETE', headers });
-      if (res.ok) {
-        setMessage(t('friends.friendRemoved'));
-        fetchFriends();
-      }
-    } catch (e) { console.error(e); }
-    setTimeout(() => setMessage(''), 3000);
-  };
-
-  const getInitials = (name) => (name || '?').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-
-  const timeAgo = (dateStr) => {
-    if (!dateStr) return '';
-    const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-    if (diff < 60) return 'agora';
-    if (diff < 3600) return `há ${Math.floor(diff / 60)} min`;
-    if (diff < 86400) return `há ${Math.floor(diff / 3600)}h`;
-    return `há ${Math.floor(diff / 86400)}d`;
-  };
-
-  // Check if user is online (last_seen_at within 2 minutes)
-  const isOnline = (user) => {
-    if (!user.last_seen_at) return false;
-    const diff = Date.now() - new Date(user.last_seen_at).getTime();
-    return diff < 2 * 60 * 1000; // 2 minutes
-  };
-
-  const Avatar = ({ user }) => (
-    <div style={{ position: 'relative', width: 40, height: 40, flexShrink: 0 }}>
-      {user.avatar_url
-        ? <img src={user.avatar_url} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />
-        : <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #667eea, #764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 'bold', fontSize: 14 }}>{getInitials(user.full_name || user.display_name)}</div>
-      }
-      {isOnline(user) && (
-        <span style={{
-          position: 'absolute', bottom: 0, right: 0,
-          width: 12, height: 12, borderRadius: '50%',
-          background: '#2ecc71', border: '2px solid #fff',
-          boxShadow: '0 0 4px rgba(46,204,113,0.5)',
-        }} title="Online agora" />
-      )}
-    </div>
-  );
+  const [activeTab, setActiveTab] = useState('my'); // 'my', 'requests', 'search'
 
   return (
-    <div className="page-container" style={{ maxWidth: 600, margin: '0 auto', padding: '20px' }}>
-      <h1 style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <Users size={28} /> {t('friends.title')}
-      </h1>
-
-      {message && <div style={{ background: '#d4edda', color: '#155724', padding: '10px 16px', borderRadius: 8, marginBottom: 16 }}>{message}</div>}
-
-      {/* Tabs */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
-        <button className={`btn ${tab === 'friends' ? 'btn-primary' : 'btn-outline'} btn-sm`} onClick={() => setTab('friends')}>
-          <UserCheck size={14} style={{ marginRight: 4 }} />{t('friends.myFriends')}
-        </button>
-        <button className={`btn ${tab === 'requests' ? 'btn-primary' : 'btn-outline'} btn-sm`} onClick={() => setTab('requests')}>
-          <UserPlus size={14} style={{ marginRight: 4 }} />{t('friends.requests')}
-          {requests.length > 0 && <span style={{ marginLeft: 4, background: '#e74c3c', color: '#fff', borderRadius: '50%', padding: '1px 6px', fontSize: 11 }}>{requests.length}</span>}
-        </button>
-        <button className={`btn ${tab === 'search' ? 'btn-primary' : 'btn-outline'} btn-sm`} onClick={() => setTab('search')}>
-          <Search size={14} style={{ marginRight: 4 }} />{t('friends.search')}
-        </button>
+    <div style={{ maxWidth: '700px', margin: '0 auto', padding: '20px 15px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '25px' }}>
+        <Users size={28} color="#0095f6" />
+        <h1 style={{ fontSize: '24px', fontWeight: '800', margin: 0 }}>{t('friends.title', 'Amigos')}</h1>
       </div>
 
-      {/* Search Tab */}
-      {tab === 'search' && (
-        <div>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleSearch()}
-              placeholder={t('friends.searchPlaceholder')}
-              style={{ flex: 1, padding: '8px 12px', borderRadius: 8, border: '1px solid #ddd', fontSize: 14 }}
-            />
-            <button className="btn btn-primary btn-sm" onClick={handleSearch} disabled={loading}>
-              <Search size={16} />
-            </button>
-          </div>
-          {searchResults.map(u => (
-            <div key={u.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: '1px solid #eee' }}>
-              <Avatar user={u} />
-              <span style={{ flex: 1, fontWeight: 500 }}>{u.full_name || u.display_name}</span>
-              {u.friendship_status === 'accepted' ? (
-                <span style={{ color: '#27ae60', fontSize: 13 }}><UserCheck size={14} /> {t('friends.myFriends')}</span>
-              ) : u.friendship_status === 'pending' ? (
-                <span style={{ color: '#f39c12', fontSize: 13 }}>{t('friends.pending')}</span>
-              ) : (
-                <button className="btn btn-primary btn-sm" onClick={() => sendRequest(u.id)}>
-                  <UserPlus size={14} style={{ marginRight: 4 }} />{t('friends.addFriend')}
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Navegação por Abas Estilo Pílula */}
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '30px', overflowX: 'auto', paddingBottom: '5px' }}>
+        {[
+          { id: 'my', label: t('friends.myFriends', 'Meus Amigos'), icon: <UserCheck size={16} /> },
+          { id: 'requests', label: t('friends.requests', 'Solicitações'), icon: <Users size={16} /> },
+          { id: 'search', label: t('friends.search', 'Descobrir'), icon: <Search size={16} /> }
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '25px',
+              border: 'none', cursor: 'pointer', fontWeight: '600', transition: '0.3s',
+              background: activeTab === tab.id ? '#0095f6' : '#efefef',
+              color: activeTab === tab.id ? '#fff' : '#262626'
+            }}
+          >
+            {tab.icon} {tab.label}
+          </button>
+        ))}
+      </div>
 
-      {/* Friends Tab */}
-      {tab === 'friends' && (
-        <div>
-          {friends.length === 0 ? (
-            <p style={{ color: '#888', textAlign: 'center', padding: 40 }}>{t('friends.noFriends')}</p>
-          ) : friends.map(f => (
-            <div key={f.friendship_id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: '1px solid #eee' }}>
-              <Avatar user={f} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 500 }}>{f.full_name || f.display_name}</div>
-                <div style={{ fontSize: '0.72rem', color: isOnline(f) ? '#2ecc71' : '#aaa' }}>
-                  {isOnline(f) ? '🟢 Online agora' : f.last_seen_at ? `Visto ${timeAgo(f.last_seen_at)}` : 'Offline'}
+      {/* Lista de Amigos */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {/* Exemplo de Card (Você deve mapear seus amigos aqui) */}
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '15px', background: '#fff', borderRadius: '15px',
+            border: '1px solid #dbdbdb', transition: 'transform 0.2s'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }} onClick={() => navigate('/perfil/1')}>
+              <div style={{ width: '55px', height: '55px', borderRadius: '50%', overflow: 'hidden', background: '#eee', border: '2px solid #0095f6' }}>
+                <img src={`https://i.pravatar.cc/150?u=${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+              <div>
+                <div style={{ fontWeight: '700', color: '#262626' }}>Nome do Amigo {i}</div>
+                <div style={{ fontSize: '12px', color: '#8e8e8e', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <Clock size={12} /> Visto há {i}d
                 </div>
               </div>
-              <button className="btn btn-outline btn-sm" onClick={() => removeFriend(f.friendship_id)} style={{ color: '#e74c3c', borderColor: '#e74c3c', fontSize: 12 }}>
-                {t('friends.removeFriend')}
-              </button>
             </div>
-          ))}
-        </div>
-      )}
 
-      {/* Requests Tab */}
-      {tab === 'requests' && (
-        <div>
-          {requests.length === 0 ? (
-            <p style={{ color: '#888', textAlign: 'center', padding: 40 }}>{t('friends.noRequests')}</p>
-          ) : requests.map(r => (
-            <div key={r.friendship_id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: '1px solid #eee' }}>
-              <Avatar user={r} />
-              <span style={{ flex: 1, fontWeight: 500 }}>{r.full_name || r.display_name}</span>
-              <button className="btn btn-primary btn-sm" onClick={() => acceptRequest(r.friendship_id)}>
-                {t('friends.accept')}
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button style={{ 
+                padding: '8px 15px', borderRadius: '8px', border: 'none', 
+                background: '#efefef', color: '#262626', fontWeight: '600', 
+                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' 
+              }}>
+                <MessageCircle size={16} /> {t('friends.chat', 'Chat')}
               </button>
-              <button className="btn btn-outline btn-sm" onClick={() => rejectRequest(r.friendship_id)} style={{ color: '#e74c3c' }}>
-                {t('friends.reject')}
+              <button style={{ 
+                padding: '8px', borderRadius: '8px', border: '1px solid #ffcccc', 
+                background: '#fff', color: '#ed4956', cursor: 'pointer' 
+              }}>
+                <UserMinus size={18} />
               </button>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
