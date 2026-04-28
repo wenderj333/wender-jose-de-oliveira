@@ -200,6 +200,8 @@ function MiniPlayer({ songs, currentIdx, setCurrentIdx, audioRef, playing, setPl
     audioRef.current.currentTime = (e.target.value / 100) * audioRef.current.duration;
   };
 
+    const handleNext = () => { if (currentIdx < songs.length - 1) setCurrentIdx(currentIdx + 1); else setCurrentIdx(0); };
+  const handlePrev = () => { if (currentIdx > 0) setCurrentIdx(currentIdx - 1); else setCurrentIdx(songs.length - 1); };
   const changeVolume = (e) => {
     const v = parseFloat(e.target.value);
     setVolume(v);
@@ -226,13 +228,13 @@ function MiniPlayer({ songs, currentIdx, setCurrentIdx, audioRef, playing, setPl
           style={{ width: '100%', accentColor: 'var(--fb, #4a80d4)', height: 3, marginTop: 4 }} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-        <button onClick={() => setCurrentIdx(Math.max(0, currentIdx - 1))} style={iconBtn}>
+        <button onClick={handlePrev} style={iconBtn}>
           <ChevronLeft size={18} />
         </button>
         <button onClick={toggle} style={{ ...iconBtn, background: 'var(--fb, #4a80d4)', color: '#fff', width: 36, height: 36, borderRadius: '50%' }}>
           {playing ? <Pause size={16} /> : <Play size={16} />}
         </button>
-        <button onClick={() => setCurrentIdx(Math.min(songs.length - 1, currentIdx + 1))} style={iconBtn}>
+        <button onClick={handleNext} style={iconBtn}>
           <ChevronRight size={18} />
         </button>
         <Volume2 size={14} color="#888" />
