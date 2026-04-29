@@ -1,4 +1,4 @@
-const { WebSocketServer } = require('ws');
+﻿const { WebSocketServer } = require('ws');
 const Anthropic = require('@anthropic-ai/sdk');
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -27,7 +27,7 @@ function setupWebSocket(server) {
   }, 25000);
 
   wss.on('connection', (ws) => {
-    console.log('🔌 Nova conexão WebSocket');
+    console.log('ðŸ”Œ Nova conexÃ£o WebSocket');
 
     ws.on('message', async (data) => {
       try {
@@ -159,7 +159,7 @@ function setupWebSocket(server) {
           case 'live_join': {
             const stream = liveStreams.get(msg.streamId);
             if (!stream) { ws.send(JSON.stringify({ type: 'live_stopped', streamId: msg.streamId })); break; }
-            if (stream.viewers.size >= 10) { ws.send(JSON.stringify({ type: 'live_error', error: 'Stream cheio (máx. 10 espectadores)' })); break; }
+            if (stream.viewers.size >= 10) { ws.send(JSON.stringify({ type: 'live_error', error: 'Stream cheio (mÃ¡x. 10 espectadores)' })); break; }
             stream.viewers.set(msg.viewerId, ws);
             const ci2 = clients.get(ws) || {};
             ci2.liveStreamId = msg.streamId;
@@ -522,7 +522,7 @@ function handleGameQueue(ws, msg) {
 
   if (msg.type === 'game_queue') {
     // Procurar alguem na fila
-    const idx = gameQueue.findIndex(p => p.userId !== userId);
+    const idx = gameQueue.findIndex(p => p.userId !== userId && p.ws.readyState === 1);
     if (idx !== -1) {
       const outro = gameQueue.splice(idx, 1)[0];
       const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
@@ -553,3 +553,4 @@ function handleGameQueue(ws, msg) {
 module.exports = { setupWebSocket };
 
 // clean
+
