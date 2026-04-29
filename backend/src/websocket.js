@@ -521,7 +521,13 @@ function handleGameQueue(ws, msg) {
   const livro = msg.livro || 'Todos';
 
   if (msg.type === 'game_queue') {
-    // Procurar alguem na fila
+    // Limpeza: remove jogadores mortos ou duplicados
+    for (let i = gameQueue.length - 1; i >= 0; i--) {
+      if (gameQueue[i].userId === userId || gameQueue[i].ws.readyState !== 1) {
+        gameQueue.splice(i, 1);
+      }
+    }
+    // Procurar alguem na fila (qualquer livro)
     const idx = gameQueue.findIndex(p => p.userId !== userId && p.ws.readyState === 1);
     if (idx !== -1) {
       const outro = gameQueue.splice(idx, 1)[0];
@@ -540,8 +546,13 @@ function handleGameQueue(ws, msg) {
       if (ws.readyState === 1) ws.send(matchMsg2);
       gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, jogadores: [{ userId: outro.userId, userName: outro.userName, avatar: outro.avatar, pontos: 0, ws: outro.ws }, { userId, userName, avatar, pontos: 0, ws }] });
     } else {
-      gameQueue.push({ userId, userName, avatar, livro, ws });
+      const playerEntry = { userId, userName, avatar, livro, ws };
+      gameQueue.push(playerEntry);
       if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'game_queued' }));
+      ws.on('close', () => {
+        const ci = gameQueue.indexOf(playerEntry);
+        if (ci !== -1) gameQueue.splice(ci, 1);
+      });
     }
   }
 
