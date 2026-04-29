@@ -520,7 +520,7 @@ function handleGameQueue(ws, msg) {
   const avatar = msg.avatar || '';
   const livro = msg.livro || 'Todos';
 
-  if (msg.type === 'game_queue') {
+  if (msg.type === 'game_queue') { console.log('🎮 GAME_QUEUE:', userId, livro, 'fila:', gameQueue.length);
     // Limpeza: remove jogadores mortos ou duplicados
     for (let i = gameQueue.length - 1; i >= 0; i--) {
       if (gameQueue[i].userId === userId || gameQueue[i].ws.readyState !== 1) {
