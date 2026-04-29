@@ -6,7 +6,7 @@ import PERGUNTAS_JSON from '../data/perguntas.json';
 
 const LIVROS = ['Todos','Genesis','Exodo','Salmos','Proverbios','Mateus','Apocalipse'];
 const TEMPO = 15;
-const bg = { minHeight:'100vh', background:'linear-gradient(135deg,#1a0a3e,#2d1054)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:24, color:'white' };
+const bg = { minHeight:'100vh', backgroundImage:'url(/desavio_biblico.jpeg)',backgroundSize:'cover',backgroundPosition:'center', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:24, color:'white' };
 
 function filtrar(livro) {
   let p = PERGUNTAS_JSON.filter(x => livro==='Todos' || x.livro===livro);
@@ -237,7 +237,7 @@ export default function DesafioBiblico() {
   const btn=(onClick,bg2,txt,mb=10)=><button onClick={()=>{playSound('click');onClick();}} style={{width:'100%',maxWidth:320,padding:14,borderRadius:14,border:'none',background:bg2,color:'white',fontSize:15,fontWeight:700,cursor:'pointer',marginBottom:mb}}>{txt}</button>;
 
   if(tela==='lobby') return (
-    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#1a0a3e,#2d1054)',display:'flex',color:'white'}}>
+    <div style={{minHeight:'100vh',backgroundImage:'url(/desavio_biblico.jpeg)',backgroundSize:'cover',backgroundPosition:'center',display:'flex',color:'white'}}>
       <div style={{width:200,background:'rgba(0,0,0,0.3)',borderRight:'1px solid rgba(255,255,255,0.1)',padding:'24px 14px',display:'flex',flexDirection:'column',overflowY:'auto'}}>
         <p style={{fontSize:11,fontWeight:800,color:'#f0c040',letterSpacing:1.5,textTransform:'uppercase',marginBottom:16}}>🏆 Top Jogadores</p>
         {ranking.slice(0,10).map((j,i)=>(
@@ -306,7 +306,7 @@ export default function DesafioBiblico() {
   );
 
   if(tela==='vs') return (
-    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#1a0a3e,#2d1054)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:'white'}}>
+    <div style={{minHeight:'100vh',backgroundImage:'url(/desavio_biblico.jpeg)',backgroundSize:'cover',backgroundPosition:'center',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:'white'}}>
       <p style={{fontSize:13,opacity:0.6,marginBottom:24,letterSpacing:2,textTransform:'uppercase'}}>Desafio Bíblico</p>
       <div style={{display:'flex',alignItems:'center',gap:24}}>
         <div style={{textAlign:'center'}}>
@@ -384,7 +384,7 @@ export default function DesafioBiblico() {
   );
 
   const musicBar = musicUrl ? (
-    <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:9999,background:'linear-gradient(135deg,#1a0a3e,#2d1054)',borderTop:'1px solid rgba(108,71,212,0.4)',padding:'8px 16px',display:'flex',alignItems:'center',gap:12}}>
+    <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:9999,backgroundImage:'url(/desavio_biblico.jpeg)',backgroundSize:'cover',backgroundPosition:'center',borderTop:'1px solid rgba(108,71,212,0.4)',padding:'8px 16px',display:'flex',alignItems:'center',gap:12}}>
       <audio ref={audioRef} src={musicUrl} loop onEnded={()=>setMusicPlaying(false)}/>
       <span style={{fontSize:13,color:'#a78bfa',fontWeight:700}}>🎵 Desafio Bíblico</span>
       <button onClick={()=>setMusicPlaying(p=>!p)} style={{padding:'6px 14px',borderRadius:20,border:'none',background:'#6c47d4',color:'white',cursor:'pointer',fontWeight:700,fontSize:13}}>{musicPlaying?'⏸️':'▶️'}</button>
@@ -425,7 +425,7 @@ export default function DesafioBiblico() {
   ) : null;
 
   const conquistaAnim = novaConquista ? (
-    <div style={{position:'fixed',top:80,left:'50%',transform:'translateX(-50%)',zIndex:9997,background:'linear-gradient(135deg,#1a0a3e,#2d1054)',border:'2px solid #f0c040',borderRadius:20,padding:'16px 28px',textAlign:'center',boxShadow:'0 8px 32px rgba(240,192,64,0.4)',animation:'slideDown 0.5s ease'}}>
+    <div style={{position:'fixed',top:80,left:'50%',transform:'translateX(-50%)',zIndex:9997,backgroundImage:'url(/desavio_biblico.jpeg)',backgroundSize:'cover',backgroundPosition:'center',border:'2px solid #f0c040',borderRadius:20,padding:'16px 28px',textAlign:'center',boxShadow:'0 8px 32px rgba(240,192,64,0.4)',animation:'slideDown 0.5s ease'}}>
       <div style={{fontSize:40}}>{novaConquista.icon}</div>
       <p style={{color:'#f0c040',fontWeight:900,fontSize:15,margin:'4px 0'}}>Conquista Desbloqueada!</p>
       <p style={{color:'white',fontWeight:700,fontSize:14,margin:0}}>{novaConquista.nome}</p>
