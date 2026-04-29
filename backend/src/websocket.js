@@ -33,7 +33,7 @@ function setupWebSocket(server) {
       try {
         const msg = JSON.parse(data);
 
-        switch (msg.type) {
+        console.log("MSG_TIPO:", msg.type, "USER:", msg.userId); switch (msg.type) {
           case 'game_create':
           case 'game_join':
           case 'game_ready':
