@@ -12919,5 +12919,1625 @@
       "Новый Иерусалим",
       "Мария"
     ]
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem construiu a arca?",
+    "opts": [
+      "Abraão",
+      "Noé",
+      "Moisés",
+      "Davi"
+    ],
+    "r": 1,
+    "nivel": "facil",
+    "es_q": "¿Quién construyó el arca?",
+    "en_q": "Who built the ark?",
+    "de_q": "Wer baute die Arche?",
+    "fr_q": "Qui a construit l'arche?",
+    "ro_q": "Cine a construit arca?",
+    "ru_q": "Кто построил ковчег?",
+    "es_opts": [
+      "Abraham",
+      "Noé",
+      "Moisés",
+      "David"
+    ],
+    "en_opts": [
+      "Abraham",
+      "Noah",
+      "Moses",
+      "David"
+    ],
+    "de_opts": [
+      "Abraham",
+      "Noe",
+      "Mose",
+      "David"
+    ],
+    "fr_opts": [
+      "Abraham",
+      "Noé",
+      "Moïse",
+      "David"
+    ],
+    "ro_opts": [
+      "Avraam",
+      "Noe",
+      "Moise",
+      "David"
+    ],
+    "ru_opts": [
+      "Авраам",
+      "Ной",
+      "Моисей",
+      "Давид"
+    ]
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quantos dias durou o dilúvio?",
+    "opts": [
+      "20 dias",
+      "40 dias",
+      "100 dias",
+      "7 dias"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "es_q": "¿Cuántos días duró el diluvio?",
+    "en_q": "How many days did the flood last?",
+    "de_q": "Wie viele Tage dauerte die Flut?",
+    "fr_q": "Combien de jours a duré le déluge?",
+    "ro_q": "Câte zile a durat potopul?",
+    "ru_q": "Сколько дней длился потоп?",
+    "es_opts": [
+      "20 días",
+      "40 días",
+      "100 días",
+      "7 días"
+    ],
+    "en_opts": [
+      "20 days",
+      "40 days",
+      "100 days",
+      "7 days"
+    ],
+    "de_opts": [
+      "20 Tage",
+      "40 Tage",
+      "100 Tage",
+      "7 Tage"
+    ],
+    "fr_opts": [
+      "20 jours",
+      "40 jours",
+      "100 jours",
+      "7 jours"
+    ],
+    "ro_opts": [
+      "20 zile",
+      "40 zile",
+      "100 zile",
+      "7 zile"
+    ],
+    "ru_opts": [
+      "20 дней",
+      "40 дней",
+      "100 дней",
+      "7 дней"
+    ]
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem foi o irmão de Caim?",
+    "opts": [
+      "Noé",
+      "Abel",
+      "Sem",
+      "Jacó"
+    ],
+    "r": 1,
+    "nivel": "facil",
+    "es_q": "¿Quién fue el hermano de Caín?",
+    "en_q": "Who was Cain's brother?",
+    "de_q": "Wer war Kains Bruder?",
+    "fr_q": "Qui était le frère de Caïn?",
+    "ro_q": "Cine a fost fratele lui Cain?",
+    "ru_q": "Кто был братом Каина?",
+    "es_opts": [
+      "Noé",
+      "Abel",
+      "Sem",
+      "Jacob"
+    ],
+    "en_opts": [
+      "Noah",
+      "Abel",
+      "Shem",
+      "Jacob"
+    ],
+    "de_opts": [
+      "Noe",
+      "Abel",
+      "Sem",
+      "Jakob"
+    ],
+    "fr_opts": [
+      "Noé",
+      "Abel",
+      "Sem",
+      "Jacob"
+    ],
+    "ro_opts": [
+      "Noe",
+      "Abel",
+      "Sem",
+      "Iacov"
+    ],
+    "ru_opts": [
+      "Ной",
+      "Авель",
+      "Сим",
+      "Иаков"
+    ]
+  },
+  {
+    "livro": "Genesis",
+    "q": "Como se chamava a esposa de Abraão?",
+    "opts": [
+      "Raquel",
+      "Rebeca",
+      "Sara",
+      "Lea"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Cómo se llamaba la esposa de Abraham?",
+    "en_q": "What was Abraham's wife's name?",
+    "de_q": "Wie hieß Abrahams Frau?",
+    "fr_q": "Comment s'appelait la femme d'Abraham?",
+    "ro_q": "Cum se numea soția lui Avraam?",
+    "ru_q": "Как звали жену Авраама?",
+    "es_opts": [
+      "Raquel",
+      "Rebeca",
+      "Sara",
+      "Lea"
+    ],
+    "en_opts": [
+      "Rachel",
+      "Rebecca",
+      "Sarah",
+      "Leah"
+    ],
+    "de_opts": [
+      "Rahel",
+      "Rebekka",
+      "Sara",
+      "Lea"
+    ],
+    "fr_opts": [
+      "Rachel",
+      "Rébecca",
+      "Sara",
+      "Léa"
+    ],
+    "ro_opts": [
+      "Rahela",
+      "Rebeca",
+      "Sara",
+      "Lea"
+    ],
+    "ru_opts": [
+      "Рахиль",
+      "Ревекка",
+      "Сарра",
+      "Лия"
+    ]
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quantos filhos tinha Jacó?",
+    "opts": [
+      "10",
+      "12",
+      "14",
+      "8"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "es_q": "¿Cuántos hijos tenía Jacob?",
+    "en_q": "How many sons did Jacob have?",
+    "de_q": "Wie viele Söhne hatte Jakob?",
+    "fr_q": "Combien de fils Jacob avait-il?",
+    "ro_q": "Câți fii avea Iacov?",
+    "ru_q": "Сколько сыновей было у Иакова?",
+    "es_opts": [
+      "10",
+      "12",
+      "14",
+      "8"
+    ],
+    "en_opts": [
+      "10",
+      "12",
+      "14",
+      "8"
+    ],
+    "de_opts": [
+      "10",
+      "12",
+      "14",
+      "8"
+    ],
+    "fr_opts": [
+      "10",
+      "12",
+      "14",
+      "8"
+    ],
+    "ro_opts": [
+      "10",
+      "12",
+      "14",
+      "8"
+    ],
+    "ru_opts": [
+      "10",
+      "12",
+      "14",
+      "8"
+    ]
+  },
+  {
+    "livro": "Genesis",
+    "q": "Quem interpretou os sonhos do Faraó?",
+    "opts": [
+      "Moisés",
+      "Abraão",
+      "José",
+      "Jacó"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Quién interpretó los sueños del Faraón?",
+    "en_q": "Who interpreted Pharaoh's dreams?",
+    "de_q": "Wer deutete die Träume des Pharaos?",
+    "fr_q": "Qui a interprété les rêves du Pharaon?",
+    "ro_q": "Cine a interpretat visele Faraonului?",
+    "ru_q": "Кто истолковал сны фараона?",
+    "es_opts": [
+      "Moisés",
+      "Abraham",
+      "José",
+      "Jacob"
+    ],
+    "en_opts": [
+      "Moses",
+      "Abraham",
+      "Joseph",
+      "Jacob"
+    ],
+    "de_opts": [
+      "Mose",
+      "Abraham",
+      "Josef",
+      "Jakob"
+    ],
+    "fr_opts": [
+      "Moïse",
+      "Abraham",
+      "Joseph",
+      "Jacob"
+    ],
+    "ro_opts": [
+      "Moise",
+      "Avraam",
+      "Iosif",
+      "Iacov"
+    ],
+    "ru_opts": [
+      "Моисей",
+      "Авраам",
+      "Иосиф",
+      "Иаков"
+    ]
+  },
+  {
+    "livro": "Genesis",
+    "q": "O que Deus criou no primeiro dia?",
+    "opts": [
+      "Sol e lua",
+      "Luz",
+      "Animais",
+      "Mar"
+    ],
+    "r": 1,
+    "nivel": "facil",
+    "es_q": "¿Qué creó Dios el primer día?",
+    "en_q": "What did God create on the first day?",
+    "de_q": "Was erschuf Gott am ersten Tag?",
+    "fr_q": "Qu'a créé Dieu le premier jour?",
+    "ro_q": "Ce a creat Dumnezeu în prima zi?",
+    "ru_q": "Что Бог создал в первый день?",
+    "es_opts": [
+      "Sol y luna",
+      "Luz",
+      "Animales",
+      "Mar"
+    ],
+    "en_opts": [
+      "Sun and moon",
+      "Light",
+      "Animals",
+      "Sea"
+    ],
+    "de_opts": [
+      "Sonne und Mond",
+      "Licht",
+      "Tiere",
+      "Meer"
+    ],
+    "fr_opts": [
+      "Soleil et lune",
+      "Lumière",
+      "Animaux",
+      "Mer"
+    ],
+    "ro_opts": [
+      "Soare și lună",
+      "Lumină",
+      "Animale",
+      "Mare"
+    ],
+    "ru_opts": [
+      "Солнце и луна",
+      "Свет",
+      "Животные",
+      "Море"
+    ]
+  },
+  {
+    "livro": "Exodo",
+    "q": "Quantas pragas Deus enviou ao Egito?",
+    "opts": [
+      "7",
+      "10",
+      "12",
+      "5"
+    ],
+    "r": 1,
+    "nivel": "facil",
+    "es_q": "¿Cuántas plagas envió Dios a Egipto?",
+    "en_q": "How many plagues did God send to Egypt?",
+    "de_q": "Wie viele Plagen sandte Gott nach Ägypten?",
+    "fr_q": "Combien de plaies Dieu a-t-il envoyées en Égypte?",
+    "ro_q": "Câte plăgi a trimis Dumnezeu în Egipt?",
+    "ru_q": "Сколько казней послал Бог в Египет?",
+    "es_opts": [
+      "7",
+      "10",
+      "12",
+      "5"
+    ],
+    "en_opts": [
+      "7",
+      "10",
+      "12",
+      "5"
+    ],
+    "de_opts": [
+      "7",
+      "10",
+      "12",
+      "5"
+    ],
+    "fr_opts": [
+      "7",
+      "10",
+      "12",
+      "5"
+    ],
+    "ro_opts": [
+      "7",
+      "10",
+      "12",
+      "5"
+    ],
+    "ru_opts": [
+      "7",
+      "10",
+      "12",
+      "5"
+    ]
+  },
+  {
+    "livro": "Exodo",
+    "q": "Como se chamava a irmã de Moisés?",
+    "opts": [
+      "Débora",
+      "Rute",
+      "Miriã",
+      "Ester"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "es_q": "¿Cómo se llamaba la hermana de Moisés?",
+    "en_q": "What was Moses' sister's name?",
+    "de_q": "Wie hieß Moses' Schwester?",
+    "fr_q": "Comment s'appelait la sœur de Moïse?",
+    "ro_q": "Cum se numea sora lui Moise?",
+    "ru_q": "Как звали сестру Моисея?",
+    "es_opts": [
+      "Débora",
+      "Rut",
+      "Miriam",
+      "Ester"
+    ],
+    "en_opts": [
+      "Deborah",
+      "Ruth",
+      "Miriam",
+      "Esther"
+    ],
+    "de_opts": [
+      "Debora",
+      "Rut",
+      "Mirjam",
+      "Ester"
+    ],
+    "fr_opts": [
+      "Déborah",
+      "Ruth",
+      "Miriam",
+      "Esther"
+    ],
+    "ro_opts": [
+      "Debora",
+      "Rut",
+      "Miriam",
+      "Estera"
+    ],
+    "ru_opts": [
+      "Девора",
+      "Руфь",
+      "Мириам",
+      "Есфирь"
+    ]
+  },
+  {
+    "livro": "Exodo",
+    "q": "Em que montanha Deus deu os 10 mandamentos?",
+    "opts": [
+      "Monte Carmelo",
+      "Monte Sinai",
+      "Monte Tabor",
+      "Monte Nebo"
+    ],
+    "r": 1,
+    "nivel": "facil",
+    "es_q": "¿En qué monte Dios dio los 10 mandamientos?",
+    "en_q": "On which mountain did God give the 10 commandments?",
+    "de_q": "Auf welchem Berg gab Gott die 10 Gebote?",
+    "fr_q": "Sur quelle montagne Dieu a-t-il donné les 10 commandements?",
+    "ro_q": "Pe ce munte a dat Dumnezeu cele 10 porunci?",
+    "ru_q": "На какой горе Бог дал 10 заповедей?",
+    "es_opts": [
+      "Monte Carmelo",
+      "Monte Sinaí",
+      "Monte Tabor",
+      "Monte Nebo"
+    ],
+    "en_opts": [
+      "Mount Carmel",
+      "Mount Sinai",
+      "Mount Tabor",
+      "Mount Nebo"
+    ],
+    "de_opts": [
+      "Berg Karmel",
+      "Berg Sinai",
+      "Berg Tabor",
+      "Berg Nebo"
+    ],
+    "fr_opts": [
+      "Mont Carmel",
+      "Mont Sinaï",
+      "Mont Thabor",
+      "Mont Nébo"
+    ],
+    "ro_opts": [
+      "Muntele Carmel",
+      "Muntele Sinai",
+      "Muntele Tabor",
+      "Muntele Nebo"
+    ],
+    "ru_opts": [
+      "Гора Кармил",
+      "Гора Синай",
+      "Гора Фавор",
+      "Гора Нево"
+    ]
+  },
+  {
+    "livro": "Exodo",
+    "q": "O que era a maná?",
+    "opts": [
+      "Um animal",
+      "Pão do céu",
+      "Uma fruta",
+      "Uma pedra"
+    ],
+    "r": 1,
+    "nivel": "facil",
+    "es_q": "¿Qué era el maná?",
+    "en_q": "What was manna?",
+    "de_q": "Was war Manna?",
+    "fr_q": "Qu'était la manne?",
+    "ro_q": "Ce era mana?",
+    "ru_q": "Что такое манна?",
+    "es_opts": [
+      "Un animal",
+      "Pan del cielo",
+      "Una fruta",
+      "Una piedra"
+    ],
+    "en_opts": [
+      "An animal",
+      "Bread from heaven",
+      "A fruit",
+      "A stone"
+    ],
+    "de_opts": [
+      "Ein Tier",
+      "Himmelsbrot",
+      "Eine Frucht",
+      "Ein Stein"
+    ],
+    "fr_opts": [
+      "Un animal",
+      "Pain du ciel",
+      "Un fruit",
+      "Une pierre"
+    ],
+    "ro_opts": [
+      "Un animal",
+      "Pâine din cer",
+      "Un fruct",
+      "O piatră"
+    ],
+    "ru_opts": [
+      "Животное",
+      "Хлеб с неба",
+      "Фрукт",
+      "Камень"
+    ]
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quem escreveu a maioria dos Salmos?",
+    "opts": [
+      "Salomão",
+      "Moisés",
+      "Davi",
+      "Asafe"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Quién escribió la mayoría de los Salmos?",
+    "en_q": "Who wrote most of the Psalms?",
+    "de_q": "Wer schrieb die meisten Psalmen?",
+    "fr_q": "Qui a écrit la plupart des Psaumes?",
+    "ro_q": "Cine a scris majoritatea Psalmilor?",
+    "ru_q": "Кто написал большинство псалмов?",
+    "es_opts": [
+      "Salomón",
+      "Moisés",
+      "David",
+      "Asaf"
+    ],
+    "en_opts": [
+      "Solomon",
+      "Moses",
+      "David",
+      "Asaph"
+    ],
+    "de_opts": [
+      "Salomo",
+      "Mose",
+      "David",
+      "Asaf"
+    ],
+    "fr_opts": [
+      "Salomon",
+      "Moïse",
+      "David",
+      "Asaph"
+    ],
+    "ro_opts": [
+      "Solomon",
+      "Moise",
+      "David",
+      "Asaf"
+    ],
+    "ru_opts": [
+      "Соломон",
+      "Моисей",
+      "Давид",
+      "Асаф"
+    ]
+  },
+  {
+    "livro": "Salmos",
+    "q": "Quantos salmos tem o livro dos Salmos?",
+    "opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "es_q": "¿Cuántos salmos tiene el libro de los Salmos?",
+    "en_q": "How many psalms does the book of Psalms have?",
+    "de_q": "Wie viele Psalmen hat das Psalmenbuch?",
+    "fr_q": "Combien de psaumes compte le livre des Psaumes?",
+    "ro_q": "Câți psalmi are cartea Psalmilor?",
+    "ru_q": "Сколько псалмов в книге Псалмов?",
+    "es_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "en_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "de_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "fr_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "ro_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ],
+    "ru_opts": [
+      "100",
+      "120",
+      "150",
+      "180"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Quantas tentações Jesus enfrentou no deserto?",
+    "opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Cuántas tentaciones enfrentó Jesús en el desierto?",
+    "en_q": "How many temptations did Jesus face in the desert?",
+    "de_q": "Wie viele Versuchungen begegnete Jesus in der Wüste?",
+    "fr_q": "Combien de tentations Jésus a-t-il affrontées dans le désert?",
+    "ro_q": "Câte ispite a întâmpinat Isus în deșert?",
+    "ru_q": "Сколько искушений Иисус испытал в пустыне?",
+    "es_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "en_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "de_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "fr_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "ro_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "ru_opts": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Onde Jesus nasceu?",
+    "opts": [
+      "Nazaré",
+      "Jerusalém",
+      "Belém",
+      "Cafarnaum"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Dónde nació Jesús?",
+    "en_q": "Where was Jesus born?",
+    "de_q": "Wo wurde Jesus geboren?",
+    "fr_q": "Où est né Jésus?",
+    "ro_q": "Unde s-a născut Isus?",
+    "ru_q": "Где родился Иисус?",
+    "es_opts": [
+      "Nazaret",
+      "Jerusalén",
+      "Belén",
+      "Cafarnaúm"
+    ],
+    "en_opts": [
+      "Nazareth",
+      "Jerusalem",
+      "Bethlehem",
+      "Capernaum"
+    ],
+    "de_opts": [
+      "Nazareth",
+      "Jerusalem",
+      "Bethlehem",
+      "Kapernaum"
+    ],
+    "fr_opts": [
+      "Nazareth",
+      "Jérusalem",
+      "Bethléem",
+      "Capharnaüm"
+    ],
+    "ro_opts": [
+      "Nazaret",
+      "Ierusalim",
+      "Betleem",
+      "Capernaum"
+    ],
+    "ru_opts": [
+      "Назарет",
+      "Иерусалим",
+      "Вифлеем",
+      "Капернаум"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Quem baptizou Jesus?",
+    "opts": [
+      "Pedro",
+      "Paulo",
+      "João Baptista",
+      "Tiago"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Quién bautizó a Jesús?",
+    "en_q": "Who baptized Jesus?",
+    "de_q": "Wer taufte Jesus?",
+    "fr_q": "Qui a baptisé Jésus?",
+    "ro_q": "Cine l-a botezat pe Isus?",
+    "ru_q": "Кто крестил Иисуса?",
+    "es_opts": [
+      "Pedro",
+      "Pablo",
+      "Juan el Bautista",
+      "Santiago"
+    ],
+    "en_opts": [
+      "Peter",
+      "Paul",
+      "John the Baptist",
+      "James"
+    ],
+    "de_opts": [
+      "Petrus",
+      "Paulus",
+      "Johannes der Täufer",
+      "Jakobus"
+    ],
+    "fr_opts": [
+      "Pierre",
+      "Paul",
+      "Jean-Baptiste",
+      "Jacques"
+    ],
+    "ro_opts": [
+      "Petru",
+      "Pavel",
+      "Ioan Botezătorul",
+      "Iacov"
+    ],
+    "ru_opts": [
+      "Пётр",
+      "Павел",
+      "Иоанн Креститель",
+      "Иаков"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Qual discípulo negou Jesus três vezes?",
+    "opts": [
+      "João",
+      "Tiago",
+      "Pedro",
+      "André"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Qué discípulo negó a Jesús tres veces?",
+    "en_q": "Which disciple denied Jesus three times?",
+    "de_q": "Welcher Jünger verleugnete Jesus dreimal?",
+    "fr_q": "Quel disciple a renié Jésus trois fois?",
+    "ro_q": "Ce ucenic l-a negat pe Isus de trei ori?",
+    "ru_q": "Какой ученик трижды отрёкся от Иисуса?",
+    "es_opts": [
+      "Juan",
+      "Santiago",
+      "Pedro",
+      "Andrés"
+    ],
+    "en_opts": [
+      "John",
+      "James",
+      "Peter",
+      "Andrew"
+    ],
+    "de_opts": [
+      "Johannes",
+      "Jakobus",
+      "Petrus",
+      "Andreas"
+    ],
+    "fr_opts": [
+      "Jean",
+      "Jacques",
+      "Pierre",
+      "André"
+    ],
+    "ro_opts": [
+      "Ioan",
+      "Iacov",
+      "Petru",
+      "Andrei"
+    ],
+    "ru_opts": [
+      "Иоанн",
+      "Иаков",
+      "Пётр",
+      "Андрей"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Quem traiu Jesus por 30 moedas de prata?",
+    "opts": [
+      "Pedro",
+      "Tomé",
+      "Judas",
+      "Filipe"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Quién traicionó a Jesús por 30 monedas de plata?",
+    "en_q": "Who betrayed Jesus for 30 pieces of silver?",
+    "de_q": "Wer verriet Jesus für 30 Silberstücke?",
+    "fr_q": "Qui a trahi Jésus pour 30 pièces d'argent?",
+    "ro_q": "Cine l-a trădat pe Isus pentru 30 de arginți?",
+    "ru_q": "Кто предал Иисуса за 30 сребреников?",
+    "es_opts": [
+      "Pedro",
+      "Tomás",
+      "Judas",
+      "Felipe"
+    ],
+    "en_opts": [
+      "Peter",
+      "Thomas",
+      "Judas",
+      "Philip"
+    ],
+    "de_opts": [
+      "Petrus",
+      "Thomas",
+      "Judas",
+      "Philipp"
+    ],
+    "fr_opts": [
+      "Pierre",
+      "Thomas",
+      "Judas",
+      "Philippe"
+    ],
+    "ro_opts": [
+      "Petru",
+      "Toma",
+      "Iuda",
+      "Filip"
+    ],
+    "ru_opts": [
+      "Пётр",
+      "Фома",
+      "Иуда",
+      "Филипп"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Qual foi o primeiro milagre de Jesus?",
+    "opts": [
+      "Curar um cego",
+      "Transformar água em vinho",
+      "Ressuscitar Lázaro",
+      "Multiplicar pães"
+    ],
+    "r": 1,
+    "nivel": "facil",
+    "es_q": "¿Cuál fue el primer milagro de Jesús?",
+    "en_q": "What was Jesus' first miracle?",
+    "de_q": "Was war Jesu erstes Wunder?",
+    "fr_q": "Quel fut le premier miracle de Jésus?",
+    "ro_q": "Care a fost primul miracol al lui Isus?",
+    "ru_q": "Каким было первое чудо Иисуса?",
+    "es_opts": [
+      "Sanar a un ciego",
+      "Convertir agua en vino",
+      "Resucitar a Lázaro",
+      "Multiplicar panes"
+    ],
+    "en_opts": [
+      "Heal a blind man",
+      "Turn water into wine",
+      "Raise Lazarus",
+      "Multiply loaves"
+    ],
+    "de_opts": [
+      "Einen Blinden heilen",
+      "Wasser in Wein verwandeln",
+      "Lazarus auferwecken",
+      "Brote vermehren"
+    ],
+    "fr_opts": [
+      "Guérir un aveugle",
+      "Transformer l'eau en vin",
+      "Ressusciter Lazare",
+      "Multiplier les pains"
+    ],
+    "ro_opts": [
+      "Vindeca un orb",
+      "Transforma apa în vin",
+      "Învia pe Lazăr",
+      "Înmulți pâinile"
+    ],
+    "ru_opts": [
+      "Исцелить слепого",
+      "Превратить воду в вино",
+      "Воскресить Лазаря",
+      "Умножить хлебы"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Quem disse 'Eu sou o caminho, a verdade e a vida'?",
+    "opts": [
+      "Paulo",
+      "Pedro",
+      "Jesus",
+      "João"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Quién dijo 'Yo soy el camino, la verdad y la vida'?",
+    "en_q": "Who said 'I am the way, the truth and the life'?",
+    "de_q": "Wer sagte 'Ich bin der Weg, die Wahrheit und das Leben'?",
+    "fr_q": "Qui a dit 'Je suis le chemin, la vérité et la vie'?",
+    "ro_q": "Cine a spus 'Eu sunt calea, adevărul și viața'?",
+    "ru_q": "Кто сказал 'Я есмь путь и истина и жизнь'?",
+    "es_opts": [
+      "Pablo",
+      "Pedro",
+      "Jesús",
+      "Juan"
+    ],
+    "en_opts": [
+      "Paul",
+      "Peter",
+      "Jesus",
+      "John"
+    ],
+    "de_opts": [
+      "Paulus",
+      "Petrus",
+      "Jesus",
+      "Johannes"
+    ],
+    "fr_opts": [
+      "Paul",
+      "Pierre",
+      "Jésus",
+      "Jean"
+    ],
+    "ro_opts": [
+      "Pavel",
+      "Petru",
+      "Isus",
+      "Ioan"
+    ],
+    "ru_opts": [
+      "Павел",
+      "Пётр",
+      "Иисус",
+      "Иоанн"
+    ]
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quem escreveu o livro do Apocalipse?",
+    "opts": [
+      "Paulo",
+      "Pedro",
+      "João",
+      "Tiago"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Quién escribió el libro del Apocalipsis?",
+    "en_q": "Who wrote the book of Revelation?",
+    "de_q": "Wer schrieb das Buch der Offenbarung?",
+    "fr_q": "Qui a écrit le livre de l'Apocalypse?",
+    "ro_q": "Cine a scris cartea Apocalipsei?",
+    "ru_q": "Кто написал книгу Откровения?",
+    "es_opts": [
+      "Pablo",
+      "Pedro",
+      "Juan",
+      "Santiago"
+    ],
+    "en_opts": [
+      "Paul",
+      "Peter",
+      "John",
+      "James"
+    ],
+    "de_opts": [
+      "Paulus",
+      "Petrus",
+      "Johannes",
+      "Jakobus"
+    ],
+    "fr_opts": [
+      "Paul",
+      "Pierre",
+      "Jean",
+      "Jacques"
+    ],
+    "ro_opts": [
+      "Pavel",
+      "Petru",
+      "Ioan",
+      "Iacov"
+    ],
+    "ru_opts": [
+      "Павел",
+      "Пётр",
+      "Иоанн",
+      "Иаков"
+    ]
+  },
+  {
+    "livro": "Apocalipse",
+    "q": "Quantas igrejas são mencionadas no Apocalipse?",
+    "opts": [
+      "5",
+      "7",
+      "9",
+      "12"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "es_q": "¿Cuántas iglesias se mencionan en el Apocalipsis?",
+    "en_q": "How many churches are mentioned in Revelation?",
+    "de_q": "Wie viele Gemeinden werden in der Offenbarung erwähnt?",
+    "fr_q": "Combien d'églises sont mentionnées dans l'Apocalypse?",
+    "ro_q": "Câte biserici sunt menționate în Apocalipsă?",
+    "ru_q": "Сколько церквей упомянуто в Откровении?",
+    "es_opts": [
+      "5",
+      "7",
+      "9",
+      "12"
+    ],
+    "en_opts": [
+      "5",
+      "7",
+      "9",
+      "12"
+    ],
+    "de_opts": [
+      "5",
+      "7",
+      "9",
+      "12"
+    ],
+    "fr_opts": [
+      "5",
+      "7",
+      "9",
+      "12"
+    ],
+    "ro_opts": [
+      "5",
+      "7",
+      "9",
+      "12"
+    ],
+    "ru_opts": [
+      "5",
+      "7",
+      "9",
+      "12"
+    ]
+  },
+  {
+    "livro": "Proverbios",
+    "q": "Segundo Provérbios, o que é melhor que o ouro?",
+    "opts": [
+      "Prata",
+      "Riqueza",
+      "Sabedoria",
+      "Poder"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "es_q": "Según Proverbios, ¿qué es mejor que el oro?",
+    "en_q": "According to Proverbs, what is better than gold?",
+    "de_q": "Was ist laut Sprichwörter besser als Gold?",
+    "fr_q": "Selon les Proverbes, qu'est-ce qui est mieux que l'or?",
+    "ro_q": "Potrivit Proverbelor, ce este mai bun decât aurul?",
+    "ru_q": "Согласно Притчам, что лучше золота?",
+    "es_opts": [
+      "Plata",
+      "Riqueza",
+      "Sabiduría",
+      "Poder"
+    ],
+    "en_opts": [
+      "Silver",
+      "Wealth",
+      "Wisdom",
+      "Power"
+    ],
+    "de_opts": [
+      "Silber",
+      "Reichtum",
+      "Weisheit",
+      "Macht"
+    ],
+    "fr_opts": [
+      "Argent",
+      "Richesse",
+      "Sagesse",
+      "Pouvoir"
+    ],
+    "ro_opts": [
+      "Argint",
+      "Bogăție",
+      "Înțelepciune",
+      "Putere"
+    ],
+    "ru_opts": [
+      "Серебро",
+      "Богатство",
+      "Мудрость",
+      "Власть"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Com que arma Davi matou Golias?",
+    "opts": [
+      "Espada",
+      "Lança",
+      "Funda e pedra",
+      "Arco e flecha"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Con qué arma David mató a Goliat?",
+    "en_q": "With what weapon did David kill Goliath?",
+    "de_q": "Mit welcher Waffe tötete David Goliat?",
+    "fr_q": "Avec quelle arme David a-t-il tué Goliath?",
+    "ro_q": "Cu ce armă l-a ucis David pe Goliat?",
+    "ru_q": "Каким оружием Давид убил Голиафа?",
+    "es_opts": [
+      "Espada",
+      "Lanza",
+      "Honda y piedra",
+      "Arco y flecha"
+    ],
+    "en_opts": [
+      "Sword",
+      "Spear",
+      "Sling and stone",
+      "Bow and arrow"
+    ],
+    "de_opts": [
+      "Schwert",
+      "Speer",
+      "Schleuder und Stein",
+      "Bogen und Pfeil"
+    ],
+    "fr_opts": [
+      "Épée",
+      "Lance",
+      "Fronde et pierre",
+      "Arc et flèche"
+    ],
+    "ro_opts": [
+      "Sabie",
+      "Suliță",
+      "Praștie și piatră",
+      "Arc și săgeată"
+    ],
+    "ru_opts": [
+      "Меч",
+      "Копьё",
+      "Праща и камень",
+      "Лук и стрела"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Qual era o nome antigo do apóstolo Paulo?",
+    "opts": [
+      "Barnabé",
+      "Saulo",
+      "Silas",
+      "Timóteo"
+    ],
+    "r": 1,
+    "nivel": "facil",
+    "es_q": "¿Cuál era el nombre antiguo del apóstolo Pablo?",
+    "en_q": "What was the apostle Paul's former name?",
+    "de_q": "Wie hieß der Apostel Paulus früher?",
+    "fr_q": "Quel était l'ancien nom de l'apôtre Paul?",
+    "ro_q": "Care era numele vechi al apostolului Pavel?",
+    "ru_q": "Каким было прежнее имя апостола Павла?",
+    "es_opts": [
+      "Bernabé",
+      "Saulo",
+      "Silas",
+      "Timoteo"
+    ],
+    "en_opts": [
+      "Barnabas",
+      "Saul",
+      "Silas",
+      "Timothy"
+    ],
+    "de_opts": [
+      "Barnabas",
+      "Saulus",
+      "Silas",
+      "Timotheus"
+    ],
+    "fr_opts": [
+      "Barnabas",
+      "Saul",
+      "Silas",
+      "Timothée"
+    ],
+    "ro_opts": [
+      "Barnaba",
+      "Saul",
+      "Sila",
+      "Timotei"
+    ],
+    "ru_opts": [
+      "Варнава",
+      "Савл",
+      "Сила",
+      "Тимофей"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Quem ajudou Jesus a carregar a cruz?",
+    "opts": [
+      "João",
+      "Pedro",
+      "Simão de Cirene",
+      "Nicodemos"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "es_q": "¿Quién ayudó a Jesús a cargar la cruz?",
+    "en_q": "Who helped Jesus carry the cross?",
+    "de_q": "Wer half Jesus, das Kreuz zu tragen?",
+    "fr_q": "Qui a aidé Jésus à porter la croix?",
+    "ro_q": "Cine l-a ajutat pe Isus să poarte crucea?",
+    "ru_q": "Кто помог Иисусу нести крест?",
+    "es_opts": [
+      "Juan",
+      "Pedro",
+      "Simón de Cirene",
+      "Nicodemo"
+    ],
+    "en_opts": [
+      "John",
+      "Peter",
+      "Simon of Cyrene",
+      "Nicodemus"
+    ],
+    "de_opts": [
+      "Johannes",
+      "Petrus",
+      "Simon von Kyrene",
+      "Nikodemus"
+    ],
+    "fr_opts": [
+      "Jean",
+      "Pierre",
+      "Simon de Cyrène",
+      "Nicodème"
+    ],
+    "ro_opts": [
+      "Ioan",
+      "Petru",
+      "Simon din Cirene",
+      "Nicodim"
+    ],
+    "ru_opts": [
+      "Иоанн",
+      "Пётр",
+      "Симон Киринеянин",
+      "Никодим"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Quantos pães Jesus usou para alimentar 5000 pessoas?",
+    "opts": [
+      "2",
+      "3",
+      "5",
+      "7"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "es_q": "¿Cuántos panes usó Jesús para alimentar a 5000 personas?",
+    "en_q": "How many loaves did Jesus use to feed 5000 people?",
+    "de_q": "Wie viele Brote benutzte Jesus, um 5000 Menschen zu speisen?",
+    "fr_q": "Combien de pains Jésus a-t-il utilisés pour nourrir 5000 personnes?",
+    "ro_q": "Câte pâini a folosit Isus pentru a hrăni 5000 de oameni?",
+    "ru_q": "Сколько хлебов использовал Иисус, чтобы накормить 5000 человек?",
+    "es_opts": [
+      "2",
+      "3",
+      "5",
+      "7"
+    ],
+    "en_opts": [
+      "2",
+      "3",
+      "5",
+      "7"
+    ],
+    "de_opts": [
+      "2",
+      "3",
+      "5",
+      "7"
+    ],
+    "fr_opts": [
+      "2",
+      "3",
+      "5",
+      "7"
+    ],
+    "ro_opts": [
+      "2",
+      "3",
+      "5",
+      "7"
+    ],
+    "ru_opts": [
+      "2",
+      "3",
+      "5",
+      "7"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Em que dia o Espírito Santo desceu sobre os discípulos?",
+    "opts": [
+      "Páscoa",
+      "Pentecostes",
+      "Natal",
+      "Epifania"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "es_q": "¿En qué día descendió el Espíritu Santo sobre los discípulos?",
+    "en_q": "On which day did the Holy Spirit descend on the disciples?",
+    "de_q": "An welchem Tag kam der Heilige Geist über die Jünger?",
+    "fr_q": "Quel jour le Saint-Esprit est-il descendu sur les disciples?",
+    "ro_q": "În ce zi a coborât Duhul Sfânt peste ucenici?",
+    "ru_q": "В какой день Дух Святой сошёл на учеников?",
+    "es_opts": [
+      "Pascua",
+      "Pentecostés",
+      "Navidad",
+      "Epifanía"
+    ],
+    "en_opts": [
+      "Easter",
+      "Pentecost",
+      "Christmas",
+      "Epiphany"
+    ],
+    "de_opts": [
+      "Ostern",
+      "Pfingsten",
+      "Weihnachten",
+      "Epiphanie"
+    ],
+    "fr_opts": [
+      "Pâques",
+      "Pentecôte",
+      "Noël",
+      "Épiphanie"
+    ],
+    "ro_opts": [
+      "Paști",
+      "Rusalii",
+      "Crăciun",
+      "Bobotează"
+    ],
+    "ru_opts": [
+      "Пасха",
+      "Пятидесятница",
+      "Рождество",
+      "Богоявление"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Quem ungiu Davi como rei?",
+    "opts": [
+      "Elias",
+      "Natã",
+      "Samuel",
+      "Gade"
+    ],
+    "r": 2,
+    "nivel": "facil",
+    "es_q": "¿Quién ungió a David como rey?",
+    "en_q": "Who anointed David as king?",
+    "de_q": "Wer salbte David zum König?",
+    "fr_q": "Qui a oint David comme roi?",
+    "ro_q": "Cine l-a uns pe David ca rege?",
+    "ru_q": "Кто помазал Давида в цари?",
+    "es_opts": [
+      "Elías",
+      "Natán",
+      "Samuel",
+      "Gad"
+    ],
+    "en_opts": [
+      "Elijah",
+      "Nathan",
+      "Samuel",
+      "Gad"
+    ],
+    "de_opts": [
+      "Elia",
+      "Natan",
+      "Samuel",
+      "Gad"
+    ],
+    "fr_opts": [
+      "Élie",
+      "Nathan",
+      "Samuel",
+      "Gad"
+    ],
+    "ro_opts": [
+      "Ilie",
+      "Natan",
+      "Samuel",
+      "Gad"
+    ],
+    "ru_opts": [
+      "Илия",
+      "Нафан",
+      "Самуил",
+      "Гад"
+    ]
+  },
+  {
+    "livro": "Mateo",
+    "q": "Quem conduziu Israel à Terra Prometida depois de Moisés?",
+    "opts": [
+      "Calebe",
+      "Josué",
+      "Gideão",
+      "Sansão"
+    ],
+    "r": 1,
+    "nivel": "facil",
+    "es_q": "¿Quién condujo a Israel a la Tierra Prometida después de Moisés?",
+    "en_q": "Who led Israel to the Promised Land after Moses?",
+    "de_q": "Wer führte Israel nach Mose ins gelobte Land?",
+    "fr_q": "Qui a conduit Israël en Terre Promise après Moïse?",
+    "ro_q": "Cine a condus Israel în Țara Promisă după Moise?",
+    "ru_q": "Кто привёл Израиль в Землю обетованную после Моисея?",
+    "es_opts": [
+      "Caleb",
+      "Josué",
+      "Gedeón",
+      "Sansón"
+    ],
+    "en_opts": [
+      "Caleb",
+      "Joshua",
+      "Gideon",
+      "Samson"
+    ],
+    "de_opts": [
+      "Kaleb",
+      "Josua",
+      "Gideon",
+      "Simson"
+    ],
+    "fr_opts": [
+      "Caleb",
+      "Josué",
+      "Gédéon",
+      "Samson"
+    ],
+    "ro_opts": [
+      "Caleb",
+      "Iosua",
+      "Ghedeon",
+      "Samson"
+    ],
+    "ru_opts": [
+      "Халев",
+      "Иисус Навин",
+      "Гедеон",
+      "Самсон"
+    ]
   }
 ]
