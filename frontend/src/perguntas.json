@@ -1,0 +1,102 @@
+﻿[
+    {
+        "correta":  1,
+        "pergunta":  "Quem foi engolido por um grande peixe?",
+        "opcoes":  [
+                       "Moisés",
+                       "Jonas",
+                       "Davi",
+                       "Noé"
+                   ]
+    },
+    {
+        "correta":  2,
+        "pergunta":  "Quantos mandamentos foram dados a Moisés?",
+        "opcoes":  [
+                       "5",
+                       "7",
+                       "10",
+                       "12"
+                   ]
+    },
+    {
+        "correta":  2,
+        "pergunta":  "Quem derrotou o gigante Golias?",
+        "opcoes":  [
+                       "Saul",
+                       "Salomão",
+                       "Davi",
+                       "Samson"
+                   ]
+    },
+    {
+        "correta":  1,
+        "pergunta":  "Qual o último livro da Bíblia?",
+        "opcoes":  [
+                       "Gênesis",
+                       "Apocalipse",
+                       "Salmos",
+                       "Êxodo"
+                   ]
+    },
+    {
+        "correta":  0,
+        "pergunta":  "Quem é considerado o pai da fé?",
+        "opcoes":  [
+                       "Abraão",
+                       "Isaque",
+                       "Jacó",
+                       "José"
+                   ]
+    },
+    {
+        "correta":  2,
+        "pergunta":  "Em qual cidade Jesus nasceu?",
+        "opcoes":  [
+                       "Jerusalém",
+                       "Nazaré",
+                       "Belém",
+                       "Jericó"
+                   ]
+    },
+    {
+        "correta":  1,
+        "pergunta":  "Quem construiu a Arca?",
+        "opcoes":  [
+                       "Pedro",
+                       "Noé",
+                       "João",
+                       "Elias"
+                   ]
+    },
+    {
+        "correta":  1,
+        "pergunta":  "Quantos discípulos Jesus tinha?",
+        "opcoes":  [
+                       "10",
+                       "12",
+                       "7",
+                       "3"
+                   ]
+    },
+    {
+        "correta":  2,
+        "pergunta":  "Qual mar Moisés abriu?",
+        "opcoes":  [
+                       "Mar Morto",
+                       "Mar Mediterrâneo",
+                       "Mar Vermelho",
+                       "Mar da Galileia"
+                   ]
+    },
+    {
+        "correta":  0,
+        "pergunta":  "Quem era o irmão de Moisés?",
+        "opcoes":  [
+                       "Arão",
+                       "Caim",
+                       "Lázaro",
+                       "Judas"
+                   ]
+    }
+]
