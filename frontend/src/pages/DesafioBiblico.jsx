@@ -140,7 +140,14 @@ export default function DesafioBiblico() {
       if (msg.type === 'game_matched') {
         setEsperando(false);
         setCodigo(msg.roomId);
-        if (msg.adversario) setAdversario(msg.adversario);
+        if (msg.adversario) {
+          const adv = msg.adversario;
+          setAdversario(adv);
+          if (msg.isBot) {
+            const pontosBot = Math.floor(Math.random() * 3) * 10 + 20;
+            setTimeout(() => setAdversario(a => ({...a, pontos: pontosBot})), 15000);
+          }
+        }
         if (msg.perguntas && msg.perguntas.length > 0) {
           setPerguntas(msg.perguntas);
           setIdx(0); setPontos(0); setResp(null); setFeedback(null); setPausado(false); setChat([]);
