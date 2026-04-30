@@ -15,11 +15,13 @@ export default function Members() {
   useEffect(() => {
     async function fetchMembers() {
       try {
+        if (!token) { setLoading(false); return; }
         const res = await fetch(`${API}/members`, {
           headers: { Authorization: "Bearer " + token }
         });
+        if (!res.ok) { console.error('Members error:', res.status); setLoading(false); return; }
         const data = await res.json();
-        // Ajuste para diferentes formatos de resposta da API
+        console.log('Members data:', data);
         const userList = Array.isArray(data) ? data : (data.members || data.users || []);
         setUsers(userList);
       } catch (err) {
