@@ -206,7 +206,7 @@ export default function DesafioBiblico() {
   }
   function avancar() {
     setFeedback(null); setResp(null);
-    if(idx+1>=perguntas.length) { guardarResultado(pontos, pontos > 0 ? Math.ceil(pontos/7.5) : 0, TEMPO - tRef.current); playSound('fim'); setTela('resultado'); }
+    if(idx+1>=perguntas.length) { if(!adversario || pontos >= (adversario.pontos||0)) { guardarResultado(pontos, pontos > 0 ? Math.ceil(pontos/7.5) : 0, TEMPO - tRef.current); } playSound('fim'); setTela('resultado'); }
     else setIdx(prev=>prev+1);
   }
 
