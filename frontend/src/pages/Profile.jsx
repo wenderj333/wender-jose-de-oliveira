@@ -2,7 +2,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
-import { Camera, Settings, Grid, Bookmark, UserSquare2, Loader2, Link as LinkIcon, QrCode, Bell, Shield, LogOut } from "lucide-react";
+import { Camera, Settings, Grid, Bookmark, UserSquare2, Loader2, Link as LinkIcon, QrCode, Bell, Shield, LogOut, Plus } from "lucide-react";
 
 const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'degxiuf43';
 const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'sigo_com_fe';
@@ -38,7 +38,7 @@ export default function Profile() {
     load();
   }, [memberId, token, authUser]);
 
-  const handleUpload = async (e) => {
+  const handleUploadAvatar = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setUploading(true);
@@ -55,16 +55,16 @@ export default function Profile() {
         body: JSON.stringify({ photoURL: cData.secure_url })
       });
       setMember({ ...member, avatar_url: cData.secure_url });
+      if (typeof updateUser === 'function') updateUser({ ...member, avatar_url: cData.secure_url });
+      localStorage.setItem('avatar_url', cData.secure_url);
     } catch (err) { alert(t('profile.upload_error') || "Erro upload"); }
     finally { setUploading(false); }
   };
 
   if (loading) return <div style={{ display: 'flex', justifyContent: 'center', padding: '50px' }}><Loader2 className="animate-spin" /></div>;
 
-  const btnActionStyle = { background: "#efefef", border: "none", borderRadius: "8px", padding: "7px 16px", fontSize: "14px", fontWeight: "600", cursor: "pointer" };
-
   return (
-    <div style={{ maxWidth: "935px", margin: "0 auto", padding: "30px 20px", background: "#fafafa", minHeight: "100vh", fontFamily: "sans-serif" }}>
+    <div style={{ maxWidth: "935px", margin: "0 auto", padding: "30px 20px", background: "#fafafa", minHeight: "100vh", fontFamily: "sans-serif", position: "relative" }}>
       
       <header style={{ display: "flex", marginBottom: "44px" }}>
         <div style={{ flex: "1", display: "flex", justifyContent: "center", position: "relative" }}>
@@ -72,7 +72,7 @@ export default function Profile() {
             <img src={member?.avatar_url || "/pro.jpg"} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             {uploading && <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}><Loader2 className="animate-spin" color="white" /></div>}
           </div>
-          <input type="file" ref={fileInputRef} hidden accept="image/*" onChange={handleUpload} />
+          <input type="file" ref={fileInputRef} hidden accept="image/*" onChange={handleUploadAvatar} />
         </div>
 
         <div style={{ flex: "2", paddingTop: "10px" }}>
@@ -81,7 +81,6 @@ export default function Profile() {
             {isOwnProfile && (
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <button onClick={() => navigate("/settings/edit")} style={btnActionStyle}>{t('profile.edit') || "Editar Perfil"}</button>
-                <button style={btnActionStyle}>{t('profile.archive') || "Ver Arquivo"}</button>
                 <Settings style={{ cursor: "pointer" }} size={24} onClick={() => setShowSettings(true)} />
               </div>
             )}
@@ -98,24 +97,45 @@ export default function Profile() {
         </div>
       </header>
 
-      {/* Tabs Estilo Instagram */}
+      {/* Tabs */}
       <div style={{ borderTop: "1px solid #dbdbdb", display: "flex", justifyContent: "center", gap: "60px" }}>
-        <div style={{ borderTop: "1px solid #262626", marginTop: "-1px", display: "flex", alignItems: "center", gap: "6px", padding: "15px 0", fontSize: "12px", fontWeight: "600", color: "#262626", cursor: "pointer", letterSpacing: "1px" }}>
+        <div style={{ borderTop: "1px solid #262626", marginTop: "-1px", display: "flex", alignItems: "center", gap: "6px", padding: "15px 0", fontSize: "12px", fontWeight: "600", color: "#262626", cursor: "pointer" }}>
           <Grid size={12} /> {t('profile.grid') || "PUBLICAÇÕES"}
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "15px 0", fontSize: "12px", fontWeight: "600", color: "#8e8e8e", cursor: "pointer", letterSpacing: "1px" }}>
-          <Bookmark size={12} /> {t('profile.saved') || "GUARDADO"}
         </div>
       </div>
 
-      {/* Menu Config (Instagram Style Overlay) */}
+      {/* BOTÃO FLUTUANTE PARA POSTAR (ESTILO MODERNO) */}
+      {isOwnProfile && (
+        <button 
+          onClick={() => navigate("/mural")} 
+          style={{
+            position: "fixed",
+            bottom: "30px",
+            right: "30px",
+            width: "60px",
+            height: "60px",
+            borderRadius: "50%",
+            backgroundColor: "#daa520",
+            color: "white",
+            border: "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
+            cursor: "pointer",
+            zIndex: 999
+          }}
+          title="Nova Publicação"
+        >
+          <Plus size={32} />
+        </button>
+      )}
+
+      {/* Menu Config */}
       {showSettings && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setShowSettings(false)}>
           <div style={{ background: 'white', width: '400px', borderRadius: '12px', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
-            <button style={menuBtnStyle}>{t('settings.apps') || "Aplicativos e sites"}</button>
-            <button style={menuBtnStyle} onClick={() => navigate("/qr")}><QrCode size={18} /> {t('settings.qr') || "Código QR"}</button>
-            <button style={menuBtnStyle}><Bell size={18} /> {t('settings.notifications') || "Notificações"}</button>
-            <button style={menuBtnStyle} onClick={() => navigate("/settings/edit")}><Shield size={18} /> {t('settings.privacy') || "Configuração e privacidade"}</button>
+            <button style={menuBtnStyle} onClick={() => navigate("/settings/edit")}><Shield size={18} /> {t('settings.privacy') || "Privacidade"}</button>
             <button style={{ ...menuBtnStyle, color: '#ed4956', fontWeight: 'bold' }} onClick={() => { logout(); navigate("/login"); }}>
               <LogOut size={18} /> {t('settings.logout') || "Sair"}
             </button>
@@ -127,4 +147,5 @@ export default function Profile() {
   );
 }
 
+const btnActionStyle = { background: "#efefef", border: "none", borderRadius: "8px", padding: "7px 16px", fontSize: "14px", fontWeight: "600", cursor: "pointer" };
 const menuBtnStyle = { width: '100%', padding: '14px', border: 'none', background: 'none', borderBottom: '1px solid #dbdbdb', cursor: 'pointer', fontSize: '14px', display: 'flex', justifyContent: 'center', gap: '10px', alignItems: 'center' };
