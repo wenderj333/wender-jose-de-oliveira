@@ -1,62 +1,76 @@
 ﻿import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Settings, Grid, Loader2 } from "lucide-react";
+import { Loader2, Settings, Grid, Bookmark } from "lucide-react";
 
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
 
+const translations = {
+  pt: { edit: "Editar Perfil", followers: "seguidores", following: "seguindo", posts: "publicações", loading: "Carregando...", back: "Voltar" },
+  en: { edit: "Edit Profile", followers: "followers", following: "following", posts: "posts", loading: "Loading...", back: "Back" },
+  es: { edit: "Editar Perfil", followers: "seguidores", following: "siguiendo", posts: "publicaciones", loading: "Cargando...", back: "Volver" }
+};
+
 export default function Profile() {
-  const { id: paramId } = useParams();
-  const { token, user: authUser, logout } = useAuth();
+  const { id } = useParams();
+  const { token, user, userLanguage = 'pt' } = useAuth();
+  const t = translations[userLanguage] || translations.pt;
   const navigate = useNavigate();
-  const [member, setMember] = useState(null);
+  const [profileUser, setProfileUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const memberId = paramId || authUser?.id;
-
   useEffect(() => {
-    async function load() {
-      if (!memberId) return;
+    async function fetchProfile() {
       try {
-        const res = await fetch(`${API}/profile/${memberId}`, {
+        const targetId = id || user?.id;
+        if (!targetId) return;
+        const res = await fetch(`${API}/users/${targetId}`, {
           headers: { Authorization: "Bearer " + token }
         });
         const data = await res.json();
-        setMember(data.user || authUser);
-      } catch (err) { 
-        setMember(authUser); 
-      } finally { setLoading(false); }
+        setProfileUser(data);
+      } catch (err) {
+        console.error("Erro ao carregar perfil", err);
+      } finally {
+        setLoading(false);
+      }
     }
-    load();
-  }, [memberId, token, authUser]);
+    fetchProfile();
+  }, [id, token, user]);
 
-  if (loading) return <div style={{ display: 'flex', justifyContent: 'center', padding: '50px' }}><Loader2 className="animate-spin" /></div>;
+  if (loading) return <div style={{display:'flex', justifyContent:'center', marginTop:'50px'}}><Loader2 className="animate-spin" color="#0095f6" /></div>;
 
   return (
-    <div style={{ maxWidth: "935px", margin: "0 auto", padding: "30px 20px", background: "#fff", fontFamily: "sans-serif" }}>
-      <header style={{ display: "flex", marginBottom: "44px", alignItems: "center" }}>
-        <div style={{ flex: "1", display: "flex", justifyContent: "center" }}>
-          <div style={{ width: "150px", height: "150px", borderRadius: "50%", overflow: "hidden", border: "1px solid #dbdbdb" }}>
-            <img 
-              src={member?.avatar_url || "/pro.jpg"} 
-              style={{ width: "100%", height: "100%", objectFit: "cover" }} 
-              onError={(e) => e.target.src = "/pro.jpg"} 
-            />
-          </div>
+    <div style={{ maxWidth: "935px", margin: "0 auto", padding: "20px", background: "#fff", minHeight: "100vh" }}>
+      <header style={{ display: 'flex', alignItems: 'center', gap: '40px', marginBottom: '40px', padding: '20px' }}>
+        <div style={{ flexShrink: 0 }}>
+          <img 
+            src={profileUser?.avatar_url || "/pro.jpg"} 
+            style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', border: '1px solid #dbdbdb' }}
+            onError={(e) => { e.target.src = "/pro.jpg"; }}
+          />
         </div>
-        <div style={{ flex: "2", paddingLeft: "20px" }}>
-          <h2 style={{ fontSize: "28px", fontWeight: "300", marginBottom: "20px" }}>{member?.username || "Usuário"}</h2>
-          <div style={{ display: "flex", gap: "40px", marginBottom: "20px" }}>
-            <span><strong>0</strong> publicações</span>
-            <span><strong>0</strong> seguidores</span>
-            <span><strong>0</strong> seguindo</span>
+        <section style={{ flexGrow: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
+            <h2 style={{ fontSize: '28px', fontWeight: '300' }}>{profileUser?.username || "Usuário"}</h2>
+            {(!id || id === user?.id) && (
+              <button style={{ border: '1px solid #dbdbdb', background: 'transparent', padding: '5px 9px', borderRadius: '4px', fontWeight: '600', cursor: 'pointer' }}>
+                {t.edit}
+              </button>
+            )}
           </div>
-          <div style={{ fontWeight: "600" }}>{member?.full_name}</div>
-          <p>{member?.bio || "Sigo com fé 🙏"}</p>
-        </div>
+          <div style={{ display: 'flex', gap: '40px', marginBottom: '20px' }}>
+            <span><strong>0</strong> {t.posts}</span>
+            <span><strong>0</strong> {t.followers}</span>
+            <span><strong>0</strong> {t.following}</span>
+          </div>
+          <div style={{ fontWeight: '600' }}>{profileUser?.full_name}</div>
+        </section>
       </header>
-      <div style={{ borderTop: "1px solid #dbdbdb", textAlign: "center", padding: "20px", color: "#8e8e8e" }}>
-        <Grid size={16} style={{ verticalAlign: "middle", marginRight: "5px" }} /> PUBLICACIONES
+      <div style={{ borderTop: '1px solid #dbdbdb', display: 'flex', justifyContent: 'center', gap: '60px' }}>
+         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingTop: '15px', borderTop: '1px solid #262626', marginTop: '-1px', cursor: 'pointer' }}>
+            <Grid size={12} /> <span style={{ fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>{t.posts}</span>
+         </div>
       </div>
     </div>
   );
