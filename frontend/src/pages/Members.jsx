@@ -15,11 +15,12 @@ export default function Members() {
   useEffect(() => {
     async function fetchMembers() {
       try {
-        if (!token) { setLoading(false); return; }
+        const t = token || localStorage.getItem('token');
+        console.log('Token usado:', t ? t.substring(0,20)+'...' : 'NULL');
         const res = await fetch(`${API}/members`, {
-          headers: { Authorization: "Bearer " + token }
+          headers: { Authorization: "Bearer " + t }
         });
-        if (!res.ok) { console.error('Members error:', res.status); setLoading(false); return; }
+        if (!res.ok) { console.error('Members error:', res.status, await res.text()); setLoading(false); return; }
         const data = await res.json();
         console.log('Members data:', data);
         const userList = Array.isArray(data) ? data : (data.members || data.users || []);
