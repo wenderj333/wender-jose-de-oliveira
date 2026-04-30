@@ -566,7 +566,19 @@ function handleGameQueue(ws, msg) {
             const sh = a => a.sort(() => Math.random() - 0.5);
             return [...sh(p.filter(x=>x.nivel==='facil')).slice(0,2), ...sh(p.filter(x=>x.nivel==='medio')).slice(0,2), ...sh(p.filter(x=>x.nivel==='dificil')).slice(0,1)];
           })(); } catch(e) {}
-          const botAdv = { userId: 'bot-333', userName: 'Pastor Bot', avatar: '' };
+          const botPersonagens = [
+            { userId: 'bot-333', userName: 'Moises', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=moises' },
+            { userId: 'bot-333', userName: 'Davi', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=davi' },
+            { userId: 'bot-333', userName: 'Salomao', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=salomao' },
+            { userId: 'bot-333', userName: 'Paulo', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=paulo' },
+            { userId: 'bot-333', userName: 'Pedro', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=pedro' },
+            { userId: 'bot-333', userName: 'Elias', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=elias' },
+            { userId: 'bot-333', userName: 'Daniel', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=daniel' },
+            { userId: 'bot-333', userName: 'Josue', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=josue' },
+            { userId: 'bot-333', userName: 'Joao', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=joao' },
+            { userId: 'bot-333', userName: 'Abraao', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=abraao' },
+          ];
+          const botAdv = botPersonagens[Math.floor(Math.random() * botPersonagens.length)];
           ws.send(JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: botAdv, isBot: true }));
           gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, isBot: true, jogadores: [{ userId: 'bot-333', userName: 'Pastor Bot', avatar: '', pontos: 0, ws: null }, { userId, userName, avatar, pontos: 0, ws }] });
         }
