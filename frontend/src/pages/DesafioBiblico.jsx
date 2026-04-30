@@ -304,7 +304,7 @@ export default function DesafioBiblico() {
         </div>
         <div style={{display:'flex',alignItems:'center',gap:12,padding:'10px 16px',background:'rgba(255,255,255,0.05)',borderRadius:10,border:'1px dashed rgba(255,255,255,0.2)'}}>
           {adversario
-            ? <>{adversario.avatar?<img src={adversario.avatar} style={{width:40,height:40,borderRadius:'50%',objectFit:'cover'}}/>:<div style={{width:40,height:40,borderRadius:'50%',background:'#e74c3c',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700}}>{adversario.name?.charAt(0)||'?'}</div>}<span style={{flex:1,fontWeight:600}}>{adversario.name}</span><span style={{fontSize:11,color:'#27ae60',fontWeight:700}}>✓ Pronto</span></>
+            ? <>{adversario.avatar?<img src={adversario.avatar} style={{width:40,height:40,borderRadius:'50%',objectFit:'cover'}}/>:<div style={{width:40,height:40,borderRadius:'50%',background:'#e74c3c',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700}}>{adversario?.userName||adversario?.name?.charAt(0)||'?'}</div>}<span style={{flex:1,fontWeight:600}}>{adversario?.userName||adversario?.name}</span><span style={{fontSize:11,color:'#27ae60',fontWeight:700}}>✓ Pronto</span></>
             : <><div style={{width:40,height:40,borderRadius:'50%',background:'rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center'}}>?</div><span style={{opacity:0.5,fontSize:13}}>{t('desafio.waitingplayer')}</span></>
           }
         </div>
@@ -325,8 +325,8 @@ export default function DesafioBiblico() {
         </div>
         <div style={{fontSize:36,fontWeight:900,color:'#f0c040'}}>VS</div>
         <div style={{textAlign:'center'}}>
-          {adversario?.avatar?<img src={adversario.avatar} style={{width:80,height:80,borderRadius:'50%',objectFit:'cover',border:'3px solid #e74c3c'}}/>:<div style={{width:80,height:80,borderRadius:'50%',background:'#e74c3c',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,fontWeight:700}}>{adversario?.name?.charAt(0)||'?'}</div>}
-          <p style={{marginTop:8,fontWeight:700,fontSize:15}}>{adversario?.name||'Adversário'}</p>
+          {adversario?.avatar?<img src={adversario.avatar} style={{width:80,height:80,borderRadius:'50%',objectFit:'cover',border:'3px solid #e74c3c'}}/>:<div style={{width:80,height:80,borderRadius:'50%',background:'#e74c3c',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,fontWeight:700}}>{((adversario?.userName||adversario?.name)||'?').charAt(0)||'?'}</div>}
+          <p style={{marginTop:8,fontWeight:700,fontSize:15}}>{adversario?.userName||adversario?.name||'Adversário'}</p>
           <p style={{fontSize:11,color:'#f87171'}}>Adversário</p>
         </div>
       </div>
@@ -383,7 +383,7 @@ export default function DesafioBiblico() {
       <div style={{fontSize:60,marginBottom:12}}>{adversario ? (pontos >= (adversario.pontos||0) ? '🏆' : '😔') : '🏆'}</div>
       {adversario && <div style={{background: pontos >= (adversario.pontos||0) ? 'rgba(39,174,96,0.3)' : 'rgba(231,76,60,0.3)', border: '2px solid ' + (pontos >= (adversario.pontos||0) ? '#27ae60' : '#e74c3c'), borderRadius:16, padding:'12px 24px', marginBottom:12, textAlign:'center'}}>
         <p style={{fontSize:24, fontWeight:900, color: pontos >= (adversario.pontos||0) ? '#27ae60' : '#e74c3c', margin:0}}>{pontos >= (adversario.pontos||0) ? '🎉 GANHOU!' : '😔 PERDEU!'}</p>
-        <p style={{fontSize:13, color:'white', margin:'4px 0 0', opacity:0.8}}>Tu: {pontos} pts | {adversario.userName||adversario.name}: {adversario.pontos||0} pts</p>
+        <p style={{fontSize:13, color:'white', margin:'4px 0 0', opacity:0.8}}>Tu: {pontos} pts | {adversario.userName||adversario?.userName||adversario?.name}: {adversario.pontos||0} pts</p>
       </div>}
       <h2 style={{fontSize:26,fontWeight:900,marginBottom:8}}>{t('desafio.result')}</h2>
       <div style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:8}}>{pontos} pts</div>
