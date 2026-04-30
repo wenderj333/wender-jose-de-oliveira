@@ -160,6 +160,8 @@ export default function DesafioBiblico() {
       }
     };
     ws.onerror = () => { setEsperando(false); alert('Erro ao conectar. Tenta de novo!'); };
+    ws.onclose = () => { if(wsRef.current === ws) setEsperando(false); };
+    setInterval(() => { if(ws.readyState === 1) ws.send(JSON.stringify({type:'ping'})); }, 10000);
   }
   function cancelarFila() { wsRef.current?.close(); setEsperando(false); }
   function gerar() { return Math.random().toString(36).substring(2,8).toUpperCase(); }
