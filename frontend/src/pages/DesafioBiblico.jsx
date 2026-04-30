@@ -371,7 +371,11 @@ export default function DesafioBiblico() {
 
   if(tela==='resultado') return (
     <div style={bg}>
-      <div style={{fontSize:60,marginBottom:12}}>🏆</div>
+      <div style={{fontSize:60,marginBottom:12}}>{adversario ? (pontos >= (adversario.pontos||0) ? '🏆' : '😔') : '🏆'}</div>
+      {adversario && <div style={{background: pontos >= (adversario.pontos||0) ? 'rgba(39,174,96,0.3)' : 'rgba(231,76,60,0.3)', border: '2px solid ' + (pontos >= (adversario.pontos||0) ? '#27ae60' : '#e74c3c'), borderRadius:16, padding:'12px 24px', marginBottom:12, textAlign:'center'}}>
+        <p style={{fontSize:24, fontWeight:900, color: pontos >= (adversario.pontos||0) ? '#27ae60' : '#e74c3c', margin:0}}>{pontos >= (adversario.pontos||0) ? '🎉 GANHOU!' : '😔 PERDEU!'}</p>
+        <p style={{fontSize:13, color:'white', margin:'4px 0 0', opacity:0.8}}>Tu: {pontos} pts | {adversario.userName||adversario.name}: {adversario.pontos||0} pts</p>
+      </div>}
       <h2 style={{fontSize:26,fontWeight:900,marginBottom:8}}>{t('desafio.result')}</h2>
       <div style={{fontSize:48,fontWeight:900,color:'#f0c040',marginBottom:8}}>{pontos} pts</div>
       <p style={{opacity:0.7,marginBottom:28}}>{pontos>=40?'Mestre Biblico!':pontos>=25?'Muito bem!':'Continue estudando!'}</p>
