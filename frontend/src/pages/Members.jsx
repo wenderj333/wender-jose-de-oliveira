@@ -15,12 +15,12 @@ export default function Members() {
   useEffect(() => {
     async function fetchMembers() {
       try {
-        const res = await fetch(`${API}/users`, {
+        const res = await fetch(`${API}/members`, {
           headers: { Authorization: "Bearer " + token }
         });
         const data = await res.json();
         // Ajuste para diferentes formatos de resposta da API
-        const userList = Array.isArray(data) ? data : (data.users || []);
+        const userList = Array.isArray(data) ? data : (data.members || data.users || []);
         setUsers(userList);
       } catch (err) {
         console.error("Erro ao carregar membros:", err);
