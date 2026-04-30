@@ -553,6 +553,24 @@ function handleGameQueue(ws, msg) {
         const ci = gameQueue.indexOf(playerEntry);
         if (ci !== -1) gameQueue.splice(ci, 1);
       });
+      setTimeout(() => {
+        const still = gameQueue.indexOf(playerEntry);
+        if (still !== -1 && ws.readyState === 1) {
+          gameQueue.splice(still, 1);
+          const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
+          let perguntas = [];
+          try { perguntas = (() => {
+            const pj = require('../data/perguntas.json');
+            let p = pj.filter(x => livro === 'Todos' || x.livro === livro);
+            if (!p.length) p = pj;
+            const sh = a => a.sort(() => Math.random() - 0.5);
+            return [...sh(p.filter(x=>x.nivel==='facil')).slice(0,2), ...sh(p.filter(x=>x.nivel==='medio')).slice(0,2), ...sh(p.filter(x=>x.nivel==='dificil')).slice(0,1)];
+          })(); } catch(e) {}
+          const botAdv = { userId: 'bot-333', userName: 'Pastor Bot', avatar: '' };
+          ws.send(JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: botAdv, isBot: true }));
+          gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, isBot: true, jogadores: [{ userId: 'bot-333', userName: 'Pastor Bot', avatar: '', pontos: 0, ws: null }, { userId, userName, avatar, pontos: 0, ws }] });
+        }
+      }, 30000);
     }
   }
 
@@ -564,5 +582,6 @@ function handleGameQueue(ws, msg) {
 module.exports = { setupWebSocket };
 
 // clean
+
 
 
