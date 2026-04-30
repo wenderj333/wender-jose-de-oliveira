@@ -8,7 +8,7 @@ const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState({id: "local-dev", full_name: "Wender Dev", role: "admin"});
+  const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
