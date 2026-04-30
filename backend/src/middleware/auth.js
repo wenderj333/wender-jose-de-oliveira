@@ -20,7 +20,8 @@ async function authenticate(req, res, next) {
   try {
     const token = header.split(' ')[1];
     const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await db.prepare('SELECT id, email, full_name, role, avatar_url FROM users WHERE id = ?').get(decoded.id);
+    const result = await db.query('SELECT id, email, full_name, role, avatar_url FROM users WHERE id = $1', [decoded.id]);
+    const user = result.rows[0];
     if (!user) return res.status(401).json({ error: 'Usuário não encontrado' });
     req.user = user;
     next();
