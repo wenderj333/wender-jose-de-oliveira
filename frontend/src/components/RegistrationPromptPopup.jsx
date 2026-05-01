@@ -30,12 +30,12 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
 
   // If user already has a photo, close the modal immediately
   useEffect(() => {
-    if (user && user.photoURL && isOpen) {
+    if (user && (user.photoURL || user.avatar_url) && isOpen) {
       onClose();
     }
   }, [user, isOpen, onClose]);
 
-  if (!isOpen || (user && user.photoURL)) return null; // Ensure it's only open if needed
+  if (!isOpen || (user && (user.photoURL || user.avatar_url))) return null; // Ensure it's only open if needed
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -73,7 +73,7 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
 
   // Prevent closing the modal if user is logged in and needs a photo
   const handleOverlayClick = (e) => {
-    if (user && !user.photoURL) {
+    if (user && !user.photoURL && !user.avatar_url) {
       e.stopPropagation();
     } else {
       onClose();
@@ -81,7 +81,7 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
   };
 
   return (
-    <div className="registration-popup-overlay" onClick={handleOverlayClick} style={{ pointerEvents: (user && !user.photoURL) ? 'auto' : 'none' }}>
+    <div className="registration-popup-overlay" onClick={handleOverlayClick} style={{ pointerEvents: (user && !user.photoURL && !user.avatar_url) ? 'auto' : 'none' }}>
       <div classNameName="registration-popup-content" onClick={(e) => e.stopPropagation()} style={{
           padding: '30px',
           borderRadius: '16px',
@@ -94,7 +94,7 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
           border: '1px solid rgba(218,165,32,0.3)',
           position: 'relative',
         }}>
-        {user && !user.photoURL && (
+        {user && !user.photoURL && !user.avatar_url && (
           <button className="registration-popup-close" onClick={(e) => { e.stopPropagation(); setError('Por favor, faça upload de uma foto para continuar.'); }} style={{
             position: 'absolute', top: '15px', right: '15px',
             background: 'none', border: 'none', color: '#aaa', cursor: 'pointer',
