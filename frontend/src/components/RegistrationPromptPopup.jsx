@@ -20,6 +20,7 @@ async function uploadToCloudinary(file) {
 }
 
 function RegistrationPromptPopup({ isOpen, onClose }) {
+  return null; // Desativado
   const { t } = useTranslation();
   const { user, updateProfilePhoto } = useAuth();
   const [avatarFile, setAvatarFile] = useState(null);
