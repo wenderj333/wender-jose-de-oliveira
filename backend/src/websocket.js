@@ -534,13 +534,20 @@ function handleGameQueue(ws, msg) {
     if (idx !== -1) {
       const outro = gameQueue.splice(idx, 1)[0];
       const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
+      const nivelJogo = msg.nivel || 0;
       let perguntas = [];
       try { perguntas = (() => {
         const pj = require('../data/perguntas.json');
         let p = pj.filter(x => livro === 'Todos' || x.livro === livro);
         if (!p.length) p = pj;
-        const sh = a => a.sort(() => Math.random() - 0.5);
-        return [...sh(p.filter(x=>x.nivel==='facil')).slice(0,2), ...sh(p.filter(x=>x.nivel==='medio')).slice(0,2), ...sh(p.filter(x=>x.nivel==='dificil')).slice(0,1)];
+        const sh = a => [...a].sort(() => Math.random() - 0.5);
+        // Nivel 0-4: facil, 5-9: medio, 10-13: dificil
+        let pool;
+        if (nivelJogo <= 4) pool = sh(p.filter(x=>x.nivel==='facil'));
+        else if (nivelJogo <= 9) pool = sh(p.filter(x=>x.nivel==='medio'));
+        else pool = sh(p.filter(x=>x.nivel==='dificil'));
+        if (pool.length < 10) pool = [...pool, ...sh(p)];
+        return pool.slice(0,10);
       })(); } catch(e) {}
       const matchMsg1 = JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: { userId: msg.userId, userName: msg.userName, avatar: msg.avatar } });
       const matchMsg2 = JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: { userId: outro.userId, userName: outro.userName, avatar: outro.avatar } });
