@@ -28,7 +28,7 @@ export default function Profile() {
           headers: { Authorization: "Bearer " + token }
         });
         const data = await res.json();
-        setProfileUser(data);
+        setProfileUser(data.user || data);
       } catch (err) {
         console.error("Erro ao carregar perfil", err);
       } finally {
