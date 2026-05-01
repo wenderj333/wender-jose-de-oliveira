@@ -79,7 +79,7 @@ router.patch('/photo', authenticate, async (req, res) => {
     await db.query('UPDATE users SET avatar_url = $1 WHERE id = $2', [photoURL, userId]);
 
     const updatedUser = await db.query('SELECT avatar_url FROM users WHERE id = $1', [userId]);
-    res.json({ success: true, user: { photoURL: updatedUser.rows[0].avatar_url } });
+    res.json({ success: true, user: { photoURL: updatedUser.rows[0].avatar_url, avatar_url: updatedUser.rows[0].avatar_url } });
   } catch (err) {
     console.error('Error updating profile photo:', err);
     res.status(500).json({ error: 'Internal server error' });

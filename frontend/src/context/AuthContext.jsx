@@ -211,7 +211,7 @@ export function AuthProvider({ children }) {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Erro ao atualizar foto de perfil');
 
-    const updatedUser = { ...user, photoURL: data.user.photoURL };
+    const updatedUser = { ...user, avatar_url: data.user.avatar_url || data.user.photoURL, photoURL: data.user.photoURL || data.user.avatar_url };
     setUser(updatedUser);
     localStorage.setItem('user', JSON.stringify(updatedUser));
     return updatedUser;
