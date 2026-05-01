@@ -1,4 +1,4 @@
-const { WebSocketServer } = require('ws');
+﻿const { WebSocketServer } = require('ws');
 const Anthropic = require('@anthropic-ai/sdk');
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -27,13 +27,13 @@ function setupWebSocket(server) {
   }, 25000);
 
   wss.on('connection', (ws) => {
-    console.log('🔌 Nova conexão WebSocket');
+    console.log('ðŸ”Œ Nova conexÃ£o WebSocket');
 
     ws.on('message', async (data) => {
       try {
         const msg = JSON.parse(data);
 
-        switch (msg.type) {
+        console.log("MSG_TIPO:", msg.type, "USER:", msg.userId); switch (msg.type) {
           case 'game_create':
           case 'game_join':
           case 'game_ready':
@@ -159,7 +159,7 @@ function setupWebSocket(server) {
           case 'live_join': {
             const stream = liveStreams.get(msg.streamId);
             if (!stream) { ws.send(JSON.stringify({ type: 'live_stopped', streamId: msg.streamId })); break; }
-            if (stream.viewers.size >= 10) { ws.send(JSON.stringify({ type: 'live_error', error: 'Stream cheio (máx. 10 espectadores)' })); break; }
+            if (stream.viewers.size >= 10) { ws.send(JSON.stringify({ type: 'live_error', error: 'Stream cheio (mÃ¡x. 10 espectadores)' })); break; }
             stream.viewers.set(msg.viewerId, ws);
             const ci2 = clients.get(ws) || {};
             ci2.liveStreamId = msg.streamId;
@@ -476,9 +476,9 @@ function handleGame(ws, msg) {
     if (j) { j.pontos += msg.pontos || 0; j.respondeu = true; }
     const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos }));
     room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_score', jogadores: jogadoresPublico })); });
-    const todosResponderem = room.jogadores.every(j => j.respondeu);
-    const apenasUm = room.jogadores.length === 1 || room.jogadores.filter(j => j.respondeu).length >= 1;
-    if (todosResponderem || (apenasUm && room.jogadores.some(j => j.respondeu))) {
+    console.log('jogadores:', room.jogadores.length, 'responderam:', room.jogadores.filter(j=>j.respondeu).length);
+    const todosResponderem = room.jogadores.every(j => j.respondeu) || room.jogadores.length === 1;
+    if (todosResponderem) {
       room.jogadores.forEach(j => j.respondeu = false);
       room.perguntaIdx++;
       if (room.perguntaIdx >= (room.perguntas||[]).length) {
@@ -521,18 +521,33 @@ function handleGameQueue(ws, msg) {
   const livro = msg.livro || 'Todos';
 
   if (msg.type === 'game_queue') {
-    // Procurar alguem na fila
-    const idx = gameQueue.findIndex(p => p.userId !== userId);
+    console.log('🎮 GAME_QUEUE:', userId, livro, 'fila:', gameQueue.length);
+    console.log('🎮 Jogadores na fila:', gameQueue.map(p => p.userId + ' ws:' + p.ws.readyState));
+    // Limpeza: remove jogadores mortos ou duplicados
+    for (let i = gameQueue.length - 1; i >= 0; i--) {
+      if (gameQueue[i].userId === userId || gameQueue[i].ws.readyState !== 1) {
+        gameQueue.splice(i, 1);
+      }
+    }
+    // Procurar alguem na fila (qualquer livro)
+    const idx = gameQueue.findIndex(p => p.userId !== userId && p.ws.readyState === 1);
     if (idx !== -1) {
       const outro = gameQueue.splice(idx, 1)[0];
       const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
+      const nivelJogo = msg.nivel || 0;
       let perguntas = [];
       try { perguntas = (() => {
         const pj = require('../data/perguntas.json');
         let p = pj.filter(x => livro === 'Todos' || x.livro === livro);
         if (!p.length) p = pj;
-        const sh = a => a.sort(() => Math.random() - 0.5);
-        return [...sh(p.filter(x=>x.nivel==='facil')).slice(0,2), ...sh(p.filter(x=>x.nivel==='medio')).slice(0,2), ...sh(p.filter(x=>x.nivel==='dificil')).slice(0,1)];
+        const sh = a => [...a].sort(() => Math.random() - 0.5);
+        // Nivel 0-4: facil, 5-9: medio, 10-13: dificil
+        let pool;
+        if (nivelJogo <= 4) pool = sh(p.filter(x=>x.nivel==='facil'));
+        else if (nivelJogo <= 9) pool = sh(p.filter(x=>x.nivel==='medio'));
+        else pool = sh(p.filter(x=>x.nivel==='dificil'));
+        if (pool.length < 10) pool = [...pool, ...sh(p)];
+        return pool.slice(0,10);
       })(); } catch(e) {}
       const matchMsg1 = JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: { userId: msg.userId, userName: msg.userName, avatar: msg.avatar } });
       const matchMsg2 = JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: { userId: outro.userId, userName: outro.userName, avatar: outro.avatar } });
@@ -540,8 +555,43 @@ function handleGameQueue(ws, msg) {
       if (ws.readyState === 1) ws.send(matchMsg2);
       gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, jogadores: [{ userId: outro.userId, userName: outro.userName, avatar: outro.avatar, pontos: 0, ws: outro.ws }, { userId, userName, avatar, pontos: 0, ws }] });
     } else {
-      gameQueue.push({ userId, userName, avatar, livro, ws });
+      const playerEntry = { userId, userName, avatar, livro, ws };
+      gameQueue.push(playerEntry);
       if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'game_queued' }));
+      ws.on('close', () => {
+        const ci = gameQueue.indexOf(playerEntry);
+        if (ci !== -1) gameQueue.splice(ci, 1);
+      });
+      setTimeout(() => {
+        const still = gameQueue.indexOf(playerEntry);
+        if (still !== -1 && ws.readyState === 1) {
+          gameQueue.splice(still, 1);
+          const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
+          let perguntas = [];
+          try { perguntas = (() => {
+            const pj = require('../data/perguntas.json');
+            let p = pj.filter(x => livro === 'Todos' || x.livro === livro);
+            if (!p.length) p = pj;
+            const sh = a => a.sort(() => Math.random() - 0.5);
+            return [...sh(p.filter(x=>x.nivel==='facil')).slice(0,2), ...sh(p.filter(x=>x.nivel==='medio')).slice(0,2), ...sh(p.filter(x=>x.nivel==='dificil')).slice(0,1)];
+          })(); } catch(e) {}
+          const botPersonagens = [
+            { userId: 'bot-333', userName: 'Moises', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=moises' },
+            { userId: 'bot-333', userName: 'Davi', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=davi' },
+            { userId: 'bot-333', userName: 'Salomao', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=salomao' },
+            { userId: 'bot-333', userName: 'Paulo', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=paulo' },
+            { userId: 'bot-333', userName: 'Pedro', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=pedro' },
+            { userId: 'bot-333', userName: 'Elias', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=elias' },
+            { userId: 'bot-333', userName: 'Daniel', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=daniel' },
+            { userId: 'bot-333', userName: 'Josue', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=josue' },
+            { userId: 'bot-333', userName: 'Joao', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=joao' },
+            { userId: 'bot-333', userName: 'Abraao', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=abraao' },
+          ];
+          const botAdv = botPersonagens[Math.floor(Math.random() * botPersonagens.length)];
+          ws.send(JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: botAdv, isBot: true }));
+          gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, isBot: true, jogadores: [{ userId: 'bot-333', userName: 'Pastor Bot', avatar: '', pontos: 0, ws: null }, { userId, userName, avatar, pontos: 0, ws }] });
+        }
+      }, 30000);
     }
   }
 
@@ -553,3 +603,6 @@ function handleGameQueue(ws, msg) {
 module.exports = { setupWebSocket };
 
 // clean
+
+
+
