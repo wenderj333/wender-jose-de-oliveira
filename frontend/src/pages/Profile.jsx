@@ -24,7 +24,7 @@ export default function Profile() {
       try {
         const targetId = id || user?.id;
         if (!targetId) return;
-        const res = await fetch(`${API}/users/${targetId}`, {
+        const res = await fetch(`${API}/profile/${targetId}`, {
           headers: { Authorization: "Bearer " + token }
         });
         const data = await res.json();
