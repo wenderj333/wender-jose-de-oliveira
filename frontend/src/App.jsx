@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import "./sidebar.css";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,7 @@ import MuralGrid from "./pages/MuralGrid";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import Members from "./pages/Members";
 import Groups from "./pages/Groups";
 import MusicLibrary from "./pages/MusicLibrary";
@@ -328,7 +329,7 @@ export default function App() {
         <main className="main-content-area">
           <Routes>
             <Route path="/" element={<MuralGrid />} />
-            <Route path="/perfil/:userId" element={<Profile />} />
+            <Route path="/perfil/:userId" element={<Profile />} /><Route path="/configuracoes" element={<Settings />} />
             <Route path="/membros" element={<Members />} />
             <Route path="/ia-biblica" element={<BiblicalAI />} />
             <Route path="/chat-pastoral" element={<PastorChat />} />
@@ -483,3 +484,4 @@ export default function App() {
           </div>
   );
 }
+
