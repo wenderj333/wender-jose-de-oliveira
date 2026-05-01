@@ -522,3 +522,5 @@ server.listen(PORT, () => {
   console.log(`📡 WebSocket disponível em ws://localhost:${PORT}/ws`);
 });
 
+
+// deploy trigger
