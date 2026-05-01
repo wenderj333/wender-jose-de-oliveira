@@ -54,7 +54,7 @@ export default function Profile() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
             <h2 style={{ fontSize: '28px', fontWeight: '300' }}>{profileUser?.username || "Usuário"}</h2>
             {(!id || id === user?.id) && (
-              <button style={{ border: '1px solid #dbdbdb', background: 'transparent', padding: '5px 9px', borderRadius: '4px', fontWeight: '600', cursor: 'pointer' }}>
+              <button onClick={() => navigate('/configuracoes')} style={{ border: '1px solid #dbdbdb', background: 'transparent', padding: '5px 9px', borderRadius: '4px', fontWeight: '600', cursor: 'pointer' }}>
                 {t.edit}
               </button>
             )}
