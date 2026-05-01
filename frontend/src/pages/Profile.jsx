@@ -5,12 +5,12 @@ import { Loader2, Grid, Settings } from "lucide-react";
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
 export default function Profile() {
   const { id } = useParams();
-  const { user: currentUser, token } = useAuth();
   const navigate = useNavigate();
+  const { user: currentUser, token } = useAuth();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const targetId = id || currentUser?.id;
   useEffect(() => {
-    const targetId = id || currentUser?.id;
     if (!targetId) return;
     fetch(`${API}/profile/${targetId}`, {
       headers: { Authorization: "Bearer " + token }
@@ -18,7 +18,7 @@ export default function Profile() {
     .then(res => res.json())
     .then(data => { setUser(data.user || data); setLoading(false); })
     .catch(() => setLoading(false));
-  }, [id, currentUser, token]);
+  }, [targetId, token]);
   if (loading) return <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}><Loader2 className="animate-spin" /></div>;
   if (!user) return <div style={{ textAlign: "center", padding: "20px" }}>Utilizador nao encontrado.</div>;
   return (
@@ -28,12 +28,12 @@ export default function Profile() {
         <section>
           <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "20px" }}>
             <h2 style={{ fontSize: "28px", fontWeight: "300" }}>{user.username || user.full_name || "Usuario"}</h2>
-            {(!id || id === currentUser?.id) && (
-              <button onClick={() => navigate("/configuracoes")} style={{ background: "transparent", border: "1px solid #dbdbdb", borderRadius: "4px", padding: "5px 9px", fontWeight: "600", fontSize: "14px", cursor: "pointer" }}>
-                Editar perfil
-              </button>
+            {currentUser?.id === user.id && (
+              <>
+                <button onClick={() => navigate("/configuracoes")} style={{ background: "transparent", border: "1px solid #dbdbdb", borderRadius: "4px", padding: "5px 9px", fontWeight: "600", fontSize: "14px", cursor: "pointer" }}>Editar perfil</button>
+                <Settings style={{ cursor: "pointer" }} onClick={() => navigate("/configuracoes")} />
+              </>
             )}
-            {(!id || id === currentUser?.id) && <Settings style={{ cursor: "pointer" }} onClick={() => navigate("/configuracoes")} />}
           </div>
           <div style={{ display: "flex", gap: "40px", marginBottom: "20px" }}>
             <span><strong>0</strong> publicacoes</span>
@@ -42,7 +42,7 @@ export default function Profile() {
           </div>
           <div>
             <span style={{ fontWeight: "600" }}>{user.full_name}</span>
-            <p>{user.bio || ""}</p>
+            <p style={{ whiteSpace: "pre-wrap" }}>{user.bio || ""}</p>
           </div>
         </section>
       </header>
