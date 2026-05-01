@@ -103,6 +103,8 @@ export default function DesafioBiblico() {
   const [idx, setIdx] = useState(0);
   const [tempo, setTempo] = useState(TEMPO);
   const [pausado, setPausado] = useState(false);
+  const [nivelAtual, setNivelAtual] = useState(0);
+  const [xp, setXp] = useState(0);
   const [resp, setResp] = useState(null);
   const [pontos, setPontos] = useState(0);
   const [feedback, setFeedback] = useState(null);
@@ -133,7 +135,7 @@ export default function DesafioBiblico() {
     wsRef.current = ws;
     setEsperando(true);
     ws.onopen = () => {
-      ws.send(JSON.stringify({ type: 'game_queue', userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro }));
+      ws.send(JSON.stringify({ type: 'game_queue', userId: user?.id, userName: user?.full_name, avatar: user?.photo_url||user?.avatar_url, livro, nivel: nivelAtual }));
     };
     ws.onmessage = (e) => {
       const msg = JSON.parse(e.data);
@@ -215,7 +217,9 @@ export default function DesafioBiblico() {
   }
   function avancar() {
     setFeedback(null); setResp(null);
-    if(idx+1>=perguntas.length) { if(!adversario || pontos >= (adversario.pontos||0)) { guardarResultado(pontos, pontos > 0 ? Math.ceil(pontos/7.5) : 0, TEMPO - tRef.current); } playSound('fim'); setTela('resultado'); }
+    if(idx+1>=perguntas.length) { if(!adversario || pontos >= (adversario.pontos||0)) { guardarResultado(pontos, pontos > 0 ? Math.ceil(pontos/7.5) : 0, TEMPO - tRef.current); } playSound('fim'); setNivelAtual(prev => Math.min(prev+1, 13));
+      setXp(prev => prev + pontos);
+      setTela('resultado'); }
     else setIdx(prev=>prev+1);
   }
 
@@ -338,7 +342,7 @@ export default function DesafioBiblico() {
     <div style={{...bg,justifyContent:'flex-start',paddingTop:20}}>
       <div style={{width:'100%',maxWidth:500}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
-          <span style={{opacity:0.7,fontSize:13}}>Pergunta {idx+1}/{perguntas.length}</span>
+          <span style={{opacity:0.7,fontSize:13}}>Nivel {nivelAtual} | Pergunta {idx+1}/{perguntas.length}</span>
           <button onClick={pausa} style={{padding:'5px 14px',borderRadius:20,border:'1px solid rgba(255,255,255,0.3)',background:pausado?'#f0c040':'transparent',color:pausado?'#1a0a3e':'white',cursor:'pointer',fontSize:12,fontWeight:700}}>{pausado?'Continuar':'Pausa'}</button>
           <span style={{fontWeight:700,color:tempo<=3?'#e74c3c':'#f0c040'}}>{tempo}s</span>
         </div>
