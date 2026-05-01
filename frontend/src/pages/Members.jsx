@@ -13,19 +13,26 @@ export default function Members() {
 
   useEffect(() => {
     async function load() {
-      try {
-        const res = await fetch(`${API}/users`, { 
-          headers: { Authorization: "Bearer " + token } 
-        });
-        const data = await res.json();
-        // Tenta encontrar a lista em diferentes formatos
-        const list = Array.isArray(data) ? data : (data.users || data.data || []);
-        setUsers(list);
-      } catch (err) {
-        console.error("Erro:", err);
-      } finally {
-        setLoading(false);
+      // Testamos as 3 rotas mais comuns para ver qual responde
+      const rotas = [`${API}/users`, `${API}/members`, `${API}/profile/all`];
+      
+      for (let rota of rotas) {
+        try {
+          const res = await fetch(rota, { 
+            headers: { Authorization: "Bearer " + token } 
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const list = Array.isArray(data) ? data : (data.users || data.data || data.members || []);
+            if (list.length > 0) {
+              setUsers(list);
+              setLoading(false);
+              return; // Achou! Para de procurar.
+            }
+          }
+        } catch (err) { console.log("Tentativa falhou em: " + rota); }
       }
+      setLoading(false);
     }
     load();
   }, [token]);
@@ -36,7 +43,7 @@ export default function Members() {
     <div style={{ maxWidth: "600px", margin: "0 auto", padding: "20px" }}>
       <h2 style={{ fontWeight: "800", marginBottom: "20px" }}>Membros ({users.length})</h2>
       <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-        {users.length === 0 ? <p>Nenhum membro encontrado.</p> : users.map(u => (
+        {users.length === 0 ? <p>Nenhum membro encontrado. (Verificando rotas...)</p> : users.map(u => (
           <div key={u.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div onClick={() => navigate(`/profile/${u.id}`)} style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
               <img src={u.avatar_url || "/pro.jpg"} style={{ width: "50px", height: "50px", borderRadius: "50%", objectFit: "cover" }} onError={(e) => e.target.src="/pro.jpg"} />
