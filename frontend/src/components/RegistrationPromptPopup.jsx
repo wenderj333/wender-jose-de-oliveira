@@ -81,7 +81,7 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
   };
 
   return (
-    <div className="registration-popup-overlay" onClick={handleOverlayClick} style={{ pointerEvents: (user && !user.photoURL && !user.avatar_url) ? 'auto' : 'none' }}>
+    <div className="registration-popup-overlay" onClick={handleOverlayClick} style={{ pointerEvents: 'none' }}>
       <div classNameName="registration-popup-content" onClick={(e) => e.stopPropagation()} style={{
           padding: '30px',
           borderRadius: '16px',
