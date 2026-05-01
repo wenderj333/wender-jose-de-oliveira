@@ -1,7 +1,7 @@
 ﻿import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Loader2 } from "lucide-react";
+import { Search, Loader2, UserCircle } from "lucide-react";
 
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
 
@@ -10,51 +10,107 @@ export default function Members() {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    async function load() {
-      // Testamos as 3 rotas mais comuns para ver qual responde
-      const rotas = [`${API}/users`, `${API}/members`, `${API}/profile/all`];
-      
-      for (let rota of rotas) {
-        try {
-          const res = await fetch(rota, { 
-            headers: { Authorization: "Bearer " + token } 
-          });
-          if (res.ok) {
-            const data = await res.json();
-            const list = Array.isArray(data) ? data : (data.users || data.data || data.members || []);
-            if (list.length > 0) {
-              setUsers(list);
-              setLoading(false);
-              return; // Achou! Para de procurar.
-            }
-          }
-        } catch (err) { console.log("Tentativa falhou em: " + rota); }
+    async function fetchMembers() {
+      try {
+        const t = token || localStorage.getItem('token');
+        console.log('Token usado:', t ? t.substring(0,20)+'...' : 'NULL');
+        const res = await fetch(`${API}/members`, {
+          headers: { Authorization: "Bearer " + t }
+        });
+        if (!res.ok) { console.error('Members error:', res.status, await res.text()); setLoading(false); return; }
+        const data = await res.json();
+        console.log('Members data:', data);
+        const userList = Array.isArray(data) ? data : (data.members || data.users || []);
+        setUsers(userList);
+      } catch (err) {
+        console.error("Erro ao carregar membros:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
-    load();
+    fetchMembers();
   }, [token]);
 
-  if (loading) return <div style={{ textAlign: "center", padding: "50px" }}><Loader2 className="animate-spin" /></div>;
+  const filteredUsers = users.filter(u => 
+    u.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    u.full_name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+        <Loader2 className="animate-spin" size={32} color="#0095f6" />
+      </div>
+    );
+  }
 
   return (
-    <div style={{ maxWidth: "600px", margin: "0 auto", padding: "20px" }}>
-      <h2 style={{ fontWeight: "800", marginBottom: "20px" }}>Membros ({users.length})</h2>
-      <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-        {users.length === 0 ? <p>Nenhum membro encontrado. (Verificando rotas...)</p> : users.map(u => (
-          <div key={u.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div onClick={() => navigate(`/profile/${u.id}`)} style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
-              <img src={u.avatar_url || "/pro.jpg"} style={{ width: "50px", height: "50px", borderRadius: "50%", objectFit: "cover" }} onError={(e) => e.target.src="/pro.jpg"} />
-              <div>
-                <div style={{ fontWeight: "600" }}>{u.username}</div>
-                <div style={{ color: "#8e8e8e", fontSize: "14px" }}>{u.full_name}</div>
+    <div style={{ maxWidth: "600px", margin: "0 auto", padding: "20px", background: "#fff", minHeight: "100vh" }}>
+      <h2 style={{ fontSize: "24px", fontWeight: "800", marginBottom: "20px", color: "#1a1a1a" }}>Descobrir Pessoas</h2>
+      
+      {/* Barra de Pesquisa Estilo Clean */}
+      <div style={{ position: 'relative', marginBottom: '25px' }}>
+        <Search style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#8e8e8e' }} size={18} />
+        <input 
+          type="text" 
+          placeholder="Pesquisar..." 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ 
+            width: '100%', 
+            padding: '12px 12px 12px 40px', 
+            borderRadius: '10px', 
+            border: '1px solid #dbdbdb', 
+            background: '#efefef',
+            outline: 'none'
+          }}
+        />
+      </div>
+
+      {/* Grid/Lista de Membros */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        {filteredUsers.length === 0 ? (
+          <p style={{ textAlign: 'center', color: '#8e8e8e' }}>Nenhum membro encontrado.</p>
+        ) : (
+          filteredUsers.map(user => (
+            <div key={user.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div 
+                onClick={() => navigate(`/profile/${user.id}`)} 
+                style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
+              >
+                <div style={{ width: '54px', height: '54px', borderRadius: '50%', overflow: 'hidden', border: '1px solid #dbdbdb' }}>
+                  <img 
+                    src={user.avatar_url || "/pro.jpg"} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    onError={(e) => { e.target.src = "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"; }}
+                  />
+                </div>
+                <div>
+                  <div style={{ fontWeight: '600', fontSize: '14px', color: '#262626' }}>{user.username}</div>
+                  <div style={{ color: '#8e8e8e', fontSize: '14px' }}>{user.full_name || "Membro da comunidade"}</div>
+                </div>
               </div>
+              <button 
+                onClick={() => navigate(`/profile/${user.id}`)}
+                style={{ 
+                  background: '#0095f6', 
+                  color: 'white', 
+                  border: 'none', 
+                  borderRadius: '8px', 
+                  padding: '7px 16px', 
+                  fontSize: '14px', 
+                  fontWeight: '600', 
+                  cursor: 'pointer' 
+                }}
+              >
+                Ver Perfil
+              </button>
             </div>
-            <button onClick={() => navigate(`/profile/${u.id}`)} style={{ background: "#0095f6", color: "#fff", border: "none", borderRadius: "8px", padding: "6px 12px" }}>Ver perfil</button>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
