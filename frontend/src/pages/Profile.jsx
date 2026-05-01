@@ -1,79 +1,57 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Loader2, Settings, Grid, Bookmark } from "lucide-react";
-
+import { Loader2, Grid, Settings } from "lucide-react";
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
-
-const translations = {
-  pt: { edit: "Editar Perfil", followers: "seguidores", following: "seguindo", posts: "publicações", loading: "Carregando...", back: "Voltar" },
-  en: { edit: "Edit Profile", followers: "followers", following: "following", posts: "posts", loading: "Loading...", back: "Back" },
-  es: { edit: "Editar Perfil", followers: "seguidores", following: "siguiendo", posts: "publicaciones", loading: "Cargando...", back: "Volver" }
-};
-
 export default function Profile() {
   const { id } = useParams();
-  const { token, user, userLanguage = 'pt' } = useAuth();
-  const t = translations[userLanguage] || translations.pt;
+  const { user: currentUser, token } = useAuth();
   const navigate = useNavigate();
-  const [profileUser, setProfileUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
-    async function fetchProfile() {
-      try {
-        const targetId = id || user?.id;
-        if (!targetId) return;
-        const res = await fetch(`${API}/profile/${targetId}`, {
-          headers: { Authorization: "Bearer " + token }
-        });
-        const data = await res.json();
-        setProfileUser(data.user || data);
-      } catch (err) {
-        console.error("Erro ao carregar perfil", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchProfile();
-  }, [id, token, user]);
-
-  if (loading) return <div style={{display:'flex', justifyContent:'center', marginTop:'50px'}}><Loader2 className="animate-spin" color="#0095f6" /></div>;
-
+    const targetId = id || currentUser?.id;
+    if (!targetId) return;
+    fetch(`${API}/profile/${targetId}`, {
+      headers: { Authorization: "Bearer " + token }
+    })
+    .then(res => res.json())
+    .then(data => { setUser(data.user || data); setLoading(false); })
+    .catch(() => setLoading(false));
+  }, [id, currentUser, token]);
+  if (loading) return <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}><Loader2 className="animate-spin" /></div>;
+  if (!user) return <div style={{ textAlign: "center", padding: "20px" }}>Utilizador nao encontrado.</div>;
   return (
-    <div style={{ maxWidth: "935px", margin: "0 auto", padding: "20px", background: "#fff", minHeight: "100vh" }}>
-      <header style={{ display: 'flex', alignItems: 'center', gap: '40px', marginBottom: '40px', padding: '20px' }}>
-        <div style={{ flexShrink: 0 }}>
-          <img 
-            src={profileUser?.avatar_url || "/pro.jpg"} 
-            style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', border: '1px solid #dbdbdb' }}
-            onError={(e) => { e.target.src = "/pro.jpg"; }}
-          />
-        </div>
-        <section style={{ flexGrow: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: '300' }}>{profileUser?.username || "Usuário"}</h2>
-            {(!id || id === user?.id) && (
-              <button onClick={() => navigate('/configuracoes')} style={{ border: '1px solid #dbdbdb', background: 'transparent', padding: '5px 9px', borderRadius: '4px', fontWeight: '600', cursor: 'pointer' }}>
-                {t.edit}
+    <div style={{ maxWidth: "935px", margin: "0 auto", padding: "30px 20px" }}>
+      <header style={{ display: "flex", alignItems: "center", marginBottom: "44px", gap: "30px" }}>
+        <img src={user.avatar_url || "/pro.jpg"} style={{ width: "150px", height: "150px", borderRadius: "50%", objectFit: "cover", border: "1px solid #dbdbdb" }} onError={e => e.target.src="/pro.jpg"} />
+        <section>
+          <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "20px" }}>
+            <h2 style={{ fontSize: "28px", fontWeight: "300" }}>{user.username || user.full_name || "Usuario"}</h2>
+            {(!id || id === currentUser?.id) && (
+              <button onClick={() => navigate("/configuracoes")} style={{ background: "transparent", border: "1px solid #dbdbdb", borderRadius: "4px", padding: "5px 9px", fontWeight: "600", fontSize: "14px", cursor: "pointer" }}>
+                Editar perfil
               </button>
             )}
+            {(!id || id === currentUser?.id) && <Settings style={{ cursor: "pointer" }} onClick={() => navigate("/configuracoes")} />}
           </div>
-          <div style={{ display: 'flex', gap: '40px', marginBottom: '20px' }}>
-            <span><strong>0</strong> {t.posts}</span>
-            <span><strong>0</strong> {t.followers}</span>
-            <span><strong>0</strong> {t.following}</span>
+          <div style={{ display: "flex", gap: "40px", marginBottom: "20px" }}>
+            <span><strong>0</strong> publicacoes</span>
+            <span><strong>0</strong> seguidores</span>
+            <span><strong>0</strong> seguindo</span>
           </div>
-          <div style={{ fontWeight: '600' }}>{profileUser?.full_name}</div>
+          <div>
+            <span style={{ fontWeight: "600" }}>{user.full_name}</span>
+            <p>{user.bio || ""}</p>
+          </div>
         </section>
       </header>
-      <div style={{ borderTop: '1px solid #dbdbdb', display: 'flex', justifyContent: 'center', gap: '60px' }}>
-         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingTop: '15px', borderTop: '1px solid #262626', marginTop: '-1px', cursor: 'pointer' }}>
-            <Grid size={12} /> <span style={{ fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>{t.posts}</span>
-         </div>
+      <hr style={{ border: "0", borderTop: "1px solid #dbdbdb", marginBottom: "0" }} />
+      <div style={{ display: "flex", justifyContent: "center", gap: "60px", textTransform: "uppercase", fontSize: "12px", fontWeight: "600", letterSpacing: "1px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", borderTop: "1px solid #262626", padding: "15px 0", marginTop: "-1px" }}>
+          <Grid size={12} /> Publicacoes
+        </div>
       </div>
     </div>
   );
 }
-
-
