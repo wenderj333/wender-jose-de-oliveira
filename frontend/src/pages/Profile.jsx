@@ -87,7 +87,7 @@ export default function Profile() {
   }, [targetId, token]);
 
   async function saveProfile() {
-    const res = await fetch(`/profile`, {
+    const res = await fetch(`${API}/profile`, {
       method: 'PATCH',
       headers: { ...headers, 'Content-Type': 'application/json' },
       body: JSON.stringify(editData),
