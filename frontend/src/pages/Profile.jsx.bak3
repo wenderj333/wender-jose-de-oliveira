@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Cropper from 'react-easy-crop';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -20,7 +20,7 @@ async function uploadPhoto(file) {
 }
 
 export default function Profile() {
-  const { userId, id } = useParams(); const _userId = userId || id;
+  const { userId } = useParams();
   const { user: currentUser, token } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ export default function Profile() {
   const [showAvatarBig, setShowAvatarBig] = React.useState(false);
   const coverRef = useRef(null);
 
-  const targetId = _userId || currentUser?.id;
+  const targetId = userId || currentUser?.id;
   const isOwn = !userId || userId === currentUser?.id;
   const [cropModal, setCropModal] = useState(false);
   const [cropImage, setCropImage] = useState(null);
@@ -136,7 +136,7 @@ export default function Profile() {
   }
 
   if (loading) return <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="loading-spinner" /></div>;
-  if (!profile) return <div style={{ textAlign: 'center', padding: '3rem' }}>ðŸ˜” Perfil nao encontrado.</div>;
+  if (!profile) return <div style={{ textAlign: 'center', padding: '3rem' }}>😔 Perfil nao encontrado.</div>;
 
   const initials = (profile.full_name || 'U').slice(0, 2).toUpperCase();
   const totalPosts = posts.length;
@@ -206,15 +206,15 @@ export default function Profile() {
                   <Edit2 size={16} /> {t('profile.editProfile')}
                 </button>
                 <div style={{ position: 'relative' }}>
-                  <button onClick={() => setShowMenu(!showMenu)} style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid #dbdbdb', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 18 }}>â‹®</button>
+                  <button onClick={() => setShowMenu(!showMenu)} style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid #dbdbdb', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 18 }}>⋮</button>
                   {showMenu && (
                     <div style={{ position: 'absolute', top: 40, right: 0, background: '#fff', borderRadius: 12, boxShadow: '0 4px 20px rgba(0,0,0,0.15)', zIndex: 100, minWidth: 200, overflow: 'hidden' }}>
-                      <button onClick={() => { navigator.clipboard.writeText(window.location.href); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>ðŸ”— {t('profile.copyLink')}</button>
-                      <button onClick={() => { coverRef.current?.click(); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>ðŸ“· {t('profile.changeCover')}</button>
-                      <button onClick={() => { avatarRef.current?.click(); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>ðŸ–¼ï¸ {t('profile.changeAvatar')}</button>
-                      <button onClick={() => { setProfile(prev => ({...prev, cover_url: null})); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, color: '#e11d48', display: 'flex', alignItems: 'center', gap: 8 }}>ðŸ—‘ï¸ {t('profile.deleteCover')}</button>
+                      <button onClick={() => { navigator.clipboard.writeText(window.location.href); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>🔗 {t('profile.copyLink')}</button>
+                      <button onClick={() => { coverRef.current?.click(); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>📷 {t('profile.changeCover')}</button>
+                      <button onClick={() => { avatarRef.current?.click(); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, display: 'flex', alignItems: 'center', gap: 8 }}>🖼️ {t('profile.changeAvatar')}</button>
+                      <button onClick={() => { setProfile(prev => ({...prev, cover_url: null})); setShowMenu(false); }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, color: '#e11d48', display: 'flex', alignItems: 'center', gap: 8 }}>🗑️ {t('profile.deleteCover')}</button>
                         <div style={{height:1,background:'#f0f0f0',margin:'4px 0'}}/>
-                        <button onClick={() => { setShowMenu(false); if(window.confirm('Tem certeza? Esta acao nao pode ser desfeita.')) { fetch(API_BASE + '/api/auth/delete-account', { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } }).then(() => { logout(); }); } }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, color: '#e11d48', display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700 }}>âš ï¸ Apagar Conta</button>
+                        <button onClick={() => { setShowMenu(false); if(window.confirm('Tem certeza? Esta acao nao pode ser desfeita.')) { fetch(API_BASE + '/api/auth/delete-account', { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } }).then(() => { logout(); }); } }} style={{ width: '100%', padding: '12px 16px', border: 'none', background: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, color: '#e11d48', display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700 }}>⚠️ Apagar Conta</button>
                     </div>
                   )}
                 </div>
@@ -302,7 +302,7 @@ export default function Profile() {
         {activeTab === 'prayers' && (
           <div style={{ textAlign: 'center', padding: '3rem', color: '#888' }}>
             <Heart size={48} style={{ marginBottom: 16, opacity: 0.3 }} />
-            <p>Pedidos de oraÃ§Ã£o em breve</p>
+            <p>Pedidos de oração em breve</p>
           </div>
         )}
 
@@ -322,7 +322,7 @@ export default function Profile() {
               <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>{t('profile.editProfile')}</h2>
               <button onClick={() => setEditMode(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={24} /></button>
             </div>
-            {[['Nome completo', 'full_name'], ['Bio', 'bio'], ['LocalizaÃ§Ã£o', 'location'], ['Igreja', 'church_name']].map(([label, key]) => (
+            {[['Nome completo', 'full_name'], ['Bio', 'bio'], ['Localização', 'location'], ['Igreja', 'church_name']].map(([label, key]) => (
               <div key={key} style={{ marginBottom: 16 }}>
                 <label style={{ display: 'block', fontWeight: 600, fontSize: 13, marginBottom: 6, color: '#555' }}>{label}</label>
                 {key === 'bio' ? (
@@ -357,8 +357,8 @@ export default function Profile() {
             <div style={{ padding: 20 }}>
               <p style={{ fontSize: 14, lineHeight: 1.6, margin: '0 0 12px' }}>{selectedPost.content}</p>
               <div style={{ display: 'flex', gap: 16, color: '#888', fontSize: 13 }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Heart size={16} /> {selectedPost.like_count || 0} AmÃ©n</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><MessageCircle size={16} /> {selectedPost.comment_count || 0} ComentÃ¡rios</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Heart size={16} /> {selectedPost.like_count || 0} Amén</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><MessageCircle size={16} /> {selectedPost.comment_count || 0} Comentários</span>
               </div>
             </div>
           </div>
@@ -384,4 +384,3 @@ export default function Profile() {
     </div>
   );
 }
-
