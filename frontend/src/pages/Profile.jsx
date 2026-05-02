@@ -15,7 +15,8 @@ export default function Profile() {
   const targetId = userId || currentUser?.id;
 
   useEffect(() => {
-    if (!targetId || !token) return;
+    if (!targetId) return;
+    if (!token) { setLoading(false); return; }
     async function loadProfile() {
       try {
         const headers = { Authorization: `Bearer ${token}` };
