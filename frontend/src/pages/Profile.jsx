@@ -21,6 +21,7 @@ export default function Profile() {
       .catch(() => setLoading(false));
   }, [targetId]);
 
+  console.log("PROFILE RENDER - targetId:", targetId, "loading:", loading, "profile:", profile);
   if (loading) return (
     <div style={{display:"flex",justifyContent:"center",padding:"80px"}}>
       <Loader2 className="animate-spin" size={36} color="#6c63ff" />
