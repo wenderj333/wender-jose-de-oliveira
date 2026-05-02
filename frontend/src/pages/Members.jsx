@@ -116,15 +116,37 @@ export default function Members() {
               </div>
 
               {/* Botão */}
-              <button style={{
-                background:'linear-gradient(135deg, #6c63ff, #a78bfa)',
-                color:'white', border:'none',
-                borderRadius:'20px', padding:'6px 18px',
-                fontSize:'12px', fontWeight:'600', cursor:'pointer',
-                width:'100%'
-              }}>
+              <button
+                onClick={() => navigate(`/profile/${user.id}`)}
+                style={{
+                  background:'linear-gradient(135deg, #6c63ff, #a78bfa)',
+                  color:'white', border:'none',
+                  borderRadius:'20px', padding:'6px 18px',
+                  fontSize:'12px', fontWeight:'600', cursor:'pointer',
+                  width:'100%', marginBottom:'6px'
+                }}>
                 Ver Perfil
               </button>
+              <div style={{ display:'flex', gap:'6px', width:'100%' }}>
+                <button
+                  onClick={e => { e.stopPropagation(); alert('Seguir ' + user.username); }}
+                  style={{
+                    flex:1, background:'#f0f0f0', color:'#6c63ff',
+                    border:'1px solid #6c63ff', borderRadius:'16px',
+                    padding:'4px 0', fontSize:'11px', fontWeight:'600', cursor:'pointer'
+                  }}>
+                  + Seguir
+                </button>
+                <button
+                  onClick={e => { e.stopPropagation(); navigate('/messages?to=' + user.id); }}
+                  style={{
+                    flex:1, background:'#f0f0f0', color:'#333',
+                    border:'1px solid #ddd', borderRadius:'16px',
+                    padding:'4px 0', fontSize:'11px', fontWeight:'600', cursor:'pointer'
+                  }}>
+                  ✉ Msg
+                </button>
+              </div>
             </div>
           ))
         )}
