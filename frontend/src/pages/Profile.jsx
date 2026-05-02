@@ -5,14 +5,14 @@ import { Loader2, MapPin, Church, ArrowLeft } from "lucide-react";
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
 
 export default function Profile() {
-  const { userId } = useParams();
+  const { userId, id } = useParams();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId && !id) return;
     const token = localStorage.getItem('token');
     const headers = token ? { Authorization: "Bearer " + token } : {};
 
