@@ -73,8 +73,6 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/profile/:id" element={<Profile />} />
-        <Route path="/perfil/:id" element={<Profile />} />
         <Route path="*" element={<Login />} />
       </Routes>
     );
