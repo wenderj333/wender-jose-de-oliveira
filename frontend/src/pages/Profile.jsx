@@ -81,7 +81,7 @@ export default function Profile() {
     ]).then(([profileData, feedData]) => {
       const u = profileData.user || profileData;
       setProfile(u);
-      setEditData({ full_name: u.full_name || '', bio: u.bio || '', location: u.location || '', church_name: u.church_name || '' });
+      setEditData({ full_name: u.full_name || '', bio: u.bio || '', location: '', church_name: u.church_name || '' });
       setPosts(feedData.posts || []);
     }).catch(console.error).finally(() => setLoading(false));
   }, [targetId, token]);
