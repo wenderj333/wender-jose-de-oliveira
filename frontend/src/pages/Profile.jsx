@@ -148,8 +148,8 @@ export default function Profile() {
       </div>
       <div style={{ background:"#fff", borderBottom:"1px solid #dbdbdb", padding:"0 24px 20px" }}>
         <div style={{ display:"flex", alignItems:"flex-start", gap:32, flexWrap:"wrap" }}>
-          <div style={{ position:"relative", marginTop:-44, flexShrink:0 }}>
-            <div style={{ width:110, height:110, borderRadius:"50%", border:"4px solid #fff", overflow:"hidden", background:"linear-gradient(135deg,#daa520,#f0c040)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:36, fontWeight:700, color:"#fff", boxShadow:"0 2px 12px rgba(0,0,0,0.15)" }}>
+          <div style={{ position:"relative", marginTop:-60, flexShrink:0 }}>
+            <div style={{ width:150, height:150, borderRadius:"50%", border:"4px solid #fff", overflow:"hidden", background:"linear-gradient(135deg,#daa520,#f0c040)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:48, fontWeight:700, color:"#fff", boxShadow:"0 2px 12px rgba(0,0,0,0.15)" }}>
               {profile.avatar_url ? <img src={profile.avatar_url} alt="" onClick={()=>setShowAvatarBig(true)} style={{width:"100%",height:"100%",objectFit:"cover",cursor:"pointer"}}/> : initials}
             </div>
             {showAvatarBig && (<div onClick={()=>setShowAvatarBig(false)} style={{position:"fixed",top:0,left:0,right:0,bottom:0,background:"rgba(0,0,0,0.85)",zIndex:9999,display:"flex",alignItems:"center",justifyContent:"center"}}><img src={profile.avatar_url} alt="" style={{maxWidth:"90vw",maxHeight:"90vh",borderRadius:12}}/></div>)}
