@@ -225,12 +225,12 @@ function setupWebSocket(server) {
 
           case 'live_chat_message': {
             // Community live chat broadcast
-            const communityChat = { type: 'live_chat_broadcast', userId: msg.userId, userName: msg.userName, userAvatar: msg.userAvatar, text: msg.text, time: new Date().toISOString() };
+            const communityChat = { type: 'live_chat_broadcast', userId: msg.userId, userName: msg.userName, userAvatar: msg.userAvatar, text: msg.text, id: Date.now().toString(), time: new Date().toISOString() };
             broadcast(wss, communityChat);
             break;
           }
           case 'live_chat': {
-            const chatData = { type: 'live_chat_message', streamId: msg.streamId, name: msg.name, text: msg.text, time: new Date().toISOString() };
+            const chatData = { type: 'live_chat_message', streamId: msg.streamId, name: msg.name, text: msg.text, id: Date.now().toString(), time: new Date().toISOString() };
             broadcastToStream(wss, msg.streamId, chatData, ws);
             break;
           }
