@@ -78,7 +78,7 @@ export default function Members() {
           filtered.map(user => (
             <div
               key={user.id}
-              onClick={() => navigate(`/profile/${user.id}`)}
+              onClick={() => navigate(`/perfil/${user.id}`)}
               style={{
                 background:'#fff',
                 borderRadius:'16px',
@@ -117,7 +117,7 @@ export default function Members() {
 
               {/* Botão */}
               <button
-                onClick={() => navigate(`/profile/${user.id}`)}
+                onClick={() => navigate(`/perfil/${user.id}`)}
                 style={{
                   background:'#ffffff',
                   color:'#1a1a1a', border:'1px solid #e0e0e0',
@@ -154,5 +154,6 @@ export default function Members() {
     </div>
   );
 }
+
 
 
