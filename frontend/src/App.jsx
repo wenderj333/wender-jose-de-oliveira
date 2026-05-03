@@ -93,6 +93,23 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hideSidebars, setHideSidebars] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [soundEnabled, setSoundEnabled] = React.useState(localStorage.getItem('scf_sound') !== 'off');
+
+  function playNotifSound() {
+    if (!soundEnabled) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = 880;
+      o.type = 'sine';
+      g.gain.setValueAtTime(0.3, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      o.start(ctx.currentTime);
+      o.stop(ctx.currentTime + 0.4);
+    } catch(e) {}
+  }
   const [pendingRequests, setPendingRequests] = useState(0);
 
   useEffect(() => {
@@ -122,7 +139,7 @@ export default function App() {
   useEffect(() => {
     if (lastEvent?.type === 'direct_message' && lastEvent.senderId !== user?.id) {
       if (!location.pathname.startsWith('/mensagens')) {
-        setUnreadMessages(prev => prev + 1);
+        setUnreadMessages(prev => prev + 1); playNotifSound();
       }
     }
     if (lastEvent?.type === 'friend_request') {
@@ -199,7 +216,10 @@ export default function App() {
 
         <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8}}>
           <LanguageSelector />
-          <Link to="/notificacoes" style={{position:'relative',background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',textDecoration:'none'}}>
+          <button onClick={()=>{ const s=!soundEnabled; setSoundEnabled(s); localStorage.setItem('scf_sound',s?'on':'off'); }} style={{background:'none',border:'none',color:'white',cursor:'pointer',padding:'4px',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:'50%',width:34,height:34}} title={soundEnabled?'Som ativo':'Som desativado'}>
+              {soundEnabled ? '🔔' : '🔕'}
+            </button>
+            <Link to="/notificacoes" style={{position:'relative',background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',textDecoration:'none'}}>
             <Bell size={17}/>{unreadMessages > 0 && <span style={{ position:'absolute', top:-4, right:-4, background:'#e11d48', color:'white', borderRadius:'50%', width:16, height:16, fontSize:10, fontWeight:700, display:'flex', alignItems:'center', justifyContent:'center' }}>{unreadMessages > 9 ? '9+' : unreadMessages}</span>}
           </Link>
           <Link to={`/perfil/${user.id}`} style={{background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',overflow:'hidden',textDecoration:'none'}}>
