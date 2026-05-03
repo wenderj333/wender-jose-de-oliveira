@@ -158,7 +158,8 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/mural" element={<MuralGrid />} />
-        <Route path="/membros" element={<Members />} />
+        <Route path="/perfil/:userId" element={<Profile />} />
+            <Route path="/membros" element={<Members />} />
         <Route path="/ia-biblica" element={<BiblicalAI />} />
         <Route path="/journeys" element={<FaithJourneys />} />
         <Route path="/musica" element={<MusicLibrary />} />
@@ -328,6 +329,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<MuralGrid />} />
             <Route path="/perfil/:userId" element={<Profile />} />
+            <Route path="/perfil/:userId" element={<Profile />} />
             <Route path="/membros" element={<Members />} />
             <Route path="/ia-biblica" element={<BiblicalAI />} />
             <Route path="/chat-pastoral" element={<PastorChat />} />
@@ -483,3 +485,4 @@ export default function App() {
     </div>
   );
 }
+
