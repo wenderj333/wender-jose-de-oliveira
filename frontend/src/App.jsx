@@ -45,7 +45,6 @@ import LiveCommunity from "./pages/LiveCommunity";
 // Components
 import LanguageSelector from "./components/LanguageSwitcher";
 import ProtectedRoute from "./components/ProtectedRoute";
-import RightSidebar from './components/RightSidebar';
 import GlobalChat from "./components/GlobalChat";
 
 // Styles
@@ -499,7 +498,7 @@ export default function App() {
       </nav>
 
       <GlobalChat />
-      {!hideSidebars && <RightSidebar />}
+      
     </div>
   );
 }
