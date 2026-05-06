@@ -139,8 +139,11 @@ export default function App() {
   useEffect(() => {
     if (lastEvent?.type === 'direct_message' && lastEvent.senderId !== user?.id) {
       if (!location.pathname.startsWith('/mensagens')) {
-        setUnreadMessages(prev => prev + 1);
+        setUnreadMessages(prev => prev + 1); playNotifSound();
       }
+    }
+    if (lastEvent?.type === 'live_chat_broadcast' && !location.pathname.startsWith('/comunidade-ao-vivo')) {
+      setUnreadMessages(prev => prev + 1); playNotifSound();
     }
     if (lastEvent?.type === 'friend_request') {
       setPendingRequests(prev => prev + 1);
