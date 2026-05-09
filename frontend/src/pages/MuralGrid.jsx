@@ -330,7 +330,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       const res = await fetch(`${API}/feed/${post.id}/comments`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bg_music_url: selectedSongUrl, bg_music_start: startTime, bg_music_duration: duration, content: comment })
+        body: JSON.stringify({ content: comment })
       });
       const data = await res.json();
       if (data.comment) setComments([...comments, data.comment]);
@@ -868,7 +868,7 @@ export default function MuralGrid() {
                 onClick={(e) => { e.stopPropagation(); setActiveVideoId(post.id); }}
                 style={{ position: 'absolute', bottom: 10, left: 10, zIndex: 30, background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '20px', padding: '8px 12px', fontSize: '12px', fontWeight: 'bold', color: '#000', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}
               >
-                {activeVideoId === post.id ? '?? TOCANDO' : '?? OUVIR MÚSICA'}
+                {activeVideoId === post.id ? '?? TOCANDO' : '?? OUVIR MSICA'}
               </button>
             </div>
           )}
