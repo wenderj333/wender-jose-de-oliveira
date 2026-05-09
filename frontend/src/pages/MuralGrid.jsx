@@ -642,7 +642,7 @@ export default function MuralGrid() {
       const res = await fetch(`${API}/feed`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bg_music_url: selectedSongUrl, bg_music_start: startTime, bg_music_duration: duration,
+        body: JSON.stringify({ bg_music_url: audioUrl || null, bg_music_start: startTime, bg_music_duration: duration,
           content: postText || '📸',
           category: postCategory,
           visibility: postVisibility,
