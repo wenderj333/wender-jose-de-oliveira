@@ -229,7 +229,7 @@ export default function App() {
               <User size={17}/>
             )}
           </Link>
-          <button className="icon-btn mobile-only" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{background:'transparent',border:'none',color:'white',display:'none',cursor:'pointer'}}>
+          <button className="icon-btn mobile-only" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} style={{background:'transparent',border:'none',color:'white',cursor:'pointer'}}>
             {mobileMenuOpen ? <X size={24}/> : <Menu size={24}/>}
           </button>
 
