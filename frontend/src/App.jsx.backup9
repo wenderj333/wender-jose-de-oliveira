@@ -30,6 +30,7 @@ import DiarioComDeus from './pages/DiarioComDeus';
 import LiveStream from './pages/LiveStream';
 import FaithJourneys from "./pages/FaithJourneys";
 import Reflection from "./pages/Reflection";
+import DesafioBiblico from "./pages/DesafioBiblico";
 import AjudaUmaVida from "./pages/AjudaUmaVida";
 import Chat from "./pages/Chat";
 import Churches from "./pages/Churches";
@@ -43,10 +44,25 @@ import LiveCommunity from "./pages/LiveCommunity";
 // Components
 import LanguageSelector from "./components/LanguageSwitcher";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RightSidebar from './components/RightSidebar';
 import GlobalChat from "./components/GlobalChat";
 
 // Styles
 import "./styles/ModernTheme.css";
+
+function playSound(type) {
+  try {
+    const sounds = {
+      notify: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
+      message: 'https://assets.mixkit.co/active_storage/sfx/2355/2355-preview.mp3',
+      pray: 'https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3',
+    };
+    const audio = new Audio(sounds[type]);
+    audio.volume = 0.5;
+    audio.play().catch(() => {});
+  } catch(e) {}
+}
+window.playSound = playSound;
 
 export default function App() {
   const { t } = useTranslation();
@@ -77,6 +93,23 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hideSidebars, setHideSidebars] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [soundEnabled, setSoundEnabled] = React.useState(localStorage.getItem('scf_sound') !== 'off');
+
+  function playNotifSound() {
+    if (!soundEnabled) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = 880;
+      o.type = 'sine';
+      g.gain.setValueAtTime(0.3, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      o.start(ctx.currentTime);
+      o.stop(ctx.currentTime + 0.4);
+    } catch(e) {}
+  }
   const [pendingRequests, setPendingRequests] = useState(0);
 
   useEffect(() => {
@@ -142,7 +175,8 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/mural" element={<MuralGrid />} />
-        <Route path="/membros" element={<Members />} />
+        <Route path="/perfil/:userId" element={<Profile />} />
+            <Route path="/membros" element={<Members />} />
         <Route path="/ia-biblica" element={<BiblicalAI />} />
         <Route path="/journeys" element={<FaithJourneys />} />
         <Route path="/musica" element={<MusicLibrary />} />
@@ -272,7 +306,7 @@ export default function App() {
             <p className="menu-title">{t('menu.you','VOCÃŠ')}</p>
             <Link to={`/perfil/${user?.id}`} className={isActive(`/perfil/${user?.id}`)}><User size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.profile','Meu Perfil')}</span></Link>
             <Link to="/amigos" className={isActive('/amigos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.friends','Amigos')} {pendingRequests>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{pendingRequests}</span>}</span></Link>
-            <Link to="/mensagens" className={isActive('/mensagens')}><Mail size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.messages','Mensagens')}</span></Link>
+            <Link to="/mensagens" className={isActive('/mensagens')} style={{position:'relative'}}><Mail size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.messages','Mensagens')}</span>{unreadMessages>0&&<span style={{position:'absolute',top:-4,right:-4,background:'#e74c3c',color:'white',borderRadius:'50%',width:16,height:16,fontSize:10,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center'}}>{unreadMessages>9?'9+':unreadMessages}</span>}</Link>
           </div>
 
           {/* 3. COMUNIDADE */}
@@ -312,6 +346,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<MuralGrid />} />
             <Route path="/perfil/:userId" element={<Profile />} />
+            <Route path="/perfil/:userId" element={<Profile />} />
             <Route path="/membros" element={<Members />} />
             <Route path="/ia-biblica" element={<BiblicalAI />} />
             <Route path="/chat-pastoral" element={<PastorChat />} />
@@ -321,7 +356,7 @@ export default function App() {
             <Route path="/musica" element={<MusicLibrary />} />
             <Route path="/consagracao" element={<Consecration />} />
             <Route path="/reflexao" element={<Reflection />} />
-            <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
+            <Route path="/desafio-biblico" element={<DesafioBiblico />} /><Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
             <Route path="/mensagens" element={<Chat />} />
             <Route path="/mensagens/:userId" element={<Chat />} />
             <Route path="/amigos" element={<Friends />} />
@@ -448,7 +483,7 @@ export default function App() {
           { to: '/', icon: <Home size={22}/>, label: t('nav.mural', 'Inicio') },
           { to: '/amigos', icon: <Users size={22}/>, label: t('nav.friends', 'Amigos') },
           { to: '/mensagens', icon: <MessageCircle size={22}/>, label: t('nav.messages', 'Mensagens') },
-          { to: '/comunidade-ao-vivo', icon: <span style={{fontSize:20}}>ðŸ•Šï¸</span>, label: t('nav.live_community', 'Chat') },
+          { to: '/comunidade-ao-vivo', icon: <MessageCircle size={20}/>, label: t('nav.live_community', 'Chat') },
           { to: `/perfil/${user.id}`, icon: user.avatar_url ? <img src={user.avatar_url} style={{width:24,height:24,borderRadius:'50%',objectFit:'cover'}}/> : <User size={22}/>, label: t('common.profile', 'Perfil') },
         ].map(item => (
           <Link key={item.to} to={item.to} style={{
@@ -463,6 +498,8 @@ export default function App() {
       </nav>
 
       <GlobalChat />
+      {!hideSidebars && <RightSidebar />}
     </div>
   );
 }
+

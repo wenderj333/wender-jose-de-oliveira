@@ -1,0 +1,6 @@
+﻿code = open(r'src\pages\MuralGrid.jsx', encoding='utf-8', errors='ignore').read()
+code = code.replace('bg_music_start: startTime,', 'bg_music_start: null,')
+code = code.replace('bg_music_duration: duration,', 'bg_music_duration: null,')
+open(r'src\pages\MuralGrid.jsx', 'w', encoding='utf-8').write(code)
+print('startTime:', code.count('startTime'))
+print('duration restante:', code.count('bg_music_duration'))
