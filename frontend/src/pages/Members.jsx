@@ -40,13 +40,11 @@ export default function Members() {
     const bHasPhoto = b.avatar_url && b.avatar_url.length > 10 ? 1 : 0;
     return bHasPhoto - aHasPhoto;
   });
-  );
 
   if (loading) return (
     <div style={{ display:'flex', justifyContent:'center', alignItems:'center', height:'50vh' }}>
       <Loader2 className="animate-spin" size={32} color="#6c63ff" />
     </div>
-  );
 
   return (
     <div style={{ maxWidth:"900px", margin:"0 auto", padding:"24px 16px" }}>
@@ -157,7 +155,6 @@ export default function Members() {
         )}
       </div>
     </div>
-  );
 }
 
 
