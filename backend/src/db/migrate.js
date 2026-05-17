@@ -1,18 +1,18 @@
 require('dotenv').config();
 const { Pool } = require('pg');
-
+ 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false },
 });
-
+ 
 async function migrate() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS cover_url TEXT`);
   console.log('🔄 Executando migração do banco de dados (PostgreSQL/Neon)...');
-
+ 
   await pool.query(`
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
+ 
     -- ============ USUÁRIOS ============
     CREATE TABLE IF NOT EXISTS users (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -31,7 +31,7 @@ async function migrate() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     -- ============ IGREJAS ============
     CREATE TABLE IF NOT EXISTS churches (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -61,10 +61,10 @@ async function migrate() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     CREATE INDEX IF NOT EXISTS idx_churches_location ON churches(city, country_code);
     CREATE INDEX IF NOT EXISTS idx_churches_coords ON churches(latitude, longitude);
-
+ 
     -- ============ CARGOS NA IGREJA ============
     CREATE TABLE IF NOT EXISTS church_roles (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -80,7 +80,7 @@ async function migrate() {
       assigned_at TIMESTAMPTZ DEFAULT NOW(),
       UNIQUE(church_id, user_id, role_type)
     );
-
+ 
     -- ============ PEDIDOS DE ORAÇÃO ============
     CREATE TABLE IF NOT EXISTS prayers (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -101,11 +101,11 @@ async function migrate() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     CREATE INDEX IF NOT EXISTS idx_prayers_church ON prayers(church_id, created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_prayers_category ON prayers(category);
     CREATE INDEX IF NOT EXISTS idx_prayers_answered ON prayers(is_answered);
-
+ 
     -- ============ RESPOSTAS / "ESTOU ORANDO" ============
     CREATE TABLE IF NOT EXISTS prayer_responses (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -115,7 +115,7 @@ async function migrate() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       UNIQUE(prayer_id, user_id)
     );
-
+ 
     -- ============ CÍRCULOS DE ORAÇÃO ============
     CREATE TABLE IF NOT EXISTS prayer_circles (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -128,14 +128,14 @@ async function migrate() {
       is_active BOOLEAN DEFAULT true,
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     CREATE TABLE IF NOT EXISTS prayer_circle_members (
       circle_id UUID NOT NULL REFERENCES prayer_circles(id) ON DELETE CASCADE,
       user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
       joined_at TIMESTAMPTZ DEFAULT NOW(),
       PRIMARY KEY (circle_id, user_id)
     );
-
+ 
     -- ============ CAMPANHAS DE ORAÇÃO ============
     CREATE TABLE IF NOT EXISTS prayer_campaigns (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -153,7 +153,7 @@ async function migrate() {
       is_active BOOLEAN DEFAULT true,
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     CREATE TABLE IF NOT EXISTS campaign_checkins (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       campaign_id UUID NOT NULL REFERENCES prayer_campaigns(id) ON DELETE CASCADE,
@@ -163,7 +163,7 @@ async function migrate() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       UNIQUE(campaign_id, user_id, check_date)
     );
-
+ 
     -- ============ PASTOR ORANDO AO VIVO ============
     CREATE TABLE IF NOT EXISTS pastor_prayer_sessions (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -176,9 +176,9 @@ async function migrate() {
       prayer_focus TEXT,
       duration_minutes INT
     );
-
+ 
     CREATE INDEX IF NOT EXISTS idx_pastor_sessions_live ON pastor_prayer_sessions(is_live) WHERE is_live = true;
-
+ 
     -- ============ DÍZIMOS E OFERTAS ============
     CREATE TABLE IF NOT EXISTS tithes (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -193,9 +193,9 @@ async function migrate() {
       payment_ref VARCHAR(255),
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     CREATE INDEX IF NOT EXISTS idx_tithes_church ON tithes(church_id, created_at DESC);
-
+ 
     -- ============ NOVOS CONVERTIDOS ============
     CREATE TABLE IF NOT EXISTS new_converts (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -214,7 +214,7 @@ async function migrate() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     -- ============ NOTAS PASTORAIS ============
     CREATE TABLE IF NOT EXISTS pastoral_notes (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -227,7 +227,7 @@ async function migrate() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     -- ============ NOTIFICAÇÕES ============
     CREATE TABLE IF NOT EXISTS notifications (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -239,9 +239,9 @@ async function migrate() {
       is_read BOOLEAN DEFAULT false,
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id, is_read, created_at DESC);
-
+ 
     -- ============ MURAL / FEED ============
     CREATE TABLE IF NOT EXISTS feed_posts (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -259,11 +259,11 @@ async function migrate() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     CREATE INDEX IF NOT EXISTS idx_feed_posts_created ON feed_posts(created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_feed_posts_category ON feed_posts(category);
     CREATE INDEX IF NOT EXISTS idx_feed_posts_church ON feed_posts(church_id, created_at DESC);
-
+ 
     -- ============ PEDIDOS DE AJUDA ============
     CREATE TABLE IF NOT EXISTS help_requests (
       id SERIAL PRIMARY KEY,
@@ -275,7 +275,7 @@ async function migrate() {
       assigned_church_id UUID REFERENCES churches(id),
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     -- ============ CHAT PASTORAL ============
     CREATE TABLE IF NOT EXISTS chat_rooms (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -290,7 +290,7 @@ async function migrate() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       closed_at TIMESTAMPTZ
     );
-
+ 
     CREATE TABLE IF NOT EXISTS chat_messages (
       id SERIAL PRIMARY KEY,
       room_id UUID NOT NULL REFERENCES chat_rooms(id) ON DELETE CASCADE,
@@ -304,15 +304,13 @@ async function migrate() {
     );
     CREATE INDEX IF NOT EXISTS idx_chat_messages_room ON chat_messages(room_id, created_at);
   `);
-
-  // Add new columns
+ 
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_private BOOLEAN DEFAULT false`);
   await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS media_type VARCHAR(10)`);
   await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS is_flagged BOOLEAN DEFAULT false`);
   await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS flag_reason TEXT`);
   await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS audio_url TEXT`);
-
-  // ============ GRUPOS (tipo Facebook) ============
+ 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS groups (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -325,7 +323,7 @@ async function migrate() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     );
-
+ 
     CREATE TABLE IF NOT EXISTS group_members (
       group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
       user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -333,7 +331,7 @@ async function migrate() {
       joined_at TIMESTAMPTZ DEFAULT NOW(),
       PRIMARY KEY (group_id, user_id)
     );
-
+ 
     CREATE TABLE IF NOT EXISTS group_posts (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
@@ -344,8 +342,7 @@ async function migrate() {
     );
     CREATE INDEX IF NOT EXISTS idx_group_posts_group ON group_posts(group_id, created_at DESC);
   `);
-
-  // ============ CONSAGRAÇÃO / JEJUM ============
+ 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS consecrations (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -354,13 +351,12 @@ async function migrate() {
       start_date TIMESTAMPTZ DEFAULT NOW(),
       end_date TIMESTAMPTZ,
       purpose TEXT,
-      count INT DEFAULT 1, -- Quantas vezes o usuário 'consagrou' nesse período ou tipo
+      count INT DEFAULT 1,
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
     CREATE INDEX IF NOT EXISTS idx_consecrations_user ON consecrations(user_id, created_at DESC);
   `);
-
-  // ============ RELATÓRIOS DE PROBLEMAS TÉCNICOS ============
+ 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS technical_issues (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -375,8 +371,7 @@ async function migrate() {
     );
     CREATE INDEX IF NOT EXISTS idx_technical_issues_status ON technical_issues(status);
   `);
-
-  // ============ CRIADOR DE LOUVOR COM IA ============
+ 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS ai_songs (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -395,7 +390,7 @@ async function migrate() {
     );
     CREATE INDEX IF NOT EXISTS idx_ai_songs_author ON ai_songs(author_id, created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_ai_songs_public ON ai_songs(is_public, like_count DESC);
-
+ 
     CREATE TABLE IF NOT EXISTS song_credits (
       user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
       credits_remaining INT DEFAULT 4,
@@ -403,10 +398,8 @@ async function migrate() {
       updated_at TIMESTAMPTZ DEFAULT NOW()
     );
   `);
-
-  await pool.query(CREATE TABLE IF NOT EXISTS quiz_resultados (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), user_id UUID REFERENCES users(id) ON DELETE CASCADE, pontos INTEGER DEFAULT 0, perguntas_corretas INTEGER DEFAULT 5, perguntas_total INTEGER DEFAULT 5, livro VARCHAR(50) DEFAULT 'Todos', tempo_medio FLOAT DEFAULT 0, criado_em TIMESTAMP DEFAULT NOW())\));
-  console.log('✅ Migração PostgreSQL concluída com sucesso! (20+ tabelas criadas)');
-  await pool.query(    CREATE TABLE IF NOT EXISTS quiz_resultados (
+ 
+  await pool.query(`CREATE TABLE IF NOT EXISTS quiz_resultados (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       user_id UUID REFERENCES users(id) ON DELETE CASCADE,
       pontos INTEGER DEFAULT 0,
@@ -415,14 +408,14 @@ async function migrate() {
       livro VARCHAR(50) DEFAULT 'Todos',
       tempo_medio FLOAT DEFAULT 0,
       criado_em TIMESTAMP DEFAULT NOW()
-    )
-  \);
+    )`);
+ 
   console.log('quiz_resultados OK');
-
-
+  console.log('✅ Migração PostgreSQL concluída com sucesso! (20+ tabelas criadas)');
+ 
   await pool.end();
 }
-
+ 
 migrate().catch(err => {
   console.error('❌ Erro na migração:', err);
   process.exit(1);
