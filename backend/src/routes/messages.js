@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
+const { createNotification } = require('./notifications');
 
 // ─── GET /api/messages/conversations ─────────────────────────────────────────
 router.get('/conversations', authenticate, async (req, res) => {
@@ -160,3 +161,4 @@ router.post('/mark-read', authenticate, async (req, res) => {
 });
 
 module.exports = router;
+
