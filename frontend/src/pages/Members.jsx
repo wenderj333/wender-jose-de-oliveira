@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Search, Loader2 } from "lucide-react";
@@ -46,7 +46,7 @@ export default function Members() {
   return (
     <div style={{ maxWidth:"900px", margin:"0 auto", padding:"24px 16px" }}>
       <h2 style={{ fontSize:"22px", fontWeight:"800", marginBottom:"20px", color:"#1a1a1a" }}>
-        ?? Membros da Comunidade
+        Membros da Comunidade
       </h2>
 
       {/* Pesquisa */}
@@ -115,7 +115,7 @@ export default function Members() {
                 <div style={{ fontSize:'12px', color:'#999', marginTop:'2px' }}>{user.full_name || "Membro"}</div>
               </div>
 
-              {/* Bot�o */}
+              {/* Botão */}
               <button
                 onClick={() => navigate(`/perfil/${user.id}`)}
                 style={{
