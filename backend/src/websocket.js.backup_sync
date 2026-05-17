@@ -454,24 +454,6 @@ function handleGame(ws, msg) {
     }
   }
 
-  else if (msg.type === 'start_game') {
-    const roomId2 = [...gameRooms.entries()].find(([,r]) => r.jogadores.some(j => j.ws === ws))?.[0];
-    const room2 = gameRooms.get(roomId2);
-    if (room2 && msg.perguntas) {
-      room2.perguntas = msg.perguntas;
-      room2.jogadores.forEach(j => { if (j.ws !== ws && j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'start_game', perguntas: msg.perguntas })); });
-    }
-  }
-  else if (msg.type === 'avancar') {
-    const roomId3 = [...gameRooms.entries()].find(([,r]) => r.jogadores.some(j => j.ws === ws))?.[0];
-    const room3 = gameRooms.get(roomId3);
-    if (room3) { room3.jogadores.forEach(j => { if (j.ws !== ws && j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'avancar', idx: msg.idx })); }); }
-  }
-  else if (msg.type === 'resultado') {
-    const roomId4 = [...gameRooms.entries()].find(([,r]) => r.jogadores.some(j => j.ws === ws))?.[0];
-    const room4 = gameRooms.get(roomId4);
-    if (room4) { const jj = room4.jogadores.find(j => j.ws === ws); if (jj) jj.pontos = msg.pontos; room4.jogadores.forEach(j => { if (j.ws !== ws && j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'adversario_resultado', pontos: msg.pontos })); }); }
-  }
   else if (msg.type === 'game_start') {
     const room = gameRooms.get(msg.roomId);
     if (!room) return;
