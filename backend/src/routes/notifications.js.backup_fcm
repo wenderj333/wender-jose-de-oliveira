@@ -99,4 +99,3 @@ router.get('/admin-issues', authenticate, async (req, res) => {
 });
 
 module.exports = { router, createNotification };
-
