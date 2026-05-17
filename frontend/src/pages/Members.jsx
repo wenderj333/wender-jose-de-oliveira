@@ -45,6 +45,7 @@ export default function Members() {
     <div style={{ display:'flex', justifyContent:'center', alignItems:'center', height:'50vh' }}>
       <Loader2 className="animate-spin" size={32} color="#6c63ff" />
     </div>
+  );
 
   return (
     <div style={{ maxWidth:"900px", margin:"0 auto", padding:"24px 16px" }}>
