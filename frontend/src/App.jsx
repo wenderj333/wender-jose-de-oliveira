@@ -1,5 +1,5 @@
-﻿import React from 'react';
-ï»¿import { useState, useEffect, useRef } from "react";
+import React from 'react';
+ÃƒÂ¯Ã‚Â»Ã‚Â¿import { useState, useEffect, useRef } from "react";
 import "./sidebar.css";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -166,7 +166,7 @@ export default function App() {
   if (loading) return (
     <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#f5f7ff',flexDirection:'column',gap:20}}>
       <div style={{width:50,height:50,border:'4px solid #e0e6f5',borderTopColor:'#4a80d4',borderRadius:'50%',animation:'spin 1s linear infinite'}}/>
-      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.2rem',fontWeight:600,color:'#3568b8'}}>Sigo com FÃƒÂ©...</p>
+      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.2rem',fontWeight:600,color:'#3568b8'}}>Sigo com FÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©...</p>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </div>
   );
@@ -249,7 +249,7 @@ export default function App() {
               ['/curso-biblico', <BookOpen size={20}/>, t('course.title')],
               ['/ajuda-uma-vida', <Heart size={20}/>, t('nav.help_life')],
               ['/journeys', <Globe size={20}/>, t('nav.journeys')],
-              ['/live', <PlayCircle size={20}/>, 'Ã°Å¸â€Â´ Directo'],
+              ['/live', <PlayCircle size={20}/>, 'Directo'],
               ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
               ['/diario-com-deus', <BookOpen size={20}/>, t('nav.diary')],
             ].map(([to, icon, label, badge]) => (
@@ -265,7 +265,7 @@ export default function App() {
               ['/membros', <Users size={20}/>, t('nav.members')],
               ['/igrejas', <Globe size={20}/>, t('churches.title', 'Igrejas')],
               ['/musica', <Music size={20}/>, t('nav.music')],
-              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA BÃƒÂ­blica')],
+              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­blica')],
               ['/grupos', <Users size={20}/>, t('nav.groups')],
               ['/ajuda-uma-vida', <Heart size={20}/>, t('nav.help_life', 'Ajuda ao Proximo')],
             ].map(([to, icon, label]) => (
@@ -275,7 +275,7 @@ export default function App() {
             ))}
             {user?.role === 'pastor' && (
               <Link to="/sala-pastor" onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'#c9a84c',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)',fontWeight:600}}>
-                <BookOpen size={20}/> Ã°Å¸â€¢Å Ã¯Â¸Â <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span>
+                <BookOpen size={20}/> ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€¦Ã‚Â ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span>
               </Link>
             )}
           </div>
@@ -297,12 +297,12 @@ export default function App() {
             <p className="menu-title">{t('menu.principal','PRINCIPAL')}</p>
             <Link to="/" className={isActive('/')}><Home size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.mural','Inicio')}</span></Link>
             <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.live_community','Chat')} {unreadMessages>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{unreadMessages}</span>}</span></Link>
-            <Link to="/notificacoes" className={isActive('/notificacoes')}><Bell size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.notifications','NotificaÃƒÂ§ÃƒÂµes')}</span></Link>
+            <Link to="/notificacoes" className={isActive('/notificacoes')}><Bell size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.notifications','NotificaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes')}</span></Link>
           </div>
 
           {/* 2. VOCE */}
           <div className="menu-group">
-            <p className="menu-title">{t('menu.you','VOCÃƒÅ ')}</p>
+            <p className="menu-title">{t('menu.you','VOCÃƒÆ’Ã†â€™Ãƒâ€¦Ã‚Â ')}</p>
           </div>
 
           {/* 3. COMUNIDADE */}
@@ -316,12 +316,12 @@ export default function App() {
           {/* 4. ESPIRITUAL */}
           <div className="menu-group">
             <p className="menu-title">{t('menu.spiritual','ESPIRITUAL')}</p>
-            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bible_ai','IA BÃƒÂ­blica')}</span></Link>
-            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','OraÃƒÂ§ÃƒÂµes')}</span></Link>
+            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bible_ai','IA BÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â­blica')}</span></Link>
+            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','OraÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes')}</span></Link>
             <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_life','Ajuda ao Proximo')}</span></Link>
-            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','ReflexÃƒÂ£o')}</span></Link>
-            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','MÃƒÂºsica')}</span></Link>
-            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','ConsagraÃƒÂ§ÃƒÂ£o')}</span></Link>
+            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','ReflexÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o')}</span></Link>
+            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','MÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºsica')}</span></Link>
+            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','ConsagraÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o')}</span></Link>
           </div>
 
           {/* 5. SISTEMA */}
@@ -376,7 +376,7 @@ export default function App() {
 
           {/* VERSICULO DO DIA */}
           <div style={{background:'linear-gradient(135deg,#6C3FA0,#4A2270)',borderRadius:14,padding:16,marginBottom:14,color:'white'}}>
-            <p style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',opacity:0.8,marginBottom:8}}>Ã°Å¸â€œâ€“ {t('sidebar.verse','VERSICULO DO DIA')}</p>
+            <p style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',opacity:0.8,marginBottom:8}}>ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ {t('sidebar.verse','VERSICULO DO DIA')}</p>
             <p style={{fontSize:13,fontStyle:'italic',lineHeight:1.6,marginBottom:6}}>
               {[
                 {t:'"Todo lo puedo en Aquel que me fortalece"',r:'Fil 4:13'},
@@ -393,7 +393,7 @@ export default function App() {
             </p>
           </div>
 
-          {/* LIVE Widget Ã¢â‚¬â€ golden theme */}
+          {/* LIVE Widget ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â golden theme */}
           <div style={{background:'linear-gradient(135deg,#3568b8 0%,#4a80d4 60%,#6a9ade 100%)',borderRadius:14,padding:18,marginBottom:14,color:'white',position:'relative',overflow:'hidden',border:'1px solid rgba(240,192,64,0.3)'}}>
             {/* gold top border accent */}
             <div style={{position:'absolute',top:0,left:0,right:0,height:3,background:'linear-gradient(90deg,transparent,#f0c040,transparent)'}}/>
@@ -412,14 +412,14 @@ export default function App() {
               <Heart size={15} style={{color:'var(--gold)'}}/> {t('nav.prayers')}
             </div>
             <div style={{display:'flex',gap:9,padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
-              <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#4a80d4,#6a9ade)',flexShrink:0,fontSize:'0.85rem'}}>Ã°Å¸â„¢Â</div>
+              <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#4a80d4,#6a9ade)',flexShrink:0,fontSize:'0.85rem'}}>ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢Ãƒâ€šÃ‚Â</div>
               <div>
-                <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb)'}}>Ana Costa</b> pede saÃƒÂºde</p>
+                <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb)'}}>Ana Costa</b> pede saÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºde</p>
                 <button style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}}>{t('mural.pray')}</button>
               </div>
             </div>
             <div style={{display:'flex',gap:9,padding:'8px 0'}}>
-              <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#a07820,#c49a28)',flexShrink:0,fontSize:'0.85rem'}}>Ã°Å¸â€¢Å Ã¯Â¸Â</div>
+              <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#a07820,#c49a28)',flexShrink:0,fontSize:'0.85rem'}}>ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€¦Ã‚Â ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â</div>
               <div>
                 <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb)'}}>Carlos</b> pede paz</p>
                 <button style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}}>{t('mural.pray')}</button>
@@ -439,16 +439,16 @@ export default function App() {
               </div>
               <div>
                 <p style={{fontSize:'0.8rem',fontWeight:600,color:'var(--text)'}}>Culto Dominical</p>
-                <p style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h Ã‚Â· Online</p>
+                <p style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· Online</p>
               </div>
             </div>
           </div>
 
           {showInstall && (
           <div style={{marginTop:16,background:'linear-gradient(135deg,#667eea,#764ba2)',borderRadius:12,padding:'14px 16px',textAlign:'center'}}>
-            <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>Ã°Å¸â€œÂ² Instalar App</p>
+            <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€šÃ‚Â² Instalar App</p>
             <p style={{color:'rgba(255,255,255,0.8)',fontSize:'0.75rem',margin:'0 0 10px'}}>Acede mais rapido no teu telemovel</p>
-            <button onClick={handleInstallClick} style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',border:'none',cursor:'pointer'}}>Ã¢Â¬â€¡Ã¯Â¸Â Instalar</button>
+            <button onClick={handleInstallClick} style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',border:'none',cursor:'pointer'}}>ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¡ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â Instalar</button>
           </div>
           )}
 
@@ -498,7 +498,4 @@ export default function App() {
     </div>
   );
 }
-
-
-
 
