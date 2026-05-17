@@ -129,7 +129,7 @@ export default function Members() {
               </button>
               <div style={{ display:'flex', gap:'6px', width:'100%' }}>
                 <button
-                  onClick={e => { e.stopPropagation(); alert('Seguir ' + user.username); }}
+                  onClick={e => { e.stopPropagation(); fetch((import.meta.env.VITE_API_URL || '') + '/api/friends/request', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('token') }, body: JSON.stringify({ addressee_id: user.id }) }).then(r => r.json()).then(d => alert(d.error || 'Pedido enviado!')).catch(() => alert('Erro')); }}
                   style={{
                     flex:1, background:'#f0f0f0', color:'#6c63ff',
                     border:'1px solid #6c63ff', borderRadius:'16px',
