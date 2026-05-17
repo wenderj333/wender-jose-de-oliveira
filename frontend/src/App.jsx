@@ -262,7 +262,6 @@ export default function App() {
           <div style={{marginBottom:'20px'}}>
             <p style={{color:'rgba(255,255,255,0.5)',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'10px',paddingLeft:'16px'}}>Menu</p>
             {[
-              [`/perfil/${user?.id}`, <User size={20}/>, 'Meu Perfil'],
               ['/', <Home size={20}/>, t('nav.mural')],
               ['/mensagens', <MessageCircle size={20}/>, t('nav.messages', 'Mensagens'), unreadMessages],
               ['/amigos', <Users size={20}/>, t('nav.friends', 'Amigos'), pendingRequests],
@@ -307,7 +306,6 @@ export default function App() {
           {/* 2. VOCE */}
           <div className="menu-group">
             <p className="menu-title">{t('menu.you','VOCÃŠ')}</p>
-            <Link to={`/perfil/${user?.id}`} className={isActive(`/perfil/${user?.id}`)}><User size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.profile','Meu Perfil')}</span></Link>
             <Link to="/amigos" className={isActive('/amigos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.friends','Amigos')} {pendingRequests>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{pendingRequests}</span>}</span></Link>
             <Link to="/mensagens" className={isActive('/mensagens')} style={{position:'relative'}}><Mail size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.messages','Mensagens')}</span>{unreadMessages>0&&<span style={{position:'absolute',top:-4,right:-4,background:'#e74c3c',color:'white',borderRadius:'50%',width:16,height:16,fontSize:10,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center'}}>{unreadMessages>9?'9+':unreadMessages}</span>}</Link>
           </div>
