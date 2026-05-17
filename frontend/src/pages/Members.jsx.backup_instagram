@@ -100,7 +100,7 @@ export default function Members() {
               <div style={{
                 width:'72px', height:'72px', borderRadius:'50%',
                 overflow:'hidden',
-                border:'3px solid transparent', background:'linear-gradient(white,white) padding-box, linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888) border-box',
+                border:'3px solid #6c63ff',
                 boxShadow:'0 0 0 3px #e8e6ff'
               }}>
                 <img
