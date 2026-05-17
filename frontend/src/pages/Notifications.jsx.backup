@@ -20,10 +20,7 @@ const NotificationIcon = ({ type }) => {
   switch (type) {
     case 'flagged_post': return <XCircle size={20} color="#e74c3c" />;
     case 'new_help_request': return <Info size={20} color="#3498db" />;
-      case 'new_direct_message':
-      case 'message': return notification.data?.from ? '/mensagens/' + notification.data.from : '/mensagens';
-      case 'friend_request': return '/amigos';
-      case 'friend_accepted': return notification.data?.from ? '/perfil/' + notification.data.from : '/amigos';
+    case 'new_direct_message': return <MessageCircle size={20} color="#4caf50" />;
     // Add more types here
     default: return <Bell size={20} color="#daa520" />;
   }
@@ -72,10 +69,8 @@ export default function NotificationsPage() {
     }
     switch (notification.type) {
       case 'flagged_post': return `${FRONTEND_URL}/mural?postId=${notification.data?.postId}`; // Example for linking to a specific post
-      case 'new_direct_message':
-      case 'message': return notification.data?.from ? '/mensagens/' + notification.data.from : '/mensagens';
-      case 'friend_request': return '/amigos';
-      case 'friend_accepted': return notification.data?.from ? '/perfil/' + notification.data.from : '/amigos';
+      case 'new_direct_message': return `${FRONTEND_URL}/mensagens`;
+      // Add more specific links here
       default: return '#';
     }
   };
