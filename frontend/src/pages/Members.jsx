@@ -32,14 +32,10 @@ export default function Members() {
     fetchMembers();
   }, [token]);
 
-  const filtered = users.filter(u =>
+  const filtered = [...users].sort((a,b) => (b.avatar_url?1:0)-(a.avatar_url?1:0)).filter(u =>
     u.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.full_name?.toLowerCase().includes(searchTerm.toLowerCase())
-  ).sort((a, b) => {
-    const aHasPhoto = a.avatar_url && a.avatar_url.length > 10 ? 1 : 0;
-    const bHasPhoto = b.avatar_url && b.avatar_url.length > 10 ? 1 : 0;
-    return bHasPhoto - aHasPhoto;
-  });
+  );
 
   if (loading) return (
     <div style={{ display:'flex', justifyContent:'center', alignItems:'center', height:'50vh' }}>
@@ -156,6 +152,7 @@ export default function Members() {
         )}
       </div>
     </div>
+  );
 }
 
 
