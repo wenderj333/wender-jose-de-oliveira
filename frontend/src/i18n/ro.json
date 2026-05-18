@@ -1399,7 +1399,10 @@
     "your_name": "Numele tau...",
     "your_country": "Tara ta...",
     "other_country": "Alta tara",
-    "enter_chat": "Intra in chat"
+    "enter_chat": "Intra in chat",
+    "none": "Fara live acum",
+    "be_first": "Fii primul!",
+    "start": "Incepe Live"
   },
   "auth": {
     "logout": "Deconectare",

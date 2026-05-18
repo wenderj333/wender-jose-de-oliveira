@@ -932,7 +932,10 @@
     "your_name": "Vashe imya...",
     "your_country": "Vasha strana...",
     "other_country": "Drugaya strana",
-    "enter_chat": "Voyti v chat"
+    "enter_chat": "Voyti v chat",
+    "none": "Net efira",
+    "be_first": "Budte pervym!",
+    "start": "Nachat efir"
   },
   "auth": {
     "logout": "Выйти",

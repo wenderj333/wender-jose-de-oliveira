@@ -1398,7 +1398,10 @@
     "your_name": "Your name...",
     "your_country": "Your country...",
     "other_country": "Other country",
-    "enter_chat": "Enter chat"
+    "enter_chat": "Enter chat",
+    "none": "No live now",
+    "be_first": "Be the first to stream!",
+    "start": "Start Live"
   },
   "auth": {
     "logout": "Logout",

@@ -1379,7 +1379,10 @@
     "your_name": "O teu nome...",
     "your_country": "O teu pais...",
     "other_country": "Outro pais",
-    "enter_chat": "Entrar no chat"
+    "enter_chat": "Entrar no chat",
+    "none": "Nenhum directo agora",
+    "be_first": "Se o primeiro a transmitir!",
+    "start": "Iniciar Directo"
   },
   "auth": {
     "logout": "Sair"

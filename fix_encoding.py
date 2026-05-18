@@ -1,39 +1,14 @@
-#!/usr/bin/env python3
-import json
-import os
-
-os.chdir('frontend/src/i18n')
-
-langs = ['pt.json', 'es.json']
-fixes = {
-    # Eyes, ears, faces
-    'ðŸ\'ï¸': '👁️',
-    'ðŸ\'‚': '👂',
-    'ðŸ˜"': '😔',
-    'ðŸ˜°': '😰',
-    'ðŸ˜¢': '😢',
-    'ðŸ˜': '😔',
-    # Hand gestures
-    'ðŸ™': '🙏',
-    '🙏': '🙏',  # Already fixed
-    # Check mark
-    'âœ…': '✅',
-    # Emoji variations
-    'ðŸO': '🌐',
-    'ðŸ"': '📍',
-    'ðŸ"´': '📴',
-}
-
-for lang in langs:
-    with open(lang, 'r', encoding='utf-8') as f:
-        content = f.read()
-    
-    for broken, fixed in fixes.items():
-        content = content.replace(broken, fixed)
-    
-    with open(lang, 'w', encoding='utf-8') as f:
-        f.write(content)
-    
-    print(f'Fixed {lang}')
-
-print("Done!")
+﻿content = open('frontend/src/App.jsx', 'rb').read()
+text = content.decode('utf-8')
+replacements = [
+    ('Ã°Å¸â€œâ€"', '📖'),
+    ('Ã°Å¸â„¢Â', '🙏'),
+    ('Ã°Å¸â€¢Å\x00Ã¯Â¸Â', '🙏'),
+    ('Ã°Å¸â€œÂ²', '📲'),
+    ('pede saÃƒÂºde', 'pede saúde'),
+    ('10:00h Ã‚Â·', '10:00h ·'),
+]
+for old, new in replacements:
+    text = text.replace(old, new)
+open('frontend/src/App.jsx', 'wb').write(text.encode('utf-8'))
+print('Feito!')

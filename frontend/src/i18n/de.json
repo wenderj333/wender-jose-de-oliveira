@@ -1399,7 +1399,10 @@
     "your_name": "Dein Name...",
     "your_country": "Dein Land...",
     "other_country": "Anderes Land",
-    "enter_chat": "Chat betreten"
+    "enter_chat": "Chat betreten",
+    "none": "Kein Live jetzt",
+    "be_first": "Sei der Erste!",
+    "start": "Live starten"
   },
   "auth": {
     "logout": "Abmelden",
