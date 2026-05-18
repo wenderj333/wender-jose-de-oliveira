@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Bell, CheckCircle, XCircle, Info, Trash, MessageCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 const FRONTEND_URL = 'https://sigo-com-fe.vercel.app'; // Or wherever your frontend is deployed
@@ -22,7 +23,9 @@ const NotificationIcon = ({ type }) => {
     case 'new_help_request': return <Info size={20} color="#3498db" />;
       case 'new_direct_message':
       case 'message': return notification.data?.from ? '/mensagens/' + notification.data.from : '/mensagens';
-      case 'friend_request': return '/amigos';
+      case 'friend_request': return '/amigos?tab=requests';
+      case 'like': return '/';
+      case 'prayer': return '/pedidos-ajuda';
       case 'friend_accepted': return notification.data?.from ? '/perfil/' + notification.data.from : '/amigos';
     // Add more types here
     default: return <Bell size={20} color="#daa520" />;
@@ -33,6 +36,7 @@ export default function NotificationsPage() {
   const { user, token } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => { fetchNotifications(); markAllAsRead(); }, []);
 
@@ -74,7 +78,9 @@ export default function NotificationsPage() {
       case 'flagged_post': return `${FRONTEND_URL}/mural?postId=${notification.data?.postId}`; // Example for linking to a specific post
       case 'new_direct_message':
       case 'message': return notification.data?.from ? '/mensagens/' + notification.data.from : '/mensagens';
-      case 'friend_request': return '/amigos';
+      case 'friend_request': return '/amigos?tab=requests';
+      case 'like': return '/';
+      case 'prayer': return '/pedidos-ajuda';
       case 'friend_accepted': return notification.data?.from ? '/perfil/' + notification.data.from : '/amigos';
       default: return '#';
     }
@@ -106,7 +112,7 @@ export default function NotificationsPage() {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {notifications.map(n => (
-            <a key={n.id} href={getNotificationLink(n)} onClick={() => markAsRead(n.id)} style={{
+            <a key={n.id} href='#' onClick={(e)=>{e.preventDefault();markAsRead(n.id);const l=getNotificationLink(n);if(l&&l!='#')navigate(l.replace('https://sigo-com-fe.vercel.app',''));}} style={{
               display: 'flex', alignItems: 'center', gap: 12, padding: '1rem',
               background: n.is_read ? '#f0fff4' : '#fff', borderRadius: 12, border: n.is_read ? '2px solid #86efac' : '2px solid #daa520', transition: 'background 0.3s',
               boxShadow: n.is_read ? 'none' : '0 0 0 2px #daa52030',
