@@ -168,9 +168,9 @@ export default function AjudaUmaVida() {
               </button>
             ))}
           </div>
+          <label style={{display:"block",cursor:"pointer",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:10,marginBottom:8,color:"white",fontSize:13,textAlign:"center"}}><input type="file" accept="image/*,video/*" style={{display:"none"}} onChange={e=>setMediaFile(e.target.files[0])}/>{mediaFile ? "📸 " + mediaFile.name : "📸 Adicionar foto/video (opcional)"}</label>
           <textarea value={content} onChange={e=>setContent(e.target.value)} placeholder="Partilha o teu pedido ou testemunho..." style={{width:"100%",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:12,color:"white",fontSize:14,resize:"none",outline:"none",boxSizing:"border-box"}} rows={4}/>
           {(postType==="request" || postType==="offer") && (
-            <label style={{display:'block',cursor:'pointer',background:'rgba(255,255,255,0.1)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:12,padding:10,marginTop:8,color:'white',fontSize:13}}><input type='file' accept='image/*,video/*' style={{display:'none'}} onChange={e=>setMediaFile(e.target.files[0])}/>{mediaFile?mediaFile.name:'📸 Foto/Video (opcional)'}</label>
             <input value={pixKey} onChange={e=>setPixKey(e.target.value)} placeholder="Chave PIX (opcional) - para receber doações" style={{width:"100%",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:12,color:"white",fontSize:13,outline:"none",boxSizing:"border-box",marginTop:8}} />
           )}
           <div style={{display:"flex",gap:10,marginTop:10,alignItems:"center"}}>
