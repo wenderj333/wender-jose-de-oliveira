@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
-const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME or "degxiuf43";
-const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET or "sigo_com_fe";
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || "degxiuf43";
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || "sigo_com_fe";
 async function uploadToCloudinary(file) {
   const formData = new FormData();
   formData.append("file", file);
