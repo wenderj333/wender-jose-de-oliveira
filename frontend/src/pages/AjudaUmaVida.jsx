@@ -107,11 +107,11 @@ export default function AjudaUmaVida() {
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 0 40px",fontFamily:"Segoe UI,sans-serif"}}>
 
       {/* HERO */}
-      <div style={{background:"linear-gradient(135deg,#7a9e7e,#8fac7a,#c4b89a)",borderRadius:"0 0 28px 28px",padding:"32px 24px 28px",textAlign:"center",color:"white",marginBottom:20,position:"relative",overflow:"hidden"}}>
+      <div style={{background:"linear-gradient(135deg,#7a9e7e,#8fac7a,#c4b89a)",borderRadius:"0 0 28px 28px",padding:"16px 24px 16px",textAlign:"center",color:"white",marginBottom:20,position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:0,right:0,fontSize:120,opacity:0.06,lineHeight:1}}>🕊️</div>
         <div style={{position:"relative",zIndex:1}}>
           <p style={{margin:"0 0 6px",fontSize:"0.75rem",opacity:0.7,letterSpacing:2,textTransform:"uppercase"}}>✨ Sigo com Fe</p>
-          <h1 style={{margin:"0 0 8px",fontSize:"clamp(1.4rem,4vw,2rem)",fontWeight:900}}>{t('ajuda.title','🕊 Ajuda uma Vida')}</h1>
+          <h1 style={{margin:"0 0 8px",fontSize:"clamp(1rem,3vw,1.4rem)",fontWeight:900}}>{t('ajuda.title','🕊 Ajuda uma Vida')}</h1>
           <p style={{opacity:0.85,fontSize:14,margin:"0 0 16px"}}>{t('ajuda.subtitle','Seja resposta de oracao na vida de alguem')}</p>
           {helpedCount > 0 && <p style={{color:"#f0c040",fontWeight:700,fontSize:13,margin:"0 0 8px"}}>✨ Hoje tocaste {helpedCount} {helpedCount===1?"vida":"vidas"}</p>}
           <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
