@@ -22,7 +22,7 @@ const NotificationIcon = ({ type }) => {
     case 'new_help_request': return <Info size={20} color="#3498db" />;
       case 'new_direct_message':
       case 'message': return notification.data?.from ? '/mensagens/' + notification.data.from : '/mensagens';
-      case 'friend_request': return '/amigos?tab=requests';
+      case 'friend_request': return '/amigos';
       case 'friend_accepted': return notification.data?.from ? '/perfil/' + notification.data.from : '/amigos';
     // Add more types here
     default: return <Bell size={20} color="#daa520" />;
@@ -74,7 +74,7 @@ export default function NotificationsPage() {
       case 'flagged_post': return `${FRONTEND_URL}/mural?postId=${notification.data?.postId}`; // Example for linking to a specific post
       case 'new_direct_message':
       case 'message': return notification.data?.from ? '/mensagens/' + notification.data.from : '/mensagens';
-      case 'friend_request': return '/amigos?tab=requests';
+      case 'friend_request': return '/amigos';
       case 'friend_accepted': return notification.data?.from ? '/perfil/' + notification.data.from : '/amigos';
       default: return '#';
     }

@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { Users, UserMinus, MessageCircle, Search, UserCheck, Clock, User } from 'lucide-react';
@@ -10,11 +10,9 @@ export default function Friends() {
   const { t } = useTranslation();
   const { token } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  const tabFromUrl = new URLSearchParams(location.search).get('tab');
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState(tabFromUrl || 'my');
+  const [activeTab, setActiveTab] = useState('my');
   const [requests, setRequests] = useState([]);
 
   const loadData = async () => {
