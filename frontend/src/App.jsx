@@ -426,14 +426,14 @@ export default function App() {
               <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#4a80d4,#6a9ade)',flexShrink:0,fontSize:'0.85rem'}}>ðŸ™</div>
               <div>
                 <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb)'}}>Ana Costa</b> pede saÃºde</p>
-                <button style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}}>{t('mural.pray')}</button>
+                <button style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}} onClick={()=>navigate('/pedidos-ajuda')}>{t('mural.pray')}</button>
               </div>
             </div>
             <div style={{display:'flex',gap:9,padding:'8px 0'}}>
               <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#a07820,#c49a28)',flexShrink:0,fontSize:'0.85rem'}}>ðŸ•Šï¸</div>
               <div>
                 <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb)'}}>Carlos</b> pede paz</p>
-                <button style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}}>{t('mural.pray')}</button>
+                <button style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}} onClick={()=>navigate('/pedidos-ajuda')}>{t('mural.pray')}</button>
               </div>
             </div>
           </div>
