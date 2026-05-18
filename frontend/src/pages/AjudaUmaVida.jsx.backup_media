@@ -3,17 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
-const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME or "degxiuf43";
-const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET or "sigo_com_fe";
-async function uploadToCloudinary(file) {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-  const resourceType = file.type.startsWith("video") ? "video" : "image";
-  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`, { method: "POST", body: formData });
-  const data = await res.json();
-  return data.secure_url;
-}
 
 function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -48,9 +37,6 @@ export default function AjudaUmaVida() {
   const [showContinue, setShowContinue] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [pixKey, setPixKey] = useState("");
-  const [mediaFile, setMediaFile] = useState(null);
-  const [mediaUrl, setMediaUrl] = useState("");
-  const [uploading, setUploading] = useState(false);
   const [prayedIds, setPrayedIds] = useState(new Set());
   const [successMsg, setSuccessMsg] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -171,13 +157,6 @@ export default function AjudaUmaVida() {
           </div>
           <textarea value={content} onChange={e=>setContent(e.target.value)} placeholder="Partilha o teu pedido ou testemunho..." style={{width:"100%",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:12,color:"white",fontSize:14,resize:"none",outline:"none",boxSizing:"border-box"}} rows={4}/>
           {(postType==="request" || postType==="offer") && (
-            <div style={{marginTop:8,marginBottom:4}}>
-              <label style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer',background:'rgba(255,255,255,0.1)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:12,padding:10}}>
-                <span style={{fontSize:13,color:'white'}}>📸 {mediaFile ? mediaFile.name : 'Adicionar foto/vídeo (opcional)'}</span>
-                <input type='file' accept='image/*,video/*' style={{display:'none'}} onChange={e=>setMediaFile(e.target.files[0])}/>
-              </label>
-              {mediaFile && <button onClick={()=>setMediaFile(null)} style={{marginTop:4,fontSize:11,color:'rgba(255,255,255,0.6)',background:'none',border:'none',cursor:'pointer'}}>✕ Remover</button>}
-            </div>
             <input value={pixKey} onChange={e=>setPixKey(e.target.value)} placeholder="Chave PIX (opcional) - para receber doações" style={{width:"100%",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:12,color:"white",fontSize:13,outline:"none",boxSizing:"border-box",marginTop:8}} />
           )}
           <div style={{display:"flex",gap:10,marginTop:10,alignItems:"center"}}>
@@ -243,11 +222,6 @@ export default function AjudaUmaVida() {
                 <span style={{background:cfg.bg,color:cfg.color,fontSize:11,fontWeight:700,padding:"3px 10px",borderRadius:20}}>{cfg.label}</span>
               </div>
               <p style={{color:"#333",fontSize:14,lineHeight:1.6,margin:"0 0 12px"}}>{post.content}</p>
-              {post.media_url && (post.media_url.includes("video") ? (
-                <video src={post.media_url} controls style={{width:"100%",borderRadius:12,marginBottom:12,maxHeight:300}} />
-              ) : (
-                <img src={post.media_url} style={{width:"100%",borderRadius:12,marginBottom:12,maxHeight:300,objectFit:"cover"}} />
-              ))}
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
                 <span style={{color:"#6c47d4",fontSize:12,fontWeight:600}}>🙏 {post.prayer_count||0} pessoas contigo nesta oracao</span>
                 <button onClick={()=>handlePray(post.id)} disabled={prayed} style={{padding:"8px 18px",borderRadius:20,border:"none",background:prayed?"#eee":"linear-gradient(135deg,#6c47d4,#4A2270)",color:prayed?"#aaa":"white",fontWeight:700,cursor:prayed?"default":"pointer",fontSize:13,transition:"all 0.2s"}}>
