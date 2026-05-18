@@ -111,17 +111,6 @@ export default function App() {
     } catch(e) {}
   }
   const [pendingRequests, setPendingRequests] = useState(0);
-  const [prayerRequests, setPrayerRequests] = useState([]);
-
-  useEffect(() => {
-    if (!token) return;
-    fetch((import.meta.env ? import.meta.env.VITE_API_URL : '') + '/api/pedidos-ajuda' || '/api/pedidos-ajuda', {
-      headers: { Authorization: 'Bearer ' + token }
-    }).then(r => r.json()).then(d => {
-      const list = d.requests || d.posts || d || [];
-      setPrayerRequests(Array.isArray(list) ? list.slice(0, 3) : []);
-    }).catch(() => {});
-  }, [token]);
 
   useEffect(() => {
     if (!token) return;
@@ -430,18 +419,91 @@ export default function App() {
 
           {/* Prayers Widget */}
           <div className="modern-card widget-card">
-            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"0.95rem",fontWeight:700,color:"var(--text)",marginBottom:12,display:"flex",alignItems:"center",gap:7,borderBottom:"1px solid var(--border)",paddingBottom:10,cursor:"pointer"}} onClick={()=>navigate("/pedidos-ajuda")}>
-              <Heart size={15} style={{color:"var(--gold)"}}/> {t("nav.prayers")}
+            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'0.95rem',fontWeight:700,color:'var(--text)',marginBottom:12,display:'flex',alignItems:'center',gap:7,borderBottom:'1px solid var(--border)',paddingBottom:10,cursor:'pointer'}} onClick={()=>navigate('/pedidos-ajuda')}>
+              <Heart size={15} style={{color:'var(--gold)'}}/> {t('nav.prayers')}
             </div>
             {prayerRequests.length > 0 ? prayerRequests.map((req, i) => (
-              <div key={req.id||i} style={{display:"flex",gap:9,padding:"8px 0",borderBottom:i<prayerRequests.length-1?"1px solid var(--border)":"none"}}>
-                <div style={{width:30,height:30,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",background:"linear-gradient(135deg,#4a80d4,#6a9ade)",flexShrink:0}}>??</div>
+              <div key={req.id||i} style={{display:'flex',gap:9,padding:'8px 0',borderBottom:i<prayerRequests.length-1?'1px solid var(--border)':'none'}}>
+                <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#4a80d4,#6a9ade)',flexShrink:0}}>🙏</div>
                 <div>
-                  <p style={{fontSize:"0.76rem",color:"var(--text)",lineHeight:1.4}}><b style={{color:"var(--fb)"}}>{req.author_name||req.full_name||"Membro"}</b> {(req.content||"").substring(0,40)}</p>
-                  <button onClick={()=>navigate("/pedidos-ajuda")} style={{marginTop:4,padding:"3px 10px",borderRadius:10,fontSize:"0.66rem",fontWeight:600,border:"1px solid #e8c04060",background:"#fffbec",color:"#a07820",cursor:"pointer"}}>{t("mural.pray")}</button>
+                  <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb)'}}>{req.author_name||req.full_name||'Membro'}</b> {(req.content||'').substring(0,40)}</p>
+                  <button onClick={()=>navigate('/pedidos-ajuda')} style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}}>{t('mural.pray')}</button>
                 </div>
               </div>
             )) : (
-              <p style={{fontSize:"0.76rem",color:"var(--muted)",textAlign:"center",padding:"8px 0",cursor:"pointer"}} onClick={()=>navigate("/pedidos-ajuda")}>Ver pedidos de ora??o ??</p>
+              <p style={{fontSize:'0.76rem',color:'var(--muted)',textAlign:'center',padding:'8px 0',cursor:'pointer'}} onClick={()=>navigate('/pedidos-ajuda')}>Ver pedidos de oracao 🙏</p>
             )}
           </div>
+
+          {/* Events Widget */}
+          <div className="modern-card widget-card">
+            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'0.95rem',fontWeight:700,color:'var(--text)',marginBottom:12,display:'flex',alignItems:'center',gap:7,borderBottom:'1px solid var(--border)',paddingBottom:10}}>
+              <Calendar size={15} style={{color:'var(--gold)'}}/> {t('events.title')}
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:10}}>
+              <div style={{width:38,height:38,borderRadius:9,background:'linear-gradient(135deg,#3568b8,#4a80d4)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:'white',flexShrink:0}}>
+                <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1rem',fontWeight:700,color:'#f0c040',lineHeight:1}}>09</span>
+                <span style={{fontSize:'0.48rem',color:'rgba(255,255,255,0.7)',textTransform:'uppercase'}}>MAR</span>
+              </div>
+              <div>
+                <p style={{fontSize:'0.8rem',fontWeight:600,color:'var(--text)'}}>Culto Dominical</p>
+                <p style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h Â· Online</p>
+              </div>
+            </div>
+          </div>
+
+          {showInstall && (
+          <div style={{marginTop:16,background:'linear-gradient(135deg,#667eea,#764ba2)',borderRadius:12,padding:'14px 16px',textAlign:'center'}}>
+            <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>ðŸ“² Instalar App</p>
+            <p style={{color:'rgba(255,255,255,0.8)',fontSize:'0.75rem',margin:'0 0 10px'}}>Acede mais rapido no teu telemovel</p>
+            <button onClick={handleInstallClick} style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',border:'none',cursor:'pointer'}}>â¬‡ï¸ Instalar</button>
+          </div>
+          )}
+
+        </aside>
+
+      </div>
+
+      <style>{`
+        @media (max-width: 1100px) {
+          .desktop-only { display: none !important; }
+          .mobile-only { display: flex !important; }
+          .modern-layout { grid-template-columns: 1fr; }
+          .mobile-bottom-nav { display: flex !important; }
+          .main-content-area { padding-bottom: 70px !important; }
+        }
+        @media (min-width: 1101px) {
+          .mobile-bottom-nav { display: none !important; }
+        }
+      `}</style>
+
+      <nav style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 300,
+        background: 'white', borderTop: '1px solid #e0e0e0',
+        display: 'flex', justifyContent: 'space-around', alignItems: 'center',
+        padding: '8px 0 12px', boxShadow: '0 -2px 10px rgba(0,0,0,0.1)'
+      }} className="mobile-bottom-nav">
+        {[
+          { to: '/', icon: <Home size={22}/>, label: t('nav.mural', 'Inicio') },
+          { to: '/amigos', icon: <Users size={22}/>, label: t('nav.friends', 'Amigos') },
+          { to: '/mensagens', icon: <MessageCircle size={22}/>, label: t('nav.messages', 'Mensagens') },
+          { to: '/comunidade-ao-vivo', icon: <MessageCircle size={20}/>, label: t('nav.live_community', 'Chat') },
+          { to: `/perfil/${user.id}`, icon: user.avatar_url ? <img src={user.avatar_url} style={{width:24,height:24,borderRadius:'50%',objectFit:'cover'}}/> : <User size={22}/>, label: t('common.profile', 'Perfil') },
+        ].map(item => (
+          <Link key={item.to} to={item.to} style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+            textDecoration: 'none', color: location.pathname === item.to ? '#667eea' : '#888',
+            fontSize: 10, fontWeight: 600, minWidth: 50,
+          }}>
+            {item.icon}
+            <span>{item.label}</span>
+          </Link>
+        ))}
+      </nav>
+
+      <GlobalChat />
+      
+    </div>
+  );
+}
+
