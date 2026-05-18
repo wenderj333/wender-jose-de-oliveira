@@ -136,7 +136,7 @@ export default function Members() {
                     border:'1px solid #6c63ff', borderRadius:'16px',
                     padding:'4px 0', fontSize:'11px', fontWeight:'600', cursor:'pointer'
                   }}>
-                  {friendStatus[user.id] === 'pending' ? '⏳ Pendente' : friendStatus[user.id] === 'accepted' ? '✓ Amigos' : '+ Seguir'}
+                  {friendStatus[user.id] === 'pending' ? '⏳ Pendente' : '+ Seguir'}
                 </button>
                 <button
                   onClick={e => { e.stopPropagation(); navigate('/mensagens/' + user.id); }}
