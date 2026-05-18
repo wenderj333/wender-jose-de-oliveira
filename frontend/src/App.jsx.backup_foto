@@ -293,7 +293,7 @@ export default function App() {
       {user && !user.avatar_url && (
         <div style={{background:'#fff3cd',borderBottom:'2px solid #f0c040',padding:'10px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
           <span style={{fontSize:13,color:'#856404'}}>📸 Adiciona uma foto de perfil para a comunidade te conhecer!</span>
-          <a href={`/perfil/${user.id}`} style={{background:'#f0c040',color:'#856404',padding:'6px 14px',borderRadius:20,fontSize:12,fontWeight:700,textDecoration:'none'}}>Adicionar foto</a>
+          <a href={/perfil/} style={{background:'#f0c040',color:'#856404',padding:'6px 14px',borderRadius:20,fontSize:12,fontWeight:700,textDecoration:'none'}}>Adicionar foto</a>
         </div>
       )}
       <div className="modern-layout">
