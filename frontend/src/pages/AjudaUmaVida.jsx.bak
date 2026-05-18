@@ -170,7 +170,10 @@ export default function AjudaUmaVida() {
           </div>
           <textarea value={content} onChange={e=>setContent(e.target.value)} placeholder="Partilha o teu pedido ou testemunho..." style={{width:"100%",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:12,color:"white",fontSize:14,resize:"none",outline:"none",boxSizing:"border-box"}} rows={4}/>
           {(postType==="request" || postType==="offer") && (
-            <label style={{display:'block',cursor:'pointer',background:'rgba(255,255,255,0.1)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:12,padding:10,marginTop:8,color:'white',fontSize:13}}><input type='file' accept='image/*,video/*' style={{display:'none'}} onChange={e=>setMediaFile(e.target.files[0])}/>{mediaFile?mediaFile.name:'📸 Foto/Video (opcional)'}</label>
+            <label style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer',background:'rgba(255,255,255,0.1)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:12,padding:10,marginTop:8}}>
+              <span style={{fontSize:13,color:'white'}}>📸 {mediaFile ? mediaFile.name : 'Foto/Video (opcional)'}</span>
+              <input type='file' accept='image/*,video/*' style={{display:'none'}} onChange={e=>setMediaFile(e.target.files[0])}/>
+            </label>
             <input value={pixKey} onChange={e=>setPixKey(e.target.value)} placeholder="Chave PIX (opcional) - para receber doações" style={{width:"100%",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:12,color:"white",fontSize:13,outline:"none",boxSizing:"border-box",marginTop:8}} />
           )}
           <div style={{display:"flex",gap:10,marginTop:10,alignItems:"center"}}>
@@ -235,7 +238,8 @@ export default function AjudaUmaVida() {
                 </div>
                 <span style={{background:cfg.bg,color:cfg.color,fontSize:11,fontWeight:700,padding:"3px 10px",borderRadius:20}}>{cfg.label}</span>
               </div>
-              <p style={{color:"#333",fontSize:14,lineHeight:1.6,margin:"0 0 12px"}}>{post.content}</p>{post.media_url&&(post.media_url.includes("video")?<video src={post.media_url} controls style={{width:"100%",borderRadius:12,marginBottom:12}}/>:<img src={post.media_url} style={{width:"100%",borderRadius:12,marginBottom:12,objectFit:"cover",maxHeight:300}}/>)}
+              <p style={{color:"#333",fontSize:14,lineHeight:1.6,margin:"0 0 12px"}}>{post.content}</p>
+              {post.media_url && (post.media_url.includes("video") ? <video src={post.media_url} controls style={{width:"100%",borderRadius:12,marginBottom:12,maxHeight:300}}/> : <img src={post.media_url} style={{width:"100%",borderRadius:12,marginBottom:12,maxHeight:300,objectFit:"cover"}}/>)}
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
                 <span style={{color:"#6c47d4",fontSize:12,fontWeight:600}}>🙏 {post.prayer_count||0} pessoas contigo nesta oracao</span>
                 <button onClick={()=>handlePray(post.id)} disabled={prayed} style={{padding:"8px 18px",borderRadius:20,border:"none",background:prayed?"#eee":"linear-gradient(135deg,#6c47d4,#4A2270)",color:prayed?"#aaa":"white",fontWeight:700,cursor:prayed?"default":"pointer",fontSize:13,transition:"all 0.2s"}}>
