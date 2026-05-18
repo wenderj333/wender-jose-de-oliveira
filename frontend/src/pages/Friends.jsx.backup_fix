@@ -13,29 +13,23 @@ export default function Friends() {
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('my');
-  const [requests, setRequests] = useState([]);
 
-  const loadData = async () => {
+  useEffect(() => {
     setLoading(true);
-    try {
-      const [fr, rq] = await Promise.all([
-        fetch(API + '/friends', { headers: { Authorization: 'Bearer ' + token } }).then(r => r.json()),
-        fetch(API + '/friends/requests', { headers: { Authorization: 'Bearer ' + token } }).then(r => r.json())
-      ]);
-      setFriends(fr.friends || fr || []);
-      setRequests(rq.requests || rq || []);
-    } catch(e) { console.error(e); }
-    setLoading(false);
-  };
-
-  const acceptRequest = async (friendshipId) => {
-    try {
-      await fetch(API + '/friends/accept/' + friendshipId, { method: 'PUT', headers: { Authorization: 'Bearer ' + token } });
-      await loadData();
-      alert('Amizade aceite!');
-    } catch(e) { console.error(e); }
-  };
-  useEffect(() => { loadData(); }, [token]);
+    fetch(`${API}/friends`, { 
+      headers: { Authorization: "Bearer " + token } 
+    })
+    .then(res => res.json())
+    .then(data => {
+      // Ajuste para pegar a lista correta dependendo de como o backend envia
+      setFriends(data.friends || data || []);
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error("Erro ao carregar amigos:", err);
+      setLoading(false);
+    });
+  }, [token]);
 
   const handleRemoveFriend = async (friendId) => {
     if (!window.confirm(t('friends.confirmRemove', 'Remover amigo?'))) return;
