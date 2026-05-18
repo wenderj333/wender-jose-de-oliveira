@@ -17,7 +17,6 @@ const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
         category VARCHAR(50) DEFAULT 'general',
         post_type VARCHAR(30) DEFAULT 'request',
         content TEXT NOT NULL,
-        pix_key TEXT,
         is_anonymous BOOLEAN DEFAULT false,
         media_url TEXT,
         prayer_count INT DEFAULT 0,
@@ -39,7 +38,6 @@ const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
         post_id UUID REFERENCES help_posts(id) ON DELETE CASCADE,
         user_id UUID REFERENCES users(id) ON DELETE CASCADE,
         content TEXT NOT NULL,
-        pix_key TEXT,
         is_anonymous BOOLEAN DEFAULT false,
         created_at TIMESTAMPTZ DEFAULT NOW()
       )
@@ -114,17 +112,17 @@ router.get('/', optionalAuth, async (req, res) => {
 // POST /api/help-posts — criar post (requer autenticação)
 router.post('/', authenticate, async (req, res) => {
   try {
-    const { content, category = 'general', post_type = 'request', is_anonymous = false, media_url, pix_key, type } = req.body;
+    const { content, category = 'general', post_type = 'request', is_anonymous = false, media_url } = req.body;
 
     if (!content || !content.trim()) {
       return res.status(400).json({ error: 'Conteúdo é obrigatório' });
     }
 
     const result = await db.query(
-      `INSERT INTO help_posts (user_id, category, post_type, content, is_anonymous, media_url, pix_key)
+      `INSERT INTO help_posts (user_id, category, post_type, content, is_anonymous, media_url)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
-      [req.user.id, category, post_type || type || 'request', content.trim(), is_anonymous, media_url || null, pix_key || null]
+      [req.user.id, category, post_type, content.trim(), is_anonymous, media_url || null]
     );
 
     res.status(201).json({ post: result.rows[0] });

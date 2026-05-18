@@ -1739,6 +1739,10 @@
     "answeredStories": "Histoires de Foi",
     "beforeAfter": "Demandes qui ont ete exaucees",
     "prayingTogether": "personnes sont avec toi dans cette priere",
-    "rewardMsg": "Une demande pour laquelle tu as prie a ete exaucee!"
+    "rewardMsg": "Une demande pour laquelle tu as prie a ete exaucee!",
+    "pixKey": "Clé PIX (optionnel)",
+    "pixHelp": "Pour recevoir des dons directement",
+    "donate": "Faire un don",
+    "donateHelp": "Cliquer pour copier"
   }
 }

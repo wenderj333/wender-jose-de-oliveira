@@ -1741,6 +1741,10 @@
     "answeredStories": "Glaubensgeschichten",
     "beforeAfter": "Gebete die erhort wurden",
     "prayingTogether": "Personen sind bei dir in diesem Gebet",
-    "rewardMsg": "Eine Bitte fuer die du gebetet hast wurde erhort!"
+    "rewardMsg": "Eine Bitte fuer die du gebetet hast wurde erhort!",
+    "pixKey": "PIX-Schlüssel (optional)",
+    "pixHelp": "Um direkte Spenden zu erhalten",
+    "donate": "Spenden",
+    "donateHelp": "Klicken zum Kopieren"
   }
 }

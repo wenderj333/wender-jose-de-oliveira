@@ -1739,6 +1739,10 @@
     "answeredStories": "Historias de Fe",
     "beforeAfter": "Peticiones que fueron respondidas",
     "prayingTogether": "personas estan contigo en esta oracion",
-    "rewardMsg": "Una peticion por la que oraste fue respondida!"
+    "rewardMsg": "Una peticion por la que oraste fue respondida!",
+    "pixKey": "Clave PIX (opcional)",
+    "pixHelp": "Para recibir donaciones directamente",
+    "donate": "Donar",
+    "donateHelp": "Toca para copiar clave PIX"
   }
 }

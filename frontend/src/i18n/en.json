@@ -1739,6 +1739,10 @@
     "answeredStories": "Faith Stories",
     "beforeAfter": "Requests that were answered",
     "prayingTogether": "people are with you in this prayer",
-    "rewardMsg": "A request you prayed for was answered!"
+    "rewardMsg": "A request you prayed for was answered!",
+    "pixKey": "PIX Key (optional)",
+    "pixHelp": "To receive donations directly",
+    "donate": "Donate",
+    "donateHelp": "Click to copy PIX key"
   }
 }

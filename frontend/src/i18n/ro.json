@@ -1740,6 +1740,10 @@
     "answeredStories": "Povesti de Credinta",
     "beforeAfter": "Cereri care au fost raspunse",
     "prayingTogether": "persoane sunt cu tine in aceasta rugaciune",
-    "rewardMsg": "O cerere pentru care te-ai rugat a fost raspunsa!"
+    "rewardMsg": "O cerere pentru care te-ai rugat a fost raspunsa!",
+    "pixKey": "Cheie PIX (optional)",
+    "pixHelp": "Pentru a primi donatii direct",
+    "donate": "Doneaza",
+    "donateHelp": "Apasa pentru a copia"
   }
 }

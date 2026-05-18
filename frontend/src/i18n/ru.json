@@ -1739,6 +1739,10 @@
     "answeredStories": "Istorii Very",
     "beforeAfter": "Prosyby kotorye byli uslyshany",
     "prayingTogether": "lyudey vmeste s toboy v etoy molitve",
-    "rewardMsg": "Prosba za kotoruyu ty molilsya byla uslyshana!"
+    "rewardMsg": "Prosba za kotoruyu ty molilsya byla uslyshana!",
+    "pixKey": "PIX ключ (необязательно)",
+    "pixHelp": "Для получения пожертвований",
+    "donate": "Пожертвовать",
+    "donateHelp": "Нажмите для копирования"
   }
 }

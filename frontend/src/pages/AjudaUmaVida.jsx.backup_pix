@@ -36,7 +36,6 @@ export default function AjudaUmaVida() {
   const [helpedCount, setHelpedCount] = useState(()=>parseInt(localStorage.getItem("helped_count")||"0"));
   const [showContinue, setShowContinue] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [pixKey, setPixKey] = useState("");
   const [prayedIds, setPrayedIds] = useState(new Set());
   const [successMsg, setSuccessMsg] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -80,7 +79,7 @@ export default function AjudaUmaVida() {
     if (!user) return alert("Faz login para publicar!");
     setSubmitting(true);
     try {
-      const res = await fetch(API+"/help-posts", { method:"POST", headers:{...authHeaders,"Content-Type":"application/json"}, body:JSON.stringify({content, type:postType, is_anonymous:isAnon, is_urgent:isUrgent, pix_key:pixKey}) });
+      const res = await fetch(API+"/help-posts", { method:"POST", headers:{...authHeaders,"Content-Type":"application/json"}, body:JSON.stringify({content, type:postType, is_anonymous:isAnon, is_urgent:isUrgent}) });
       setContent(""); setShowForm(false);
       setSuccessMsg(t("ajuda.requestReceived","O teu pedido foi recebido. Pessoas vao orar por ti."));
       setTimeout(()=>setSuccessMsg(""),5000);
@@ -156,9 +155,6 @@ export default function AjudaUmaVida() {
             ))}
           </div>
           <textarea value={content} onChange={e=>setContent(e.target.value)} placeholder="Partilha o teu pedido ou testemunho..." style={{width:"100%",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:12,color:"white",fontSize:14,resize:"none",outline:"none",boxSizing:"border-box"}} rows={4}/>
-          {(postType==="request" || postType==="offer") && (
-            <input value={pixKey} onChange={e=>setPixKey(e.target.value)} placeholder="Chave PIX (opcional) - para receber doações" style={{width:"100%",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:12,color:"white",fontSize:13,outline:"none",boxSizing:"border-box",marginTop:8}} />
-          )}
           <div style={{display:"flex",gap:10,marginTop:10,alignItems:"center"}}>
             <label style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer",fontSize:13,color:"rgba(255,255,255,0.8)"}}>
               <input type="checkbox" checked={isAnon} onChange={e=>setIsAnon(e.target.checked)}/> Anonimo
@@ -227,7 +223,6 @@ export default function AjudaUmaVida() {
                 <button onClick={()=>handlePray(post.id)} disabled={prayed} style={{padding:"8px 18px",borderRadius:20,border:"none",background:prayed?"#eee":"linear-gradient(135deg,#6c47d4,#4A2270)",color:prayed?"#aaa":"white",fontWeight:700,cursor:prayed?"default":"pointer",fontSize:13,transition:"all 0.2s"}}>
                   {prayed ? "✓ " + t("ajuda.prayNow","Orei") : t("ajuda.prayNow","🙏 Orar agora")}
                 </button>
-                  {post.pix_key && (<button onClick={()=>{navigator.clipboard.writeText(post.pix_key);alert('Chave PIX copiada: ' + post.pix_key);}} style={{padding:'8px 18px',borderRadius:20,border:'none',background:'linear-gradient(135deg,#27ae60,#1e8a5a)',color:'white',fontWeight:700,cursor:'pointer',fontSize:13,marginLeft:8}}>💚 Doar PIX</button>)}
               </div>
             </div>
           );
