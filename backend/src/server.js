@@ -535,3 +535,14 @@ async function addFcmTokenColumn() {
   }
 }
 addFcmTokenColumn();
+
+// Adicionar coluna pix_key se nao existir
+async function addPixKeyColumn() {
+  try {
+    await pool.query('ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS pix_key TEXT');
+    console.log('pix_key column ready');
+  } catch(e) {
+    console.error('pix_key migration error:', e.message);
+  }
+}
+addPixKeyColumn();
