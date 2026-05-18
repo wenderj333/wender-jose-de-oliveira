@@ -253,6 +253,13 @@ router.post('/:id/like', authenticate, async (req, res) => {
     } else {
       await db.prepare('INSERT INTO post_likes (post_id, user_id) VALUES (?, ?)').run(postId, req.user.id);
       await db.prepare('UPDATE feed_posts SET like_count = like_count + 1 WHERE id = ?').run(postId);
+      try {
+        const post = db.prepare('SELECT author_id FROM feed_posts WHERE id = ?').get(postId);
+        if (post && post.author_id && post.author_id !== req.user.id) {
+          const { createNotification } = require('./notifications');
+          await createNotification(post.author_id, 'like', (req.user.full_name || 'Alguem') + ' deu Amen!', '', { postId });
+        }
+      } catch(e) { console.error('Notif like error:', e.message); }
       res.json({ liked: true });
     }
   } catch (err) {
