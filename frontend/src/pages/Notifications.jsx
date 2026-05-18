@@ -24,6 +24,8 @@ const NotificationIcon = ({ type }) => {
       case 'message': return notification.data?.from ? '/mensagens/' + notification.data.from : '/mensagens';
       case 'friend_request': return '/amigos?tab=requests';
       case 'friend_accepted': return notification.data?.from ? '/perfil/' + notification.data.from : '/amigos';
+      case 'like': return '/';
+      case 'prayer': return '/pedidos-ajuda';
     // Add more types here
     default: return <Bell size={20} color="#daa520" />;
   }
@@ -76,6 +78,8 @@ export default function NotificationsPage() {
       case 'message': return notification.data?.from ? '/mensagens/' + notification.data.from : '/mensagens';
       case 'friend_request': return '/amigos?tab=requests';
       case 'friend_accepted': return notification.data?.from ? '/perfil/' + notification.data.from : '/amigos';
+      case 'like': return '/';
+      case 'prayer': return '/pedidos-ajuda';
       default: return '#';
     }
   };
