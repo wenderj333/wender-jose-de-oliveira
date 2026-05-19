@@ -119,7 +119,7 @@ export default function Friends() {
                 </div>
 
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <button onClick={() => navigate(`/mensagens/${friend.id}`)} style={{ padding: '8px 15px', borderRadius: '8px', border: 'none', background: '#efefef', fontWeight: '600', cursor: 'pointer' }}>
+                  <button onClick={() => navigate(`/chat/${friend.id}`)} style={{ padding: '8px 15px', borderRadius: '8px', border: 'none', background: '#efefef', fontWeight: '600', cursor: 'pointer' }}>
                     {t('friends.chat', 'Chat')}
                   </button>
                   <button onClick={() => handleRemoveFriend(friend.id)} style={{ padding: '8px', borderRadius: '8px', border: '1px solid #ffcccc', background: '#fff', color: '#ed4956', cursor: 'pointer' }}>
