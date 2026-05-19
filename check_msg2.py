@@ -1,0 +1,5 @@
+﻿f = open("backend/src/routes/messages.js", "rb")
+content = f.read().decode("utf-8")
+f.close()
+idx = content.find("// Notifi")
+print(repr(content[idx:idx+300]))

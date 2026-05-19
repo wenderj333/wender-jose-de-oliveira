@@ -128,12 +128,15 @@ router.post('/', authenticate, async (req, res) => {
 
     const msg = result.rows[0];
 
-    // Notificacao + push FCM
+    // Notificação
     try {
       const sender = await db.query('SELECT full_name FROM users WHERE id = $1', [me]);
-      const name = sender.rows[0]?.full_name || 'Alguem';
+      const name = sender.rows[0]?.full_name || 'Alguém';
       const preview = content.trim().length > 50 ? content.trim().substring(0, 50) + '...' : content.trim();
-      await createNotification(targetId, 'message', '💬 ' + name, preview, { senderId: me });
+      await db.query(`
+        INSERT INTO notifications (user_id, type, title, body)
+        VALUES ($1, 'message', $2, $3)
+      `, [targetId, `💬 Nova mensagem de ${name}`, preview]);
     } catch (_) {}
 
     res.status(201).json({ message: msg });
