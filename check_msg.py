@@ -1,5 +1,0 @@
-﻿f = open("backend/src/routes/messages.js", "rb")
-content = f.read().decode("utf-8")
-f.close()
-idx = content.find("Notifica")
-print(repr(content[idx:idx+300]))
