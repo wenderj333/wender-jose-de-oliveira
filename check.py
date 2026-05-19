@@ -1,0 +1,5 @@
+﻿f = open("backend/src/routes/notifications.js", "rb")
+content = f.read().decode("utf-8")
+f.close()
+idx = content.find("Error creating")
+print(repr(content[idx-50:idx+80]))
