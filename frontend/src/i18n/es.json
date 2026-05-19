@@ -863,7 +863,12 @@
     "audio": "Audio",
     "uploadHint": "MP3, WAV, MP4, MOV · máx 5 min",
     "uploadCover": "Portada de la canción",
-    "uploadCoverHint": "Haz clic para añadir imagen de portada"
+    "uploadCoverHint": "Haz clic para añadir imagen de portada",
+    "next": "Siguiente",
+    "prev": "Anterior",
+    "shuffle": "Aleatorio",
+    "repeat": "Repetir",
+    "nowPlaying": "Reproduciendo"
   },
   "courseFinance": {
     "title": "Finanzas Bíblicas",

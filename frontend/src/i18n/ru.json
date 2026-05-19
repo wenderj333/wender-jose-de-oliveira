@@ -1111,7 +1111,12 @@
     "favorites": "Favoritos",
     "noFavorites": "Nenhum favorito ainda",
     "tapHeart": "Toque no â¤ï¸ para salvar músicas",
-    "freeSources": "Mais música gratuita"
+    "freeSources": "Mais música gratuita",
+    "next": "Следующий",
+    "prev": "Предыдущий",
+    "shuffle": "Случайно",
+    "repeat": "Повторить",
+    "nowPlaying": "Сейчас играет"
   },
   "report": {
     "title": "Пожаловаться",

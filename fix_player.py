@@ -1,4 +1,4 @@
-import React from "react";
+﻿content = """import React from "react";
 import { useMusic } from "../context/MusicContext";
 import { useTranslation } from "react-i18next";
 import { X, ChevronDown, ChevronUp, Music, SkipBack, SkipForward, Shuffle, Repeat } from "lucide-react";
@@ -66,3 +66,7 @@ export default function MusicPlayer() {
     </div>
   );
 }
+"""
+with open("frontend/src/components/MusicPlayer.jsx", "wb") as f:
+    f.write(content.encode("utf-8"))
+print("MusicPlayer OK!")

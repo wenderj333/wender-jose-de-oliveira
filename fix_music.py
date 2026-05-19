@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+﻿content = """import React, { createContext, useContext, useState, useCallback } from "react";
 
 const MusicContext = createContext();
 
@@ -66,3 +66,7 @@ export function MusicProvider({ children }) {
 export function useMusic() {
   return useContext(MusicContext);
 }
+"""
+with open("frontend/src/context/MusicContext.jsx", "wb") as f:
+    f.write(content.encode("utf-8"))
+print("MusicContext OK!")

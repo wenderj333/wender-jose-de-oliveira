@@ -864,7 +864,12 @@
     "audio": "Audio",
     "uploadHint": "MP3, WAV, MP4, MOV · max 5 min",
     "uploadCover": "Coperta melodiei",
-    "uploadCoverHint": "Click pentru a adăuga o imagine de copertă"
+    "uploadCoverHint": "Click pentru a adăuga o imagine de copertă",
+    "next": "Următor",
+    "prev": "Anterior",
+    "shuffle": "Aleatoriu",
+    "repeat": "Repetă",
+    "nowPlaying": "Se redă"
   },
   "courseFinance": {
     "title": "Finanțe Biblice",

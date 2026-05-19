@@ -863,7 +863,12 @@
     "audio": "Audio",
     "uploadHint": "MP3, WAV, MP4, MOV · max 5 min",
     "uploadCover": "Pochette de la chanson",
-    "uploadCoverHint": "Cliquez pour ajouter une image de pochette"
+    "uploadCoverHint": "Cliquez pour ajouter une image de pochette",
+    "next": "Suivant",
+    "prev": "Précédent",
+    "shuffle": "Aléatoire",
+    "repeat": "Répéter",
+    "nowPlaying": "En cours"
   },
   "courseFinance": {
     "title": "Finances Bibliques",

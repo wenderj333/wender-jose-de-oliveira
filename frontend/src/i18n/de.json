@@ -864,7 +864,12 @@
     "audio": "Audio",
     "uploadHint": "MP3, WAV, MP4, MOV · max 5 Min",
     "uploadCover": "Song-Cover",
-    "uploadCoverHint": "Klicken, um ein Cover-Bild hinzuzufügen"
+    "uploadCoverHint": "Klicken, um ein Cover-Bild hinzuzufügen",
+    "next": "Weiter",
+    "prev": "Zurück",
+    "shuffle": "Zufällig",
+    "repeat": "Wiederholen",
+    "nowPlaying": "Spielt jetzt"
   },
   "courseFinance": {
     "title": "Biblical Finance",
