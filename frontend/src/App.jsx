@@ -94,6 +94,7 @@ export default function App() {
   const [hideSidebars, setHideSidebars] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [soundEnabled, setSoundEnabled] = React.useState(localStorage.getItem('scf_sound') !== 'off');
+  const [recentPrayers, setRecentPrayers] = useState([]);
 
   function playNotifSound() {
     if (!soundEnabled) return;
@@ -162,6 +163,19 @@ export default function App() {
     }
     setMobileMenuOpen(false);
   }, [location]);
+  // Fetch recent prayer requests
+  useEffect(() => {
+    fetch((import.meta.env.VITE_API_URL || '') + '/api/help-posts')
+      .then(r => r.json())
+      .then(data => {
+        const prayers = (data.posts || [])
+          .filter(p => p.post_type === 'request')
+          .slice(0, 2);
+        setRecentPrayers(prayers);
+      })
+      .catch(() => {});
+  }, []);
+
 
   if (loading) return (
     <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#f5f7ff',flexDirection:'column',gap:20}}>
@@ -331,7 +345,7 @@ export default function App() {
             <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','OraÃ§Ãµes')}</span></Link>
             <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_life','Ajuda ao Proximo')}</span></Link>
             <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','ReflexÃ£o')}</span></Link>
-            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','MÃºsica')}</span></Link>
+            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','Música')}</span></Link>
             <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','ConsagraÃ§Ã£o')}</span></Link>
           </div>
 
@@ -422,20 +436,47 @@ export default function App() {
             <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'0.95rem',fontWeight:700,color:'var(--text)',marginBottom:12,display:'flex',alignItems:'center',gap:7,borderBottom:'1px solid var(--border)',paddingBottom:10}}>
               <Heart size={15} style={{color:'var(--gold)'}}/> {t('nav.prayers')}
             </div>
-            <div style={{display:'flex',gap:9,padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
-              <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#4a80d4,#6a9ade)',flexShrink:0,fontSize:'0.85rem'}}>ðŸ™</div>
-              <div>
-                <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb)'}}>Ana Costa</b> pede saÃºde</p>
-                <button style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}} onClick={()=>navigate('/pedidos-ajuda')}>{t('mural.pray')}</button>
-              </div>
-            </div>
-            <div style={{display:'flex',gap:9,padding:'8px 0'}}>
-              <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#a07820,#c49a28)',flexShrink:0,fontSize:'0.85rem'}}>ðŸ•Šï¸</div>
-              <div>
-                <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}><b style={{color:'var(--fb)'}}>Carlos</b> pede paz</p>
-                <button style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}} onClick={()=>navigate('/pedidos-ajuda')}>{t('mural.pray')}</button>
-              </div>
-            </div>
+            {recentPrayers.length === 0 ? (
+              <p style={{fontSize:'0.76rem',color:'var(--text)',opacity:0.6,textAlign:'center',padding:'1rem 0'}}>
+                Nenhum pedido recente
+              </p>
+            ) : (
+              recentPrayers.map((prayer, idx) => (
+                <div 
+                  key={prayer.id}
+                  onClick={() => navigate('/pedidos-ajuda')}
+                  style={{
+                    display:'flex',
+                    gap:9,
+                    padding:'8px 0',
+                    borderBottom: idx < recentPrayers.length - 1 ? '1px solid var(--border)' : 'none',
+                    cursor:'pointer',
+                    transition:'background 0.2s'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.background = 'rgba(74,128,212,0.05)'}
+                  onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                >
+                  <div style={{width:30,height:30,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#4a80d4,#6a9ade)',flexShrink:0,fontSize:'0.85rem'}}>
+                    {prayer.author_avatar ? (
+                      <img src={prayer.author_avatar} alt="" style={{width:'100%',height:'100%',borderRadius:'50%',objectFit:'cover'}} />
+                    ) : (
+                      <span>🙏</span>
+                    )}
+                  </div>
+                  <div style={{flex:1}}>
+                    <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}>
+                      <b style={{color:'var(--fb)'}}>{prayer.author_name || 'Anónimo'}</b> {prayer.content.length > 40 ? prayer.content.substring(0, 40) + '...' : prayer.content}
+                    </p>
+                    <button 
+                      style={{marginTop:4,padding:'3px 10px',borderRadius:10,fontSize:'0.66rem',fontWeight:600,border:'1px solid #e8c04060',background:'#fffbec',color:'#a07820',cursor:'pointer'}} 
+                      onClick={(e) => { e.stopPropagation(); navigate('/pedidos-ajuda'); }}
+                    >
+                      {t('mural.pray')}
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
           {/* Events Widget */}
