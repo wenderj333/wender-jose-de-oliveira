@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Bell, CheckCircle, XCircle, Info, Trash, MessageCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -70,10 +70,17 @@ export default function NotificationsPage() {
       return notification.data.url.startsWith('/') ? `${FRONTEND_URL}${notification.data.url}` : notification.data.url;
     }
     switch (notification.type) {
-      case 'flagged_post': return `${FRONTEND_URL}/mural?postId=${notification.data?.postId}`; // Example for linking to a specific post
-      case 'new_direct_message': return `${FRONTEND_URL}/mensagens`;
-      // Add more specific links here
-      default: return '#';
+      case 'flagged_post': 
+        return `${FRONTEND_URL}/mural?postId=${notification.data?.postId}`;
+      case 'new_direct_message':
+      case 'message':
+        // Se tem senderId, vai direto para o chat com essa pessoa
+        if (notification.data?.senderId) {
+          return `${FRONTEND_URL}/mensagens/${notification.data.senderId}`;
+        }
+        return `${FRONTEND_URL}/mensagens`;
+      default: 
+        return '#';
     }
   };
 
@@ -125,3 +132,4 @@ export default function NotificationsPage() {
     </div>
   );
 }
+
