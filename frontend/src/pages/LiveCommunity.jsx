@@ -20,96 +20,43 @@ export default function LiveCommunity() {
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
 
-  const commonEmojis = ['😊', '❤️', '🙏', '✨', '🙌', '🔥', '💪', '🎵', '📖', '⛪', '🕊️', '🌟', '💫', '🎉', '👏'];
-
   // Carregar playlist
   useEffect(() => {
-    console.log('🎵 Carregando playlist...');
     fetch(`${API_BASE}/api/live-community/playlist`)
       .then(r => r.json())
-      .then(data => {
-        console.log(`✅ ${data.songs?.length || 0} músicas carregadas`, data.songs);
-        setSongs(data.songs || []);
-      })
-      .catch((err) => {
-        console.error('❌ Erro ao carregar playlist:', err);
-      });
+      .then(data => setSongs(data.songs || []))
+      .catch(() => {});
   }, []);
 
-  // Marcar como online e atualizar stats
+  // Carregar stats
   useEffect(() => {
-    const markOnline = () => {
-      if (user && !isGuest) {
-        fetch(`${API_BASE}/api/live-community/join`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId: user.id }),
-        })
-          .then(r => r.json())
-          .then(data => {
-            console.log(`✅ Online na live: ${data.onlineCount} usuários`);
-            setOnlineCount(data.onlineCount || 1);
-          })
-          .catch(() => {});
-      } else {
-        // Visitante - só pegar contador
-        fetch(`${API_BASE}/api/live-community/stats`)
-          .then(r => r.json())
-          .then(data => setOnlineCount(data.onlineCount || 0))
-          .catch(() => {});
-      }
-    };
-
-    markOnline();
-    const interval = setInterval(markOnline, 30000); // Refresh a cada 30s
-
-    return () => {
-      clearInterval(interval);
-      // Marcar como offline ao sair
-      if (user && !isGuest) {
-        fetch(`${API_BASE}/api/live-community/leave`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId: user.id }),
-        }).catch(() => {});
-      }
-    };
-  }, [user, isGuest]);
+    fetch(`${API_BASE}/api/live-community/stats`)
+      .then(r => r.json())
+      .then(data => setOnlineCount(data.onlineCount || 0))
+      .catch(() => {});
+  }, []);
 
   // WebSocket chat
   useEffect(() => {
-    if (!send || !on || !off) {
-      console.log('⚠️ WebSocket não disponível (send/on/off)', { send: !!send, on: !!on, off: !!off });
-      return;
-    }
-    
-    console.log('🔌 Conectando ao chat WebSocket...');
+    if (!send || !on || !off) return;
     
     const handleMessage = (data) => {
-      console.log('💬 Mensagem recebida:', data);
       setChatMessages(prev => [...prev, data].slice(-100)); // últimas 100
     };
 
     on('live_chat_broadcast', handleMessage);
     
     if (user && !isGuest) {
-      console.log('✅ Enviando live_join para WebSocket...', user.full_name);
       send({ type: 'live_join', userId: user.id, userName: user.full_name, userAvatar: user.avatar_url });
-    } else {
-      console.log('👁️ Usuário visitante (não envia live_join)');
     }
 
     return () => {
       off('live_chat_broadcast', handleMessage);
-      if (user && !isGuest) {
-        console.log('👋 Enviando live_leave...');
-        send({ type: 'live_leave', userId: user.id });
-      }
+      if (user && !isGuest) send({ type: 'live_leave', userId: user.id });
     };
   }, [send, on, off, user, isGuest]);
 
@@ -131,16 +78,11 @@ export default function LiveCommunity() {
 
   const handleSendMessage = () => {
     if (!user || isGuest) {
-      console.log('⚠️ Guest tentou enviar mensagem');
       setShowGuestPrompt(true);
       return;
     }
-    if (!messageInput.trim()) {
-      console.log('⚠️ Mensagem vazia');
-      return;
-    }
+    if (!messageInput.trim()) return;
     
-    console.log('📤 Enviando mensagem:', messageInput);
     send({
       type: 'live_chat_message',
       userId: user.id,
@@ -156,58 +98,38 @@ export default function LiveCommunity() {
   };
 
   const togglePlay = () => {
-    if (!audioRef.current) {
-      console.error('❌ audioRef não existe');
-      return;
-    }
+    if (!audioRef.current) return;
     
     if (!hasStarted) {
-      console.log('▶️ Primeiro play - iniciando...');
       setHasStarted(true);
     }
     
     if (isPlaying) {
-      console.log('⏸️ Pausando...');
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      console.log('▶️ Tocando...', audioRef.current.src);
       audioRef.current.play()
-        .then(() => {
-          console.log('✅ Play iniciado com sucesso');
-          setIsPlaying(true);
-        })
+        .then(() => setIsPlaying(true))
         .catch((err) => {
-          console.error('❌ Erro ao tocar:', err);
+          console.error('Play error:', err);
           setIsPlaying(false);
         });
     }
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', padding: '0' }}>
-      <div style={{
-        background: 'rgba(255,255,255,0.95)',
-        borderRadius: '0',
-        padding: '24px 16px',
-        textAlign: 'center',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-      }}>
-        <h1 style={{ margin: 0, fontSize: '1.8rem', fontWeight: 800, color: '#333' }}>
-          🔴 {t('live.title', 'Comunidade ao Vivo 24h')}
-        </h1>
-        <p style={{ margin: '8px 0 0', color: '#666', fontSize: '0.95rem' }}>
-          Louvor contínuo e comunidade em oração
-        </p>
-      </div>
+    <div style={{ minHeight: '100vh', background: '#f5f5f5', padding: '16px' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '20px', color: '#333' }}>
+        🎵 {t('live.title', 'Comunidade ao Vivo 24h')}
+      </h1>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', padding: '16px', maxWidth: '100%', margin: '0 auto', height: 'calc(100vh - 120px)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', maxWidth: '1400px', margin: '0 auto' }}>
         
         {/* Coluna Esquerda */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           
           {/* Music Player */}
-          <div style={{ background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)' }}>
+          <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Music size={20} /> {t('live.nowPlaying', 'Tocando agora')}
             </h3>
@@ -296,14 +218,14 @@ export default function LiveCommunity() {
           </div>
 
           {/* Online Users */}
-          <div style={{ background: 'white', borderRadius: '16px', padding: '20px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)' }}>
+          <div style={{ background: 'white', borderRadius: '12px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             <h3 style={{ margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Users size={20} /> +{onlineCount} {t('live.online', 'online')}
             </h3>
           </div>
 
           {/* Live Chat */}
-          <div style={{ background: 'white', borderRadius: '16px', padding: '20px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)', flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+          <div style={{ background: 'white', borderRadius: '12px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', height: '400px', display: 'flex', flexDirection: 'column' }}>
             <h3 style={{ margin: '0 0 12px' }}>💬 Chat ao Vivo</h3>
             <div style={{ flex: 1, overflowY: 'auto', marginBottom: '12px', padding: '8px' }}>
               {chatMessages.length === 0 && (
@@ -319,82 +241,25 @@ export default function LiveCommunity() {
               ))}
               <div ref={chatEndRef} />
             </div>
-            <div style={{ position: 'relative' }}>
-              {showEmojiPicker && user && !isGuest && (
-                <div style={{
-                  position: 'absolute',
-                  bottom: '60px',
-                  left: 0,
-                  background: 'white',
-                  borderRadius: '12px',
-                  padding: '12px',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(5, 1fr)',
-                  gap: '8px',
-                  zIndex: 10,
-                }}>
-                  {commonEmojis.map(emoji => (
-                    <button
-                      key={emoji}
-                      onClick={() => {
-                        setMessageInput(prev => prev + emoji);
-                        setShowEmojiPicker(false);
-                      }}
-                      style={{
-                        width: '36px',
-                        height: '36px',
-                        border: 'none',
-                        background: 'transparent',
-                        cursor: 'pointer',
-                        fontSize: '22px',
-                        borderRadius: '8px',
-                        transition: 'background 0.2s',
-                      }}
-                      onMouseOver={(e) => e.currentTarget.style.background = '#f0f0f0'}
-                      onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                    >
-                      {emoji}
-                    </button>
-                  ))}
-                </div>
-              )}
-              <div style={{ display: 'flex', gap: '8px' }}>
-                {user && !isGuest && (
-                  <button
-                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                    style={{
-                      padding: '10px 12px',
-                      borderRadius: '8px',
-                      background: showEmojiPicker ? '#667eea' : '#f0f0f0',
-                      color: showEmojiPicker ? 'white' : '#666',
-                      border: 'none',
-                      cursor: 'pointer',
-                      fontSize: '18px',
-                    }}
-                  >
-                    😊
-                  </button>
-                )}
-                <input
-                  type="text"
-                  value={messageInput}
-                  onChange={(e) => setMessageInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder={user && !isGuest ? t('live.typeMessage', 'Escreve uma mensagem...') : '🔒 Cria conta para participar'}
-                  disabled={!user || isGuest}
-                  style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                />
-                <button onClick={handleSendMessage} disabled={!user || isGuest} style={{ padding: '10px 16px', borderRadius: '8px', background: '#667eea', color: 'white', border: 'none', cursor: 'pointer' }}>
-                  <Send size={18} />
-                </button>
-              </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <input
+                type="text"
+                value={messageInput}
+                onChange={(e) => setMessageInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder={user && !isGuest ? t('live.typeMessage', 'Escreve uma mensagem...') : '🔒 Cria conta para participar'}
+                disabled={!user || isGuest}
+                style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+              />
+              <button onClick={handleSendMessage} disabled={!user || isGuest} style={{ padding: '10px 16px', borderRadius: '8px', background: '#667eea', color: 'white', border: 'none', cursor: 'pointer' }}>
+                <Send size={18} />
+              </button>
             </div>
           </div>
         </div>
 
         {/* Coluna Direita */}
-        <div style={{ background: 'white', borderRadius: '16px', padding: '24px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', border: '1px solid rgba(102,126,234,0.2)', height: 'fit-content' }}>
+        <div style={{ background: 'white', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', height: 'fit-content' }}>
           {user && !isGuest ? (
             <div>
               <h3>{t('live.welcome', 'Bem-vindo')}, {user.full_name}!</h3>
