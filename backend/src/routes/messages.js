@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
+const { createNotification } = require('./notifications');
 
 // ─── GET /api/messages/conversations ─────────────────────────────────────────
 router.get('/conversations', authenticate, async (req, res) => {
@@ -127,15 +128,12 @@ router.post('/', authenticate, async (req, res) => {
 
     const msg = result.rows[0];
 
-    // Notificação
+    // Notificacao + push FCM
     try {
       const sender = await db.query('SELECT full_name FROM users WHERE id = $1', [me]);
-      const name = sender.rows[0]?.full_name || 'Alguém';
+      const name = sender.rows[0]?.full_name || 'Alguem';
       const preview = content.trim().length > 50 ? content.trim().substring(0, 50) + '...' : content.trim();
-      await db.query(`
-        INSERT INTO notifications (user_id, type, title, body)
-        VALUES ($1, 'message', $2, $3)
-      `, [targetId, `💬 Nova mensagem de ${name}`, preview]);
+      await createNotification(targetId, 'message', '💬 ' + name, preview, { senderId: me });
     } catch (_) {}
 
     res.status(201).json({ message: msg });
@@ -160,3 +158,4 @@ router.post('/mark-read', authenticate, async (req, res) => {
 });
 
 module.exports = router;
+

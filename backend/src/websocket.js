@@ -1,4 +1,17 @@
-const { WebSocketServer } = require('ws');
+﻿const { WebSocketServer } = require('ws');
+const Anthropic = require('@anthropic-ai/sdk');
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+async function translateWithClaude(text, sourceLang, targetLang) {
+  const langNames = { pt: 'Portuguese', en: 'English', de: 'German', fr: 'French', es: 'Spanish', ro: 'Romanian', ru: 'Russian', it: 'Italian', ar: 'Arabic', zh: 'Chinese', ja: 'Japanese', ko: 'Korean' };
+  try {
+    const msg = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514', max_tokens: 300,
+      messages: [{ role: 'user', content: 'Translate from ' + (langNames[sourceLang]||sourceLang) + ' to ' + (langNames[targetLang]||targetLang) + '. Return ONLY the translation:\n\n' + text }]
+    });
+    return msg.content[0].text;
+  } catch(e) { console.error('Translation error:', e); return text; }
+}
 const PastorSession = require('./models/PastorSession');
 
 const clients = new Map(); // ws -> { userId, churchId }
@@ -6,15 +19,34 @@ const liveStreams = new Map(); // streamId -> { id, broadcasterId, broadcasterNa
 
 function setupWebSocket(server) {
   const wss = new WebSocketServer({ server, path: '/ws' });
+  // Ping para manter conexoes activas
+  setInterval(() => {
+    wss.clients.forEach(ws => {
+      if (ws.readyState === 1) ws.ping();
+    });
+  }, 25000);
 
   wss.on('connection', (ws) => {
-    console.log('🔌 Nova conexão WebSocket');
+    console.log('ðŸ”Œ Nova conexÃ£o WebSocket');
 
     ws.on('message', async (data) => {
       try {
         const msg = JSON.parse(data);
 
-        switch (msg.type) {
+        console.log("MSG_TIPO:", msg.type, "USER:", msg.userId); switch (msg.type) {
+          case 'game_create':
+          case 'game_join':
+          case 'game_ready':
+          case 'game_start':
+          case 'game_answer':
+          case 'game_chat':
+          case 'game_end':
+            handleGame(ws, msg);
+            break;
+          case 'game_queue':
+          case 'game_cancel_queue':
+            handleGameQueue(ws, msg);
+            break;
           case 'identify':
             clients.set(ws, { userId: msg.userId, churchId: msg.churchId });
             // Send current live sessions
@@ -127,7 +159,7 @@ function setupWebSocket(server) {
           case 'live_join': {
             const stream = liveStreams.get(msg.streamId);
             if (!stream) { ws.send(JSON.stringify({ type: 'live_stopped', streamId: msg.streamId })); break; }
-            if (stream.viewers.size >= 10) { ws.send(JSON.stringify({ type: 'live_error', error: 'Stream cheio (máx. 10 espectadores)' })); break; }
+            if (stream.viewers.size >= 10) { ws.send(JSON.stringify({ type: 'live_error', error: 'Stream cheio (mÃ¡x. 10 espectadores)' })); break; }
             stream.viewers.set(msg.viewerId, ws);
             const ci2 = clients.get(ws) || {};
             ci2.liveStreamId = msg.streamId;
@@ -191,8 +223,14 @@ function setupWebSocket(server) {
             break;
           }
 
+          case 'live_chat_message': {
+            // Community live chat broadcast
+            const communityChat = { type: 'live_chat_broadcast', userId: msg.userId, userName: msg.userName, userAvatar: msg.userAvatar, text: msg.text, id: Date.now().toString(), time: new Date().toISOString() };
+            broadcast(wss, communityChat);
+            break;
+          }
           case 'live_chat': {
-            const chatData = { type: 'live_chat_message', streamId: msg.streamId, name: msg.name, text: msg.text, time: new Date().toISOString() };
+            const chatData = { type: 'live_chat_message', streamId: msg.streamId, name: msg.name, text: msg.text, id: Date.now().toString(), time: new Date().toISOString() };
             broadcastToStream(wss, msg.streamId, chatData, ws);
             break;
           }
@@ -222,18 +260,13 @@ function setupWebSocket(server) {
             let translated = msg.text;
             if (msg.targetLang && msg.sourceLang && msg.targetLang !== msg.sourceLang) {
               try {
-                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(msg.text)}&langpair=${msg.sourceLang}|${msg.targetLang}`;
-                const resp = await fetch(url);
-                const data = await resp.json();
-                if (data.responseData && data.responseData.translatedText) {
-                  translated = data.responseData.translatedText;
-                }
+                translated = await translateWithClaude(msg.text, msg.sourceLang, msg.targetLang);
               } catch (e) { console.error('Translation error:', e); }
             }
             const chatDb = require('./db/connection');
-            await chatDb.prepare(
-              'INSERT INTO chat_messages (room_id, sender_role, sender_name, original_text, translated_text, original_lang, target_lang) VALUES (?, ?, ?, ?, ?, ?, ?)'
-            ).run(msg.roomId, msg.role, msg.name, msg.text, translated, msg.sourceLang, msg.targetLang);
+            await chatDb.query(
+              'INSERT INTO chat_messages (room_id, sender_role, sender_name, original_text, translated_text, original_lang, target_lang) VALUES ($1,$2,$3,$4,$5,$6,$7)',
+              [msg.roomId, msg.role, msg.name, msg.text, translated, msg.sourceLang, msg.targetLang]);
             broadcastToRoom(wss, clients, msg.roomId, {
               type: 'chat_new_message',
               roomId: msg.roomId,
@@ -270,19 +303,6 @@ function setupWebSocket(server) {
           }
 
           // ===== LIVE COMMUNITY CHAT =====
-          case 'live_chat_message': {
-            const { message, userId, userName, userAvatar } = msg;
-            broadcast(wss, {
-              type: 'live_chat_broadcast',
-              id: Date.now(),
-              userId,
-              userName,
-              userAvatar,
-              message,
-              timestamp: new Date().toISOString(),
-            });
-            break;
-          }
 
           case 'live_join': {
             broadcast(wss, {
@@ -373,4 +393,236 @@ function broadcastToStream(wss, streamId, data, excludeWs) {
   }
 }
 
+
+const gameRooms = new Map();
+
+function handleGame(ws, msg) {
+  const client = clients.get(ws);
+  const userId = client?.userId || msg.userId;
+  const userName = msg.userName || 'Jogador';
+
+  if (msg.type === 'game_create') {
+    const roomId = msg.roomId;
+    gameRooms.set(roomId, {
+      id: roomId,
+      livro: msg.livro || 'Todos',
+      jogadores: [{ userId, userName, avatar: msg.avatar, pontos: 0, pronto: false, ws }],
+      iniciado: false,
+      perguntaIdx: 0,
+    });
+    ws.send(JSON.stringify({ type: 'game_joined', roomId, jogadores: gameRooms.get(roomId).jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto })) }));
+  }
+
+  else if (msg.type === 'game_join') {
+    const roomId = msg.roomId;
+    const room = gameRooms.get(roomId);
+    if (!room) { ws.send(JSON.stringify({ type: 'game_error', message: 'Sala nao encontrada' })); return; }
+    if (room.iniciado) { ws.send(JSON.stringify({ type: 'game_error', message: 'Jogo ja iniciado' })); return; }
+    room.jogadores.push({ userId, userName, avatar: msg.avatar, pontos: 0, pronto: false, ws });
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_joined', roomId, jogadores: jogadoresPublico })); });
+    // Auto iniciar quando 2 jogadores estiverem na sala
+    if (room.jogadores.length >= 2) {
+      room.iniciado = true;
+      room.perguntaIdx = 0;
+      const PALL = require('../frontend/src/data/perguntas.json');
+      let p = PALL.filter(x => room.livro==='Todos' || x.livro===room.livro);
+      if(!p.length) p = PALL;
+      const f=p.filter(x=>x.nivel==='facil').sort(()=>Math.random()-0.5).slice(0,2);
+      const m=p.filter(x=>x.nivel==='medio').sort(()=>Math.random()-0.5).slice(0,2);
+      const d=p.filter(x=>x.nivel==='dificil').sort(()=>Math.random()-0.5).slice(0,1);
+      room.perguntas = [...f,...m,...d];
+      const adv1 = { userId: room.jogadores[0].userId, userName: room.jogadores[0].userName, avatar: room.jogadores[0].avatar, pontos: 0 };
+      const adv2 = { userId: room.jogadores[1].userId, userName: room.jogadores[1].userName, avatar: room.jogadores[1].avatar, pontos: 0 };
+      setTimeout(() => {
+        if (room.jogadores[0].ws.readyState === 1) room.jogadores[0].ws.send(JSON.stringify({ type: 'game_matched', roomId: roomId, perguntas: room.perguntas, adversario: adv2 }));
+        if (room.jogadores[1].ws.readyState === 1) room.jogadores[1].ws.send(JSON.stringify({ type: 'game_matched', roomId: roomId, perguntas: room.perguntas, adversario: adv1 }));
+      }, 1000);
+    }
+  }
+
+  else if (msg.type === 'game_ready') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const j = room.jogadores.find(j => j.userId === userId);
+    if (j) j.pronto = true;
+    const todosprontos = room.jogadores.every(j => j.pronto);
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_update', jogadores: jogadoresPublico })); });
+    if (todosprontos) {
+      room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_started', livro: room.livro, perguntas: room.perguntas })); });
+    }
+  }
+
+  else if (msg.type === 'start_game') {
+    const roomId2 = [...gameRooms.entries()].find(([,r]) => r.jogadores.some(j => j.ws === ws))?.[0];
+    const room2 = gameRooms.get(roomId2);
+    if (room2 && msg.perguntas) {
+      room2.perguntas = msg.perguntas;
+      room2.jogadores.forEach(j => { if (j.ws !== ws && j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'start_game', perguntas: msg.perguntas })); });
+    }
+  }
+  else if (msg.type === 'avancar') {
+    const roomId3 = [...gameRooms.entries()].find(([,r]) => r.jogadores.some(j => j.ws === ws))?.[0];
+    const room3 = gameRooms.get(roomId3);
+    if (room3) { room3.jogadores.forEach(j => { if (j.ws !== ws && j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'avancar', idx: msg.idx })); }); }
+  }
+  else if (msg.type === 'resultado') {
+    const roomId4 = [...gameRooms.entries()].find(([,r]) => r.jogadores.some(j => j.ws === ws))?.[0];
+    const room4 = gameRooms.get(roomId4);
+    if (room4) { const jj = room4.jogadores.find(j => j.ws === ws); if (jj) jj.pontos = msg.pontos; room4.jogadores.forEach(j => { if (j.ws !== ws && j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'adversario_resultado', pontos: msg.pontos })); }); }
+  }
+  else if (msg.type === 'game_start') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    room.iniciado = true;
+    room.perguntaIdx = 0;
+    const PALL = require('../frontend/src/data/perguntas.json');
+    let p = PALL.filter(x => room.livro==='Todos' || x.livro===room.livro);
+    if(!p.length) p = PALL;
+    const f=p.filter(x=>x.nivel==='facil').sort(()=>Math.random()-0.5).slice(0,2);
+    const m=p.filter(x=>x.nivel==='medio').sort(()=>Math.random()-0.5).slice(0,2);
+    const d=p.filter(x=>x.nivel==='dificil').sort(()=>Math.random()-0.5).slice(0,1);
+    room.perguntas = [...f,...m,...d];
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_started', livro: room.livro, perguntas: room.perguntas })); });
+  }
+
+  else if (msg.type === 'game_answer') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const j = room.jogadores.find(j => j.userId === userId);
+    if (j) { j.pontos += msg.pontos || 0; j.respondeu = true; }
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_score', jogadores: jogadoresPublico })); });
+    console.log('jogadores:', room.jogadores.length, 'responderam:', room.jogadores.filter(j=>j.respondeu).length);
+    const todosResponderem = room.jogadores.every(j => j.respondeu) || room.jogadores.length === 1;
+    if (todosResponderem) {
+      room.jogadores.forEach(j => j.respondeu = false);
+      room.perguntaIdx++;
+      if (room.perguntaIdx >= (room.perguntas||[]).length) {
+        const vencedor = jogadoresPublico.reduce((a,b)=>a.pontos>=b.pontos?a:b);
+        room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores: jogadoresPublico, vencedor })); });
+        gameRooms.delete(msg.roomId);
+      } else {
+        setTimeout(()=>{ room.jogadores.forEach(j => { if (j.ws && j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_next_question', idx: room.perguntaIdx })); }); }, 1500);
+      }
+    }
+  }
+
+  else if (msg.type === 'game_chat') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_chat_msg', userName, texto: msg.texto })); });
+  }
+
+  else if (msg.type === 'game_end') {
+    const room = gameRooms.get(msg.roomId);
+    if (!room) return;
+    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos }));
+    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores: jogadoresPublico })); });
+    gameRooms.delete(msg.roomId);
+  }
+}
+
+
+
+
+
+
+
+const gameQueue = [];
+
+function handleGameQueue(ws, msg) {
+  const userId = msg.userId;
+  const userName = msg.userName || 'Jogador';
+  const avatar = msg.avatar || '';
+  const livro = msg.livro || 'Todos';
+
+  if (msg.type === 'game_queue') {
+    console.log('🎮 GAME_QUEUE:', userId, livro, 'fila:', gameQueue.length);
+    console.log('🎮 Jogadores na fila:', gameQueue.map(p => p.userId + ' ws:' + p.ws.readyState));
+    // Limpeza: remove jogadores mortos ou duplicados
+    for (let i = gameQueue.length - 1; i >= 0; i--) {
+      if (gameQueue[i].userId === userId || gameQueue[i].ws.readyState !== 1) {
+        gameQueue.splice(i, 1);
+      }
+    }
+    // Procurar alguem na fila (qualquer livro)
+    const idx = gameQueue.findIndex(p => p.userId !== userId && p.ws.readyState === 1);
+    if (idx !== -1) {
+      const outro = gameQueue.splice(idx, 1)[0];
+      const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
+      const nivelJogo = msg.nivel || 0;
+      let perguntas = [];
+      try { perguntas = (() => {
+        const pj = require('../data/perguntas.json');
+        let p = pj.filter(x => livro === 'Todos' || x.livro === livro);
+        if (!p.length) p = pj;
+        const sh = a => [...a].sort(() => Math.random() - 0.5);
+        // Nivel 0-4: facil, 5-9: medio, 10-13: dificil
+        let pool;
+        if (nivelJogo <= 4) pool = sh(p.filter(x=>x.nivel==='facil'));
+        else if (nivelJogo <= 9) pool = sh(p.filter(x=>x.nivel==='medio'));
+        else pool = sh(p.filter(x=>x.nivel==='dificil'));
+        if (pool.length < 10) pool = [...pool, ...sh(p)];
+        return pool.slice(0,10);
+      })(); } catch(e) {}
+      const matchMsg1 = JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: { userId: msg.userId, userName: msg.userName, avatar: msg.avatar } });
+      const matchMsg2 = JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: { userId: outro.userId, userName: outro.userName, avatar: outro.avatar } });
+      if (outro.ws.readyState === 1) outro.ws.send(matchMsg1);
+      if (ws.readyState === 1) ws.send(matchMsg2);
+      gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, jogadores: [{ userId: outro.userId, userName: outro.userName, avatar: outro.avatar, pontos: 0, ws: outro.ws }, { userId, userName, avatar, pontos: 0, ws }] });
+    } else {
+      const playerEntry = { userId, userName, avatar, livro, ws };
+      gameQueue.push(playerEntry);
+      if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'game_queued' }));
+      ws.on('close', () => {
+        const ci = gameQueue.indexOf(playerEntry);
+        if (ci !== -1) gameQueue.splice(ci, 1);
+      });
+      setTimeout(() => {
+        const still = gameQueue.indexOf(playerEntry);
+        if (still !== -1 && ws.readyState === 1) {
+          gameQueue.splice(still, 1);
+          const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
+          let perguntas = [];
+          try { perguntas = (() => {
+            const pj = require('../data/perguntas.json');
+            let p = pj.filter(x => livro === 'Todos' || x.livro === livro);
+            if (!p.length) p = pj;
+            const sh = a => a.sort(() => Math.random() - 0.5);
+            return [...sh(p.filter(x=>x.nivel==='facil')).slice(0,2), ...sh(p.filter(x=>x.nivel==='medio')).slice(0,2), ...sh(p.filter(x=>x.nivel==='dificil')).slice(0,1)];
+          })(); } catch(e) {}
+          const botPersonagens = [
+            { userId: 'bot-333', userName: 'Moises', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=moises' },
+            { userId: 'bot-333', userName: 'Davi', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=davi' },
+            { userId: 'bot-333', userName: 'Salomao', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=salomao' },
+            { userId: 'bot-333', userName: 'Paulo', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=paulo' },
+            { userId: 'bot-333', userName: 'Pedro', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=pedro' },
+            { userId: 'bot-333', userName: 'Elias', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=elias' },
+            { userId: 'bot-333', userName: 'Daniel', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=daniel' },
+            { userId: 'bot-333', userName: 'Josue', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=josue' },
+            { userId: 'bot-333', userName: 'Joao', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=joao' },
+            { userId: 'bot-333', userName: 'Abraao', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=abraao' },
+          ];
+          const botAdv = botPersonagens[Math.floor(Math.random() * botPersonagens.length)];
+          ws.send(JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: botAdv, isBot: true }));
+          gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, isBot: true, jogadores: [{ userId: 'bot-333', userName: 'Pastor Bot', avatar: '', pontos: 0, ws: null }, { userId, userName, avatar, pontos: 0, ws }] });
+        }
+      }, 30000);
+    }
+  }
+
+  if (msg.type === 'game_cancel_queue') {
+    const idx = gameQueue.findIndex(p => p.userId === userId);
+    if (idx !== -1) gameQueue.splice(idx, 1);
+  }
+}
 module.exports = { setupWebSocket };
+
+// clean
+
+
+
+
+// nivel system

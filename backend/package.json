@@ -9,17 +9,20 @@
     "migrate": "node src/db/migrate.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.9.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-rate-limit": "^8.2.1",
+    "google-auth-library": "^10.6.2",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "pg": "^8.11.3",
     "replicate": "^1.2.0",
+    "resend": "^6.4.2",
     "stripe": "^20.3.1",
     "uuid": "^9.0.0",
     "ws": "^8.16.0"

@@ -1,0 +1,5 @@
+﻿code = open(r'src\styles\ModernTheme.css', encoding='utf-8').read()
+code = code.replace('.mobile-only { display: none !important; }', '.mobile-only { display: none !important; }')
+code = code.replace('@media (max-width: 768px) {', '@media (max-width: 1024px) {')
+open(r'src\styles\ModernTheme.css', 'w', encoding='utf-8').write(code)
+print('Feito!')

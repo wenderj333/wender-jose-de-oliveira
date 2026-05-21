@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sigo-com-fe.vercel.app/sitemap.xml

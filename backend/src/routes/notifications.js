@@ -14,6 +14,22 @@ async function createNotification(userId, type, title, body, data = {}) {
   } catch (err) {
     console.error('Error creating notification:', err);
   }
+  // FCM push
+  try {
+    const userRes = await db.query('SELECT fcm_token FROM users WHERE id = $1', [userId]);
+    const fcmToken = userRes.rows[0]?.fcm_token;
+    if (fcmToken) {
+      const { GoogleAuth } = require('google-auth-library');
+      const creds = require('../firebase-adminsdk.json');
+      const auth = new GoogleAuth({ credentials: creds, scopes: ['https://www.googleapis.com/auth/firebase.messaging'] });
+      const token = await auth.getAccessToken();
+      await fetch('https://fcm.googleapis.com/v1/projects/' + creds.project_id + '/messages:send', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: { token: fcmToken, notification: { title, body: body || title } } })
+      });
+    }
+  } catch(fcmErr) { console.error('FCM error:', fcmErr.message); }
 }
 
 // GET /api/notifications — listar notificações do usuário logado
@@ -99,3 +115,4 @@ router.get('/admin-issues', authenticate, async (req, res) => {
 });
 
 module.exports = { router, createNotification };
+

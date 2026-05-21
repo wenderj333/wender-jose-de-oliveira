@@ -2,9 +2,21 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { Send, Search, ArrowLeft, UserPlus, MessageCircle, Check, CheckCheck } from 'lucide-react';
+import { Send, Search, ArrowLeft, UserPlus, MessageCircle, Check, CheckCheck, Mic, MicOff } from 'lucide-react';
 
 const API = import.meta.env.VITE_API_URL || '';
+function playMessageSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.setValueAtTime(880, ctx.currentTime);
+    o.frequency.setValueAtTime(660, ctx.currentTime + 0.1);
+    g.gain.setValueAtTime(0.3, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.3);
+  } catch(e) {}
+}
 
 export default function Chat() {
   const { t } = useTranslation();
@@ -24,6 +36,14 @@ export default function Chat() {
   const [translations, setTranslations] = useState({}); // msgId -> translated text
   const [translating, setTranslating] = useState({}); // msgId -> bool
   const messagesEndRef = useRef(null);
+  const [recording, setRecording] = useState(false);
+  const [audioBlob, setAudioBlob] = useState(null);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const startRecording = async () => { try { const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); const mediaRecorder = new MediaRecorder(stream); mediaRecorderRef.current = mediaRecorder; audioChunksRef.current = []; mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunksRef.current.push(e.data); }; mediaRecorder.onstop = () => { const blob = new Blob(audioChunksRef.current, { type: "audio/webm" }); setAudioBlob(blob); setAudioUrl(URL.createObjectURL(blob)); stream.getTracks().forEach(t => t.stop()); }; mediaRecorder.start(); setRecording(true); } catch(e) { alert("Erro ao aceder ao microfone"); } };
+  const stopRecording = () => { if (mediaRecorderRef.current) { mediaRecorderRef.current.stop(); setRecording(false); } };
+  const cancelAudio = () => { setAudioBlob(null); setAudioUrl(null); };
   const pollRef = useRef(null);
 
   const translateMessage = async (msgId, content) => {
@@ -67,7 +87,10 @@ export default function Chat() {
       const res = await fetch(`${API}/api/messages/${userId}`, { headers });
       if (res.ok) {
         const data = await res.json();
-        setMessages(data.messages || []);
+        const prev = messages.length;
+        const newMsgs = data.messages || [];
+        if (prev > 0 && newMsgs.length > prev && newMsgs[newMsgs.length-1]?.sender_id !== user?.id) { playMessageSound(); }
+        setMessages(newMsgs);
         setFriendStatus(data.friendshipStatus || 'none');
         setOtherUser(data.otherUser || null);
       }

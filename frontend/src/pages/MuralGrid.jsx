@@ -1,7 +1,8 @@
-﻿import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play, Pause, BookOpen, Trash2, Grid, List, Volume2, VolumeX, Search, Flag } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import LiveViewers from '../components/LiveViewers';
 import ReportModal from '../components/ReportModal';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
@@ -140,13 +141,13 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
         onPause={handleOnPause}
         preload="metadata"
       />
-      <button onClick={toggle} style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0 }}>
+      <button onClick={toggle} style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0 }}>
         {playing ? <Pause size={16} /> : <Play size={16} />}
       </button>
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>{t('mural.musicLabel')}</div>
         <div style={{ height: 4, background: '#e2e8f0', borderRadius: 2 }}>
-          <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg,#667eea,#764ba2)', transition: 'width 0.1s' }} />
+          <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg,#7a9e7e,#c4b89a)', transition: 'width 0.1s' }} />
         </div>
       </div>
     </div>
@@ -176,7 +177,7 @@ function MusicPickerModal({ onClose, onSelect }) {
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 3000 }}
       onClick={e => e.target === e.currentTarget && onClose()}>
-      <div style={{ background: 'white', borderRadius: '20px 20px 0 0', width: '100%', maxWidth: 600, maxHeight: '70vh', display: 'flex', flexDirection: 'column', padding: 20, boxSizing: 'border-box' }}>
+      <div style={{ background: 'white', borderRadius: '20px 20px 0 0', width: '100%', maxWidth: 900, maxHeight: '50vh', display: 'flex', flexDirection: 'column', padding: 20, boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
           <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>🎵 {t('mural.pickMusic')}</h3>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}><X size={20} /></button>
@@ -198,7 +199,7 @@ function MusicPickerModal({ onClose, onSelect }) {
             }}
               onMouseEnter={e => e.currentTarget.style.background = '#f5f5f5'}
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-              <div style={{ width: 36, height: 36, borderRadius: 8, background: 'linear-gradient(135deg,#4a80d4,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 18 }}>🎵</div>
+              <div style={{ width: 36, height: 36, borderRadius: 8, background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 18 }}>🎵</div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</div>
                 <div style={{ fontSize: 11, color: '#888' }}>{song.artist}</div>
@@ -247,6 +248,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const isOwner = user && (user.id === post.author_id || user.id === post.user_id);
 
   const videoRef = useRef(null);
+  const recordRef = useRef(null);
   const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay
   const [imageModal, setImageModal] = useState(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
@@ -380,15 +382,15 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             color: 'white', cursor: 'pointer', zIndex: 10,
           }}>
             {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-          <div style={{ position: 'absolute ', right: 10, bottom: 60, display: 'flex ', flexDirection: 'column ', gap: 16, alignItems: 'center ', zIndex: 10 }}><button onClick={() => onLike(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: post.liked ? '#e11d48 ' : 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Heart size={28} fill={post.liked ? '#e11d48 ' : 'none '} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.like_count || 0}</span></button><button onClick={() => { if (!showComments) loadComments(); setShowComments(!showComments); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><MessageCircle size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.comment_count || 0}</span></button><button onClick={() => { const url = window.location.origin + '/mural?post=' + post.id; if (navigator.share) navigator.share({ title: 'Sigo com Fe', text: post.content, url }); else navigator.clipboard.writeText(url); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Share2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>Share</span></button>{isOwner && <button onClick={() => onDelete(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Trash2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>Apagar</span></button>}</div>
-          <div style={{ position: 'absolute ', right: 10, bottom: 60, display: 'flex ', flexDirection: 'column ', gap: 16, alignItems: 'center ', zIndex: 10 }}><button onClick={() => onLike(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: post.liked ? '#e11d48 ' : 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Heart size={28} fill={post.liked ? '#e11d48 ' : 'none '} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.like_count || 0}</span></button><button onClick={() => { if (!showComments) loadComments(); setShowComments(!showComments); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><MessageCircle size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.comment_count || 0}</span></button><button onClick={() => { const url = window.location.origin + '/mural?post=' + post.id; if (navigator.share) navigator.share({ title: 'Sigo com Fe', text: post.content, url }); else navigator.clipboard.writeText(url); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Share2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>Share</span></button>{isOwner && <button onClick={() => onDelete(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Trash2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>Apagar</span></button>}</div>
-          <div style={{ position: 'absolute ', right: 10, bottom: 60, display: 'flex ', flexDirection: 'column ', gap: 16, alignItems: 'center ', zIndex: 10 }}><button onClick={() => onLike(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: post.liked ? '#e11d48 ' : 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Heart size={28} fill={post.liked ? '#e11d48 ' : 'none '} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.like_count || 0}</span></button><button onClick={() => { if (!showComments) loadComments(); setShowComments(!showComments); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><MessageCircle size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.comment_count || 0}</span></button><button onClick={() => { const url = window.location.origin + '/mural?post=' + post.id; if (navigator.share) navigator.share({ title: 'Sigo com Fe', text: post.content, url }); else navigator.clipboard.writeText(url); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Share2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>Share</span></button>{isOwner && <button onClick={() => onDelete(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Trash2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>Apagar</span></button>}</div>
+          <div style={{ position: 'absolute ', right: 10, bottom: 60, display: 'flex ', flexDirection: 'column ', gap: 16, alignItems: 'center ', zIndex: 10 }}><button onClick={() => onLike(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: post.liked ? '#e11d48 ' : 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Heart size={28} fill={post.liked ? '#e11d48 ' : 'none '} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.like_count || 0}</span></button><button onClick={() => { if (!showComments) loadComments(); setShowComments(!showComments); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><MessageCircle size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.comment_count || 0}</span></button><button onClick={() => { const url = window.location.origin + '/mural?post=' + post.id; if (navigator.share) navigator.share({ title: 'Sigo com Fe', text: post.content, url }); else navigator.clipboard.writeText(url); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Share2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{t('common.share')}</span></button>{isOwner && <button onClick={() => onDelete(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Trash2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>Apagar</span></button>}</div>
+          <div style={{ position: 'absolute ', right: 10, bottom: 60, display: 'flex ', flexDirection: 'column ', gap: 16, alignItems: 'center ', zIndex: 10 }}><button onClick={() => onLike(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: post.liked ? '#e11d48 ' : 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Heart size={28} fill={post.liked ? '#e11d48 ' : 'none '} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.like_count || 0}</span></button><button onClick={() => { if (!showComments) loadComments(); setShowComments(!showComments); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><MessageCircle size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.comment_count || 0}</span></button><button onClick={() => { const url = window.location.origin + '/mural?post=' + post.id; if (navigator.share) navigator.share({ title: 'Sigo com Fe', text: post.content, url }); else navigator.clipboard.writeText(url); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Share2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{t('common.share')}</span></button>{isOwner && <button onClick={() => onDelete(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Trash2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>Apagar</span></button>}</div>
+          <div style={{ position: 'absolute ', right: 10, bottom: 60, display: 'flex ', flexDirection: 'column ', gap: 16, alignItems: 'center ', zIndex: 10 }}><button onClick={() => onLike(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: post.liked ? '#e11d48 ' : 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Heart size={28} fill={post.liked ? '#e11d48 ' : 'none '} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.like_count || 0}</span></button><button onClick={() => { if (!showComments) loadComments(); setShowComments(!showComments); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><MessageCircle size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{post.comment_count || 0}</span></button><button onClick={() => { const url = window.location.origin + '/mural?post=' + post.id; if (navigator.share) navigator.share({ title: 'Sigo com Fe', text: post.content, url }); else navigator.clipboard.writeText(url); }} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Share2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>{t('common.share')}</span></button>{isOwner && <button onClick={() => onDelete(post.id)} style={{ background: 'none ', border: 'none ', cursor: 'pointer ', color: 'white ', display: 'flex ', flexDirection: 'column ', alignItems: 'center ', gap: 2 }}><Trash2 size={28} /><span style={{ fontSize: 11, color: 'white ', fontWeight: 700 }}>Apagar</span></button>}</div>
           </button>
         </div>
       )}
       {isImage && (
-        <div style={{ width: '100%', maxHeight: 400, overflow: 'hidden' }}>
-          <img src={mediaUrl} alt="post" onClick={() => setImageModal(mediaUrl)} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }} />
+        <div style={{ width: '100%', maxHeight: 500, overflow: 'hidden', background: '#f8f9ff', display: 'flex', justifyContent: 'center' }}>
+          <img src={mediaUrl} alt="post" onClick={() => setImageModal(mediaUrl)} style={{ width: '100%', objectFit: 'contain', display: 'block', cursor: 'zoom-in', background: '#f8f9ff' }} />
         </div>
       )}
 
@@ -437,7 +439,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
           {comments.map((c, i) => (
             <div key={c.id || i} style={{ padding: '10px 0', borderBottom: '1px solid #f5f5f5' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg,#667eea,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 12, flexShrink: 0 }}>
+                <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 12, flexShrink: 0 }}>
                   {(c.full_name || c.author_name || 'U').charAt(0).toUpperCase()}
                 </div>
                 <div style={{ flex: 1 }}>
@@ -458,7 +460,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
                   {replyTo === (c.id || i) && user && (
                     <form onSubmit={(e) => { e.preventDefault(); submitComment(e); setReplyTo(null); }} style={{ display: 'flex', gap: 6, marginTop: 6 }}>
                       <input value={comment} onChange={e => setComment(e.target.value)} placeholder={`Responder a ${c.full_name || 'utilizador'}...`} style={{ flex: 1, padding: '6px 10px', borderRadius: 16, border: '1px solid #e2e8f0', fontSize: 12, outline: 'none' }} autoFocus />
-                      <button type="submit" style={{ padding: '6px 12px', borderRadius: 16, background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', color: 'white', cursor: 'pointer', fontSize: 12 }}>Enviar</button>
+                      <button type="submit" style={{ padding: '6px 12px', borderRadius: 16, background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', border: 'none', color: 'white', cursor: 'pointer', fontSize: 12 }}>Enviar</button>
                     </form>
                   )}
                 </div>
@@ -467,11 +469,11 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
           ))}
           {user && (
             <form onSubmit={submitComment} style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#667eea,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>
+              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>
                 {(user.full_name || 'U').charAt(0).toUpperCase()}
               </div>
               <input value={comment} onChange={e => setComment(e.target.value)} placeholder={t('mural.commentPlaceholder')} style={{ flex: 1, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none', background: '#f7f7f7' }} />
-              <button type="submit" style={{ padding: '8px 14px', borderRadius: 20, background: 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}><Send size={14} /></button>
+              <button type="submit" style={{ padding: '8px 14px', borderRadius: 20, background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}><Send size={14} /></button>
             </form>
           )}
         </div>
@@ -489,6 +491,7 @@ export default function MuralGrid() {
   const [viewMode, setViewMode] = useState('feed');
   const [showForm, setShowForm] = useState(false);
   const [postText, setPostText] = useState('');
+  const [postVisibility, setPostVisibility] = useState('public');
   const [postCategory, setPostCategory] = useState('testemunho');
   const [mediaFile, setMediaFile] = useState(null);
   const [mediaPreview, setMediaPreview] = useState(null);
@@ -506,6 +509,21 @@ export default function MuralGrid() {
   const photoRef = useRef(null);
   const videoRef = useRef(null);
   const musicRef = useRef(null);
+  const [activeLive, setActiveLive] = useState(null);
+
+  useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
+    const checkLive = async () => {
+      try {
+        const r = await fetch(API_URL + '/api/live-community/active');
+        const d = await r.json();
+        setActiveLive(d.live || null);
+      } catch(e) {}
+    };
+    checkLive();
+    const iv = setInterval(checkLive, 15000);
+    return () => clearInterval(iv);
+  }, []);
 
   // State for active video playback
   const [activeVideoId, setActiveVideoId] = useState(null);
@@ -624,9 +642,10 @@ export default function MuralGrid() {
       const res = await fetch(`${API}/feed`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify({ bg_music_url: audioUrl || null, bg_music_start: null, bg_music_duration: null,
           content: postText || '📸',
           category: postCategory,
+          visibility: postVisibility,
           media_url: mediaUrl || undefined,
           media_type: mediaType || undefined,
           audio_url: audioUrl || undefined,
@@ -660,9 +679,21 @@ export default function MuralGrid() {
   ];
 
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto', padding: 16 }}>
+    <>
+      <LiveViewers activeLive={activeLive} />
+      {false && (
+        <div onClick={() => window.location.href='/live-stream'} style={{ background:'linear-gradient(135deg,#e74c3c,#c0392b)', borderRadius:12, padding:'14px 20px', marginBottom:16, cursor:'pointer', display:'flex', alignItems:'center', gap:12, boxShadow:'0 4px 15px rgba(231,76,60,0.4)' }}>
+          <div style={{ width:12, height:12, background:'white', borderRadius:'50%' }}/>
+          <div style={{ flex:1 }}>
+            <p style={{ color:'white', fontWeight:800, fontSize:16, margin:0 }}>🔴 AO VIVO agora!</p>
+            <p style={{ color:'rgba(255,255,255,0.85)', fontSize:13, margin:0 }}>{activeLive?.user_name} está transmitindo</p>
+          </div>
+          <span style={{ color:'white', fontSize:13, fontWeight:600 }}>Entrar →</span>
+        </div>
+      )}
+    <div style={{ maxWidth: 900, margin: '0 auto', padding: 16 }}>
       {/* Header */}
-      <div style={{ background: 'linear-gradient(135deg,#667eea,#764ba2)', borderRadius: 16, padding: '20px 24px', marginBottom: 20, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', borderRadius: 16, padding: '20px 24px', marginBottom: 20, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>{t('mural.title')}</h1>
           <p style={{ margin: '4px 0 0', fontSize: 13, opacity: 0.85 }}>{t('mural.subtitle')}</p>
@@ -704,8 +735,9 @@ export default function MuralGrid() {
           )}
 
           <input ref={photoRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleMediaSelect(e, 'foto')} />
-          <input ref={videoRef} type="file" accept="video/*" capture="environment" style={{ display: 'none' }} onChange={e => handleMediaSelect(e, 'video')} />
-          <input ref={videoRef} type="file" accept="video/*" capture="environment" style={{ display: "none" }} onChange={e => handleMediaSelect(e, "video")} />
+          <input ref={videoRef} type="file" accept="video/*" style={{ display: 'none' }} onChange={e => handleMediaSelect(e, 'video')} />
+          
+          <input ref={videoRef} type="file" accept="video/*" style={{ display: "none" }} onChange={e => handleMediaSelect(e, "video")} />
           <input ref={musicRef} type="file" accept="audio/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files[0]; if (f) { setMusicFile(f); setMusicName(f.name); } }} />
 
           {/* Selected music from library */}
@@ -730,7 +762,20 @@ export default function MuralGrid() {
 
           {uploadError && <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#e11d48' }}>⚠️ {uploadError}</div>}
 
-          <button onClick={handleSubmit} disabled={uploading || (!postText.trim() && !mediaFile)} style={{ width: '100%', padding: 12, background: uploading ? '#ccc' : 'linear-gradient(135deg,#667eea,#764ba2)', border: 'none', borderRadius: 12, color: 'white', fontSize: 15, fontWeight: 600, cursor: uploading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+          {/* Selector de visibilidade */}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+            {[
+              { value: 'public', label: '🌍 ' + t('mural.visPublic', 'Público'), color: '#27ae60' },
+              { value: 'members', label: '⛪ ' + t('mural.visMembers', 'Membros'), color: '#2980b9' },
+              { value: 'private', label: '🔒 ' + t('mural.visPrivate', 'Privado'), color: '#7f8c8d' },
+            ].map(opt => (
+              <button key={opt.value} type="button" onClick={() => setPostVisibility(opt.value)}
+                style={{ flex: 1, padding: '6px 4px', borderRadius: 8, border: `2px solid ${postVisibility === opt.value ? opt.color : '#eee'}`, background: postVisibility === opt.value ? opt.color : 'white', color: postVisibility === opt.value ? 'white' : '#666', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          <button onClick={handleSubmit} disabled={uploading || (!postText.trim() && !mediaFile)} style={{ width: '100%', padding: 12, background: uploading ? '#ccc' : 'linear-gradient(135deg,#7a9e7e,#c4b89a)', border: 'none', borderRadius: 12, color: 'white', fontSize: 15, fontWeight: 600, cursor: uploading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
             {uploading ? t('mural.publishing') : <><Send size={16} /> {t('mural.publish')}</>}
           </button>
         </div>
@@ -739,10 +784,11 @@ export default function MuralGrid() {
       {/* Filtros */}
       <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4, marginBottom: 16, scrollbarWidth: 'none' }}>
         {FILTERS_CONFIG.map(f => (
-          <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{ padding: '8px 16px', borderRadius: 20, whiteSpace: 'nowrap', border: activeFilter === f.key ? 'none' : '1px solid #e2e8f0', background: activeFilter === f.key ? 'linear-gradient(135deg,#667eea,#764ba2)' : 'white', color: activeFilter === f.key ? 'white' : '#555', cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>{t(f.labelKey)}</button>
+          <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{ padding: '8px 16px', borderRadius: 20, whiteSpace: 'nowrap', border: activeFilter === f.key ? 'none' : '1px solid #e2e8f0', background: activeFilter === f.key ? 'linear-gradient(135deg,#7a9e7e,#c4b89a)' : 'white', color: activeFilter === f.key ? 'white' : '#555', cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>{t(f.labelKey)}</button>
         ))}
       </div>
 
+      <button onClick={()=>window.location.href='/desafio-biblico'} style={{padding:'8px 16px',borderRadius:20,border:'none',background:'linear-gradient(135deg,#6c47d4,#e74c3c)',color:'white',cursor:'pointer',fontSize:13,fontWeight:700,marginBottom:16,display:'flex',alignItems:'center',gap:6}}>🎮 {t('nav.challenge','Desafio Biblico')}</button>
       {/* Loading */}
       {loading && <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>{t('common.loading')}</div>}
 
@@ -758,7 +804,7 @@ export default function MuralGrid() {
                   mediaUrl.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
                     <div style={{ width: '100%', height: '100%', background: '#1a1a2e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Play size={28} color="#daa520" /></div>
                   ) : (
-                    <img src={mediaUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={mediaUrl} alt="" style={{ width: '100%', maxHeight: '400px', objectFit: 'contain', background: '#f8f8f8' }} />
                   )
                 ) : (
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(135deg,${color}22,white)`, padding: 8 }}>
@@ -776,7 +822,7 @@ export default function MuralGrid() {
       {!loading && viewMode === 'feed' && filteredPosts.map(post => (
         <PostCard
           key={post.id}
-          post={post}
+          post={post} bgMusicStart={post.bg_music_start} bgMusicDuration={post.bg_music_duration}
           onLike={handleLike}
           onDelete={handleDelete}
           token={token}
@@ -807,7 +853,7 @@ export default function MuralGrid() {
             ) : null}
             <div style={{ padding: "16px 20px 20px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                <div style={{ width: 38, height: 38, borderRadius: "50%", background: "linear-gradient(135deg,#667eea,#764ba2)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 700, fontSize: 14 }}>
+                <div style={{ width: 38, height: 38, borderRadius: "50%", background: "linear-gradient(135deg,#7a9e7e,#c4b89a)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 700, fontSize: 14 }}>
                   {(selectedPost.full_name || selectedPost.author_name || "U").charAt(0).toUpperCase()}
                 </div>
                 <div>
@@ -818,8 +864,14 @@ export default function MuralGrid() {
               {selectedPost.content && <p style={{ color: "#333", fontSize: 14, lineHeight: 1.65, margin: 0 }}>{selectedPost.content}</p>}
             </div>
           </div>
-        </div>
-      )}
+              <button 
+                onClick={(e) => { e.stopPropagation(); setActiveVideoId(post.id); }}
+                style={{ position: 'absolute', bottom: 10, left: 10, zIndex: 30, background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '20px', padding: '8px 12px', fontSize: '12px', fontWeight: 'bold', color: '#000', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}
+              >
+                {activeVideoId === post.id ? '?? TOCANDO' : '?? OUVIR MSICA'}
+              </button>
+            </div>
+          )}
 
       {/* Music Picker Modal */}
       {showMusicPicker && (
@@ -829,8 +881,23 @@ export default function MuralGrid() {
         />
       )}
     </div>
+    </>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

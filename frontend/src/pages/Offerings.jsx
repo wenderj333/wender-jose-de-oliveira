@@ -5,8 +5,19 @@ import { Heart, DollarSign, CreditCard, Save, Copy, Check, Gift, TrendingUp, Cal
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 
+const getCurrency = (lang) => {
+  const currencies = {
+    'pt': 'R$', 'pt-BR': 'R$', 'pt-PT': '€',
+    'en': '$', 'en-US': '$', 'en-GB': '£',
+    'de': '€', 'fr': '€', 'es': '€',
+    'ro': 'lei', 'ru': '₽'
+  };
+  return currencies[lang] || '€';
+};
+
 export default function Offerings() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currency = getCurrency(i18n.language);
   const { user, token } = useAuth();
   const isPastor = user?.role === 'pastor' || user?.role === 'admin';
   const [tab, setTab] = useState(isPastor ? 'config' : 'contribute');
@@ -16,6 +27,35 @@ export default function Offerings() {
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState('');
   const [loading, setLoading] = useState(true);
+  const [amount, setAmount] = useState('');
+  const [offerType, setOfferType] = useState('dizimo');
+  const [note, setNote] = useState('');
+  const [myChurch, setMyChurch] = useState(null);
+  const [paying, setPaying] = useState(false);
+  const [payMsg, setPayMsg] = useState('');
+
+  useEffect(() => {
+    if (!isPastor && token) {
+      fetch(`${API}/churches/my/church`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(r => r.json()).then(d => setMyChurch(d.church)).catch(() => {});
+    }
+  }, []);
+
+  async function handleContribute() {
+    if (!amount || parseFloat(amount) < 1) return setPayMsg('Valor minimo: 1€');
+    setPaying(true); setPayMsg('');
+    try {
+      const res = await fetch(`${API}/stripe/create-checkout-session`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: parseFloat(amount), description: offerType === 'dizimo' ? 'Dizimo' : 'Oferta', pastor_id: myChurch?.pastor_id, note }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+      else setPayMsg(data.error || 'Erro ao processar pagamento');
+    } catch { setPayMsg('Erro de conexao'); }
+    finally { setPaying(false); }
+  }
 
   useEffect(() => {
     if (isPastor) { fetchConfig(); fetchRecords(); }
@@ -185,18 +225,55 @@ export default function Offerings() {
         </form>
       )}
 
+      {/* Contribute Tab - para membros */}
+      {!isPastor && (
+        <div style={{ padding: '1rem' }}>
+          {myChurch ? (
+            <div style={{ background: '#f8f0ff', borderRadius: 12, padding: '1rem', marginBottom: 16, border: '1px solid #e0c8ff' }}>
+              <p style={{ margin: 0, fontWeight: 600, color: '#6C3FA0' }}>⛪ {myChurch.name}</p>
+              <p style={{ margin: '4px 0 0', fontSize: 13, color: '#666' }}>Pastor: {myChurch.pastor_name}</p>
+            </div>
+          ) : (
+            <div style={{ background: '#fff3e0', borderRadius: 12, padding: '1rem', marginBottom: 16 }}>
+              <p style={{ margin: 0, fontSize: 13, color: '#e65100' }}>⚠️ Não tens uma igreja associada. Vai a Igrejas e junta-te a uma.</p>
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+            {['dizimo', 'oferta'].map(type => (
+              <button key={type} onClick={() => setOfferType(type)}
+                style={{ flex: 1, padding: '10px', borderRadius: 10, border: `2px solid ${offerType === type ? '#6C3FA0' : '#eee'}`, background: offerType === type ? '#6C3FA0' : 'white', color: offerType === type ? 'white' : '#666', fontWeight: 600, cursor: 'pointer' }}>
+                {type === 'dizimo' ? '💰 Dízimo' : '🎁 Oferta'}
+              </button>
+            ))}
+          </div>
+          <label style={{ fontSize: 13, color: '#666', display: 'block', marginBottom: 4 }}>Valor ({currency})</label>
+          <input type="number" min="1" value={amount} onChange={e => setAmount(e.target.value)}
+            placeholder="Ex: 50"
+            style={{ width: '100%', padding: '12px', borderRadius: 10, border: '1px solid #ddd', fontSize: 16, marginBottom: 12, boxSizing: 'border-box' }} />
+          <label style={{ fontSize: 13, color: '#666', display: 'block', marginBottom: 4 }}>Mensagem (opcional)</label>
+          <textarea value={note} onChange={e => setNote(e.target.value)}
+            placeholder="Ex: Com gratidao a Deus..."
+            rows={3} style={{ width: '100%', padding: '10px', borderRadius: 10, border: '1px solid #ddd', fontSize: 14, marginBottom: 12, resize: 'none', boxSizing: 'border-box' }} />
+          {payMsg && <p style={{ color: payMsg.includes('Erro') ? '#e74c3c' : '#27ae60', fontSize: 13, marginBottom: 8 }}>{payMsg}</p>}
+          <button onClick={handleContribute} disabled={paying || !myChurch}
+            style={{ width: '100%', padding: '14px', borderRadius: 12, border: 'none', background: paying || !myChurch ? '#ccc' : 'linear-gradient(135deg,#667eea,#764ba2)', color: 'white', fontSize: 16, fontWeight: 700, cursor: paying || !myChurch ? 'not-allowed' : 'pointer' }}>
+            {paying ? 'A processar...' : `💳 Pagar ${amount ? currency + ' ' + amount : ''}`}
+          </button>
+        </div>
+      )}
+
       {/* Records Tab */}
       {tab === 'records' && (
         <>
           <div style={{ display: 'flex', gap: 12, marginBottom: '1rem', flexWrap: 'wrap' }}>
             <div style={{ flex: 1, minWidth: 140, padding: '1rem', borderRadius: 12, background: '#e8f5e9', textAlign: 'center' }}>
               <TrendingUp size={20} color="#2e7d32" />
-              <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#2e7d32' }}>R$ {monthTotal.toFixed(2)}</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#2e7d32' }}>{currency} {monthTotal.toFixed(2)}</div>
               <div style={{ fontSize: '0.75rem', color: '#666' }}>{t('offerings.thisMonth')}</div>
             </div>
             <div style={{ flex: 1, minWidth: 140, padding: '1rem', borderRadius: 12, background: '#fff3e0', textAlign: 'center' }}>
               <Gift size={20} color="#e65100" />
-              <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#e65100' }}>R$ {totalAmount.toFixed(2)}</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#e65100' }}>{currency} {totalAmount.toFixed(2)}</div>
               <div style={{ fontSize: '0.75rem', color: '#666' }}>{t('offerings.totalGeneral')}</div>
             </div>
             <div style={{ flex: 1, minWidth: 140, padding: '1rem', borderRadius: 12, background: '#e3f2fd', textAlign: 'center' }}>
@@ -225,7 +302,7 @@ export default function Offerings() {
                     </div>
                     {r.note && <div style={{ fontSize: '0.75rem', color: '#666', fontStyle: 'italic' }}>"{r.note}"</div>}
                   </div>
-                  <div style={{ fontWeight: 700, fontSize: '1.1rem', color: '#4caf50' }}>R$ {parseFloat(r.amount).toFixed(2)}</div>
+                  <div style={{ fontWeight: 700, fontSize: '1.1rem', color: '#4caf50' }}>{currency} {parseFloat(r.amount).toFixed(2)}</div>
                 </div>
               ))}
             </div>

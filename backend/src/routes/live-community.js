@@ -1,55 +1,88 @@
-const express = require('express');
+﻿const express = require('express');
 const router = express.Router();
-const { pool } = require('../config/connection');
+const db = require('../db/connection');
 
-// GET /api/live-community/playlist - obter músicas para tocar
+async function ensureTables() {
+  await db.query(`CREATE TABLE IF NOT EXISTS live_community_users (user_id VARCHAR(100) PRIMARY KEY, last_seen TIMESTAMP DEFAULT NOW())`);
+  await db.query(`CREATE TABLE IF NOT EXISTS live_chat_history (id SERIAL PRIMARY KEY, user_id VARCHAR(100), user_name VARCHAR(100), user_avatar TEXT, message TEXT, created_at TIMESTAMP DEFAULT NOW())`);
+}
+ensureTables().catch(console.error);
+
 router.get('/playlist', async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT id, title, artist, url AS file_url, cover_url FROM music WHERE is_public = true ORDER BY RANDOM() LIMIT 50'
-    );
-    console.log(`✅ Live Community: ${result.rows.length} músicas públicas encontradas`);
+    const result = await db.query('SELECT id, title, artist, url AS file_url, cover_url FROM music WHERE is_public = true ORDER BY RANDOM() LIMIT 50');
     res.json({ songs: result.rows });
-  } catch (err) {
-    console.error('❌ Erro ao carregar playlist:', err);
-    res.status(500).json({ error: 'Erro ao carregar playlist' });
-  }
+  } catch (err) { res.status(500).json({ error: 'Erro' }); }
 });
 
-// Rastrear usuários online (em memória)
-let liveUsers = new Set();
-
-// GET /api/live-community/stats - estatísticas (online count)
 router.get('/stats', async (req, res) => {
-  res.json({ onlineCount: liveUsers.size });
+  try {
+    await db.query(`DELETE FROM live_community_users WHERE last_seen < NOW() - INTERVAL '10 minutes'`);
+    const r = await db.query('SELECT COUNT(*) FROM live_community_users');
+    res.json({ onlineCount: parseInt(r.rows[0].count) });
+  } catch (err) { res.json({ onlineCount: 0 }); }
 });
 
-// POST /api/live-community/join - marcar como online
 router.post('/join', async (req, res) => {
   const { userId } = req.body;
-  if (userId) {
-    liveUsers.add(userId);
-    console.log(`✅ User ${userId} joined live community. Online: ${liveUsers.size}`);
-  }
-  res.json({ onlineCount: liveUsers.size });
+  try {
+    if (userId) await db.query(`INSERT INTO live_community_users (user_id, last_seen) VALUES ($1, NOW()) ON CONFLICT (user_id) DO UPDATE SET last_seen = NOW()`, [userId]);
+    await db.query(`DELETE FROM live_community_users WHERE last_seen < NOW() - INTERVAL '10 minutes'`);
+    const r = await db.query('SELECT COUNT(*) FROM live_community_users');
+    res.json({ onlineCount: parseInt(r.rows[0].count) });
+  } catch (err) { res.json({ onlineCount: 0 }); }
 });
 
-// POST /api/live-community/leave - marcar como offline
 router.post('/leave', async (req, res) => {
   const { userId } = req.body;
-  if (userId) {
-    liveUsers.delete(userId);
-    console.log(`👋 User ${userId} left live community. Online: ${liveUsers.size}`);
-  }
-  res.json({ onlineCount: liveUsers.size });
+  try {
+    if (userId) await db.query('DELETE FROM live_community_users WHERE user_id = $1', [userId]);
+    const r = await db.query('SELECT COUNT(*) FROM live_community_users');
+    res.json({ onlineCount: parseInt(r.rows[0].count) });
+  } catch (err) { res.json({ onlineCount: 0 }); }
 });
 
-// Limpar usuários inativos a cada 5 minutos
-setInterval(() => {
-  if (liveUsers.size > 0) {
-    console.log(`🧹 Cleaning inactive users. Before: ${liveUsers.size}`);
-    liveUsers.clear(); // Simples: limpa tudo (em produção, rastrear timestamps)
-  }
-}, 5 * 60 * 1000);
+router.get('/history', async (req, res) => {
+  try {
+    const r = await db.query(`SELECT user_id as "userId", user_name as "userName", user_avatar as "userAvatar", message as text, created_at as time FROM live_chat_history ORDER BY created_at DESC LIMIT 50`);
+    res.json({ messages: r.rows.reverse() });
+  } catch (err) { res.json({ messages: [] }); }
+});
 
+router.post('/history', async (req, res) => {
+  const { userId, userName, userAvatar, message } = req.body;
+  try {
+    await db.query(`INSERT INTO live_chat_history (user_id, user_name, user_avatar, message) VALUES ($1, $2, $3, $4)`, [userId, userName, userAvatar, message]);
+    await db.query(`DELETE FROM live_chat_history WHERE id NOT IN (SELECT id FROM live_chat_history ORDER BY created_at DESC LIMIT 200)`);
+    res.json({ ok: true });
+  } catch (err) { res.json({ ok: false }); }
+});
+
+
+router.post('/start', async (req, res) => {
+  const { userId, userName, userAvatar, title } = req.body;
+  try {
+    await db.query(`CREATE TABLE IF NOT EXISTS active_lives (id SERIAL PRIMARY KEY, user_id VARCHAR(100), user_name VARCHAR(100), user_avatar TEXT, title TEXT, started_at TIMESTAMP DEFAULT NOW())`);
+    await db.query(`DELETE FROM active_lives WHERE user_id = $1`, [userId]);
+    await db.query(`INSERT INTO active_lives (user_id, user_name, user_avatar, title) VALUES ($1, $2, $3, $4)`, [userId, userName, userAvatar, title || 'Live ao Vivo']);
+    res.json({ ok: true });
+  } catch (err) { res.status(500).json({ error: 'Erro' }); }
+});
+
+router.post('/stop', async (req, res) => {
+  const { userId } = req.body;
+  try {
+    await db.query(`DELETE FROM active_lives WHERE user_id = $1`, [userId]);
+    res.json({ ok: true });
+  } catch (err) { res.status(500).json({ error: 'Erro' }); }
+});
+
+router.get('/active', async (req, res) => {
+  try {
+    await db.query(`CREATE TABLE IF NOT EXISTS active_lives (id SERIAL PRIMARY KEY, user_id VARCHAR(100), user_name VARCHAR(100), user_avatar TEXT, title TEXT, started_at TIMESTAMP DEFAULT NOW())`);
+    await db.query(`DELETE FROM active_lives WHERE started_at < NOW() - INTERVAL '4 hours'`);
+    const r = await db.query(`SELECT * FROM active_lives ORDER BY started_at DESC LIMIT 1`);
+    res.json({ live: r.rows[0] || null });
+  } catch (err) { res.json({ live: null }); }
+});
 module.exports = router;

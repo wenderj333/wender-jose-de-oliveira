@@ -1,4 +1,4 @@
-/* =============================================
+﻿/* =============================================
    SIGO COM FÉ — Tema Claro Suave (Azul Fraco + Dourado)
    ============================================= */
 
@@ -53,12 +53,12 @@ body {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: 56px;
-  background: linear-gradient(135deg, var(--fb2) 0%, var(--fb) 60%, #6a9ade 100%);
+  background: linear-gradient(135deg, #7a9e7e 0%, #8fac7a 60%, #c4b89a 100%);
   display: flex;
   align-items: center;
   padding: 0 20px;
   z-index: 200;
-  box-shadow: 0 2px 16px rgba(53,104,184,0.2);
+  box-shadow: 0 2px 16px rgba(122,158,126,0.2);
 }
 
 .nav-item {
@@ -253,7 +253,7 @@ body {
 .mobile-only { display: none !important; }
 .desktop-only { display: block; }
 
-@media (max-width: 1100px) {
+@media (max-width: 1024px) {
   .desktop-only { display: none !important; }
   .mobile-only { display: flex !important; }
   .modern-layout { grid-template-columns: 1fr; padding: 10px 8px; }
@@ -262,3 +262,4 @@ body {
 @media (max-width: 900px) {
   .nav-scroll { display: none !important; }
 }
+

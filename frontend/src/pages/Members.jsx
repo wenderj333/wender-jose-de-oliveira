@@ -1,220 +1,160 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useAuth } from '../context/AuthContext';
-import { Users, Send, ArrowLeft, User, Mail, Calendar, Shield, MessageCircle, Search, UserPlus } from 'lucide-react';
+﻿import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { Search, Loader2 } from "lucide-react";
 
-const API = (import.meta.env.VITE_API_URL || '') + '/api';
-
-function timeAgo(d, t) {
-  if (!d) return t('members.never', 'Nunca');
-  const diff = Date.now() - new Date(d).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return t('members.now', 'Agora');
-  if (mins < 60) return t('members.minsAgo', '{{mins}}min atras', { mins });
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return t('members.hoursAgo', '{{hrs}}h atras', { hrs });
-  const days = Math.floor(hrs / 24);
-  return t('members.daysAgo', '{{days}}d atras', { days });
-}
-
-const ROLE_COLORS = { member: '#666', leader: '#e67e22', pastor: '#4caf50', admin: '#e74c3c' };
-const ADMIN_ID = 'c7c930da-5fe8-4b4e-887d-ba547804b7e1';
+const API = (import.meta.env.VITE_API_URL || "") + "/api";
 
 export default function Members() {
-  const { t } = useTranslation();
-  const { token, user } = useAuth();
-  const ROLE_LABELS = {
-    member: t('members.roleMember', 'Membro'),
-    leader: t('members.roleLeader', 'Lider'),
-    pastor: t('members.rolePastor', 'Pastor'),
-    admin: t('members.roleAdmin', 'Admin')
-  };
+  const { token } = useAuth();
   const navigate = useNavigate();
-  const isAdmin = user?.id === ADMIN_ID;
-  const [members, setMembers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const [selectedMember, setSelectedMember] = useState(null);
-  const [messages, setMessages] = useState([]);
-  const [newMsg, setNewMsg] = useState('');
-  const [sending, setSending] = useState(false);
-  const [loadingMsgs, setLoadingMsgs] = useState(false);
-  const [friendMsg, setFriendMsg] = useState('');
-  const [sentRequests, setSentRequests] = useState(new Set());
-  const chatEndRef = useRef(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [friendStatus, setFriendStatus] = useState({});
 
-  useEffect(() => { fetchMembers(); }, []);
-  useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+  useEffect(() => {
+    async function fetchMembers() {
+      try {
+        const t = token || localStorage.getItem('token');
+        const res = await fetch(`${API}/members`, {
+          headers: { Authorization: "Bearer " + t }
+        });
+        if (!res.ok) { setLoading(false); return; }
+        const data = await res.json();
+        const userList = Array.isArray(data) ? data : (data.members || data.users || []);
+        setUsers(userList);
+      } catch (err) {
+        console.error("Erro:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchMembers();
+  }, [token]);
 
-  async function fetchMembers() {
-    try {
-      const res = await fetch(`${API}/members`, { headers: { Authorization: `Bearer ${token}` } });
-      const data = await res.json();
-      setMembers(data.members || []);
-    } catch (err) { console.error(err); }
-    finally { setLoading(false); }
-  }
-
-  async function sendFriendRequest(e, memberId) {
-    e.stopPropagation();
-    try {
-      const res = await fetch(`${API}/friends/request`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ addressee_id: memberId }),
-      });
-      const data = await res.json();
-      setFriendMsg(data.message || data.error || 'Pedido enviado!'); setSentRequests(prev => new Set([...prev, memberId]));
-      setTimeout(() => setFriendMsg(''), 3000);
-    } catch (err) { console.error(err); }
-  }
-
-  async function openChat(e, member) {
-    e.stopPropagation();
-    setSelectedMember(member);
-    setLoadingMsgs(true);
-    try {
-      const res = await fetch(`${API}/members/messages/${member.id}`, { headers: { Authorization: `Bearer ${token}` } });
-      const data = await res.json();
-      setMessages(data.messages || []);
-    } catch (err) { console.error(err); }
-    finally { setLoadingMsgs(false); }
-  }
-
-  async function sendMessage(e) {
-    e.preventDefault();
-    if (!newMsg.trim() || sending) return;
-    setSending(true);
-    try {
-      const res = await fetch(`${API}/members/messages`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ receiverId: selectedMember.id, content: newMsg }),
-      });
-      const data = await res.json();
-      if (data.message) { setMessages(prev => [...prev, data.message]); setNewMsg(''); }
-    } catch (err) { console.error(err); }
-    finally { setSending(false); }
-  }
-
-  const filtered = members.filter(m =>
-    m.full_name?.toLowerCase().includes(search.toLowerCase()) ||
-    m.email?.toLowerCase().includes(search.toLowerCase())
+  const filtered = [...users].sort((a,b) => (b.avatar_url?1:0)-(a.avatar_url?1:0)).filter(u =>
+    u.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    u.full_name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const getAvatarUrl = (url) => url ? (url.startsWith('http') ? url : `${import.meta.env.VITE_API_URL || ''}${url}`) : null;
-
-  if (selectedMember) {
-    return (
-      <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem', height: 'calc(100vh - 120px)', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '0.75rem', background: '#fff', borderRadius: 12, marginBottom: '0.5rem', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
-          <button onClick={() => setSelectedMember(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-            <ArrowLeft size={22} color="#1a0a3e" />
-          </button>
-          <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#4caf50', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-            {selectedMember.avatar_url
-              ? <img src={getAvatarUrl(selectedMember.avatar_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              : <User size={20} color="#fff" />}
-          </div>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1a0a3e' }}>{selectedMember.full_name}</div>
-            <div style={{ fontSize: '0.75rem', color: ROLE_COLORS[selectedMember.role] }}>{ROLE_LABELS[selectedMember.role]}</div>
-          </div>
-        </div>
-        <div style={{ flex: 1, overflowY: 'auto', padding: '0.5rem', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {loadingMsgs ? (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>Carregando...</div>
-          ) : messages.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
-              <MessageCircle size={40} style={{ opacity: 0.3, marginBottom: 8 }} />
-              <p>Nenhuma mensagem ainda.</p>
-            </div>
-          ) : messages.map(msg => {
-            const isMine = msg.sender_id === selectedMember.id ? false : true;
-            return (
-              <div key={msg.id} style={{ alignSelf: isMine ? 'flex-end' : 'flex-start', maxWidth: '75%', padding: '0.6rem 0.9rem', borderRadius: 16, background: isMine ? '#4caf50' : '#f0f0f0', color: isMine ? '#fff' : '#333', fontSize: '0.9rem', lineHeight: 1.4 }}>
-                {msg.content}
-                <div style={{ fontSize: '0.65rem', opacity: 0.7, marginTop: 4, textAlign: 'right' }}>
-                  {new Date(msg.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                </div>
-              </div>
-            );
-          })}
-          <div ref={chatEndRef} />
-        </div>
-        <form onSubmit={sendMessage} style={{ display: 'flex', gap: 8, padding: '0.5rem 0' }}>
-          <input value={newMsg} onChange={e => setNewMsg(e.target.value)} placeholder="Escreva sua mensagem..."
-            style={{ flex: 1, padding: '0.7rem 1rem', borderRadius: 25, border: '1px solid #ddd', fontSize: '0.9rem' }} />
-          <button type="submit" disabled={sending || !newMsg.trim()} style={{ width: 44, height: 44, borderRadius: '50%', border: 'none', background: newMsg.trim() ? '#4caf50' : '#ccc', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Send size={18} color="#fff" />
-          </button>
-        </form>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div style={{ display:'flex', justifyContent:'center', alignItems:'center', height:'50vh' }}>
+      <Loader2 className="animate-spin" size={32} color="#6c63ff" />
+    </div>
+  );
 
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto', padding: '1rem 0.5rem' }}>
-      <h1 style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '1.5rem', color: '#1a0a3e', marginBottom: '1rem' }}>
-        <Users size={24} /> {t('members.title', 'Membros da Comunidade')}
-      </h1>
-      {friendMsg && <div style={{ background: '#d4edda', color: '#155724', padding: '10px 16px', borderRadius: 8, marginBottom: 12 }}>{friendMsg}</div>}
-      <div style={{ position: 'relative', marginBottom: '1rem' }}>
-        <Search size={18} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#999' }} />
-        <input value={search} onChange={e => setSearch(e.target.value)} placeholder={t('members.searchPlaceholder', 'Buscar membro...')}
-          style={{ width: '100%', padding: '0.7rem 0.7rem 0.7rem 2.5rem', borderRadius: 12, border: '1px solid #ddd', fontSize: '0.9rem', boxSizing: 'border-box' }} />
+    <div style={{ maxWidth:"900px", margin:"0 auto", padding:"24px 16px" }}>
+      <h2 style={{ fontSize:"22px", fontWeight:"800", marginBottom:"20px", color:"#1a1a1a" }}>
+        Membros da Comunidade
+      </h2>
+
+      {/* Pesquisa */}
+      <div style={{ position:'relative', marginBottom:'28px' }}>
+        <Search style={{ position:'absolute', left:'14px', top:'50%', transform:'translateY(-50%)', color:'#aaa' }} size={18} />
+        <input
+          type="text"
+          placeholder="Pesquisar membro..."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+          style={{
+            width:'100%', padding:'12px 12px 12px 44px',
+            borderRadius:'12px', border:'1px solid #e0e0e0',
+            background:'#f7f7f7', fontSize:'15px', outline:'none',
+            boxSizing:'border-box'
+          }}
+        />
       </div>
-      <div style={{ display: 'flex', gap: 12, marginBottom: '1rem', flexWrap: 'wrap' }}>
-        <div style={{ padding: '0.5rem 1rem', borderRadius: 10, background: '#e8f5e9', fontSize: '0.85rem', color: '#2e7d32', fontWeight: 600 }}>
-          {t('members.memberCount', '{{count}} membros', { count: members.length })}
-        </div>
-        <div style={{ padding: '0.5rem 1rem', borderRadius: 10, background: '#fff3e0', fontSize: '0.85rem', color: '#e65100', fontWeight: 600 }}>
-          {t('members.pastorCount', '{{count}} pastores', { count: members.filter(m => m.role === 'pastor').length })}
-        </div>
-      </div>
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#999' }}>Carregando membros...</div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {filtered.map(member => (
-            <div key={member.id} onClick={() => navigate(`/perfil/${member.id}`)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '0.75rem 1rem', background: '#fff', borderRadius: 12, border: '1px solid #eee', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', cursor: 'pointer' }}>
-              <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#daa520', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                {member.avatar_url
-                  ? <img src={getAvatarUrl(member.avatar_url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : <User size={22} color="#fff" />}
+
+      {/* Grid de Cards */}
+      <div style={{
+        display:'grid',
+        gridTemplateColumns:'repeat(auto-fill, minmax(160px, 1fr))',
+        gap:'16px'
+      }}>
+        {filtered.length === 0 ? (
+          <p style={{ color:'#aaa', gridColumn:'1/-1', textAlign:'center' }}>Nenhum membro encontrado.</p>
+        ) : (
+          filtered.map(user => (
+            <div
+              key={user.id}
+              onClick={() => navigate(`/perfil/${user.id}`)}
+              style={{
+                background:'#fff',
+                borderRadius:'16px',
+                boxShadow:'0 2px 12px rgba(0,0,0,0.08)',
+                padding:'20px 12px',
+                display:'flex',
+                flexDirection:'column',
+                alignItems:'center',
+                gap:'10px',
+                cursor:'pointer',
+                transition:'transform 0.15s, box-shadow 0.15s',
+                border:'1px solid #f0f0f0'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform='translateY(-4px)'; e.currentTarget.style.boxShadow='0 6px 20px rgba(108,99,255,0.15)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 2px 12px rgba(0,0,0,0.08)'; }}
+            >
+              {/* Avatar */}
+              <div style={{
+                width:'72px', height:'72px', borderRadius:'50%',
+                overflow:'hidden',
+                border:'3px solid transparent', background:'linear-gradient(white,white) padding-box, linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888) border-box',
+                boxShadow:'0 0 0 3px #e8e6ff'
+              }}>
+                <img
+                  src={user.avatar_url || "/pro.jpg"}
+                  style={{ width:'100%', height:'100%', objectFit:'cover' }}
+                  onError={e => { e.target.src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"; }}
+                />
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1a0a3e' }}>{member.full_name}</div>
-                {isAdmin && (
-                  <div style={{ fontSize: '0.75rem', color: '#999', display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <Mail size={12} /> {member.email}
-                  </div>
-                )}
-                <div style={{ display: 'flex', gap: 8, marginTop: 3 }}>
-                  <span style={{ fontSize: '0.7rem', color: ROLE_COLORS[member.role], fontWeight: 600 }}>{ROLE_LABELS[member.role]}</span>
-                  <span style={{ fontSize: '0.7rem', color: '#aaa' }}>
-                    <Calendar size={10} style={{ verticalAlign: 'middle' }} /> {timeAgo(member.last_seen_at, t)}
-                  </span>
-                </div>
+
+              {/* Nome */}
+              <div style={{ textAlign:'center' }}>
+                <div style={{ fontWeight:'700', fontSize:'14px', color:'#1a1a1a' }}>{user.username}</div>
+                <div style={{ fontSize:'12px', color:'#999', marginTop:'2px' }}>{user.full_name || "Membro"}</div>
               </div>
-              <div style={{ display: 'flex', gap: 6 }}>
-                {member.id !== user?.id && member.friendship_status !== 'accepted' && (
-                  <button onClick={(e) => !sentRequests.has(member.id) && sendFriendRequest(e, member.id)} style={{ padding: '0.4rem 0.8rem', borderRadius: 20, border: 'none', background: sentRequests.has(member.id) ? '#888' : '#1a0a3e', color: '#fff', cursor: sentRequests.has(member.id) ? 'default' : 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', fontWeight: 600 }}>
-                    <UserPlus size={14} /> {sentRequests.has(member.id) ? 'Pendente' : 'Amigo'}
-                  </button>
-                )}
-                <button onClick={(e) => openChat(e, member)} style={{ padding: '0.4rem 0.8rem', borderRadius: 20, border: 'none', background: '#4caf50', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', fontWeight: 600 }}>
-                  <MessageCircle size={14} /> Chat
+
+              {/* Botão */}
+              <button
+                onClick={() => navigate(`/perfil/${user.id}`)}
+                style={{
+                  background:'#ffffff',
+                  color:'#1a1a1a', border:'1px solid #e0e0e0',
+                  borderRadius:'20px', padding:'6px 18px',
+                  fontSize:'12px', fontWeight:'600', cursor:'pointer',
+                  width:'100%', marginBottom:'6px'
+                }}>
+                Ver Perfil
+              </button>
+              <div style={{ display:'flex', gap:'6px', width:'100%' }}>
+                <button
+                  onClick={e => { e.stopPropagation(); if(friendStatus[user.id]) return; fetch((import.meta.env.VITE_API_URL || '') + '/api/friends/request', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('token') }, body: JSON.stringify({ addressee_id: user.id }) }).then(r => r.json()).then(d => { if(!d.error) setFriendStatus(prev => ({...prev, [user.id]: 'pending'})); else alert(d.error); }).catch(() => alert('Erro')); }}
+                  style={{
+                    flex:1, background:'#f0f0f0', color:'#6c63ff',
+                    border:'1px solid #6c63ff', borderRadius:'16px',
+                    padding:'4px 0', fontSize:'11px', fontWeight:'600', cursor:'pointer'
+                  }}>
+                  {friendStatus[user.id] === 'pending' ? '⏳ Pendente' : friendStatus[user.id] === 'accepted' ? '✓ Amigos' : '+ Seguir'}
+                </button>
+                <button
+                  onClick={e => { e.stopPropagation(); navigate('/mensagens/' + user.id); }}
+                  style={{
+                    flex:1, background:'#f0f0f0', color:'#333',
+                    border:'1px solid #ddd', borderRadius:'16px',
+                    padding:'4px 0', fontSize:'11px', fontWeight:'600', cursor:'pointer'
+                  }}>
+                  ? Msg
                 </button>
               </div>
             </div>
-          ))}
-          {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>{t('members.noMembers', 'Nenhum membro encontrado')}</div>
-          )}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </div>
   );
 }
+
+
+

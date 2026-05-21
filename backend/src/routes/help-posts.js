@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
+const { createNotification } = require('./notifications');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
@@ -16,6 +17,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
         category VARCHAR(50) DEFAULT 'general',
         post_type VARCHAR(30) DEFAULT 'request',
         content TEXT NOT NULL,
+        pix_key TEXT,
         is_anonymous BOOLEAN DEFAULT false,
         media_url TEXT,
         prayer_count INT DEFAULT 0,
@@ -37,6 +39,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
         post_id UUID REFERENCES help_posts(id) ON DELETE CASCADE,
         user_id UUID REFERENCES users(id) ON DELETE CASCADE,
         content TEXT NOT NULL,
+        pix_key TEXT,
         is_anonymous BOOLEAN DEFAULT false,
         created_at TIMESTAMPTZ DEFAULT NOW()
       )
@@ -111,17 +114,17 @@ router.get('/', optionalAuth, async (req, res) => {
 // POST /api/help-posts — criar post (requer autenticação)
 router.post('/', authenticate, async (req, res) => {
   try {
-    const { content, category = 'general', post_type = 'request', is_anonymous = false, media_url } = req.body;
+    const { content, category = 'general', post_type = 'request', is_anonymous = false, media_url, pix_key, type } = req.body;
 
     if (!content || !content.trim()) {
       return res.status(400).json({ error: 'Conteúdo é obrigatório' });
     }
 
     const result = await db.query(
-      `INSERT INTO help_posts (user_id, category, post_type, content, is_anonymous, media_url)
+      `INSERT INTO help_posts (user_id, category, post_type, content, is_anonymous, media_url, pix_key)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
-      [req.user.id, category, post_type, content.trim(), is_anonymous, media_url || null]
+      [req.user.id, category, post_type || type || 'request', content.trim(), is_anonymous, media_url || null, pix_key || null]
     );
 
     res.status(201).json({ post: result.rows[0] });
@@ -166,6 +169,14 @@ router.post('/:id/pray', authenticate, async (req, res) => {
         [id]
       );
       prayed = true;
+      // Notificar dono do pedido
+      try {
+        const postOwner = await db.query(`SELECT user_id, content FROM help_posts WHERE id = $1`, [id]);
+        if (postOwner.rows.length > 0 && postOwner.rows[0].user_id !== userId) {
+          const preview = postOwner.rows[0].content?.substring(0,50);
+          await createNotification(postOwner.rows[0].user_id, 'prayer', 'Alguem orou pelo teu pedido 🙏', `Mais uma pessoa esta contigo nesta oracao: ${preview}...`, { postId: id });
+        }
+      } catch(ne) {}
     }
 
     const postResult = await db.query(

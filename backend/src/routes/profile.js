@@ -5,7 +5,7 @@ const { authenticate } = require('../middleware/auth');
 router.get('/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, favorite_verse, testimony, life_motto, church_denomination, faith_years, platform_purpose, spiritual_gifts, interest_areas, christian_values, spiritual_state, profile_public, verse_public, testimony_public, church_public FROM users WHERE id = $1', [userId]);
+    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name FROM users WHERE id = $1', [userId]);
     const user = result.rows[0];
 
     if (!user) return res.status(404).json({ error: 'User not found' });
@@ -15,8 +15,8 @@ router.get('/:userId', async (req, res) => {
 
     res.json({ user });
   } catch (err) {
-    console.error('Error fetching user profile:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error fetching user profile:', err.message, err.stack);
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -57,7 +57,7 @@ router.patch('/', authenticate, async (req, res) => {
 
     await db.query(`UPDATE users SET ${setClause} WHERE id = $${updateKeys.length + 1}`, updateValues);
 
-    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, favorite_verse, testimony, life_motto, church_denomination, faith_years, platform_purpose, spiritual_gifts, interest_areas, christian_values, spiritual_state, profile_public, verse_public, testimony_public, church_public FROM users WHERE id = $1', [userId]);
+    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name FROM users WHERE id = $1', [userId]);
     const user = result.rows[0];
 
     res.json({ success: true, user });
@@ -79,7 +79,7 @@ router.patch('/photo', authenticate, async (req, res) => {
     await db.query('UPDATE users SET avatar_url = $1 WHERE id = $2', [photoURL, userId]);
 
     const updatedUser = await db.query('SELECT avatar_url FROM users WHERE id = $1', [userId]);
-    res.json({ success: true, user: { photoURL: updatedUser.rows[0].avatar_url } });
+    res.json({ success: true, user: { photoURL: updatedUser.rows[0].avatar_url, avatar_url: updatedUser.rows[0].avatar_url } });
   } catch (err) {
     console.error('Error updating profile photo:', err);
     res.status(500).json({ error: 'Internal server error' });

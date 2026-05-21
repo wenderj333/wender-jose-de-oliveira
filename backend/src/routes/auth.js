@@ -4,15 +4,15 @@ const User = require('../models/User');
 const { generateToken, authenticate } = require('../middleware/auth');
 
 // POST /api/auth/register
+const { sendWelcomeEmail } = require('../services/email');
+
 router.post('/register', async (req, res) => {
   try {
     const { email, password, full_name, role, avatar_url } = req.body;
     if (!email || !password || !full_name) {
       return res.status(400).json({ error: 'Email, senha e nome completo são obrigatórios' });
     }
-    if (!avatar_url) {
-      return res.status(400).json({ error: 'Foto de perfil é obrigatória para se registrar' });
-    }
+
 
     const existing = await User.findByEmail(email);
     if (existing) return res.status(409).json({ error: 'Email já cadastrado' });
@@ -27,6 +27,7 @@ router.post('/register', async (req, res) => {
     }
 
     const token = generateToken(user);
+    sendWelcomeEmail(email, full_name).catch(()=>{});
     res.status(201).json({ user, token });
   } catch (err) {
     console.error('Erro no registro:', err);

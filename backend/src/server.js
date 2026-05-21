@@ -437,6 +437,8 @@ const path = require('path');
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // Routes
+const quizRoutes = require('./routes/quiz');
+app.use('/api/quiz', quizRoutes);
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/prayers', require('./routes/prayer'));
 app.use('/api/churches', require('./routes/churches'));
@@ -509,8 +511,38 @@ const helpRoute = require('./routes/help');
 helpRoute.setWss(wss);
 
 const PORT = process.env.PORT || 3001;
+
+// Criar tabela quiz_resultados se nao existir
+const { Pool } = require('pg');
+const _pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+_pool.query('CREATE TABLE IF NOT EXISTS quiz_resultados (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID REFERENCES users(id) ON DELETE CASCADE, pontos INTEGER DEFAULT 0, perguntas_corretas INTEGER DEFAULT 5, perguntas_total INTEGER DEFAULT 5, livro VARCHAR(50), tempo_medio FLOAT DEFAULT 0, criado_em TIMESTAMP DEFAULT NOW())').then(()=>console.log('quiz_resultados OK')).catch(e=>console.log('quiz_resultados erro:', e.message));
+
 server.listen(PORT, () => {
   console.log(`🙏 Sigo com Fé API rodando na porta ${PORT}`);
   console.log(`📡 WebSocket disponível em ws://localhost:${PORT}/ws`);
 });
 
+
+// deploy trigger
+
+// Adicionar coluna fcm_token se nao existir
+async function addFcmTokenColumn() {
+  try {
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS fcm_token TEXT');
+    console.log('? fcm_token column ready');
+  } catch(e) {
+    console.error('fcm_token migration error:', e.message);
+  }
+}
+addFcmTokenColumn();
+
+// Adicionar coluna pix_key se nao existir
+async function addPixKeyColumn() {
+  try {
+    await pool.query('ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS pix_key TEXT');
+    console.log('pix_key column ready');
+  } catch(e) {
+    console.error('pix_key migration error:', e.message);
+  }
+}
+addPixKeyColumn();
