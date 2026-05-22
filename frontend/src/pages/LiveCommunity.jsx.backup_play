@@ -102,16 +102,12 @@ export default function LiveCommunity() {
     
     if (!hasStarted) {
       setHasStarted(true);
-      if (songs[currentSongIndex]?.file_url) {
-        audioRef.current.src = songs[currentSongIndex].file_url;
-      }
     }
     
     if (isPlaying) {
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.load();
       audioRef.current.play()
         .then(() => setIsPlaying(true))
         .catch((err) => {
