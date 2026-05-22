@@ -24,20 +24,11 @@ export default function LiveCommunity() {
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
 
-  // Carregar playlist e autoplay
+  // Carregar playlist
   useEffect(() => {
     fetch(`${API_BASE}/api/live-community/playlist`)
       .then(r => r.json())
-      .then(data => {
-        const list = data.songs || [];
-        setSongs(list);
-        if (list.length > 0 && audioRef.current) {
-          audioRef.current.src = list[0].file_url;
-          audioRef.current.play()
-            .then(() => { setIsPlaying(true); setHasStarted(true); })
-            .catch(() => {});
-        }
-      })
+      .then(data => setSongs(data.songs || []))
       .catch(() => {});
   }, []);
 
