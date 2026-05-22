@@ -54,11 +54,7 @@ export default function LiveCommunity() {
     if (!send || !on || !off) return;
     
     const handleMessage = (data) => {
-      setChatMessages(prev => {
-        const exists = prev.some(m => m.id && m.id === data.id);
-        if (exists) return prev;
-        return [...prev, data].slice(-100);
-      });
+      setChatMessages(prev => [...prev, data].slice(-100)); // últimas 100
     };
 
     on('live_chat_broadcast', handleMessage);
