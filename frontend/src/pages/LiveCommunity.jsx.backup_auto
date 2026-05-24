@@ -24,20 +24,11 @@ export default function LiveCommunity() {
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
 
-  // Carregar playlist e autoplay
+  // Carregar playlist
   useEffect(() => {
     fetch(`${API_BASE}/api/live-community/playlist`)
       .then(r => r.json())
-      .then(data => {
-        const list = data.songs || [];
-        setSongs(list);
-        if (list.length > 0 && audioRef.current) {
-          audioRef.current.src = list[0].file_url;
-          audioRef.current.play()
-            .then(() => { setIsPlaying(true); setHasStarted(true); })
-            .catch(() => {});
-        }
-      })
+      .then(data => setSongs(data.songs || []))
       .catch(() => {});
   }, []);
 
@@ -54,11 +45,7 @@ export default function LiveCommunity() {
     if (!send || !on || !off) return;
     
     const handleMessage = (data) => {
-      setChatMessages(prev => {
-        const exists = prev.some(m => m.id && m.id === data.id);
-        if (exists) return prev;
-        return [...prev, data].slice(-100);
-      });
+      setChatMessages(prev => [...prev, data].slice(-100)); // últimas 100
     };
 
     on('live_chat_broadcast', handleMessage);
@@ -101,7 +88,7 @@ export default function LiveCommunity() {
       userId: user.id,
       userName: user.full_name,
       userAvatar: user.avatar_url,
-      text: messageInput,
+      message: messageInput,
     });
     setMessageInput('');
   };
@@ -253,7 +240,7 @@ export default function LiveCommunity() {
               {chatMessages.map((msg, i) => (
                 <div key={i} style={{ marginBottom: '8px', padding: '8px', background: '#f9f9f9', borderRadius: '8px' }}>
                   <span style={{ fontWeight: 600, color: '#667eea' }}>{msg.userName}: </span>
-                  <span>{msg.text || msg.message}</span>
+                  <span>{msg.message}</span>
                 </div>
               ))}
               <div ref={chatEndRef} />
