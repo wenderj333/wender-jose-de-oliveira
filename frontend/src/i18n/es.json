@@ -588,7 +588,7 @@
   "profile": {
     "title": "Perfil",
     "memberSince": "Miembro desde",
-    "editProfile": "Editar Perfil",
+    "editProfile": "Editar perfil",
     "prayers": "Oraciones",
     "posts": "Publicaciones",
     "friends": "Amigos",
@@ -608,7 +608,21 @@
     "copyLink": "Copiar enlace",
     "changeAvatar": "Cambiar foto",
     "deleteCover": "Eliminar portada",
-    "deleteAccount": "Eliminar Cuenta"
+    "deleteAccount": "Eliminar Cuenta",
+    "aboutMe": "Sobre mi",
+    "city": "Ciudad",
+    "country": "Pais",
+    "profession": "Profesion",
+    "work": "Trabajo",
+    "birthdate": "Fecha de nacimiento",
+    "maritalStatus": "Estado civil",
+    "married": "Casado(a)",
+    "single": "Soltero(a)",
+    "divorced": "Divorciado(a)",
+    "widowed": "Viudo(a)",
+    "favoriteVerse": "Versiculo favorito",
+    "testimony": "Testimonio",
+    "saveProfile": "Guardar perfil"
   },
   "messages": {
     "title": "Mensajes",

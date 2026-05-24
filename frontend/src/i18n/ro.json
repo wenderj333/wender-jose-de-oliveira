@@ -589,7 +589,7 @@
   "profile": {
     "title": "Profil",
     "memberSince": "Membru din",
-    "editProfile": "Editeaza profilul",
+    "editProfile": "Editeaza profil",
     "prayers": "Rugăciuni",
     "posts": "Postări",
     "friends": "Prieteni",
@@ -609,7 +609,21 @@
     "copyLink": "Copiaza link",
     "changeAvatar": "Schimba poza",
     "deleteCover": "Sterge coperta",
-    "deleteAccount": "Sterge contul"
+    "deleteAccount": "Sterge contul",
+    "aboutMe": "Despre mine",
+    "city": "Oras",
+    "country": "Tara",
+    "profession": "Profesie",
+    "work": "Munca",
+    "birthdate": "Data nasterii",
+    "maritalStatus": "Stare civila",
+    "married": "Casatorit(a)",
+    "single": "Necasatorit(a)",
+    "divorced": "Divortat(a)",
+    "widowed": "Vaduv(a)",
+    "favoriteVerse": "Versetul preferat",
+    "testimony": "Marturie",
+    "saveProfile": "Salveaza profil"
   },
   "messages": {
     "title": "Mesaje",

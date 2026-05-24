@@ -66,7 +66,8 @@ export default function Profile() {
   const [showMenu, setShowMenu] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [editData, setEditData] = useState({ full_name: '', bio: '', location: '', church_name: '' });
+  const [editData, setEditData] = useState({ full_name: '', bio: '', location: '', church_name: '', city: '', country: '', profession: '', work: '', birthdate: '', marital_status: '' });
+  const [showAbout, setShowAbout] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [activeTab, setActiveTab] = useState('posts');
 
@@ -81,7 +82,7 @@ export default function Profile() {
     ]).then(([profileData, feedData]) => {
       const u = profileData.user || profileData;
       setProfile(u);
-      setEditData({ full_name: u.full_name || '', bio: u.bio || '', location: '', church_name: u.church_name || '' });
+      setEditData({ full_name: u.full_name || '', bio: u.bio || '', location: u.location || '', church_name: u.church_name || '', city: u.city || '', country: u.country || '', profession: u.profession || '', work: u.work || '', birthdate: u.birthdate || '', marital_status: u.marital_status || '' });
       setPosts(feedData.posts || []);
     }).catch(console.error).finally(() => setLoading(false));
   }, [targetId, token]);
@@ -136,7 +137,7 @@ export default function Profile() {
   }
 
   if (loading) return <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}><div className="loading-spinner" /></div>;
-  if (!profile) return <div style={{ textAlign: 'center', padding: '3rem' }}>���� Perfil nao encontrado.</div>;
+  if (!profile) return <div style={{ textAlign: 'center', padding: '3rem' }}>���� Perfil nao encontrado.</div>;
 
   const initials = (profile.full_name || 'U').slice(0, 2).toUpperCase();
   const totalPosts = posts.length;
@@ -171,7 +172,19 @@ export default function Profile() {
             </div>
             {profile.bio && <p style={{margin:"0 0 4px",fontSize:14,color:"#1a1a2e",lineHeight:1.5}}>{profile.bio}</p>}
             {profile.church_name && <div style={{display:"flex",alignItems:"center",gap:4,fontSize:13,color:"#555",marginBottom:2}}><Church size={13}/> {profile.church_name}</div>}
-            {profile.location && <div style={{display:"flex",alignItems:"center",gap:4,fontSize:13,color:"#555"}}><MapPin size={13}/> {profile.location}</div>}
+            {profile.location && <div style={{display:'flex',alignItems:'center',gap:4,fontSize:13,color:'#555'}}><MapPin size={13}/> {profile.location}</div>}
+            <button onClick={()=>setShowAbout(!showAbout)} style={{marginTop:10,padding:'7px 18px',borderRadius:8,border:'1px solid #dbdbdb',background:'#fff',cursor:'pointer',fontWeight:600,fontSize:13}}>👤 {t('profile.aboutMe','Sobre mim')}</button>
+            {showAbout && (
+              <div style={{marginTop:12,background:'#f8f9ff',borderRadius:12,padding:16,fontSize:13,color:'#333'}}>
+                {profile.city && <div style={{marginBottom:6}}>🏙️ <b>{t('profile.city','Cidade')}:</b> {profile.city}</div>}
+                {profile.country && <div style={{marginBottom:6}}>🌍 <b>{t('profile.country','País')}:</b> {profile.country}</div>}
+                {profile.profession && <div style={{marginBottom:6}}>💼 <b>{t('profile.profession','Profissão')}:</b> {profile.profession}</div>}
+                {profile.work && <div style={{marginBottom:6}}>🏢 <b>{t('profile.work','Trabalho')}:</b> {profile.work}</div>}
+                {profile.birthdate && <div style={{marginBottom:6}}>🎂 <b>{t('profile.birthdate','Nascimento')}:</b> {profile.birthdate}</div>}
+                {profile.marital_status && <div style={{marginBottom:6}}>💑 <b>{t('profile.maritalStatus','Estado civil')}:</b> {t('profile.'+profile.marital_status, profile.marital_status)}</div>}
+                {profile.favorite_verse && <div style={{marginBottom:6}}>📖 <b>{t('profile.favoriteVerse','Versículo')}:</b> {profile.favorite_verse}</div>}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -220,7 +233,7 @@ export default function Profile() {
               <h2 style={{margin:0,fontSize:18,fontWeight:700}}>{t("profile.editProfile")}</h2>
               <button onClick={()=>setEditMode(false)} style={{background:"none",border:"none",cursor:"pointer"}}><X size={24}/></button>
             </div>
-            {[["Nome","full_name"],[t("profile.bio","Bio"),"bio"],["Localizacao","location"],["Igreja","church_name"]].map(([label,key])=>(
+            {[["Nome","full_name"],[t("profile.bio","Bio"),"bio"],[t("profile.city","Cidade"),"city"],[t("profile.country","Pais"),"country"],[t("profile.profession","Profissao"),"profession"],[t("profile.work","Trabalho"),"work"],[t("profile.church","Igreja"),"church_name"],[t("profile.birthdate","Data de nascimento"),"birthdate"],[t("profile.favoriteVerse","Versiculo favorito"),"favorite_verse"]].map(([label,key])=>(
               <div key={key} style={{marginBottom:16}}>
                 <label style={{display:"block",fontWeight:600,fontSize:13,marginBottom:6,color:"#555"}}>{label}</label>
                 {key==="bio"?<textarea value={editData[key]} onChange={e=>setEditData(prev=>({...prev,[key]:e.target.value}))} rows={3} style={{width:"100%",padding:"10px 12px",borderRadius:8,border:"1px solid #dbdbdb",fontSize:14,resize:"vertical",boxSizing:"border-box"}}/>:<input value={editData[key]} onChange={e=>setEditData(prev=>({...prev,[key]:e.target.value}))} style={{width:"100%",padding:"10px 12px",borderRadius:8,border:"1px solid #dbdbdb",fontSize:14,boxSizing:"border-box"}}/>}

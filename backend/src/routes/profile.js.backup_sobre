@@ -22,7 +22,7 @@ router.get('/:userId', async (req, res) => {
 
 router.patch('/', authenticate, async (req, res) => {
   try {
-    const { full_name, bio, location, church_name, cover_url, avatar_url, favorite_verse, testimony, life_motto, church_denomination, faith_years, platform_purpose, spiritual_gifts, interest_areas, christian_values, spiritual_state, profile_public, verse_public, testimony_public, church_public, city, country, profession, work, birthdate, marital_status } = req.body;
+    const { full_name, bio, location, church_name, cover_url, avatar_url, favorite_verse, testimony, life_motto, church_denomination, faith_years, platform_purpose, spiritual_gifts, interest_areas, christian_values, spiritual_state, profile_public, verse_public, testimony_public, church_public } = req.body;
     const userId = req.user.id;
 
     const updates = {};
@@ -30,12 +30,6 @@ router.patch('/', authenticate, async (req, res) => {
     if (bio !== undefined) updates.bio = bio;
     if (location !== undefined) updates.location = location;
     if (church_name !== undefined) updates.church_name = church_name;
-    if (city !== undefined) updates.city = city;
-    if (country !== undefined) updates.country = country;
-    if (profession !== undefined) updates.profession = profession;
-    if (work !== undefined) updates.work = work;
-    if (birthdate !== undefined) updates.birthdate = birthdate;
-    if (marital_status !== undefined) updates.marital_status = marital_status;
     if (cover_url !== undefined) updates.cover_url = cover_url;
     if (avatar_url !== undefined) updates.avatar_url = avatar_url;
     if (favorite_verse !== undefined) updates.favorite_verse = favorite_verse;

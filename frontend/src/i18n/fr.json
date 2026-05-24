@@ -608,7 +608,21 @@
     "copyLink": "Copier lien",
     "changeAvatar": "Changer photo",
     "deleteCover": "Supprimer couverture",
-    "deleteAccount": "Supprimer le compte"
+    "deleteAccount": "Supprimer le compte",
+    "aboutMe": "A propos de moi",
+    "city": "Ville",
+    "country": "Pays",
+    "profession": "Profession",
+    "work": "Travail",
+    "birthdate": "Date de naissance",
+    "maritalStatus": "Etat civil",
+    "married": "Marie(e)",
+    "single": "Celibataire",
+    "divorced": "Divorce(e)",
+    "widowed": "Veuf/Veuve",
+    "favoriteVerse": "Verset prefere",
+    "testimony": "Temoignage",
+    "saveProfile": "Sauvegarder profil"
   },
   "messages": {
     "title": "Messages",

@@ -609,7 +609,21 @@
     "copyLink": "Link kopieren",
     "changeAvatar": "Foto aendern",
     "deleteCover": "Cover loeschen",
-    "deleteAccount": "Konto loschen"
+    "deleteAccount": "Konto loschen",
+    "aboutMe": "Ueber mich",
+    "city": "Stadt",
+    "country": "Land",
+    "profession": "Beruf",
+    "work": "Arbeit",
+    "birthdate": "Geburtsdatum",
+    "maritalStatus": "Familienstand",
+    "married": "Verheiratet",
+    "single": "Ledig",
+    "divorced": "Geschieden",
+    "widowed": "Verwitwet",
+    "favoriteVerse": "Lieblingsvers",
+    "testimony": "Zeugnis",
+    "saveProfile": "Profil speichern"
   },
   "messages": {
     "title": "Messages",

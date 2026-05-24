@@ -588,7 +588,7 @@
   "profile": {
     "title": "Profile",
     "memberSince": "Member since",
-    "editProfile": "Edit Profile",
+    "editProfile": "Edit profile",
     "prayers": "Prayers",
     "posts": "Posts",
     "friends": "Friends",
@@ -608,7 +608,21 @@
     "copyLink": "Copy link",
     "changeAvatar": "Change photo",
     "deleteCover": "Delete cover",
-    "deleteAccount": "Delete Account"
+    "deleteAccount": "Delete Account",
+    "aboutMe": "About me",
+    "city": "City",
+    "country": "Country",
+    "profession": "Profession",
+    "work": "Work",
+    "birthdate": "Date of birth",
+    "maritalStatus": "Marital status",
+    "married": "Married",
+    "single": "Single",
+    "divorced": "Divorced",
+    "widowed": "Widowed",
+    "favoriteVerse": "Favourite verse",
+    "testimony": "Testimony",
+    "saveProfile": "Save profile"
   },
   "messages": {
     "title": "Messages",

@@ -944,7 +944,7 @@
   "profile": {
     "friends": "Друзья",
     "changeCover": "Изменить обложку",
-    "editProfile": "Редактировать",
+    "editProfile": "Redaktirovat profil",
     "message": "Сообщение",
     "follow": "Подписаться",
     "copyLink": "Kopirovat link",
@@ -964,7 +964,21 @@
     "addFriend": "Adicionar",
     "pendingFriend": "Pendente",
     "acceptFriend": "Aceitar",
-    "rejectFriend": "Recusar"
+    "rejectFriend": "Recusar",
+    "aboutMe": "Obo mne",
+    "city": "Gorod",
+    "country": "Strana",
+    "profession": "Professiya",
+    "work": "Rabota",
+    "birthdate": "Data rozhdeniya",
+    "maritalStatus": "Semeynoe polozhenie",
+    "married": "Zhenat/Zamuzhem",
+    "single": "Holost",
+    "divorced": "Razveden(a)",
+    "widowed": "Vdovec/Vdova",
+    "favoriteVerse": "Lyubimyy stikh",
+    "testimony": "Svidetelstvo",
+    "saveProfile": "Sokhranit profil"
   },
   "landing": {
     "subtitle": "Чувствовал ли ты себя одиноким? Здесь всегда есть кто-то для тебя.",
