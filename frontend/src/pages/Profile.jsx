@@ -228,7 +228,7 @@ export default function Profile() {
       {activeTab==="friends" && <div style={{textAlign:"center",padding:"4rem",color:"#888"}}><UserCheck size={48} style={{marginBottom:16,opacity:0.2}}/><p>{t("profile.friends")}</p></div>}
       {editMode && (
         <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
-          <div style={{background:"#fff",borderRadius:16,width:"100%",maxWidth:480,padding:24}}>
+          <div style={{background:'#fff',borderRadius:16,width:'100%',maxWidth:480,padding:24,maxHeight:'90vh',overflowY:'auto'}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
               <h2 style={{margin:0,fontSize:18,fontWeight:700}}>{t("profile.editProfile")}</h2>
               <button onClick={()=>setEditMode(false)} style={{background:"none",border:"none",cursor:"pointer"}}><X size={24}/></button>
