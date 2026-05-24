@@ -336,7 +336,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       if (data.comment) setComments([...comments, data.comment]);
       setComment('');
     } catch (e) {
-      setComments([...comments, { id: Date.now(), content: comment, full_name: user?.full_name || t('common.user') }]);
+      setComments([...comments, { id: Date.now(), content: comment, full_name: t('common.user') }]);
       setComment('');
     }
   };
