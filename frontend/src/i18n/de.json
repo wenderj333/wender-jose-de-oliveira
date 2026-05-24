@@ -869,7 +869,9 @@
     "prev": "Zurück",
     "shuffle": "Zufällig",
     "repeat": "Wiederholen",
-    "nowPlaying": "Spielt jetzt"
+    "nowPlaying": "Spielt jetzt",
+    "changeCover": "Cover ändern",
+    "clickToPlay": "Zum Abspielen klicken"
   },
   "courseFinance": {
     "title": "Biblical Finance",

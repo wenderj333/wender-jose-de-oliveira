@@ -869,7 +869,9 @@
     "prev": "Anterior",
     "shuffle": "Aleatoriu",
     "repeat": "Repetă",
-    "nowPlaying": "Se redă"
+    "nowPlaying": "Se redă",
+    "changeCover": "Schimba coperta",
+    "clickToPlay": "Apasa pentru a reda"
   },
   "courseFinance": {
     "title": "Finanțe Biblice",

@@ -868,7 +868,9 @@
     "prev": "Précédent",
     "shuffle": "Aléatoire",
     "repeat": "Répéter",
-    "nowPlaying": "En cours"
+    "nowPlaying": "En cours",
+    "changeCover": "Changer la pochette",
+    "clickToPlay": "Cliquer pour jouer"
   },
   "courseFinance": {
     "title": "Finances Bibliques",

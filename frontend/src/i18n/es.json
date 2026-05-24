@@ -868,7 +868,9 @@
     "prev": "Anterior",
     "shuffle": "Aleatorio",
     "repeat": "Repetir",
-    "nowPlaying": "Reproduciendo"
+    "nowPlaying": "Reproduciendo",
+    "changeCover": "Cambiar portada",
+    "clickToPlay": "Toca para reproducir"
   },
   "courseFinance": {
     "title": "Finanzas Bíblicas",

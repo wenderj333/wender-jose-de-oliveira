@@ -868,7 +868,9 @@
     "prev": "Previous",
     "shuffle": "Shuffle",
     "repeat": "Repeat",
-    "nowPlaying": "Now Playing"
+    "nowPlaying": "Now Playing",
+    "changeCover": "Change cover",
+    "clickToPlay": "Click to play"
   },
   "courseFinance": {
     "title": "Biblical Finance",
