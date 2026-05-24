@@ -401,10 +401,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             {post.verse_reference && <p style={{ fontWeight: 700, color, marginTop: 8, marginBottom: 0, fontSize: 13 }}>— {post.verse_reference}</p>}
           </div>
         ) : (
-          <p style={{ color: '#333', fontSize: 14, lineHeight: 1.65, margin: 0 }}>{post.content}</p>
-          {musicUrl && !isImage && !isVideo && (
-            <MiniAudioPlayer src={musicUrl} isPlaying={isMusicPlaying} onPlay={()=>setIsMusicPlaying(true)} onPause={()=>setIsMusicPlaying(false)} onEnded={()=>setIsMusicPlaying(false)} />
-          )}
+          <><p style={{ color: '#333', fontSize: 14, lineHeight: 1.65, margin: 0 }}>{post.content}</p>{musicUrl && !isImage && !isVideo && (<MiniAudioPlayer src={musicUrl} isPlaying={isMusicPlaying} onPlay={()=>setIsMusicPlaying(true)} onPause={()=>setIsMusicPlaying(false)} onEnded={()=>setIsMusicPlaying(false)} />)}</>
         )}
       </div>
 
