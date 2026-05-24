@@ -245,7 +245,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const authorInitials = authorName.slice(0, 2).toUpperCase();
   const mediaUrl = post.media_url || post.mediaUrl;
   const musicUrl = post.audio_url || post.musicUrl;
-  const isOwner = user && (user.id === post.author_id || user.id === post.user_id);
+  const isOwner = user != null && (user.id === post.author_id || user.id === post.user_id);
 
   const videoRef = useRef(null);
   const recordRef = useRef(null);
@@ -470,7 +470,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
           {user && (
             <form onSubmit={submitComment} style={{ display: 'flex', gap: 8, marginTop: 12 }}>
               <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>
-                {(user.full_name || 'U').charAt(0).toUpperCase()}
+                {(user?.full_name || 'U').charAt(0).toUpperCase()}
               </div>
               <input value={comment} onChange={e => setComment(e.target.value)} placeholder={t('mural.commentPlaceholder')} style={{ flex: 1, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none', background: '#f7f7f7' }} />
               <button type="submit" style={{ padding: '8px 14px', borderRadius: 20, background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}><Send size={14} /></button>
