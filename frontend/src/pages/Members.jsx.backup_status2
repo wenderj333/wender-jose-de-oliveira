@@ -16,33 +16,20 @@ export default function Members() {
   useEffect(() => {
     async function fetchMembers() {
       try {
-        const t = token || localStorage.getItem("token");
-        const [membersRes, friendsRes, requestsRes] = await Promise.all([
-          fetch(`${API}/members`, { headers: { Authorization: "Bearer " + t } }),
-          fetch(`${API}/friends`, { headers: { Authorization: "Bearer " + t } }),
-          fetch(`${API}/friends/requests`, { headers: { Authorization: "Bearer " + t } })
-        ]);
-        if (!membersRes.ok) { setLoading(false); return; }
-        const data = await membersRes.json();
+        const t = token || localStorage.getItem('token');
+        const res = await fetch(`${API}/members`, {
+          headers: { Authorization: "Bearer " + t }
+        });
+        if (!res.ok) { setLoading(false); return; }
+        const data = await res.json();
         const userList = Array.isArray(data) ? data : (data.members || data.users || []);
         setUsers(userList);
-        const statusMap = {};
-        if (friendsRes.ok) {
-          const fd = await friendsRes.json();
-          (fd.friends || []).forEach(f => { statusMap[f.id] = "accepted"; });
-        }
-        if (requestsRes.ok) {
-          const rd = await requestsRes.json();
-          (rd.requests || []).forEach(r => { statusMap[r.id] = "pending"; });
-        }
-        setFriendStatus(statusMap);
       } catch (err) {
         console.error("Erro:", err);
       } finally {
         setLoading(false);
       }
     }
-    fetchMembers();
     fetchMembers();
   }, [token]);
 
