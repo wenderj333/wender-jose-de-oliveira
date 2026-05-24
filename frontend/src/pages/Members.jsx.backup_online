@@ -110,8 +110,6 @@ export default function Members() {
               onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 2px 12px rgba(0,0,0,0.08)'; }}
             >
               {/* Avatar */}
-              <div style={{position:'relative',display:'inline-block'}}>
-              {user.last_seen_at && (new Date()-new Date(user.last_seen_at))<5*60*1000 && <div style={{position:'absolute',bottom:2,right:2,width:12,height:12,borderRadius:'50%',background:'#22c55e',border:'2px solid white',zIndex:2}}/>}
               <div style={{
                 width:'72px', height:'72px', borderRadius:'50%',
                 overflow:'hidden',
@@ -125,7 +123,6 @@ export default function Members() {
                 />
               </div>
 
-              </div>
               {/* Nome */}
               <div style={{ textAlign:'center' }}>
                 <div style={{ fontWeight:'700', fontSize:'14px', color:'#1a1a1a' }}>{user.username}</div>
