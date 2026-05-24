@@ -302,4 +302,17 @@ router.post('/:id/comments', authenticate, async (req, res) => {
   }
 });
 
+// PUT /api/music/:id/cover
+router.put('/:id/cover', authenticate, async (req, res) => {
+  try {
+    const { cover_url } = req.body;
+    if (!cover_url) return res.status(400).json({ error: 'cover_url obrigatorio' });
+    await db.prepare('UPDATE music SET cover_url = ? WHERE id = ? AND user_id = ?').run(cover_url, req.params.id, req.user.id);
+    res.json({ success: true, cover_url });
+  } catch (err) {
+    console.error('Error updating cover:', err);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
 module.exports = router;
