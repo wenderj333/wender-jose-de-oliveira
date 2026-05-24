@@ -402,6 +402,9 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
           </div>
         ) : (
           <p style={{ color: '#333', fontSize: 14, lineHeight: 1.65, margin: 0 }}>{post.content}</p>
+          {musicUrl && !isImage && !isVideo && (
+            <MiniAudioPlayer src={musicUrl} isPlaying={isMusicPlaying} onPlay={()=>setIsMusicPlaying(true)} onPause={()=>setIsMusicPlaying(false)} onEnded={()=>setIsMusicPlaying(false)} />
+          )}
         )}
       </div>
 
