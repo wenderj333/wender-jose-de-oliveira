@@ -554,6 +554,12 @@ async function addProfileColumns() {
     await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS country TEXT');
     await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS profession TEXT');
     await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS work TEXT');
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS marital_status TEXT');
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS favorite_verse TEXT');
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS profession TEXT');
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS city TEXT');
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS country TEXT');
+    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS birthdate TEXT');
     await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS birthdate TEXT');
     await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS marital_status TEXT');
     console.log('Profile columns ready');
