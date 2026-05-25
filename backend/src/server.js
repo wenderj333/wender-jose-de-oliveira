@@ -551,6 +551,7 @@ addPixKeyColumn();
 async function addProfileColumns() {
   try {
     await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS city TEXT');
+    await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS location TEXT');
     await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS country TEXT');
     await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS profession TEXT');
     await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS work TEXT');
