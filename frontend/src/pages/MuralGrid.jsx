@@ -345,7 +345,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   return (
     <div ref={postCardRef} style={{ background: 'white', borderRadius: 16, border: `1px solid ${color}33`, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 16 }}>
       <div style={{ padding: '14px 16px 10px', display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div onClick={()=>window.location.href='/perfil/'+(post.author_id||post.user_id)} style={{ width: 42, height: 42, borderRadius: '50%', background: linear-gradient(135deg,,88), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14, flexShrink: 0, cursor:'pointer', overflow:'hidden' }}>
+        <div onClick={()=>window.location.href='/perfil/'+(post.author_id||post.user_id)} style={{ width: 42, height: 42, borderRadius: '50%', background: `linear-gradient(135deg,${color},${color}88)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14, flexShrink: 0, cursor:'pointer', overflow:'hidden' }}>
           {post.author_avatar||post.avatar_url ? <img src={post.author_avatar||post.avatar_url} style={{width:'100%',height:'100%',objectFit:'cover'}}/> : authorInitials}
         </div>
         <div style={{ flex: 1 }}>
