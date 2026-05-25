@@ -66,7 +66,7 @@ export default function Profile() {
   const [showMenu, setShowMenu] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [editData, setEditData] = useState({ full_name: '', bio: '', location: '', church_name: '', city: '', country: '', profession: '', work: '', birthdate: '', marital_status: '' });
+  const [editData, setEditData] = useState({ full_name: '', bio: '', location: '', church_name: '', city: '', country: '', profession: '', work: '', birthdate: '', marital_status: '', favorite_verse: '' });
   const [showAbout, setShowAbout] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [activeTab, setActiveTab] = useState('posts');
@@ -82,7 +82,7 @@ export default function Profile() {
     ]).then(([profileData, feedData]) => {
       const u = profileData.user || profileData;
       setProfile(u);
-      setEditData({ full_name: u.full_name || '', bio: u.bio || '', location: u.location || '', church_name: u.church_name || '', city: u.city || '', country: u.country || '', profession: u.profession || '', work: u.work || '', birthdate: u.birthdate || '', marital_status: u.marital_status || '' });
+      setEditData({ full_name: u.full_name || '', bio: u.bio || '', location: u.location || '', church_name: u.church_name || '', city: u.city || '', country: u.country || '', profession: u.profession || '', work: u.work || '', birthdate: u.birthdate || '', marital_status: u.marital_status || '', favorite_verse: u.favorite_verse || '' });
       setPosts(feedData.posts || []);
     }).catch(console.error).finally(() => setLoading(false));
   }, [targetId, token]);
@@ -241,7 +241,7 @@ export default function Profile() {
             ))}
             <div style={{display:"flex",gap:12,justifyContent:"flex-end"}}>
               <button onClick={()=>setEditMode(false)} style={{padding:"10px 20px",borderRadius:8,border:"1px solid #dbdbdb",background:"#fff",cursor:"pointer",fontWeight:600}}>{t("profile.cancel","Cancelar")}</button>
-              <button onClick={saveProfile} style={{padding:"10px 20px",borderRadius:8,border:"none",background:"#0095f6",color:"#fff",cursor:"pointer",fontWeight:600}}>{t("profile.save")}</button>
+              <button onClick={saveProfile} style={{padding:"10px 20px",borderRadius:8,border:"none",background:"#0095f6",color:"#fff",cursor:"pointer",fontWeight:600}}>{t("profile.saveProfile","Guardar")}</button>
             </div>
           </div>
         </div>
