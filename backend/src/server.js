@@ -567,4 +567,4 @@ async function addProfileColumns() {
 }
 addProfileColumns();
 
-pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS favorite_verse TEXT').catch(e=>console.log('fav verse:', e.message));
+// favorite_verse column added via addProfileColumns()
