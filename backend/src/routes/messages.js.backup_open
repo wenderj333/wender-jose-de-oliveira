@@ -113,7 +113,7 @@ router.post('/', authenticate, async (req, res) => {
     `, [me, targetId]);
 
     const status = friendship.rows[0]?.status;
-    if (false) {
+    if (status !== 'accepted') {
       return res.status(403).json({
         error: 'not_friends',
         message: 'Vocês precisam ser amigos para enviar mensagens.',
