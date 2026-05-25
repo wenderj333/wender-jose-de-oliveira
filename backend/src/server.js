@@ -550,18 +550,13 @@ addPixKeyColumn();
 // Adicionar colunas perfil sobre mim
 async function addProfileColumns() {
   try {
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS city TEXT');
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS country TEXT');
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS profession TEXT');
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS work TEXT');
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS marital_status TEXT');
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS favorite_verse TEXT');
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS profession TEXT');
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS city TEXT');
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS country TEXT');
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS birthdate TEXT');
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS birthdate TEXT');
-    await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS marital_status TEXT');
+    await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS city TEXT');
+    await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS country TEXT');
+    await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS profession TEXT');
+    await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS work TEXT');
+    await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS marital_status TEXT');
+    await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS favorite_verse TEXT');
+    await _pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS birthdate TEXT');
     console.log('Profile columns ready');
   } catch(e) { console.error('Profile columns error:', e.message); }
 }
