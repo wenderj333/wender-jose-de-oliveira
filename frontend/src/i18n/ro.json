@@ -1772,5 +1772,7 @@
     "sendPost": "Trimite post",
     "searchMember": "Cauta membru...",
     "postSent": "Post trimis!"
-  }
+  },
+  "profileAmen": "Amin",
+  "profileAmenCount": "Amin dat"
 }

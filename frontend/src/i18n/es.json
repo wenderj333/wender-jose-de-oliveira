@@ -1771,5 +1771,7 @@
     "sendPost": "Enviar post",
     "searchMember": "Buscar miembro...",
     "postSent": "Post enviado!"
-  }
+  },
+  "profileAmen": "Amén",
+  "profileAmenCount": "Amén dado"
 }
