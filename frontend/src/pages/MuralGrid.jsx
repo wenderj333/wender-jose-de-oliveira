@@ -255,7 +255,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareMembers, setShareMembers] = useState([]);
-  const loadShareMembers = async () => { try { const res = await fetch(API + "/members"); const data = await res.json(); setShareMembers(Array.isArray(data) ? data : (data.members || [])); } catch(e) {} };
+  const loadShareMembers = async () => { try { const res = await fetch(API + "/members", { headers: token ? { Authorization: "Bearer " + token } : {} }); const data = await res.json(); setShareMembers(Array.isArray(data) ? data : (data.members || [])); } catch(e) {} };
   const sendPostToMember = async (mid) => { const url = window.location.origin + "/mural?post=" + post.id; try { await fetch(API + "/api/messages", { method: "POST", headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" }, body: JSON.stringify({ receiverId: mid, content: "Post: " + url }) }); setShowShareModal(false); alert("Enviado!"); } catch(e) {} };
   const postCardRef = useRef(null);
 
