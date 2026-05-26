@@ -255,22 +255,8 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareMembers, setShareMembers] = useState([]);
-  const loadShareMembers = async () => {
-    try {
-      const res = await fetch(API + '/members', { headers: token ? { Authorization: 'Bearer ' + token } : {} });
-      const data = await res.json();
-      setShareMembers(Array.isArray(data) ? data : (data.members || []));
-    } catch(e) {}
-  };
-  const sendPostToMember = async (memberId) => {
-    const url = window.location.origin + '/mural?post=' + post.id;
-    const msg = 'Post: ' + (post.content || '') + ' ' + url;
-    try {
-      await fetch(API + '/api/messages', { method: 'POST', headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ receiverId: memberId, content: msg }) });
-      setShowShareModal(false);
-      alert('Post enviado!');
-    } catch(e) { alert('Erro'); }
-  };
+  const loadShareMembers = async () => { try { const res = await fetch(API + "/members"); const data = await res.json(); setShareMembers(Array.isArray(data) ? data : (data.members || [])); } catch(e) {} };
+  const sendPostToMember = async (mid) => { const url = window.location.origin + "/mural?post=" + post.id; try { await fetch(API + "/api/messages", { method: "POST", headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" }, body: JSON.stringify({ receiverId: mid, content: "Post: " + url }) }); setShowShareModal(false); alert("Enviado!"); } catch(e) {} };
   const postCardRef = useRef(null);
 
   const isVideo = mediaUrl && mediaUrl.match(/\.(mp4|webm|mov|ogg)(\?|$)/i);
@@ -432,7 +418,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         <button onClick={() => { if (!showComments) loadComments(); setShowComments(!showComments); }} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, fontWeight: 600, padding: '6px 10px', borderRadius: 8 }}>
           <MessageCircle size={18} /> {post.comment_count || post.commentCount || comments.length} {t('common.comment')}
         </button>
-        <button onClick={() => { setShowShareModal(true); loadShareMembers(); }} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", color: "#888", fontSize: 13, marginLeft: "auto", padding: "6px 10px", borderRadius: 8 }}><Share2 size={18} /> {t("common.share")}</button>
+        <button onClick={() => { const url = window.location.origin + "/mural?post=" + post.id; if (navigator.share) { navigator.share({ title: "Sigo com Fe", text: post.content, url }); } else { navigator.clipboard.writeText(url); alert("Link copiado!"); } }} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", color: "#888", fontSize: 13, marginLeft: "auto", padding: "6px 10px", borderRadius: 8 }}><Share2 size={18} /> {t("common.share")}</button>
         {user && !isOwner && (
           <button onClick={() => setReportOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', padding: '6px 8px', borderRadius: 8, display: 'flex', alignItems: 'center' }} title={t('report.title')}
             onMouseEnter={e => e.currentTarget.style.color = '#e11d48'} onMouseLeave={e => e.currentTarget.style.color = '#ccc'}>
@@ -493,6 +479,14 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
               </div>
               <input value={comment} onChange={e => setComment(e.target.value)} placeholder={t('mural.commentPlaceholder')} style={{ flex: 1, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none', background: '#f7f7f7' }} />
               <button type="submit" style={{ padding: '8px 14px', borderRadius: 20, background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}><Send size={14} /></button>
+    {showShareModal && (
+      <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",zIndex:2000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}} onClick={()=>setShowShareModal(false)}>
+        <div style={{background:"#fff",borderRadius:16,width:"100%",maxWidth:400,padding:24,maxHeight:"80vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
+          <h3>Partilhar</h3>
+          {shareMembers.map(m=>(<div key={m.id} onClick={()=>sendPostToMember(m.id)} style={{display:"flex",alignItems:"center",gap:10,padding:"8px",cursor:"pointer"}}><span>{m.full_name}</span></div>))}
+        </div>
+      </div>
+    )}
             </form>
           )}
         </div>
@@ -861,19 +855,6 @@ export default function MuralGrid() {
       )}
 
       {/* Post Viewer Modal */}
-      {showShareModal && (
-        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",zIndex:2000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}} onClick={()=>setShowShareModal(false)}>
-          <div style={{background:"#fff",borderRadius:16,width:"100%",maxWidth:400,padding:24,maxHeight:"80vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
-            <h3 style={{margin:"0 0 16px",fontSize:16,fontWeight:700}}>Partilhar com membro</h3>
-            {shareMembers.map(m=>(
-              <div key={m.id} onClick={()=>sendPostToMember(m.id)} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 8px",borderRadius:8,cursor:"pointer",borderBottom:"1px solid #f0f0f0"}}>
-                <div style={{width:36,height:36,borderRadius:"50%",background:"#4a80d4",display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontWeight:700,fontSize:14,overflow:"hidden",flexShrink:0}}>{(m.full_name||"U").charAt(0).toUpperCase()}</div>
-                <div style={{fontWeight:600,fontSize:14}}>{m.full_name}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
       {selectedPost && (
         <div onClick={() => setSelectedPost(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: "white", borderRadius: 20, overflow: "hidden", maxWidth: 500, width: "100%", maxHeight: "90vh", overflowY: "auto", position: "relative" }}>
