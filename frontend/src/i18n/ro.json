@@ -1766,5 +1766,11 @@
     "pixHelp": "Pentru a primi donatii direct",
     "donate": "Doneaza",
     "donateHelp": "Apasa pentru a copia"
+  },
+  "share": {
+    "shareWithMember": "Distribuie cu membru",
+    "sendPost": "Trimite post",
+    "searchMember": "Cauta membru...",
+    "postSent": "Post trimis!"
   }
 }

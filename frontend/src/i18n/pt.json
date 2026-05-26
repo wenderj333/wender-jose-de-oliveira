@@ -1732,5 +1732,11 @@
     "pixHelp": "Para receber doações directamente",
     "donate": "Fazer doação",
     "donateHelp": "Clica para copiar a chave PIX"
+  },
+  "share": {
+    "shareWithMember": "Partilhar com membro",
+    "sendPost": "Enviar post",
+    "searchMember": "Procurar membro...",
+    "postSent": "Post enviado!"
   }
 }

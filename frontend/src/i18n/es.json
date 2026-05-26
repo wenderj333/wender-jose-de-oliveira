@@ -1765,5 +1765,11 @@
     "pixHelp": "Para recibir donaciones directamente",
     "donate": "Donar",
     "donateHelp": "Toca para copiar clave PIX"
+  },
+  "share": {
+    "shareWithMember": "Compartir con miembro",
+    "sendPost": "Enviar post",
+    "searchMember": "Buscar miembro...",
+    "postSent": "Post enviado!"
   }
 }

@@ -1765,5 +1765,11 @@
     "pixHelp": "Pour recevoir des dons directement",
     "donate": "Faire un don",
     "donateHelp": "Cliquer pour copier"
+  },
+  "share": {
+    "shareWithMember": "Partager avec membre",
+    "sendPost": "Envoyer post",
+    "searchMember": "Chercher membre...",
+    "postSent": "Post envoye!"
   }
 }
