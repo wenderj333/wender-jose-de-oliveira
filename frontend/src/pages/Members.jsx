@@ -111,7 +111,7 @@ export default function Members() {
             >
               {/* Avatar */}
               <div style={{position:'relative',display:'inline-block'}}>
-              {user.last_seen_at && (new Date()-new Date(user.last_seen_at))<5*60*1000 && <div style={{position:'absolute',bottom:2,right:2,width:12,height:12,borderRadius:'50%',background:'#22c55e',border:'2px solid white',zIndex:2}}/>}
+              {member.last_seen_at && (new Date()-new Date(member.last_seen_at))<5*60*1000 && <div style={{position:'absolute',bottom:2,right:2,width:12,height:12,borderRadius:'50%',background:'#22c55e',border:'2px solid white',zIndex:2}}/>}
               <div style={{
                 width:'72px', height:'72px', borderRadius:'50%',
                 overflow:'hidden',
@@ -146,16 +146,16 @@ export default function Members() {
               </button>
               <div style={{ display:'flex', gap:'6px', width:'100%' }}>
                 <button
-                  onClick={e => { e.stopPropagation(); if(friendStatus[user.id]) return; fetch((import.meta.env.VITE_API_URL || '') + '/api/friends/request', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('token') }, body: JSON.stringify({ addressee_id: user.id }) }).then(r => r.json()).then(d => { if(!d.error) setFriendStatus(prev => ({...prev, [user.id]: 'pending'})); else alert(d.error); }).catch(() => alert('Erro')); }}
+                  onClick={e => { e.stopPropagation(); if(friendStatus[member.id]) return; fetch((import.meta.env.VITE_API_URL || '') + '/api/friends/request', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('token') }, body: JSON.stringify({ addressee_id: member.id }) }).then(r => r.json()).then(d => { if(!d.error) setFriendStatus(prev => ({...prev, [member.id]: 'pending'})); else alert(d.error); }).catch(() => alert('Erro')); }}
                   style={{
                     flex:1, background:'#f0f0f0', color:'#6c63ff',
                     border:'1px solid #6c63ff', borderRadius:'16px',
                     padding:'4px 0', fontSize:'11px', fontWeight:'600', cursor:'pointer'
                   }}>
-                  {friendStatus[user.id] === 'pending' ? '⏳ Pendente' : friendStatus[user.id] === 'accepted' ? '✓ Amigos' : '+ Seguir'}
+                  {friendStatus[member.id] === 'pending' ? '⏳ Pendente' : friendStatus[member.id] === 'accepted' ? '✓ Amigos' : '+ Seguir'}
                 </button>
                 <button
-                  onClick={e => { e.stopPropagation(); navigate('/mensagens/' + user.id); }}
+                  onClick={e => { e.stopPropagation(); navigate('/mensagens/' + member.id); }}
                   style={{
                     flex:1, background:'#f0f0f0', color:'#333',
                     border:'1px solid #ddd', borderRadius:'16px',
