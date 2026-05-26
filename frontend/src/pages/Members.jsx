@@ -89,10 +89,10 @@ export default function Members() {
         {filtered.length === 0 ? (
           <p style={{ color:'#aaa', gridColumn:'1/-1', textAlign:'center' }}>Nenhum membro encontrado.</p>
         ) : (
-          filtered.map(user => (
+          filtered.map(member => (
             <div
-              key={user.id}
-              onClick={() => navigate(`/perfil/${user.id}`)}
+              key={member.id}
+              onClick={() => navigate(`/perfil/${member.id}`)}
               style={{
                 background:'#fff',
                 borderRadius:'16px',
@@ -119,7 +119,7 @@ export default function Members() {
                 boxShadow:'0 0 0 3px #e8e6ff'
               }}>
                 <img
-                  src={user.avatar_url || "/pro.jpg"}
+                  src={member.avatar_url || "/pro.jpg"}
                   style={{ width:'100%', height:'100%', objectFit:'cover' }}
                   onError={e => { e.target.src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"; }}
                 />
@@ -128,13 +128,13 @@ export default function Members() {
               </div>
               {/* Nome */}
               <div style={{ textAlign:'center' }}>
-                <div style={{ fontWeight:'700', fontSize:'14px', color:'#1a1a1a' }}>{user.username}</div>
-                <div style={{ fontSize:'12px', color:'#999', marginTop:'2px' }}>{user.full_name || "Membro"}</div>
+                <div style={{ fontWeight:'700', fontSize:'14px', color:'#1a1a1a' }}>{member.username}</div>
+                <div style={{ fontSize:'12px', color:'#999', marginTop:'2px' }}>{member.full_name || "Membro"}</div>
               </div>
 
               {/* Botão */}
               <button
-                onClick={() => navigate(`/perfil/${user.id}`)}
+                onClick={() => navigate(`/perfil/${member.id}`)}
                 style={{
                   background:'#ffffff',
                   color:'#1a1a1a', border:'1px solid #e0e0e0',
