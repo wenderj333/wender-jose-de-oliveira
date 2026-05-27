@@ -16,6 +16,7 @@ import MuralGrid from "./pages/MuralGrid";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import Members from "./pages/Members";
 import Groups from "./pages/Groups";
 import MusicLibrary from "./pages/MusicLibrary";
@@ -192,7 +193,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/mural" element={<MuralGrid />} />
-        <Route path="/perfil/:userId" element={<Profile />} />
+        <Route path="/perfil/:userId" element={<Profile />} /><Route path="/configuracoes" element={<Settings />} />
             <Route path="/membros" element={<Members />} />
         <Route path="/ia-biblica" element={<BiblicalAI />} />
         <Route path="/journeys" element={<FaithJourneys />} />
