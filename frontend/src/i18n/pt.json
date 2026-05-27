@@ -1740,5 +1740,30 @@
     "postSent": "Post enviado!"
   },
   "profileAmen": "Amém",
-  "profileAmenCount": "Amém dado"
+  "profileAmenCount": "Amém dado",
+  "settings": {
+    "title": "Editar Perfil",
+    "photo": "Mudar foto",
+    "name": "Nome completo",
+    "bio": "Bio",
+    "city": "Cidade",
+    "country": "Pais",
+    "church": "Igreja",
+    "denomination": "Denominacao",
+    "faithYears": "Anos de fe",
+    "verse": "Versiculo favorito",
+    "testimony": "Testemunho",
+    "profession": "Profissao",
+    "marital": "Estado civil",
+    "maritalOptions": {
+      "single": "Solteiro",
+      "married": "Casado",
+      "divorced": "Divorciado",
+      "widowed": "Viuvo"
+    },
+    "spiritual": "Estado espiritual",
+    "save": "Guardar",
+    "saving": "A guardar...",
+    "saved": "Guardado!"
+  }
 }

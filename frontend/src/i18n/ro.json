@@ -1774,5 +1774,30 @@
     "postSent": "Post trimis!"
   },
   "profileAmen": "Amin",
-  "profileAmenCount": "Amin dat"
+  "profileAmenCount": "Amin dat",
+  "settings": {
+    "title": "Editare profil",
+    "photo": "Schimba poza",
+    "name": "Nume complet",
+    "bio": "Bio",
+    "city": "Oras",
+    "country": "Tara",
+    "church": "Biserica",
+    "denomination": "Confesiune",
+    "faithYears": "Ani de credinta",
+    "verse": "Versetul preferat",
+    "testimony": "Marturie",
+    "profession": "Profesie",
+    "marital": "Stare civila",
+    "maritalOptions": {
+      "single": "Necasatorit",
+      "married": "Casatorit",
+      "divorced": "Divortat",
+      "widowed": "Vaduv"
+    },
+    "spiritual": "Stare spirituala",
+    "save": "Salveaza",
+    "saving": "Se salveaza...",
+    "saved": "Salvat!"
+  }
 }

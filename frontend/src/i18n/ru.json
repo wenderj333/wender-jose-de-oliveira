@@ -1773,5 +1773,30 @@
     "postSent": "???? ?????????!"
   },
   "profileAmen": "Аминь",
-  "profileAmenCount": "Аминь дано"
+  "profileAmenCount": "Аминь дано",
+  "settings": {
+    "title": "Редактировать профиль",
+    "photo": "Изменить фото",
+    "name": "Полное имя",
+    "bio": "Био",
+    "city": "Город",
+    "country": "Страна",
+    "church": "Церковь",
+    "denomination": "Деноминация",
+    "faithYears": "Лет в вере",
+    "verse": "Любимый стих",
+    "testimony": "Свидетельство",
+    "profession": "Профессия",
+    "marital": "Семейное положение",
+    "maritalOptions": {
+      "single": "Холост",
+      "married": "Женат",
+      "divorced": "Разведен",
+      "widowed": "Вдовец"
+    },
+    "spiritual": "Духовное состояние",
+    "save": "Сохранить",
+    "saving": "Сохранение...",
+    "saved": "Сохранено!"
+  }
 }

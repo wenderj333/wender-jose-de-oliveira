@@ -1773,5 +1773,30 @@
     "postSent": "Post sent!"
   },
   "profileAmen": "Amen",
-  "profileAmenCount": "Amen given"
+  "profileAmenCount": "Amen given",
+  "settings": {
+    "title": "Edit Profile",
+    "photo": "Change photo",
+    "name": "Full name",
+    "bio": "Bio",
+    "city": "City",
+    "country": "Country",
+    "church": "Church",
+    "denomination": "Denomination",
+    "faithYears": "Years of faith",
+    "verse": "Favorite verse",
+    "testimony": "Testimony",
+    "profession": "Profession",
+    "marital": "Marital status",
+    "maritalOptions": {
+      "single": "Single",
+      "married": "Married",
+      "divorced": "Divorced",
+      "widowed": "Widowed"
+    },
+    "spiritual": "Spiritual state",
+    "save": "Save",
+    "saving": "Saving...",
+    "saved": "Saved!"
+  }
 }

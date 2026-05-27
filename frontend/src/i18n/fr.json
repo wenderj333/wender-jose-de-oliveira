@@ -1773,5 +1773,30 @@
     "postSent": "Post envoye!"
   },
   "profileAmen": "Amen",
-  "profileAmenCount": "Amen donné"
+  "profileAmenCount": "Amen donné",
+  "settings": {
+    "title": "Modifier le profil",
+    "photo": "Changer la photo",
+    "name": "Nom complet",
+    "bio": "Bio",
+    "city": "Ville",
+    "country": "Pays",
+    "church": "Eglise",
+    "denomination": "Denomination",
+    "faithYears": "Annees de foi",
+    "verse": "Verset favori",
+    "testimony": "Temoignage",
+    "profession": "Profession",
+    "marital": "Etat civil",
+    "maritalOptions": {
+      "single": "Celibataire",
+      "married": "Marie",
+      "divorced": "Divorce",
+      "widowed": "Veuf"
+    },
+    "spiritual": "Etat spirituel",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "saved": "Enregistre!"
+  }
 }
