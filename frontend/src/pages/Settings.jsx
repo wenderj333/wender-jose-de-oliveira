@@ -15,9 +15,9 @@ async function uploadPhoto(file) {
 }
 export default function Settings() {
   const { user, token, setUser } = useAuth();
-  console.log("USER NO SETTINGS:", user, "TOKEN:", token); if (!user) return <div style={{padding:40,textAlign:"center",color:"#6C3FA0",fontSize:18,background:"red"}}>SEM USER!</div>;
   const { t } = useTranslation();
   const navigate = useNavigate();
+  if (!user) return <div style={{padding:40,textAlign:"center",color:"#6C3FA0",fontSize:18,background:"red"}}>SEM USER!</div>;
   const [form, setForm] = useState({
     full_name: user?.full_name || "",
     bio: user?.bio || "",
