@@ -24,7 +24,9 @@ export default function Profile() {
   if (loading) return <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}><Loader2 className="animate-spin" /></div>;
   if (!user) return <div style={{ textAlign: "center", padding: "20px" }}>Utilizador nao encontrado.</div>;
   return (
-    <div style={{ maxWidth: "935px", margin: "0 auto", padding: "30px 20px" }}>
+    <div style={{ maxWidth: "935px", margin: "0 auto", padding: "0" }}>
+      {user.cover_url && <img src={user.cover_url} style={{width:"100%",height:"200px",objectFit:"cover"}} onError={e=>e.target.style.display="none"} />}
+      <div style={{padding:"20px"}}>
       <header style={{ display: "flex", alignItems: "center", marginBottom: "44px", gap: "30px" }}>
         <div style={{position:"relative",display:"inline-block"}}>
           <img src={user.avatar_url || "/pro.jpg"} style={{ width: "150px", height: "150px", borderRadius: "50%", objectFit: "cover", border: "1px solid #dbdbdb" }} onError={e => e.target.src="/pro.jpg"} />
@@ -58,6 +60,6 @@ export default function Profile() {
           <Grid size={12} /> Publicacoes
         </div>
       </div>
-    </div>
+    </div></div>
   );
 }
