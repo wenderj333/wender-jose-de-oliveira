@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Loader2, Grid, Settings } from "lucide-react";
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
 export default function Profile() {
-  const { id } = useParams();
+  const { id, userId } = useParams();
   const navigate = useNavigate();
   const { user: currentUser, token } = useAuth();
   const { t } = useTranslation();
@@ -13,7 +13,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [amens, setAmens] = useState(0);
   const [amenDado, setAmenDado] = useState(false);
-  const targetId = id || currentUser?.id;
+  const targetId = userId || id || currentUser?.id;
   useEffect(() => {
     if (!targetId) return;
     fetch(API + "/profile/" + targetId, { headers: { Authorization: "Bearer " + token } })
