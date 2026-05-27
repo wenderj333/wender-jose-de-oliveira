@@ -67,7 +67,7 @@ export default function Settings() {
   const sech = {fontWeight:700,fontSize:16,color:"#6C3FA0",marginBottom:12};
 
   return (
-    <div style={{maxWidth:600,margin:"0 auto",padding:24}}>
+    <div style={{maxWidth:600,margin:"0 auto",padding:24,background:"#fff",minHeight:"100vh"}}>
       <button onClick={()=>navigate(-1)} style={{marginBottom:16,background:"none",border:"none",cursor:"pointer",fontSize:16,color:"#6C3FA0"}}>← {t("common.back","Voltar")}</button>
       <h2 style={{marginBottom:24,color:"#1a1a2e"}}>{t("settings.title","Editar Perfil")}</h2>
       <div style={{textAlign:"center",marginBottom:24}}>
