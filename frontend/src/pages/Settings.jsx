@@ -118,13 +118,3 @@ export default function Settings() {
     </div>
   );
 }
-}
-
-
-// v2
-
-
-// v3
-
-
-// v4
