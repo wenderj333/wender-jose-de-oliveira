@@ -15,6 +15,7 @@ async function uploadPhoto(file) {
 }
 export default function Settings() {
   const { user, token, setUser } = useAuth();
+  if (!user) return <div style={{padding:40}}>A carregar...</div>;
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -118,3 +119,6 @@ export default function Settings() {
   );
 }
 }
+
+
+// v2
