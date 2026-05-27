@@ -15,7 +15,7 @@ async function uploadPhoto(file) {
 }
 export default function Settings() {
   const { user, token, setUser } = useAuth();
-  if (!user) return <div style={{padding:40}}>A carregar...</div>;
+  if (!user) { return <div style={{padding:40,textAlign:'center'}}><p>Precisas de fazer login.</p><button onClick={()=>navigate('/login')} style={{background:'#6C3FA0',color:'white',border:'none',borderRadius:8,padding:'10px 20px',cursor:'pointer',marginTop:16}}>Login</button></div>; }
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -122,3 +122,6 @@ export default function Settings() {
 
 
 // v2
+
+
+// v3
