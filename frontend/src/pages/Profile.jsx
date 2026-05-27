@@ -34,7 +34,7 @@ export default function Profile() {
         <section>
           <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "20px" }}>
             <h2 style={{ fontSize: "28px", fontWeight: "300" }}>{user.username || user.full_name || "Usuario"}</h2>
-            {(!id || id === currentUser?.id) && (
+            {(!userId || userId === currentUser?.id) && (
               <>
                 <button onClick={() => navigate("/configuracoes")} style={{ background: "transparent", border: "1px solid #dbdbdb", borderRadius: "4px", padding: "5px 9px", fontWeight: "600", fontSize: "14px", cursor: "pointer" }}>Editar perfil</button>
                 <Settings style={{ cursor: "pointer" }} onClick={() => navigate("/configuracoes")} />
