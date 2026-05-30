@@ -19,12 +19,10 @@ export default function Settings() {
   const token = ctxToken || localStorage.getItem('token');
   React.useEffect(() => {
     if (ctxUser) { setLocalUser(ctxUser); return; }
-    const t = localStorage.getItem('token');
-    if (!t) return;
-    fetch(API+'/auth/me', {headers:{Authorization:'Bearer '+t}})
-      .then(r=>r.ok?r.json():null)
-      .then(d=>{ if(d?.user) setLocalUser(d.user); })
-      .catch(()=>{});
+    try {
+      const saved = localStorage.getItem('user');
+      if (saved) setLocalUser(JSON.parse(saved));
+    } catch(e) {}
   }, [ctxUser]);
   const { t } = useTranslation();
   const navigate = useNavigate();
