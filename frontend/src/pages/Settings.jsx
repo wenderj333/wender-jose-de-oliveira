@@ -21,14 +21,13 @@ export default function Settings() {
     if (ctxUser) { setLocalUser(ctxUser); return; }
     const t = localStorage.getItem('token');
     if (!t) return;
-    fetch(API+'/profile/me', {headers:{Authorization:'Bearer '+t}})
+    fetch(API+'/auth/me', {headers:{Authorization:'Bearer '+t}})
       .then(r=>r.ok?r.json():null)
       .then(d=>{ if(d?.user) setLocalUser(d.user); })
       .catch(()=>{});
   }, [ctxUser]);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  if (!user) return <div style={{padding:40,textAlign:"center",color:"#6C3FA0",fontSize:18}}>Faz login para editar o perfil.</div>;
   const [form, setForm] = useState({
     full_name: user?.full_name || "",
     bio: user?.bio || "",
@@ -43,6 +42,7 @@ export default function Settings() {
     marital_status: user?.marital_status || "",
     spiritual_state: user?.spiritual_state || "",
   });
+  if (!user) return <div style={{padding:40,textAlign:"center",color:"#6C3FA0",fontSize:18}}>Faz login para editar o perfil.</div>;
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [msg, setMsg] = useState("");
