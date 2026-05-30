@@ -14,12 +14,12 @@ async function uploadPhoto(file) {
   return (await r.json()).secure_url;
 }
 export default function Settings() {
-  const { user, token, setUser } = useAuth();
+  const { user: ctxUser, token: ctxToken, setUser } = useAuth();
+  const savedUser = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('user')); } catch(e) { return null; } }, []);
+  const user = ctxUser || savedUser;
+  const token = ctxToken || localStorage.getItem('token');
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [ready, setReady] = React.useState(false);
-  React.useEffect(() => { setTimeout(() => setReady(true), 1500); }, []);
-  if (!user && !ready) return <div style={{padding:40,textAlign:"center",color:"#6C3FA0",fontSize:18}}>A carregar...</div>;
   if (!user) return <div style={{padding:40,textAlign:"center",color:"#6C3FA0",fontSize:18}}>Faz login para editar o perfil.</div>;
   const [form, setForm] = useState({
     full_name: user?.full_name || "",
