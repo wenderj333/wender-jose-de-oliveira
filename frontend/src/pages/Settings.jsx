@@ -15,9 +15,9 @@ async function uploadPhoto(file) {
 }
 export default function Settings() {
   const { user: ctxUser, token: ctxToken, setUser } = useAuth();
-  const savedUser = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('user')); } catch(e) { return null; } }, []);
-  const user = ctxUser || savedUser;
+  const [user, setLocalUser] = React.useState(() => { try { return ctxUser || JSON.parse(localStorage.getItem('user')); } catch(e) { return null; } });
   const token = ctxToken || localStorage.getItem('token');
+  React.useEffect(() => { if (ctxUser) setLocalUser(ctxUser); }, [ctxUser]);
   const { t } = useTranslation();
   const navigate = useNavigate();
   if (!user) return <div style={{padding:40,textAlign:"center",color:"#6C3FA0",fontSize:18}}>Faz login para editar o perfil.</div>;
