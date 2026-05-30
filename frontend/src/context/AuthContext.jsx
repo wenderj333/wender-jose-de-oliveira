@@ -192,9 +192,9 @@ export function AuthProvider({ children }) {
       // ignore firebase signout errors
     }
     localStorage.removeItem('token');
-    // localStorage.removeItem('user');
+    localStorage.removeItem('user');
     setToken(null);
-    // setUser(null);
+    setUser(null);
   };
 
   const updateProfilePhoto = async (photoURL) => {
@@ -224,6 +224,7 @@ export function AuthProvider({ children }) {
 }
 
 export const useAuth = () => useContext(AuthContext);
+
 
 
 
