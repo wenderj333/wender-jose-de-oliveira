@@ -17,7 +17,10 @@ export default function Settings() {
   const { user, token, setUser } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  if (!user) return <div style={{padding:40,textAlign:"center",color:"#6C3FA0",fontSize:18,background:"red"}}>SEM USER!</div>;
+  const [ready, setReady] = React.useState(false);
+  React.useEffect(() => { setTimeout(() => setReady(true), 1500); }, []);
+  if (!user && !ready) return <div style={{padding:40,textAlign:"center",color:"#6C3FA0",fontSize:18}}>A carregar...</div>;
+  if (!user) return <div style={{padding:40,textAlign:"center",color:"#6C3FA0",fontSize:18}}>Faz login para editar o perfil.</div>;
   const [form, setForm] = useState({
     full_name: user?.full_name || "",
     bio: user?.bio || "",
