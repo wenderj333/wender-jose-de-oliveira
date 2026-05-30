@@ -623,7 +623,11 @@
     "widowed": "Vaduv(a)",
     "favoriteVerse": "Versetul preferat",
     "testimony": "Marturie",
-    "saveProfile": "Salveaza profil"
+    "saveProfile": "Salveaza profil",
+    "followers": "urmaritori",
+    "following": "urmaresc",
+    "notFound": "Utilizator negasit.",
+    "defaultUser": "Utilizator"
   },
   "messages": {
     "title": "Mesaje",
@@ -1798,6 +1802,9 @@
     "spiritual": "Stare spirituala",
     "save": "Salveaza",
     "saving": "Se salveaza...",
-    "saved": "Salvat!"
-  }
+    "saved": "Salvat!",
+    "errorPhoto": "Eroare actualizare foto",
+    "error": "Eroare la salvare"
+  },
+  "christianLife": "Viata Crestina"
 }

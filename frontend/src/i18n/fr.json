@@ -622,7 +622,11 @@
     "widowed": "Veuf/Veuve",
     "favoriteVerse": "Verset prefere",
     "testimony": "Temoignage",
-    "saveProfile": "Sauvegarder profil"
+    "saveProfile": "Sauvegarder profil",
+    "followers": "abonnés",
+    "following": "abonnements",
+    "notFound": "Utilisateur introuvable.",
+    "defaultUser": "Utilisateur"
   },
   "messages": {
     "title": "Messages",
@@ -1797,6 +1801,9 @@
     "spiritual": "Etat spirituel",
     "save": "Enregistrer",
     "saving": "Enregistrement...",
-    "saved": "Enregistre!"
-  }
+    "saved": "Enregistre!",
+    "errorPhoto": "Erreur mise à jour photo",
+    "error": "Erreur lors de la sauvegarde"
+  },
+  "christianLife": "Vie Chrétienne"
 }

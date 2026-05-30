@@ -978,7 +978,11 @@
     "widowed": "Vdovec/Vdova",
     "favoriteVerse": "Lyubimyy stikh",
     "testimony": "Svidetelstvo",
-    "saveProfile": "Sokhranit profil"
+    "saveProfile": "Sokhranit profil",
+    "followers": "подписчики",
+    "following": "подписки",
+    "notFound": "Пользователь не найден.",
+    "defaultUser": "Пользователь"
   },
   "landing": {
     "subtitle": "Чувствовал ли ты себя одиноким? Здесь всегда есть кто-то для тебя.",
@@ -1797,6 +1801,9 @@
     "spiritual": "Духовное состояние",
     "save": "Сохранить",
     "saving": "Сохранение...",
-    "saved": "Сохранено!"
-  }
+    "saved": "Сохранено!",
+    "errorPhoto": "Ошибка обновления фото",
+    "error": "Ошибка сохранения"
+  },
+  "christianLife": "Христианская жизнь"
 }

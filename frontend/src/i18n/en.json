@@ -622,7 +622,11 @@
     "widowed": "Widowed",
     "favoriteVerse": "Favourite verse",
     "testimony": "Testimony",
-    "saveProfile": "Save profile"
+    "saveProfile": "Save profile",
+    "followers": "followers",
+    "following": "following",
+    "notFound": "User not found.",
+    "defaultUser": "User"
   },
   "messages": {
     "title": "Messages",
@@ -1797,6 +1801,9 @@
     "spiritual": "Spiritual state",
     "save": "Save",
     "saving": "Saving...",
-    "saved": "Saved!"
-  }
+    "saved": "Saved!",
+    "errorPhoto": "Error updating photo",
+    "error": "Error saving"
+  },
+  "christianLife": "Christian Life"
 }

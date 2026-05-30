@@ -623,7 +623,11 @@
     "widowed": "Verwitwet",
     "favoriteVerse": "Lieblingsvers",
     "testimony": "Zeugnis",
-    "saveProfile": "Profil speichern"
+    "saveProfile": "Profil speichern",
+    "followers": "Follower",
+    "following": "Folge ich",
+    "notFound": "Benutzer nicht gefunden.",
+    "defaultUser": "Benutzer"
   },
   "messages": {
     "title": "Messages",
@@ -1799,6 +1803,9 @@
     "spiritual": "Geistlicher Zustand",
     "save": "Speichern",
     "saving": "Speichern...",
-    "saved": "Gespeichert!"
-  }
+    "saved": "Gespeichert!",
+    "errorPhoto": "Fehler beim Foto aktualisieren",
+    "error": "Fehler beim Speichern"
+  },
+  "christianLife": "Christliches Leben"
 }

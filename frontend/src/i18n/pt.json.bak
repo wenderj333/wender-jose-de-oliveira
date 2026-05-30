@@ -651,11 +651,7 @@
     "widowed": "Viuvo(a)",
     "favoriteVerse": "Versiculo favorito",
     "testimony": "Testemunho",
-    "saveProfile": "Guardar perfil",
-    "followers": "seguidores",
-    "following": "seguindo",
-    "notFound": "Utilizador não encontrado.",
-    "defaultUser": "Utilizador"
+    "saveProfile": "Guardar perfil"
   },
   "messages": {
     "title": "Mensagens",
@@ -1742,35 +1738,5 @@
     "sendPost": "Enviar post",
     "searchMember": "Procurar membro...",
     "postSent": "Post enviado!"
-  },
-  "profileAmen": "Amém",
-  "profileAmenCount": "Amém dado",
-  "settings": {
-    "title": "Editar Perfil",
-    "photo": "Mudar foto",
-    "name": "Nome completo",
-    "bio": "Bio",
-    "city": "Cidade",
-    "country": "Pais",
-    "church": "Igreja",
-    "denomination": "Denominacao",
-    "faithYears": "Anos de fe",
-    "verse": "Versiculo favorito",
-    "testimony": "Testemunho",
-    "profession": "Profissao",
-    "marital": "Estado civil",
-    "maritalOptions": {
-      "single": "Solteiro",
-      "married": "Casado",
-      "divorced": "Divorciado",
-      "widowed": "Viuvo"
-    },
-    "spiritual": "Estado espiritual",
-    "save": "Guardar",
-    "saving": "A guardar...",
-    "saved": "Guardado!",
-    "errorPhoto": "Erro ao atualizar foto",
-    "error": "Erro ao guardar"
-  },
-  "christianLife": "Vida Cristã"
+  }
 }
