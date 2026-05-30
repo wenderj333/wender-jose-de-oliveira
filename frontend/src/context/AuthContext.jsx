@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth, googleProvider, facebookProvider } from '../firebase';
 import { signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
@@ -72,7 +72,7 @@ export function AuthProvider({ children }) {
       try {
         setUser(JSON.parse(savedUser));
       } catch (e) {
-        localStorage.removeItem('user');
+        // localStorage.removeItem('user');
       }
     }
     if (token && !user) {
@@ -192,9 +192,9 @@ export function AuthProvider({ children }) {
       // ignore firebase signout errors
     }
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    // localStorage.removeItem('user');
     setToken(null);
-    setUser(null);
+    // setUser(null);
   };
 
   const updateProfilePhoto = async (photoURL) => {
@@ -224,4 +224,5 @@ export function AuthProvider({ children }) {
 }
 
 export const useAuth = () => useContext(AuthContext);
+
 
