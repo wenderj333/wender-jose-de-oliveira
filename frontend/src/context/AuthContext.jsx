@@ -87,9 +87,8 @@ export function AuthProvider({ children }) {
         })
         .catch(() => {
           // Token invalid, keep any Firebase user if present
-          if (!auth.currentUser) {
+          if (!auth.currentUser && !localStorage.getItem('user')) {
             localStorage.removeItem('token');
-            localStorage.removeItem('user');
             setToken(null);
             setUser(null);
           }
