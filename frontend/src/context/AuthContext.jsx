@@ -87,10 +87,10 @@ export function AuthProvider({ children }) {
         })
         .catch(() => {
           // Token invalid, keep any Firebase user if present
-          if (!auth.currentUser && !localStorage.getItem('user')) {
+          // Nao limpar user do localStorage - manter sessao
+          if (!auth.currentUser) {
             localStorage.removeItem('token');
             setToken(null);
-            setUser(null);
           }
         })
         .finally(() => setLoading(false));
