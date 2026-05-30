@@ -16,23 +16,21 @@ async function uploadPhoto(file) {
 }
 
 export default function Settings() {
-  const { user: ctxUser, token: ctxToken, setUser } = useAuth();
+  const { setUser } = useAuth();
   const navigate = useNavigate();
-  const token = ctxToken || localStorage.getItem("token");
+  const token = localStorage.getItem("token");
   
   const [user, setUser2] = useState(() => {
-    if (ctxUser) return ctxUser;
     try { return JSON.parse(localStorage.getItem("user")); } catch(e) { return null; }
   });
 
   useEffect(() => {
-    if (ctxUser) { setUser2(ctxUser); return; }
     if (!token) return;
     fetch(API+"/auth/me", {headers:{Authorization:"Bearer "+token}})
       .then(r=>r.ok?r.json():null)
       .then(d=>{ if(d?.user){ setUser2(d.user); localStorage.setItem("user",JSON.stringify(d.user)); }})
       .catch(()=>{});
-  }, [ctxUser, token]);
+  }, [token]);
 
   const [form, setForm] = useState({
     full_name:"", bio:"", city:"", country:"",
@@ -150,3 +148,5 @@ export default function Settings() {
     </div>
   );
 }
+
+
