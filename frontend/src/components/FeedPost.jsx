@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Heart, MessageCircle, Share2, Video, Image, BookOpen, Award, Play, Music } from 'lucide-react';
 
@@ -23,7 +23,7 @@ export default function FeedPost({ post, isPlaying, onVideoPlay, onImageClick })
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current.play().catch(err => console.log("Erro �udio:", err));
+        audioRef.current.play().catch(err => console.log("Erro áudio:", err));
       } else {
         audioRef.current.pause();
       }
@@ -108,3 +108,4 @@ export default function FeedPost({ post, isPlaying, onVideoPlay, onImageClick })
     </article>
   );
 }
+

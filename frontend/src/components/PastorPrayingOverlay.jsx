@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useTranslation } from 'react-i18next';
 import PrayerBubbles from './PrayerBubbles';
 import { HandHeart, BookOpen, X } from 'lucide-react';
@@ -43,3 +43,4 @@ export default function PastorPrayingOverlay({ sessions, totalCount, onClose }) 
     </div>
   );
 }
+

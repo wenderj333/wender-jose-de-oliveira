@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Church } from 'lucide-react';
 
 const CHURCH_NAMES = [
   'Igreja Batista Central',
   'Assembleia de Deus',
   'Igreja Presbiteriana',
-  'Comunidade da Graça',
+  'Comunidade da GraÃ§a',
   'Igreja Metodista',
   'Igreja do Evangelho Pleno',
-  'Comunidade Cristã',
+  'Comunidade CristÃ£',
   'Igreja Adventista',
 ];
 
@@ -56,3 +56,4 @@ export default function PrayerBubbles({ sessions = [] }) {
     </div>
   );
 }
+

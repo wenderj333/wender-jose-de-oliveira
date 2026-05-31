@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Camera, Upload, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -47,7 +47,7 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
       reader.readAsDataURL(file);
       setError('');
     } else {
-      setError('Por favor, selecione um ficheiro de imagem válido.');
+      setError('Por favor, selecione um ficheiro de imagem vÃ¡lido.');
       setAvatarFile(null);
       setAvatarPreview(null);
     }
@@ -96,7 +96,7 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
           position: 'relative',
         }}>
         {user && !user.photoURL && !user.avatar_url && (
-          <button className="registration-popup-close" onClick={(e) => { e.stopPropagation(); setError('Por favor, faça upload de uma foto para continuar.'); }} style={{
+          <button className="registration-popup-close" onClick={(e) => { e.stopPropagation(); setError('Por favor, faÃ§a upload de uma foto para continuar.'); }} style={{
             position: 'absolute', top: '15px', right: '15px',
             background: 'none', border: 'none', color: '#aaa', cursor: 'pointer',
             fontSize: '1.2rem',
@@ -107,7 +107,7 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
           {t('profile.addPhotoPrompt', 'Adicione sua foto de perfil!')}
         </h3>
         <p style={{ fontSize: '0.9rem', color: '#bbb', marginBottom: '25px' }}>
-          {t('profile.addPhotoDesc', 'É obrigatório ter uma foto para interagir na comunidade.')}
+          {t('profile.addPhotoDesc', 'Ã‰ obrigatÃ³rio ter uma foto para interagir na comunidade.')}
         </p>
 
         <div style={{ marginBottom: '20px' }}>
@@ -134,7 +134,7 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
             {!avatarPreview && <Camera size={40} color="#daa520" />}
           </div>
           <p style={{ fontSize: '0.85rem', color: avatarPreview ? '#4caf50' : '#daa520', fontWeight: '600' }}>
-            {avatarPreview ? '✅ Foto selecionada!' : 'Clique para selecionar uma foto *'}
+            {avatarPreview ? 'âœ… Foto selecionada!' : 'Clique para selecionar uma foto *'}
           </p>
         </div>
 
@@ -152,7 +152,7 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
             transition: 'all 0.3s ease',
           }}
         >
-          {uploading ? '📤 A subir...' : <><Upload size={18} /> Subir Foto e Continuar</>}
+          {uploading ? 'ðŸ“¤ A subir...' : <><Upload size={18} /> Subir Foto e Continuar</>}
         </button>
       </div>
     </div>
@@ -160,3 +160,4 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
 }
 
 export default RegistrationPromptPopup;
+

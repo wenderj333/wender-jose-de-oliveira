@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { X } from 'lucide-react';
@@ -7,11 +7,11 @@ const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
 
 const REASONS = [
-  { value: 'inappropriate', icon: '🚫' },
-  { value: 'disrespectful', icon: '😡' },
-  { value: 'spam', icon: '📢' },
-  { value: 'harassment', icon: '😰' },
-  { value: 'other', icon: '❓' },
+  { value: 'inappropriate', icon: 'ðŸš«' },
+  { value: 'disrespectful', icon: 'ðŸ˜¡' },
+  { value: 'spam', icon: 'ðŸ“¢' },
+  { value: 'harassment', icon: 'ðŸ˜°' },
+  { value: 'other', icon: 'â“' },
 ];
 
 export default function ReportModal({ type, targetId, targetName, onClose }) {
@@ -68,20 +68,20 @@ export default function ReportModal({ type, targetId, targetName, onClose }) {
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
           <h2 style={{ margin: 0, fontSize: 18, color: 'var(--text, #1a1a2e)', fontWeight: 700 }}>
-            🚩 {t('report.title')} {targetName ? `— ${targetName}` : ''}
+            ðŸš© {t('report.title')} {targetName ? `â€” ${targetName}` : ''}
           </h2>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}>
             <X size={20} />
           </button>
         </div>
         <p style={{ margin: '0 0 20px', fontSize: 13, color: '#888' }}>
-          {t('report.subtitle')} ✝️
+          {t('report.subtitle')} âœï¸
         </p>
 
         {sent ? (
           /* Success state */
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>✅</div>
+            <div style={{ fontSize: 48, marginBottom: 12 }}>âœ…</div>
             <p style={{ fontWeight: 700, color: '#2e7d32', fontSize: 15, margin: '0 0 20px' }}>
               {t('report.sent')}
             </p>
@@ -164,3 +164,4 @@ export default function ReportModal({ type, targetId, targetName, onClose }) {
     </div>
   );
 }
+

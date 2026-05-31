@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Lock } from 'lucide-react';
 
@@ -81,7 +81,7 @@ export default function GuestPrompt({ show, onClose, feature = 'esta funcionalid
             marginBottom: '8px',
           }}
         >
-          ✨ Criar conta grátis
+          âœ¨ Criar conta grÃ¡tis
         </button>
 
         <button
@@ -101,9 +101,10 @@ export default function GuestPrompt({ show, onClose, feature = 'esta funcionalid
             cursor: 'pointer',
           }}
         >
-          Já tenho conta
+          JÃ¡ tenho conta
         </button>
       </div>
     </div>
   );
 }
+

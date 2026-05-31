@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe, Check } from 'lucide-react';
 
 const LANGUAGES = [
-  { code: 'pt', name: '🇧🇷 Português' },
-  { code: 'es', name: '🇪🇸 Español' },
-  { code: 'en', name: '🇺🇸 English' },
-  { code: 'de', name: '🇩🇪 Deutsch' },
-  { code: 'fr', name: '🇫🇷 Français' },
-  { code: 'ro', name: '🇷🇴 Română' },
-  { code: 'ru', name: '🇷🇺 Русский' },
+  { code: 'pt', name: 'ðŸ‡§ðŸ‡· PortuguÃªs' },
+  { code: 'es', name: 'ðŸ‡ªðŸ‡¸ EspaÃ±ol' },
+  { code: 'en', name: 'ðŸ‡ºðŸ‡¸ English' },
+  { code: 'de', name: 'ðŸ‡©ðŸ‡ª Deutsch' },
+  { code: 'fr', name: 'ðŸ‡«ðŸ‡· FranÃ§ais' },
+  { code: 'ro', name: 'ðŸ‡·ðŸ‡´ RomÃ¢nÄƒ' },
+  { code: 'ru', name: 'ðŸ‡·ðŸ‡º Ð ÑƒÑÑÐºÐ¸Ð¹' },
 ];
 
 /**
- * variant="dark"  → botão branco (para navbar azul do app) — padrão
- * variant="light" → botão azul escuro (para navbar branca da Landing)
+ * variant="dark"  â†’ botÃ£o branco (para navbar azul do app) â€” padrÃ£o
+ * variant="light" â†’ botÃ£o azul escuro (para navbar branca da Landing)
  */
 export default function LanguageSwitcher({ variant = 'dark' }) {
   const { i18n } = useTranslation();
@@ -30,7 +30,7 @@ export default function LanguageSwitcher({ variant = 'dark' }) {
     setOpen(false);
   };
 
-  // Cores do botão principal
+  // Cores do botÃ£o principal
   const btnStyle = {
     background: isLight ? 'rgba(74,128,212,0.1)' : 'rgba(255,255,255,0.18)',
     border: isLight ? '1.5px solid rgba(74,128,212,0.3)' : '1px solid rgba(255,255,255,0.25)',
@@ -118,3 +118,4 @@ export default function LanguageSwitcher({ variant = 'dark' }) {
     </div>
   );
 }
+

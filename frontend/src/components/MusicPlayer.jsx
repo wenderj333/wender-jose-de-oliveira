@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { useMusic } from "../context/MusicContext";
 import { useTranslation } from "react-i18next";
 import { X, ChevronDown, ChevronUp, Music, SkipBack, SkipForward, Shuffle, Repeat } from "lucide-react";
@@ -58,11 +58,12 @@ export default function MusicPlayer() {
         <div style={{ color: "#888", fontSize: "0.8rem", marginTop: 2 }}>{currentSong.artist}</div>
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, padding: "0.4rem 1rem 0.8rem" }}>
-        <button onClick={toggleShuffle} style={{ ...btnBase, color: shuffle ? "#667eea" : "#555" }} title={t("music.shuffle","Aleatório")}><Shuffle size={18} /></button>
+        <button onClick={toggleShuffle} style={{ ...btnBase, color: shuffle ? "#667eea" : "#555" }} title={t("music.shuffle","AleatÃ³rio")}><Shuffle size={18} /></button>
         <button onClick={prevSong} style={{ ...btnBase, color: "#ccc" }} title={t("music.prev","Anterior")}><SkipBack size={22} /></button>
-        <button onClick={nextSong} style={{ ...btnBase, color: "#ccc" }} title={t("music.next","Próxima")}><SkipForward size={22} /></button>
+        <button onClick={nextSong} style={{ ...btnBase, color: "#ccc" }} title={t("music.next","PrÃ³xima")}><SkipForward size={22} /></button>
         <button onClick={toggleRepeat} style={{ ...btnBase, color: repeat ? "#667eea" : "#555" }} title={t("music.repeat","Repetir")}><Repeat size={18} /></button>
       </div>
     </div>
   );
 }
+

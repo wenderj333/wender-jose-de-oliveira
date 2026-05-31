@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HandHeart, Check } from 'lucide-react';
 
@@ -27,3 +27,4 @@ export default function AmemButton({ onClick }) {
     </button>
   );
 }
+

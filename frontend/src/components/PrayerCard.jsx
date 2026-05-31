@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useTranslation } from 'react-i18next';
 import AmemButton from './AmemButton';
 import { Church, HandHeart, Sparkles, AlertTriangle, Heart, Stethoscope, Briefcase, Users, GraduationCap, Home, HeartCrack, Scale, Star } from 'lucide-react';
@@ -45,7 +45,7 @@ export default function PrayerCard({ prayer, onPray, user }) {
         <div>
           <div className="prayer-card__author">{prayer.author_name}</div>
           <div className="prayer-card__church">
-            {prayer.church_name && (<><Church size={12} style={{ verticalAlign: 'middle' }} /> {prayer.church_name} · </>)}
+            {prayer.church_name && (<><Church size={12} style={{ verticalAlign: 'middle' }} /> {prayer.church_name} Â· </>)}
             {timeAgo(prayer.created_at)}
           </div>
         </div>
@@ -86,3 +86,4 @@ export default function PrayerCard({ prayer, onPray, user }) {
     </div>
   );
 }
+

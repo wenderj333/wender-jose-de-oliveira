@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, courseType, accentColor = '#d4af37', onClose, onNavigate }) => {
   const lesson = lessons[currentIndex];
@@ -38,7 +38,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
       const textsToTranslate = [
         content.title,
         ...content.paragraphs,
-        ...content.verses.map(v => v.text + ' — ' + v.ref),
+        ...content.verses.map(v => v.text + ' â€” ' + v.ref),
         content.challenge,
       ];
       const results = await Promise.all(
@@ -71,7 +71,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
   const c = translated || {
     title: content.title,
     paragraphs: content.paragraphs,
-    verses: content.verses.map(v => v.text + '\n— ' + v.ref),
+    verses: content.verses.map(v => v.text + '\nâ€” ' + v.ref),
     challenge: content.challenge,
   };
 
@@ -94,10 +94,10 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
           padding: '8px 16px', borderRadius: 8, cursor: 'pointer', fontSize: '0.9rem',
           fontWeight: 600, transition: 'all 0.2s',
         }}>
-          ← Voltar ao Curso
+          â† Voltar ao Curso
         </button>
         <div style={{ color: '#aaa', fontSize: '0.9rem', fontWeight: 600 }}>
-          Lição {currentIndex + 1} de {totalLessons}
+          LiÃ§Ã£o {currentIndex + 1} de {totalLessons}
         </div>
         <button onClick={handleTranslate} disabled={translating} style={{
           background: translating ? 'rgba(255,255,255,0.1)' : `${accentColor}22`,
@@ -105,7 +105,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
           padding: '8px 16px', borderRadius: 8, cursor: 'pointer', fontSize: '0.9rem',
           fontWeight: 600, transition: 'all 0.2s',
         }}>
-          {translating ? '⏳ Traduzindo...' : '🌐 Traduzir'}
+          {translating ? 'â³ Traduzindo...' : 'ðŸŒ Traduzir'}
         </button>
       </div>
 
@@ -130,7 +130,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
             fontSize: '0.75rem', fontWeight: 800, letterSpacing: 1,
             textTransform: 'uppercase',
           }}>
-            👑 Conteúdo VIP Premium
+            ðŸ‘‘ ConteÃºdo VIP Premium
           </span>
         </div>
 
@@ -183,7 +183,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
               color: accentColor, fontWeight: 700, fontSize: '0.95rem',
               marginTop: '0.75rem', marginBottom: 0, textAlign: 'right',
             }}>
-              📖 {translated ? c.verses[i].split('—')[1]?.trim() || verse.ref : verse.ref}
+              ðŸ“– {translated ? c.verses[i].split('â€”')[1]?.trim() || verse.ref : verse.ref}
             </p>
           </div>
         ))}
@@ -194,7 +194,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
           border: '1px solid rgba(139,92,246,0.3)', borderRadius: 12,
           padding: '1.5rem', margin: '2.5rem 0',
         }}>
-          <div style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🎯 Desafio Prático</div>
+          <div style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>ðŸŽ¯ Desafio PrÃ¡tico</div>
           <p style={{
             fontFamily: 'Georgia, "Times New Roman", serif',
             fontSize: '1.05rem', lineHeight: 1.75, color: '#c4b5fd', margin: 0,
@@ -206,12 +206,12 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
         {/* Notes */}
         <div style={{ margin: '3rem 0 2rem' }}>
           <div style={{ color: '#aaa', fontSize: '0.95rem', fontWeight: 600, marginBottom: '0.75rem' }}>
-            📝 Suas Anotações
+            ðŸ“ Suas AnotaÃ§Ãµes
           </div>
           <textarea
             value={notes}
             onChange={handleNotesChange}
-            placeholder="Escreva suas anotações aqui..."
+            placeholder="Escreva suas anotaÃ§Ãµes aqui..."
             style={{
               width: '100%', minHeight: 150, background: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12,
@@ -247,7 +247,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
               transition: 'all 0.2s',
             }}
           >
-            ← Lição Anterior
+            â† LiÃ§Ã£o Anterior
           </button>
           <button
             onClick={() => currentIndex < totalLessons - 1 && onNavigate(currentIndex + 1)}
@@ -262,7 +262,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
               transition: 'all 0.2s',
             }}
           >
-            Próxima Lição →
+            PrÃ³xima LiÃ§Ã£o â†’
           </button>
         </div>
       </div>
@@ -278,3 +278,4 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 };
 
 export default LessonReader;
+

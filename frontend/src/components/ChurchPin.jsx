@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BookOpen, MapPin, Building2, Phone, User, Users, Navigation, Heart, Share2 } from 'lucide-react';
 
@@ -59,3 +59,4 @@ export default function ChurchPin({ church }) {
     </div>
   );
 }
+
