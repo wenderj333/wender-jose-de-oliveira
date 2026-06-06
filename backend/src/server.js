@@ -444,6 +444,7 @@ app.use('/api/prayers', require('./routes/prayer'));
 app.use('/api/churches', require('./routes/churches'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/feed', require('./routes/feed'));
+app.use('/api/photos', require('./routes/photos'));
 app.use('/api/help-requests', require('./routes/help'));
 app.use('/api/chat', require('./routes/chat'));
 app.use('/api/pastoral-ai', require('./routes/pastoral-ai'));
