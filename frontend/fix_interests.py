@@ -1,0 +1,24 @@
+﻿import json
+
+# Adicionar chaves nos JSONs
+fixes = {
+    "pt": {"biblicalStudies": "Estudos Biblicos", "prayer": "Oracao", "evangelism": "Evangelismo", "missions": "Missoes", "gospelMusic": "Musica Gospel", "reading": "Leitura", "family": "Familia", "christianFriends": "Amizades Cristas", "christianEvents": "Eventos Cristaos", "other": "Outro", "makeFriends": "Fazer amizades cristas", "shareWord": "Compartilhar a Palavra", "prayerGroup": "Grupo de oracao", "biblicalStudiesGoal": "Estudos biblicos", "meetBrothers": "Conhecer irmaos em Cristo", "christianNetworking": "Networking cristao", "seriousRelationship": "Relacionamento serio", "spiritualSupport": "Apoio espiritual"},
+    "en": {"biblicalStudies": "Biblical Studies", "prayer": "Prayer", "evangelism": "Evangelism", "missions": "Missions", "gospelMusic": "Gospel Music", "reading": "Reading", "family": "Family", "christianFriends": "Christian Friends", "christianEvents": "Christian Events", "other": "Other", "makeFriends": "Make Christian Friends", "shareWord": "Share the Word", "prayerGroup": "Prayer Group", "biblicalStudiesGoal": "Biblical Studies", "meetBrothers": "Meet Brothers in Christ", "christianNetworking": "Christian Networking", "seriousRelationship": "Serious Relationship", "spiritualSupport": "Spiritual Support"},
+    "es": {"biblicalStudies": "Estudios Biblicos", "prayer": "Oracion", "evangelism": "Evangelismo", "missions": "Misiones", "gospelMusic": "Musica Gospel", "reading": "Lectura", "family": "Familia", "christianFriends": "Amigos Cristianos", "christianEvents": "Eventos Cristianos", "other": "Otro", "makeFriends": "Hacer amigos cristianos", "shareWord": "Compartir la Palabra", "prayerGroup": "Grupo de oracion", "biblicalStudiesGoal": "Estudios biblicos", "meetBrothers": "Conocer hermanos en Cristo", "christianNetworking": "Networking cristiano", "seriousRelationship": "Relacion seria", "spiritualSupport": "Apoyo espiritual"},
+    "de": {"biblicalStudies": "Bibelstudien", "prayer": "Gebet", "evangelism": "Evangelisation", "missions": "Missionen", "gospelMusic": "Gospelmusik", "reading": "Lesen", "family": "Familie", "christianFriends": "Christliche Freunde", "christianEvents": "Christliche Events", "other": "Andere", "makeFriends": "Christliche Freunde finden", "shareWord": "Wort teilen", "prayerGroup": "Gebetsgruppe", "biblicalStudiesGoal": "Bibelstudien", "meetBrothers": "Bruder in Christus treffen", "christianNetworking": "Christliches Netzwerk", "seriousRelationship": "Ernste Beziehung", "spiritualSupport": "Spirituelle Unterstutzung"},
+    "fr": {"biblicalStudies": "Etudes Bibliques", "prayer": "Priere", "evangelism": "Evangelisation", "missions": "Missions", "gospelMusic": "Musique Gospel", "reading": "Lecture", "family": "Famille", "christianFriends": "Amis Chretiens", "christianEvents": "Evenements Chretiens", "other": "Autre", "makeFriends": "Faire des amis chretiens", "shareWord": "Partager la Parole", "prayerGroup": "Groupe de priere", "biblicalStudiesGoal": "Etudes bibliques", "meetBrothers": "Rencontrer des freres en Christ", "christianNetworking": "Reseau chretien", "seriousRelationship": "Relation serieuse", "spiritualSupport": "Soutien spirituel"},
+    "ro": {"biblicalStudies": "Studii Biblice", "prayer": "Rugaciune", "evangelism": "Evanghelizare", "missions": "Misiuni", "gospelMusic": "Muzica Gospel", "reading": "Lectura", "family": "Familie", "christianFriends": "Prieteni Crestini", "christianEvents": "Evenimente Crestine", "other": "Altul", "makeFriends": "Faca prieteni crestini", "shareWord": "Impartaseste Cuvantul", "prayerGroup": "Grup de rugaciune", "biblicalStudiesGoal": "Studii biblice", "meetBrothers": "Intalneste frati in Hristos", "christianNetworking": "Retea crestina", "seriousRelationship": "Relatie serioasa", "spiritualSupport": "Suport spiritual"},
+    "ru": {"biblicalStudies": "Bibleyskiye Issledovaniya", "prayer": "Molitva", "evangelism": "Evangelizatsiya", "missions": "Missii", "gospelMusic": "Gospelnaya Muzyka", "reading": "Chteniye", "family": "Semya", "christianFriends": "Khristianskiye Druzya", "christianEvents": "Khristianskiye Sobytiya", "other": "Drugoe", "makeFriends": "Nayti khrist druzey", "shareWord": "Delitsya Slovom", "prayerGroup": "Molitvennaya gruppa", "biblicalStudiesGoal": "Bibleiskiye issledovaniya", "meetBrothers": "Vstretit bratev vo Khriste", "christianNetworking": "Khrist set", "seriousRelationship": "Seryoznye otnosheniya", "spiritualSupport": "Dukhovnaya podderzhka"}
+}
+
+for lang, keys in fixes.items():
+    fname = "src/i18n/" + lang + ".json"
+    with open(fname, "r", encoding="utf-8-sig") as f:
+        data = json.load(f)
+    if "interests" not in data:
+        data["interests"] = {}
+    for k, v in keys.items():
+        data["interests"][k] = v
+    with open(fname, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    print("OK: " + lang)

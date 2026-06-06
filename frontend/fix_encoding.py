@@ -1,0 +1,8 @@
+﻿content = open('src/App.jsx', 'r', encoding='utf-8').read()
+content = content.replace('Ã°Å¸â€Â´', '📺')
+content = content.replace('VOCÃƒÅ ', 'VOCÊ')
+content = content.replace('Ã°Å¸â€¢Å Ã¯Â¸Â', '✝️')
+content = content.replace('ðŸ"¸', '📸')
+content = content.replace('Ã‚Â·', '·')
+open('src/App.jsx', 'w', encoding='utf-8').write(content)
+print('Feito!')

@@ -1,0 +1,92 @@
+.registration-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeInOverlay 0.3s ease-out;
+}
+
+.registration-popup-content {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  animation: slideInPopup 0.3s ease-out;
+}
+
+.registration-popup-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--gray-500);
+}
+
+.popup-verse {
+  font-style: italic;
+  margin-bottom: 1rem;
+  color: var(--primary-dark);
+  font-size: 1rem;
+}
+
+.popup-title {
+  font-size: 1.8rem;
+  color: var(--gold-dark);
+  margin-bottom: 1.5rem;
+}
+
+.popup-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.popup-features li {
+  background: var(--primary-pale);
+  color: var(--primary-dark);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.popup-features li::before {
+  content: '✓'; /* Checkmark icon */
+  color: var(--green);
+  font-weight: bold;
+}
+
+.popup-register-btn {
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.popup-login-btn {
+  width: 100%;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInPopup {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
