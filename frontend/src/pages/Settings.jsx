@@ -15,7 +15,53 @@ export default function Settings() {
   });
 
   const [msg, setMsg] = useState("");
+  const [avatar, setAvatar] = useState(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const avatarInputRef = React.useRef(null);
+  const uploadAvatar = async (file) => {
+    if (!file) return;
+    setUploadingAvatar(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file); fd.append("upload_preset", "sigo_com_fe");
+      const res = await fetch("https://api.cloudinary.com/v1_1/degxiuf43/image/upload", { method: "POST", body: fd });
+      const data = await res.json();
+      const url = data.secure_url;
+      const token = localStorage.getItem("token");
+      await fetch("https://sigo-com-fe-api.onrender.com/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+        body: JSON.stringify({ avatar_url: url })
+      });
+      setAvatar(url);
+      setMsg("Foto atualizada!");
+    } catch(e) { setMsg("Erro ao atualizar foto"); }
+    setUploadingAvatar(false);
+  };
   const [loading, setLoading] = useState(false);
+
+  const handleSave = async () => {
+    setLoading(true);
+    setMsg("");
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch("https://sigo-com-fe-api.onrender.com/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+        body: JSON.stringify(form)
+      });
+      if (res.ok) {
+        setMsg("Perfil atualizado com sucesso!");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        setMsg("Erro ao salvar dados no servidor.");
+      }
+    } catch {
+      setMsg("Erro de conexao com o servidor.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -45,28 +91,7 @@ export default function Settings() {
     }
   };
 
-  const handleSave = async () => {
-    setLoading(true);
-    setMsg("");
-    const token = localStorage.getItem("token");
-    try {
-      const res = await fetch("https://sigo-com-fe-api.onrender.com/api/profile", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
-        body: JSON.stringify(form)
-      });
-      if (res.ok) {
-        setMsg("✅ Perfil atualizado e salvo com sucesso!");
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        setMsg("❌ Erro ao salvar dados no servidor.");
-      }
-    } catch {
-      setMsg("❌ Erro de conexão com o servidor.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   const sectionStyle = { marginBottom: "25px", padding: "15px", border: "1px solid #eee", borderRadius: "10px", background: "#fbfbfe" };
   const labelStyle = { display: "block", fontWeight: "bold", marginBottom: "5px", color: "#333", fontSize: "14px" };
@@ -79,6 +104,15 @@ export default function Settings() {
       
       {msg && <p style={{ color: msg.includes("❌") ? "#e11d48" : "#16a34a", fontWeight: "bold", marginBottom: "15px", textAlign: "center", fontSize: "16px" }}>{msg}</p>}
 
+      <div style={{...sectionStyle, textAlign:"center"}}>
+        <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>📸 Foto de Perfil</h3>
+        <img src={avatar || form.avatar_url || "/pro.jpg"} onError={e=>e.target.src="/pro.jpg"} style={{width:100,height:100,borderRadius:"50%",objectFit:"cover",border:"3px solid #6C3FA0",marginBottom:12}} />
+        <br/>
+        <input ref={avatarInputRef} type="file" accept="image/*" style={{display:"none"}} onChange={e=>uploadAvatar(e.target.files[0])} />
+        <button onClick={()=>avatarInputRef.current?.click()} disabled={uploadingAvatar} style={{background:"#6C3FA0",color:"white",border:"none",borderRadius:8,padding:"8px 16px",cursor:"pointer",fontSize:13}}>
+          {uploadingAvatar ? "A fazer upload..." : "Mudar Foto"}
+        </button>
+      </div>
       <div style={sectionStyle}>
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionPersonal','INFORMACOES PESSOAIS')}</h3>
         
@@ -118,6 +152,7 @@ export default function Settings() {
         </div>
       </div>
 
+
       <div style={sectionStyle}>
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionChurch','VIDA CRISTA')}</h3>
         
@@ -133,6 +168,7 @@ export default function Settings() {
         <label style={labelStyle}>{t("profile.pastor","Pastor")}:</label>
         <input style={inputStyle} value={form.pastor_name} onChange={e => setForm({...form, pastor_name: e.target.value})} />
       </div>
+
 
       <div style={sectionStyle}>
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionRole','FUNCAO NA IGREJA')}</h3>
@@ -152,6 +188,7 @@ export default function Settings() {
         <input type="number" style={inputStyle} value={form.role_years} onChange={e => setForm({...form, role_years: e.target.value})} />
       </div>
 
+
       <div style={sectionStyle}>
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionMinistry','MINISTERIO')}</h3>
         <label style={labelStyle}>{t("profile.ministry","Ministerio")}</label>
@@ -167,6 +204,7 @@ export default function Settings() {
           </>
         )}
       </div>
+
 
       <div style={sectionStyle}>
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionPrefs','PREFERENCIAS E TESTEMUNHO')}</h3>
@@ -187,6 +225,7 @@ export default function Settings() {
         <textarea style={{ ...inputStyle, minHeight: "80px", resize: "vertical" }} value={form.bio} onChange={e => setForm({...form, bio: e.target.value})} />
       </div>
 
+
       <div style={sectionStyle}>
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionInterests','INTERESSES')}</h3>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "12px" }}>
@@ -202,6 +241,7 @@ export default function Settings() {
         )}
       </div>
 
+
       <div style={sectionStyle}>
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionObjectives','OBJETIVOS')}</h3>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
@@ -210,6 +250,7 @@ export default function Settings() {
           ))}
         </div>
       </div>
+
 
       <div style={sectionStyle}>
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionFinish','FINALIZANDO PERFIL')}</h3>
