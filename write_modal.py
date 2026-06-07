@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿content = """import React, { useState } from "react";
 
 export default function PhotoModal({ url, onClose, onNext, onPrev }) {
   const [liked, setLiked] = useState(false);
@@ -69,3 +69,6 @@ export default function PhotoModal({ url, onClose, onNext, onPrev }) {
     </div>
   );
 }
+"""
+open("src/components/PhotoModal.jsx", "w", encoding="utf-8").write(content)
+print("Feito!")
