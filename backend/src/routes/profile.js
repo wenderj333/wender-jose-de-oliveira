@@ -92,7 +92,6 @@ router.patch('/photo', authenticate, async (req, res) => {
   }
 });
 
-module.exports = router;
 
 router.patch('/', authenticate, async (req, res) => {
   try {
@@ -105,3 +104,5 @@ router.patch('/', authenticate, async (req, res) => {
     res.json({ success: true });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
+
+module.exports = router;
