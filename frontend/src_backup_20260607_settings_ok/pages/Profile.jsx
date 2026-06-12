@@ -66,17 +66,7 @@ export default function Profile() {
           <section style={{ flex: 1, minWidth: 200 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px", flexWrap: "wrap" }}>
               <h2 style={{ fontSize: "22px", fontWeight: "300", margin: 0 }}>{user.username || user.full_name}</h2>
-              {isOwner ? (
-                <>
-                  <button onClick={() => navigate("/settings")} style={{ background: "transparent", border: "1px solid #dbdbdb", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>Editar perfil</button>
-                  <button onClick={() => setShowInfo(!showInfo)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>{showInfo ? "Fechar" : "Ver Perfil"}</button>
-                  <Settings size={18} style={{ cursor: "pointer" }} onClick={() => navigate("/settings")} />
-                </>
-              ) : (
-                <button onClick={handleFollow} disabled={!!friendStatus} style={{ background: friendStatus === "accepted" ? "#6C3FA0" : "transparent", color: friendStatus === "accepted" ? "white" : "#6C3FA0", border: "1px solid #6C3FA0", borderRadius: "20px", padding: "4px 14px", fontSize: "13px", cursor: friendStatus ? "default" : "pointer" }}>
-                  {friendStatus === "accepted" ? "irmaos" : friendStatus === "pending" ? "pedido enviado" : "seguir"}
-                </button>
-              )}
+              {isOwner ? (<><button onClick={() => navigate("/settings")} style={{ background: "transparent", border: "1px solid #dbdbdb", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>Editar perfil</button><button onClick={() => setShowInfo(!showInfo)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>Ver Perfil</button><Settings size={18} style={{ cursor: "pointer" }} onClick={() => navigate("/settings")} /></>) : (<button onClick={handleFollow} disabled={!!friendStatus} style={{ background: friendStatus === "accepted" ? "#6C3FA0" : "transparent", color: friendStatus === "accepted" ? "white" : "#6C3FA0", border: "1px solid #6C3FA0", borderRadius: "20px", padding: "4px 14px", fontSize: "13px", cursor: friendStatus ? "default" : "pointer" }}>{friendStatus === "accepted" ? "irmaos" : friendStatus === "pending" ? "pedido enviado" : "seguir"}</button>)}
             </div>
             <div style={{ display: "flex", gap: "24px", marginBottom: "12px" }}>
               <span><strong>{userPosts.length}</strong> publicacoes</span>
@@ -86,16 +76,6 @@ export default function Profile() {
             <div><b>{user.full_name}</b><p style={{ margin: "4px 0", color: "#555" }}>{user.bio || ""}</p></div>
           </section>
         </header>
-
-        {showInfo && (
-          <div style={{ marginBottom: 16, display: "flex", flexDirection: "column", gap: 10 }}>
-            {(user.city || user.country) && <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}><b style={{ color: "#6C3FA0" }}>👤 Info Pessoais</b><br/>{user.city && <span style={{ fontSize: 13, marginRight: 12 }}>Cidade: {user.city}</span>}{user.country && <span style={{ fontSize: 13 }}>País: {user.country}</span>}</div>}
-            {user.church_name && <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}><b style={{ color: "#6C3FA0" }}>✝️ Igreja</b><br/><span style={{ fontSize: 13 }}>{user.church_name}</span></div>}
-            {user.favorite_verse && <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}><b style={{ color: "#6C3FA0" }}>📖 Versículo</b><p style={{ fontSize: 13, fontStyle: "italic", margin: "4px 0" }}>{user.favorite_verse}</p></div>}
-            {user.testimony && <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}><b style={{ color: "#6C3FA0" }}>🙏 Testemunho</b><p style={{ fontSize: 13, margin: "4px 0", whiteSpace: "pre-wrap" }}>{user.testimony}</p></div>}
-          </div>
-        )}
-
         <div style={{ display: "flex", justifyContent: "center", gap: "16px", fontSize: "12px", fontWeight: "600", borderTop: "1px solid #dbdbdb", marginTop: 8 }}>
           {tabs.map(([tab, label]) => (<div key={tab} onClick={() => setActiveTab(tab)} style={{ cursor: "pointer", padding: "12px 4px", borderTop: activeTab === tab ? "2px solid #262626" : "2px solid transparent" }}>{label}</div>))}
         </div>
