@@ -5,7 +5,7 @@ const { authenticate } = require('../middleware/auth');
 router.get('/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, city, state, country, profession, work, birthdate, marital_status, favorite_verse, testimony, church_denomination, faith_years, church_role, ministry FROM users WHERE id = $1', [userId]);
+    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, city, country, profession, work, birthdate, marital_status, favorite_verse, testimony, church_denomination, faith_years, church_role, ministry FROM users WHERE id = $1', [userId]);
     const user = result.rows[0];
 
     if (!user) return res.status(404).json({ error: 'User not found' });
@@ -63,7 +63,7 @@ router.patch('/', authenticate, async (req, res) => {
 
     await db.query(`UPDATE users SET ${setClause} WHERE id = $${updateKeys.length + 1}`, updateValues);
 
-    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, city, state, country, profession, work, birthdate, marital_status, favorite_verse, testimony, church_denomination, faith_years, church_role, ministry FROM users WHERE id = $1', [userId]);
+    const result = await db.query('SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, city, country, profession, work, birthdate, marital_status, favorite_verse, testimony, church_denomination, faith_years, church_role, ministry FROM users WHERE id = $1', [userId]);
     const user = result.rows[0];
 
     res.json({ success: true, user });
@@ -96,10 +96,10 @@ router.patch('/photo', authenticate, async (req, res) => {
 router.patch('/', authenticate, async (req, res) => {
   try {
     const userId = req.user.id;
-    const { full_name, username, bio, city, state, country, profession, marital_status, church_name, denomination, pastor_name, christian_years, church_role, ministry, favorite_verse, testimony, prayer_request, final_message, avatar_url, cover_url } = req.body;
+    const { full_name, username, bio, city, country, profession, marital_status, church_name, denomination, pastor_name, christian_years, church_role, ministry, favorite_verse, testimony, prayer_request, final_message, avatar_url, cover_url } = req.body;
     await db.query(
       `UPDATE users SET full_name=$1, username=$2, bio=$3, city=$4, state=$5, country=$6, profession=$7, marital_status=$8, church_name=$9, church_denomination=$10, faith_years=$11, church_role=$12, favorite_verse=$13, testimony=$14, avatar_url=$15, cover_url=$16, updated_at=NOW() WHERE id=$17`,
-      [full_name, username, bio, city, state, country, profession, marital_status, church_name, denomination, christian_years, church_role, favorite_verse, testimony, avatar_url, cover_url, userId]
+      [full_name, username, bio, city, country, profession, marital_status, church_name, denomination, christian_years, church_role, favorite_verse, testimony, avatar_url, cover_url, userId]
     );
     res.json({ success: true });
   } catch(e) { res.status(500).json({ error: e.message }); }
