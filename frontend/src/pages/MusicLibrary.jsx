@@ -551,7 +551,7 @@ function SongCard({ song, isPlaying, onPlay, onDelete, onPublish, onComment, tok
           />
         </div>
       ) : (
-        <div style={{
+        <div onClick={(e) => { e.stopPropagation(); if (!isVideo) onPlay(song); }} style={{ cursor: isVideo ? "default" : "pointer",
           width: '100%', aspectRatio: '1/1', borderRadius: 12,
           background: song.cover_url ? undefined : 'linear-gradient(135deg, var(--fb, #4a80d4), #764ba2)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -938,9 +938,6 @@ export default function MusicLibrary() {
                             </button>
                             <button onClick={() => handlePublish(song).then(() => alert('✅ Publicado no Mural!')).catch(() => alert('❌ Erro'))} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.3)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#9333ea', fontSize: 11, fontWeight: 600 }}>
                               <Share2 size={12} /> Mural
-                            </button>
-                            <button onClick={() => { const txt = encodeURIComponent('🎵 ' + song.title + (song.artist ? ' - ' + song.artist : '') + ' ' + song.url); window.open('https://wa.me/?text=' + txt, '_blank'); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(37,211,102,0.1)', border: '1px solid rgba(37,211,102,0.3)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#25D166', fontSize: 11, fontWeight: 600 }}>
-                              <Share2 size={12} /> WA
                             </button>
                             <button onClick={() => { const txt = encodeURIComponent('🎵 ' + song.title + (song.artist ? ' - ' + song.artist : '') + ' ' + song.url); window.open('https://wa.me/?text=' + txt, '_blank'); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(37,211,102,0.1)', border: '1px solid rgba(37,211,102,0.3)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#25D166', fontSize: 11, fontWeight: 600 }}>
                               <Share2 size={12} /> WA
