@@ -907,11 +907,8 @@
     "shuffle": "Aléatoire",
     "repeat": "Répéter",
     "nowPlaying": "En cours",
-    "changeCover": "Changer Couverture",
-    "clickToPlay": "Cliquer pour jouer",
-    "shareWhatsApp": "Partager WhatsApp",
-    "shareSocial": "Partager",
-    "playMusic": "Jouer"
+    "changeCover": "Changer la pochette",
+    "clickToPlay": "Cliquer pour jouer"
   },
   "courseFinance": {
     "title": "Finances Bibliques",

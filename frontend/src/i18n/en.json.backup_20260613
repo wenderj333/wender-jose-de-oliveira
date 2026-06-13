@@ -907,11 +907,8 @@
     "shuffle": "Shuffle",
     "repeat": "Repeat",
     "nowPlaying": "Now Playing",
-    "changeCover": "Change Cover",
-    "clickToPlay": "Click to play",
-    "shareWhatsApp": "Share WhatsApp",
-    "shareSocial": "Share",
-    "playMusic": "Play"
+    "changeCover": "Change cover",
+    "clickToPlay": "Click to play"
   },
   "courseFinance": {
     "title": "Biblical Finance",

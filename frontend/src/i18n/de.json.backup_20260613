@@ -909,10 +909,7 @@
     "repeat": "Wiederholen",
     "nowPlaying": "Spielt jetzt",
     "changeCover": "Cover ändern",
-    "clickToPlay": "Zum Abspielen klicken",
-    "shareWhatsApp": "WhatsApp teilen",
-    "shareSocial": "Teilen",
-    "playMusic": "Abspielen"
+    "clickToPlay": "Zum Abspielen klicken"
   },
   "courseFinance": {
     "title": "Biblical Finance",

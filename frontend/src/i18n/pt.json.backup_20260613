@@ -905,11 +905,8 @@
     "shuffle": "Aleatório",
     "repeat": "Repetir",
     "nowPlaying": "A tocar",
-    "changeCover": "Mudar Capa",
-    "clickToPlay": "Clica para tocar",
-    "shareWhatsApp": "Partilhar WhatsApp",
-    "shareSocial": "Partilhar",
-    "playMusic": "Tocar"
+    "changeCover": "Trocar capa",
+    "clickToPlay": "Clica para tocar"
   },
   "courseFinance": {
     "title": "Finanças Bíblicas",

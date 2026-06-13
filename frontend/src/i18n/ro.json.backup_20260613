@@ -908,11 +908,8 @@
     "shuffle": "Aleatoriu",
     "repeat": "RepetÄƒ",
     "nowPlaying": "Se redÄƒ",
-    "changeCover": "Schimba Coperta",
-    "clickToPlay": "Apasa pentru a reda",
-    "shareWhatsApp": "Distribuie WhatsApp",
-    "shareSocial": "Distribuie",
-    "playMusic": "Reda"
+    "changeCover": "Schimba coperta",
+    "clickToPlay": "Apasa pentru a reda"
   },
   "courseFinance": {
     "title": "FinanÈ›e Biblice",
