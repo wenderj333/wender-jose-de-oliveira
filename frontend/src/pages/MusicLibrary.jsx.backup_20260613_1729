@@ -489,12 +489,6 @@ function ShareMenu({ song, onPublish }) {
           <button onClick={(e) => { e.stopPropagation(); window.open('https://t.me/share/url?url=' + encodeURIComponent(song.url) + '&text=' + encodeURIComponent('🎵 ' + song.title), '_blank'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#0088cc' }}>
             ✈️ Telegram
           </button>
-          <button onClick={(e) => { e.stopPropagation(); window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(song.url), '_blank'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#1877F2' }}>
-            🇫🇧 Facebook
-          </button>
-          <button onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(song.url); alert('📸 Link copiado! Cola no Instagram Stories ou Bio.'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#E1306C' }}>
-            📸 Instagram
-          </button>
           <button onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(song.url); alert('✅ Link copiado!'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#555' }}>
             🔗 Copiar Link
           </button>
