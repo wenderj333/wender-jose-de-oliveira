@@ -1,9 +1,0 @@
-content = open("frontend/src/pages/MuralGrid.jsx", "rb").read().decode("utf-8")
-old1 = "  const [isMusicPlaying, setIsMusicPlaying] = useState(false);"
-new1 = old1 + "\r\n  const [showShareModal, setShowShareModal] = useState(false);\r\n  const [shareMembers, setShareMembers] = useState([]);\r\n  const loadShareMembers = async () => { try { const res = await fetch(API + \"/members\"); const data = await res.json(); setShareMembers(Array.isArray(data) ? data : (data.members || [])); } catch(e) {} };\r\n  const sendPostToMember = async (mid) => { const url = window.location.origin + \"/mural?post=\" + post.id; try { await fetch(API + \"/api/messages\", { method: \"POST\", headers: { Authorization: \"Bearer \" + token, \"Content-Type\": \"application/json\" }, body: JSON.stringify({ receiverId: mid, content: \"Post: \" + url }) }); setShowShareModal(false); alert(\"Enviado!\"); } catch(e) {} };"
-content = content.replace(old1, new1)
-lines = content.split("\r\n")
-modal = ["    {showShareModal && (", "      <div style={{position:\"fixed\",inset:0,background:\"rgba(0,0,0,0.5)\",zIndex:2000,display:\"flex\",alignItems:\"center\",justifyContent:\"center\",padding:16}} onClick={()=>setShowShareModal(false)}>", "        <div style={{background:\"#fff\",borderRadius:16,width:\"100%\",maxWidth:400,padding:24,maxHeight:\"80vh\",overflowY:\"auto\"}} onClick={e=>e.stopPropagation()}>", "          <h3>Partilhar</h3>", "          {shareMembers.map(m=>(<div key={m.id} onClick={()=>sendPostToMember(m.id)} style={{display:\"flex\",alignItems:\"center\",gap:10,padding:\"8px\",cursor:\"pointer\"}}><span>{m.full_name}</span></div>))}", "        </div>", "      </div>", "    )}"]
-new_lines = lines[:479] + modal + lines[479:]
-open("frontend/src/pages/MuralGrid.jsx", "wb").write("\r\n".join(new_lines).encode("utf-8"))
-print("Feito!")
