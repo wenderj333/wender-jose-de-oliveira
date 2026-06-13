@@ -869,7 +869,7 @@ export default function MusicLibrary() {
               )}
             </div>
           ) : viewMode === 'grid' ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
               {filteredSongs.map((song, idx) => (
                 <SongCard 
                   key={song.id} 
