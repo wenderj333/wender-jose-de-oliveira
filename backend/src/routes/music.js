@@ -341,10 +341,18 @@ router.get('/share/:id', async (req, res) => {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${title}" />
   <meta name="twitter:image" content="${cover}" />
-  <meta http-equiv="refresh" content="0;url=${url}" />
+  <!-- sem redirect automatico - usuario escolhe -->
 </head>
-<body>
-  <p>A redirecionar para <a href="${url}">Sigo com Fe</a>...</p>
+<body style="margin:0;font-family:sans-serif;background:#1a1a2e;display:flex;align-items:center;justify-content:center;min-height:100vh;">
+  <div style="text-align:center;padding:30px;max-width:400px;">
+    <img src="${cover}" style="width:200px;height:200px;border-radius:16px;object-fit:cover;margin-bottom:20px;" />
+    <h2 style="color:#fff;margin:0 0 6px;">${title}</h2>
+    <p style="color:#aaa;margin:0 0 24px;">Sigo com Fe - Rede Social Crista</p>
+    <a href="${url}" style="display:inline-block;background:linear-gradient(135deg,#4a80d4,#764ba2);color:#fff;text-decoration:none;padding:14px 28px;border-radius:12px;font-weight:700;font-size:16px;">
+      🎵 Ouvir Musica
+    </a>
+    <p style="color:#666;font-size:12px;margin-top:20px;">Junta-te a nos em sigo-com-fe.vercel.app</p>
+  </div>
 </body>
 </html>`);
   } catch (err) {
