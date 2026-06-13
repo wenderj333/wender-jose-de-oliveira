@@ -326,6 +326,8 @@ const { Pool: MigratePool } = require('pg');
     // Add like_count to feed_posts if missing
     await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS like_count INT DEFAULT 0`);
     await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS audio_url TEXT`);
+    await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS cover_url TEXT`);
+    await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS music_title TEXT`);
 
     // Stripe payments table
     await mp.query(`

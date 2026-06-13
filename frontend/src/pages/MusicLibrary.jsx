@@ -765,6 +765,8 @@ export default function MusicLibrary() {
     fd.append('category', 'louvor');
     fd.append('visibility', 'public');
     fd.append('audio_url', song.url);
+    if (song.cover_url) fd.append('cover_url', song.cover_url);
+    if (song.title) fd.append('music_title', song.title);
     const res = await fetch(`${API}/feed`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },

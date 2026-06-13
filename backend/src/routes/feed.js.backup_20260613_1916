@@ -123,10 +123,6 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
     let mediaUrl = req.body.media_url || null;
     let mediaType = req.body.media_type || null;
     let audioUrl = req.body.audio_url || null;
-    let coverUrl = req.body.cover_url || null;
-    let musicTitle = req.body.music_title || null;
-    let coverUrl = req.body.cover_url || null;
-    let musicTitle = req.body.music_title || null;
 
     // Se veio arquivo via multer (upload pequeno pelo backend)
     if (req.file) {
@@ -156,9 +152,9 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
     let result;
     try {
       result = await db.prepare(
-        `INSERT INTO feed_posts (author_id, content, category, media_url, media_type, verse_reference, visibility, audio_url, cover_url, music_title)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
-      ).get(req.user.id, content, cat, mediaUrl, mediaType, verse_reference || null, vis, audioUrl || null, coverUrl || null, musicTitle || null);
+        `INSERT INTO feed_posts (author_id, content, category, media_url, media_type, verse_reference, visibility, audio_url)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
+      ).get(req.user.id, content, cat, mediaUrl, mediaType, verse_reference || null, vis, audioUrl || null);
     } catch (insertErr) {
       // Fallback if audio_url column doesn't exist yet
       console.warn('⚠️ Insert with audio_url failed:', insertErr.message);
