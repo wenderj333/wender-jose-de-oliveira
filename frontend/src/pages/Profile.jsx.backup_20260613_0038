@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -50,8 +50,8 @@ export default function Profile() {
   const nextPhoto = () => setCurrentIndex(prev => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentIndex(prev => (prev - 1 + photos.length) % photos.length);
   if (loading) return <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}><Loader2 className="animate-spin" /></div>;
-  if (!user) return <div style={{ textAlign: "center", padding: "20px" }}>{t("profile.notFound","Utilizador nao encontrado.")}</div>;
-  const tabs = [["all", t("profile.allPosts","Todas")], ["foto", t("profile.photos","Fotos")], ["video", t("profile.videos","Videos")], ["galeria", t("profile.gallery","Galeria")]];
+  if (!user) return <div style={{ textAlign: "center", padding: "20px" }}>Utilizador nao encontrado.</div>;
+  const tabs = [["all", t("profile.allPosts","Todas")], ["foto", "Fotos"], ["video", "Videos"], ["galeria", "Galeria"]];
   const filteredPosts = userPosts.filter(p => activeTab === "all" ? true : activeTab === "foto" ? (p.media_url && !p.media_url.includes("video")) : activeTab === "video" ? (p.media_url && p.media_url.includes("video")) : false);
   return (
     <div style={{ maxWidth: "935px", margin: "0 auto", padding: "0" }}>
@@ -68,20 +68,20 @@ export default function Profile() {
               <h2 style={{ fontSize: "22px", fontWeight: "300", margin: 0 }}>{user.username || user.full_name}</h2>
               {isOwner ? (
                 <>
-                  <button onClick={() => navigate("/settings")} style={{ background: "transparent", border: "1px solid #dbdbdb", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>{t("profile.editProfile","Editar perfil")}</button>
-                  <button onClick={() => setShowInfo(!showInfo)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>{showInfo ? t("profile.close","Fechar") : t("profile.viewProfile","Ver Perfil")}</button>
+                  <button onClick={() => navigate("/settings")} style={{ background: "transparent", border: "1px solid #dbdbdb", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>Editar perfil</button>
+                  <button onClick={() => setShowInfo(!showInfo)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>{showInfo ? "Fechar" : "Ver Perfil"}</button>
                   <Settings size={18} style={{ cursor: "pointer" }} onClick={() => navigate("/settings")} />
                 </>
               ) : (
                 <button onClick={handleFollow} disabled={!!friendStatus} style={{ background: friendStatus === "accepted" ? "#6C3FA0" : "transparent", color: friendStatus === "accepted" ? "white" : "#6C3FA0", border: "1px solid #6C3FA0", borderRadius: "20px", padding: "4px 14px", fontSize: "13px", cursor: friendStatus ? "default" : "pointer" }}>
-                  {friendStatus === "accepted" ? t("profile.brothers","Irmaos") : friendStatus === "pending" ? t("profile.requestSent","Pedido enviado") : t("profile.follow","Seguir")}
+                  {friendStatus === "accepted" ? "irmaos" : friendStatus === "pending" ? "pedido enviado" : "seguir"}
                 </button>
               )}
             </div>
             <div style={{ display: "flex", gap: "24px", marginBottom: "12px" }}>
-              <span><strong>{userPosts.length}</strong> {t("profile.posts","publicacoes")}</span>
-              <span><strong>{photos.length}</strong> {t("profile.photos","fotos")}</span>
-              <span><strong>0</strong> {t("profile.brothers","irmaos")}</span>
+              <span><strong>{userPosts.length}</strong> publicacoes</span>
+              <span><strong>{photos.length}</strong> fotos</span>
+              <span><strong>0</strong> irmaos</span>
             </div>
             <div><b>{user.full_name}</b><p style={{ margin: "4px 0", color: "#555" }}>{user.bio || ""}</p></div>
           </section>
@@ -91,47 +91,33 @@ export default function Profile() {
           <div style={{ marginBottom: 16, display: "flex", flexDirection: "column", gap: 10 }}>
             {(user.city || user.country || user.profession || user.marital_status) && (
               <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}>
-                <b style={{ color: "#6C3FA0" }}>👤 {t("profile.personalInfo","Info Pessoais")}</b>
-                {user.city && <div style={{ fontSize: 13 }}>{t("profile.city","Cidade")}: {user.city}</div>}
-                {user.country && <div style={{ fontSize: 13 }}>{t("profile.country","Pais")}: {user.country}</div>}
-                {user.profession && <div style={{ fontSize: 13 }}>{t("profile.profession","Profissao")}: {user.profession}</div>}
-                {user.marital_status && <div style={{ fontSize: 13 }}>{t("profile.maritalStatus","Estado Civil")}: {user.marital_status}</div>}
+                <b style={{ color: "#6C3FA0" }}>👤 Info Pessoais</b>
+                {user.city && <div style={{ fontSize: 13 }}>Cidade: {user.city}</div>}
+                {user.country && <div style={{ fontSize: 13 }}>Pais: {user.country}</div>}
+                {user.profession && <div style={{ fontSize: 13 }}>Profissao: {user.profession}</div>}
+                {user.marital_status && <div style={{ fontSize: 13 }}>Estado Civil: {user.marital_status}</div>}
               </div>
             )}
-            {(user.church_name || user.church_denomination || user.faith_years) && (
+            {(user.church_name || user.church_denomination || user.faith_years || user.church_role) && (
               <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}>
-                <b style={{ color: "#6C3FA0" }}>⛪ {t("profile.church","Igreja")}</b>
-                {user.church_name && <div style={{ fontSize: 13 }}>{t("profile.church","Igreja")}: {user.church_name}</div>}
-                {user.church_denomination && <div style={{ fontSize: 13 }}>{t("profile.denomination","Denominacao")}: {user.church_denomination}</div>}
-                {user.faith_years && <div style={{ fontSize: 13 }}>{t("profile.faithYears","Anos de Fe")}: {user.faith_years}</div>}
+                <b style={{ color: "#6C3FA0" }}>Igreja</b>
+                {user.church_name && <div style={{ fontSize: 13 }}>Igreja: {user.church_name}</div>}
+                {user.church_denomination && <div style={{ fontSize: 13 }}>Denominacao: {user.church_denomination}</div>}
+                {user.faith_years && <div style={{ fontSize: 13 }}>Anos de Fe: {user.faith_years}</div>}
+                {user.church_role && <div style={{ fontSize: 13 }}>Funcao: {user.church_role}</div>}
               </div>
             )}
-            {user.favorite_verse && (
-              <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}>
-                <b style={{ color: "#6C3FA0" }}>📖 {t("profile.favoriteVerse","Versiculo")}</b>
-                <p style={{ fontSize: 13, fontStyle: "italic", margin: "4px 0" }}>{user.favorite_verse}</p>
-              </div>
-            )}
-            {user.testimony && (
-              <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}>
-                <b style={{ color: "#6C3FA0" }}>✝️ {t("profile.testimony","Testemunho")}</b>
-                <p style={{ fontSize: 13, margin: "4px 0", whiteSpace: "pre-wrap" }}>{user.testimony}</p>
-              </div>
-            )}
-            {user.bio && (
-              <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}>
-                <b style={{ color: "#6C3FA0" }}>💬 {t("profile.aboutMe","Sobre Mim")}</b>
-                <p style={{ fontSize: 13, margin: "4px 0" }}>{user.bio}</p>
-              </div>
-            )}
+            {user.favorite_verse && <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}><b style={{ color: "#6C3FA0" }}>Versiculo</b><p style={{ fontSize: 13, fontStyle: "italic", margin: "4px 0" }}>{user.favorite_verse}</p></div>}
+            {user.testimony && <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}><b style={{ color: "#6C3FA0" }}>Testemunho</b><p style={{ fontSize: 13, margin: "4px 0", whiteSpace: "pre-wrap" }}>{user.testimony}</p></div>}
+            {user.bio && <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}><b style={{ color: "#6C3FA0" }}>Sobre Mim</b><p style={{ fontSize: 13, margin: "4px 0" }}>{user.bio}</p></div>}
           </div>
         )}
 
         <div style={{ display: "flex", justifyContent: "center", gap: "16px", fontSize: "12px", fontWeight: "600", borderTop: "1px solid #dbdbdb", marginTop: 8 }}>
           {tabs.map(([tab, label]) => (<div key={tab} onClick={() => setActiveTab(tab)} style={{ cursor: "pointer", padding: "12px 4px", borderTop: activeTab === tab ? "2px solid #262626" : "2px solid transparent" }}>{label}</div>))}
         </div>
-        {activeTab !== "galeria" && (<div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 3, marginTop: 3 }}>{filteredPosts.map(p => (<div key={p.id} style={{ aspectRatio: "1", overflow: "hidden", background: "#f0f0f0" }}>{p.media_url && p.media_url.includes("video") ? <video src={p.media_url} style={{ width: "100%", height: "100%", objectFit: "cover" }} muted playsInline /> : p.media_url ? <img src={p.media_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ padding: 8, fontSize: 11, color: "#666", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>{(p.content || "").slice(0,60)}</div>}</div>))}{filteredPosts.length === 0 && <div style={{ gridColumn: "1/-1", textAlign: "center", padding: 40, color: "#999" }}>{t("profile.noPosts","Nenhuma publicacao ainda.")}</div>}</div>)}
-        {activeTab === "galeria" && (<div style={{ marginTop: 16 }}>{isOwner && <button onClick={() => setShowUploader(true)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontSize: 14, marginBottom: 12 }}>+ {t("profile.addPhoto","Adicionar Foto")}</button>}<div className="gallery-grid">{photos.map((p, index) => (<div key={p.id} className="gallery-item" onClick={() => openPhoto(index)}><img src={p.url} alt="" /></div>))}</div>{photos.length === 0 && <div style={{ textAlign: "center", padding: 40, color: "#999" }}>{t("profile.noPhotos","Nenhuma foto ainda.")}</div>}</div>)}
+        {activeTab !== "galeria" && (<div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 3, marginTop: 3 }}>{filteredPosts.map(p => (<div key={p.id} style={{ aspectRatio: "1", overflow: "hidden", background: "#f0f0f0" }}>{p.media_url && p.media_url.includes("video") ? <video src={p.media_url} style={{ width: "100%", height: "100%", objectFit: "cover" }} muted playsInline /> : p.media_url ? <img src={p.media_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ padding: 8, fontSize: 11, color: "#666", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>{(p.content || "").slice(0,60)}</div>}</div>))}{filteredPosts.length === 0 && <div style={{ gridColumn: "1/-1", textAlign: "center", padding: 40, color: "#999" }}>Nenhuma publicacao ainda.</div>}</div>)}
+        {activeTab === "galeria" && (<div style={{ marginTop: 16 }}>{isOwner && <button onClick={() => setShowUploader(true)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontSize: 14, marginBottom: 12 }}>+ Adicionar Foto</button>}<div className="gallery-grid">{photos.map((p, index) => (<div key={p.id} className="gallery-item" onClick={() => openPhoto(index)}><img src={p.url} alt="" /></div>))}</div>{photos.length === 0 && <div style={{ textAlign: "center", padding: 40, color: "#999" }}>Nenhuma foto ainda.</div>}</div>)}
         {currentIndex !== null && <PhotoModal url={photos[currentIndex].url} onClose={closePhoto} onNext={nextPhoto} onPrev={prevPhoto} />}
         {showUploader && <PhotoUploader token={token} onSuccess={p => { setPhotos(prev => [p, ...prev]); setShowUploader(false); }} onClose={() => setShowUploader(false)} />}
       </div>
