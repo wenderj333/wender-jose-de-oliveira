@@ -332,7 +332,7 @@ router.get('/share/:id', async (req, res) => {
   <meta charset="utf-8">
   <title>${title} | Sigo com Fe</title>
   <meta property="og:title" content="${title}" />
-  <meta property="og:description" content="Ouvi esta musica na Sigo com Fe!" />
+  <meta property="og:description" content="Ouvi esta musica na Sigo com Fe - Rede Social Crista! Junta-te a nos em sigo-com-fe.vercel.app" />
   <meta property="og:image" content="${cover}" />
   <meta property="og:image:width" content="600" />
   <meta property="og:image:height" content="600" />
