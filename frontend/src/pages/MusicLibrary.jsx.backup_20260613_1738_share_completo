@@ -483,19 +483,19 @@ function ShareMenu({ song, onPublish }) {
           <button onClick={(e) => { e.stopPropagation(); onPublish(e); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#9333ea' }}>
             📰 Mural
           </button>
-          <button onClick={(e) => { e.stopPropagation(); const txt = encodeURIComponent('🎵 ' + song.title + (song.artist ? ' - ' + song.artist : '') + ' https://sigo-com-fe-api.onrender.com/api/music/share/' + song.id); window.open('https://wa.me/?text=' + txt, '_blank'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#25D166' }}>
+          <button onClick={(e) => { e.stopPropagation(); const txt = encodeURIComponent('🎵 ' + song.title + (song.artist ? ' - ' + song.artist : '') + ' ' + song.url); window.open('https://wa.me/?text=' + txt, '_blank'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#25D166' }}>
             📱 WhatsApp
           </button>
-          <button onClick={(e) => { e.stopPropagation(); window.open('https://t.me/share/url?url=' + encodeURIComponent('https://sigo-com-fe-api.onrender.com/api/music/share/' + song.id) + '&text=' + encodeURIComponent('🎵 ' + song.title), '_blank'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#0088cc' }}>
+          <button onClick={(e) => { e.stopPropagation(); window.open('https://t.me/share/url?url=' + encodeURIComponent(song.url) + '&text=' + encodeURIComponent('🎵 ' + song.title), '_blank'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#0088cc' }}>
             ✈️ Telegram
           </button>
-          <button onClick={(e) => { e.stopPropagation(); window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent('https://sigo-com-fe-api.onrender.com/api/music/share/' + song.id), '_blank'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#1877F2' }}>
+          <button onClick={(e) => { e.stopPropagation(); window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(song.url), '_blank'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#1877F2' }}>
             🇫🇧 Facebook
           </button>
           <button onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(song.url); alert('📸 Link copiado! Cola no Instagram Stories ou Bio.'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#E1306C' }}>
             📸 Instagram
           </button>
-          <button onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText('https://sigo-com-fe-api.onrender.com/api/music/share/' + song.id); alert('✅ Link copiado!'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#555' }}>
+          <button onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(song.url); alert('✅ Link copiado!'); setOpen(false); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#555' }}>
             🔗 Copiar Link
           </button>
         </div>
@@ -977,7 +977,7 @@ export default function MusicLibrary() {
                             <button onClick={() => handlePublish(song).then(() => alert('✅ Publicado no Mural!')).catch(() => alert('❌ Erro'))} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.3)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#9333ea', fontSize: 11, fontWeight: 600 }}>
                               <Share2 size={12} /> Mural
                             </button>
-                            <button onClick={() => { const txt = encodeURIComponent('🎵 ' + song.title + (song.artist ? ' - ' + song.artist : '') + ' https://sigo-com-fe-api.onrender.com/api/music/share/' + song.id); window.open('https://wa.me/?text=' + txt, '_blank'); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(37,211,102,0.1)', border: '1px solid rgba(37,211,102,0.3)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#25D166', fontSize: 11, fontWeight: 600 }}>
+                            <button onClick={() => { const txt = encodeURIComponent('🎵 ' + song.title + (song.artist ? ' - ' + song.artist : '') + ' ' + song.url); window.open('https://wa.me/?text=' + txt, '_blank'); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, background: 'rgba(37,211,102,0.1)', border: '1px solid rgba(37,211,102,0.3)', borderRadius: 8, padding: '5px 8px', cursor: 'pointer', color: '#25D166', fontSize: 11, fontWeight: 600 }}>
                               <Share2 size={12} /> WA
                             </button>
                             {(song.user_id === user.id || user.role === 'admin' || user.role === 'pastor') && (
