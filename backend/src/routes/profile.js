@@ -2,7 +2,6 @@
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
 
-// GET perfil de utilizador
 router.get('/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
@@ -15,12 +14,10 @@ router.get('/:userId', async (req, res) => {
     user.stats = { posts: 0, friends: 0, prayers: 0 };
     res.json({ user });
   } catch (err) {
-    console.error('Error fetching profile:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
 
-// PATCH atualizar foto
 router.patch('/photo', authenticate, async (req, res) => {
   try {
     const { photoURL } = req.body;
@@ -30,50 +27,34 @@ router.patch('/photo', authenticate, async (req, res) => {
     const updated = await db.query('SELECT avatar_url FROM users WHERE id = ', [userId]);
     res.json({ success: true, avatar_url: updated.rows[0].avatar_url });
   } catch (err) {
-    console.error('Error updating photo:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
 
-// PATCH atualizar perfil completo
 router.patch('/', authenticate, async (req, res) => {
   try {
     const userId = req.user.id;
-    const {
-      full_name, bio, city, country, profession, marital_status,
-      church_name, denomination, christian_years, favorite_verse,
-      testimony, avatar_url, cover_url
-    } = req.body;
-
-    await db.query(
-      UPDATE users SET
-        full_name=COALESCE(NULLIF(,''), full_name),
-        bio=COALESCE(NULLIF(,''), bio),
-        city=COALESCE(NULLIF(,''), city),
-        country=COALESCE(NULLIF(,''), country),
-        profession=COALESCE(NULLIF(,''), profession),
-        marital_status=COALESCE(NULLIF(,''), marital_status),
-        church_name=COALESCE(NULLIF(,''), church_name),
-        church_denomination=COALESCE(NULLIF(,''), church_denomination),
-        faith_years=COALESCE(NULLIF(,''), faith_years),
-        favorite_verse=COALESCE(NULLIF(,''), favorite_verse),
-        testimony=COALESCE(NULLIF(,''), testimony),
-        avatar_url=COALESCE(NULLIF(,''), avatar_url),
-        cover_url=COALESCE(NULLIF(,''), cover_url),
-        updated_at=NOW()
-      WHERE id=,
-      [full_name, bio, city, country, profession, marital_status,
-       church_name, denomination, christian_years, favorite_verse,
-       testimony, avatar_url, cover_url, userId]
-    );
-
+    const fields = ['full_name','bio','city','country','profession','marital_status','church_name','denomination','christian_years','favorite_verse','testimony','avatar_url','cover_url'];
+    const dbFields = ['full_name','bio','city','country','profession','marital_status','church_name','church_denomination','faith_years','favorite_verse','testimony','avatar_url','cover_url'];
+    const updates = [];
+    const values = [];
+    let i = 1;
+    fields.forEach((f, idx) => {
+      if (req.body[f] !== undefined && req.body[f] !== null && req.body[f] !== '') {
+        updates.push(dbFields[idx] + '=$' + i);
+        values.push(req.body[f]);
+        i++;
+      }
+    });
+    if (updates.length === 0) return res.json({ success: true });
+    values.push(userId);
+    await db.query('UPDATE users SET ' + updates.join(',') + ',updated_at=NOW() WHERE id=$' + i, values);
     const result = await db.query(
       'SELECT id, full_name, email, role, avatar_url, cover_url, bio, church_name, city, country, profession, marital_status, favorite_verse, testimony, church_denomination, faith_years FROM users WHERE id = ',
       [userId]
     );
     res.json({ success: true, user: result.rows[0] });
   } catch (err) {
-    console.error('Error updating profile:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
