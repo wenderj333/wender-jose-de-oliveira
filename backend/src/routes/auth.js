@@ -179,4 +179,20 @@ router.get('/me', authenticate, (req, res) => {
   res.json({ user: req.user });
 });
 
+
+// POST /api/auth/admin/reset-password - admin reset password
+router.post('/admin/reset-password', async (req, res) => {
+  try {
+    const { email, newPassword, adminKey } = req.body;
+    if (adminKey !== 'SigoComFe2024Admin') return res.status(403).json({ error: 'Nao autorizado' });
+    const bcrypt = require('bcryptjs');
+    const hash = await bcrypt.hash(newPassword, 10);
+    const result = await db.query('UPDATE users SET password_hash = $1 WHERE email = $2 RETURNING id, email, full_name', [hash, email]);
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Utilizador nao encontrado' });
+    res.json({ success: true, user: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
