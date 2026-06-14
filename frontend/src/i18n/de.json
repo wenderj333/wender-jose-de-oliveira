@@ -654,7 +654,8 @@
     "listenNow": "Jetzt horen",
     "closePlayer": "Schliessen",
     "amen": "Amen",
-    "amenGiven": "Amen gegeben"
+    "amenGiven": "Amen gegeben",
+    "deletePost": "Beitrag loschen"
   },
   "messages": {
     "title": "Messages",

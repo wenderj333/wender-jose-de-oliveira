@@ -653,7 +653,8 @@
     "listenNow": "Listen now",
     "closePlayer": "Close",
     "amen": "Amen",
-    "amenGiven": "Amen given"
+    "amenGiven": "Amen given",
+    "deletePost": "Delete post"
   },
   "messages": {
     "title": "Messages",

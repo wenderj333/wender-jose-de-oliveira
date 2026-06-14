@@ -685,7 +685,8 @@
     "listenNow": "Ouvir agora",
     "closePlayer": "Fechar",
     "amen": "Amen",
-    "amenGiven": "Amem dado"
+    "amenGiven": "Amem dado",
+    "deletePost": "Apagar publicacao"
   },
   "messages": {
     "title": "Mensagens",

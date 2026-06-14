@@ -653,7 +653,8 @@
     "listenNow": "Ecouter maintenant",
     "closePlayer": "Fermer",
     "amen": "Amen",
-    "amenGiven": "Amen donne"
+    "amenGiven": "Amen donne",
+    "deletePost": "Supprimer publication"
   },
   "messages": {
     "title": "Messages",

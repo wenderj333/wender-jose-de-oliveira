@@ -654,7 +654,8 @@
     "listenNow": "Asculta acum",
     "closePlayer": "Inchide",
     "amen": "Amin",
-    "amenGiven": "Amin dat"
+    "amenGiven": "Amin dat",
+    "deletePost": "Sterge postarea"
   },
   "messages": {
     "title": "Mesaje",
