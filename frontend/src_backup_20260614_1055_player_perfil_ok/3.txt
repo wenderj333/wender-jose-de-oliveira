@@ -1,0 +1,4 @@
+const fs = require('fs');
+const content = fs.readFileSync('frontend/src/pages/Profile.jsx', 'utf8');
+console.log('Tamanho:', content.length);
+console.log('Primeiras 100 chars:', content.substring(0, 100));
