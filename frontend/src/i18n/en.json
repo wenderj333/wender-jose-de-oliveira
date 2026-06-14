@@ -348,7 +348,9 @@
     "pickMusic": "Pick music from library",
     "visPublic": "Public",
     "visMembers": "Members",
-    "visPrivate": "Private"
+    "visPrivate": "Private",
+    "viewPost": "View Post",
+    "sharedVia": "Shared via Sigo com Fe"
   },
   "kids": {
     "title": "Digital Sunday School",

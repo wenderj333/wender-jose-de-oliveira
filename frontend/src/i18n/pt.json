@@ -342,7 +342,9 @@
     "visPrivate": "Privado",
     "loginToComment": "Faca login para comentar!",
     "comment": "Comentario",
-    "comments": "Comentarios"
+    "comments": "Comentarios",
+    "viewPost": "Ver Publicacao",
+    "sharedVia": "Partilhado via Sigo com Fe"
   },
   "groups": {
     "title": "Grupos",

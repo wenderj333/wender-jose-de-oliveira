@@ -348,7 +348,9 @@
     "pickMusic": "Elegir música de la biblioteca",
     "visPublic": "Público",
     "visMembers": "Miembros",
-    "visPrivate": "Privado"
+    "visPrivate": "Privado",
+    "viewPost": "Ver Publicacion",
+    "sharedVia": "Compartido via Sigo con Fe"
   },
   "kids": {
     "title": "Escuela Dominical Digital",
