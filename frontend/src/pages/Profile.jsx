@@ -106,7 +106,7 @@ export default function Profile() {
     <div style={{ maxWidth: "935px", margin: "0 auto", padding: "0" }}>
       {user.cover_url && (
         <div style={{ width: "100%", height: "200px", overflow: "hidden", position: "relative" }}>
-          <img src={user.cover_url} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 30%" }} onError={e => e.target.style.display = "none"} />
+          <img src={user.cover_url} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} onError={e => e.target.style.display = "none"} />
         </div>
       )}
       <div style={{ padding: "20px" }}>
