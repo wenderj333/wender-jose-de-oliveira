@@ -659,7 +659,11 @@
     "likePhoto": "Gefallt mir",
     "unlikePhoto": "Gefallt mir schon",
     "commentPhoto": "Kommentieren",
-    "viewPhoto": "Foto ansehen"
+    "viewPhoto": "Foto ansehen",
+    "adjustPhoto": "Foto anpassen",
+    "centerTop": "Oben",
+    "centerMiddle": "Mitte",
+    "centerBottom": "Unten"
   },
   "messages": {
     "title": "Messages",

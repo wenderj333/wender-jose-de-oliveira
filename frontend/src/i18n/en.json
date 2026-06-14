@@ -658,7 +658,11 @@
     "likePhoto": "Like",
     "unlikePhoto": "Liked",
     "commentPhoto": "Comment",
-    "viewPhoto": "View photo"
+    "viewPhoto": "View photo",
+    "adjustPhoto": "Adjust photo",
+    "centerTop": "Top",
+    "centerMiddle": "Center",
+    "centerBottom": "Bottom"
   },
   "messages": {
     "title": "Messages",

@@ -659,7 +659,11 @@
     "likePhoto": "Imi place",
     "unlikePhoto": "Deja imi place",
     "commentPhoto": "Comenteaza",
-    "viewPhoto": "Vezi poza"
+    "viewPhoto": "Vezi poza",
+    "adjustPhoto": "Ajustare poza",
+    "centerTop": "Sus",
+    "centerMiddle": "Centru",
+    "centerBottom": "Jos"
   },
   "messages": {
     "title": "Mesaje",

@@ -690,7 +690,11 @@
     "likePhoto": "Gostei",
     "unlikePhoto": "Ja gostei",
     "commentPhoto": "Comentar",
-    "viewPhoto": "Ver foto"
+    "viewPhoto": "Ver foto",
+    "adjustPhoto": "Ajustar foto",
+    "centerTop": "Topo",
+    "centerMiddle": "Centro",
+    "centerBottom": "Base"
   },
   "messages": {
     "title": "Mensagens",
