@@ -25,6 +25,18 @@ export default function Profile() {
   const [playingPost, setPlayingPost] = useState(null);
   const audioRef = React.useRef(null);
   const [postAmens, setPostAmens] = useState({});
+  const [musicCovers, setMusicCovers] = useState({});
+
+  useEffect(() => {
+    if (!token) return;
+    fetch(API + "/music?limit=100", { headers: { Authorization: "Bearer " + token } })
+      .then(r => r.json())
+      .then(d => {
+        const covers = {};
+        (d.songs || []).forEach(s => { if (s.cover_url) covers[s.url] = s.cover_url; });
+        setMusicCovers(covers);
+      }).catch(() => {});
+  }, [token]);
   const handlePostAmen = async (postId) => {
     if (postAmens[postId]) return;
     setPostAmens(prev => ({ ...prev, [postId]: true }));
@@ -151,7 +163,7 @@ export default function Profile() {
                 <img src={p.media_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               ) : isMusic ? (
                 <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#4a80d4,#764ba2)", position: "relative" }}>
-                  {p.cover_url ? <img src={p.cover_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} /> : null}
+                  {(p.cover_url || musicCovers[p.audio_url]) ? <img src={p.cover_url || musicCovers[p.audio_url]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} /> : null}
                   <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: 8 }}>
                     <div style={{ fontSize: 36, marginBottom: 6 }}>🎵</div>
                     <div style={{ fontSize: 11, color: "white", fontWeight: 700, textShadow: "0 1px 4px rgba(0,0,0,0.9)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 90 }}>{p.content?.replace("🎵 ","").split("—")[0]?.trim()}</div>
