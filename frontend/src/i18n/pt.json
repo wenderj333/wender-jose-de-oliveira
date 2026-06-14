@@ -680,7 +680,10 @@
     "requestSent": "Pedido enviado",
     "uploading": "A fazer upload...",
     "choosePhoto": "Escolher foto",
-    "publishPhoto": "Publicar Foto"
+    "publishPhoto": "Publicar Foto",
+    "playMusic": "Tocar Musica",
+    "listenNow": "Ouvir agora",
+    "closePlayer": "Fechar"
   },
   "messages": {
     "title": "Mensagens",

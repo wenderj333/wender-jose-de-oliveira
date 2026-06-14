@@ -649,7 +649,10 @@
     "requestSent": "Cerere trimisa",
     "uploading": "Se incarca...",
     "choosePhoto": "Alege poza",
-    "publishPhoto": "Publica Poza"
+    "publishPhoto": "Publica Poza",
+    "playMusic": "Reda Muzica",
+    "listenNow": "Asculta acum",
+    "closePlayer": "Inchide"
   },
   "messages": {
     "title": "Mesaje",

@@ -648,7 +648,10 @@
     "requestSent": "Solicitud enviada",
     "uploading": "Subiendo...",
     "choosePhoto": "Elegir foto",
-    "publishPhoto": "Publicar Foto"
+    "publishPhoto": "Publicar Foto",
+    "playMusic": "Reproducir Musica",
+    "listenNow": "Escuchar ahora",
+    "closePlayer": "Cerrar"
   },
   "messages": {
     "title": "Mensajes",

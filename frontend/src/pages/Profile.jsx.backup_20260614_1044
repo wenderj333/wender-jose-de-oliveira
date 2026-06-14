@@ -22,8 +22,6 @@ export default function Profile() {
   const [showUploader, setShowUploader] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [friendStatus, setFriendStatus] = useState(null);
-  const [playingPost, setPlayingPost] = useState(null);
-  const audioRef = React.useRef(null);
   const targetId = userId || currentUser?.id;
   const isOwner = !userId || userId === currentUser?.id;
   useEffect(() => {
@@ -136,7 +134,7 @@ export default function Profile() {
             const isMusic = p.audio_url && !p.media_url;
             const coverImg = p.cover_url || (isMusic ? null : null);
             return (
-            <div key={p.id} onClick={() => isMusic ? setPlayingPost(p) : null} style={{ aspectRatio: "1", overflow: "hidden", background: "#f0f0f0", position: "relative", cursor: "pointer" }}>
+            <div key={p.id} style={{ aspectRatio: "1", overflow: "hidden", background: "#f0f0f0", position: "relative", cursor: "pointer" }}>
               {p.media_url && p.media_url.includes("video") ? (
                 <video src={p.media_url} style={{ width: "100%", height: "100%", objectFit: "cover" }} muted playsInline />
               ) : p.media_url ? (
@@ -162,19 +160,6 @@ export default function Profile() {
           })}{filteredPosts.length === 0 && <div style={{ gridColumn: "1/-1", textAlign: "center", padding: 40, color: "#999" }}>{t("profile.noPosts","Nenhuma publicacao ainda.")}</div>}</div>)}
         {activeTab === "galeria" && (<div style={{ marginTop: 16 }}>{isOwner && <button onClick={() => setShowUploader(true)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontSize: 14, marginBottom: 12 }}>+ {t("profile.addPhoto","Adicionar Foto")}</button>}<div className="gallery-grid">{photos.map((p, index) => (<div key={p.id} className="gallery-item" onClick={() => openPhoto(index)}><img src={p.url} alt="" /></div>))}</div>{photos.length === 0 && <div style={{ textAlign: "center", padding: 40, color: "#999" }}>{t("profile.noPhotos","Nenhuma foto ainda.")}</div>}</div>)}
         {currentIndex !== null && <PhotoModal url={photos[currentIndex].url} onClose={closePhoto} onNext={nextPhoto} onPrev={prevPhoto} />}
-        {playingPost && (
-          <div onClick={() => setPlayingPost(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-            <div onClick={e => e.stopPropagation()} style={{ background: "white", borderRadius: 20, padding: 24, maxWidth: 380, width: "100%", textAlign: "center" }}>
-              <div style={{ width: 200, height: 200, borderRadius: 16, overflow: "hidden", margin: "0 auto 16px", background: "linear-gradient(135deg,#4a80d4,#764ba2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                {playingPost.cover_url ? <img src={playingPost.cover_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ fontSize: 64 }}>🎵</span>}
-              </div>
-              <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 700 }}>{playingPost.content?.replace("🎵 ","").split("—")[0]?.trim()}</h3>
-              <p style={{ color: "#888", fontSize: 13, margin: "0 0 16px" }}>{playingPost.content?.split("—")[1]?.trim()}</p>
-              <audio ref={audioRef} src={playingPost.audio_url} controls autoPlay style={{ width: "100%", marginBottom: 16 }} />
-              <button onClick={() => setPlayingPost(null)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: 10, padding: "10px 24px", cursor: "pointer", fontWeight: 600 }}>{t("profile.closePlayer","Fechar")}</button>
-            </div>
-          </div>
-        )}
         {showUploader && <PhotoUploader token={token} onSuccess={p => { setPhotos(prev => [p, ...prev]); setShowUploader(false); }} onClose={() => setShowUploader(false)} />}
       </div>
     </div>

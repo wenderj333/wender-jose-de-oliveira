@@ -1004,7 +1004,10 @@
     "requestSent": "Zapros otpravlen",
     "uploading": "Zagruzka...",
     "choosePhoto": "Vybrat foto",
-    "publishPhoto": "Opublikovat foto"
+    "publishPhoto": "Opublikovat foto",
+    "playMusic": "Играть музыку",
+    "listenNow": "Слушать сейчас",
+    "closePlayer": "Закрыть"
   },
   "landing": {
     "subtitle": "Ð§ÑƒÐ²ÑÑ‚Ð²Ð¾Ð²Ð°Ð» Ð»Ð¸ Ñ‚Ñ‹ ÑÐµÐ±Ñ Ð¾Ð´Ð¸Ð½Ð¾ÐºÐ¸Ð¼? Ð—Ð´ÐµÑÑŒ Ð²ÑÐµÐ³Ð´Ð° ÐµÑÑ‚ÑŒ ÐºÑ‚Ð¾-Ñ‚Ð¾ Ð´Ð»Ñ Ñ‚ÐµÐ±Ñ.",

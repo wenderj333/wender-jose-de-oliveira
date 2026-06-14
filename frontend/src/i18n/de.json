@@ -649,7 +649,10 @@
     "requestSent": "Anfrage gesendet",
     "uploading": "Wird hochgeladen...",
     "choosePhoto": "Foto wahlen",
-    "publishPhoto": "Foto veroffentlichen"
+    "publishPhoto": "Foto veroffentlichen",
+    "playMusic": "Musik abspielen",
+    "listenNow": "Jetzt horen",
+    "closePlayer": "Schliessen"
   },
   "messages": {
     "title": "Messages",
