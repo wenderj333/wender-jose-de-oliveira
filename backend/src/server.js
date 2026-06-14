@@ -328,8 +328,6 @@ const { Pool: MigratePool } = require('pg');
     await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS audio_url TEXT`);
     await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS cover_url TEXT`);
     await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS music_title TEXT`);
-    await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS cover_url TEXT`);
-    await mp.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS music_title TEXT`);
 
     // Stripe payments table
     await mp.query(`
