@@ -24,14 +24,6 @@ export default function Profile() {
   const [friendStatus, setFriendStatus] = useState(null);
   const [playingPost, setPlayingPost] = useState(null);
   const audioRef = React.useRef(null);
-  const [postAmens, setPostAmens] = useState({});
-  const handlePostAmen = async (postId) => {
-    if (postAmens[postId]) return;
-    setPostAmens(prev => ({ ...prev, [postId]: true }));
-    try {
-      await fetch(API + "/feed/" + postId + "/like", { method: "POST", headers: { Authorization: "Bearer " + token } });
-    } catch(e) {}
-  };
   const targetId = userId || currentUser?.id;
   const isOwner = !userId || userId === currentUser?.id;
   useEffect(() => {
@@ -165,9 +157,6 @@ export default function Profile() {
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21" /></svg>
                 </div>
               )}
-              <button onClick={(e) => { e.stopPropagation(); handlePostAmen(p.id); }} style={{ position: "absolute", top: 4, right: 4, background: postAmens[p.id] ? "#e11d48" : "rgba(255,255,255,0.9)", border: "none", borderRadius: "50%", width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 14 }}>
-                {postAmens[p.id] ? "❤️" : "🤍"}
-              </button>
             </div>
             );
           })}{filteredPosts.length === 0 && <div style={{ gridColumn: "1/-1", textAlign: "center", padding: 40, color: "#999" }}>{t("profile.noPosts","Nenhuma publicacao ainda.")}</div>}</div>)}

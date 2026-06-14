@@ -652,7 +652,9 @@
     "publishPhoto": "Foto veroffentlichen",
     "playMusic": "Musik abspielen",
     "listenNow": "Jetzt horen",
-    "closePlayer": "Schliessen"
+    "closePlayer": "Schliessen",
+    "amen": "Amen",
+    "amenGiven": "Amen gegeben"
   },
   "messages": {
     "title": "Messages",

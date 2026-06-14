@@ -652,7 +652,9 @@
     "publishPhoto": "Publica Poza",
     "playMusic": "Reda Muzica",
     "listenNow": "Asculta acum",
-    "closePlayer": "Inchide"
+    "closePlayer": "Inchide",
+    "amen": "Amin",
+    "amenGiven": "Amin dat"
   },
   "messages": {
     "title": "Mesaje",
