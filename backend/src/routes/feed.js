@@ -125,8 +125,6 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
     let audioUrl = req.body.audio_url || null;
     let coverUrl = req.body.cover_url || null;
     let musicTitle = req.body.music_title || null;
-    let coverUrl = req.body.cover_url || null;
-    let musicTitle = req.body.music_title || null;
 
     // Se veio arquivo via multer (upload pequeno pelo backend)
     if (req.file) {
