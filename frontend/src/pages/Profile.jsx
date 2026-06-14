@@ -152,9 +152,10 @@ export default function Profile() {
               ) : isMusic ? (
                 <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#4a80d4,#764ba2)", position: "relative" }}>
                   {p.cover_url ? <img src={p.cover_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} /> : null}
-                  <div style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
-                    <div style={{ fontSize: 28, marginBottom: 4 }}>{p.cover_url ? "" : "🎵"}</div>
-                    <div style={{ fontSize: 10, color: "white", fontWeight: 600, textShadow: "0 1px 3px rgba(0,0,0,0.8)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 80 }}>{p.content?.replace("🎵 ","").split("—")[0]?.trim()}</div>
+                  <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: 8 }}>
+                    <div style={{ fontSize: 36, marginBottom: 6 }}>🎵</div>
+                    <div style={{ fontSize: 11, color: "white", fontWeight: 700, textShadow: "0 1px 4px rgba(0,0,0,0.9)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 90 }}>{p.content?.replace("🎵 ","").split("—")[0]?.trim()}</div>
+                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.8)", marginTop: 2 }}>{p.content?.split("—")[1]?.trim()}</div>
                   </div>
                 </div>
               ) : (
