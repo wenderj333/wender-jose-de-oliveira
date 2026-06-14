@@ -655,7 +655,9 @@
     "closePlayer": "Schliessen",
     "amen": "Amen",
     "amenGiven": "Amen gegeben",
-    "deletePost": "Beitrag loschen"
+    "deletePost": "Beitrag loschen",
+    "likePhoto": "Gefallt mir",
+    "unlikePhoto": "Gefallt mir schon"
   },
   "messages": {
     "title": "Messages",

@@ -655,7 +655,9 @@
     "closePlayer": "Inchide",
     "amen": "Amin",
     "amenGiven": "Amin dat",
-    "deletePost": "Sterge postarea"
+    "deletePost": "Sterge postarea",
+    "likePhoto": "Imi place",
+    "unlikePhoto": "Deja imi place"
   },
   "messages": {
     "title": "Mesaje",

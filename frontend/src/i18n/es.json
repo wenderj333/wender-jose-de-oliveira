@@ -654,7 +654,9 @@
     "closePlayer": "Cerrar",
     "amen": "Amen",
     "amenGiven": "Amen dado",
-    "deletePost": "Eliminar publicacion"
+    "deletePost": "Eliminar publicacion",
+    "likePhoto": "Me gusta",
+    "unlikePhoto": "Ya me gusta"
   },
   "messages": {
     "title": "Mensajes",
