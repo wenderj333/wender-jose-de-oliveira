@@ -1621,7 +1621,10 @@
   "chat": {
     "yourMessages": "Mesajele tale",
     "selectConvo": "Selecteaza o conversatie sau mergi la profilul unui prieten pentru a incepe sa vorbesti!",
-    "search": "Cauta conversatie..."
+    "search": "Cauta conversatie...",
+    "soundOn": "Sunet activat",
+    "soundOff": "Sunet dezactivat",
+    "messageSent": "Mesaj trimis"
   },
   "legal": {
     "privacy": "Politica Confidentialitate",

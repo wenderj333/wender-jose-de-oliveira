@@ -1595,7 +1595,10 @@
   "chat": {
     "yourMessages": "As tuas mensagens",
     "selectConvo": "Seleciona uma conversa ou vai ao perfil de um amigo para comecar a conversar!",
-    "search": "Procurar conversa..."
+    "search": "Procurar conversa...",
+    "soundOn": "Som activado",
+    "soundOff": "Som desactivado",
+    "messageSent": "Mensagem enviada"
   },
   "legal": {
     "privacy": "Politica de Privacidade",

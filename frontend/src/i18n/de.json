@@ -1622,7 +1622,10 @@
   "chat": {
     "yourMessages": "Deine Nachrichten",
     "selectConvo": "Wahle ein Gesprach aus oder gehe zum Profil eines Freundes!",
-    "search": "Gesprach suchen..."
+    "search": "Gesprach suchen...",
+    "soundOn": "Ton an",
+    "soundOff": "Ton aus",
+    "messageSent": "Nachricht gesendet"
   },
   "legal": {
     "privacy": "Datenschutzrichtlinie",

@@ -1620,7 +1620,10 @@
   "chat": {
     "yourMessages": "Tus mensajes",
     "selectConvo": "Selecciona una conversacion o ve al perfil de un amigo para empezar a chatear!",
-    "search": "Buscar conversacion..."
+    "search": "Buscar conversacion...",
+    "soundOn": "Sonido activado",
+    "soundOff": "Sonido desactivado",
+    "messageSent": "Mensaje enviado"
   },
   "legal": {
     "privacy": "Politica de Privacidad",
