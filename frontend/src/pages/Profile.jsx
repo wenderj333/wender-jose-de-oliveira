@@ -79,6 +79,12 @@ export default function Profile() {
       .then(r => r.json()).then(d => setUserPosts((d.posts || []).filter(p => p.user_id === targetId || p.author_id === targetId))).catch(() => {});
     fetch(API + "/photos/" + targetId, { headers: { Authorization: "Bearer " + token } })
       .then(r => r.ok ? r.json() : { photos: [] }).then(d => setPhotos(d.photos || [])).catch(() => {});
+    fetch(API + "/feed/liked-posts", { headers: { Authorization: "Bearer " + token } })
+      .then(r => r.json()).then(d => {
+        const liked = {};
+        (d.likedIds || []).forEach(id => { liked[id] = true; });
+        setPostAmens(liked);
+      }).catch(() => {});
   }, [targetId, token]);
   useEffect(() => {
     if (!token || !userId || isOwner) return;
