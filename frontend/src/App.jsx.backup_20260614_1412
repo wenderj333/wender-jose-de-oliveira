@@ -531,7 +531,7 @@ export default function App() {
 
               ['/journeys', <Globe size={20}/>, t('nav.journeys')],
 
-              ['/live', <PlayCircle size={20}/>, '🔴 Directo'],
+              ['/live', <PlayCircle size={20}/>, 'ðŸ”´ Directo'],
 
               ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
 
