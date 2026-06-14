@@ -1171,7 +1171,9 @@
     "clickToPlay": "ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð´Ð»Ñ Ð²Ð¾ÑÐ¿Ñ€Ð¾Ð¸Ð·Ð²ÐµÐ´ÐµÐ½Ð¸Ñ",
     "shareWhatsApp": "Поделиться WhatsApp",
     "shareSocial": "Поделиться",
-    "playMusic": "Играть"
+    "playMusic": "Играть",
+    "fileTooLarge": "Файл slishkom bolshoy",
+    "maxSize": "Maksimalnyy razmer"
   },
   "report": {
     "title": "ÐŸÐ¾Ð¶Ð°Ð»Ð¾Ð²Ð°Ñ‚ÑŒÑÑ",

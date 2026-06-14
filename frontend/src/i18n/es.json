@@ -923,7 +923,9 @@
     "clickToPlay": "Toca para reproducir",
     "shareWhatsApp": "Compartir WhatsApp",
     "shareSocial": "Compartir",
-    "playMusic": "Reproducir"
+    "playMusic": "Reproducir",
+    "fileTooLarge": "Archivo demasiado grande",
+    "maxSize": "Tamano maximo"
   },
   "courseFinance": {
     "title": "Finanzas Bíblicas",

@@ -923,7 +923,9 @@
     "clickToPlay": "Click to play",
     "shareWhatsApp": "Share WhatsApp",
     "shareSocial": "Share",
-    "playMusic": "Play"
+    "playMusic": "Play",
+    "fileTooLarge": "File too large",
+    "maxSize": "Maximum size"
   },
   "courseFinance": {
     "title": "Biblical Finance",

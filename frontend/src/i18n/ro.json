@@ -924,7 +924,9 @@
     "clickToPlay": "Apasa pentru a reda",
     "shareWhatsApp": "Distribuie WhatsApp",
     "shareSocial": "Distribuie",
-    "playMusic": "Reda"
+    "playMusic": "Reda",
+    "fileTooLarge": "Fisier prea mare",
+    "maxSize": "Marime maxima"
   },
   "courseFinance": {
     "title": "FinanÈ›e Biblice",
