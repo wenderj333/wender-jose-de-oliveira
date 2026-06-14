@@ -57,7 +57,7 @@ const CATEGORIES_CONFIG = [
 
 const getCatColor = (type) => CATEGORIES_CONFIG.find(c => c.value === type)?.color || '#888';
 
-function MiniAudioPlayer({ src, cover, title, isPlaying: propIsPlaying, onPlay: externalOnPlay, onPause: externalOnPause, onEnded: externalOnEnded }) {
+function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay, onPause: externalOnPause, onEnded: externalOnEnded }) {
   const { t } = useTranslation(); // Add useTranslation
   const audioRef = useRef(null);
   const [internalPlaying, setInternalPlaying] = useState(false);
@@ -132,7 +132,7 @@ function MiniAudioPlayer({ src, cover, title, isPlaying: propIsPlaying, onPlay: 
   return (
     <>
       {guestBar}
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(102,126,234,0.12)', border: '1px solid rgba(102,126,234,0.3)', borderRadius: 12, padding: '8px 10px', marginTop: 6 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(102,126,234,0.12)', border: '1px solid rgba(102,126,234,0.3)', borderRadius: 12, padding: '6px 10px', marginTop: 6 }}>
       <audio
         ref={audioRef}
         src={src}
@@ -142,25 +142,15 @@ function MiniAudioPlayer({ src, cover, title, isPlaying: propIsPlaying, onPlay: 
         onPause={handleOnPause}
         preload="metadata"
       />
-      {cover ? (
-        <img src={cover} alt="" onClick={toggle} style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', flexShrink: 0, cursor: 'pointer' }} />
-      ) : (
-        <button onClick={toggle} style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0 }}>
-          {playing ? <Pause size={16} /> : <Play size={16} />}
-        </button>
-      )}
+      <button onClick={toggle} style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0 }}>
+        {playing ? <Pause size={16} /> : <Play size={16} />}
+      </button>
       <div style={{ flex: 1 }}>
-        {title && <div style={{ fontWeight: 600, fontSize: 13, color: '#1a1a2e', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: 2 }}>{title}</div>}
         <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>{t('mural.musicLabel')}</div>
         <div style={{ height: 4, background: '#e2e8f0', borderRadius: 2 }}>
           <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg,#7a9e7e,#c4b89a)', transition: 'width 0.1s' }} />
         </div>
       </div>
-      {cover && (
-        <button onClick={toggle} style={{ width: 32, height: 32, borderRadius: '50%', background: playing ? '#e11d48' : '#4a80d4', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0 }}>
-          {playing ? <Pause size={14} /> : <Play size={14} />}
-        </button>
-      )}
     </div>
     </>
   );
@@ -224,7 +214,7 @@ function MusicPickerModal({ onClose, onSelect }) {
   );
 }
 
-function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause, postId }) {
+function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause }) {
   const { t } = useTranslation(); // Add useTranslation
   const color = getCatColor(post.category || post.type);
   const [showComments, setShowComments] = useState(false);
@@ -382,7 +372,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             playsInline
             muted={isMuted}
             poster={videoPoster || undefined}
-            style={{ width: '100%', maxHeight: 280, objectFit: 'cover', display: 'block' }}
+            style={{ width: '100%', maxHeight: 400, objectFit: 'contain', display: 'block' }}
             onPlay={handleInternalVideoPlay}
             onPause={handleInternalVideoPause}
           />
@@ -412,7 +402,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             {post.verse_reference && <p style={{ fontWeight: 700, color, marginTop: 8, marginBottom: 0, fontSize: 13 }}>— {post.verse_reference}</p>}
           </div>
         ) : (
-          <><p style={{ color: '#333', fontSize: 14, lineHeight: 1.65, margin: 0 }}>{post.content}</p>{musicUrl && !isImage && !isVideo && (<MiniAudioPlayer src={musicUrl} cover={post.cover_url} title={post.music_title || post.title} onPlay={()=>setIsMusicPlaying(true)} onPause={()=>setIsMusicPlaying(false)} onEnded={()=>setIsMusicPlaying(false)} />)}</>
+          <><p style={{ color: '#333', fontSize: 14, lineHeight: 1.65, margin: 0 }}>{post.content}</p>{musicUrl && !isImage && !isVideo && (<MiniAudioPlayer src={musicUrl} onPlay={()=>setIsMusicPlaying(true)} onPause={()=>setIsMusicPlaying(false)} onEnded={()=>setIsMusicPlaying(false)} />)}</>
         )}
       </div>
 
@@ -541,7 +531,6 @@ export default function MuralGrid() {
   const [selectedPost, setSelectedPost] = useState(null);
   const videoRefs = useRef({}); // To store refs for each video post
 
-  const postIdFromUrl = new URLSearchParams(window.location.search).get('post');
   const fetchPosts = useCallback(async () => {
     try {
       const res = await fetch(`${API}/feed?limit=50`, {
@@ -567,20 +556,6 @@ export default function MuralGrid() {
   }, [token]);
 
   useEffect(() => { fetchPosts(); }, [fetchPosts]);
-
-  useEffect(() => {
-    if (!loading && postIdFromUrl && posts.length > 0) {
-      const el = document.getElementById('post-' + postIdFromUrl);
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          el.style.outline = '3px solid #4a80d4';
-          el.style.borderRadius = '16px';
-          setTimeout(() => { el.style.outline = ''; }, 3000);
-        }, 500);
-      }
-    }
-  }, [loading, posts, postIdFromUrl]);
 
   // Intersection Observer for video autoplay
   useEffect(() => {

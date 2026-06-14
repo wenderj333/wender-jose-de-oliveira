@@ -382,7 +382,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             playsInline
             muted={isMuted}
             poster={videoPoster || undefined}
-            style={{ width: '100%', maxHeight: 280, objectFit: 'cover', display: 'block' }}
+            style={{ width: '100%', maxHeight: 400, objectFit: 'contain', display: 'block' }}
             onPlay={handleInternalVideoPlay}
             onPause={handleInternalVideoPause}
           />

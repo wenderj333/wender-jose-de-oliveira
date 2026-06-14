@@ -87,7 +87,6 @@ export default function Profile() {
   if (!user) return <div style={{ textAlign: "center", padding: "20px" }}>{t("profile.notFound","Utilizador nao encontrado.")}</div>;
   const tabs = [["all", t("profile.allPosts","Todas")], ["foto", t("profile.photos","Fotos")], ["video", t("profile.videos","Videos")], ["galeria", t("profile.gallery","Galeria")]];
   const filteredPosts = userPosts.filter(p => activeTab === "all" ? true : activeTab === "foto" ? (p.media_url && !p.media_url.includes("video")) : activeTab === "video" ? (p.media_url && p.media_url.includes("video")) : false);
-  const displayPosts = activeTab === "foto" ? [...filteredPosts, ...photos.map(ph => ({ id: ph.id, media_url: ph.url, _isGallery: true }))] : filteredPosts;
   return (
     <div style={{ maxWidth: "935px", margin: "0 auto", padding: "0" }}>
       {user.cover_url && <img src={user.cover_url} style={{ width: "100%", height: "200px", objectFit: "cover" }} onError={e => e.target.style.display = "none"} />}
@@ -165,7 +164,7 @@ export default function Profile() {
         <div style={{ display: "flex", justifyContent: "center", gap: "16px", fontSize: "12px", fontWeight: "600", borderTop: "1px solid #dbdbdb", marginTop: 8 }}>
           {tabs.map(([tab, label]) => (<div key={tab} onClick={() => setActiveTab(tab)} style={{ cursor: "pointer", padding: "12px 4px", borderTop: activeTab === tab ? "2px solid #262626" : "2px solid transparent" }}>{label}</div>))}
         </div>
-        {activeTab !== "galeria" && (<div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 3, marginTop: 3 }}>{displayPosts.map(p => {
+        {activeTab !== "galeria" && (<div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 3, marginTop: 3 }}>{filteredPosts.map(p => {
             const isMusic = p.audio_url && !p.media_url;
             const coverImg = p.cover_url || (isMusic ? null : null);
             return (

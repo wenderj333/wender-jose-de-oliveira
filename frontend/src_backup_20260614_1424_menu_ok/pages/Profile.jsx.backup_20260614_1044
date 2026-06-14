@@ -22,40 +22,6 @@ export default function Profile() {
   const [showUploader, setShowUploader] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [friendStatus, setFriendStatus] = useState(null);
-  const [playingPost, setPlayingPost] = useState(null);
-  const audioRef = React.useRef(null);
-  const [postAmens, setPostAmens] = useState({});
-  const [postLikeCounts, setPostLikeCounts] = useState({});
-  const [musicCovers, setMusicCovers] = useState({});
-
-  useEffect(() => {
-    if (!token) return;
-    fetch(API + "/music?limit=100", { headers: { Authorization: "Bearer " + token } })
-      .then(r => r.json())
-      .then(d => {
-        const covers = {};
-        (d.songs || []).forEach(s => { if (s.cover_url) covers[s.url] = s.cover_url; });
-        setMusicCovers(covers);
-      }).catch(() => {});
-  }, [token]);
-  const handleDeletePost = async (postId) => {
-    if (!window.confirm(t("profile.deletePost","Apagar publicacao?"))) return;
-    try {
-      await fetch(API + "/feed/" + postId, { method: "DELETE", headers: { Authorization: "Bearer " + token } });
-      setUserPosts(prev => prev.filter(p => p.id !== postId));
-    } catch(e) {}
-  };
-  const handlePostAmen = async (postId, currentCount) => {
-    const alreadyLiked = postAmens[postId];
-    setPostAmens(prev => ({ ...prev, [postId]: !alreadyLiked }));
-    setPostLikeCounts(prev => ({ ...prev, [postId]: (prev[postId] ?? currentCount ?? 0) + (alreadyLiked ? -1 : 1) }));
-    try {
-      await fetch(API + "/feed/" + postId + "/like", { method: "POST", headers: { Authorization: "Bearer " + token } });
-    } catch(e) {
-      setPostAmens(prev => ({ ...prev, [postId]: alreadyLiked }));
-      setPostLikeCounts(prev => ({ ...prev, [postId]: (prev[postId] ?? currentCount ?? 0) + (alreadyLiked ? 1 : -1) }));
-    }
-  };
   const targetId = userId || currentUser?.id;
   const isOwner = !userId || userId === currentUser?.id;
   useEffect(() => {
@@ -87,7 +53,6 @@ export default function Profile() {
   if (!user) return <div style={{ textAlign: "center", padding: "20px" }}>{t("profile.notFound","Utilizador nao encontrado.")}</div>;
   const tabs = [["all", t("profile.allPosts","Todas")], ["foto", t("profile.photos","Fotos")], ["video", t("profile.videos","Videos")], ["galeria", t("profile.gallery","Galeria")]];
   const filteredPosts = userPosts.filter(p => activeTab === "all" ? true : activeTab === "foto" ? (p.media_url && !p.media_url.includes("video")) : activeTab === "video" ? (p.media_url && p.media_url.includes("video")) : false);
-  const displayPosts = activeTab === "foto" ? [...filteredPosts, ...photos.map(ph => ({ id: ph.id, media_url: ph.url, _isGallery: true }))] : filteredPosts;
   return (
     <div style={{ maxWidth: "935px", margin: "0 auto", padding: "0" }}>
       {user.cover_url && <img src={user.cover_url} style={{ width: "100%", height: "200px", objectFit: "cover" }} onError={e => e.target.style.display = "none"} />}
@@ -165,69 +130,36 @@ export default function Profile() {
         <div style={{ display: "flex", justifyContent: "center", gap: "16px", fontSize: "12px", fontWeight: "600", borderTop: "1px solid #dbdbdb", marginTop: 8 }}>
           {tabs.map(([tab, label]) => (<div key={tab} onClick={() => setActiveTab(tab)} style={{ cursor: "pointer", padding: "12px 4px", borderTop: activeTab === tab ? "2px solid #262626" : "2px solid transparent" }}>{label}</div>))}
         </div>
-        {activeTab !== "galeria" && (<div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 3, marginTop: 3 }}>{displayPosts.map(p => {
+        {activeTab !== "galeria" && (<div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 3, marginTop: 3 }}>{filteredPosts.map(p => {
             const isMusic = p.audio_url && !p.media_url;
             const coverImg = p.cover_url || (isMusic ? null : null);
             return (
-            <div key={p.id} onClick={() => isMusic ? setPlayingPost(p) : null} style={{ aspectRatio: "1", overflow: "hidden", background: "#f0f0f0", position: "relative", cursor: "pointer" }}>
+            <div key={p.id} style={{ aspectRatio: "1", overflow: "hidden", background: "#f0f0f0", position: "relative", cursor: "pointer" }}>
               {p.media_url && p.media_url.includes("video") ? (
                 <video src={p.media_url} style={{ width: "100%", height: "100%", objectFit: "cover" }} muted playsInline />
               ) : p.media_url ? (
                 <img src={p.media_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               ) : isMusic ? (
-                <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#4a80d4,#764ba2)", position: "relative" }}>
-                  {(p.cover_url || musicCovers[p.audio_url]) ? <img src={p.cover_url || musicCovers[p.audio_url]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} /> : null}
-                  {!(p.cover_url || musicCovers[p.audio_url]) && (
-                    <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: 8 }}>
-                      <div style={{ fontSize: 36, marginBottom: 6 }}>🎵</div>
-                      <div style={{ fontSize: 11, color: "white", fontWeight: 700, textShadow: "0 1px 4px rgba(0,0,0,0.9)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 90 }}>{p.content?.replace("🎵 ","").split("—")[0]?.trim()}</div>
-                      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.8)", marginTop: 2 }}>{p.content?.split("—")[1]?.trim()}</div>
-                    </div>
-                  )}
-                  {(p.cover_url || musicCovers[p.audio_url]) && (
-                    <div style={{ position: "absolute", bottom: 30, left: 0, right: 0, textAlign: "center", zIndex: 2 }}>
-                      <div style={{ fontSize: 10, color: "white", fontWeight: 700, textShadow: "0 1px 4px rgba(0,0,0,0.9)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", padding: "0 8px" }}>{p.content?.replace("🎵 ","").split("—")[0]?.trim()}</div>
-                      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.8)" }}>{p.content?.split("—")[1]?.trim()}</div>
-                    </div>
-                  )}
+                <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#4a80d4,#764ba2)", padding: 8 }}>
+                  {coverImg ? <img src={coverImg} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} /> : null}
+                  <div style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
+                    <div style={{ fontSize: 28, marginBottom: 4 }}>🎵</div>
+                    <div style={{ fontSize: 10, color: "white", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 80 }}>{p.content?.replace("🎵 ","").split("—")[0]?.trim()}</div>
+                  </div>
                 </div>
               ) : (
                 <div style={{ padding: 8, fontSize: 11, color: "#666", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>{(p.content || "").slice(0,60)}</div>
               )}
               {isMusic && (
-                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <div style={{ background: "rgba(0,0,0,0.4)", borderRadius: "50%", width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21" /></svg>
-                  </div>
+                <div style={{ position: "absolute", bottom: 4, right: 4, background: "#4a80d4", borderRadius: "50%", width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21" /></svg>
                 </div>
-              )}
-              <button onClick={(e) => { e.stopPropagation(); handlePostAmen(p.id, p.like_count); }} style={{ position: "absolute", bottom: 6, left: 6, background: "rgba(0,0,0,0.3)", border: "none", borderRadius: 20, padding: "3px 8px", cursor: "pointer", display: "flex", alignItems: "center", gap: 3, color: "white", fontSize: 11, fontWeight: 700 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill={postAmens[p.id] ? "#e11d48" : "none"} stroke="white" strokeWidth="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                {postLikeCounts[p.id] ?? p.like_count ?? 0}
-              </button>
-              {isOwner && (
-                <button onClick={(e) => { e.stopPropagation(); handleDeletePost(p.id); }} style={{ position: "absolute", bottom: 6, right: 6, background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%", width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4h6v2"/></svg>
-                </button>
               )}
             </div>
             );
           })}{filteredPosts.length === 0 && <div style={{ gridColumn: "1/-1", textAlign: "center", padding: 40, color: "#999" }}>{t("profile.noPosts","Nenhuma publicacao ainda.")}</div>}</div>)}
         {activeTab === "galeria" && (<div style={{ marginTop: 16 }}>{isOwner && <button onClick={() => setShowUploader(true)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontSize: 14, marginBottom: 12 }}>+ {t("profile.addPhoto","Adicionar Foto")}</button>}<div className="gallery-grid">{photos.map((p, index) => (<div key={p.id} className="gallery-item" onClick={() => openPhoto(index)}><img src={p.url} alt="" /></div>))}</div>{photos.length === 0 && <div style={{ textAlign: "center", padding: 40, color: "#999" }}>{t("profile.noPhotos","Nenhuma foto ainda.")}</div>}</div>)}
         {currentIndex !== null && <PhotoModal url={photos[currentIndex].url} onClose={closePhoto} onNext={nextPhoto} onPrev={prevPhoto} />}
-        {playingPost && (
-          <div onClick={() => setPlayingPost(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-            <div onClick={e => e.stopPropagation()} style={{ background: "white", borderRadius: 20, padding: 24, maxWidth: 380, width: "100%", textAlign: "center" }}>
-              <div style={{ width: 200, height: 200, borderRadius: 16, overflow: "hidden", margin: "0 auto 16px", background: "linear-gradient(135deg,#4a80d4,#764ba2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                {playingPost.cover_url ? <img src={playingPost.cover_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ fontSize: 64 }}>🎵</span>}
-              </div>
-              <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 700 }}>{playingPost.content?.replace("🎵 ","").split("—")[0]?.trim()}</h3>
-              <p style={{ color: "#888", fontSize: 13, margin: "0 0 16px" }}>{playingPost.content?.split("—")[1]?.trim()}</p>
-              <audio ref={audioRef} src={playingPost.audio_url} controls autoPlay style={{ width: "100%", marginBottom: 16 }} />
-              <button onClick={() => setPlayingPost(null)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: 10, padding: "10px 24px", cursor: "pointer", fontWeight: 600 }}>{t("profile.closePlayer","Fechar")}</button>
-            </div>
-          </div>
-        )}
         {showUploader && <PhotoUploader token={token} onSuccess={p => { setPhotos(prev => [p, ...prev]); setShowUploader(false); }} onClose={() => setShowUploader(false)} />}
       </div>
     </div>

@@ -25,7 +25,6 @@ export default function Profile() {
   const [playingPost, setPlayingPost] = useState(null);
   const audioRef = React.useRef(null);
   const [postAmens, setPostAmens] = useState({});
-  const [postLikeCounts, setPostLikeCounts] = useState({});
   const [musicCovers, setMusicCovers] = useState({});
 
   useEffect(() => {
@@ -38,23 +37,12 @@ export default function Profile() {
         setMusicCovers(covers);
       }).catch(() => {});
   }, [token]);
-  const handleDeletePost = async (postId) => {
-    if (!window.confirm(t("profile.deletePost","Apagar publicacao?"))) return;
-    try {
-      await fetch(API + "/feed/" + postId, { method: "DELETE", headers: { Authorization: "Bearer " + token } });
-      setUserPosts(prev => prev.filter(p => p.id !== postId));
-    } catch(e) {}
-  };
-  const handlePostAmen = async (postId, currentCount) => {
-    const alreadyLiked = postAmens[postId];
-    setPostAmens(prev => ({ ...prev, [postId]: !alreadyLiked }));
-    setPostLikeCounts(prev => ({ ...prev, [postId]: (prev[postId] ?? currentCount ?? 0) + (alreadyLiked ? -1 : 1) }));
+  const handlePostAmen = async (postId) => {
+    if (postAmens[postId]) return;
+    setPostAmens(prev => ({ ...prev, [postId]: true }));
     try {
       await fetch(API + "/feed/" + postId + "/like", { method: "POST", headers: { Authorization: "Bearer " + token } });
-    } catch(e) {
-      setPostAmens(prev => ({ ...prev, [postId]: alreadyLiked }));
-      setPostLikeCounts(prev => ({ ...prev, [postId]: (prev[postId] ?? currentCount ?? 0) + (alreadyLiked ? 1 : -1) }));
-    }
+    } catch(e) {}
   };
   const targetId = userId || currentUser?.id;
   const isOwner = !userId || userId === currentUser?.id;
@@ -87,7 +75,6 @@ export default function Profile() {
   if (!user) return <div style={{ textAlign: "center", padding: "20px" }}>{t("profile.notFound","Utilizador nao encontrado.")}</div>;
   const tabs = [["all", t("profile.allPosts","Todas")], ["foto", t("profile.photos","Fotos")], ["video", t("profile.videos","Videos")], ["galeria", t("profile.gallery","Galeria")]];
   const filteredPosts = userPosts.filter(p => activeTab === "all" ? true : activeTab === "foto" ? (p.media_url && !p.media_url.includes("video")) : activeTab === "video" ? (p.media_url && p.media_url.includes("video")) : false);
-  const displayPosts = activeTab === "foto" ? [...filteredPosts, ...photos.map(ph => ({ id: ph.id, media_url: ph.url, _isGallery: true }))] : filteredPosts;
   return (
     <div style={{ maxWidth: "935px", margin: "0 auto", padding: "0" }}>
       {user.cover_url && <img src={user.cover_url} style={{ width: "100%", height: "200px", objectFit: "cover" }} onError={e => e.target.style.display = "none"} />}
@@ -165,7 +152,7 @@ export default function Profile() {
         <div style={{ display: "flex", justifyContent: "center", gap: "16px", fontSize: "12px", fontWeight: "600", borderTop: "1px solid #dbdbdb", marginTop: 8 }}>
           {tabs.map(([tab, label]) => (<div key={tab} onClick={() => setActiveTab(tab)} style={{ cursor: "pointer", padding: "12px 4px", borderTop: activeTab === tab ? "2px solid #262626" : "2px solid transparent" }}>{label}</div>))}
         </div>
-        {activeTab !== "galeria" && (<div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 3, marginTop: 3 }}>{displayPosts.map(p => {
+        {activeTab !== "galeria" && (<div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 3, marginTop: 3 }}>{filteredPosts.map(p => {
             const isMusic = p.audio_url && !p.media_url;
             const coverImg = p.cover_url || (isMusic ? null : null);
             return (
@@ -177,19 +164,11 @@ export default function Profile() {
               ) : isMusic ? (
                 <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#4a80d4,#764ba2)", position: "relative" }}>
                   {(p.cover_url || musicCovers[p.audio_url]) ? <img src={p.cover_url || musicCovers[p.audio_url]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} /> : null}
-                  {!(p.cover_url || musicCovers[p.audio_url]) && (
-                    <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: 8 }}>
-                      <div style={{ fontSize: 36, marginBottom: 6 }}>🎵</div>
-                      <div style={{ fontSize: 11, color: "white", fontWeight: 700, textShadow: "0 1px 4px rgba(0,0,0,0.9)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 90 }}>{p.content?.replace("🎵 ","").split("—")[0]?.trim()}</div>
-                      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.8)", marginTop: 2 }}>{p.content?.split("—")[1]?.trim()}</div>
-                    </div>
-                  )}
-                  {(p.cover_url || musicCovers[p.audio_url]) && (
-                    <div style={{ position: "absolute", bottom: 30, left: 0, right: 0, textAlign: "center", zIndex: 2 }}>
-                      <div style={{ fontSize: 10, color: "white", fontWeight: 700, textShadow: "0 1px 4px rgba(0,0,0,0.9)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", padding: "0 8px" }}>{p.content?.replace("🎵 ","").split("—")[0]?.trim()}</div>
-                      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.8)" }}>{p.content?.split("—")[1]?.trim()}</div>
-                    </div>
-                  )}
+                  <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: 8 }}>
+                    <div style={{ fontSize: 36, marginBottom: 6 }}>🎵</div>
+                    <div style={{ fontSize: 11, color: "white", fontWeight: 700, textShadow: "0 1px 4px rgba(0,0,0,0.9)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 90 }}>{p.content?.replace("🎵 ","").split("—")[0]?.trim()}</div>
+                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.8)", marginTop: 2 }}>{p.content?.split("—")[1]?.trim()}</div>
+                  </div>
                 </div>
               ) : (
                 <div style={{ padding: 8, fontSize: 11, color: "#666", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>{(p.content || "").slice(0,60)}</div>
@@ -201,15 +180,9 @@ export default function Profile() {
                   </div>
                 </div>
               )}
-              <button onClick={(e) => { e.stopPropagation(); handlePostAmen(p.id, p.like_count); }} style={{ position: "absolute", bottom: 6, left: 6, background: "rgba(0,0,0,0.3)", border: "none", borderRadius: 20, padding: "3px 8px", cursor: "pointer", display: "flex", alignItems: "center", gap: 3, color: "white", fontSize: 11, fontWeight: 700 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill={postAmens[p.id] ? "#e11d48" : "none"} stroke="white" strokeWidth="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                {postLikeCounts[p.id] ?? p.like_count ?? 0}
+              <button onClick={(e) => { e.stopPropagation(); handlePostAmen(p.id); }} style={{ position: "absolute", bottom: 6, left: 6, background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 3, color: "white", textShadow: "0 1px 3px rgba(0,0,0,0.8)", fontSize: 12, fontWeight: 700 }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill={postAmens[p.id] ? "#e11d48" : "none"} stroke="white" strokeWidth="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
               </button>
-              {isOwner && (
-                <button onClick={(e) => { e.stopPropagation(); handleDeletePost(p.id); }} style={{ position: "absolute", bottom: 6, right: 6, background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%", width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/><path d="M10,11v6"/><path d="M14,11v6"/><path d="M9,6V4h6v2"/></svg>
-                </button>
-              )}
             </div>
             );
           })}{filteredPosts.length === 0 && <div style={{ gridColumn: "1/-1", textAlign: "center", padding: 40, color: "#999" }}>{t("profile.noPosts","Nenhuma publicacao ainda.")}</div>}</div>)}
