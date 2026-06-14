@@ -657,7 +657,9 @@
     "amenGiven": "Amin dat",
     "deletePost": "Sterge postarea",
     "likePhoto": "Imi place",
-    "unlikePhoto": "Deja imi place"
+    "unlikePhoto": "Deja imi place",
+    "commentPhoto": "Comenteaza",
+    "viewPhoto": "Vezi poza"
   },
   "messages": {
     "title": "Mesaje",

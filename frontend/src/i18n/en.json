@@ -656,7 +656,9 @@
     "amenGiven": "Amen given",
     "deletePost": "Delete post",
     "likePhoto": "Like",
-    "unlikePhoto": "Liked"
+    "unlikePhoto": "Liked",
+    "commentPhoto": "Comment",
+    "viewPhoto": "View photo"
   },
   "messages": {
     "title": "Messages",

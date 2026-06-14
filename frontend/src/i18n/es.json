@@ -656,7 +656,9 @@
     "amenGiven": "Amen dado",
     "deletePost": "Eliminar publicacion",
     "likePhoto": "Me gusta",
-    "unlikePhoto": "Ya me gusta"
+    "unlikePhoto": "Ya me gusta",
+    "commentPhoto": "Comentar",
+    "viewPhoto": "Ver foto"
   },
   "messages": {
     "title": "Mensajes",

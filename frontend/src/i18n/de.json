@@ -657,7 +657,9 @@
     "amenGiven": "Amen gegeben",
     "deletePost": "Beitrag loschen",
     "likePhoto": "Gefallt mir",
-    "unlikePhoto": "Gefallt mir schon"
+    "unlikePhoto": "Gefallt mir schon",
+    "commentPhoto": "Kommentieren",
+    "viewPhoto": "Foto ansehen"
   },
   "messages": {
     "title": "Messages",

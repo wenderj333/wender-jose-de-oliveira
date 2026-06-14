@@ -656,7 +656,9 @@
     "amenGiven": "Amen donne",
     "deletePost": "Supprimer publication",
     "likePhoto": "Jaime",
-    "unlikePhoto": "Deja aime"
+    "unlikePhoto": "Deja aime",
+    "commentPhoto": "Commenter",
+    "viewPhoto": "Voir photo"
   },
   "messages": {
     "title": "Messages",
