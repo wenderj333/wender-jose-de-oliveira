@@ -345,13 +345,15 @@
     "uploadTooSlow": "Upload zu langsam. Verbindung möglicherweise schwach.",
     "fileTooLargeSimple": "âŒ Datei zu groÃŸ!",
     "doNotClose": "Bitte Seite nicht schlieÃŸen oder neu laden!",
-    "loading": "Wird geladen...",
+    "loading": "Laden...",
     "noMusicUploaded": "Noch keine Musik hochgeladen",
     "visPublic": "Ã–ffentlich",
     "visMembers": "Mitglieder",
     "visPrivate": "Privat",
     "viewPost": "Beitrag ansehen",
-    "sharedVia": "Geteilt uber Sigo com Fe"
+    "sharedVia": "Geteilt uber Sigo com Fe",
+    "loadingPosts": "Beitrage laden...",
+    "joinCommunity": "Tritt der Gemeinschaft bei!"
   },
   "kids": {
     "title": "Digital Sunday School",

@@ -344,7 +344,10 @@
     "comment": "Comentario",
     "comments": "Comentarios",
     "viewPost": "Ver Publicacao",
-    "sharedVia": "Partilhado via Sigo com Fe"
+    "sharedVia": "Partilhado via Sigo com Fe",
+    "loading": "A carregar...",
+    "loadingPosts": "A carregar publicacoes...",
+    "joinCommunity": "Entra na comunidade!"
   },
   "groups": {
     "title": "Grupos",

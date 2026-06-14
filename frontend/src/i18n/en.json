@@ -350,7 +350,9 @@
     "visMembers": "Members",
     "visPrivate": "Private",
     "viewPost": "View Post",
-    "sharedVia": "Shared via Sigo com Fe"
+    "sharedVia": "Shared via Sigo com Fe",
+    "loadingPosts": "Loading posts...",
+    "joinCommunity": "Join the community!"
   },
   "kids": {
     "title": "Digital Sunday School",

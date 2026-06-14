@@ -791,19 +791,7 @@ export default function MuralGrid() {
 
       <button onClick={()=>window.location.href='/desafio-biblico'} style={{padding:'8px 16px',borderRadius:20,border:'none',background:'linear-gradient(135deg,#6c47d4,#e74c3c)',color:'white',cursor:'pointer',fontSize:13,fontWeight:700,marginBottom:16,display:'flex',alignItems:'center',gap:6}}>🎮 {t('nav.challenge','Desafio Biblico')}</button>
       {/* Loading */}
-      {loading && (
-        <div style={{ textAlign: 'center', padding: 60 }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>🙏</div>
-          <div style={{ fontSize: 18, fontWeight: 700, color: '#7a9e7e', marginBottom: 8 }}>Sigo com Fe</div>
-          <div style={{ fontSize: 14, color: '#888', marginBottom: 24 }}>{t('mural.loadingPosts','A carregar publicacoes...')}</div>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
-            {[0,1,2].map(i => (
-              <div key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: '#7a9e7e', animation: 'bounce 1s infinite', animationDelay: i*0.2+'s' }} />
-            ))}
-          </div>
-          <style>{'@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }'}</style>
-        </div>
-      )}
+      {loading && <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>{t('common.loading')}</div>}
 
       {/* Grid View */}
       {!loading && viewMode === 'grid' && (

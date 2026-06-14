@@ -350,7 +350,9 @@
     "visMembers": "Miembros",
     "visPrivate": "Privado",
     "viewPost": "Ver Publicacion",
-    "sharedVia": "Compartido via Sigo con Fe"
+    "sharedVia": "Compartido via Sigo con Fe",
+    "loadingPosts": "Cargando publicaciones...",
+    "joinCommunity": "Unete a la comunidad!"
   },
   "kids": {
     "title": "Escuela Dominical Digital",

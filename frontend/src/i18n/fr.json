@@ -350,7 +350,9 @@
     "visMembers": "Membres",
     "visPrivate": "Privé",
     "viewPost": "Voir Publication",
-    "sharedVia": "Partage via Sigo com Fe"
+    "sharedVia": "Partage via Sigo com Fe",
+    "loadingPosts": "Chargement des publications...",
+    "joinCommunity": "Rejoins la communaute!"
   },
   "kids": {
     "title": "Ã‰cole du Dimanche Numérique",

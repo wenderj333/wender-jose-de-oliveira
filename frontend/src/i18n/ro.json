@@ -316,7 +316,7 @@
     "uploadTooSlow": "Trimiterea a durat prea mult. Conexiunea dvs. poate fi lentÄƒ. ÃŽncercaÈ›i din nou.",
     "fileTooLargeSimple": "âŒ FiÈ™ier prea mare! ÃŽncercaÈ›i un fiÈ™ier mai mic.",
     "doNotClose": "VÄƒ rugÄƒm nu închideÈ›i sau reîmprospÄƒtaÈ›i pagina!",
-    "loading": "Se încarcÄƒ...",
+    "loading": "Se incarca...",
     "noMusicUploaded": "Nicio muzicÄƒ încÄƒrcatÄƒ încÄƒ",
     "title": "Peretele ComunitÄƒÈ›ii",
     "subtitle": "ÃŽmpÄƒrtÄƒÈ™eÈ™te-È›i credinÈ›a, mÄƒrturiile È™i laudele",
@@ -351,7 +351,9 @@
     "visMembers": "Membri",
     "visPrivate": "Privat",
     "viewPost": "Vezi Postarea",
-    "sharedVia": "Distribuit prin Sigo com Fe"
+    "sharedVia": "Distribuit prin Sigo com Fe",
+    "loadingPosts": "Se incarca postarile...",
+    "joinCommunity": "Alatura-te comunitatii!"
   },
   "kids": {
     "title": "È˜coala DuminicalÄƒ DigitalÄƒ",
