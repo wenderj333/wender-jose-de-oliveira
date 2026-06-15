@@ -50,7 +50,6 @@ export default function BibleStudy() {
       const res = await fetch("https://api.allorigins.win/get?url="+encodeURIComponent(bibleUrl));
       const raw = await res.json();
       const data = JSON.parse(raw.contents);
-      const data = await res.json();
       setVerses(data.verses || []); setChapter(ch); setShowBooks(false);
       setSelectedBook(book); setSelectedBookPt(bookPt);
     } catch(e) {}
