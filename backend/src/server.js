@@ -1,4 +1,4 @@
-require('dotenv').config();
+﻿require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
@@ -28,21 +28,21 @@ app.use(require('helmet')());
 
 // Rate limiting
 const rateLimit = require('express-rate-limit');
-const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 500, message: { error: 'Muitas requisições. Tente novamente em 15 minutos.' } });
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 500, message: { error: 'Muitas requisiÃ§Ãµes. Tente novamente em 15 minutos.' } });
 const chatLimiter = rateLimit({ windowMs: 1 * 60 * 1000, max: 30, message: { error: 'Limite de mensagens atingido.' } });
 app.use('/api/', limiter);
 app.use('/api/chat', chatLimiter);
 
 // JWT secret warning
 if (process.env.JWT_SECRET === 'sigocomfe-secret-key-2026-mudar-em-producao') {
-  console.warn('⚠️  AVISO: Usando JWT_SECRET padrão! Defina um segredo forte em produção.');
+  console.warn('âš ï¸  AVISO: Usando JWT_SECRET padrÃ£o! Defina um segredo forte em produÃ§Ã£o.');
 }
 
-// Auto-migrate on startup (runs CREATE TABLE IF NOT EXISTS — safe to repeat)
+// Auto-migrate on startup (runs CREATE TABLE IF NOT EXISTS â€” safe to repeat)
 const { Pool: MigratePool } = require('pg');
 (async () => {
   if (!process.env.DATABASE_URL) {
-    console.warn('⚠️  DATABASE_URL não definida, pulando migração.');
+    console.warn('âš ï¸  DATABASE_URL nÃ£o definida, pulando migraÃ§Ã£o.');
     return;
   }
   const mp = new MigratePool({
@@ -50,7 +50,7 @@ const { Pool: MigratePool } = require('pg');
     ssl: process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false },
   });
   try {
-    console.log('🔄 Auto-migração iniciando...');
+    console.log('ðŸ”„ Auto-migraÃ§Ã£o iniciando...');
     await mp.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
     await mp.query(`
       CREATE TABLE IF NOT EXISTS users (
@@ -397,7 +397,7 @@ const { Pool: MigratePool } = require('pg');
       );
     `);
 
-    // ── Fase 1 Sala do Pastor: church_members, church_events, novas colunas ──
+    // â”€â”€ Fase 1 Sala do Pastor: church_members, church_events, novas colunas â”€â”€
     await mp.query(`ALTER TABLE churches ADD COLUMN IF NOT EXISTS pastor_name VARCHAR(200)`);
     await mp.query(`ALTER TABLE churches ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'active'`);
     await mp.query(`
@@ -426,9 +426,9 @@ const { Pool: MigratePool } = require('pg');
       );
     `);
 
-    console.log('✅ Auto-migração concluída!');
+    console.log('âœ… Auto-migraÃ§Ã£o concluÃ­da!');
   } catch (err) {
-    console.error('⚠️  Erro na auto-migração (continuando):', err.message);
+    console.error('âš ï¸  Erro na auto-migraÃ§Ã£o (continuando):', err.message);
   } finally {
     await mp.end();
   }
@@ -472,12 +472,12 @@ app.use('/api/help-posts', require('./routes/help-posts'));
 app.use('/api/live-community', require('./routes/live-community'));
 
 // Log OpenClaw routes for debugging
-console.log('✅ OpenClaw routes registered: /api/openclaw/health, /api/openclaw/users/new');
+console.log('âœ… OpenClaw routes registered: /api/openclaw/health, /api/openclaw/users/new');
 console.log('   Available endpoints: GET /api/openclaw/health, POST /api/openclaw/users/new');
 
 // Root route
 app.get('/', (req, res) => {
-  res.json({ name: 'Sigo com Fé API', status: 'online', version: '1.0.0' });
+  res.json({ name: 'Sigo com FÃ© API', status: 'online', version: '1.0.0' });
 });
 
 // Temporary admin route - set user role
@@ -493,18 +493,38 @@ app.get('/api/admin/users', async (req, res) => {
 app.post('/api/admin/set-role', async (req, res) => {
   try {
     const { email, role } = req.body;
-    if (!['member', 'leader', 'pastor', 'admin'].includes(role)) return res.status(400).json({ error: 'Role inválido' });
+    if (!['member', 'leader', 'pastor', 'admin'].includes(role)) return res.status(400).json({ error: 'Role invÃ¡lido' });
     const user = await db.prepare('UPDATE users SET role = ? WHERE email = ? RETURNING id, email, full_name, role').get(role, email);
-    if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+    if (!user) return res.status(404).json({ error: 'UsuÃ¡rio nÃ£o encontrado' });
     res.json({ message: 'Role atualizado!', user });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
+
+// Bible proxy route
+app.get('/api/bible/chapter', async (req, res) => {
+  try {
+    const { book, chapter, translation } = req.query;
+    const url = `https://bible-api.com/${encodeURIComponent(book)}+${chapter}?translation=${translation || 'kjv'}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    res.json(data);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+app.get('/api/bible/search', async (req, res) => {
+  try {
+    const { q, translation } = req.query;
+    const url = `https://bible-api.com/${encodeURIComponent(q)}?translation=${translation || 'kjv'}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    res.json(data);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', name: 'Sigo com Fé API', version: '1.0.0' });
+  res.json({ status: 'ok', name: 'Sigo com FÃ© API', version: '1.0.0' });
 });
 
 // WebSocket
@@ -522,8 +542,8 @@ const _pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { reje
 _pool.query('CREATE TABLE IF NOT EXISTS quiz_resultados (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID REFERENCES users(id) ON DELETE CASCADE, pontos INTEGER DEFAULT 0, perguntas_corretas INTEGER DEFAULT 5, perguntas_total INTEGER DEFAULT 5, livro VARCHAR(50), tempo_medio FLOAT DEFAULT 0, criado_em TIMESTAMP DEFAULT NOW())').then(()=>console.log('quiz_resultados OK')).catch(e=>console.log('quiz_resultados erro:', e.message));
 
 server.listen(PORT, () => {
-  console.log(`🙏 Sigo com Fé API rodando na porta ${PORT}`);
-  console.log(`📡 WebSocket disponível em ws://localhost:${PORT}/ws`);
+  console.log(`ðŸ™ Sigo com FÃ© API rodando na porta ${PORT}`);
+  console.log(`ðŸ“¡ WebSocket disponÃ­vel em ws://localhost:${PORT}/ws`);
 });
 
 
@@ -568,3 +588,4 @@ async function addProfileColumns() {
 addProfileColumns();
 
 // favorite_verse column added via addProfileColumns()
+
