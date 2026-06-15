@@ -1914,5 +1914,17 @@
     "sharePhoto": "Partager",
     "noComments": "Pas encore de commentaires.",
     "writeComment": "Ecris un commentaire..."
+  },
+  "bible": {
+    "bibleStudy": "Etude Biblique",
+    "searchVerse": "Rechercher verset",
+    "readBible": "Lire la Bible",
+    "favorites": "Favoris",
+    "readingPlan": "Plan de Lecture",
+    "books": "Livres",
+    "chapter": "Chapitre",
+    "verse": "Verset",
+    "addFavorite": "Ajouter aux favoris",
+    "removeFavorite": "Retirer des favoris"
   }
 }

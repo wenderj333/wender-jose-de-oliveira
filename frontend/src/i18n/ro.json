@@ -1915,5 +1915,17 @@
     "sharePhoto": "Distribuie",
     "noComments": "Niciun comentariu inca.",
     "writeComment": "Scrie un comentariu..."
+  },
+  "bible": {
+    "bibleStudy": "Studiu Biblic",
+    "searchVerse": "Cauta verset",
+    "readBible": "Citeste Biblia",
+    "favorites": "Favorite",
+    "readingPlan": "Plan de Citire",
+    "books": "Carti",
+    "chapter": "Capitol",
+    "verse": "Verset",
+    "addFavorite": "Adauga la favorite",
+    "removeFavorite": "Sterge din favorite"
   }
 }

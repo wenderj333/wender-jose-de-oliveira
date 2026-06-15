@@ -1916,5 +1916,17 @@
     "sharePhoto": "Teilen",
     "noComments": "Noch keine Kommentare.",
     "writeComment": "Schreibe einen Kommentar..."
+  },
+  "bible": {
+    "bibleStudy": "Bibelstudium",
+    "searchVerse": "Vers suchen",
+    "readBible": "Bibel lesen",
+    "favorites": "Favoriten",
+    "readingPlan": "Leseplan",
+    "books": "Bucher",
+    "chapter": "Kapitel",
+    "verse": "Vers",
+    "addFavorite": "Zu Favoriten hinzufugen",
+    "removeFavorite": "Aus Favoriten entfernen"
   }
 }

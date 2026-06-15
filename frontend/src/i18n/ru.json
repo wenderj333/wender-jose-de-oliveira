@@ -1914,5 +1914,17 @@
     "sharePhoto": "Podelit",
     "noComments": "Kommentariev poka net.",
     "writeComment": "Napishy kommentariy..."
+  },
+  "bible": {
+    "bibleStudy": "Изучение Библии",
+    "searchVerse": "Поиск стиха",
+    "readBible": "Читать Библию",
+    "favorites": "Избранное",
+    "readingPlan": "План чтения",
+    "books": "Книги",
+    "chapter": "Глава",
+    "verse": "Стих",
+    "addFavorite": "Добавить в избранное",
+    "removeFavorite": "Удалить из избранного"
   }
 }
