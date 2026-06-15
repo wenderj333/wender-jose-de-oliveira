@@ -517,7 +517,7 @@ export default function App() {
 
             {[
 
-              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA Biblica')],
+              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_study', 'Biblia')],
 
               ['/pedidos-ajuda', <Heart size={20}/>, t('nav.prayers')],
 
