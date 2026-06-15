@@ -2,28 +2,11 @@
 import { useTranslation } from "react-i18next";
 
 const BOOKS = ["Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth","1 Samuel","2 Samuel","1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Esther","Job","Psalms","Proverbs","Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations","Ezekiel","Daniel","Hosea","Joel","Amos","Obadiah","Jonah","Micah","Nahum","Habakkuk","Zephaniah","Haggai","Zechariah","Malachi","Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus","Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"];
-const LANG_TRANSLATION = {
-  pt: 'almeida', es: 'rva', en: 'kjv', de: 'luther1912', fr: 'martin', ro: 'cornilescu', ru: 'synodal'
-};
-
-const LANG_BOOKS = {
-  en: ["Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth","1 Samuel","2 Samuel","1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Esther","Job","Psalms","Proverbs","Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations","Ezekiel","Daniel","Hosea","Joel","Amos","Obadiah","Jonah","Micah","Nahum","Habakkuk","Zephaniah","Haggai","Zechariah","Malachi","Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus","Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"],
-  pt: ["Genesis","Exodo","Levitico","Numeros","Deuteronomio","Josue","Juizes","Rute","1 Samuel","2 Samuel","1 Reis","2 Reis","1 Cronicas","2 Cronicas","Esdras","Neemias","Ester","Jo","Salmos","Proverbios","Eclesiastes","Cantares","Isaias","Jeremias","Lamentacoes","Ezequiel","Daniel","Oseias","Joel","Amos","Obadias","Jonas","Miqueas","Naum","Habacuque","Sofonias","Ageu","Zacarias","Malaquias","Mateus","Marcos","Lucas","Joao","Atos","Romanos","1 Corintios","2 Corintios","Galatas","Efesios","Filipenses","Colossenses","1 Tessalonicenses","2 Tessalonicenses","1 Timoteo","2 Timoteo","Tito","Filemon","Hebreus","Tiago","1 Pedro","2 Pedro","1 Joao","2 Joao","3 Joao","Judas","Apocalipse"],
-  es: ["Genesis","Exodo","Levitico","Numeros","Deuteronomio","Josue","Jueces","Rut","1 Samuel","2 Samuel","1 Reyes","2 Reyes","1 Cronicas","2 Cronicas","Esdras","Nehemias","Ester","Job","Salmos","Proverbios","Eclesiastes","Cantares","Isaias","Jeremias","Lamentaciones","Ezequiel","Daniel","Oseas","Joel","Amos","Abdias","Jonas","Miqueas","Nahum","Habacuc","Sofonias","Ageo","Zacarias","Malaquias","Mateo","Marcos","Lucas","Juan","Hechos","Romanos","1 Corintios","2 Corintios","Galatas","Efesios","Filipenses","Colosenses","1 Tesalonicenses","2 Tesalonicenses","1 Timoteo","2 Timoteo","Tito","Filemon","Hebreos","Santiago","1 Pedro","2 Pedro","1 Juan","2 Juan","3 Juan","Judas","Apocalipsis"],
-  de: ["1 Mose","2 Mose","3 Mose","4 Mose","5 Mose","Josua","Richter","Ruth","1 Samuel","2 Samuel","1 Konige","2 Konige","1 Chronik","2 Chronik","Esra","Nehemia","Esther","Hiob","Psalmen","Spruche","Prediger","Hoheslied","Jesaja","Jeremia","Klagelieder","Hesekiel","Daniel","Hosea","Joel","Amos","Obadja","Jona","Micha","Nahum","Habakuk","Zefanja","Haggai","Sacharja","Maleachi","Matthaus","Markus","Lukas","Johannes","Apostelgeschichte","Romer","1 Korinther","2 Korinther","Galater","Epheser","Philipper","Kolosser","1 Thessalonicher","2 Thessalonicher","1 Timotheus","2 Timotheus","Titus","Philemon","Hebraer","Jakobus","1 Petrus","2 Petrus","1 Johannes","2 Johannes","3 Johannes","Judas","Offenbarung"],
-  fr: ["Genese","Exode","Levitique","Nombres","Deuteronome","Josue","Juges","Ruth","1 Samuel","2 Samuel","1 Rois","2 Rois","1 Chroniques","2 Chroniques","Esdras","Nehemie","Esther","Job","Psaumes","Proverbes","Ecclesiaste","Cantique","Esaie","Jeremie","Lamentations","Ezechiel","Daniel","Osee","Joel","Amos","Abdias","Jonas","Michee","Nahum","Habacuc","Sophonie","Aggee","Zacharie","Malachie","Matthieu","Marc","Luc","Jean","Actes","Romains","1 Corinthiens","2 Corinthiens","Galates","Ephesiens","Philippiens","Colossiens","1 Thessaloniciens","2 Thessaloniciens","1 Timothee","2 Timothee","Tite","Philemon","Hebreux","Jacques","1 Pierre","2 Pierre","1 Jean","2 Jean","3 Jean","Jude","Apocalypse"],
-  ro: ["Geneza","Exodul","Leviticul","Numeri","Deuteronomul","Iosua","Judecatori","Rut","1 Samuel","2 Samuel","1 Imparati","2 Imparati","1 Cronici","2 Cronici","Ezra","Neemia","Estera","Iov","Psalmii","Proverbele","Eclesiastul","Cantarea","Isaia","Ieremia","Plangerile","Ezechiel","Daniel","Osea","Ioel","Amos","Obadia","Iona","Mica","Naum","Habacuc","Tefania","Hagai","Zaharia","Maleahi","Matei","Marcu","Luca","Ioan","Faptele","Romani","1 Corinteni","2 Corinteni","Galateni","Efeseni","Filipeni","Coloseni","1 Tesaloniceni","2 Tesaloniceni","1 Timotei","2 Timotei","Tit","Filimon","Evrei","Iacov","1 Petru","2 Petru","1 Ioan","2 Ioan","3 Ioan","Iuda","Apocalipsa"],
-  ru: ["Bytie","Iskhod","Levit","Chisla","Vtorozakonie","Iiisus Navin","Sudei","Ruf","1 Tsarstv","2 Tsarstv","3 Tsarstv","4 Tsarstv","1 Paralipomenon","2 Paralipomenon","Ezdry","Neemii","Esfire","Iov","Psaltir","Pritchi","Ekklesiast","Pesn Pesnei","Isaiya","Ieremiya","Plach Ieremii","Iezekiil","Daniil","Osiya","Ioil","Amos","Avdiy","Iona","Mikha","Naum","Avvakum","Sofoniya","Aggei","Zakhariya","Malakhiya","Matvei","Mark","Luka","Ioann","Deyaniya","Rimlyanam","1 Korinfyanam","2 Korinfyanam","Galatam","Efesyanam","Filipiystsam","Kolossyanam","1 Fessalonikiytsam","2 Fessalonikiytsam","1 Timofeiyu","2 Timofeiyu","Titu","Filimonu","Evreiyam","Iakova","1 Petra","2 Petra","1 Ioanna","2 Ioanna","3 Ioanna","Iudy","Otkrovenie"]
-};
-
 const BOOKS_PT = ["Genesis","Exodo","Levitico","Numeros","Deuteronomio","Josue","Juizes","Rute","1 Samuel","2 Samuel","1 Reis","2 Reis","1 Cronicas","2 Cronicas","Esdras","Neemias","Ester","Jo","Salmos","Proverbios","Eclesiastes","Cantares","Isaias","Jeremias","Lamentacoes","Ezequiel","Daniel","Oseias","Joel","Amos","Obadias","Jonas","Miqueas","Naum","Habacuque","Sofonias","Ageu","Zacarias","Malaquias","Mateus","Marcos","Lucas","Joao","Atos","Romanos","1 Corintios","2 Corintios","Galatas","Efesios","Filipenses","Colossenses","1 Tessalonicenses","2 Tessalonicenses","1 Timoteo","2 Timoteo","Tito","Filemon","Hebreus","Tiago","1 Pedro","2 Pedro","1 Joao","2 Joao","3 Joao","Judas","Apocalipse"];
 
 export default function BibleStudy() {
   const { t } = useTranslation();
   const [tab, setTab] = useState("read");
-  const userLang = (navigator.language || 'pt').split('-')[0];
-  const translation = LANG_TRANSLATION[userLang] || 'almeida';
-  const booksLocal = LANG_BOOKS[userLang] || LANG_BOOKS.pt;
   const [selectedBook, setSelectedBook] = useState(null);
   const [selectedBookPt, setSelectedBookPt] = useState(null);
   const [chapter, setChapter] = useState(1);
@@ -45,7 +28,7 @@ export default function BibleStudy() {
   const loadChapter = async (book, bookPt, ch) => {
     setLoading(true); setVerses([]);
     try {
-      const res = await fetch("https://bible-api.com/"+encodeURIComponent(book)+"+"+ch+"?translation="+translation+"");
+      const res = await fetch("https://bible-api.com/"+encodeURIComponent(book)+"+"+ch+"?translation=almeida");
       const data = await res.json();
       setVerses(data.verses || []); setChapter(ch); setShowBooks(false);
       setSelectedBook(book); setSelectedBookPt(bookPt);
@@ -57,7 +40,7 @@ export default function BibleStudy() {
     if (!search.trim()) return;
     setLoading(true);
     try {
-      const res = await fetch("https://bible-api.com/"+encodeURIComponent(search)+"?translation="+translation+"");
+      const res = await fetch("https://bible-api.com/"+encodeURIComponent(search)+"?translation=almeida");
       const data = await res.json();
       setSearchResults(data);
     } catch(e) {}
@@ -95,7 +78,7 @@ export default function BibleStudy() {
           <div>
             <h3 style={{ color: "#1a3a5c", marginBottom: 12 }}>📚 {t("bible.books","Livros")}</h3>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 6 }}>
-              {booksLocal.map((b, i) => (
+              {BOOKS_PT.map((b, i) => (
                 <button key={b} onClick={() => loadChapter(BOOKS[i], b, 1)} style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #e2e8f0", background: "white", textAlign: "left", cursor: "pointer", fontSize: 13, fontWeight: 500, color: "#1a3a5c" }}>{b}</button>
               ))}
             </div>
