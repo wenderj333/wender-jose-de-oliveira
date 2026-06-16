@@ -669,11 +669,55 @@ function duelProxima(sid) {
     });
     duelTimer(sid);
   } else {
-    ioduelo.to(sid).emit('fimJogo', sala.j.map(j=>({nome:j.nome,pontos:j.pts})));
+    const resultado = sala.j.map(j=>({nome:j.nome,pontos:j.pts}));
+    ioduelo.to(sid).emit('fimJogo', resultado);
+    // Actualizar ranking semanal
+    resultado.forEach(j => {
+      if (!rankingSemanal[j.nome]) rankingSemanal[j.nome] = 0;
+      rankingSemanal[j.nome] += j.pontos;
+    });
     delete duelSalas[sid];
   }
 }
 // ========== FIM DUELO BIBLICO ==========
+
+// ========== RANKING SEMANAL PIX ==========
+let rankingSemanal = {};
+let pixAtivo = false;
+let pixValor = 'R$ 10,00';
+
+// Rota para ver ranking
+app.get('/api/duelo/ranking', (req, res) => {
+  const ranking = Object.entries(rankingSemanal)
+    .sort((a,b) => b[1] - a[1])
+    .slice(0,10)
+    .map(([nome,pontos],i) => ({pos:i+1,nome,pontos:Math.round(pontos)}));
+  res.json({ ranking, pixAtivo, pixValor });
+});
+
+// Rota admin para activar/desactivar PIX
+app.post('/api/duelo/pix', (req, res) => {
+  const { token, ativo, valor } = req.body;
+  if (token !== process.env.ADMIN_SECRET && token !== 'sigocomfe-admin-2026') {
+    return res.status(401).json({ error: 'Nao autorizado' });
+  }
+  pixAtivo = ativo;
+  if (valor) pixValor = valor;
+  // Zerar ranking ao activar nova semana
+  if (ativo) rankingSemanal = {};
+  res.json({ ok: true, pixAtivo, pixValor });
+});
+
+// Rota para zerar ranking manualmente
+app.post('/api/duelo/zerar', (req, res) => {
+  const { token } = req.body;
+  if (token !== process.env.ADMIN_SECRET && token !== 'sigocomfe-admin-2026') {
+    return res.status(401).json({ error: 'Nao autorizado' });
+  }
+  rankingSemanal = {};
+  res.json({ ok: true, msg: 'Ranking zerado!' });
+});
+// ========== FIM RANKING SEMANAL PIX ==========
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', name: 'Sigo com FÃ© API', version: '1.0.0' });
@@ -740,5 +784,6 @@ async function addProfileColumns() {
 addProfileColumns();
 
 // favorite_verse column added via addProfileColumns()
+
 
 
