@@ -522,6 +522,169 @@ app.get('/api/bible/search', async (req, res) => {
     res.json(data);
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
+
+// ========== DUELO BIBLICO ==========
+const perguntasDuelo = {
+  pt: [
+    {q:"Quem foi o homem mais velho da Biblia?",a:["Abraao","Metusalem","Noe","Moises"],c:1},
+    {q:"Quantos dias choveu no Diluvio?",a:["7 dias","12 dias","40 dias","100 dias"],c:2},
+    {q:"Onde esta escrito No principio era o Verbo?",a:["Mateus","Lucas","Marcos","Joao"],c:3},
+    {q:"Quantos apostolos Jesus escolheu?",a:["7","10","12","14"],c:2},
+    {q:"Qual foi o primeiro milagre de Jesus?",a:["Curou um cego","Ressuscitou Lazaro","Agua em vinho","Alimentou 5000"],c:2},
+    {q:"Onde Jesus nasceu?",a:["Nazare","Jerusalem","Belem","Jerico"],c:2},
+    {q:"Quantos livros tem a Biblia?",a:["60","63","66","72"],c:2},
+    {q:"Quem traiu Jesus?",a:["Pedro","Judas","Tome","Filipe"],c:1},
+    {q:"Qual o versiculo mais curto da Biblia?",a:["Deus e amor","Jesus chorou","Orai sempre","Alegrai-vos"],c:1},
+    {q:"Quem escreveu a maioria das cartas do NT?",a:["Pedro","Paulo","Joao","Tiago"],c:1}
+  ],
+  en: [
+    {q:"Who was the oldest man in the Bible?",a:["Abraham","Methuselah","Noah","Moses"],c:1},
+    {q:"How many days did it rain in the Flood?",a:["7 days","12 days","40 days","100 days"],c:2},
+    {q:"Where is written In the beginning was the Word?",a:["Matthew","Luke","Mark","John"],c:3},
+    {q:"How many apostles did Jesus choose?",a:["7","10","12","14"],c:2},
+    {q:"What was Jesus first miracle?",a:["Healed blind","Raised Lazarus","Water to wine","Fed 5000"],c:2},
+    {q:"Where was Jesus born?",a:["Nazareth","Jerusalem","Bethlehem","Jericho"],c:2},
+    {q:"How many books are in the Bible?",a:["60","63","66","72"],c:2},
+    {q:"Who betrayed Jesus?",a:["Peter","Judas","Thomas","Philip"],c:1},
+    {q:"What is the shortest verse in the Bible?",a:["God is love","Jesus wept","Pray always","Rejoice"],c:1},
+    {q:"Who wrote most NT letters?",a:["Peter","Paul","John","James"],c:1}
+  ],
+  es: [
+    {q:"Quien fue el hombre mas anciano de la Biblia?",a:["Abraham","Matusalen","Noe","Moises"],c:1},
+    {q:"Cuantos dias llovo en el Diluvio?",a:["7 dias","12 dias","40 dias","100 dias"],c:2},
+    {q:"Donde dice En el principio era el Verbo?",a:["Mateo","Lucas","Marcos","Juan"],c:3},
+    {q:"Cuantos apostoles eligio Jesus?",a:["7","10","12","14"],c:2},
+    {q:"Cual fue el primer milagro de Jesus?",a:["Sano un ciego","Resucito a Lazaro","Agua en vino","Alimento 5000"],c:2},
+    {q:"Donde nacio Jesus?",a:["Nazaret","Jerusalem","Belen","Jerico"],c:2},
+    {q:"Cuantos libros tiene la Biblia?",a:["60","63","66","72"],c:2},
+    {q:"Quien traiciono a Jesus?",a:["Pedro","Judas","Tomas","Felipe"],c:1},
+    {q:"Cual es el versiculo mas corto?",a:["Dios es amor","Jesus lloro","Orad siempre","Alegraos"],c:1},
+    {q:"Quien escribio la mayoria de las cartas del NT?",a:["Pedro","Pablo","Juan","Santiago"],c:1}
+  ],
+  fr: [
+    {q:"Qui etait le plus vieux de la Bible?",a:["Abraham","Mathusalem","Noe","Moise"],c:1},
+    {q:"Combien de jours a-t-il plu pendant le Deluge?",a:["7 jours","12 jours","40 jours","100 jours"],c:2},
+    {q:"Ou est ecrit Au commencement etait la Parole?",a:["Matthieu","Luc","Marc","Jean"],c:3},
+    {q:"Combien d apostres Jesus a-t-il choisi?",a:["7","10","12","14"],c:2},
+    {q:"Quel fut le premier miracle de Jesus?",a:["Guerit aveugle","Ressuscita Lazare","Eau en vin","Nourrit 5000"],c:2},
+    {q:"Ou Jesus est-il ne?",a:["Nazareth","Jerusalem","Bethleem","Jericho"],c:2},
+    {q:"Combien de livres dans la Bible?",a:["60","63","66","72"],c:2},
+    {q:"Qui a trahi Jesus?",a:["Pierre","Judas","Thomas","Philippe"],c:1},
+    {q:"Quel est le verset le plus court?",a:["Dieu est amour","Jesus pleura","Priez toujours","Rejouissez-vous"],c:1},
+    {q:"Qui a ecrit la plupart des lettres du NT?",a:["Pierre","Paul","Jean","Jacques"],c:1}
+  ],
+  de: [
+    {q:"Wer war der aelteste Mann in der Bibel?",a:["Abraham","Methusalem","Noah","Moses"],c:1},
+    {q:"Wie viele Tage regnete es bei der Sintflut?",a:["7 Tage","12 Tage","40 Tage","100 Tage"],c:2},
+    {q:"Wo steht Im Anfang war das Wort?",a:["Matthaeus","Lukas","Markus","Johannes"],c:3},
+    {q:"Wie viele Apostel waehlte Jesus?",a:["7","10","12","14"],c:2},
+    {q:"Was war Jesu erstes Wunder?",a:["Heilte Blinden","Erweckte Lazarus","Wasser zu Wein","Speiste 5000"],c:2},
+    {q:"Wo wurde Jesus geboren?",a:["Nazareth","Jerusalem","Bethlehem","Jericho"],c:2},
+    {q:"Wie viele Buecher hat die Bibel?",a:["60","63","66","72"],c:2},
+    {q:"Wer verriet Jesus?",a:["Petrus","Judas","Thomas","Philippus"],c:1},
+    {q:"Was ist der kuerzeste Vers der Bibel?",a:["Gott ist Liebe","Jesus weinte","Betet immer","Freuet euch"],c:1},
+    {q:"Wer schrieb die meisten NT-Briefe?",a:["Petrus","Paulus","Johannes","Jakobus"],c:1}
+  ],
+  ro: [
+    {q:"Cine a fost cel mai batran om din Biblie?",a:["Avraam","Matusalem","Noe","Moise"],c:1},
+    {q:"Cate zile a plouat in timpul Potopului?",a:["7 zile","12 zile","40 de zile","100 de zile"],c:2},
+    {q:"Unde scrie La inceput era Cuvantul?",a:["Matei","Luca","Marcu","Ioan"],c:3},
+    {q:"Cati apostoli a ales Isus?",a:["7","10","12","14"],c:2},
+    {q:"Care a fost prima minune a lui Isus?",a:["Vindecat orb","Inviat Lazar","Apa in vin","Hranit 5000"],c:2},
+    {q:"Unde s-a nascut Isus?",a:["Nazaret","Ierusalim","Betleem","Ierihon"],c:2},
+    {q:"Cate carti are Biblia?",a:["60","63","66","72"],c:2},
+    {q:"Cine L-a tradat pe Isus?",a:["Petru","Iuda","Toma","Filip"],c:1},
+    {q:"Care e cel mai scurt verset?",a:["Dumnezeu e dragoste","Isus a plans","Rugati-va","Bucurati-va"],c:1},
+    {q:"Cine a scris majoritatea epistolelor NT?",a:["Petru","Pavel","Ioan","Iacov"],c:1}
+  ],
+  ru: [
+    {q:"Kto byl samym starym v Biblii?",a:["Avraam","Mafusail","Noi","Moisei"],c:1},
+    {q:"Skolko dney shyol dozhd v Potop?",a:["7 dney","12 dney","40 dney","100 dney"],c:2},
+    {q:"Gde napisano V nachale bylo Slovo?",a:["Matvei","Luka","Mark","Ioann"],c:3},
+    {q:"Skolko apostolov vibral Iisus?",a:["7","10","12","14"],c:2},
+    {q:"Kakoe bylo pervoe chudo Iisusa?",a:["Istseli slepogo","Voskresil Lazarya","Voda v vino","Nakormil 5000"],c:2},
+    {q:"Gde rodilsya Iisus?",a:["Nazaret","Ierusalim","Viflehem","Ierihon"],c:2},
+    {q:"Skolko knig v Biblii?",a:["60","63","66","72"],c:2},
+    {q:"Kto predal Iisusa?",a:["Petr","Iuda","Foma","Filip"],c:1},
+    {q:"Kakoy samiy korotkiy stih?",a:["Bog est lyubov","Iisus zaplakal","Moliytes","Raduytsya"],c:1},
+    {q:"Kto napisal bolshinstvo pisem NT?",a:["Petr","Pavel","Ioann","Iakov"],c:1}
+  ]
+};
+
+let duelEsperando = null;
+let duelSalas = {};
+
+const { Server: SocketServer } = require('socket.io');
+const ioduelo = new SocketServer(server, { cors: { origin: '*' }, path: '/duelo' });
+
+ioduelo.on('connection', (socket) => {
+  socket.on('procurarPartida', (d) => {
+    const lang = d.idioma || 'pt';
+    const nome = d.nome || 'Jogador';
+    if (!duelEsperando) {
+      duelEsperando = { socket, nome, lang };
+      socket.emit('status', 'Aguardando...');
+    } else {
+      const op = duelEsperando; duelEsperando = null;
+      const sid = 'duelo_' + Date.now();
+      socket.join(sid); op.socket.join(sid);
+      const p1 = perguntasDuelo[lang] || perguntasDuelo.pt;
+      const p2 = perguntasDuelo[op.lang] || perguntasDuelo.pt;
+      duelSalas[sid] = { j:[{id:socket.id,nome,lang,pts:0,resp:false},{id:op.socket.id,nome:op.nome,lang:op.lang,pts:0,resp:false}], qi:0, t:15, timer:null };
+      socket.emit('inicioJogo', {salaId:sid, oponente:op.nome, pergunta:p1[0]});
+      op.socket.emit('inicioJogo', {salaId:sid, oponente:nome, pergunta:p2[0]});
+      duelTimer(sid);
+    }
+  });
+  socket.on('enviarResposta', (d) => {
+    const sala = duelSalas[d.salaId]; if (!sala) return;
+    const j = sala.j.find(x => x.id === socket.id);
+    if (j && !j.resp) {
+      j.resp = true;
+      const p = (perguntasDuelo[j.lang]||perguntasDuelo.pt)[sala.qi];
+      if (d.escolha === p.c) j.pts += 100 + (sala.t * 5);
+      const op = sala.j.find(x => x.id !== socket.id);
+      if (op) ioduelo.to(op.id).emit('oponenteRespondeu');
+      if (sala.j.every(x => x.resp)) { clearInterval(sala.timer); setTimeout(() => duelProxima(d.salaId), 1500); }
+    }
+  });
+  socket.on('disconnect', () => {
+    if (duelEsperando && duelEsperando.socket.id === socket.id) duelEsperando = null;
+    for (const [sid, sala] of Object.entries(duelSalas)) {
+      if (sala.j.find(x => x.id === socket.id)) {
+        clearInterval(sala.timer);
+        ioduelo.to(sid).emit('oponenteSaiu');
+        delete duelSalas[sid];
+      }
+    }
+  });
+});
+
+function duelTimer(sid) {
+  const sala = duelSalas[sid]; if (!sala) return;
+  sala.t = 15;
+  sala.timer = setInterval(() => {
+    sala.t--;
+    ioduelo.to(sid).emit('atualizarTimer', sala.t);
+    if (sala.t <= 0) { clearInterval(sala.timer); duelProxima(sid); }
+  }, 1000);
+}
+
+function duelProxima(sid) {
+  const sala = duelSalas[sid]; if (!sala) return;
+  sala.qi++; sala.j.forEach(j => j.resp = false);
+  if (sala.qi < 10) {
+    sala.j.forEach(j => {
+      const p = (perguntasDuelo[j.lang]||perguntasDuelo.pt)[sala.qi];
+      ioduelo.to(j.id).emit('novaPergunta', {pergunta:p});
+    });
+    duelTimer(sid);
+  } else {
+    ioduelo.to(sid).emit('fimJogo', sala.j.map(j=>({nome:j.nome,pontos:j.pts})));
+    delete duelSalas[sid];
+  }
+}
+// ========== FIM DUELO BIBLICO ==========
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', name: 'Sigo com FÃ© API', version: '1.0.0' });
@@ -588,4 +751,5 @@ async function addProfileColumns() {
 addProfileColumns();
 
 // favorite_verse column added via addProfileColumns()
+
 
