@@ -14539,5 +14539,4325 @@
       "Гедеон",
       "Самсон"
     ]
+  },
+  {
+    "livro": "Levitico",
+    "q": "Qual era o dia de expiação anual em Israel?",
+    "opts": [
+      "Páscoa",
+      "Yom Kipur",
+      "Pentecostes",
+      "Tabernáculos"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What was the annual day of atonement in Israel?",
+    "es_q": "¿Cuál era el día anual de expiación en Israel?",
+    "fr_q": "Quel était le jour annuel d'expiation en Israël ?",
+    "de_q": "Was war der jährliche Versöhnungstag in Israel?",
+    "ro_q": "Care era ziua anuală a ispășirii în Israel?",
+    "ru_q": "Каким был ежегодный день искупления в Израиле?",
+    "en_opts": [
+      "Passover",
+      "Yom Kippur",
+      "Pentecost",
+      "Tabernacles"
+    ],
+    "es_opts": [
+      "Pascua",
+      "Yom Kipur",
+      "Pentecostés",
+      "Tabernáculos"
+    ],
+    "fr_opts": [
+      "Pâque",
+      "Yom Kippour",
+      "Pentecôte",
+      "Tabernacles"
+    ],
+    "de_opts": [
+      "Passah",
+      "Yom Kippur",
+      "Pfingsten",
+      "Laubhütten"
+    ],
+    "ro_opts": [
+      "Paște",
+      "Yom Kipur",
+      "Cincizecime",
+      "Corturi"
+    ],
+    "ru_opts": [
+      "Пасха",
+      "Йом Кипур",
+      "Пятидесятница",
+      "Кущи"
+    ]
+  },
+  {
+    "livro": "Levitico",
+    "q": "Qual animal era usado como bode expiatório?",
+    "opts": [
+      "Touro",
+      "Ovelha",
+      "Bode",
+      "Pomba"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Which animal was used as a scapegoat?",
+    "es_q": "¿Qué animal se usaba como chivo expiatorio?",
+    "fr_q": "Quel animal était utilisé comme bouc émissaire ?",
+    "de_q": "Welches Tier wurde als Sündenbock verwendet?",
+    "ro_q": "Ce animal era folosit ca țap ispășitor?",
+    "ru_q": "Какое животное использовалось как козел отпущения?",
+    "en_opts": [
+      "Bull",
+      "Sheep",
+      "Goat",
+      "Dove"
+    ],
+    "es_opts": [
+      "Toro",
+      "Oveja",
+      "Cabra",
+      "Paloma"
+    ],
+    "fr_opts": [
+      "Taureau",
+      "Brebis",
+      "Bouc",
+      "Colombe"
+    ],
+    "de_opts": [
+      "Stier",
+      "Schaf",
+      "Ziege",
+      "Taube"
+    ],
+    "ro_opts": [
+      "Taur",
+      "Oaie",
+      "Țap",
+      "Porumbel"
+    ],
+    "ru_opts": [
+      "Бык",
+      "Овца",
+      "Козел",
+      "Голубь"
+    ]
+  },
+  {
+    "livro": "Levitico",
+    "q": "O que proibia comer o Levitico?",
+    "opts": [
+      "Carne de porco",
+      "Trigo",
+      "Uvas",
+      "Mel"
+    ],
+    "r": 0,
+    "nivel": "medio",
+    "en_q": "What did Leviticus prohibit eating?",
+    "es_q": "¿Qué prohibía comer el Levítico?",
+    "fr_q": "Que défendait de manger le Lévitique ?",
+    "de_q": "Was verbot das Buch Levitikus zu essen?",
+    "ro_q": "Ce interzicea Leviticul să mănânce?",
+    "ru_q": "Что запрещал есть Левит?",
+    "en_opts": [
+      "Pork",
+      "Wheat",
+      "Grapes",
+      "Honey"
+    ],
+    "es_opts": [
+      "Carne de cerdo",
+      "Trigo",
+      "Uvas",
+      "Miel"
+    ],
+    "fr_opts": [
+      "Porc",
+      "Blé",
+      "Raisins",
+      "Miel"
+    ],
+    "de_opts": [
+      "Schweinefleisch",
+      "Weizen",
+      "Trauben",
+      "Honig"
+    ],
+    "ro_opts": [
+      "Carne de porc",
+      "Grâu",
+      "Struguri",
+      "Miere"
+    ],
+    "ru_opts": [
+      "Свинина",
+      "Пшеница",
+      "Виноград",
+      "Мёд"
+    ]
+  },
+  {
+    "livro": "Levitico",
+    "q": "Quantas vezes por ano o sumo sacerdote entrava no Santo dos Santos?",
+    "opts": [
+      "Uma vez",
+      "Três vezes",
+      "Sete vezes",
+      "Doze vezes"
+    ],
+    "r": 0,
+    "nivel": "medio",
+    "en_q": "How many times a year did the high priest enter the Holy of Holies?",
+    "es_q": "¿Cuántas veces al año entraba el sumo sacerdote al Lugar Santísimo?",
+    "fr_q": "Combien de fois par an le grand prêtre entrait-il dans le Saint des Saints ?",
+    "de_q": "Wie oft im Jahr betrat der Hohepriester das Allerheiligste?",
+    "ro_q": "De câte ori pe an intra marele preot în Sfânta Sfintelor?",
+    "ru_q": "Сколько раз в год первосвященник входил в Святое Святых?",
+    "en_opts": [
+      "Once",
+      "Three times",
+      "Seven times",
+      "Twelve times"
+    ],
+    "es_opts": [
+      "Una vez",
+      "Tres veces",
+      "Siete veces",
+      "Doce veces"
+    ],
+    "fr_opts": [
+      "Une fois",
+      "Trois fois",
+      "Sept fois",
+      "Douze fois"
+    ],
+    "de_opts": [
+      "Einmal",
+      "Dreimal",
+      "Siebenmal",
+      "Zwölfmal"
+    ],
+    "ro_opts": [
+      "O dată",
+      "De trei ori",
+      "De șapte ori",
+      "De douăsprezece ori"
+    ],
+    "ru_opts": [
+      "Один раз",
+      "Три раза",
+      "Семь раз",
+      "Двенадцать раз"
+    ]
+  },
+  {
+    "livro": "Levitico",
+    "q": "Qual tribo foi escolhida para o serviço do sacerdócio?",
+    "opts": [
+      "Judá",
+      "Levi",
+      "Benjamin",
+      "Efraim"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Which tribe was chosen for the priesthood service?",
+    "es_q": "¿Qué tribu fue elegida para el servicio del sacerdocio?",
+    "fr_q": "Quelle tribu a été choisie pour le service du sacerdoce ?",
+    "de_q": "Welcher Stamm wurde für den Priesterdienst ausgewählt?",
+    "ro_q": "Ce seminție a fost aleasă pentru slujba preoției?",
+    "ru_q": "Какое колено было выбрано для священнического служения?",
+    "en_opts": [
+      "Judah",
+      "Levi",
+      "Benjamin",
+      "Ephraim"
+    ],
+    "es_opts": [
+      "Judá",
+      "Leví",
+      "Benjamín",
+      "Efraín"
+    ],
+    "fr_opts": [
+      "Juda",
+      "Lévi",
+      "Benjamin",
+      "Éphraïm"
+    ],
+    "de_opts": [
+      "Juda",
+      "Levi",
+      "Benjamin",
+      "Efraim"
+    ],
+    "ro_opts": [
+      "Iuda",
+      "Levi",
+      "Beniamin",
+      "Efraim"
+    ],
+    "ru_opts": [
+      "Иуда",
+      "Левий",
+      "Вениамин",
+      "Ефрем"
+    ]
+  },
+  {
+    "livro": "Numeros",
+    "q": "Quantas tribos de Israel foram contadas no deserto?",
+    "opts": [
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "How many tribes of Israel were counted in the desert?",
+    "es_q": "¿Cuántas tribus de Israel fueron contadas en el desierto?",
+    "fr_q": "Combien de tribus d'Israël ont été comptées dans le désert ?",
+    "de_q": "Wie viele Stämme Israels wurden in der Wüste gezählt?",
+    "ro_q": "Câte seminții ale lui Israel au fost numărate în pustie?",
+    "ru_q": "Сколько колен Израилевых было сосчитано в пустыне?",
+    "en_opts": [
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "es_opts": [
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "fr_opts": [
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "de_opts": [
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "ro_opts": [
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "ru_opts": [
+      "10",
+      "12",
+      "14",
+      "16"
+    ]
+  },
+  {
+    "livro": "Numeros",
+    "q": "Quantos espias foram enviados a Canaã?",
+    "opts": [
+      "10",
+      "12",
+      "7",
+      "2"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "How many spies were sent to Canaan?",
+    "es_q": "¿Cuántos espías fueron enviados a Canaán?",
+    "fr_q": "Combien d'espions ont été envoyés en Canaan ?",
+    "de_q": "Wie viele Kundschafter wurden nach Kanaan gesandt?",
+    "ro_q": "Câți iscoade au fost trimise în Canaan?",
+    "ru_q": "Сколько разведчиков было послано в Ханаан?",
+    "en_opts": [
+      "10",
+      "12",
+      "7",
+      "2"
+    ],
+    "es_opts": [
+      "10",
+      "12",
+      "7",
+      "2"
+    ],
+    "fr_opts": [
+      "10",
+      "12",
+      "7",
+      "2"
+    ],
+    "de_opts": [
+      "10",
+      "12",
+      "7",
+      "2"
+    ],
+    "ro_opts": [
+      "10",
+      "12",
+      "7",
+      "2"
+    ],
+    "ru_opts": [
+      "10",
+      "12",
+      "7",
+      "2"
+    ]
+  },
+  {
+    "livro": "Numeros",
+    "q": "Quem foi o espião que junto com Josué deu um bom relatório?",
+    "opts": [
+      "Calebe",
+      "Ruben",
+      "Gade",
+      "Aser"
+    ],
+    "r": 0,
+    "nivel": "medio",
+    "en_q": "Who was the spy who together with Joshua gave a good report?",
+    "es_q": "¿Quién fue el espía que junto con Josué dio un buen informe?",
+    "fr_q": "Qui était l'espion qui, avec Josué, a donné un bon rapport ?",
+    "de_q": "Wer war der Kundschafter der zusammen mit Josua einen guten Bericht gab?",
+    "ro_q": "Cine a fost iscoadă care împreună cu Iosua a dat un raport bun?",
+    "ru_q": "Кто был разведчиком, который вместе с Иисусом Навином дал хороший отчет?",
+    "en_opts": [
+      "Caleb",
+      "Reuben",
+      "Gad",
+      "Asher"
+    ],
+    "es_opts": [
+      "Caleb",
+      "Rubén",
+      "Gad",
+      "Aser"
+    ],
+    "fr_opts": [
+      "Caleb",
+      "Ruben",
+      "Gad",
+      "Aser"
+    ],
+    "de_opts": [
+      "Kaleb",
+      "Ruben",
+      "Gad",
+      "Asser"
+    ],
+    "ro_opts": [
+      "Caleb",
+      "Ruben",
+      "Gad",
+      "Așer"
+    ],
+    "ru_opts": [
+      "Халев",
+      "Рувим",
+      "Гад",
+      "Асир"
+    ]
+  },
+  {
+    "livro": "Numeros",
+    "q": "Quantos anos Israel vagou pelo deserto?",
+    "opts": [
+      "20 anos",
+      "30 anos",
+      "40 anos",
+      "50 anos"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "How many years did Israel wander in the desert?",
+    "es_q": "¿Cuántos años vagó Israel por el desierto?",
+    "fr_q": "Combien d'années Israël a-t-il erré dans le désert ?",
+    "de_q": "Wie viele Jahre irrte Israel in der Wüste umher?",
+    "ro_q": "Câți ani a rătăcit Israel prin pustie?",
+    "ru_q": "Сколько лет Израиль странствовал по пустыне?",
+    "en_opts": [
+      "20 years",
+      "30 years",
+      "40 years",
+      "50 years"
+    ],
+    "es_opts": [
+      "20 años",
+      "30 años",
+      "40 años",
+      "50 años"
+    ],
+    "fr_opts": [
+      "20 ans",
+      "30 ans",
+      "40 ans",
+      "50 ans"
+    ],
+    "de_opts": [
+      "20 Jahre",
+      "30 Jahre",
+      "40 Jahre",
+      "50 Jahre"
+    ],
+    "ro_opts": [
+      "20 de ani",
+      "30 de ani",
+      "40 de ani",
+      "50 de ani"
+    ],
+    "ru_opts": [
+      "20 лет",
+      "30 лет",
+      "40 лет",
+      "50 лет"
+    ]
+  },
+  {
+    "livro": "Numeros",
+    "q": "O que Deus enviou para morder o povo quando reclamaram no deserto?",
+    "opts": [
+      "Escorpiões",
+      "Cobras de fogo",
+      "Leões",
+      "Vespas"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What did God send to bite the people when they complained in the desert?",
+    "es_q": "¿Qué envió Dios para morder al pueblo cuando se quejaron en el desierto?",
+    "fr_q": "Qu'est-ce que Dieu a envoyé pour mordre le peuple quand ils se plaignirent dans le désert ?",
+    "de_q": "Was schickte Gott um das Volk zu beißen als sie in der Wüste klagten?",
+    "ro_q": "Ce a trimis Dumnezeu să muște poporul când s-au plâns în pustie?",
+    "ru_q": "Что послал Бог кусать народ когда они роптали в пустыне?",
+    "en_opts": [
+      "Scorpions",
+      "Fiery serpents",
+      "Lions",
+      "Wasps"
+    ],
+    "es_opts": [
+      "Escorpiones",
+      "Serpientes de fuego",
+      "Leones",
+      "Avispas"
+    ],
+    "fr_opts": [
+      "Scorpions",
+      "Serpents de feu",
+      "Lions",
+      "Guêpes"
+    ],
+    "de_opts": [
+      "Skorpione",
+      "Feuerschlangen",
+      "Löwen",
+      "Wespen"
+    ],
+    "ro_opts": [
+      "Scorpioni",
+      "Șerpi de foc",
+      "Lei",
+      "Viespi"
+    ],
+    "ru_opts": [
+      "Скорпионы",
+      "Огненные змеи",
+      "Львы",
+      "Осы"
+    ]
+  },
+  {
+    "livro": "Deuteronomio",
+    "q": "Quem proferiu os discursos do livro de Deuteronômio?",
+    "opts": [
+      "Josué",
+      "Moisés",
+      "Arão",
+      "Samuel"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Who delivered the speeches in the book of Deuteronomy?",
+    "es_q": "¿Quién pronunció los discursos del libro de Deuteronomio?",
+    "fr_q": "Qui a prononcé les discours du livre du Deutéronome ?",
+    "de_q": "Wer hielt die Reden im Buch Deuteronomium?",
+    "ro_q": "Cine a rostit discursurile din cartea Deuteronomului?",
+    "ru_q": "Кто произносил речи в книге Второзакония?",
+    "en_opts": [
+      "Joshua",
+      "Moses",
+      "Aaron",
+      "Samuel"
+    ],
+    "es_opts": [
+      "Josué",
+      "Moisés",
+      "Aarón",
+      "Samuel"
+    ],
+    "fr_opts": [
+      "Josué",
+      "Moïse",
+      "Aaron",
+      "Samuel"
+    ],
+    "de_opts": [
+      "Josua",
+      "Mose",
+      "Aaron",
+      "Samuel"
+    ],
+    "ro_opts": [
+      "Iosua",
+      "Moise",
+      "Aaron",
+      "Samuel"
+    ],
+    "ru_opts": [
+      "Иисус Навин",
+      "Моисей",
+      "Аарон",
+      "Самуил"
+    ]
+  },
+  {
+    "livro": "Deuteronomio",
+    "q": "Qual é o mandamento mais importante segundo Deuteronômio 6?",
+    "opts": [
+      "Honrar os pais",
+      "Amar ao Senhor com todo coração",
+      "Não matar",
+      "Guardar o Sábado"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What is the most important commandment according to Deuteronomy 6?",
+    "es_q": "¿Cuál es el mandamiento más importante según Deuteronomio 6?",
+    "fr_q": "Quel est le commandement le plus important selon Deutéronome 6 ?",
+    "de_q": "Was ist das wichtigste Gebot nach Deuteronomium 6?",
+    "ro_q": "Care este cea mai importantă poruncă conform Deuteronom 6?",
+    "ru_q": "Какова самая важная заповедь согласно Второзаконию 6?",
+    "en_opts": [
+      "Honor parents",
+      "Love the Lord with all heart",
+      "Do not kill",
+      "Keep the Sabbath"
+    ],
+    "es_opts": [
+      "Honrar a los padres",
+      "Amar al Señor con todo el corazón",
+      "No matar",
+      "Guardar el Sábado"
+    ],
+    "fr_opts": [
+      "Honorer les parents",
+      "Aimer le Seigneur de tout son coeur",
+      "Ne pas tuer",
+      "Garder le Sabbat"
+    ],
+    "de_opts": [
+      "Eltern ehren",
+      "Den Herrn mit ganzem Herzen lieben",
+      "Nicht töten",
+      "Den Sabbat halten"
+    ],
+    "ro_opts": [
+      "Cinstește părinții",
+      "Iubește pe Domnul din toată inima",
+      "Să nu ucizi",
+      "Ține Sabatul"
+    ],
+    "ru_opts": [
+      "Чти родителей",
+      "Люби Господа всем сердцем",
+      "Не убивай",
+      "Соблюдай субботу"
+    ]
+  },
+  {
+    "livro": "Deuteronomio",
+    "q": "Onde Moisés morreu?",
+    "opts": [
+      "Monte Sinai",
+      "Monte Nebo",
+      "Monte Sião",
+      "Monte Carmelo"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Where did Moses die?",
+    "es_q": "¿Dónde murió Moisés?",
+    "fr_q": "Où Moïse est-il mort ?",
+    "de_q": "Wo starb Mose?",
+    "ro_q": "Unde a murit Moise?",
+    "ru_q": "Где умер Моисей?",
+    "en_opts": [
+      "Mount Sinai",
+      "Mount Nebo",
+      "Mount Zion",
+      "Mount Carmel"
+    ],
+    "es_opts": [
+      "Monte Sinaí",
+      "Monte Nebo",
+      "Monte Sión",
+      "Monte Carmelo"
+    ],
+    "fr_opts": [
+      "Mont Sinaï",
+      "Mont Nebo",
+      "Mont Sion",
+      "Mont Carmel"
+    ],
+    "de_opts": [
+      "Berg Sinai",
+      "Berg Nebo",
+      "Berg Zion",
+      "Berg Karmel"
+    ],
+    "ro_opts": [
+      "Muntele Sinai",
+      "Muntele Nebo",
+      "Muntele Sion",
+      "Muntele Carmel"
+    ],
+    "ru_opts": [
+      "Гора Синай",
+      "Гора Нево",
+      "Гора Сион",
+      "Гора Кармил"
+    ]
+  },
+  {
+    "livro": "Deuteronomio",
+    "q": "Quem sucedeu a Moisés como líder de Israel?",
+    "opts": [
+      "Calebe",
+      "Josué",
+      "Arão",
+      "Finéias"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Who succeeded Moses as leader of Israel?",
+    "es_q": "¿Quién sucedió a Moisés como líder de Israel?",
+    "fr_q": "Qui a succédé à Moïse comme chef d'Israël ?",
+    "de_q": "Wer folgte Mose als Anführer Israels nach?",
+    "ro_q": "Cine a succedat lui Moise ca lider al lui Israel?",
+    "ru_q": "Кто сменил Моисея в качестве лидера Израиля?",
+    "en_opts": [
+      "Caleb",
+      "Joshua",
+      "Aaron",
+      "Phinehas"
+    ],
+    "es_opts": [
+      "Caleb",
+      "Josué",
+      "Aarón",
+      "Finees"
+    ],
+    "fr_opts": [
+      "Caleb",
+      "Josué",
+      "Aaron",
+      "Phinéas"
+    ],
+    "de_opts": [
+      "Kaleb",
+      "Josua",
+      "Aaron",
+      "Pinehas"
+    ],
+    "ro_opts": [
+      "Caleb",
+      "Iosua",
+      "Aaron",
+      "Fineas"
+    ],
+    "ru_opts": [
+      "Халев",
+      "Иисус Навин",
+      "Аарон",
+      "Финеес"
+    ]
+  },
+  {
+    "livro": "Deuteronomio",
+    "q": "Quantos mandamentos Deus deu a Moisés no Sinai?",
+    "opts": [
+      "5",
+      "7",
+      "10",
+      "12"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "How many commandments did God give Moses at Sinai?",
+    "es_q": "¿Cuántos mandamientos le dio Dios a Moisés en el Sinaí?",
+    "fr_q": "Combien de commandements Dieu a-t-il donnés à Moïse au Sinaï ?",
+    "de_q": "Wie viele Gebote gab Gott Mose am Sinai?",
+    "ro_q": "Câte porunci i-a dat Dumnezeu lui Moise la Sinai?",
+    "ru_q": "Сколько заповедей дал Бог Моисею на Синае?",
+    "en_opts": [
+      "5",
+      "7",
+      "10",
+      "12"
+    ],
+    "es_opts": [
+      "5",
+      "7",
+      "10",
+      "12"
+    ],
+    "fr_opts": [
+      "5",
+      "7",
+      "10",
+      "12"
+    ],
+    "de_opts": [
+      "5",
+      "7",
+      "10",
+      "12"
+    ],
+    "ro_opts": [
+      "5",
+      "7",
+      "10",
+      "12"
+    ],
+    "ru_opts": [
+      "5",
+      "7",
+      "10",
+      "12"
+    ]
+  },
+  {
+    "livro": "Josue",
+    "q": "Qual rio o povo de Israel atravessou a seco?",
+    "opts": [
+      "Nilo",
+      "Jordão",
+      "Eufrates",
+      "Tigre"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Which river did the people of Israel cross on dry land?",
+    "es_q": "¿Qué río cruzó el pueblo de Israel en seco?",
+    "fr_q": "Quel fleuve le peuple d'Israël a-t-il traversé à pied sec ?",
+    "de_q": "Welchen Fluss durchquerte das Volk Israel auf trockenem Boden?",
+    "ro_q": "Ce râu a trecut poporul Israel pe uscat?",
+    "ru_q": "Какую реку народ Израиля перешел посуху?",
+    "en_opts": [
+      "Nile",
+      "Jordan",
+      "Euphrates",
+      "Tigris"
+    ],
+    "es_opts": [
+      "Nilo",
+      "Jordán",
+      "Éufrates",
+      "Tigris"
+    ],
+    "fr_opts": [
+      "Nil",
+      "Jourdain",
+      "Euphrate",
+      "Tigre"
+    ],
+    "de_opts": [
+      "Nil",
+      "Jordan",
+      "Euphrat",
+      "Tigris"
+    ],
+    "ro_opts": [
+      "Nil",
+      "Iordan",
+      "Eufrat",
+      "Tigru"
+    ],
+    "ru_opts": [
+      "Нил",
+      "Иордан",
+      "Евфрат",
+      "Тигр"
+    ]
+  },
+  {
+    "livro": "Josue",
+    "q": "Qual cidade teve suas muralhas derrubadas?",
+    "opts": [
+      "Jerusalém",
+      "Jericó",
+      "Ai",
+      "Gibeão"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Which city had its walls brought down?",
+    "es_q": "¿Qué ciudad vio caer sus murallas?",
+    "fr_q": "Quelle ville a vu ses murailles s'effondrer ?",
+    "de_q": "Welche Stadt sah ihre Mauern einstürzen?",
+    "ro_q": "Ce cetate și-a văzut zidurile prăbușite?",
+    "ru_q": "Стены какого города рухнули?",
+    "en_opts": [
+      "Jerusalem",
+      "Jericho",
+      "Ai",
+      "Gibeon"
+    ],
+    "es_opts": [
+      "Jerusalén",
+      "Jericó",
+      "Ai",
+      "Gabaón"
+    ],
+    "fr_opts": [
+      "Jérusalem",
+      "Jéricho",
+      "Aï",
+      "Gabaon"
+    ],
+    "de_opts": [
+      "Jerusalem",
+      "Jericho",
+      "Ai",
+      "Gibeon"
+    ],
+    "ro_opts": [
+      "Ierusalim",
+      "Ierihon",
+      "Ai",
+      "Gabaon"
+    ],
+    "ru_opts": [
+      "Иерусалим",
+      "Иерихон",
+      "Гаи",
+      "Гаваон"
+    ]
+  },
+  {
+    "livro": "Josue",
+    "q": "Quem escondeu os espias em Jericó?",
+    "opts": [
+      "Débora",
+      "Raabe",
+      "Rute",
+      "Ana"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Who hid the spies in Jericho?",
+    "es_q": "¿Quién escondió a los espías en Jericó?",
+    "fr_q": "Qui a caché les espions à Jéricho ?",
+    "de_q": "Wer versteckte die Kundschafter in Jericho?",
+    "ro_q": "Cine a ascuns iscoade în Ierihon?",
+    "ru_q": "Кто спрятал разведчиков в Иерихоне?",
+    "en_opts": [
+      "Deborah",
+      "Rahab",
+      "Ruth",
+      "Hannah"
+    ],
+    "es_opts": [
+      "Débora",
+      "Rahab",
+      "Rut",
+      "Ana"
+    ],
+    "fr_opts": [
+      "Déborah",
+      "Rahab",
+      "Ruth",
+      "Hannah"
+    ],
+    "de_opts": [
+      "Debora",
+      "Rahab",
+      "Rut",
+      "Hanna"
+    ],
+    "ro_opts": [
+      "Debora",
+      "Rahab",
+      "Rut",
+      "Ana"
+    ],
+    "ru_opts": [
+      "Девора",
+      "Раав",
+      "Руфь",
+      "Анна"
+    ]
+  },
+  {
+    "livro": "Josue",
+    "q": "Quantas vezes o povo marchou ao redor de Jericó no sétimo dia?",
+    "opts": [
+      "3 vezes",
+      "5 vezes",
+      "7 vezes",
+      "12 vezes"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "How many times did the people march around Jericho on the seventh day?",
+    "es_q": "¿Cuántas veces el pueblo marchó alrededor de Jericó el séptimo día?",
+    "fr_q": "Combien de fois le peuple a-t-il marché autour de Jéricho le septième jour ?",
+    "de_q": "Wie viele Male zogen die Leute am siebten Tag um Jericho?",
+    "ro_q": "De câte ori a mers poporul în jurul Ierihonului în a șaptea zi?",
+    "ru_q": "Сколько раз народ обходил Иерихон в седьмой день?",
+    "en_opts": [
+      "3 times",
+      "5 times",
+      "7 times",
+      "12 times"
+    ],
+    "es_opts": [
+      "3 veces",
+      "5 veces",
+      "7 veces",
+      "12 veces"
+    ],
+    "fr_opts": [
+      "3 fois",
+      "5 fois",
+      "7 fois",
+      "12 fois"
+    ],
+    "de_opts": [
+      "3 Mal",
+      "5 Mal",
+      "7 Mal",
+      "12 Mal"
+    ],
+    "ro_opts": [
+      "De 3 ori",
+      "De 5 ori",
+      "De 7 ori",
+      "De 12 ori"
+    ],
+    "ru_opts": [
+      "3 раза",
+      "5 раз",
+      "7 раз",
+      "12 раз"
+    ]
+  },
+  {
+    "livro": "Josue",
+    "q": "Quem foi o lider que distribuiu a terra prometida entre as tribos?",
+    "opts": [
+      "Moisés",
+      "Josué",
+      "Calebe",
+      "Samuel"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Who was the leader who distributed the promised land among the tribes?",
+    "es_q": "¿Quién fue el líder que distribuyó la tierra prometida entre las tribus?",
+    "fr_q": "Qui était le chef qui a distribué la terre promise entre les tribus ?",
+    "de_q": "Wer war der Anführer der das gelobte Land unter den Stämmen aufteilte?",
+    "ro_q": "Cine a fost liderul care a împărțit pământul făgăduinței între seminții?",
+    "ru_q": "Кто был вождем разделившим землю обетованную между коленами?",
+    "en_opts": [
+      "Moses",
+      "Joshua",
+      "Caleb",
+      "Samuel"
+    ],
+    "es_opts": [
+      "Moisés",
+      "Josué",
+      "Caleb",
+      "Samuel"
+    ],
+    "fr_opts": [
+      "Moïse",
+      "Josué",
+      "Caleb",
+      "Samuel"
+    ],
+    "de_opts": [
+      "Mose",
+      "Josua",
+      "Kaleb",
+      "Samuel"
+    ],
+    "ro_opts": [
+      "Moise",
+      "Iosua",
+      "Caleb",
+      "Samuel"
+    ],
+    "ru_opts": [
+      "Моисей",
+      "Иисус Навин",
+      "Халев",
+      "Самуил"
+    ]
+  },
+  {
+    "livro": "Juizes",
+    "q": "Qual juiz era conhecido por sua força sobrenatural?",
+    "opts": [
+      "Gideão",
+      "Sansão",
+      "Baraque",
+      "Jefté"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Which judge was known for his supernatural strength?",
+    "es_q": "¿Qué juez era conocido por su fuerza sobrenatural?",
+    "fr_q": "Quel juge était connu pour sa force surnaturelle ?",
+    "de_q": "Welcher Richter war für seine übernatürliche Kraft bekannt?",
+    "ro_q": "Ce judecător era cunoscut pentru puterea sa supranaturală?",
+    "ru_q": "Какой судья был известен своей сверхъестественной силой?",
+    "en_opts": [
+      "Gideon",
+      "Samson",
+      "Barak",
+      "Jephthah"
+    ],
+    "es_opts": [
+      "Gedeón",
+      "Sansón",
+      "Barac",
+      "Jefté"
+    ],
+    "fr_opts": [
+      "Gédéon",
+      "Samson",
+      "Barak",
+      "Jephté"
+    ],
+    "de_opts": [
+      "Gideon",
+      "Simson",
+      "Barak",
+      "Jephthah"
+    ],
+    "ro_opts": [
+      "Ghedeon",
+      "Samson",
+      "Barac",
+      "Ieftae"
+    ],
+    "ru_opts": [
+      "Гедеон",
+      "Самсон",
+      "Варак",
+      "Иеффай"
+    ]
+  },
+  {
+    "livro": "Juizes",
+    "q": "Qual mulher foi juíza de Israel?",
+    "opts": [
+      "Rute",
+      "Débora",
+      "Raabe",
+      "Miriã"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Which woman was a judge of Israel?",
+    "es_q": "¿Qué mujer fue jueza de Israel?",
+    "fr_q": "Quelle femme était juge d'Israël ?",
+    "de_q": "Welche Frau war Richterin Israels?",
+    "ro_q": "Ce femeie a fost judecătoare a lui Israel?",
+    "ru_q": "Какая женщина была судьёй Израиля?",
+    "en_opts": [
+      "Ruth",
+      "Deborah",
+      "Rahab",
+      "Miriam"
+    ],
+    "es_opts": [
+      "Rut",
+      "Débora",
+      "Rahab",
+      "Miriam"
+    ],
+    "fr_opts": [
+      "Ruth",
+      "Déborah",
+      "Rahab",
+      "Myriam"
+    ],
+    "de_opts": [
+      "Rut",
+      "Debora",
+      "Rahab",
+      "Mirjam"
+    ],
+    "ro_opts": [
+      "Rut",
+      "Debora",
+      "Rahab",
+      "Miriam"
+    ],
+    "ru_opts": [
+      "Руфь",
+      "Девора",
+      "Раав",
+      "Мариам"
+    ]
+  },
+  {
+    "livro": "Juizes",
+    "q": "Com quantos homens Gideão derrotou o exército Midianita?",
+    "opts": [
+      "100",
+      "300",
+      "1000",
+      "3000"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "With how many men did Gideon defeat the Midianite army?",
+    "es_q": "¿Con cuántos hombres Gedeón derrotó al ejército madianita?",
+    "fr_q": "Avec combien d'hommes Gédéon a-t-il vaincu l'armée madianite ?",
+    "de_q": "Mit wie vielen Männern besiegte Gideon das midianitische Heer?",
+    "ro_q": "Cu câți oameni a înfrânt Ghedeon armata madianiților?",
+    "ru_q": "С каким количеством людей Гедеон победил армию мадианитян?",
+    "en_opts": [
+      "100",
+      "300",
+      "1000",
+      "3000"
+    ],
+    "es_opts": [
+      "100",
+      "300",
+      "1000",
+      "3000"
+    ],
+    "fr_opts": [
+      "100",
+      "300",
+      "1000",
+      "3000"
+    ],
+    "de_opts": [
+      "100",
+      "300",
+      "1000",
+      "3000"
+    ],
+    "ro_opts": [
+      "100",
+      "300",
+      "1000",
+      "3000"
+    ],
+    "ru_opts": [
+      "100",
+      "300",
+      "1000",
+      "3000"
+    ]
+  },
+  {
+    "livro": "Juizes",
+    "q": "O que cortaram para tirar a força de Sansão?",
+    "opts": [
+      "As orelhas",
+      "O cabelo",
+      "A barba",
+      "As sobrancelhas"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What was cut to take away Samson's strength?",
+    "es_q": "¿Qué le cortaron para quitarle la fuerza a Sansón?",
+    "fr_q": "Qu'a-t-on coupé pour enlever la force de Samson ?",
+    "de_q": "Was wurde abgeschnitten um Simsons Kraft wegzunehmen?",
+    "ro_q": "Ce i-au tăiat pentru a-i lua puterea lui Samson?",
+    "ru_q": "Что отрезали чтобы лишить Самсона силы?",
+    "en_opts": [
+      "The ears",
+      "The hair",
+      "The beard",
+      "The eyebrows"
+    ],
+    "es_opts": [
+      "Las orejas",
+      "El cabello",
+      "La barba",
+      "Las cejas"
+    ],
+    "fr_opts": [
+      "Les oreilles",
+      "Les cheveux",
+      "La barbe",
+      "Les sourcils"
+    ],
+    "de_opts": [
+      "Die Ohren",
+      "Das Haar",
+      "Den Bart",
+      "Die Augenbrauen"
+    ],
+    "ro_opts": [
+      "Urechile",
+      "Părul",
+      "Barba",
+      "Sprâncenele"
+    ],
+    "ru_opts": [
+      "Уши",
+      "Волосы",
+      "Бороду",
+      "Брови"
+    ]
+  },
+  {
+    "livro": "Juizes",
+    "q": "Qual foi a mulher que traiu Sansão?",
+    "opts": [
+      "Raabe",
+      "Dalila",
+      "Débora",
+      "Rute"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Which woman betrayed Samson?",
+    "es_q": "¿Qué mujer traicionó a Sansón?",
+    "fr_q": "Quelle femme a trahi Samson ?",
+    "de_q": "Welche Frau verriet Simson?",
+    "ro_q": "Ce femeie l-a trădat pe Samson?",
+    "ru_q": "Какая женщина предала Самсона?",
+    "en_opts": [
+      "Rahab",
+      "Delilah",
+      "Deborah",
+      "Ruth"
+    ],
+    "es_opts": [
+      "Rahab",
+      "Dalila",
+      "Débora",
+      "Rut"
+    ],
+    "fr_opts": [
+      "Rahab",
+      "Dalila",
+      "Déborah",
+      "Ruth"
+    ],
+    "de_opts": [
+      "Rahab",
+      "Delila",
+      "Debora",
+      "Rut"
+    ],
+    "ro_opts": [
+      "Rahab",
+      "Dalila",
+      "Debora",
+      "Rut"
+    ],
+    "ru_opts": [
+      "Раав",
+      "Далила",
+      "Девора",
+      "Руфь"
+    ]
+  },
+  {
+    "livro": "Rute",
+    "q": "De que povo era Rute?",
+    "opts": [
+      "Egípcio",
+      "Moabita",
+      "Filisteu",
+      "Cananeu"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "From what people was Ruth?",
+    "es_q": "¿De qué pueblo era Rut?",
+    "fr_q": "De quel peuple était Ruth ?",
+    "de_q": "Von welchem Volk war Rut?",
+    "ro_q": "Din ce popor era Rut?",
+    "ru_q": "Из какого народа была Руфь?",
+    "en_opts": [
+      "Egyptian",
+      "Moabite",
+      "Philistine",
+      "Canaanite"
+    ],
+    "es_opts": [
+      "Egipcio",
+      "Moabita",
+      "Filisteo",
+      "Cananeo"
+    ],
+    "fr_opts": [
+      "Égyptien",
+      "Moabite",
+      "Philistin",
+      "Cananéen"
+    ],
+    "de_opts": [
+      "Ägyptisch",
+      "Moabitisch",
+      "Philistäisch",
+      "Kanaanitisch"
+    ],
+    "ro_opts": [
+      "Egyptian",
+      "Moabită",
+      "Filistean",
+      "Canaanit"
+    ],
+    "ru_opts": [
+      "Египтянка",
+      "Моавитянка",
+      "Филистимлянка",
+      "Хананеянка"
+    ]
+  },
+  {
+    "livro": "Rute",
+    "q": "Quem foi a sogra de Rute?",
+    "opts": [
+      "Débora",
+      "Noemi",
+      "Ana",
+      "Miriã"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Who was Ruth's mother-in-law?",
+    "es_q": "¿Quién fue la suegra de Rut?",
+    "fr_q": "Qui était la belle-mère de Ruth ?",
+    "de_q": "Wer war Ruts Schwiegermutter?",
+    "ro_q": "Cine a fost soacra lui Rut?",
+    "ru_q": "Кто была свекровью Руфи?",
+    "en_opts": [
+      "Deborah",
+      "Naomi",
+      "Hannah",
+      "Miriam"
+    ],
+    "es_opts": [
+      "Débora",
+      "Noemí",
+      "Ana",
+      "Miriam"
+    ],
+    "fr_opts": [
+      "Déborah",
+      "Naomi",
+      "Hannah",
+      "Myriam"
+    ],
+    "de_opts": [
+      "Debora",
+      "Naomi",
+      "Hanna",
+      "Mirjam"
+    ],
+    "ro_opts": [
+      "Debora",
+      "Naomi",
+      "Ana",
+      "Miriam"
+    ],
+    "ru_opts": [
+      "Девора",
+      "Ноеминь",
+      "Анна",
+      "Мариам"
+    ]
+  },
+  {
+    "livro": "Rute",
+    "q": "Com quem Rute se casou em Belém?",
+    "opts": [
+      "Boaz",
+      "Elimeleque",
+      "Maalão",
+      "Quiliom"
+    ],
+    "r": 0,
+    "nivel": "medio",
+    "en_q": "Who did Ruth marry in Bethlehem?",
+    "es_q": "¿Con quién se casó Rut en Belén?",
+    "fr_q": "Avec qui Ruth s'est-elle mariée à Bethléem ?",
+    "de_q": "Wen heiratete Rut in Bethlehem?",
+    "ro_q": "Cu cine s-a căsătorit Rut în Betleem?",
+    "ru_q": "За кого вышла замуж Руфь в Вифлееме?",
+    "en_opts": [
+      "Boaz",
+      "Elimelech",
+      "Mahlon",
+      "Chilion"
+    ],
+    "es_opts": [
+      "Booz",
+      "Elimelec",
+      "Mahlón",
+      "Quelión"
+    ],
+    "fr_opts": [
+      "Boaz",
+      "Élimélek",
+      "Mahlon",
+      "Kilion"
+    ],
+    "de_opts": [
+      "Boas",
+      "Elimelech",
+      "Machlon",
+      "Kiljon"
+    ],
+    "ro_opts": [
+      "Boaz",
+      "Elimelec",
+      "Mahlon",
+      "Chilion"
+    ],
+    "ru_opts": [
+      "Вооз",
+      "Елимелех",
+      "Махлон",
+      "Хилеон"
+    ]
+  },
+  {
+    "livro": "Rute",
+    "q": "O que disse Rute a Noemi quando ela pediu para voltar ao seu povo?",
+    "opts": [
+      "Voltarei para minha terra",
+      "Onde tu morreres morrerei eu",
+      "Deixa-me ficar aqui",
+      "Irei com teus filhos"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What did Ruth say to Naomi when she asked her to return to her people?",
+    "es_q": "¿Qué le dijo Rut a Noemí cuando le pidió que regresara a su pueblo?",
+    "fr_q": "Que dit Ruth à Naomi quand elle lui demanda de retourner chez son peuple ?",
+    "de_q": "Was sagte Rut zu Naomi als sie sie bat zu ihrem Volk zurückzukehren?",
+    "ro_q": "Ce i-a spus Rut lui Naomi când a rugat-o să se întoarcă la poporul ei?",
+    "ru_q": "Что сказала Руфь Ноемини когда та попросила её вернуться к своему народу?",
+    "en_opts": [
+      "I will return to my land",
+      "Where you die I will die",
+      "Let me stay here",
+      "I will go with your sons"
+    ],
+    "es_opts": [
+      "Volveré a mi tierra",
+      "Donde tú mueras moriré yo",
+      "Déjame quedarme aquí",
+      "Iré con tus hijos"
+    ],
+    "fr_opts": [
+      "Je retournerai dans ma terre",
+      "Où tu mourras je mourrai",
+      "Laisse-moi rester ici",
+      "J'irai avec tes fils"
+    ],
+    "de_opts": [
+      "Ich kehre in mein Land zurück",
+      "Wo du stirbst werde ich sterben",
+      "Lass mich hier bleiben",
+      "Ich gehe mit deinen Söhnen"
+    ],
+    "ro_opts": [
+      "Mă voi întoarce în țara mea",
+      "Unde vei muri tu voi muri și eu",
+      "Lasă-mă să rămân aici",
+      "Voi merge cu fiii tăi"
+    ],
+    "ru_opts": [
+      "Я вернусь на свою землю",
+      "Где умрёшь ты умру и я",
+      "Позволь мне остаться здесь",
+      "Я пойду с твоими сыновьями"
+    ]
+  },
+  {
+    "livro": "Rute",
+    "q": "Rute foi bisavó de qual rei famoso?",
+    "opts": [
+      "Saul",
+      "Salomão",
+      "Davi",
+      "Ezequias"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Ruth was the great-grandmother of which famous king?",
+    "es_q": "Rut fue bisabuela de qué famoso rey?",
+    "fr_q": "Ruth était l'arrière-grand-mère de quel roi célèbre ?",
+    "de_q": "Rut war die Urgroßmutter welches berühmten Königs?",
+    "ro_q": "Rut a fost străbunica cărui rege celebru?",
+    "ru_q": "Руфь была прабабушкой какого известного царя?",
+    "en_opts": [
+      "Saul",
+      "Solomon",
+      "David",
+      "Hezekiah"
+    ],
+    "es_opts": [
+      "Saúl",
+      "Salomón",
+      "David",
+      "Ezequías"
+    ],
+    "fr_opts": [
+      "Saül",
+      "Salomon",
+      "David",
+      "Ézéchias"
+    ],
+    "de_opts": [
+      "Saul",
+      "Salomo",
+      "David",
+      "Hiskia"
+    ],
+    "ro_opts": [
+      "Saul",
+      "Solomon",
+      "David",
+      "Ezechia"
+    ],
+    "ru_opts": [
+      "Саул",
+      "Соломон",
+      "Давид",
+      "Езекия"
+    ]
+  },
+  {
+    "livro": "1 Samuel",
+    "q": "Quem foi o primeiro rei de Israel?",
+    "opts": [
+      "Davi",
+      "Saul",
+      "Salomão",
+      "Samuel"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Who was the first king of Israel?",
+    "es_q": "¿Quién fue el primer rey de Israel?",
+    "fr_q": "Qui fut le premier roi d'Israël ?",
+    "de_q": "Wer war der erste König Israels?",
+    "ro_q": "Cine a fost primul rege al lui Israel?",
+    "ru_q": "Кто был первым царём Израиля?",
+    "en_opts": [
+      "David",
+      "Saul",
+      "Solomon",
+      "Samuel"
+    ],
+    "es_opts": [
+      "David",
+      "Saúl",
+      "Salomón",
+      "Samuel"
+    ],
+    "fr_opts": [
+      "David",
+      "Saül",
+      "Salomon",
+      "Samuel"
+    ],
+    "de_opts": [
+      "David",
+      "Saul",
+      "Salomo",
+      "Samuel"
+    ],
+    "ro_opts": [
+      "David",
+      "Saul",
+      "Solomon",
+      "Samuel"
+    ],
+    "ru_opts": [
+      "Давид",
+      "Саул",
+      "Соломон",
+      "Самуил"
+    ]
+  },
+  {
+    "livro": "1 Samuel",
+    "q": "Quem ungiu Davi como rei?",
+    "opts": [
+      "Eli",
+      "Natã",
+      "Samuel",
+      "Gade"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who anointed David as king?",
+    "es_q": "¿Quién ungió a David como rey?",
+    "fr_q": "Qui a oint David comme roi ?",
+    "de_q": "Wer salbte David zum König?",
+    "ro_q": "Cine l-a uns pe David ca rege?",
+    "ru_q": "Кто помазал Давида на царство?",
+    "en_opts": [
+      "Eli",
+      "Nathan",
+      "Samuel",
+      "Gad"
+    ],
+    "es_opts": [
+      "Elí",
+      "Natán",
+      "Samuel",
+      "Gad"
+    ],
+    "fr_opts": [
+      "Éli",
+      "Nathan",
+      "Samuel",
+      "Gad"
+    ],
+    "de_opts": [
+      "Eli",
+      "Natan",
+      "Samuel",
+      "Gad"
+    ],
+    "ro_opts": [
+      "Eli",
+      "Natan",
+      "Samuel",
+      "Gad"
+    ],
+    "ru_opts": [
+      "Илий",
+      "Нафан",
+      "Самуил",
+      "Гад"
+    ]
+  },
+  {
+    "livro": "1 Samuel",
+    "q": "Com o que Davi matou Golias?",
+    "opts": [
+      "Espada",
+      "Lança",
+      "Funda e pedra",
+      "Arco e flecha"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "With what did David kill Goliath?",
+    "es_q": "¿Con qué mató David a Goliat?",
+    "fr_q": "Avec quoi David a-t-il tué Goliath ?",
+    "de_q": "Womit tötete David Goliat?",
+    "ro_q": "Cu ce l-a ucis David pe Goliat?",
+    "ru_q": "Чем Давид убил Голиафа?",
+    "en_opts": [
+      "Sword",
+      "Spear",
+      "Sling and stone",
+      "Bow and arrow"
+    ],
+    "es_opts": [
+      "Espada",
+      "Lanza",
+      "Honda y piedra",
+      "Arco y flecha"
+    ],
+    "fr_opts": [
+      "Épée",
+      "Lance",
+      "Fronde et pierre",
+      "Arc et flèche"
+    ],
+    "de_opts": [
+      "Schwert",
+      "Speer",
+      "Schleuder und Stein",
+      "Bogen und Pfeil"
+    ],
+    "ro_opts": [
+      "Sabie",
+      "Suliță",
+      "Praștie și piatră",
+      "Arc și săgeată"
+    ],
+    "ru_opts": [
+      "Меч",
+      "Копьё",
+      "Праща и камень",
+      "Лук и стрела"
+    ]
+  },
+  {
+    "livro": "1 Samuel",
+    "q": "Qual era a profissão de Samuel antes de ser profeta?",
+    "opts": [
+      "Pastor",
+      "Sacerdote no templo",
+      "Carpinteiro",
+      "Guerreiro"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What was Samuel's occupation before being a prophet?",
+    "es_q": "¿Cuál era la ocupación de Samuel antes de ser profeta?",
+    "fr_q": "Quelle était l'occupation de Samuel avant d'être prophète ?",
+    "de_q": "Was war Samuels Beruf bevor er Prophet wurde?",
+    "ro_q": "Care era ocupația lui Samuel înainte de a fi profet?",
+    "ru_q": "Каким было занятие Самуила до того как он стал пророком?",
+    "en_opts": [
+      "Shepherd",
+      "Priest in the temple",
+      "Carpenter",
+      "Warrior"
+    ],
+    "es_opts": [
+      "Pastor",
+      "Sacerdote en el templo",
+      "Carpintero",
+      "Guerrero"
+    ],
+    "fr_opts": [
+      "Berger",
+      "Prêtre au temple",
+      "Charpentier",
+      "Guerrier"
+    ],
+    "de_opts": [
+      "Hirte",
+      "Priester im Tempel",
+      "Zimmermann",
+      "Krieger"
+    ],
+    "ro_opts": [
+      "Păstor",
+      "Preot în templu",
+      "Tâmplar",
+      "Războinic"
+    ],
+    "ru_opts": [
+      "Пастух",
+      "Священник в храме",
+      "Плотник",
+      "Воин"
+    ]
+  },
+  {
+    "livro": "1 Samuel",
+    "q": "Qual foi o amigo fiel de Davi filho do rei Saul?",
+    "opts": [
+      "Absalão",
+      "Joabe",
+      "Jônatas",
+      "Isboset"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who was David's faithful friend son of King Saul?",
+    "es_q": "¿Quién fue el fiel amigo de David hijo del rey Saúl?",
+    "fr_q": "Qui était le fidèle ami de David fils du roi Saül ?",
+    "de_q": "Wer war Davids treuer Freund Sohn von König Saul?",
+    "ro_q": "Cine a fost prietenul fidel al lui David fiul regelui Saul?",
+    "ru_q": "Кто был верным другом Давида сыном царя Саула?",
+    "en_opts": [
+      "Absalom",
+      "Joab",
+      "Jonathan",
+      "Ish-bosheth"
+    ],
+    "es_opts": [
+      "Absalón",
+      "Joab",
+      "Jonatán",
+      "Is-boset"
+    ],
+    "fr_opts": [
+      "Absalom",
+      "Joab",
+      "Jonathan",
+      "Ishbosheth"
+    ],
+    "de_opts": [
+      "Absalom",
+      "Joab",
+      "Jonatan",
+      "Ischboschet"
+    ],
+    "ro_opts": [
+      "Absalom",
+      "Ioab",
+      "Ionatan",
+      "Isboșet"
+    ],
+    "ru_opts": [
+      "Авессалом",
+      "Иоав",
+      "Ионафан",
+      "Иевосфей"
+    ]
+  },
+  {
+    "livro": "2 Samuel",
+    "q": "Qual cidade Davi conquistou e fez sua capital?",
+    "opts": [
+      "Hebrom",
+      "Jerusalém",
+      "Belém",
+      "Jericó"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Which city did David conquer and make his capital?",
+    "es_q": "¿Qué ciudad conquistó David y convirtió en su capital?",
+    "fr_q": "Quelle ville David a-t-il conquise et en a fait sa capitale ?",
+    "de_q": "Welche Stadt eroberte David und machte sie zu seiner Hauptstadt?",
+    "ro_q": "Ce cetate a cucerit David și a făcut-o capitala sa?",
+    "ru_q": "Какой город завоевал Давид и сделал своей столицей?",
+    "en_opts": [
+      "Hebron",
+      "Jerusalem",
+      "Bethlehem",
+      "Jericho"
+    ],
+    "es_opts": [
+      "Hebrón",
+      "Jerusalén",
+      "Belén",
+      "Jericó"
+    ],
+    "fr_opts": [
+      "Hébron",
+      "Jérusalem",
+      "Bethléem",
+      "Jéricho"
+    ],
+    "de_opts": [
+      "Hebron",
+      "Jerusalem",
+      "Bethlehem",
+      "Jericho"
+    ],
+    "ro_opts": [
+      "Hebron",
+      "Ierusalim",
+      "Betleem",
+      "Ierihon"
+    ],
+    "ru_opts": [
+      "Хеврон",
+      "Иерусалим",
+      "Вифлеем",
+      "Иерихон"
+    ]
+  },
+  {
+    "livro": "2 Samuel",
+    "q": "Quem foi o filho de Davi que se rebelou contra ele?",
+    "opts": [
+      "Salomão",
+      "Adonias",
+      "Absalão",
+      "Amnon"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who was David's son who rebelled against him?",
+    "es_q": "¿Quién fue el hijo de David que se rebeló contra él?",
+    "fr_q": "Qui était le fils de David qui s'est rebellé contre lui ?",
+    "de_q": "Wer war Davids Sohn der sich gegen ihn auflehnte?",
+    "ro_q": "Cine a fost fiul lui David care s-a răzvrătit împotriva lui?",
+    "ru_q": "Кто был сыном Давида восставшим против него?",
+    "en_opts": [
+      "Solomon",
+      "Adonijah",
+      "Absalom",
+      "Amnon"
+    ],
+    "es_opts": [
+      "Salomón",
+      "Adonías",
+      "Absalón",
+      "Amnón"
+    ],
+    "fr_opts": [
+      "Salomon",
+      "Adonija",
+      "Absalom",
+      "Amnon"
+    ],
+    "de_opts": [
+      "Salomo",
+      "Adonija",
+      "Absalom",
+      "Amnon"
+    ],
+    "ro_opts": [
+      "Solomon",
+      "Adonia",
+      "Absalom",
+      "Amnon"
+    ],
+    "ru_opts": [
+      "Соломон",
+      "Адония",
+      "Авессалом",
+      "Амнон"
+    ]
+  },
+  {
+    "livro": "2 Samuel",
+    "q": "Com quem Davi pecou ao cobiçar a mulher do outro?",
+    "opts": [
+      "Abigail",
+      "Mical",
+      "Bate-Seba",
+      "Azelaide"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "With whom did David sin by coveting another man's wife?",
+    "es_q": "¿Con quién pecó David al codiciar la mujer de otro?",
+    "fr_q": "Avec qui David a-t-il péché en convoitant la femme d'un autre ?",
+    "de_q": "Mit wem sündigte David indem er die Frau eines anderen begehrte?",
+    "ro_q": "Cu cine a păcătuit David poftind nevasta altuia?",
+    "ru_q": "С кем согрешил Давид возжелав жену другого?",
+    "en_opts": [
+      "Abigail",
+      "Michal",
+      "Bathsheba",
+      "Azelaide"
+    ],
+    "es_opts": [
+      "Abigaíl",
+      "Mical",
+      "Betsabé",
+      "Azelaide"
+    ],
+    "fr_opts": [
+      "Abigaïl",
+      "Mikal",
+      "Bath-Sheba",
+      "Azelaide"
+    ],
+    "de_opts": [
+      "Abigail",
+      "Michal",
+      "Batseba",
+      "Azelaide"
+    ],
+    "ro_opts": [
+      "Abigail",
+      "Mical",
+      "Bat-Șeba",
+      "Azelaide"
+    ],
+    "ru_opts": [
+      "Авигея",
+      "Мелхола",
+      "Вирсавия",
+      "Азелайд"
+    ]
+  },
+  {
+    "livro": "2 Samuel",
+    "q": "Qual profeta confrontou Davi após seu pecado?",
+    "opts": [
+      "Samuel",
+      "Elias",
+      "Natã",
+      "Eliseu"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Which prophet confronted David after his sin?",
+    "es_q": "¿Qué profeta confrontó a David después de su pecado?",
+    "fr_q": "Quel prophète a confronté David après son péché ?",
+    "de_q": "Welcher Prophet konfrontierte David nach seiner Sünde?",
+    "ro_q": "Ce profet l-a confruntat pe David după păcatul său?",
+    "ru_q": "Какой пророк противостал Давиду после его греха?",
+    "en_opts": [
+      "Samuel",
+      "Elijah",
+      "Nathan",
+      "Elisha"
+    ],
+    "es_opts": [
+      "Samuel",
+      "Elías",
+      "Natán",
+      "Eliseo"
+    ],
+    "fr_opts": [
+      "Samuel",
+      "Élie",
+      "Nathan",
+      "Élisée"
+    ],
+    "de_opts": [
+      "Samuel",
+      "Elija",
+      "Natan",
+      "Elischa"
+    ],
+    "ro_opts": [
+      "Samuel",
+      "Ilie",
+      "Natan",
+      "Elisei"
+    ],
+    "ru_opts": [
+      "Самуил",
+      "Илия",
+      "Нафан",
+      "Елисей"
+    ]
+  },
+  {
+    "livro": "2 Samuel",
+    "q": "Qual foi o filho de Davi que se tornou rei após ele?",
+    "opts": [
+      "Absalão",
+      "Adonias",
+      "Salomão",
+      "Amnon"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Which of David's sons became king after him?",
+    "es_q": "¿Cuál fue el hijo de David que se convirtió en rey después de él?",
+    "fr_q": "Lequel des fils de David est devenu roi après lui ?",
+    "de_q": "Welcher Sohn Davids wurde nach ihm König?",
+    "ro_q": "Care fiu al lui David a devenit rege după el?",
+    "ru_q": "Какой сын Давида стал царём после него?",
+    "en_opts": [
+      "Absalom",
+      "Adonijah",
+      "Solomon",
+      "Amnon"
+    ],
+    "es_opts": [
+      "Absalón",
+      "Adonías",
+      "Salomón",
+      "Amnón"
+    ],
+    "fr_opts": [
+      "Absalom",
+      "Adonija",
+      "Salomon",
+      "Amnon"
+    ],
+    "de_opts": [
+      "Absalom",
+      "Adonija",
+      "Salomo",
+      "Amnon"
+    ],
+    "ro_opts": [
+      "Absalom",
+      "Adonia",
+      "Solomon",
+      "Amnon"
+    ],
+    "ru_opts": [
+      "Авессалом",
+      "Адония",
+      "Соломон",
+      "Амнон"
+    ]
+  },
+  {
+    "livro": "1 Reis",
+    "q": "Qual foi o rei mais sábio de Israel?",
+    "opts": [
+      "Davi",
+      "Saul",
+      "Salomão",
+      "Josias"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who was the wisest king of Israel?",
+    "es_q": "¿Quién fue el rey más sabio de Israel?",
+    "fr_q": "Qui fut le roi le plus sage d'Israël ?",
+    "de_q": "Wer war der weiseste König Israels?",
+    "ro_q": "Cine a fost cel mai înțelept rege al lui Israel?",
+    "ru_q": "Кто был самым мудрым царём Израиля?",
+    "en_opts": [
+      "David",
+      "Saul",
+      "Solomon",
+      "Josiah"
+    ],
+    "es_opts": [
+      "David",
+      "Saúl",
+      "Salomón",
+      "Josías"
+    ],
+    "fr_opts": [
+      "David",
+      "Saül",
+      "Salomon",
+      "Josias"
+    ],
+    "de_opts": [
+      "David",
+      "Saul",
+      "Salomo",
+      "Josia"
+    ],
+    "ro_opts": [
+      "David",
+      "Saul",
+      "Solomon",
+      "Iosia"
+    ],
+    "ru_opts": [
+      "Давид",
+      "Саул",
+      "Соломон",
+      "Иосия"
+    ]
+  },
+  {
+    "livro": "1 Reis",
+    "q": "Quem foi o profeta que desafiou os profetas de Baal no Monte Carmelo?",
+    "opts": [
+      "Eliseu",
+      "Samuel",
+      "Elias",
+      "Natã"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who was the prophet who challenged the prophets of Baal on Mount Carmel?",
+    "es_q": "¿Quién fue el profeta que desafió a los profetas de Baal en el Monte Carmelo?",
+    "fr_q": "Qui était le prophète qui a défié les prophètes de Baal sur le Mont Carmel ?",
+    "de_q": "Wer war der Prophet der die Propheten Baals auf dem Berg Karmel herausforderte?",
+    "ro_q": "Cine a fost profetul care i-a înfruntat pe profeții lui Baal pe Muntele Carmel?",
+    "ru_q": "Кто был пророком бросившим вызов пророкам Ваала на горе Кармил?",
+    "en_opts": [
+      "Elisha",
+      "Samuel",
+      "Elijah",
+      "Nathan"
+    ],
+    "es_opts": [
+      "Eliseo",
+      "Samuel",
+      "Elías",
+      "Natán"
+    ],
+    "fr_opts": [
+      "Élisée",
+      "Samuel",
+      "Élie",
+      "Nathan"
+    ],
+    "de_opts": [
+      "Elischa",
+      "Samuel",
+      "Elija",
+      "Natan"
+    ],
+    "ro_opts": [
+      "Elisei",
+      "Samuel",
+      "Ilie",
+      "Natan"
+    ],
+    "ru_opts": [
+      "Елисей",
+      "Самуил",
+      "Илия",
+      "Нафан"
+    ]
+  },
+  {
+    "livro": "1 Reis",
+    "q": "Quem foi a rainha que visitou Salomão para testar sua sabedoria?",
+    "opts": [
+      "Rainha de Sabá",
+      "Jezabel",
+      "Ester",
+      "Dalila"
+    ],
+    "r": 0,
+    "nivel": "medio",
+    "en_q": "Who was the queen who visited Solomon to test his wisdom?",
+    "es_q": "¿Quién fue la reina que visitó a Salomón para probar su sabiduría?",
+    "fr_q": "Qui était la reine qui a rendu visite à Salomon pour tester sa sagesse ?",
+    "de_q": "Wer war die Königin die Salomo besuchte um seine Weisheit zu testen?",
+    "ro_q": "Cine a fost regina care l-a vizitat pe Solomon pentru a-i testa înțelepciunea?",
+    "ru_q": "Кто была царица посетившая Соломона чтобы испытать его мудрость?",
+    "en_opts": [
+      "Queen of Sheba",
+      "Jezebel",
+      "Esther",
+      "Delilah"
+    ],
+    "es_opts": [
+      "Reina de Sabá",
+      "Jezabel",
+      "Ester",
+      "Dalila"
+    ],
+    "fr_opts": [
+      "Reine de Saba",
+      "Jézabel",
+      "Esther",
+      "Dalila"
+    ],
+    "de_opts": [
+      "Königin von Saba",
+      "Isebel",
+      "Ester",
+      "Delila"
+    ],
+    "ro_opts": [
+      "Regina din Seba",
+      "Izabela",
+      "Estera",
+      "Dalila"
+    ],
+    "ru_opts": [
+      "Царица Савская",
+      "Иезавель",
+      "Есфирь",
+      "Далила"
+    ]
+  },
+  {
+    "livro": "1 Reis",
+    "q": "Quantas esposas tinha Salomão?",
+    "opts": [
+      "100",
+      "300",
+      "700",
+      "1000"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "How many wives did Solomon have?",
+    "es_q": "¿Cuántas esposas tenía Salomón?",
+    "fr_q": "Combien d'épouses Salomon avait-il ?",
+    "de_q": "Wie viele Frauen hatte Salomo?",
+    "ro_q": "Câte soții avea Solomon?",
+    "ru_q": "Сколько жён было у Соломона?",
+    "en_opts": [
+      "100",
+      "300",
+      "700",
+      "1000"
+    ],
+    "es_opts": [
+      "100",
+      "300",
+      "700",
+      "1000"
+    ],
+    "fr_opts": [
+      "100",
+      "300",
+      "700",
+      "1000"
+    ],
+    "de_opts": [
+      "100",
+      "300",
+      "700",
+      "1000"
+    ],
+    "ro_opts": [
+      "100",
+      "300",
+      "700",
+      "1000"
+    ],
+    "ru_opts": [
+      "100",
+      "300",
+      "700",
+      "1000"
+    ]
+  },
+  {
+    "livro": "1 Reis",
+    "q": "O que Elias pediu a Deus quando estava deprimido debaixo da árvore?",
+    "opts": [
+      "Força para lutar",
+      "Que tirasse sua vida",
+      "Sabedoria",
+      "Um exército"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What did Elijah ask God when he was depressed under the tree?",
+    "es_q": "¿Qué le pidió Elías a Dios cuando estaba deprimido bajo el árbol?",
+    "fr_q": "Qu'est-ce qu'Élie a demandé à Dieu quand il était déprimé sous l'arbre ?",
+    "de_q": "Was bat Elija Gott als er unter dem Baum deprimiert war?",
+    "ro_q": "Ce i-a cerut Ilie lui Dumnezeu când era deprimat sub copac?",
+    "ru_q": "О чём просил Илия Бога когда был в унынии под деревом?",
+    "en_opts": [
+      "Strength to fight",
+      "To take his life",
+      "Wisdom",
+      "An army"
+    ],
+    "es_opts": [
+      "Fuerza para luchar",
+      "Que quitara su vida",
+      "Sabiduría",
+      "Un ejército"
+    ],
+    "fr_opts": [
+      "La force de combattre",
+      "De lui ôter la vie",
+      "La sagesse",
+      "Une armée"
+    ],
+    "de_opts": [
+      "Kraft zu kämpfen",
+      "Sein Leben zu nehmen",
+      "Weisheit",
+      "Eine Armee"
+    ],
+    "ro_opts": [
+      "Putere să lupte",
+      "Să-i ia viața",
+      "Înțelepciune",
+      "O armată"
+    ],
+    "ru_opts": [
+      "Силу сражаться",
+      "Забрать его жизнь",
+      "Мудрость",
+      "Армию"
+    ]
+  },
+  {
+    "livro": "2 Reis",
+    "q": "Como Elias subiu ao céu?",
+    "opts": [
+      "Morreu e ressuscitou",
+      "Num carro de fogo",
+      "Andando sobre as nuvens",
+      "Por um anjo"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "How did Elijah go up to heaven?",
+    "es_q": "¿Cómo subió Elías al cielo?",
+    "fr_q": "Comment Élie est-il monté au ciel ?",
+    "de_q": "Wie fuhr Elija in den Himmel auf?",
+    "ro_q": "Cum s-a înălțat Ilie la cer?",
+    "ru_q": "Как Илия вознёсся на небо?",
+    "en_opts": [
+      "Died and resurrected",
+      "In a chariot of fire",
+      "Walking on clouds",
+      "By an angel"
+    ],
+    "es_opts": [
+      "Murió y resucitó",
+      "En un carro de fuego",
+      "Caminando sobre las nubes",
+      "Por un ángel"
+    ],
+    "fr_opts": [
+      "Mourut et ressuscita",
+      "Dans un char de feu",
+      "Marchant sur les nuages",
+      "Par un ange"
+    ],
+    "de_opts": [
+      "Starb und auferstand",
+      "In einem Feuerwagen",
+      "Auf Wolken gehend",
+      "Durch einen Engel"
+    ],
+    "ro_opts": [
+      "A murit și a înviat",
+      "Într-un car de foc",
+      "Mergând pe nori",
+      "Printr-un înger"
+    ],
+    "ru_opts": [
+      "Умер и воскрес",
+      "На огненной колеснице",
+      "Шагая по облакам",
+      "Через ангела"
+    ]
+  },
+  {
+    "livro": "2 Reis",
+    "q": "Quem foi o sucessor de Elias como profeta?",
+    "opts": [
+      "Amós",
+      "Oséias",
+      "Eliseu",
+      "Jonas"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who was Elijah's successor as prophet?",
+    "es_q": "¿Quién fue el sucesor de Elías como profeta?",
+    "fr_q": "Qui était le successeur d'Élie comme prophète ?",
+    "de_q": "Wer war Elijas Nachfolger als Prophet?",
+    "ro_q": "Cine a fost succesorul lui Ilie ca profet?",
+    "ru_q": "Кто был преемником Илии в качестве пророка?",
+    "en_opts": [
+      "Amos",
+      "Hosea",
+      "Elisha",
+      "Jonah"
+    ],
+    "es_opts": [
+      "Amós",
+      "Oseas",
+      "Eliseo",
+      "Jonás"
+    ],
+    "fr_opts": [
+      "Amos",
+      "Osée",
+      "Élisée",
+      "Jonas"
+    ],
+    "de_opts": [
+      "Amos",
+      "Hosea",
+      "Elischa",
+      "Jona"
+    ],
+    "ro_opts": [
+      "Amos",
+      "Osea",
+      "Elisei",
+      "Iona"
+    ],
+    "ru_opts": [
+      "Амос",
+      "Осия",
+      "Елисей",
+      "Иона"
+    ]
+  },
+  {
+    "livro": "2 Reis",
+    "q": "Qual rei de Judá reformou o culto e destruiu os ídolos?",
+    "opts": [
+      "Acaz",
+      "Manassés",
+      "Josias",
+      "Jeoaquim"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Which king of Judah reformed worship and destroyed idols?",
+    "es_q": "¿Qué rey de Judá reformó el culto y destruyó los ídolos?",
+    "fr_q": "Quel roi de Juda a réformé le culte et détruit les idoles ?",
+    "de_q": "Welcher König Judas reformierte den Gottesdienst und zerstörte Götzen?",
+    "ro_q": "Ce rege al lui Iuda a reformat închinarea și a distrus idolii?",
+    "ru_q": "Какой царь Иудеи реформировал богослужение и уничтожил идолов?",
+    "en_opts": [
+      "Ahaz",
+      "Manasseh",
+      "Josiah",
+      "Jehoiakim"
+    ],
+    "es_opts": [
+      "Acaz",
+      "Manasés",
+      "Josías",
+      "Joaquín"
+    ],
+    "fr_opts": [
+      "Acaz",
+      "Manassé",
+      "Josias",
+      "Joïaqim"
+    ],
+    "de_opts": [
+      "Ahas",
+      "Manasse",
+      "Josia",
+      "Jojakim"
+    ],
+    "ro_opts": [
+      "Ahaz",
+      "Manase",
+      "Iosia",
+      "Ioiachim"
+    ],
+    "ru_opts": [
+      "Ахаз",
+      "Манассия",
+      "Иосия",
+      "Иоаким"
+    ]
+  },
+  {
+    "livro": "2 Reis",
+    "q": "Qual império destruiu Jerusalém e levou o povo para o exílio?",
+    "opts": [
+      "Egito",
+      "Assíria",
+      "Babilônia",
+      "Pérsia"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Which empire destroyed Jerusalem and took the people into exile?",
+    "es_q": "¿Qué imperio destruyó Jerusalén y llevó al pueblo al exilio?",
+    "fr_q": "Quel empire a détruit Jérusalem et emmené le peuple en exil ?",
+    "de_q": "Welches Reich zerstörte Jerusalem und führte das Volk in die Verbannung?",
+    "ro_q": "Ce imperiu a distrus Ierusalimul și a dus poporul în exil?",
+    "ru_q": "Какая империя разрушила Иерусалим и увела народ в плен?",
+    "en_opts": [
+      "Egypt",
+      "Assyria",
+      "Babylon",
+      "Persia"
+    ],
+    "es_opts": [
+      "Egipto",
+      "Asiria",
+      "Babilonia",
+      "Persia"
+    ],
+    "fr_opts": [
+      "Égypte",
+      "Assyrie",
+      "Babylone",
+      "Perse"
+    ],
+    "de_opts": [
+      "Ägypten",
+      "Assyrien",
+      "Babylon",
+      "Persien"
+    ],
+    "ro_opts": [
+      "Egipt",
+      "Asiria",
+      "Babilon",
+      "Persia"
+    ],
+    "ru_opts": [
+      "Египет",
+      "Ассирия",
+      "Вавилон",
+      "Персия"
+    ]
+  },
+  {
+    "livro": "2 Reis",
+    "q": "Qual profeta curou Naamã da lepra?",
+    "opts": [
+      "Elias",
+      "Samuel",
+      "Eliseu",
+      "Isaías"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Which prophet healed Naaman of leprosy?",
+    "es_q": "¿Qué profeta sanó a Naamán de la lepra?",
+    "fr_q": "Quel prophète a guéri Naaman de la lèpre ?",
+    "de_q": "Welcher Prophet heilte Naaman vom Aussatz?",
+    "ro_q": "Ce profet l-a vindecat pe Naaman de lepră?",
+    "ru_q": "Какой пророк исцелил Неемана от проказы?",
+    "en_opts": [
+      "Elijah",
+      "Samuel",
+      "Elisha",
+      "Isaiah"
+    ],
+    "es_opts": [
+      "Elías",
+      "Samuel",
+      "Eliseo",
+      "Isaías"
+    ],
+    "fr_opts": [
+      "Élie",
+      "Samuel",
+      "Élisée",
+      "Ésaïe"
+    ],
+    "de_opts": [
+      "Elija",
+      "Samuel",
+      "Elischa",
+      "Jesaja"
+    ],
+    "ro_opts": [
+      "Ilie",
+      "Samuel",
+      "Elisei",
+      "Isaia"
+    ],
+    "ru_opts": [
+      "Илия",
+      "Самуил",
+      "Елисей",
+      "Исаия"
+    ]
+  },
+  {
+    "livro": "1 Cronicas",
+    "q": "Quem organizou os levitas para o serviço no templo?",
+    "opts": [
+      "Salomão",
+      "Moisés",
+      "Davi",
+      "Samuel"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who organized the Levites for service in the temple?",
+    "es_q": "¿Quién organizó a los levitas para el servicio en el templo?",
+    "fr_q": "Qui a organisé les lévites pour le service dans le temple ?",
+    "de_q": "Wer organisierte die Leviten für den Dienst im Tempel?",
+    "ro_q": "Cine a organizat leviții pentru slujba în templu?",
+    "ru_q": "Кто организовал левитов для служения в храме?",
+    "en_opts": [
+      "Solomon",
+      "Moses",
+      "David",
+      "Samuel"
+    ],
+    "es_opts": [
+      "Salomón",
+      "Moisés",
+      "David",
+      "Samuel"
+    ],
+    "fr_opts": [
+      "Salomon",
+      "Moïse",
+      "David",
+      "Samuel"
+    ],
+    "de_opts": [
+      "Salomo",
+      "Mose",
+      "David",
+      "Samuel"
+    ],
+    "ro_opts": [
+      "Solomon",
+      "Moise",
+      "David",
+      "Samuel"
+    ],
+    "ru_opts": [
+      "Соломон",
+      "Моисей",
+      "Давид",
+      "Самуил"
+    ]
+  },
+  {
+    "livro": "1 Cronicas",
+    "q": "Quem não pôde construir o templo por ser um homem de guerra?",
+    "opts": [
+      "Salomão",
+      "Josué",
+      "Davi",
+      "Ezequias"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who was not allowed to build the temple because he was a man of war?",
+    "es_q": "¿Quién no pudo construir el templo por ser un hombre de guerra?",
+    "fr_q": "Qui n'a pas pu construire le temple parce qu'il était un homme de guerre ?",
+    "de_q": "Wer durfte den Tempel nicht bauen weil er ein Kriegsmann war?",
+    "ro_q": "Cine nu a putut construi templul pentru că era un om de război?",
+    "ru_q": "Кому не позволили строить храм потому что он был воином?",
+    "en_opts": [
+      "Solomon",
+      "Joshua",
+      "David",
+      "Hezekiah"
+    ],
+    "es_opts": [
+      "Salomón",
+      "Josué",
+      "David",
+      "Ezequías"
+    ],
+    "fr_opts": [
+      "Salomon",
+      "Josué",
+      "David",
+      "Ézéchias"
+    ],
+    "de_opts": [
+      "Salomo",
+      "Josua",
+      "David",
+      "Hiskia"
+    ],
+    "ro_opts": [
+      "Solomon",
+      "Iosua",
+      "David",
+      "Ezechia"
+    ],
+    "ru_opts": [
+      "Соломон",
+      "Иисус Навин",
+      "Давид",
+      "Езекия"
+    ]
+  },
+  {
+    "livro": "1 Cronicas",
+    "q": "Qual era a tarefa principal dos levitas no Antigo Testamento?",
+    "opts": [
+      "Guerrear",
+      "Servir no templo",
+      "Cultivar a terra",
+      "Governar cidades"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What was the main task of the Levites in the Old Testament?",
+    "es_q": "¿Cuál era la tarea principal de los levitas en el Antiguo Testamento?",
+    "fr_q": "Quelle était la tâche principale des lévites dans l'Ancien Testament ?",
+    "de_q": "Was war die Hauptaufgabe der Leviten im Alten Testament?",
+    "ro_q": "Care era sarcina principală a leviților în Vechiul Testament?",
+    "ru_q": "Какой была главная задача левитов в Ветхом Завете?",
+    "en_opts": [
+      "Fight in wars",
+      "Serve in the temple",
+      "Cultivate the land",
+      "Govern cities"
+    ],
+    "es_opts": [
+      "Guerrear",
+      "Servir en el templo",
+      "Cultivar la tierra",
+      "Gobernar ciudades"
+    ],
+    "fr_opts": [
+      "Faire la guerre",
+      "Servir dans le temple",
+      "Cultiver la terre",
+      "Gouverner des villes"
+    ],
+    "de_opts": [
+      "Krieg führen",
+      "Im Tempel dienen",
+      "Das Land bebauen",
+      "Städte regieren"
+    ],
+    "ro_opts": [
+      "A lupta în războaie",
+      "A sluji în templu",
+      "A cultiva pământul",
+      "A guverna cetăți"
+    ],
+    "ru_opts": [
+      "Воевать",
+      "Служить в храме",
+      "Возделывать землю",
+      "Управлять городами"
+    ]
+  },
+  {
+    "livro": "2 Cronicas",
+    "q": "Quem construiu o templo em Jerusalém?",
+    "opts": [
+      "Davi",
+      "Salomão",
+      "Ezequias",
+      "Josias"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Who built the temple in Jerusalem?",
+    "es_q": "¿Quién construyó el templo en Jerusalén?",
+    "fr_q": "Qui a construit le temple à Jérusalem ?",
+    "de_q": "Wer baute den Tempel in Jerusalem?",
+    "ro_q": "Cine a construit templul în Ierusalim?",
+    "ru_q": "Кто построил храм в Иерусалиме?",
+    "en_opts": [
+      "David",
+      "Solomon",
+      "Hezekiah",
+      "Josiah"
+    ],
+    "es_opts": [
+      "David",
+      "Salomón",
+      "Ezequías",
+      "Josías"
+    ],
+    "fr_opts": [
+      "David",
+      "Salomon",
+      "Ézéchias",
+      "Josias"
+    ],
+    "de_opts": [
+      "David",
+      "Salomo",
+      "Hiskia",
+      "Josia"
+    ],
+    "ro_opts": [
+      "David",
+      "Solomon",
+      "Ezechia",
+      "Iosia"
+    ],
+    "ru_opts": [
+      "Давид",
+      "Соломон",
+      "Езекия",
+      "Иосия"
+    ]
+  },
+  {
+    "livro": "2 Cronicas",
+    "q": "Qual rei de Judá orou e Deus curou sua doença?",
+    "opts": [
+      "Josias",
+      "Manassés",
+      "Ezequias",
+      "Davi"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Which king of Judah prayed and God healed his illness?",
+    "es_q": "¿Qué rey de Judá oró y Dios sanó su enfermedad?",
+    "fr_q": "Quel roi de Juda a prié et Dieu a guéri sa maladie ?",
+    "de_q": "Welcher König Judas betete und Gott heilte seine Krankheit?",
+    "ro_q": "Ce rege al lui Iuda s-a rugat și Dumnezeu i-a vindecat boala?",
+    "ru_q": "Какой царь Иудеи молился и Бог исцелил его болезнь?",
+    "en_opts": [
+      "Josiah",
+      "Manasseh",
+      "Hezekiah",
+      "David"
+    ],
+    "es_opts": [
+      "Josías",
+      "Manasés",
+      "Ezequías",
+      "David"
+    ],
+    "fr_opts": [
+      "Josias",
+      "Manassé",
+      "Ézéchias",
+      "David"
+    ],
+    "de_opts": [
+      "Josia",
+      "Manasse",
+      "Hiskia",
+      "David"
+    ],
+    "ro_opts": [
+      "Iosia",
+      "Manase",
+      "Ezechia",
+      "David"
+    ],
+    "ru_opts": [
+      "Иосия",
+      "Манассия",
+      "Езекия",
+      "Давид"
+    ]
+  },
+  {
+    "livro": "Esdras",
+    "q": "Qual rei persa permitiu que os judeus voltassem a Jerusalém?",
+    "opts": [
+      "Dario",
+      "Ciro",
+      "Xerxes",
+      "Artaxerxes"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Which Persian king allowed the Jews to return to Jerusalem?",
+    "es_q": "¿Qué rey persa permitió que los judíos regresaran a Jerusalén?",
+    "fr_q": "Quel roi perse a permis aux Juifs de retourner à Jérusalem ?",
+    "de_q": "Welcher persische König erlaubte den Juden nach Jerusalem zurückzukehren?",
+    "ro_q": "Ce rege persan a permis evreilor să se întoarcă la Ierusalim?",
+    "ru_q": "Какой персидский царь позволил евреям вернуться в Иерусалим?",
+    "en_opts": [
+      "Darius",
+      "Cyrus",
+      "Xerxes",
+      "Artaxerxes"
+    ],
+    "es_opts": [
+      "Darío",
+      "Ciro",
+      "Jerjes",
+      "Artajerjes"
+    ],
+    "fr_opts": [
+      "Darius",
+      "Cyrus",
+      "Xerxès",
+      "Artaxerxès"
+    ],
+    "de_opts": [
+      "Darius",
+      "Kyros",
+      "Xerxes",
+      "Artaxerxes"
+    ],
+    "ro_opts": [
+      "Dariu",
+      "Cir",
+      "Xerxes",
+      "Artaxerxe"
+    ],
+    "ru_opts": [
+      "Дарий",
+      "Кир",
+      "Ксеркс",
+      "Артаксеркс"
+    ]
+  },
+  {
+    "livro": "Esdras",
+    "q": "O que Esdras era por profissão?",
+    "opts": [
+      "Profeta",
+      "Escriba e sacerdote",
+      "Rei",
+      "Guerreiro"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What was Ezra's profession?",
+    "es_q": "¿Cuál era la profesión de Esdras?",
+    "fr_q": "Quelle était la profession d'Esdras ?",
+    "de_q": "Was war Esras Beruf?",
+    "ro_q": "Ce profesie avea Ezdra?",
+    "ru_q": "Какова была профессия Ездры?",
+    "en_opts": [
+      "Prophet",
+      "Scribe and priest",
+      "King",
+      "Warrior"
+    ],
+    "es_opts": [
+      "Profeta",
+      "Escriba y sacerdote",
+      "Rey",
+      "Guerrero"
+    ],
+    "fr_opts": [
+      "Prophète",
+      "Scribe et prêtre",
+      "Roi",
+      "Guerrier"
+    ],
+    "de_opts": [
+      "Prophet",
+      "Schreiber und Priester",
+      "König",
+      "Krieger"
+    ],
+    "ro_opts": [
+      "Profet",
+      "Cărturar și preot",
+      "Rege",
+      "Războinic"
+    ],
+    "ru_opts": [
+      "Пророк",
+      "Книжник и священник",
+      "Царь",
+      "Воин"
+    ]
+  },
+  {
+    "livro": "Esdras",
+    "q": "O que o povo reconstruiu primeiro ao voltar do exílio?",
+    "opts": [
+      "As muralhas",
+      "O palácio",
+      "O altar e o templo",
+      "As casas"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "What did the people rebuild first when they returned from exile?",
+    "es_q": "¿Qué reconstruyó el pueblo primero al regresar del exilio?",
+    "fr_q": "Qu'est-ce que le peuple a reconstruit en premier à son retour d'exil ?",
+    "de_q": "Was baute das Volk zuerst wieder auf als es aus dem Exil zurückkehrte?",
+    "ro_q": "Ce a reconstruit poporul mai întâi când s-a întors din exil?",
+    "ru_q": "Что народ восстановил первым когда вернулся из плена?",
+    "en_opts": [
+      "The walls",
+      "The palace",
+      "The altar and temple",
+      "The houses"
+    ],
+    "es_opts": [
+      "Las murallas",
+      "El palacio",
+      "El altar y el templo",
+      "Las casas"
+    ],
+    "fr_opts": [
+      "Les murailles",
+      "Le palais",
+      "L'autel et le temple",
+      "Les maisons"
+    ],
+    "de_opts": [
+      "Die Mauern",
+      "Den Palast",
+      "Den Altar und Tempel",
+      "Die Häuser"
+    ],
+    "ro_opts": [
+      "Zidurile",
+      "Palatul",
+      "Altarul și templul",
+      "Casele"
+    ],
+    "ru_opts": [
+      "Стены",
+      "Дворец",
+      "Жертвенник и храм",
+      "Дома"
+    ]
+  },
+  {
+    "livro": "Neemias",
+    "q": "Qual era a função de Neemias na corte persa?",
+    "opts": [
+      "General",
+      "Copeiro do rei",
+      "Sacerdote",
+      "Profeta"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What was Nehemiah's role in the Persian court?",
+    "es_q": "¿Cuál era el papel de Nehemías en la corte persa?",
+    "fr_q": "Quel était le rôle de Néhémie à la cour perse ?",
+    "de_q": "Was war Nehemias Rolle am persischen Hof?",
+    "ro_q": "Care era rolul lui Neemia la curtea persană?",
+    "ru_q": "Какова была роль Неемии при персидском дворе?",
+    "en_opts": [
+      "General",
+      "Cupbearer to the king",
+      "Priest",
+      "Prophet"
+    ],
+    "es_opts": [
+      "General",
+      "Copero del rey",
+      "Sacerdote",
+      "Profeta"
+    ],
+    "fr_opts": [
+      "Général",
+      "Échanson du roi",
+      "Prêtre",
+      "Prophète"
+    ],
+    "de_opts": [
+      "General",
+      "Mundschenk des Königs",
+      "Priester",
+      "Prophet"
+    ],
+    "ro_opts": [
+      "General",
+      "Paharnicul regelui",
+      "Preot",
+      "Profet"
+    ],
+    "ru_opts": [
+      "Полководец",
+      "Виночерпий царя",
+      "Священник",
+      "Пророк"
+    ]
+  },
+  {
+    "livro": "Neemias",
+    "q": "O que Neemias reconstruiu em Jerusalém?",
+    "opts": [
+      "O templo",
+      "As muralhas",
+      "O palácio",
+      "O aqueduto"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What did Nehemiah rebuild in Jerusalem?",
+    "es_q": "¿Qué reconstruyó Nehemías en Jerusalén?",
+    "fr_q": "Qu'est-ce que Néhémie a reconstruit à Jérusalem ?",
+    "de_q": "Was baute Nehemia in Jerusalem wieder auf?",
+    "ro_q": "Ce a reconstruit Neemia în Ierusalim?",
+    "ru_q": "Что Неемия восстановил в Иерусалиме?",
+    "en_opts": [
+      "The temple",
+      "The walls",
+      "The palace",
+      "The aqueduct"
+    ],
+    "es_opts": [
+      "El templo",
+      "Las murallas",
+      "El palacio",
+      "El acueducto"
+    ],
+    "fr_opts": [
+      "Le temple",
+      "Les murailles",
+      "Le palais",
+      "L'aqueduc"
+    ],
+    "de_opts": [
+      "Den Tempel",
+      "Die Mauern",
+      "Den Palast",
+      "Den Aquädukt"
+    ],
+    "ro_opts": [
+      "Templul",
+      "Zidurile",
+      "Palatul",
+      "Apeductul"
+    ],
+    "ru_opts": [
+      "Храм",
+      "Стены",
+      "Дворец",
+      "Акведук"
+    ]
+  },
+  {
+    "livro": "Ester",
+    "q": "Quem foi a rainha judia que salvou seu povo na Pérsia?",
+    "opts": [
+      "Débora",
+      "Rute",
+      "Ester",
+      "Miriã"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who was the Jewish queen who saved her people in Persia?",
+    "es_q": "¿Quién fue la reina judía que salvó a su pueblo en Persia?",
+    "fr_q": "Qui était la reine juive qui a sauvé son peuple en Perse ?",
+    "de_q": "Wer war die jüdische Königin die ihr Volk in Persien rettete?",
+    "ro_q": "Cine a fost regina evreiască care și-a salvat poporul în Persia?",
+    "ru_q": "Кто была еврейская царица спасшая свой народ в Персии?",
+    "en_opts": [
+      "Deborah",
+      "Ruth",
+      "Esther",
+      "Miriam"
+    ],
+    "es_opts": [
+      "Débora",
+      "Rut",
+      "Ester",
+      "Miriam"
+    ],
+    "fr_opts": [
+      "Déborah",
+      "Ruth",
+      "Esther",
+      "Myriam"
+    ],
+    "de_opts": [
+      "Debora",
+      "Rut",
+      "Ester",
+      "Mirjam"
+    ],
+    "ro_opts": [
+      "Debora",
+      "Rut",
+      "Estera",
+      "Miriam"
+    ],
+    "ru_opts": [
+      "Девора",
+      "Руфь",
+      "Есфирь",
+      "Мариам"
+    ]
+  },
+  {
+    "livro": "Ester",
+    "q": "Quem foi o inimigo que queria destruir os judeus no livro de Ester?",
+    "opts": [
+      "Hamã",
+      "Haman",
+      "Mardoqueu",
+      "Tobias"
+    ],
+    "r": 0,
+    "nivel": "medio",
+    "en_q": "Who was the enemy who wanted to destroy the Jews in the book of Esther?",
+    "es_q": "¿Quién fue el enemigo que quería destruir a los judíos en el libro de Ester?",
+    "fr_q": "Qui était l'ennemi qui voulait détruire les Juifs dans le livre d'Esther ?",
+    "de_q": "Wer war der Feind der die Juden im Buch Esther vernichten wollte?",
+    "ro_q": "Cine a fost dușmanul care voia să distrugă evreii în cartea Esterei?",
+    "ru_q": "Кто был врагом желавшим уничтожить евреев в книге Есфирь?",
+    "en_opts": [
+      "Haman",
+      "Mordecai",
+      "Tobias",
+      "Sanballat"
+    ],
+    "es_opts": [
+      "Amán",
+      "Mardoqueo",
+      "Tobías",
+      "Sanbalat"
+    ],
+    "fr_opts": [
+      "Haman",
+      "Mardochée",
+      "Tobias",
+      "Sanbalat"
+    ],
+    "de_opts": [
+      "Haman",
+      "Mordechai",
+      "Tobias",
+      "Sanballat"
+    ],
+    "ro_opts": [
+      "Haman",
+      "Mardoheu",
+      "Tobie",
+      "Sanbalat"
+    ],
+    "ru_opts": [
+      "Аман",
+      "Мардохей",
+      "Товий",
+      "Санаваллат"
+    ]
+  },
+  {
+    "livro": "Ester",
+    "q": "Quem foi o primo de Ester que a aconselhou?",
+    "opts": [
+      "Esdras",
+      "Neemias",
+      "Mardoqueu",
+      "Zorobabel"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who was Esther's cousin who advised her?",
+    "es_q": "¿Quién fue el primo de Ester que la aconsejó?",
+    "fr_q": "Qui était le cousin d'Esther qui l'a conseillée ?",
+    "de_q": "Wer war Esters Cousin der ihr riet?",
+    "ro_q": "Cine a fost vărul Esterei care a sfătuit-o?",
+    "ru_q": "Кто был двоюродным братом Есфири давшим ей совет?",
+    "en_opts": [
+      "Ezra",
+      "Nehemiah",
+      "Mordecai",
+      "Zerubbabel"
+    ],
+    "es_opts": [
+      "Esdras",
+      "Nehemías",
+      "Mardoqueo",
+      "Zorobabel"
+    ],
+    "fr_opts": [
+      "Esdras",
+      "Néhémie",
+      "Mardochée",
+      "Zorobabel"
+    ],
+    "de_opts": [
+      "Esra",
+      "Nehemia",
+      "Mordechai",
+      "Serubbabel"
+    ],
+    "ro_opts": [
+      "Ezdra",
+      "Neemia",
+      "Mardoheu",
+      "Zorobabel"
+    ],
+    "ru_opts": [
+      "Ездра",
+      "Неемия",
+      "Мардохей",
+      "Зоровавель"
+    ]
+  },
+  {
+    "livro": "Ester",
+    "q": "O que Ester fez antes de entrar na presença do rei sem ser chamada?",
+    "opts": [
+      "Orou e jejuou por 3 dias",
+      "Consultou um profeta",
+      "Pediu ajuda ao exército",
+      "Fugiu do palácio"
+    ],
+    "r": 0,
+    "nivel": "medio",
+    "en_q": "What did Esther do before entering the king's presence without being called?",
+    "es_q": "¿Qué hizo Ester antes de entrar a la presencia del rey sin ser llamada?",
+    "fr_q": "Qu'est-ce qu'Esther a fait avant d'entrer en présence du roi sans être appelée ?",
+    "de_q": "Was tat Ester bevor sie ohne Einladung vor den König trat?",
+    "ro_q": "Ce a făcut Estera înainte de a intra în prezența regelui fără să fie chemată?",
+    "ru_q": "Что сделала Есфирь перед тем как войти к царю без приглашения?",
+    "en_opts": [
+      "Prayed and fasted for 3 days",
+      "Consulted a prophet",
+      "Asked the army for help",
+      "Fled the palace"
+    ],
+    "es_opts": [
+      "Oró y ayunó por 3 días",
+      "Consultó a un profeta",
+      "Pidió ayuda al ejército",
+      "Huyó del palacio"
+    ],
+    "fr_opts": [
+      "Pria et jeûna pendant 3 jours",
+      "Consulta un prophète",
+      "Demanda l'aide de l'armée",
+      "S'enfuit du palais"
+    ],
+    "de_opts": [
+      "Betete und fastete 3 Tage",
+      "Konsultierte einen Propheten",
+      "Bat die Armee um Hilfe",
+      "Floh aus dem Palast"
+    ],
+    "ro_opts": [
+      "S-a rugat și a postit 3 zile",
+      "A consultat un profet",
+      "A cerut ajutorul armatei",
+      "A fugit din palat"
+    ],
+    "ru_opts": [
+      "Молилась и постилась 3 дня",
+      "Консультировалась с пророком",
+      "Просила помощи у армии",
+      "Бежала из дворца"
+    ]
+  },
+  {
+    "livro": "Ester",
+    "q": "Qual festa judaica comemora a salvação do povo no livro de Ester?",
+    "opts": [
+      "Páscoa",
+      "Yom Kipur",
+      "Purim",
+      "Hannuka"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Which Jewish feast commemorates the salvation of the people in the book of Esther?",
+    "es_q": "¿Qué fiesta judía conmemora la salvación del pueblo en el libro de Ester?",
+    "fr_q": "Quelle fête juive commémore le salut du peuple dans le livre d'Esther ?",
+    "de_q": "Welches jüdische Fest erinnert an die Rettung des Volkes im Buch Esther?",
+    "ro_q": "Ce sărbătoare evreiască comemorează salvarea poporului în cartea Esterei?",
+    "ru_q": "Какой еврейский праздник отмечает спасение народа в книге Есфирь?",
+    "en_opts": [
+      "Passover",
+      "Yom Kippur",
+      "Purim",
+      "Hanukkah"
+    ],
+    "es_opts": [
+      "Pascua",
+      "Yom Kipur",
+      "Purim",
+      "Hannuka"
+    ],
+    "fr_opts": [
+      "Pâque",
+      "Yom Kippour",
+      "Pourim",
+      "Hanoukka"
+    ],
+    "de_opts": [
+      "Passah",
+      "Yom Kippur",
+      "Purim",
+      "Chanukka"
+    ],
+    "ro_opts": [
+      "Paște",
+      "Yom Kipur",
+      "Purim",
+      "Hanuca"
+    ],
+    "ru_opts": [
+      "Пасха",
+      "Йом Кипур",
+      "Пурим",
+      "Ханука"
+    ]
+  },
+  {
+    "livro": "1 Cronicas",
+    "q": "Quem organizou os levitas para o serviço no templo?",
+    "opts": [
+      "Salomão",
+      "Moisés",
+      "Davi",
+      "Samuel"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who organized the Levites for service in the temple?",
+    "es_q": "¿Quién organizó a los levitas para el servicio en el templo?",
+    "fr_q": "Qui a organisé les lévites pour le service dans le temple ?",
+    "de_q": "Wer organisierte die Leviten für den Dienst im Tempel?",
+    "ro_q": "Cine a organizat leviții pentru slujba în templu?",
+    "ru_q": "Кто организовал левитов для служения в храме?",
+    "en_opts": [
+      "Solomon",
+      "Moses",
+      "David",
+      "Samuel"
+    ],
+    "es_opts": [
+      "Salomón",
+      "Moisés",
+      "David",
+      "Samuel"
+    ],
+    "fr_opts": [
+      "Salomon",
+      "Moïse",
+      "David",
+      "Samuel"
+    ],
+    "de_opts": [
+      "Salomo",
+      "Mose",
+      "David",
+      "Samuel"
+    ],
+    "ro_opts": [
+      "Solomon",
+      "Moise",
+      "David",
+      "Samuel"
+    ],
+    "ru_opts": [
+      "Соломон",
+      "Моисей",
+      "Давид",
+      "Самуил"
+    ]
+  },
+  {
+    "livro": "1 Cronicas",
+    "q": "Quem não pôde construir o templo por ser um homem de guerra?",
+    "opts": [
+      "Salomão",
+      "Josué",
+      "Davi",
+      "Ezequias"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who was not allowed to build the temple because he was a man of war?",
+    "es_q": "¿Quién no pudo construir el templo por ser un hombre de guerra?",
+    "fr_q": "Qui n'a pas pu construire le temple parce qu'il était un homme de guerre ?",
+    "de_q": "Wer durfte den Tempel nicht bauen weil er ein Kriegsmann war?",
+    "ro_q": "Cine nu a putut construi templul pentru că era un om de război?",
+    "ru_q": "Кому не позволили строить храм потому что он был воином?",
+    "en_opts": [
+      "Solomon",
+      "Joshua",
+      "David",
+      "Hezekiah"
+    ],
+    "es_opts": [
+      "Salomón",
+      "Josué",
+      "David",
+      "Ezequías"
+    ],
+    "fr_opts": [
+      "Salomon",
+      "Josué",
+      "David",
+      "Ézéchias"
+    ],
+    "de_opts": [
+      "Salomo",
+      "Josua",
+      "David",
+      "Hiskia"
+    ],
+    "ro_opts": [
+      "Solomon",
+      "Iosua",
+      "David",
+      "Ezechia"
+    ],
+    "ru_opts": [
+      "Соломон",
+      "Иисус Навин",
+      "Давид",
+      "Езекия"
+    ]
+  },
+  {
+    "livro": "1 Cronicas",
+    "q": "Qual era a tarefa principal dos levitas no Antigo Testamento?",
+    "opts": [
+      "Guerrear",
+      "Servir no templo",
+      "Cultivar a terra",
+      "Governar cidades"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What was the main task of the Levites in the Old Testament?",
+    "es_q": "¿Cuál era la tarea principal de los levitas en el Antiguo Testamento?",
+    "fr_q": "Quelle était la tâche principale des lévites dans l'Ancien Testament ?",
+    "de_q": "Was war die Hauptaufgabe der Leviten im Alten Testament?",
+    "ro_q": "Care era sarcina principală a leviților în Vechiul Testament?",
+    "ru_q": "Какой была главная задача левитов в Ветхом Завете?",
+    "en_opts": [
+      "Fight in wars",
+      "Serve in the temple",
+      "Cultivate the land",
+      "Govern cities"
+    ],
+    "es_opts": [
+      "Guerrear",
+      "Servir en el templo",
+      "Cultivar la tierra",
+      "Gobernar ciudades"
+    ],
+    "fr_opts": [
+      "Faire la guerre",
+      "Servir dans le temple",
+      "Cultiver la terre",
+      "Gouverner des villes"
+    ],
+    "de_opts": [
+      "Krieg führen",
+      "Im Tempel dienen",
+      "Das Land bebauen",
+      "Städte regieren"
+    ],
+    "ro_opts": [
+      "A lupta în războaie",
+      "A sluji în templu",
+      "A cultiva pământul",
+      "A guverna cetăți"
+    ],
+    "ru_opts": [
+      "Воевать",
+      "Служить в храме",
+      "Возделывать землю",
+      "Управлять городами"
+    ]
+  },
+  {
+    "livro": "2 Cronicas",
+    "q": "Quem construiu o templo em Jerusalém?",
+    "opts": [
+      "Davi",
+      "Salomão",
+      "Ezequias",
+      "Josias"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Who built the temple in Jerusalem?",
+    "es_q": "¿Quién construyó el templo en Jerusalén?",
+    "fr_q": "Qui a construit le temple à Jérusalem ?",
+    "de_q": "Wer baute den Tempel in Jerusalem?",
+    "ro_q": "Cine a construit templul în Ierusalim?",
+    "ru_q": "Кто построил храм в Иерусалиме?",
+    "en_opts": [
+      "David",
+      "Solomon",
+      "Hezekiah",
+      "Josiah"
+    ],
+    "es_opts": [
+      "David",
+      "Salomón",
+      "Ezequías",
+      "Josías"
+    ],
+    "fr_opts": [
+      "David",
+      "Salomon",
+      "Ézéchias",
+      "Josias"
+    ],
+    "de_opts": [
+      "David",
+      "Salomo",
+      "Hiskia",
+      "Josia"
+    ],
+    "ro_opts": [
+      "David",
+      "Solomon",
+      "Ezechia",
+      "Iosia"
+    ],
+    "ru_opts": [
+      "Давид",
+      "Соломон",
+      "Езекия",
+      "Иосия"
+    ]
+  },
+  {
+    "livro": "2 Cronicas",
+    "q": "Qual rei de Judá orou e Deus curou sua doença?",
+    "opts": [
+      "Josias",
+      "Manassés",
+      "Ezequias",
+      "Davi"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Which king of Judah prayed and God healed his illness?",
+    "es_q": "¿Qué rey de Judá oró y Dios sanó su enfermedad?",
+    "fr_q": "Quel roi de Juda a prié et Dieu a guéri sa maladie ?",
+    "de_q": "Welcher König Judas betete und Gott heilte seine Krankheit?",
+    "ro_q": "Ce rege al lui Iuda s-a rugat și Dumnezeu i-a vindecat boala?",
+    "ru_q": "Какой царь Иудеи молился и Бог исцелил его болезнь?",
+    "en_opts": [
+      "Josiah",
+      "Manasseh",
+      "Hezekiah",
+      "David"
+    ],
+    "es_opts": [
+      "Josías",
+      "Manasés",
+      "Ezequías",
+      "David"
+    ],
+    "fr_opts": [
+      "Josias",
+      "Manassé",
+      "Ézéchias",
+      "David"
+    ],
+    "de_opts": [
+      "Josia",
+      "Manasse",
+      "Hiskia",
+      "David"
+    ],
+    "ro_opts": [
+      "Iosia",
+      "Manase",
+      "Ezechia",
+      "David"
+    ],
+    "ru_opts": [
+      "Иосия",
+      "Манассия",
+      "Езекия",
+      "Давид"
+    ]
+  },
+  {
+    "livro": "Esdras",
+    "q": "Qual rei persa permitiu que os judeus voltassem a Jerusalém?",
+    "opts": [
+      "Dario",
+      "Ciro",
+      "Xerxes",
+      "Artaxerxes"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "Which Persian king allowed the Jews to return to Jerusalem?",
+    "es_q": "¿Qué rey persa permitió que los judíos regresaran a Jerusalén?",
+    "fr_q": "Quel roi perse a permis aux Juifs de retourner à Jérusalem ?",
+    "de_q": "Welcher persische König erlaubte den Juden nach Jerusalem zurückzukehren?",
+    "ro_q": "Ce rege persan a permis evreilor să se întoarcă la Ierusalim?",
+    "ru_q": "Какой персидский царь позволил евреям вернуться в Иерусалим?",
+    "en_opts": [
+      "Darius",
+      "Cyrus",
+      "Xerxes",
+      "Artaxerxes"
+    ],
+    "es_opts": [
+      "Darío",
+      "Ciro",
+      "Jerjes",
+      "Artajerjes"
+    ],
+    "fr_opts": [
+      "Darius",
+      "Cyrus",
+      "Xerxès",
+      "Artaxerxès"
+    ],
+    "de_opts": [
+      "Darius",
+      "Kyros",
+      "Xerxes",
+      "Artaxerxes"
+    ],
+    "ro_opts": [
+      "Dariu",
+      "Cir",
+      "Xerxes",
+      "Artaxerxe"
+    ],
+    "ru_opts": [
+      "Дарий",
+      "Кир",
+      "Ксеркс",
+      "Артаксеркс"
+    ]
+  },
+  {
+    "livro": "Esdras",
+    "q": "O que Esdras era por profissão?",
+    "opts": [
+      "Profeta",
+      "Escriba e sacerdote",
+      "Rei",
+      "Guerreiro"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What was Ezra's profession?",
+    "es_q": "¿Cuál era la profesión de Esdras?",
+    "fr_q": "Quelle était la profession d'Esdras ?",
+    "de_q": "Was war Esras Beruf?",
+    "ro_q": "Ce profesie avea Ezdra?",
+    "ru_q": "Какова была профессия Ездры?",
+    "en_opts": [
+      "Prophet",
+      "Scribe and priest",
+      "King",
+      "Warrior"
+    ],
+    "es_opts": [
+      "Profeta",
+      "Escriba y sacerdote",
+      "Rey",
+      "Guerrero"
+    ],
+    "fr_opts": [
+      "Prophète",
+      "Scribe et prêtre",
+      "Roi",
+      "Guerrier"
+    ],
+    "de_opts": [
+      "Prophet",
+      "Schreiber und Priester",
+      "König",
+      "Krieger"
+    ],
+    "ro_opts": [
+      "Profet",
+      "Cărturar și preot",
+      "Rege",
+      "Războinic"
+    ],
+    "ru_opts": [
+      "Пророк",
+      "Книжник и священник",
+      "Царь",
+      "Воин"
+    ]
+  },
+  {
+    "livro": "Esdras",
+    "q": "O que o povo reconstruiu primeiro ao voltar do exílio?",
+    "opts": [
+      "As muralhas",
+      "O palácio",
+      "O altar e o templo",
+      "As casas"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "What did the people rebuild first when they returned from exile?",
+    "es_q": "¿Qué reconstruyó el pueblo primero al regresar del exilio?",
+    "fr_q": "Qu'est-ce que le peuple a reconstruit en premier à son retour d'exil ?",
+    "de_q": "Was baute das Volk zuerst wieder auf als es aus dem Exil zurückkehrte?",
+    "ro_q": "Ce a reconstruit poporul mai întâi când s-a întors din exil?",
+    "ru_q": "Что народ восстановил первым когда вернулся из плена?",
+    "en_opts": [
+      "The walls",
+      "The palace",
+      "The altar and temple",
+      "The houses"
+    ],
+    "es_opts": [
+      "Las murallas",
+      "El palacio",
+      "El altar y el templo",
+      "Las casas"
+    ],
+    "fr_opts": [
+      "Les murailles",
+      "Le palais",
+      "L'autel et le temple",
+      "Les maisons"
+    ],
+    "de_opts": [
+      "Die Mauern",
+      "Den Palast",
+      "Den Altar und Tempel",
+      "Die Häuser"
+    ],
+    "ro_opts": [
+      "Zidurile",
+      "Palatul",
+      "Altarul și templul",
+      "Casele"
+    ],
+    "ru_opts": [
+      "Стены",
+      "Дворец",
+      "Жертвенник и храм",
+      "Дома"
+    ]
+  },
+  {
+    "livro": "Neemias",
+    "q": "Qual era a função de Neemias na corte persa?",
+    "opts": [
+      "General",
+      "Copeiro do rei",
+      "Sacerdote",
+      "Profeta"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What was Nehemiah's role in the Persian court?",
+    "es_q": "¿Cuál era el papel de Nehemías en la corte persa?",
+    "fr_q": "Quel était le rôle de Néhémie à la cour perse ?",
+    "de_q": "Was war Nehemias Rolle am persischen Hof?",
+    "ro_q": "Care era rolul lui Neemia la curtea persană?",
+    "ru_q": "Какова была роль Неемии при персидском дворе?",
+    "en_opts": [
+      "General",
+      "Cupbearer to the king",
+      "Priest",
+      "Prophet"
+    ],
+    "es_opts": [
+      "General",
+      "Copero del rey",
+      "Sacerdote",
+      "Profeta"
+    ],
+    "fr_opts": [
+      "Général",
+      "Échanson du roi",
+      "Prêtre",
+      "Prophète"
+    ],
+    "de_opts": [
+      "General",
+      "Mundschenk des Königs",
+      "Priester",
+      "Prophet"
+    ],
+    "ro_opts": [
+      "General",
+      "Paharnicul regelui",
+      "Preot",
+      "Profet"
+    ],
+    "ru_opts": [
+      "Полководец",
+      "Виночерпий царя",
+      "Священник",
+      "Пророк"
+    ]
+  },
+  {
+    "livro": "Neemias",
+    "q": "O que Neemias reconstruiu em Jerusalém?",
+    "opts": [
+      "O templo",
+      "As muralhas",
+      "O palácio",
+      "O aqueduto"
+    ],
+    "r": 1,
+    "nivel": "medio",
+    "en_q": "What did Nehemiah rebuild in Jerusalem?",
+    "es_q": "¿Qué reconstruyó Nehemías en Jerusalén?",
+    "fr_q": "Qu'est-ce que Néhémie a reconstruit à Jérusalem ?",
+    "de_q": "Was baute Nehemia in Jerusalem wieder auf?",
+    "ro_q": "Ce a reconstruit Neemia în Ierusalim?",
+    "ru_q": "Что Неемия восстановил в Иерусалиме?",
+    "en_opts": [
+      "The temple",
+      "The walls",
+      "The palace",
+      "The aqueduct"
+    ],
+    "es_opts": [
+      "El templo",
+      "Las murallas",
+      "El palacio",
+      "El acueducto"
+    ],
+    "fr_opts": [
+      "Le temple",
+      "Les murailles",
+      "Le palais",
+      "L'aqueduc"
+    ],
+    "de_opts": [
+      "Den Tempel",
+      "Die Mauern",
+      "Den Palast",
+      "Den Aquädukt"
+    ],
+    "ro_opts": [
+      "Templul",
+      "Zidurile",
+      "Palatul",
+      "Apeductul"
+    ],
+    "ru_opts": [
+      "Храм",
+      "Стены",
+      "Дворец",
+      "Акведук"
+    ]
+  },
+  {
+    "livro": "Ester",
+    "q": "Quem foi a rainha judia que salvou seu povo na Pérsia?",
+    "opts": [
+      "Débora",
+      "Rute",
+      "Ester",
+      "Miriã"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who was the Jewish queen who saved her people in Persia?",
+    "es_q": "¿Quién fue la reina judía que salvó a su pueblo en Persia?",
+    "fr_q": "Qui était la reine juive qui a sauvé son peuple en Perse ?",
+    "de_q": "Wer war die jüdische Königin die ihr Volk in Persien rettete?",
+    "ro_q": "Cine a fost regina evreiască care și-a salvat poporul în Persia?",
+    "ru_q": "Кто была еврейская царица спасшая свой народ в Персии?",
+    "en_opts": [
+      "Deborah",
+      "Ruth",
+      "Esther",
+      "Miriam"
+    ],
+    "es_opts": [
+      "Débora",
+      "Rut",
+      "Ester",
+      "Miriam"
+    ],
+    "fr_opts": [
+      "Déborah",
+      "Ruth",
+      "Esther",
+      "Myriam"
+    ],
+    "de_opts": [
+      "Debora",
+      "Rut",
+      "Ester",
+      "Mirjam"
+    ],
+    "ro_opts": [
+      "Debora",
+      "Rut",
+      "Estera",
+      "Miriam"
+    ],
+    "ru_opts": [
+      "Девора",
+      "Руфь",
+      "Есфирь",
+      "Мариам"
+    ]
+  },
+  {
+    "livro": "Ester",
+    "q": "Quem foi o inimigo que queria destruir os judeus no livro de Ester?",
+    "opts": [
+      "Hamã",
+      "Haman",
+      "Mardoqueu",
+      "Tobias"
+    ],
+    "r": 0,
+    "nivel": "medio",
+    "en_q": "Who was the enemy who wanted to destroy the Jews in the book of Esther?",
+    "es_q": "¿Quién fue el enemigo que quería destruir a los judíos en el libro de Ester?",
+    "fr_q": "Qui était l'ennemi qui voulait détruire les Juifs dans le livre d'Esther ?",
+    "de_q": "Wer war der Feind der die Juden im Buch Esther vernichten wollte?",
+    "ro_q": "Cine a fost dușmanul care voia să distrugă evreii în cartea Esterei?",
+    "ru_q": "Кто был врагом желавшим уничтожить евреев в книге Есфирь?",
+    "en_opts": [
+      "Haman",
+      "Mordecai",
+      "Tobias",
+      "Sanballat"
+    ],
+    "es_opts": [
+      "Amán",
+      "Mardoqueo",
+      "Tobías",
+      "Sanbalat"
+    ],
+    "fr_opts": [
+      "Haman",
+      "Mardochée",
+      "Tobias",
+      "Sanbalat"
+    ],
+    "de_opts": [
+      "Haman",
+      "Mordechai",
+      "Tobias",
+      "Sanballat"
+    ],
+    "ro_opts": [
+      "Haman",
+      "Mardoheu",
+      "Tobie",
+      "Sanbalat"
+    ],
+    "ru_opts": [
+      "Аман",
+      "Мардохей",
+      "Товий",
+      "Санаваллат"
+    ]
+  },
+  {
+    "livro": "Ester",
+    "q": "Quem foi o primo de Ester que a aconselhou?",
+    "opts": [
+      "Esdras",
+      "Neemias",
+      "Mardoqueu",
+      "Zorobabel"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Who was Esther's cousin who advised her?",
+    "es_q": "¿Quién fue el primo de Ester que la aconsejó?",
+    "fr_q": "Qui était le cousin d'Esther qui l'a conseillée ?",
+    "de_q": "Wer war Esters Cousin der ihr riet?",
+    "ro_q": "Cine a fost vărul Esterei care a sfătuit-o?",
+    "ru_q": "Кто был двоюродным братом Есфири давшим ей совет?",
+    "en_opts": [
+      "Ezra",
+      "Nehemiah",
+      "Mordecai",
+      "Zerubbabel"
+    ],
+    "es_opts": [
+      "Esdras",
+      "Nehemías",
+      "Mardoqueo",
+      "Zorobabel"
+    ],
+    "fr_opts": [
+      "Esdras",
+      "Néhémie",
+      "Mardochée",
+      "Zorobabel"
+    ],
+    "de_opts": [
+      "Esra",
+      "Nehemia",
+      "Mordechai",
+      "Serubbabel"
+    ],
+    "ro_opts": [
+      "Ezdra",
+      "Neemia",
+      "Mardoheu",
+      "Zorobabel"
+    ],
+    "ru_opts": [
+      "Ездра",
+      "Неемия",
+      "Мардохей",
+      "Зоровавель"
+    ]
+  },
+  {
+    "livro": "Ester",
+    "q": "O que Ester fez antes de entrar na presença do rei sem ser chamada?",
+    "opts": [
+      "Orou e jejuou por 3 dias",
+      "Consultou um profeta",
+      "Pediu ajuda ao exército",
+      "Fugiu do palácio"
+    ],
+    "r": 0,
+    "nivel": "medio",
+    "en_q": "What did Esther do before entering the king's presence without being called?",
+    "es_q": "¿Qué hizo Ester antes de entrar a la presencia del rey sin ser llamada?",
+    "fr_q": "Qu'est-ce qu'Esther a fait avant d'entrer en présence du roi sans être appelée ?",
+    "de_q": "Was tat Ester bevor sie ohne Einladung vor den König trat?",
+    "ro_q": "Ce a făcut Estera înainte de a intra în prezența regelui fără să fie chemată?",
+    "ru_q": "Что сделала Есфирь перед тем как войти к царю без приглашения?",
+    "en_opts": [
+      "Prayed and fasted for 3 days",
+      "Consulted a prophet",
+      "Asked the army for help",
+      "Fled the palace"
+    ],
+    "es_opts": [
+      "Oró y ayunó por 3 días",
+      "Consultó a un profeta",
+      "Pidió ayuda al ejército",
+      "Huyó del palacio"
+    ],
+    "fr_opts": [
+      "Pria et jeûna pendant 3 jours",
+      "Consulta un prophète",
+      "Demanda l'aide de l'armée",
+      "S'enfuit du palais"
+    ],
+    "de_opts": [
+      "Betete und fastete 3 Tage",
+      "Konsultierte einen Propheten",
+      "Bat die Armee um Hilfe",
+      "Floh aus dem Palast"
+    ],
+    "ro_opts": [
+      "S-a rugat și a postit 3 zile",
+      "A consultat un profet",
+      "A cerut ajutorul armatei",
+      "A fugit din palat"
+    ],
+    "ru_opts": [
+      "Молилась и постилась 3 дня",
+      "Консультировалась с пророком",
+      "Просила помощи у армии",
+      "Бежала из дворца"
+    ]
+  },
+  {
+    "livro": "Ester",
+    "q": "Qual festa judaica comemora a salvação do povo no livro de Ester?",
+    "opts": [
+      "Páscoa",
+      "Yom Kipur",
+      "Purim",
+      "Hannuka"
+    ],
+    "r": 2,
+    "nivel": "medio",
+    "en_q": "Which Jewish feast commemorates the salvation of the people in the book of Esther?",
+    "es_q": "¿Qué fiesta judía conmemora la salvación del pueblo en el libro de Ester?",
+    "fr_q": "Quelle fête juive commémore le salut du peuple dans le livre d'Esther ?",
+    "de_q": "Welches jüdische Fest erinnert an die Rettung des Volkes im Buch Esther?",
+    "ro_q": "Ce sărbătoare evreiască comemorează salvarea poporului în cartea Esterei?",
+    "ru_q": "Какой еврейский праздник отмечает спасение народа в книге Есфирь?",
+    "en_opts": [
+      "Passover",
+      "Yom Kippur",
+      "Purim",
+      "Hanukkah"
+    ],
+    "es_opts": [
+      "Pascua",
+      "Yom Kipur",
+      "Purim",
+      "Hannuka"
+    ],
+    "fr_opts": [
+      "Pâque",
+      "Yom Kippour",
+      "Pourim",
+      "Hanoukka"
+    ],
+    "de_opts": [
+      "Passah",
+      "Yom Kippur",
+      "Purim",
+      "Chanukka"
+    ],
+    "ro_opts": [
+      "Paște",
+      "Yom Kipur",
+      "Purim",
+      "Hanuca"
+    ],
+    "ru_opts": [
+      "Пасха",
+      "Йом Кипур",
+      "Пурим",
+      "Ханука"
+    ]
   }
 ]
