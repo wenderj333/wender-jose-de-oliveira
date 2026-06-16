@@ -604,7 +604,7 @@ let duelEsperando = null;
 let duelSalas = {};
 
 const { Server: SocketServer } = require('socket.io');
-const ioduelo = new SocketServer(server, { cors: { origin: '*' }, path: '/duelo' });
+const ioduelo = new SocketServer(server, { cors: { origin: '*' }, path: '/duelo/socket.io' });
 
 ioduelo.on('connection', (socket) => {
   socket.on('procurarPartida', (d) => {
