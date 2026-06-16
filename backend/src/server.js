@@ -611,6 +611,22 @@ const perguntasDuelo = {
   ]
 };
 
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
 let duelEsperando = null;
 let duelSalas = {};
 
@@ -628,8 +644,8 @@ ioduelo.on('connection', (socket) => {
       const op = duelEsperando; duelEsperando = null;
       const sid = 'duelo_' + Date.now();
       socket.join(sid); op.socket.join(sid);
-      const p1 = perguntasDuelo[lang] || perguntasDuelo.pt;
-      const p2 = perguntasDuelo[op.lang] || perguntasDuelo.pt;
+      const p1 = shuffleArray(perguntasDuelo[lang] || perguntasDuelo.pt).slice(0,10);
+      const p2 = shuffleArray(perguntasDuelo[op.lang] || perguntasDuelo.pt).slice(0,10);
       duelSalas[sid] = { j:[{id:socket.id,nome,lang,pts:0,resp:false},{id:op.socket.id,nome:op.nome,lang:op.lang,pts:0,resp:false}], qi:0, t:15, timer:null };
       socket.emit('inicioJogo', {salaId:sid, oponente:op.nome, pergunta:p1[0]});
       op.socket.emit('inicioJogo', {salaId:sid, oponente:nome, pergunta:p2[0]});
