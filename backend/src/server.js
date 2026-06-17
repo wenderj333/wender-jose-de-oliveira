@@ -639,7 +639,7 @@ ioduelo.on('connection', (socket) => {
     const foto = d.foto || null;
     const nome = d.nome || 'Jogador';
     if (!duelEsperando) {
-      duelEsperando = { socket, nome, lang };
+      duelEsperando = { socket, nome, lang, foto };
       socket.emit('status', 'Aguardando...');
     } else {
       const op = duelEsperando; duelEsperando = null;
@@ -647,7 +647,7 @@ ioduelo.on('connection', (socket) => {
       socket.join(sid); op.socket.join(sid);
       const p1 = shuffleArray(perguntasDuelo[lang] || perguntasDuelo.pt).slice(0,10);
       const p2 = shuffleArray(perguntasDuelo[op.lang] || perguntasDuelo.pt).slice(0,10);
-      duelSalas[sid] = { j:[{id:socket.id,nome,lang,pts:0,resp:false},{id:op.socket.id,nome:op.nome,lang:op.lang,pts:0,resp:false}], qi:0, t:15, timer:null };
+      duelSalas[sid] = { j:[{id:socket.id,nome,lang,pts:0,resp:false,foto},{id:op.socket.id,nome:op.nome,lang:op.lang,pts:0,resp:false,foto:op.foto||null}], qi:0, t:15, timer:null };
       socket.emit('inicioJogo', {salaId:sid, oponente:op.nome, pergunta:p1[0]});
       op.socket.emit('inicioJogo', {salaId:sid, oponente:nome, pergunta:p2[0]});
       duelTimer(sid);
@@ -697,7 +697,7 @@ function duelProxima(sid) {
     });
     duelTimer(sid);
   } else {
-    const resultado = sala.j.map(j=>({nome:j.nome,pontos:j.pts}));
+    const resultado = sala.j.map(j=>({nome:j.nome,pontos:j.pts,foto:j.foto||null}));
     ioduelo.to(sid).emit('fimJogo', resultado);
     // Actualizar ranking semanal
     resultado.forEach(j => {
