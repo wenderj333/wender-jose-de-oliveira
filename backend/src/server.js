@@ -636,6 +636,7 @@ const ioduelo = new SocketServer(server, { cors: { origin: '*' }, path: '/duelo/
 ioduelo.on('connection', (socket) => {
   socket.on('procurarPartida', (d) => {
     const lang = d.idioma || 'pt';
+    const foto = d.foto || null;
     const nome = d.nome || 'Jogador';
     if (!duelEsperando) {
       duelEsperando = { socket, nome, lang };
@@ -700,8 +701,9 @@ function duelProxima(sid) {
     ioduelo.to(sid).emit('fimJogo', resultado);
     // Actualizar ranking semanal
     resultado.forEach(j => {
-      if (!rankingSemanal[j.nome]) rankingSemanal[j.nome] = 0;
-      rankingSemanal[j.nome] += j.pontos;
+      if (!rankingSemanal[j.nome]) rankingSemanal[j.nome] = {pontos:0,foto:null};
+      rankingSemanal[j.nome].pontos += j.pontos;
+      if(j.foto) rankingSemanal[j.nome].foto = j.foto;
     });
     delete duelSalas[sid];
   }
@@ -716,9 +718,9 @@ let pixValor = 'R$ 10,00';
 // Rota para ver ranking
 app.get('/api/duelo/ranking', (req, res) => {
   const ranking = Object.entries(rankingSemanal)
-    .sort((a,b) => b[1] - a[1])
+    .sort((a,b) => (b[1].pontos||b[1]) - (a[1].pontos||a[1]))
     .slice(0,10)
-    .map(([nome,pontos],i) => ({pos:i+1,nome,pontos:Math.round(pontos)}));
+    .map(([nome,val],i) => ({pos:i+1,nome,pontos:Math.round(val.pontos||val),foto:val.foto||null}));
   res.json({ ranking, pixAtivo, pixValor });
 });
 
