@@ -716,6 +716,11 @@ let pixAtivo = false;
 let pixValor = 'R$ 10,00';
 
 // Rota para ver ranking
+app.get('/api/duelo/online', (req, res) => {
+  const online = Object.keys(duelSalas).length * 2 + (duelEsperando ? 1 : 0);
+  res.json({ online });
+});
+
 app.get('/api/duelo/ranking', (req, res) => {
   const ranking = Object.entries(rankingSemanal)
     .sort((a,b) => (b[1].pontos||b[1]) - (a[1].pontos||a[1]))
