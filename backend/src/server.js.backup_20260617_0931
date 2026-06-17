@@ -648,8 +648,8 @@ ioduelo.on('connection', (socket) => {
       const p1 = shuffleArray(perguntasDuelo[lang] || perguntasDuelo.pt).slice(0,10);
       const p2 = shuffleArray(perguntasDuelo[op.lang] || perguntasDuelo.pt).slice(0,10);
       duelSalas[sid] = { j:[{id:socket.id,nome,lang,pts:0,resp:false,foto},{id:op.socket.id,nome:op.nome,lang:op.lang,pts:0,resp:false,foto:op.foto||null}], qi:0, t:15, timer:null };
-      socket.emit('inicioJogo', {salaId:sid, oponente:op.nome, fotoOponente:op.foto||null, pergunta:p1[0]});
-      op.socket.emit('inicioJogo', {salaId:sid, oponente:nome, fotoOponente:foto||null, pergunta:p2[0]});
+      socket.emit('inicioJogo', {salaId:sid, oponente:op.nome, pergunta:p1[0]});
+      op.socket.emit('inicioJogo', {salaId:sid, oponente:nome, pergunta:p2[0]});
       duelTimer(sid);
     }
   });
@@ -716,11 +716,6 @@ let pixAtivo = false;
 let pixValor = 'R$ 10,00';
 
 // Rota para ver ranking
-app.get('/api/duelo/online', (req, res) => {
-  const online = Object.keys(duelSalas).length * 2 + (duelEsperando ? 1 : 0);
-  res.json({ online });
-});
-
 app.get('/api/duelo/ranking', (req, res) => {
   const ranking = Object.entries(rankingSemanal)
     .sort((a,b) => (b[1].pontos||b[1]) - (a[1].pontos||a[1]))

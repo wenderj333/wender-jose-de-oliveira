@@ -789,10 +789,7 @@ export default function MuralGrid() {
         ))}
       </div>
 
-      <div style={{display:"flex",gap:10,marginBottom:16,flexWrap:"wrap"}}>
-        <button onClick={()=>window.location.href="/desafio-biblico"} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"linear-gradient(135deg,#6c47d4,#e74c3c)",color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>🎮 Desafio Biblico</button>
-        <button onClick={()=>window.open("https://duelo-biblico.vercel.app","_blank")} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"linear-gradient(135deg,#c0392b,#922b21)",color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>⚔️ Duelo Biblico</button>
-      </div>
+      <button onClick={()=>window.location.href='/desafio-biblico'} style={{padding:'8px 16px',borderRadius:20,border:'none',background:'linear-gradient(135deg,#6c47d4,#e74c3c)',color:'white',cursor:'pointer',fontSize:13,fontWeight:700,marginBottom:16,display:'flex',alignItems:'center',gap:6}}>🎮 {t('nav.challenge','Desafio Biblico')}</button>
       {/* Loading */}
       {loading && (
         <div style={{ textAlign: 'center', padding: 60 }}>
