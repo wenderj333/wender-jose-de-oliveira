@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import AmemButton from './AmemButton';
 import { Church, HandHeart, Sparkles, AlertTriangle, Heart, Stethoscope, Briefcase, Users, GraduationCap, Home, HeartCrack, Scale, Star } from 'lucide-react';

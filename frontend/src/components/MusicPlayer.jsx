@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { useMusic } from "../context/MusicContext";
 import { useTranslation } from "react-i18next";
 import { X, ChevronDown, ChevronUp, Music, SkipBack, SkipForward, Shuffle, Repeat } from "lucide-react";

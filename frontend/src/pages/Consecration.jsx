@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 
@@ -47,7 +47,7 @@ export default function Consecration() {
   const todayAction = ACTIONS[today % ACTIONS.length];
   const flameIcon = dayCount >= 21 ? '🔥🔥🔥' : dayCount >= 7 ? '🔥🔥' : dayCount >= 3 ? '🔥' : '🕯️';
 
-﻿  useEffect(() => {
+  useEffect(() => {
     fetch(API+'/api/consecration/stats').then(r=>r.json()).then(d=>setStats(d)).catch(()=>{});
     const saved = localStorage.getItem('consecration_start');
     if (saved) {
@@ -130,7 +130,7 @@ export default function Consecration() {
     }, 1000);
   };
 
-﻿  if (silentMode) return (
+  if (silentMode) return (
     <div style={{position:'fixed',inset:0,backgroundImage:'url(/fundo-consagracao.png)',backgroundSize:'cover',backgroundPosition:'center',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:'white',textAlign:'center',padding:24,zIndex:100}}>
       <div style={{position:'absolute',inset:0,background:'rgba(0,0,0,0.75)'}}/>
       <div style={{position:'relative',zIndex:1}}>
@@ -167,7 +167,7 @@ export default function Consecration() {
     </div>
   );
 
-﻿  return (
+  return (
     <div style={{maxWidth:700,margin:'0 auto',padding:'0.5rem',fontFamily:'Segoe UI,sans-serif'}}>
       <div style={{position:'relative',width:'100%',minHeight:'92vh',borderRadius:16,overflow:'hidden',backgroundImage:'url(/fundo-consagracao.png)',backgroundSize:'cover',backgroundPosition:'center'}}>
         <div style={{position:'absolute',inset:0,background:isActive?'rgba(0,0,0,0.3)':'rgba(0,0,0,0.55)',borderRadius:16,transition:'background 1s'}}/>
@@ -231,7 +231,7 @@ export default function Consecration() {
         </div>
       </div>
 
-﻿      <div style={{background:'linear-gradient(135deg,#1a0a3e,#2d1054)',borderRadius:16,padding:20,marginTop:16,color:'white',border:'1px solid rgba(240,192,64,0.3)'}}>
+      <div style={{background:'linear-gradient(135deg,#1a0a3e,#2d1054)',borderRadius:16,padding:20,marginTop:16,color:'white',border:'1px solid rgba(240,192,64,0.3)'}}>
         <h3 style={{color:'#f0c040',fontWeight:800,fontSize:16,margin:'0 0 12px'}}>📖 {t('consecration.dailyTitle','Guia do Dia')}</h3>
         <div style={{background:'rgba(255,255,255,0.05)',borderRadius:12,padding:'12px 16px',marginBottom:12,borderLeft:'3px solid #f0c040'}}>
           <p style={{color:'rgba(255,255,255,0.6)',fontSize:12,fontStyle:'italic',margin:'0 0 4px'}}>📖 {verse.ref}</p>

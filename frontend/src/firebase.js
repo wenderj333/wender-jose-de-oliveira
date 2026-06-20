@@ -1,4 +1,4 @@
-﻿import { initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 

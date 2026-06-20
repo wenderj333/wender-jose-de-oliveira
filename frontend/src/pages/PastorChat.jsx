@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWebSocket } from '../context/WebSocketContext';
 import { MessageCircle, Send, X, RefreshCw, Church } from 'lucide-react';

@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -98,7 +98,7 @@ export default function Reflection() {
   };
   const progress = answers.filter(a=>a.trim().length>0).length;
 
-﻿  return (
+  return (
     <div style={{maxWidth:720,margin:'0 auto',padding:'0 0 80px',fontFamily:'Segoe UI,sans-serif'}}>
       <style>{'.rtextarea{width:100%;border:2px solid #e8e0f5;border-radius:14px;padding:14px 16px;font-size:.95rem;resize:none;outline:none;transition:border 0.2s;box-sizing:border-box;background:#fdfaff;color:#1a0a3e}.rtextarea:focus{border-color:#6C3FA0;background:white}'}</style>
       <div style={{backgroundImage:'linear-gradient(135deg,rgba(108,63,160,0.4),rgba(45,10,94,0.5)),url(https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80)',backgroundSize:'cover',backgroundPosition:'center',padding:'36px 24px 28px',borderRadius:'0 0 32px 32px',marginBottom:28,color:'white',position:'relative',overflow:'hidden'}}>
@@ -130,7 +130,7 @@ export default function Reflection() {
         </div>
       </div>
 
-﻿      <div style={{padding:'0 16px',marginBottom:20}}>
+      <div style={{padding:'0 16px',marginBottom:20}}>
         <button onClick={startTimer} style={{display:'flex',alignItems:'center',gap:8,padding:'10px 20px',borderRadius:20,border:'2px solid #6C3FA0',background:timer?'#6C3FA0':'white',color:timer?'white':'#6C3FA0',cursor:'pointer',fontWeight:700,fontSize:'0.85rem'}}>
           {timer?`${Math.floor(timerSec/60)}:${String(timerSec%60).padStart(2,'0')}`:t('reflection.timerBtn','Pausa de 2 minutos')}
         </button>

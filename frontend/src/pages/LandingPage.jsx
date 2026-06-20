@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Heart, Users, Shield, Globe, ArrowRight, PlayCircle } from "lucide-react";

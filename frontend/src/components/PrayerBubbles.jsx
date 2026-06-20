@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Church } from 'lucide-react';
 
 const CHURCH_NAMES = [
