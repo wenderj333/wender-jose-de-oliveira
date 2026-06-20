@@ -269,6 +269,18 @@ export default function RightSidebar({ showInstall, onInstall, activeLive }) {
         </div>
       </div>
 
+
+      {/* DUELO BIBLICO - CONVITE */}
+      <div style={{ background: 'linear-gradient(135deg,#1a0a3e,#3d1a7a)', borderRadius: 14, padding: 16, border: '1px solid rgba(246,216,96,0.3)', textAlign: 'center' }}>
+        <div style={{ fontSize: 28, marginBottom: 8 }}>⚔️</div>
+        <p style={{ fontSize: 14, fontWeight: 800, color: '#f6d860', marginBottom: 6 }}>Duelo Biblico</p>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, marginBottom: 12 }}>
+          Convida o teu amigo, o teu pastor e prova a tua capacidade biblica!
+        </p>
+        <a href='/duelo' style={{ display: 'block', padding: '10px 0', borderRadius: 10, background: 'linear-gradient(135deg,#f6d860,#e5b800)', color: '#1a0a3e', fontWeight: 800, fontSize: 13, textDecoration: 'none', marginBottom: 8 }}>
+          Jogar Agora
+        </a>
+      </div>
     </div>
   );
 }
