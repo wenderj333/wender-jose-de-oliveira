@@ -1,6 +1,6 @@
 import React from 'react';
 
-ï»¿import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "./sidebar.css";
 
