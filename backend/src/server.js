@@ -2702,6 +2702,14 @@ ioduelo.on('connection', (socket) => {
     }
   });
 
+
+  socket.on('chatMsg', (d) => {
+    const { salaId, msg, nome } = d;
+    if (duelSalas[salaId]) {
+      ioduelo.to(salaId).emit('chatMsg', { nome, msg });
+    }
+  });
+
   socket.on('desafiarJogador', (d) => {
     const { de, para } = d;
     const alvo = Object.values(jogadoresOnline).find(j => j.nome === para);
