@@ -169,6 +169,13 @@ const { Pool: MigratePool } = require('pg');
         created_at TIMESTAMPTZ DEFAULT NOW(),
         closed_at TIMESTAMPTZ
       );
+      
+      CREATE TABLE IF NOT EXISTS duelo_ranking (
+        nome VARCHAR(100) PRIMARY KEY,
+        pontos INTEGER DEFAULT 0,
+        foto TEXT,
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
       CREATE TABLE IF NOT EXISTS chat_messages (
         id SERIAL PRIMARY KEY,
         room_id UUID NOT NULL REFERENCES chat_rooms(id) ON DELETE CASCADE,
@@ -2734,7 +2741,13 @@ ioduelo.on('connection', (socket) => {
       if (sala.j.find(x => x.id === socket.id)) {
         clearInterval(sala.timer);
         ioduelo.to(sid).emit('oponenteSaiu');
-        delete duelSalas[sid];
+    
+    resultado.forEach(async j => {
+      try {
+        await pool.query('INSERT INTO duelo_ranking (nome,pontos,foto) VALUES ($1,$2,$3) ON CONFLICT (nome) DO UPDATE SET pontos=duelo_ranking.pontos+$2, foto=COALESCE($3,duelo_ranking.foto), updated_at=NOW()', [j.nome,j.pontos,j.foto||null]);
+      } catch(e){}
+    });
+    delete duelSalas[sid];
       }
     }
   });
@@ -2768,6 +2781,12 @@ function duelProxima(sid) {
       rankingSemanal[j.nome].pontos += j.pontos;
       if(j.foto) rankingSemanal[j.nome].foto = j.foto;
     });
+
+    resultado.forEach(async j => {
+      try {
+        await pool.query('INSERT INTO duelo_ranking (nome,pontos,foto) VALUES ($1,$2,$3) ON CONFLICT (nome) DO UPDATE SET pontos=duelo_ranking.pontos+$2, foto=COALESCE($3,duelo_ranking.foto), updated_at=NOW()', [j.nome,j.pontos,j.foto||null]);
+      } catch(e){}
+    });
     delete duelSalas[sid];
   }
 }
@@ -2790,12 +2809,14 @@ app.get('/api/duelo/online', (req, res) => {
   res.json({ online });
 });
 
-app.get('/api/duelo/ranking', (req, res) => {
-  const ranking = Object.entries(rankingSemanal)
-    .sort((a,b) => (b[1].pontos||b[1]) - (a[1].pontos||a[1]))
-    .slice(0,10)
-    .map(([nome,val],i) => ({pos:i+1,nome,pontos:Math.round(val.pontos||val),foto:val.foto||null}));
-  res.json({ ranking, pixAtivo, pixValor });
+
+app.get('/api/duelo/ranking', async (req, res) => {
+  try {
+    const r = await pool.query('SELECT nome,pontos,foto FROM duelo_ranking ORDER BY pontos DESC LIMIT 10');
+    res.json({ ranking: r.rows, pix: pixValor });
+  } catch(e) {
+    res.json({ ranking: [], pix: pixValor });
+  }
 });
 
 // Rota admin para activar/desactivar PIX
