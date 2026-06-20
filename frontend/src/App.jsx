@@ -532,7 +532,7 @@ export default function App() {
 
               ['/journeys', <Globe size={20}/>, t('nav.journeys')],
 
-              ['/live', <PlayCircle size={20}/>, 'ð´ Directo'],
+              ['/live', <PlayCircle size={20}/>, '🔴 Directo'],
 
               ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
 
@@ -590,7 +590,7 @@ export default function App() {
 
               <Link to="/sala-pastor" onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'#c9a84c',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)',fontWeight:600}}>
 
-                <BookOpen size={20}/> Ã°Å¸â¢Å Ã¯Â¸Â <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span>
+                <BookOpen size={20}/> 🕊️ <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span>
 
               </Link>
 
@@ -618,7 +618,7 @@ export default function App() {
 
         <div style={{background:'#fff3cd',borderBottom:'2px solid #f0c040',padding:'10px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
 
-          <span style={{fontSize:13,color:'#856404'}}>ð¸ Adiciona uma foto de perfil para a comunidade te conhecer!</span>
+          <span style={{fontSize:13,color:'#856404'}}>📸 Adiciona uma foto de perfil para a comunidade te conhecer!</span>
 
           <a href={`/perfil/${user.id}`} style={{background:'#f0c040',color:'#856404',padding:'6px 14px',borderRadius:20,fontSize:12,fontWeight:700,textDecoration:'none'}}>Adicionar foto</a>
 
@@ -814,7 +814,7 @@ export default function App() {
 
           <div style={{background:'linear-gradient(135deg,#6C3FA0,#4A2270)',borderRadius:14,padding:16,marginBottom:14,color:'white'}}>
 
-            <p style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',opacity:0.8,marginBottom:8}}>Ã°Å¸ââ {t('sidebar.verse','VERSICULO DO DIA')}</p>
+            <p style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',opacity:0.8,marginBottom:8}}>📖 {t('sidebar.verse','VERSICULO DO DIA')}</p>
 
             <p style={{fontSize:13,fontStyle:'italic',lineHeight:1.6,marginBottom:6}}>
 
@@ -932,7 +932,7 @@ export default function App() {
 
                     ) : (
 
-                      <span>ð</span>
+                      <span>🙏</span>
 
                     )}
 
@@ -1008,7 +1008,7 @@ export default function App() {
 
           <div style={{marginTop:16,background:'linear-gradient(135deg,#667eea,#764ba2)',borderRadius:12,padding:'14px 16px',textAlign:'center'}}>
 
-            <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>Ã°Å¸âÂ² Instalar App</p>
+            <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>📲 Instalar App</p>
 
             <p style={{color:'rgba(255,255,255,0.8)',fontSize:'0.75rem',margin:'0 0 10px'}}>Acede mais rapido no teu telemovel</p>
 
