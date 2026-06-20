@@ -2710,12 +2710,10 @@ const ioduelo = new SocketServer(server, { cors: { origin: '*' }, path: '/duelo/
 
 ioduelo.on('connection', (socket) => {
   socket.on('procurarPartida', (d) => {
-    jogadorNome = nome;
-    jogadoresOnline[socket.id] = { nome, foto, socketId: socket.id };
-
     const lang = d.idioma || 'pt';
     const foto = d.foto || null;
     const nome = d.nome || 'Jogador';
+    jogadoresOnline[socket.id] = { nome, foto, socketId: socket.id };
     if (!duelEsperando) {
       duelEsperando = { socket, nome, lang, foto };
       socket.emit('status', 'Aguardando...');
