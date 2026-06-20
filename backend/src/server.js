@@ -2705,10 +2705,14 @@ let duelEsperando = null;
 let duelSalas = {};
 
 const { Server: SocketServer } = require('socket.io');
+const jogadoresOnline = {};
 const ioduelo = new SocketServer(server, { cors: { origin: '*' }, path: '/duelo/socket.io' });
 
 ioduelo.on('connection', (socket) => {
   socket.on('procurarPartida', (d) => {
+    jogadorNome = nome;
+    jogadoresOnline[socket.id] = { nome, foto, socketId: socket.id };
+
     const lang = d.idioma || 'pt';
     const foto = d.foto || null;
     const nome = d.nome || 'Jogador';
@@ -2739,7 +2743,26 @@ ioduelo.on('connection', (socket) => {
       if (sala.j.every(x => x.resp)) { clearInterval(sala.timer); setTimeout(() => duelProxima(d.salaId), 1500); }
     }
   });
+
+  socket.on('desafiarJogador', (d) => {
+    const { de, para } = d;
+    const alvo = Object.values(jogadoresOnline).find(j => j.nome === para);
+    if (alvo) {
+      ioduelo.to(alvo.socketId).emit('desafioRecebido', de);
+    }
+  });
+
+  socket.on('aceitarDesafio', (d) => {
+    const { de, para } = d;
+    const quemDesafiou = Object.values(jogadoresOnline).find(j => j.nome === de);
+    if (quemDesafiou) {
+      ioduelo.to(quemDesafiou.socketId).emit('desafioAceite', para);
+    }
+  });
+
   socket.on('disconnect', () => {
+    delete jogadoresOnline[socket.id];
+
     if (duelEsperando && duelEsperando.socket.id === socket.id) duelEsperando = null;
     for (const [sid, sala] of Object.entries(duelSalas)) {
       if (sala.j.find(x => x.id === socket.id)) {
@@ -2790,6 +2813,12 @@ let pixAtivo = false;
 let pixValor = 'R$ 10,00';
 
 // Rota para ver ranking
+
+app.get('/api/duelo/online-jogadores', (req, res) => {
+  const jogadores = Object.values(jogadoresOnline).map(j => j.nome);
+  res.json({ jogadores });
+});
+
 app.get('/api/duelo/online', (req, res) => {
   const online = Object.keys(duelSalas).length * 2 + (duelEsperando ? 1 : 0);
   res.json({ online });
