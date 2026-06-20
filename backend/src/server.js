@@ -929,9 +929,7 @@ const perguntasDuelo = {
     {q:"Pride precedes the...?",a:["Victory", "Fall", "Joy", "Peace"],c:1},
     {q:"Better and little with...?",a:["Wealth", "Justice", "Anger", "Power"],c:1},
     {q:"Who guards the mouth preserves...?",a:["Life", "Money", "Friends", "Time"],c:0},
-    {q:"A happy heart does what?
-
-(The full saying is: \"O coração alegre faz bem como remédio\" - A happy heart is good medicine/works like a remedy)",a:["Cry", "Well", "Bad", "Sleep"],c:1},
+    {q:"A happy heart does what?",a:["Cry","Well","Bad","Sleep"],c:1},
     {q:"The language has the power to...?",a:["Life and death", "Money", "Time", "Force"],c:0},
     {q:"Who walks with the wise will be...?",a:["Rich", "Wise", "Strong", "King"],c:1},
     {q:"The lazy person wishes and does not have?",a:["Nothing", "Everything", "Peace", "Strength"],c:0},
@@ -989,24 +987,18 @@ const perguntasDuelo = {
     {q:"What is the longest Psalm in the Bible?",a:["Psalm 23", "Psalm 91", "Psalm 119", "Psalm 150"],c:2},
     {q:"What is the shortest Psalm in the Bible?",a:["Psalm 1", "Psalm 117", "Psalm 23", "Psalm 100"],c:1},
     {q:"How many Psalms are there in the Bible?",a:["100", "120", "150", "180"],c:2},
-    {q:"The Lord is my shepherd and I lack nothing.
-
-(This is the beginning of Psalm 23)",a:["Will lack", "Will frighten", "Will overcome", "Will separate"],c:0},
+    {q:"The Lord is my shepherd and I lack nothing.",a:["Will lack", "Will frighten", "Will overcome", "Will separate"],c:0},
     {q:"In which Psalm does David say God is my light and salvation?",a:["Psalm 23", "Psalm 27", "Psalm 91", "Psalm 100"],c:1},
     {q:"Who is the shield of those who trust in God?",a:["Angel", "King", "God", "Prophet"],c:2},
     {q:"What does David ask God for in Psalm 51?",a:["Wealth", "Loss of enemies", "Forgiveness and cleansing", "Strength"],c:2},
     {q:"Who dwells in the shelter of the Most High?",a:["Prophet", "Who trusts in God", "King", "Priest"],c:1},
-    {q:"\"Praise the Lord all the...?\"
-
-(This appears to be the beginning of a phrase, likely \"Praise the Lord all the earth\" or similar, but the complete thought is cut off by the \"...?\")",a:["Tribes", "Nations", "Mountains", "Stars"],c:1},
+    {q:"\"Praise the Lord all the...?\"",a:["Tribes", "Nations", "Mountains", "Stars"],c:1},
     {q:"What animal is mentioned in Psalm 22?",a:["Lion", "Eagle", "Bull", "Lamb"],c:0},
     {q:"The heavens declare the glory of...?",a:["King", "Prophet", "God", "Man"],c:2},
     {q:"Who wrote Psalm 90?",a:["David", "Solomon", "Moses", "Elijah"],c:2},
     {q:"What word begins Psalm 1?",a:["Praised", "Blessed", "Holy", "Strong"],c:1},
     {q:"The just one is like a tree planted beside...?",a:["Mountain", "Waters", "Desert", "City"],c:1},
-    {q:"\"Rejoice in the Lord you...?\"
-
-(This appears to be the beginning of Philippians 4:4 in Portuguese: \"Alegrai-vos no Senhor sempre\" = \"Rejoice in the Lord always\")",a:["Prophets", "Kings", "Righteous", "Priests"],c:2},
+    {q:"\"Rejoice in the Lord you...?\"",a:["Prophets", "Kings", "Righteous", "Priests"],c:2},
     {q:"Who is the King of glory?",a:["David", "God", "Angel", "Prophet"],c:1},
     {q:"\"Seek the Lord while he may be found...?\"",a:["Find", "See", "Hear", "Feel"],c:0},
     {q:"What instrument is mentioned in Psalm 150?",a:["Violin", "Trumpet", "Guitar", "Piano"],c:1},
@@ -1059,33 +1051,15 @@ const perguntasDuelo = {
     {q:"Jesus said he would be with his people until...?",a:["The end of the year", "The consummation of the centuries", "The day of judgment", "Forever"],c:1},
     {q:"Trust in the Lord with all your heart and lean not on your own...",a:["Heart", "Understanding", "Arm", "Effort"],c:1},
     {q:"The wise son brings joy to the...?",a:["Brother", "Father", "Friend", "King"],c:1},
-    {q:"\"Better is the poor who walks in integrity than the rich...?\"
-
-(This appears to be an incomplete Bible verse, likely from Proverbs 28:6)",a:["Perverse character", "Many friends", "Little faith", "Large family"],c:0},
+    {q:"\"Better is the poor who walks in integrity than the rich...?\"",a:["Perverse character", "Many friends", "Little faith", "Large family"],c:0},
     {q:"\"Who can find a virtuous woman? Her value exceeds that of...?\"",a:["Gold", "Rubies", "Silver", "Diamonds"],c:1},
     {q:"Teach a child in the way they should go, and when they grow old...?",a:["Will teach others", "Will not deviate", "Will be rich", "Will be king"],c:1},
     {q:"The beginning of the dispute is like an opening of...?",a:["Door", "Waters", "River", "Wound"],c:1},
-    {q:"\"Hey buddy, closer than a...?\"
-
-(This appears to be an incomplete phrase in Portuguese. The full expression is typically \"Ha amigo mais chegado que um irmão\" = \"A friend closer than a brother\")",a:["Father", "Brother", "Neighbor", "King"],c:1},
-    {q:"I can see this appears to be Portuguese text, but it seems incomplete or contains unclear/repeated words (\"agucar\" appears multiple times). 
-
-A literal attempt would be something like:
-\"How to sugar sugar the iron thus the man sugar the...?\"
-
-However, this doesn't form coherent meaning. Could you please:
-1. Verify the original text is correct?
-2. Provide the complete sentence?
-3. Clarify what \"agucar\" should be (perhaps \"açúcar\" meaning sugar, or another word)?
-
-This would help me provide an accurate translation.",a:["Spirit", "Friend's Face", "Heart", "Understanding"],c:1},
+    {q:"\"Hey buddy, closer than a...?\"",a:["Father", "Brother", "Neighbor", "King"],c:1},
+    {q:"I can see this appears to be Portuguese text, but it seems incomplete or contains unclear/repeated words.   A literal attempt would be something like: \"How to sugar sugar the iron thus the man sugar the...?\"  However, this doesn't form coherent meaning. Could you please: 1. Verify the original text is correct? 2. Provide the complete sentence? 3. Clarify what \"agucar\" should be?  This would help me provide an accurate translation.",a:["Spirit", "Friend's Face", "Heart", "Understanding"],c:1},
     {q:"The heart of man is more deceitful than all things according to...?",a:["Solomon", "Jeremiah", "Proverbs", "Isaiah"],c:1},
-    {q:"\"He who sows wind will reap...?\"
-
-(This is part of the Portuguese proverb \"Quem semeia vento colherá tempestade\" - \"He who sows wind will reap a whirlwind\")",a:["Rain", "Storm", "Nothing", "Peace"],c:1},
-    {q:"\"Hope deferred makes the...\"
-
-(This is the beginning of a famous proverb from the Bible: \"Hope deferred makes the heart sick\" - Proverbs 13:12)",a:["Body", "Heart", "Spirit", "Soul"],c:1},
+    {q:"\"He who sows wind will reap...?\"",a:["Rain", "Storm", "Nothing", "Peace"],c:1},
+    {q:"\"Hope deferred makes the...\"",a:["Body", "Heart", "Spirit", "Soul"],c:1},
     {q:"The fear of the Lord prolongs...?",a:["Goods", "Days", "Friends", "Children"],c:1},
     {q:"What is sweet to a man and then bitter?",a:["Wealth", "Bread of lies", "Love", "Wine"],c:1},
     {q:"\"Do not say to your neighbor, 'Go and come back tomorrow and I will give you,' when...?\"",a:["Tiveres tempo", "Tens o que dar", "Quiseres", "Puder\n\nIf you have time", "You have something to give", "If you wish", "If you can"],c:1},
@@ -1096,9 +1070,7 @@ This would help me provide an accurate translation.",a:["Spirit", "Friend's Face
     {q:"\"Without vision the people...?\"",a:["Sins", "Perishes", "Errs", "Falls"],c:1},
     {q:"A peaceful heart gives life to the body, but envy and...?",a:["Weakness", "Bone rot", "Sadness", "Death"],c:1},
     {q:"\"My son, do not reject the discipline of the Lord, nor...\"",a:["Distance", "Tires of your correction", "Shames", "Rebels"],c:1},
-    {q:"\"Wisdom has built her...\"
-
-(This appears to be the beginning of a verse, likely from Proverbs 9:1 in Portuguese, which continues with \"house\" or \"home\" in English.)",a:["City", "House", "Tower", "Family"],c:1},
+    {q:"\"Wisdom has built her...\"",a:["City", "House", "Tower", "Family"],c:1},
     {q:"\"Whoever finds a wife finds a good thing and obtains favor from the...?\"",a:["King", "Lord", "People", "Father"],c:1},
     {q:"The man planned his path but the Lord...?",a:["Approves", "Directs the steps", "Blesses", "Guides"],c:1},
     {q:"The Lord abhors the heart...?",a:["Cold", "Arrogant", "Sad", "Empty"],c:1},
@@ -1435,9 +1407,7 @@ This would help me provide an accurate translation.",a:["Spirit", "Friend's Face
     {q:"Enseña al niño en el camino en que debe andar y cuando envejezca...?",a:["Enseñará a otros", "No se desviará", "Será rico", "Será rey"],c:1},
     {q:"El inicio de la contienda y como una apertura de...?",a:["Puerta", "Aguas", "Río", "Herida"],c:1},
     {q:"¿Ha amigo más cercano que un...?",a:["Padre", "Hermano", "Vecino", "Rey"],c:1},
-    {q:"Como el acero endurece el acero, así el hombre endurece al...?
-
-(Note: \"agucar\" doesn't appear to be a standard Portuguese word. I interpreted it as \"açar\" or a variation meaning \"to harden/strengthen.\" If you meant a different word, please clarify.)",a:["Espíritu", "Rostro del amigo", "Corazón", "Entendimiento"],c:1},
+    {q:"Como el acero endurece el acero, así el hombre endurece al...?",a:["Espíritu", "Rostro del amigo", "Corazón", "Entendimiento"],c:1},
     {q:"El corazón del hombre es más engañoso que todas las cosas según...?",a:["Salomón", "Jeremías", "Proverbios", "Isaías"],c:1},
     {q:"¿Quién siembra viento cosechará...?",a:["Lluvia", "Tormenta", "Nada", "Paz"],c:1},
     {q:"La esperanza aplazada enferma el...?",a:["Cuerpo", "Corazón", "Espíritu", "Alma"],c:1},
@@ -1787,14 +1757,8 @@ This would help me provide an accurate translation.",a:["Spirit", "Friend's Face
     {q:"La femme vertueuse, qui la trouvera? Sa valeur dépasse celle de...?",a:["Or", "Rubis", "Argent", "Diamants"],c:1},
     {q:"Enseigne à l'enfant le chemin dans lequel il doit marcher et quand il vieillira...?",a:["Enseignera les autres", "Ne s'en détournera pas", "Sera riche", "Sera roi"],c:1},
     {q:"Le début du différend et comme une ouverture de...?",a:["Porte", "Eaux", "Fleuve", "Blessure"],c:1},
-    {q:"Ha amigo mais chegado que um irmão.
-
-(French translation:)
-
-Ah mon ami plus proche qu'un frère.",a:["Père", "Frère", "Voisin", "Roi"],c:1},
-    {q:"Je ne peux pas traduire ce texte car il ne constitue pas une phrase claire ou complète en portugais. Le texte semble contenir des répétitions et des mots peu clairs (\"agucar\" n'est pas un mot portugais standard).
-
-Pourriez-vous vérifier l'orthographe ou fournir le texte complet ?",a:["Esprit", "Visage de l'ami", "Cœur", "Compréhension"],c:1},
+    {q:"Ha amigo mais chegado que um irmão.  Ah mon ami plus proche qu'un frère.",a:["Père", "Frère", "Voisin", "Roi"],c:1},
+    {q:"Je ne peux pas traduire ce texte car il ne constitue pas une phrase claire ou complète en portugais. Le texte semble contenir des répétitions et des mots peu clairs.  Pourriez-vous vérifier l'orthographe ou fournir le texte complet ?",a:["Esprit", "Visage de l'ami", "Cœur", "Compréhension"],c:1},
     {q:"Le cœur de l'homme est plus trompeur que toutes choses selon...?",a:["Salomon", "Jérémie", "Proverbes", "Isaïe"],c:1},
     {q:"Qui sème le vent récoltera...?",a:["Pluie", "Tempête", "Rien", "Paix"],c:1},
     {q:"L'espoir ajourné rend malade le...?",a:["Corps", "Cœur", "Esprit", "Âme"],c:1},
@@ -2157,9 +2121,7 @@ Pourriez-vous vérifier l'orthographe ou fournir le texte complet ?",a:["Esprit"
     {q:"Der Name des Herrn ist ein Turm...?",a:["Hoch", "Stark", "Schön", "Heilig"],c:1},
     {q:"Wer dem Armen gibt, leiht dem...?",a:["König", "Herr", "Nächster", "Reich"],c:1},
     {q:"Ohne Vision das Volk...?",a:["Stück", "Verdirbt", "Irrt", "Fällt"],c:1},
-    {q:"O coração tranquilo e vida para o corpo mas a inveja e...?
-
-Das ruhige Herz ist Leben für den Körper, aber der Neid und...?",a:["Schwäche", "Knochenfäule", "Traurigkeit", "Tod"],c:1},
+    {q:"O coração tranquilo e vida para o corpo mas a inveja e...?  Das ruhige Herz ist Leben für den Körper, aber der Neid und...?",a:["Schwäche", "Knochenfäule", "Traurigkeit", "Tod"],c:1},
     {q:"Mein Sohn, lehne die Zucht des Herrn nicht ab und...?",a:["Entfernst", "Ermüdest von seiner Korrektur", "Beschämst", "Rebellen"],c:1},
     {q:"Die Weisheit hat ihr Haus gebaut...?",a:["Stadt", "Haus", "Turm", "Familie"],c:1},
     {q:"Wer eine Frau findet, findet etwas Gutes und erlangt die Gunst des...?",a:["König", "Herr", "Volk", "Vater"],c:1},
@@ -2335,9 +2297,7 @@ Das ruhige Herz ist Leben für den Körper, aber der Neid und...?",a:["Schwäche
     {q:"Domnul este al meu...?",a:["Rege", "Păstor", "Judecător", "Prieten"],c:1},
     {q:"Ce nu va lipsi celui care are încredere în Dumnezeu?",a:["Nimic", "Bani", "Mâncare", "Forță"],c:0},
     {q:"Cine a scris multe proverburi?",a:["Davi", "Salomон", "Moise", "Ilie"],c:1},
-    {q:"O temor do Senhor é o princípio da sabedoria.
-
-**Frica de Domnul este începutul înțelepciunii.**",a:["Înțelepciune", "Forță", "Bogăție", "Iubire"],c:0},
+    {q:"O temor do Senhor é o princípio da sabedoria.  **Frica de Domnul este începutul înțelepciunii.**",a:["Înțelepciune", "Forță", "Bogăție", "Iubire"],c:0},
     {q:"Cine l-a ucis pe Abel?",a:["Cain", "Noe", "Adam", "Set"],c:0},
     {q:"Care a fost semnul legământului după potop?",a:["Stea", "Curcubeu", "Foc", "Nor"],c:1},
     {q:"Cine a fost tatăl lui Avraam?",a:["Tera", "Isac", "Lo", "Iacov"],c:0},
