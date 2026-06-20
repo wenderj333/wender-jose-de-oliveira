@@ -2683,7 +2683,7 @@ ioduelo.on('connection', (socket) => {
       socket.join(sid); op.socket.join(sid);
       const p1 = shuffleArray(perguntasDuelo[lang] || perguntasDuelo.pt).slice(0,10);
       const p2 = shuffleArray(perguntasDuelo[op.lang] || perguntasDuelo.pt).slice(0,10);
-      duelSalas[sid] = { j:[{id:socket.id,nome,lang,pts:0,resp:false,foto},{id:op.socket.id,nome:op.nome,lang:op.lang,pts:0,resp:false,foto:op.foto||null}], qi:0, t:15, timer:null };
+      duelSalas[sid] = { j:[{id:socket.id,nome,lang,pts:0,resp:false,foto,perguntas:p1},{id:op.socket.id,nome:op.nome,lang:op.lang,pts:0,resp:false,foto:op.foto||null,perguntas:p2}], qi:0, t:15, timer:null };
       socket.emit('inicioJogo', {salaId:sid, oponente:op.nome, fotoOponente:op.foto||null, pergunta:p1[0]});
       op.socket.emit('inicioJogo', {salaId:sid, oponente:nome, fotoOponente:foto||null, pergunta:p2[0]});
       duelTimer(sid);
@@ -2694,7 +2694,7 @@ ioduelo.on('connection', (socket) => {
     const j = sala.j.find(x => x.id === socket.id);
     if (j && !j.resp) {
       j.resp = true;
-      const p = (perguntasDuelo[j.lang]||perguntasDuelo.pt)[sala.qi];
+      const p = (j.perguntas||perguntasDuelo[j.lang]||perguntasDuelo.pt)[sala.qi];
       if (d.escolha === p.c) j.pts += 100 + (sala.t * 5);
       const op = sala.j.find(x => x.id !== socket.id);
       if (op) ioduelo.to(op.id).emit('oponenteRespondeu');
@@ -2755,7 +2755,7 @@ function duelProxima(sid) {
   sala.qi++; sala.j.forEach(j => j.resp = false);
   if (sala.qi < 10) {
     sala.j.forEach(j => {
-      const p = (perguntasDuelo[j.lang]||perguntasDuelo.pt)[sala.qi];
+      const p = (j.perguntas||perguntasDuelo[j.lang]||perguntasDuelo.pt)[sala.qi];
       ioduelo.to(j.id).emit('novaPergunta', {pergunta:p});
     });
     duelTimer(sid);
