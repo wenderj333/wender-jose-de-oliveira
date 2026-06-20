@@ -656,7 +656,7 @@ export default function App() {
 
           <div className="menu-group">
 
-            <p className="menu-title">{t('menu.you','VOCÃÅ ')}</p>
+            <p className="menu-title">{t('menu.you','VOCÃ')}</p>
 
             <Link to="/amigos" className={isActive('/amigos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.friends','Amigos')} {pendingRequests>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{pendingRequests}</span>}</span></Link>
 
