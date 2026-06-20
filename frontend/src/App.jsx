@@ -1,6 +1,6 @@
 import React from 'react';
 
-﻿import { useState, useEffect, useRef } from "react";
+ï»¿import { useState, useEffect, useRef } from "react";
 
 import "./sidebar.css";
 
@@ -364,7 +364,7 @@ export default function App() {
 
       <div style={{width:50,height:50,border:'4px solid #e0e6f5',borderTopColor:'#4a80d4',borderRadius:'50%',animation:'spin 1s linear infinite'}}/>
 
-      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.2rem',fontWeight:600,color:'#3568b8'}}>Sigo com FÃ©...</p>
+      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.2rem',fontWeight:600,color:'#3568b8'}}>Sigo com FÃÂ©...</p>
 
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
 
@@ -532,7 +532,7 @@ export default function App() {
 
               ['/journeys', <Globe size={20}/>, t('nav.journeys')],
 
-              ['/live', <PlayCircle size={20}/>, '🔴 Directo'],
+              ['/live', <PlayCircle size={20}/>, 'ð´ Directo'],
 
               ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
 
@@ -570,7 +570,7 @@ export default function App() {
 
               ['/musica', <Music size={20}/>, t('nav.music')],
 
-              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA BÃ­blica')],
+              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA BÃÂ­blica')],
 
               ['/grupos', <Users size={20}/>, t('nav.groups')],
 
@@ -590,7 +590,7 @@ export default function App() {
 
               <Link to="/sala-pastor" onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'#c9a84c',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)',fontWeight:600}}>
 
-                <BookOpen size={20}/> ðŸ•Šï¸ <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span>
+                <BookOpen size={20}/> Ã°Å¸â¢Å Ã¯Â¸Â <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span>
 
               </Link>
 
@@ -618,7 +618,7 @@ export default function App() {
 
         <div style={{background:'#fff3cd',borderBottom:'2px solid #f0c040',padding:'10px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
 
-          <span style={{fontSize:13,color:'#856404'}}>📸 Adiciona uma foto de perfil para a comunidade te conhecer!</span>
+          <span style={{fontSize:13,color:'#856404'}}>ð¸ Adiciona uma foto de perfil para a comunidade te conhecer!</span>
 
           <a href={`/perfil/${user.id}`} style={{background:'#f0c040',color:'#856404',padding:'6px 14px',borderRadius:20,fontSize:12,fontWeight:700,textDecoration:'none'}}>Adicionar foto</a>
 
@@ -646,7 +646,7 @@ export default function App() {
 
             <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.live_community','Chat')} {unreadMessages>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{unreadMessages}</span>}</span></Link>
 
-            <Link to="/notificacoes" className={isActive('/notificacoes')}><Bell size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.notifications','NotificaÃ§Ãµes')}</span></Link>
+            <Link to="/notificacoes" className={isActive('/notificacoes')}><Bell size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.notifications','NotificaÃÂ§ÃÂµes')}</span></Link>
 
           </div>
 
@@ -656,7 +656,7 @@ export default function App() {
 
           <div className="menu-group">
 
-            <p className="menu-title">{t('menu.you','VOCÃŠ')}</p>
+            <p className="menu-title">{t('menu.you','VOCÃÅ ')}</p>
 
             <Link to="/amigos" className={isActive('/amigos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.friends','Amigos')} {pendingRequests>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{pendingRequests}</span>}</span></Link>
 
@@ -688,17 +688,17 @@ export default function App() {
 
             <p className="menu-title">{t('menu.spiritual','ESPIRITUAL')}</p>
 
-            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bible_ai','IA BÃ­blica')}</span></Link>
+            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bible_ai','IA BÃÂ­blica')}</span></Link>
 
-            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','OraÃ§Ãµes')}</span></Link>
+            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','OraÃÂ§ÃÂµes')}</span></Link>
 
             <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_life','Ajuda ao Proximo')}</span></Link>
 
-            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','ReflexÃ£o')}</span></Link>
+            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','ReflexÃÂ£o')}</span></Link>
 
-            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','Música')}</span></Link>
+            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','MÃºsica')}</span></Link>
 
-            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','ConsagraÃ§Ã£o')}</span></Link>
+            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','ConsagraÃÂ§ÃÂ£o')}</span></Link>
 
           </div>
 
@@ -814,7 +814,7 @@ export default function App() {
 
           <div style={{background:'linear-gradient(135deg,#6C3FA0,#4A2270)',borderRadius:14,padding:16,marginBottom:14,color:'white'}}>
 
-            <p style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',opacity:0.8,marginBottom:8}}>ðŸ“– {t('sidebar.verse','VERSICULO DO DIA')}</p>
+            <p style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',opacity:0.8,marginBottom:8}}>Ã°Å¸ââ {t('sidebar.verse','VERSICULO DO DIA')}</p>
 
             <p style={{fontSize:13,fontStyle:'italic',lineHeight:1.6,marginBottom:6}}>
 
@@ -848,7 +848,7 @@ export default function App() {
 
 
 
-          {/* LIVE Widget â€” golden theme */}
+          {/* LIVE Widget Ã¢â¬â golden theme */}
 
           <div style={{background:'linear-gradient(135deg,#3568b8 0%,#4a80d4 60%,#6a9ade 100%)',borderRadius:14,padding:18,marginBottom:14,color:'white',position:'relative',overflow:'hidden',border:'1px solid rgba(240,192,64,0.3)'}}>
 
@@ -932,7 +932,7 @@ export default function App() {
 
                     ) : (
 
-                      <span>🙏</span>
+                      <span>ð</span>
 
                     )}
 
@@ -942,7 +942,7 @@ export default function App() {
 
                     <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}>
 
-                      <b style={{color:'var(--fb)'}}>{prayer.author_name || 'Anónimo'}</b> {prayer.content.length > 40 ? prayer.content.substring(0, 40) + '...' : prayer.content}
+                      <b style={{color:'var(--fb)'}}>{prayer.author_name || 'AnÃ³nimo'}</b> {prayer.content.length > 40 ? prayer.content.substring(0, 40) + '...' : prayer.content}
 
                     </p>
 
@@ -994,7 +994,7 @@ export default function App() {
 
                 <p style={{fontSize:'0.8rem',fontWeight:600,color:'var(--text)'}}>Culto Dominical</p>
 
-                <p style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h Â· Online</p>
+                <p style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h ÃÂ· Online</p>
 
               </div>
 
@@ -1008,11 +1008,11 @@ export default function App() {
 
           <div style={{marginTop:16,background:'linear-gradient(135deg,#667eea,#764ba2)',borderRadius:12,padding:'14px 16px',textAlign:'center'}}>
 
-            <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>ðŸ“² Instalar App</p>
+            <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>Ã°Å¸âÂ² Instalar App</p>
 
             <p style={{color:'rgba(255,255,255,0.8)',fontSize:'0.75rem',margin:'0 0 10px'}}>Acede mais rapido no teu telemovel</p>
 
-            <button onClick={handleInstallClick} style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',border:'none',cursor:'pointer'}}>â¬‡ï¸ Instalar</button>
+            <button onClick={handleInstallClick} style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',border:'none',cursor:'pointer'}}>Ã¢Â¬â¡Ã¯Â¸Â Instalar</button>
 
           </div>
 
