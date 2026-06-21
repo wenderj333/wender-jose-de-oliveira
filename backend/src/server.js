@@ -2678,7 +2678,7 @@ const ioduelo = new SocketServer(server, { cors: { origin: '*' }, path: '/duelo/
 ioduelo.on('connection', (socket) => {
   socket.on('procurarPartida', (d) => {
     const lang = d.idioma || 'pt';
-    const foto = d.foto || null;
+    const fotoRaw = d.foto || null; const foto = fotoRaw && fotoRaw.startsWith('http') ? fotoRaw : (fotoRaw && fotoRaw.length < 5000 ? fotoRaw : null);
     const nome = d.nome || 'Jogador';
     jogadoresOnline[socket.id] = { nome, foto, socketId: socket.id };
     if (!duelEsperando) {
