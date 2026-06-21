@@ -2696,6 +2696,7 @@ ioduelo.on('connection', (socket) => {
       duelTimer(sid);
     }
   });
+  socket.on('chatDuelo',(d)=>{ const sala=duelSalas[d.salaId]; if(!sala) return; socket.to(d.salaId).emit('chatDuelo',{msg:d.msg,nome:d.nome}); });
   socket.on('enviarResposta', (d) => {
     const sala = duelSalas[d.salaId]; if (!sala) return;
     const j = sala.j.find(x => x.id === socket.id);
