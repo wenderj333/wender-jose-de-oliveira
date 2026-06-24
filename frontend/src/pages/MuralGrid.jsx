@@ -791,7 +791,7 @@ export default function MuralGrid() {
 
       <div style={{display:"flex",gap:10,marginBottom:16,flexWrap:"wrap"}}>
         
-        <button onClick={()=>window.location.href="/duelo-biblico"} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"linear-gradient(135deg,#c0392b,#922b21)",color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>âš⚔️ Duelo Biblico</button>
+        <button onClick={()=>window.location.href="/duelo-biblico"} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"linear-gradient(135deg,#c0392b,#922b21)",color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>⚔️ Duelo Biblico</button>
       </div>
       {/* Loading */}
       {loading && (
