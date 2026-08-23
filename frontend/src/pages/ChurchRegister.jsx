@@ -114,9 +114,9 @@ export default function ChurchRegister() {
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
             <span style={{ fontSize: '1.3rem', flexShrink: 0 }}>🌍</span>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1a0a3e' }}>Visibilidade Global</div>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1a0a3e' }}>Mais fácil de encontrar</div>
               <div style={{ fontSize: '0.8rem', color: '#666', lineHeight: 1.5 }}>
-                Sua igreja aparece para milhares de cristãos ao redor do mundo que buscam uma comunidade de fé.
+                Crie uma página pública com a localização e as informações da sua igreja para que pessoas possam encontrá-la no Sigo com Fé.
               </div>
             </div>
           </div>
@@ -195,30 +195,17 @@ export default function ChurchRegister() {
         )}
       </div>
 
-      {/* Depoimentos fictícios */}
+      {/* Compromisso de transparência */}
       <div style={{
         background: '#fff', borderRadius: 16, padding: '1.25rem', marginBottom: '1.5rem',
         border: '1px solid #eee',
       }}>
         <h3 style={{ color: '#1a0a3e', margin: '0 0 1rem', fontSize: '0.95rem', textAlign: 'center' }}>
-          💬 O que pastores dizem
+          🤝 Construído para servir igrejas
         </h3>
-        {[
-          { name: 'Pastor Roberto', church: 'Igreja Batista Central', text: 'O Sigo com Fé revolucionou a forma como me conecto com minha congregação. Agora consigo acompanhar os pedidos de oração e conversar com membros que precisam de ajuda, tudo em um só lugar!' },
-          { name: 'Pastora Ana', church: 'Comunidade da Graça', text: 'A Sala de Gestão do Pastor me dá uma visão completa da igreja. Os relatórios e a gestão de dízimos são incríveis. E o melhor: é gratuito!' },
-        ].map((dep, i) => (
-          <div key={i} style={{
-            padding: '0.75rem', background: i === 0 ? 'rgba(102,126,234,0.05)' : 'rgba(218,165,32,0.05)',
-            borderRadius: 12, marginBottom: i === 0 ? 8 : 0,
-          }}>
-            <p style={{ fontSize: '0.82rem', color: '#444', fontStyle: 'italic', margin: '0 0 0.4rem', lineHeight: 1.5 }}>
-              "{dep.text}"
-            </p>
-            <div style={{ fontSize: '0.75rem', color: '#888', fontWeight: 600 }}>
-              — {dep.name}, {dep.church}
-            </div>
-          </div>
-        ))}
+        <p style={{ fontSize: '0.84rem', color: '#555', lineHeight: 1.65, margin: 0, textAlign: 'center' }}>
+          O Sigo com Fé está a crescer com a comunidade. As ferramentas são melhoradas com base no que pastores e membros realmente precisam — sem números ou depoimentos inventados.
+        </p>
       </div>
 
       {/* CTA Button para abrir formulário */}
