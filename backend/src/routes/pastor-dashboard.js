@@ -66,7 +66,7 @@ router.get('/overview', async (req, res) => {
     monthStart.setHours(0, 0, 0, 0);
     const ms = monthStart.toISOString();
 
-    const members = await db.prepare('SELECT COUNT(*) as count FROM church_roles WHERE church_id = ?').get(church.id);
+    const members = await db.prepare("SELECT COUNT(*) as count FROM church_members WHERE church_id = ? AND status = 'active'").get(church.id);
     const prayers = await db.prepare('SELECT COUNT(*) as count FROM prayers WHERE church_id = ? AND created_at >= ?').get(church.id, ms);
     const tithes = await db.prepare("SELECT COALESCE(SUM(amount),0) as total FROM tithes WHERE church_id = ? AND type = 'tithe' AND created_at >= ?").get(church.id, ms);
     const offerings = await db.prepare("SELECT COALESCE(SUM(amount),0) as total FROM tithes WHERE church_id = ? AND type = 'offering' AND created_at >= ?").get(church.id, ms);
@@ -93,11 +93,11 @@ router.get('/members', async (req, res) => {
     if (!church) return res.json({ members: [] });
 
     const members = await db.prepare(`
-      SELECT u.id, u.full_name, u.email, u.avatar_url, u.role, cr.role_type, cr.created_at as joined_at
-      FROM church_roles cr
-      JOIN users u ON u.id = cr.user_id
-      WHERE cr.church_id = ?
-      ORDER BY cr.created_at DESC
+      SELECT u.id, u.full_name, u.email, u.avatar_url, u.role, cm.member_tag AS role_type, cm.joined_at
+      FROM church_members cm
+      JOIN users u ON u.id = cm.user_id
+      WHERE cm.church_id = ? AND cm.status = 'active'
+      ORDER BY cm.joined_at DESC NULLS LAST, cm.created_at DESC
     `).all(church.id);
 
     res.json({ members });
@@ -175,7 +175,7 @@ router.post('/announcements', async (req, res) => {
     if (!title || !content) return res.status(400).json({ error: 'Título e conteúdo são obrigatórios' });
 
     // Get all church members
-    const members = await db.prepare('SELECT user_id FROM church_roles WHERE church_id = ?').all(church.id);
+    const members = await db.prepare("SELECT user_id FROM church_members WHERE church_id = ? AND status = 'active'").all(church.id);
 
     // Create notification for each member
     let count = 0;
@@ -201,7 +201,7 @@ router.get('/announcements', async (req, res) => {
     if (!church) return res.json({ announcements: [] });
 
     // Get member IDs to find their announcements
-    const members = await db.prepare('SELECT user_id FROM church_roles WHERE church_id = ?').all(church.id);
+    const members = await db.prepare("SELECT user_id FROM church_members WHERE church_id = ? AND status = 'active'").all(church.id);
     if (!members.length) return res.json({ announcements: [] });
 
     // Get unique announcements by title+body+time (since we create one per member)
@@ -359,7 +359,7 @@ router.get('/reports', async (req, res) => {
     const church = await getPastorChurch(req.user.id);
     if (!church) return res.json({ error: 'Igreja não encontrada' });
 
-    const members = await db.prepare('SELECT COUNT(*) as count FROM church_roles WHERE church_id = ?').get(church.id);
+    const members = await db.prepare("SELECT COUNT(*) as count FROM church_members WHERE church_id = ? AND status = 'active'").get(church.id);
     const prayers = await db.prepare('SELECT COUNT(*) as total, SUM(CASE WHEN is_answered = true THEN 1 ELSE 0 END) as answered FROM prayers WHERE church_id = ?').get(church.id);
     const tithesSum = await db.prepare("SELECT COALESCE(SUM(amount),0) as total FROM tithes WHERE church_id = ? AND (type = 'tithe' OR type = 'offering')").get(church.id);
     const expensesSum = await db.prepare('SELECT COALESCE(SUM(amount),0) as total FROM church_expenses WHERE church_id = ?').get(church.id);

@@ -312,9 +312,15 @@ router.delete('/:id/events/:eventId', authenticate, async (req, res) => {
 });
 
 
-router.patch('/:id/location', async (req, res) => {
+router.patch('/:id/location', authenticate, async (req, res) => {
   try {
     const { latitude, longitude } = req.body;
+    if (!Number.isFinite(Number(latitude)) || !Number.isFinite(Number(longitude)) || Number(latitude) < -90 || Number(latitude) > 90 || Number(longitude) < -180 || Number(longitude) > 180) {
+      return res.status(400).json({ error: 'Localização inválida' });
+    }
+    const church = await db.query('SELECT pastor_id FROM churches WHERE id = $1', [req.params.id]);
+    if (!church.rows.length) return res.status(404).json({ error: 'Igreja não encontrada' });
+    if (church.rows[0].pastor_id !== req.user.id && req.user.role !== 'admin') return res.status(403).json({ error: 'Sem permissão' });
     await db.query('UPDATE churches SET latitude=$1, longitude=$2 WHERE id=$3', [latitude, longitude, req.params.id]);
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: 'Erro interno' }); }
@@ -322,17 +328,22 @@ router.patch('/:id/location', async (req, res) => {
 
 router.get('/:id/photos', async (req, res) => {
   try {
-    const r = await db.query('SELECT * FROM church_photos WHERE church_id=$1 ORDER BY created_at DESC LIMIT 10', [req.params.id]);
+    await db.query('CREATE TABLE IF NOT EXISTS church_gallery_photos (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), church_id UUID REFERENCES churches(id) ON DELETE CASCADE, photo_url TEXT NOT NULL, is_cover BOOLEAN DEFAULT false, created_at TIMESTAMPTZ DEFAULT NOW())');
+    const r = await db.query('SELECT * FROM church_gallery_photos WHERE church_id=$1 ORDER BY created_at DESC LIMIT 10', [req.params.id]);
     res.json({ photos: r.rows });
   } catch (err) { res.json({ photos: [] }); }
 });
 
-router.post('/:id/photos', async (req, res) => {
+router.post('/:id/photos', authenticate, async (req, res) => {
   try {
     const { photo_url, is_cover } = req.body;
-    await db.query('CREATE TABLE IF NOT EXISTS church_photos (id SERIAL PRIMARY KEY, church_id INTEGER, photo_url TEXT, is_cover BOOLEAN DEFAULT false, created_at TIMESTAMP DEFAULT NOW())');
+    if (!photo_url || typeof photo_url !== 'string') return res.status(400).json({ error: 'Foto inválida' });
+    const church = await db.query('SELECT pastor_id FROM churches WHERE id = $1', [req.params.id]);
+    if (!church.rows.length) return res.status(404).json({ error: 'Igreja não encontrada' });
+    if (church.rows[0].pastor_id !== req.user.id && req.user.role !== 'admin') return res.status(403).json({ error: 'Sem permissão' });
+    await db.query('CREATE TABLE IF NOT EXISTS church_gallery_photos (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), church_id UUID REFERENCES churches(id) ON DELETE CASCADE, photo_url TEXT NOT NULL, is_cover BOOLEAN DEFAULT false, created_at TIMESTAMPTZ DEFAULT NOW())');
     if (is_cover) await db.query('UPDATE churches SET logo_url=$1 WHERE id=$2', [photo_url, req.params.id]);
-    await db.query('INSERT INTO church_photos (church_id, photo_url, is_cover) VALUES ($1, $2, $3)', [req.params.id, photo_url, is_cover || false]);
+    await db.query('INSERT INTO church_gallery_photos (church_id, photo_url, is_cover) VALUES ($1, $2, $3)', [req.params.id, photo_url, is_cover || false]);
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: 'Erro interno' }); }
 });
