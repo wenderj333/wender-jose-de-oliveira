@@ -10,13 +10,8 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 
 const uploadToCloud = (buffer, folder) => new Promise((resolve, reject) => { const stream = cloudinary.uploader.upload_stream({ folder }, (error, result) => error ? reject(error) : resolve(result)); stream.end(buffer); });
 
 async function ensureFeatures() {
-  await db.query('ALTER TABLE groups ADD COLUMN IF NOT EXISTS rules TEXT');
-  await db.query('ALTER TABLE groups ADD COLUMN IF NOT EXISTS category VARCHAR(80)');
-  await db.query('ALTER TABLE groups ADD COLUMN IF NOT EXISTS require_approval BOOLEAN NOT NULL DEFAULT false');
-  await db.query(`CREATE TABLE IF NOT EXISTS group_join_requests (
-    group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE, user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    message TEXT, status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','approved','declined')),
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), PRIMARY KEY (group_id, user_id))`);
+  // The deploy migration creates these columns before the server starts.
+  return Promise.resolve();
 }
 async function member(groupId, userId) { return (await db.query('SELECT role FROM group_members WHERE group_id=$1 AND user_id=$2', [groupId, userId])).rows[0] || null; }
 async function manager(req, res) {
@@ -36,7 +31,7 @@ router.get('/', authenticate, async (req, res) => {
       FROM groups g JOIN users u ON u.id=g.creator_id
       WHERE g.privacy='public' OR g.creator_id=$1 OR EXISTS(SELECT 1 FROM group_members gm WHERE gm.group_id=g.id AND gm.user_id=$1) ORDER BY g.created_at DESC`, [req.user.id]);
     res.json({ groups: result.rows });
-  } catch { res.status(500).json({ error: 'Não foi possível carregar os grupos.' }); }
+  } catch (error) { console.error('Groups list error:', error.message); res.status(500).json({ error: 'Não foi possível carregar os grupos.' }); }
 });
 
 router.get('/:id', authenticate, async (req, res) => {

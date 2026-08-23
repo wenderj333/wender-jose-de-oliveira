@@ -342,6 +342,19 @@ async function migrate() {
     );
     CREATE INDEX IF NOT EXISTS idx_group_posts_group ON group_posts(group_id, created_at DESC);
   `);
+  await pool.query(`ALTER TABLE groups ADD COLUMN IF NOT EXISTS rules TEXT`);
+  await pool.query(`ALTER TABLE groups ADD COLUMN IF NOT EXISTS category VARCHAR(80)`);
+  await pool.query(`ALTER TABLE groups ADD COLUMN IF NOT EXISTS require_approval BOOLEAN NOT NULL DEFAULT false`);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS group_join_requests (
+      group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+      user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      message TEXT,
+      status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'declined')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      PRIMARY KEY (group_id, user_id)
+    )
+  `);
  
   await pool.query(`
     CREATE TABLE IF NOT EXISTS consecrations (
