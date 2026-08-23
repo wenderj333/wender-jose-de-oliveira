@@ -6,8 +6,8 @@ const { authenticate } = require('../middleware/auth');
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({ cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'degxiuf43', api_key: process.env.CLOUDINARY_API_KEY || '914835643241235', api_secret: process.env.CLOUDINARY_API_SECRET || '7Eu52T0NYAAy2hmXHl0i4C0TgUo' });
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
-const uploadToCloud = (buffer, folder) => new Promise((resolve, reject) => { const stream = cloudinary.uploader.upload_stream({ folder }, (error, result) => error ? reject(error) : resolve(result)); stream.end(buffer); });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 }, fileFilter: (_req, file, callback) => callback(null, /^(image|video)\//.test(file.mimetype)) });
+const uploadToCloud = (buffer, folder) => new Promise((resolve, reject) => { const stream = cloudinary.uploader.upload_stream({ folder, resource_type: 'auto' }, (error, result) => error ? reject(error) : resolve(result)); stream.end(buffer); });
 
 async function ensureFeatures() {
   // The deploy migration creates these columns before the server starts.
@@ -107,9 +107,9 @@ router.post('/:id/leave', authenticate, async (req,res) => {
 router.post('/:id/posts', authenticate, upload.single('media'), async (req,res) => {
   try {
     if (!await member(req.params.id,req.user.id)) return res.status(403).json({ error:'Entre no grupo para publicar.' });
-    if (!req.body.content?.trim()) return res.status(400).json({ error:'Escreva uma publicação.' });
+    if (!req.body.content?.trim() && !req.file) return res.status(400).json({ error:'Escreva uma publicação ou escolha uma foto ou vídeo.' });
     const mediaUrl = req.file ? (await uploadToCloud(req.file.buffer,'sigo-com-fe/group-posts')).secure_url : null;
-    const post = (await db.query('INSERT INTO group_posts (group_id,author_id,content,media_url) VALUES ($1,$2,$3,$4) RETURNING *',[req.params.id,req.user.id,req.body.content.trim(),mediaUrl])).rows[0]; res.status(201).json({ post });
+    const post = (await db.query('INSERT INTO group_posts (group_id,author_id,content,media_url) VALUES ($1,$2,$3,$4) RETURNING *',[req.params.id,req.user.id,String(req.body.content || '').trim(),mediaUrl])).rows[0]; res.status(201).json({ post });
   } catch { res.status(500).json({ error:'Não foi possível publicar.' }); }
 });
 
