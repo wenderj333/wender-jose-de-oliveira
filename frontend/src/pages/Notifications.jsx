@@ -6,6 +6,12 @@ import { useNavigate } from 'react-router-dom';
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
 const FRONTEND_URL = 'https://sigo-com-fe.vercel.app'; // Or wherever your frontend is deployed
 
+function notificationData(notification) {
+  if (!notification?.data) return {};
+  if (typeof notification.data === 'object') return notification.data;
+  try { return JSON.parse(notification.data); } catch (_) { return {}; }
+}
+
 function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
@@ -22,6 +28,7 @@ const NotificationIcon = ({ type }) => {
     case 'flagged_post': return <XCircle size={20} color="#e74c3c" />;
     case 'new_help_request': return <Info size={20} color="#3498db" />;
     case 'new_direct_message': return <MessageCircle size={20} color="#4caf50" />;
+    case 'message': return <MessageCircle size={20} color="#4caf50" />;
     // Add more types here
     default: return <Bell size={20} color="#daa520" />;
   }
@@ -66,19 +73,28 @@ export default function NotificationsPage() {
   }
 
   const getNotificationLink = (notification) => {
-    if (notification.data?.url) {
-      return notification.data.url.startsWith('/') ? `${FRONTEND_URL}${notification.data.url}` : notification.data.url;
+    const data = notificationData(notification);
+    if (data.url) {
+      return data.url.startsWith('/') ? `${FRONTEND_URL}${data.url}` : data.url;
     }
     switch (notification.type) {
       case 'flagged_post': 
-        return `${FRONTEND_URL}/mural?postId=${notification.data?.postId}`;
+        return `${FRONTEND_URL}/mural?postId=${data.postId}`;
+      case 'like':
+        return data.postId ? `${FRONTEND_URL}/mural?postId=${data.postId}` : `${FRONTEND_URL}/mural`;
       case 'new_direct_message':
       case 'message':
         // Se tem senderId, vai direto para o chat com essa pessoa
-        if (notification.data?.senderId) {
-          return `${FRONTEND_URL}/mensagens/${notification.data.senderId}`;
+        if (data.senderId) {
+          return `${FRONTEND_URL}/mensagens/${data.senderId}`;
         }
         return `${FRONTEND_URL}/mensagens`;
+      case 'friend_request':
+      case 'friend_accepted':
+        return data.from ? `${FRONTEND_URL}/perfil/${data.from}` : `${FRONTEND_URL}/amigos`;
+      case 'prayer':
+      case 'new_help_request':
+        return `${FRONTEND_URL}/pedidos-ajuda`;
       default: 
         return '#';
     }
@@ -109,12 +125,14 @@ export default function NotificationsPage() {
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {notifications.map(n => (
-            <a key={n.id} href='#' onClick={(e)=>{e.preventDefault();markAsRead(n.id);const l=getNotificationLink(n);if(l&&l!='#'&&l!=''){const path=l.replace('https://sigo-com-fe.vercel.app','');navigate(path);}}} style={{
+          {notifications.map(n => {
+            const link = getNotificationLink(n);
+            const canOpen = link && link !== '#';
+            return <button key={n.id} type="button" onClick={()=>{ markAsRead(n.id); if (canOpen) navigate(link.replace(FRONTEND_URL, '')); }} style={{
               display: 'flex', alignItems: 'center', gap: 12, padding: '1rem',
               background: n.is_read ? '#f0fff4' : '#fff', borderRadius: 12, border: n.is_read ? '2px solid #86efac' : '2px solid #daa520', transition: 'background 0.3s',
               boxShadow: n.is_read ? 'none' : '0 0 0 2px #daa52030',
-              cursor: 'pointer', textDecoration: 'none', color: 'inherit',
+              cursor: canOpen ? 'pointer' : 'default', textDecoration: 'none', color: 'inherit', textAlign: 'left', width: '100%', font: 'inherit',
             }}>
               <div style={{ flexShrink: 0 }}><NotificationIcon type={n.type} /></div>
               <div style={{ flex: 1 }}>
@@ -125,8 +143,9 @@ export default function NotificationsPage() {
               {!n.is_read && (
                 <CheckCircle size={20} color="#4caf50" style={{ flexShrink: 0 }} />
               )}
-            </a>
-          ))}
+              {canOpen && <span style={{ color: '#6C3FA0', fontSize: '0.78rem', fontWeight: 700 }}>Abrir ›</span>}
+            </button>;
+          })}
         </div>
       )}
     </div>

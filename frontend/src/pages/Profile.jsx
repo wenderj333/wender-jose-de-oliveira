@@ -28,17 +28,10 @@ export default function Profile() {
   const [postLikeCounts, setPostLikeCounts] = useState({});
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
-  const [photoLikes, setPhotoLikes] = useState({});
-  const [photoComments, setPhotoComments] = useState({});
-  const [photoComment, setPhotoComment] = useState("");
-  const handlePhotoLike = (photoId) => {
-    setPhotoLikes(prev => ({ ...prev, [photoId]: !prev[photoId] }));
-  };
-  const handlePhotoComment = (photoId) => {
-    if (!photoComment.trim()) return;
-    setPhotoComments(prev => ({ ...prev, [photoId]: [...(prev[photoId] || []), { text: photoComment, user: currentUser?.full_name || "Eu" }] }));
-    setPhotoComment("");
-  };
+  const [editingMedia, setEditingMedia] = useState(false);
+  const [mediaCaption, setMediaCaption] = useState("");
+  const [mediaVisibility, setMediaVisibility] = useState("public");
+  const [mediaSaving, setMediaSaving] = useState(false);
   const [musicCovers, setMusicCovers] = useState({});
 
   useEffect(() => {
@@ -102,12 +95,44 @@ export default function Profile() {
   const closePhoto = () => setCurrentIndex(null);
   const nextPhoto = () => setCurrentIndex(prev => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentIndex(prev => (prev - 1 + photos.length) % photos.length);
+  const selectMedia = (media) => {
+    setSelectedPhoto(media);
+    setEditingMedia(false);
+    setMediaCaption(media.caption || "");
+    setMediaVisibility(media.visibility || "public");
+  };
+  const saveMedia = async () => {
+    if (!selectedPhoto?._isGallery) return;
+    setMediaSaving(true);
+    try {
+      const res = await fetch(API + "/photos/" + selectedPhoto.id, { method: "PATCH", headers: { "Content-Type": "application/json", Authorization: "Bearer " + token }, body: JSON.stringify({ caption: mediaCaption, visibility: mediaVisibility }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Erro ao guardar");
+      setPhotos(prev => prev.map(photo => photo.id === selectedPhoto.id ? data.photo : photo));
+      setSelectedPhoto(prev => ({ ...prev, ...data.photo }));
+      setEditingMedia(false);
+    } catch (e) { alert(e.message || "Não foi possível guardar as alterações."); }
+    finally { setMediaSaving(false); }
+  };
+  const deleteMedia = async () => {
+    if (!selectedPhoto?._isGallery || !window.confirm("Apagar este ficheiro do teu perfil?")) return;
+    setMediaSaving(true);
+    try {
+      const res = await fetch(API + "/photos/" + selectedPhoto.id, { method: "DELETE", headers: { Authorization: "Bearer " + token } });
+      if (!res.ok) throw new Error("Não foi possível apagar o ficheiro.");
+      setPhotos(prev => prev.filter(photo => photo.id !== selectedPhoto.id));
+      setSelectedPhoto(null);
+    } catch (e) { alert(e.message || "Não foi possível apagar o ficheiro."); }
+    finally { setMediaSaving(false); }
+  };
   if (loading) return <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}><Loader2 className="animate-spin" /></div>;
   if (!user) return <div style={{ textAlign: "center", padding: "20px" }}>{t("profile.notFound","Utilizador nao encontrado.")}</div>;
   const tabs = [["all", t("profile.allPosts","Todas")], ["foto", t("profile.photos","Fotos")], ["video", t("profile.videos","Videos")]];
-  const galleryItems = photos.map(ph => ({ id: ph.id, media_url: ph.url, _isGallery: true }));
-  const filteredPosts = userPosts.filter(p => activeTab === "foto" ? (p.media_url && !p.media_url.includes("video")) : activeTab === "video" ? (p.media_url && p.media_url.includes("video")) : true);
-  const displayPosts = activeTab === "all" ? [...filteredPosts, ...galleryItems] : activeTab === "foto" ? [...filteredPosts, ...galleryItems] : filteredPosts;
+  const galleryItems = photos.map(ph => ({ ...ph, media_url: ph.url, _isGallery: true }));
+  const isVideo = (post) => post.media_type === "video" || post.media_url?.includes("/video/") || /\.(mp4|webm|mov)(\?|$)/i.test(post.media_url || "");
+  const filteredPosts = userPosts.filter(p => activeTab === "foto" ? (p.media_url && !isVideo(p)) : activeTab === "video" ? (p.media_url && isVideo(p)) : true);
+  const filteredGallery = galleryItems.filter(item => activeTab === "all" || (activeTab === "video" ? isVideo(item) : !isVideo(item)));
+  const displayPosts = [...filteredPosts, ...filteredGallery];
   return (
     <div style={{ maxWidth: "935px", margin: "0 auto", padding: "0" }}>
       {user.cover_url && (
@@ -193,11 +218,11 @@ export default function Profile() {
             const isMusic = p.audio_url && !p.media_url;
             const coverImg = p.cover_url || (isMusic ? null : null);
             return (
-            <div key={p.id} onClick={() => isMusic ? setPlayingPost(p) : null} style={{ aspectRatio: "1", overflow: "hidden", background: "#f0f0f0", position: "relative", cursor: "pointer" }}>
-              {p.media_url && p.media_url.includes("video") ? (
-                <video src={p.media_url} style={{ width: "100%", height: "100%", objectFit: "cover" }} muted playsInline />
+            <div key={p.id} onClick={() => p._isGallery ? selectMedia(p) : isMusic ? setPlayingPost(p) : null} style={{ aspectRatio: "1", overflow: "hidden", background: "#f0f0f0", position: "relative", cursor: "pointer" }}>
+              {p.media_url && isVideo(p) ? (
+                <><video src={p.media_url} style={{ width: "100%", height: "100%", objectFit: "cover" }} muted playsInline preload="metadata" /><span style={{ position:"absolute", top:8, right:8, background:"rgba(0,0,0,.65)", color:"white", borderRadius:20, padding:"4px 7px", fontSize:11 }}>▶ Vídeo</span></>
               ) : p.media_url ? (
-                <img src={p.media_url} alt="" onClick={() => p._isGallery ? setSelectedPhoto(p) : null} style={{ width: "100%", height: "100%", objectFit: "cover", cursor: p._isGallery ? "zoom-in" : "default" }} />
+                <img src={p.media_url} alt={p.caption || ""} style={{ width: "100%", height: "100%", objectFit: "cover", cursor: p._isGallery ? "zoom-in" : "default" }} />
               ) : isMusic ? (
                 <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#4a80d4,#764ba2)", position: "relative" }}>
                   {(p.cover_url || musicCovers[p.audio_url]) ? <img src={p.cover_url || musicCovers[p.audio_url]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} /> : null}
@@ -238,8 +263,8 @@ export default function Profile() {
               )}
             </div>
             );
-          })}{filteredPosts.length === 0 && <div style={{ gridColumn: "1/-1", textAlign: "center", padding: 40, color: "#999" }}>{t("profile.noPosts","Nenhuma publicacao ainda.")}</div>}</div>)}
-        {isOwner && activeTab === "all" && <button onClick={() => setShowUploader(true)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontSize: 14, marginBottom: 12, marginTop: 8 }}>+ {t("profile.addPhoto","Adicionar Foto")}</button>}
+          })}{displayPosts.length === 0 && <div style={{ gridColumn: "1/-1", textAlign: "center", padding: 40, color: "#999" }}>{t("profile.noPosts","Nenhuma publicacao ainda.")}</div>}</div>)}
+        {isOwner && <button onClick={() => setShowUploader(true)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: 8, padding: "10px 16px", cursor: "pointer", fontSize: 14, marginBottom: 12, marginTop: 10, fontWeight:700 }}>+ Adicionar foto ou vídeo</button>}
         {currentIndex !== null && <PhotoModal url={photos[currentIndex].url} onClose={closePhoto} onNext={nextPhoto} onPrev={prevPhoto} />}
         {showAvatarModal && (
           <div onClick={() => setShowAvatarModal(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -252,25 +277,17 @@ export default function Profile() {
         {selectedPhoto && (
           <div onClick={() => setSelectedPhoto(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
             <div onClick={e => e.stopPropagation()} style={{ background: "white", borderRadius: 16, overflow: "hidden", maxWidth: 500, width: "100%", maxHeight: "90vh", display: "flex", flexDirection: "column" }}>
-              <img src={selectedPhoto.media_url} alt="" style={{ width: "100%", maxHeight: 400, objectFit: "cover" }} />
+              {isVideo(selectedPhoto) ? <video src={selectedPhoto.media_url} controls autoPlay style={{ width: "100%", maxHeight: 400, background:"#111" }} /> : <img src={selectedPhoto.media_url} alt={selectedPhoto.caption || ""} style={{ width: "100%", maxHeight: 400, objectFit: "cover" }} />}
               <div style={{ padding: 16 }}>
-                <div style={{ display: "flex", gap: 12, marginBottom: 12 }}>
-                  <button onClick={() => handlePhotoLike(selectedPhoto.id)} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", fontSize: 14, fontWeight: 600, color: photoLikes[selectedPhoto.id] ? "#e11d48" : "#555" }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill={photoLikes[selectedPhoto.id] ? "#e11d48" : "none"} stroke={photoLikes[selectedPhoto.id] ? "#e11d48" : "#555"} strokeWidth="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    {t("profile.likePhoto","Gostei")}
-                  </button>
-                </div>
-                <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-                  <input value={photoComment} onChange={e => setPhotoComment(e.target.value)} placeholder={t("profile.commentPhoto","Adicionar comentario...")} style={{ flex: 1, padding: "8px 12px", borderRadius: 20, border: "1px solid #ddd", fontSize: 13, outline: "none" }} onKeyDown={e => e.key === "Enter" && handlePhotoComment(selectedPhoto.id)} />
-                  <button onClick={() => handlePhotoComment(selectedPhoto.id)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: 20, padding: "8px 16px", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>{t("profile.commentPhoto","Enviar")}</button>
-                </div>
-                <div style={{ maxHeight: 150, overflowY: "auto" }}>
-                  {(photoComments[selectedPhoto.id] || []).map((c, i) => (
-                    <div key={i} style={{ fontSize: 13, padding: "4px 0", borderBottom: "1px solid #f0f0f0" }}>
-                      <b>{c.user}</b>: {c.text}
-                    </div>
-                  ))}
-                </div>
+                {editingMedia ? <>
+                  <input value={mediaCaption} maxLength={500} onChange={e => setMediaCaption(e.target.value)} placeholder="Legenda" style={{ width:"100%", boxSizing:"border-box", padding:10, borderRadius:8, border:"1px solid #dbe2ea", marginBottom:8 }} />
+                  <select value={mediaVisibility} onChange={e=>setMediaVisibility(e.target.value)} style={{ width:"100%", padding:10, borderRadius:8, border:"1px solid #dbe2ea", marginBottom:12 }}><option value="public">🌎 Público</option><option value="friends">🤝 Só amigos</option><option value="private">🔒 Só eu</option></select>
+                  <div style={{ display:"flex", gap:8 }}><button onClick={()=>setEditingMedia(false)} disabled={mediaSaving} style={{ flex:1, border:"none", borderRadius:8, padding:10, cursor:"pointer" }}>Cancelar</button><button onClick={saveMedia} disabled={mediaSaving} style={{ flex:1, background:"#6C3FA0", color:"white", border:"none", borderRadius:8, padding:10, cursor:"pointer", fontWeight:700 }}>{mediaSaving ? "A guardar..." : "Guardar"}</button></div>
+                </> : <>
+                  {selectedPhoto.caption && <p style={{ margin:"0 0 8px", color:"#334155" }}>{selectedPhoto.caption}</p>}
+                  <p style={{ margin:"0 0 14px", color:"#64748b", fontSize:12 }}>{selectedPhoto.visibility === "private" ? "🔒 Só tu podes ver" : selectedPhoto.visibility === "friends" ? "🤝 Visível para amigos" : "🌎 Visível para a comunidade"}</p>
+                  {isOwner && selectedPhoto._isGallery && <div style={{ display:"flex", gap:8 }}><button onClick={()=>setEditingMedia(true)} style={{ flex:1, background:"#f1f5f9", border:"none", borderRadius:8, padding:10, cursor:"pointer", fontWeight:700 }}>Editar</button><button onClick={deleteMedia} disabled={mediaSaving} style={{ flex:1, background:"#fff1f2", color:"#be123c", border:"1px solid #fecdd3", borderRadius:8, padding:10, cursor:"pointer", fontWeight:700 }}>Apagar</button></div>}
+                </>}
               </div>
             </div>
           </div>
