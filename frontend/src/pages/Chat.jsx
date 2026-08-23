@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { Send, Search, ArrowLeft, UserPlus, MessageCircle, Check, CheckCheck, Mic, MicOff } from 'lucide-react';
+import { Send, Search, ArrowLeft, UserPlus, MessageCircle, Check, CheckCheck, Mic, MicOff, Trash2 } from 'lucide-react';
 
 const API = import.meta.env.VITE_API_URL || '';
+const CLOUDINARY_BASE = 'https://api.cloudinary.com/v1_1/degxiuf43/video/upload';
+const VOICE_PREFIX = '__SCF_VOICE__:';
 function playMessageSound(type) {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -126,24 +128,51 @@ export default function Chat() {
   }, [messages]);
 
   // ── Send message ──────────────────────────────────────────────────────────
-  const sendMessage = async (e) => {
-    e.preventDefault();
-    if (!text.trim() || !userId || sending) return;
+  const postMessage = async (content) => {
+    if (!content || !userId || sending) return false;
     setSending(true);
     try {
       const res = await fetch(`${API}/api/messages`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ receiverId: userId, content: text.trim() }),
+        body: JSON.stringify({ receiverId: userId, content }),
       });
       if (res.ok) {
         playMessageSound('send');
-        setText('');
         await loadMessages();
         await loadConversations();
+        return true;
       }
     } catch (_) {}
-    setSending(false);
+    finally { setSending(false); }
+    return false;
+  };
+
+  const sendMessage = async (e) => {
+    e.preventDefault();
+    const content = text.trim();
+    if (!content) return;
+    if (await postMessage(content)) setText('');
+  };
+
+  const sendAudio = async () => {
+    if (!audioBlob || sending) return;
+    if (audioBlob.size > 12 * 1024 * 1024) { alert('A mensagem de voz é muito grande. Grave uma mensagem menor.'); return; }
+    setSending(true);
+    try {
+      const form = new FormData();
+      form.append('file', audioBlob, 'mensagem-de-voz.webm');
+      form.append('upload_preset', 'sigo_com_fe');
+      form.append('folder', 'sigo-com-fe/voice-messages');
+      const upload = await fetch(CLOUDINARY_BASE, { method: 'POST', body: form });
+      const data = await upload.json();
+      if (!upload.ok || !data.secure_url) throw new Error('Não foi possível enviar o áudio.');
+      setSending(false);
+      if (await postMessage(`${VOICE_PREFIX}${data.secure_url}`)) cancelAudio();
+    } catch (error) {
+      setSending(false);
+      alert(error.message || 'Não foi possível enviar o áudio.');
+    }
   };
 
   // ── Send friend request ───────────────────────────────────────────────────
@@ -375,7 +404,7 @@ export default function Chat() {
                           wordBreak: 'break-word',
                           boxShadow: isMe ? '0 2px 8px rgba(53,104,184,0.25)' : '0 1px 4px rgba(0,0,0,0.06)',
                         }}>
-                          {msg.content}
+                          {String(msg.content || '').startsWith(VOICE_PREFIX) ? <audio controls preload="metadata" src={msg.content.slice(VOICE_PREFIX.length)} style={{ display: 'block', maxWidth: 230, height: 34 }} /> : msg.content}
                           {translations[msg.id] && (
                             <div style={{ marginTop: 6, paddingTop: 6, borderTop: isMe ? '1px solid rgba(255,255,255,0.3)' : '1px solid var(--border)', fontSize: '0.8rem', fontStyle: 'italic', opacity: 0.85 }}>
                               🌐 {translations[msg.id]}
@@ -410,6 +439,8 @@ export default function Chat() {
               {/* Input */}
               <form onSubmit={sendMessage} style={{ display: 'flex', gap: 10, padding: '12px 14px', borderTop: '1px solid var(--border)', background: 'var(--card)', alignItems: 'flex-end' }}>
                 <Avatar url={user?.avatar_url} name={user?.full_name} size={34} />
+                {audioBlob ? <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, background: '#eef6ff', border: '1px solid #cfe0fb', borderRadius: 18, padding: '7px 10px' }}><audio controls src={audioUrl} style={{ height: 30, minWidth: 0, flex: 1 }} /><button type="button" onClick={cancelAudio} aria-label="Apagar mensagem de voz" style={{ border: 0, background: 'transparent', color: '#c0392b', cursor: 'pointer' }}><Trash2 size={17}/></button><button type="button" onClick={sendAudio} disabled={sending} style={{ border: 0, borderRadius: 16, background: '#3568b8', color: '#fff', padding: '8px 11px', cursor: 'pointer', fontWeight: 700 }}>Enviar voz</button></div> : <>
+                <button type="button" onClick={recording ? stopRecording : startRecording} aria-label={recording ? 'Parar gravação' : 'Gravar mensagem de voz'} style={{ width: 38, height: 38, borderRadius: '50%', background: recording ? '#e74c3c' : '#eef4ff', color: recording ? '#fff' : '#3568b8', border: '1px solid #cfe0fb', cursor: 'pointer', display: 'grid', placeItems: 'center', flexShrink: 0 }}>{recording ? <MicOff size={17}/> : <Mic size={17}/>}</button>
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: 'var(--bg)', borderRadius: 22, padding: '8px 14px', border: '1px solid var(--border)', gap: 8 }}>
                   <input
                     value={text}
@@ -419,6 +450,7 @@ export default function Chat() {
                     onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(e); } }}
                   />
                 </div>
+                </>}
                 <button
                   type="submit"
                   disabled={!text.trim() || sending}
