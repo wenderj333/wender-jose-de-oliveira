@@ -42,7 +42,11 @@ router.get('/:id', authenticate, async (req, res) => {
     const current = await member(group.id, req.user.id);
     if (group.privacy === 'private' && !current && group.creator_id !== req.user.id) return res.status(403).json({ error: 'Este grupo é privado. Peça para entrar.', group: { id:group.id,name:group.name,description:group.description,privacy:group.privacy } });
     const members = await db.query(`SELECT gm.role,u.id,u.full_name,u.avatar_url FROM group_members gm JOIN users u ON u.id=gm.user_id WHERE gm.group_id=$1 ORDER BY CASE gm.role WHEN 'admin' THEN 0 WHEN 'moderator' THEN 1 ELSE 2 END,gm.joined_at`, [group.id]);
-    const posts = await db.query('SELECT gp.*,u.full_name author_name,u.avatar_url author_avatar FROM group_posts gp JOIN users u ON u.id=gp.author_id WHERE gp.group_id=$1 ORDER BY gp.created_at DESC LIMIT 50', [group.id]);
+    const posts = await db.query(`SELECT gp.*,u.full_name author_name,u.avatar_url author_avatar,
+      (SELECT COUNT(*)::int FROM group_post_likes l WHERE l.post_id=gp.id) like_count,
+      (SELECT COUNT(*)::int FROM group_post_comments c WHERE c.post_id=gp.id) comment_count,
+      EXISTS(SELECT 1 FROM group_post_likes l WHERE l.post_id=gp.id AND l.user_id=$2) liked_by_me
+      FROM group_posts gp JOIN users u ON u.id=gp.author_id WHERE gp.group_id=$1 ORDER BY gp.created_at DESC LIMIT 50`, [group.id, req.user.id]);
     const pending = current && ['admin','moderator'].includes(current.role) ? await db.query("SELECT r.user_id,r.message,r.created_at,u.full_name,u.avatar_url FROM group_join_requests r JOIN users u ON u.id=r.user_id WHERE r.group_id=$1 AND r.status='pending' ORDER BY r.created_at", [group.id]) : { rows:[] };
     res.json({ group, members:members.rows, posts:posts.rows, my_role:current?.role || null, pending_requests:pending.rows });
   } catch { res.status(500).json({ error: 'Não foi possível abrir este grupo.' }); }
@@ -111,6 +115,41 @@ router.post('/:id/posts', authenticate, upload.single('media'), async (req,res) 
     const mediaUrl = req.file ? (await uploadToCloud(req.file.buffer,'sigo-com-fe/group-posts')).secure_url : null;
     const post = (await db.query('INSERT INTO group_posts (group_id,author_id,content,media_url) VALUES ($1,$2,$3,$4) RETURNING *',[req.params.id,req.user.id,String(req.body.content || '').trim(),mediaUrl])).rows[0]; res.status(201).json({ post });
   } catch { res.status(500).json({ error:'Não foi possível publicar.' }); }
+});
+
+router.post('/:id/posts/:postId/like', authenticate, async (req, res) => {
+  try {
+    if (!await member(req.params.id, req.user.id)) return res.status(403).json({ error: 'Entre no grupo para reagir.' });
+    const post = (await db.query('SELECT id FROM group_posts WHERE id=$1 AND group_id=$2', [req.params.postId, req.params.id])).rows[0];
+    if (!post) return res.status(404).json({ error: 'Publicação não encontrada.' });
+    const existing = (await db.query('SELECT 1 FROM group_post_likes WHERE post_id=$1 AND user_id=$2', [post.id, req.user.id])).rows[0];
+    if (existing) await db.query('DELETE FROM group_post_likes WHERE post_id=$1 AND user_id=$2', [post.id, req.user.id]);
+    else await db.query('INSERT INTO group_post_likes (post_id,user_id) VALUES ($1,$2)', [post.id, req.user.id]);
+    const count = (await db.query('SELECT COUNT(*)::int AS count FROM group_post_likes WHERE post_id=$1', [post.id])).rows[0].count;
+    res.json({ liked: !existing, like_count: count });
+  } catch { res.status(500).json({ error: 'Não foi possível registar a reação.' }); }
+});
+
+router.get('/:id/posts/:postId/comments', authenticate, async (req, res) => {
+  try {
+    if (!await member(req.params.id, req.user.id)) return res.status(403).json({ error: 'Entre no grupo para ver os comentários.' });
+    const comments = await db.query(`SELECT c.*,u.full_name author_name,u.avatar_url author_avatar
+      FROM group_post_comments c JOIN group_posts p ON p.id=c.post_id JOIN users u ON u.id=c.author_id
+      WHERE c.post_id=$1 AND p.group_id=$2 ORDER BY c.created_at ASC`, [req.params.postId, req.params.id]);
+    res.json({ comments: comments.rows });
+  } catch { res.status(500).json({ error: 'Não foi possível carregar os comentários.' }); }
+});
+
+router.post('/:id/posts/:postId/comments', authenticate, async (req, res) => {
+  try {
+    if (!await member(req.params.id, req.user.id)) return res.status(403).json({ error: 'Entre no grupo para comentar.' });
+    const content = String(req.body?.content || '').trim();
+    if (!content) return res.status(400).json({ error: 'Escreva um comentário.' });
+    const post = (await db.query('SELECT id FROM group_posts WHERE id=$1 AND group_id=$2', [req.params.postId, req.params.id])).rows[0];
+    if (!post) return res.status(404).json({ error: 'Publicação não encontrada.' });
+    const comment = (await db.query('INSERT INTO group_post_comments (post_id,author_id,content) VALUES ($1,$2,$3) RETURNING *', [post.id, req.user.id, content.slice(0, 2000)])).rows[0];
+    res.status(201).json({ comment });
+  } catch { res.status(500).json({ error: 'Não foi possível publicar o comentário.' }); }
 });
 
 router.get('/:id/tools', authenticate, async (req, res) => {

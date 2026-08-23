@@ -322,6 +322,22 @@ const { Pool: MigratePool } = require('pg');
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )
     `);
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS group_post_likes (
+        post_id UUID NOT NULL REFERENCES group_posts(id) ON DELETE CASCADE,
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        PRIMARY KEY (post_id, user_id)
+      );
+      CREATE TABLE IF NOT EXISTS group_post_comments (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        post_id UUID NOT NULL REFERENCES group_posts(id) ON DELETE CASCADE,
+        author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        content TEXT NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+      CREATE INDEX IF NOT EXISTS idx_group_post_comments_post ON group_post_comments(post_id, created_at);
+    `);
 
     // Consecrations
     await mp.query(`
