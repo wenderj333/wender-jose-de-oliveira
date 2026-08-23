@@ -6,7 +6,22 @@ import { Loader2, Settings } from "lucide-react";
 import PhotoModal from "../components/PhotoModal";
 import PhotoUploader from "../components/PhotoUploader";
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
+
+class ProfileErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { failed: false }; }
+  static getDerivedStateFromError() { return { failed: true }; }
+  componentDidCatch(error) { console.error('Profile page error:', error); }
+  render() {
+    if (this.state.failed) return <div style={{ maxWidth:560, margin:'48px auto', padding:24, textAlign:'center', background:'#fff', borderRadius:16, boxShadow:'0 8px 30px rgba(15,23,42,.08)' }}><h2 style={{ color:'#4A2270' }}>Não foi possível abrir este perfil</h2><p style={{ color:'#64748b' }}>Tente atualizar a página. Se o problema continuar, volte ao mural e abra o perfil novamente.</p><button onClick={() => window.history.back()} style={{ background:'#6C3FA0', color:'#fff', border:'none', borderRadius:10, padding:'10px 16px', cursor:'pointer', fontWeight:700 }}>Voltar</button></div>;
+    return this.props.children;
+  }
+}
+
 export default function Profile() {
+  return <ProfileErrorBoundary><ProfileContent /></ProfileErrorBoundary>;
+}
+
+function ProfileContent() {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { user: currentUser, token } = useAuth();
@@ -40,7 +55,7 @@ export default function Profile() {
       .then(r => r.json())
       .then(d => {
         const covers = {};
-        (d.songs || []).forEach(s => { if (s.cover_url) covers[s.url] = s.cover_url; });
+        (Array.isArray(d?.songs) ? d.songs : []).forEach(s => { if (s?.cover_url) covers[s.url] = s.cover_url; });
         setMusicCovers(covers);
       }).catch(() => {});
   }, [token]);
@@ -67,11 +82,11 @@ export default function Profile() {
   useEffect(() => {
     if (!targetId || !token) return;
     fetch(API + "/profile/" + targetId, { headers: { Authorization: "Bearer " + token } })
-      .then(r => r.json()).then(d => { setUser(d.user || d); setLoading(false); }).catch(() => setLoading(false));
+      .then(r => r.json()).then(d => { setUser(d?.user || d || null); setLoading(false); }).catch(() => setLoading(false));
     fetch(API + "/feed", { headers: { Authorization: "Bearer " + token } })
-      .then(r => r.json()).then(d => setUserPosts((d.posts || []).filter(p => p.user_id === targetId || p.author_id === targetId))).catch(() => {});
+      .then(r => r.json()).then(d => setUserPosts((Array.isArray(d?.posts) ? d.posts : []).filter(p => p && (p.user_id === targetId || p.author_id === targetId)))).catch(() => {});
     fetch(API + "/photos/" + targetId, { headers: { Authorization: "Bearer " + token } })
-      .then(r => r.ok ? r.json() : { photos: [] }).then(d => setPhotos(d.photos || [])).catch(() => {});
+      .then(r => r.ok ? r.json() : { photos: [] }).then(d => setPhotos(Array.isArray(d?.photos) ? d.photos.filter(Boolean) : [])).catch(() => {});
     fetch(API + "/feed/liked-posts", { headers: { Authorization: "Bearer " + token } })
       .then(r => r.json()).then(d => {
         const liked = {};
@@ -128,8 +143,8 @@ export default function Profile() {
   if (loading) return <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}><Loader2 className="animate-spin" /></div>;
   if (!user) return <div style={{ textAlign: "center", padding: "20px" }}>{t("profile.notFound","Utilizador nao encontrado.")}</div>;
   const tabs = [["all", t("profile.allPosts","Todas")], ["foto", t("profile.photos","Fotos")], ["video", t("profile.videos","Videos")]];
-  const galleryItems = photos.map(ph => ({ ...ph, media_url: ph.url, _isGallery: true }));
-  const isVideo = (post) => post.media_type === "video" || post.media_url?.includes("/video/") || /\.(mp4|webm|mov)(\?|$)/i.test(post.media_url || "");
+  const galleryItems = photos.filter(Boolean).map(ph => ({ ...ph, media_url: ph.url, _isGallery: true }));
+  const isVideo = (post = {}) => post.media_type === "video" || post.media_url?.includes("/video/") || /\.(mp4|webm|mov)(\?|$)/i.test(post.media_url || "");
   const filteredPosts = userPosts.filter(p => activeTab === "foto" ? (p.media_url && !isVideo(p)) : activeTab === "video" ? (p.media_url && isVideo(p)) : true);
   const filteredGallery = galleryItems.filter(item => activeTab === "all" || (activeTab === "video" ? isVideo(item) : !isVideo(item)));
   const displayPosts = [...filteredPosts, ...filteredGallery];
