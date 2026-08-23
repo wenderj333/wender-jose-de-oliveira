@@ -2857,7 +2857,9 @@ function duelTimer(sid) {
 function duelBotResponder(sid, questionIndex) {
   const sala = duelSalas[sid]; if (!sala) return;
   const bot = sala.j.find(j => j.bot); if (!bot) return;
-  const delay = 3200 + Math.floor(Math.random() * 4200);
+  // Dá sempre pelo menos 7 segundos à pessoa antes de o Bot responder.
+  // Depois varia até 10 segundos para a partida não parecer mecânica.
+  const delay = 7000 + Math.floor(Math.random() * 3000);
   setTimeout(() => {
     const atual = duelSalas[sid];
     if (!atual || atual.qi !== questionIndex || atual.advancing || bot.resp) return;
