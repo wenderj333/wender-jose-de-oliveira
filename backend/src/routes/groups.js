@@ -113,6 +113,36 @@ router.post('/:id/posts', authenticate, upload.single('media'), async (req,res) 
   } catch { res.status(500).json({ error:'Não foi possível publicar.' }); }
 });
 
+router.get('/:id/tools', authenticate, async (req, res) => {
+  try {
+    if (!await member(req.params.id, req.user.id)) return res.status(403).json({ error: 'Entre no grupo para usar as ferramentas.' });
+    const prayers = await db.query(`SELECT p.*, u.full_name author_name FROM group_prayers p JOIN users u ON u.id=p.author_id WHERE p.group_id=$1 ORDER BY p.created_at DESC LIMIT 30`, [req.params.id]);
+    const events = await db.query(`SELECT * FROM group_events WHERE group_id=$1 AND starts_at >= NOW() - INTERVAL '1 day' ORDER BY starts_at ASC LIMIT 30`, [req.params.id]);
+    res.json({ prayers: prayers.rows, events: events.rows });
+  } catch (error) { console.error('Group tools error:', error.message); res.status(500).json({ error: 'Não foi possível carregar as ferramentas do grupo.' }); }
+});
+
+router.post('/:id/prayers', authenticate, async (req, res) => {
+  try {
+    if (!await member(req.params.id, req.user.id)) return res.status(403).json({ error: 'Entre no grupo para partilhar um pedido.' });
+    const content = String(req.body?.content || '').trim();
+    if (!content) return res.status(400).json({ error: 'Escreva o seu pedido de oração.' });
+    const prayer = (await db.query('INSERT INTO group_prayers (group_id,author_id,content) VALUES ($1,$2,$3) RETURNING *', [req.params.id, req.user.id, content])).rows[0];
+    res.status(201).json({ prayer });
+  } catch { res.status(500).json({ error: 'Não foi possível enviar o pedido.' }); }
+});
+
+router.post('/:id/events', authenticate, async (req, res) => {
+  try {
+    if (!await manager(req, res)) return;
+    const title = String(req.body?.title || '').trim();
+    const startsAt = req.body?.starts_at;
+    if (!title || !startsAt || Number.isNaN(Date.parse(startsAt))) return res.status(400).json({ error: 'Informe o título e a data do evento.' });
+    const event = (await db.query('INSERT INTO group_events (group_id,creator_id,title,description,starts_at) VALUES ($1,$2,$3,$4,$5) RETURNING *', [req.params.id, req.user.id, title, String(req.body?.description || '').trim() || null, startsAt])).rows[0];
+    res.status(201).json({ event });
+  } catch { res.status(500).json({ error: 'Não foi possível criar o evento.' }); }
+});
+
 router.delete('/:id', authenticate, async (req,res) => {
   try { const group=(await db.query('SELECT creator_id FROM groups WHERE id=$1',[req.params.id])).rows[0]; if (!group || group.creator_id!==req.user.id) return res.status(403).json({error:'Apenas o criador pode apagar o grupo.'}); await db.query('DELETE FROM groups WHERE id=$1',[req.params.id]); res.json({success:true}); }
   catch { res.status(500).json({error:'Não foi possível apagar o grupo.'}); }

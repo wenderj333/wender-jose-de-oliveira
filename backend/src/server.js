@@ -301,6 +301,27 @@ const { Pool: MigratePool } = require('pg');
         PRIMARY KEY (group_id, user_id)
       )
     `);
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS group_prayers (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+        author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        content TEXT NOT NULL,
+        is_answered BOOLEAN NOT NULL DEFAULT false,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      )
+    `);
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS group_events (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+        creator_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        title VARCHAR(180) NOT NULL,
+        description TEXT,
+        starts_at TIMESTAMPTZ NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      )
+    `);
 
     // Consecrations
     await mp.query(`
