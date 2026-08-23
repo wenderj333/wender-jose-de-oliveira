@@ -17,6 +17,18 @@ const PastorSession = require('./models/PastorSession');
 const clients = new Map(); // ws -> { userId, churchId }
 const liveStreams = new Map(); // streamId -> { id, broadcasterId, broadcasterName, broadcasterWs, viewers: Map<viewerId, ws> }
 
+// Used by HTTP routes (such as direct messages) to notify a logged-in user
+// immediately, without waiting for the next polling request.
+function notifyUser(userId, payload) {
+  if (!userId) return;
+  const message = JSON.stringify(payload);
+  for (const [ws, client] of clients.entries()) {
+    if (client?.userId === userId && ws.readyState === 1) {
+      try { ws.send(message); } catch (_) {}
+    }
+  }
+}
+
 function setupWebSocket(server) {
   const wss = new WebSocketServer({ server, path: '/ws' });
   // Ping para manter conexoes activas
@@ -618,7 +630,7 @@ function handleGameQueue(ws, msg) {
     if (idx !== -1) gameQueue.splice(idx, 1);
   }
 }
-module.exports = { setupWebSocket };
+module.exports = { setupWebSocket, notifyUser };
 
 // clean
 

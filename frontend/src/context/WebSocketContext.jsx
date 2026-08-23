@@ -104,6 +104,12 @@ export function WebSocketProvider({ children }) {
               setLastEvent(data);
               if (data.senderId !== user?.id) {
                 playSoundThrottled();
+                if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+                  new Notification(`💬 ${data.senderName || 'Nova mensagem'}`, {
+                    body: data.preview || 'Envio-te uma nova mensagem no Sigo com Fé.',
+                    icon: '/logo.jpg',
+                  });
+                }
               }
               break;
             case 'chat_new_message':

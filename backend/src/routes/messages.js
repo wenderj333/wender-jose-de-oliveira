@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
 const { createNotification } = require('./notifications');
+const { notifyUser } = require('../websocket');
 
 // ─── GET /api/messages/conversations ─────────────────────────────────────────
 router.get('/conversations', authenticate, async (req, res) => {
@@ -134,6 +135,12 @@ router.post('/', authenticate, async (req, res) => {
       const name = sender.rows[0]?.full_name || 'Alguem';
       const preview = content.trim().length > 50 ? content.trim().substring(0, 50) + '...' : content.trim();
       await createNotification(targetId, 'message', '💬 ' + name, preview, { senderId: me });
+      notifyUser(targetId, {
+        type: 'direct_message',
+        senderId: me,
+        senderName: name,
+        preview,
+      });
     } catch (_) {}
 
     res.status(201).json({ message: msg });
