@@ -477,6 +477,8 @@ app.use('/api/openclaw', require('./routes/openclaw'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/help-posts', require('./routes/help-posts'));
 app.use('/api/live-community', require('./routes/live-community'));
+app.use('/api/diary', require('./routes/diary'));
+app.use('/api/reflection', require('./routes/reflection'));
 
 // Log OpenClaw routes for debugging
 console.log('âœ… OpenClaw routes registered: /api/openclaw/health, /api/openclaw/users/new');

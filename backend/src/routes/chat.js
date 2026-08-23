@@ -57,6 +57,39 @@ router.get('/rooms', async (req, res) => {
   } catch(err) { res.status(500).json({ error: 'Erro' }); }
 });
 
+router.get('/churches-online', async (req, res) => {
+  try {
+    const result = await db.query('SELECT id, name FROM churches ORDER BY name ASC LIMIT 50');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao carregar igrejas.' });
+  }
+});
+
+router.post('/rooms/:roomId/join', async (req, res) => {
+  try {
+    const { language = 'pt' } = req.body || {};
+    const result = await db.query(
+      "UPDATE chat_rooms SET status = 'active', pastor_language = $1 WHERE id = $2 AND status = 'waiting' RETURNING *",
+      [language, req.params.roomId]
+    );
+    if (!result.rows[0]) return res.status(404).json({ error: 'Sala não disponível.' });
+    res.json({ room: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao entrar na sala.' });
+  }
+});
+
+router.post('/rooms/:roomId/close', async (req, res) => {
+  try {
+    const result = await db.query("UPDATE chat_rooms SET status = 'closed' WHERE id = $1 RETURNING *", [req.params.roomId]);
+    if (!result.rows[0]) return res.status(404).json({ error: 'Sala não encontrada.' });
+    res.json({ room: result.rows[0] });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao encerrar a sala.' });
+  }
+});
+
 // GET /api/chat/rooms/:roomId/messages
 router.get('/rooms/:roomId/messages', async (req, res) => {
   try {
