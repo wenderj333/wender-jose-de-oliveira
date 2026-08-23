@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Heart, MessageCircle, Music, Pause, Play, Send, ShieldCheck, Users, Volume2 } from 'lucide-react';
+import { Heart, MessageCircle, Music, Pause, Play, Send, ShieldCheck, Smile, Users, Volume2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ export default function LiveCommunity() {
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [chatMessages, setChatMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
+  const [showEmojis, setShowEmojis] = useState(false);
   const [onlineCount, setOnlineCount] = useState(0);
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -57,6 +58,10 @@ export default function LiveCommunity() {
     audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
   };
   const nextSong = () => setCurrentSongIndex(index => songs.length ? (index + 1) % songs.length : 0);
+  const addEmoji = emoji => {
+    setMessageInput(value => `${value}${emoji}`);
+    setShowEmojis(false);
+  };
   const onlineLabel = c.online(onlineCount);
 
   return <div style={{ minHeight: '100vh', padding: '20px 0 36px', color: '#1e2240' }}>
@@ -78,7 +83,11 @@ export default function LiveCommunity() {
           {chatMessages.map((message, index) => <article key={message.id || `${message.userName}-${index}`} style={{ marginBottom: 12, padding: '11px 13px', background: '#fff', border: '1px solid #e6ebf6', borderRadius: '4px 14px 14px 14px', maxWidth: '85%' }}><strong style={{ color: '#3568b8', fontSize: 13 }}>{message.userName || 'Membro'}</strong><p style={{ margin: '4px 0 0', lineHeight: 1.45 }}>{message.text || message.message}</p></article>)}
           <div ref={chatEndRef} />
         </div>
-        <footer style={{ padding: 14, borderTop: '1px solid #e0e6f5', display: 'flex', gap: 9 }}>
+        <footer style={{ padding: 14, borderTop: '1px solid #e0e6f5', display: 'flex', gap: 9, position: 'relative' }}>
+          {showEmojis && <div style={{ position: 'absolute', left: 14, bottom: 66, zIndex: 4, display: 'flex', gap: 4, flexWrap: 'wrap', width: 238, padding: 9, borderRadius: 12, border: '1px solid #d7dfef', background: '#fff', boxShadow: '0 10px 25px rgba(30,34,64,.18)' }}>
+            {['🙏', '❤️', '😊', '🙌', '📖', '✨', '🕊️', '🔥', '👏', '🤍', '🌿', '💬'].map(emoji => <button key={emoji} type="button" onClick={() => addEmoji(emoji)} aria-label={`Adicionar ${emoji}`} style={{ width: 32, height: 32, border: 0, borderRadius: 8, background: '#f5f8ff', cursor: 'pointer', fontSize: 18 }}>{emoji}</button>)}
+          </div>}
+          <button type="button" onClick={() => setShowEmojis(open => !open)} aria-label="Adicionar emoji" style={{ width: 42, border: '1px solid #d7dfef', borderRadius: 12, background: showEmojis ? '#eaf2ff' : '#fff', color: '#3568b8', cursor: 'pointer', display: 'grid', placeItems: 'center' }}><Smile size={19}/></button>
           <input value={messageInput} onChange={event => setMessageInput(event.target.value)} onKeyDown={event => event.key === 'Enter' && sendMessage()} onFocus={() => (!user || isGuest) && setShowGuestPrompt(true)} placeholder={user && !isGuest ? c.write : c.account} readOnly={!user || isGuest} style={{ minWidth: 0, flex: 1, padding: '12px 14px', border: '1px solid #d7dfef', borderRadius: 12, fontSize: 14, outlineColor: '#4a80d4' }}/>
           <button onClick={sendMessage} aria-label="Enviar mensagem" style={{ width: 46, border: 0, borderRadius: 12, background: '#3568b8', color: '#fff', cursor: 'pointer', display: 'grid', placeItems: 'center' }}><Send size={19}/></button>
         </footer>
