@@ -2744,7 +2744,7 @@ ioduelo.on('connection', (socket) => {
       socket.join(sid); op.socket.join(sid);
       const p1 = shuffleArray(perguntasDuelo[lang] || perguntasDuelo.pt).slice(0,10);
       const p2 = shuffleArray(perguntasDuelo[op.lang] || perguntasDuelo.pt).slice(0,10);
-      duelSalas[sid] = { j:[{id:socket.id,nome,lang,pts:0,resp:false,foto,perguntas:p1},{id:op.socket.id,nome:op.nome,lang:op.lang,pts:0,resp:false,foto:op.foto||null,perguntas:p2}], qi:0, t:15, timer:null };
+      duelSalas[sid] = { j:[{id:socket.id,nome,lang,pts:0,resp:false,foto,perguntas:p1},{id:op.socket.id,nome:op.nome,lang:op.lang,pts:0,resp:false,foto:op.foto||null,perguntas:p2}], qi:0, t:15, timer:null, advancing:false };
       socket.emit('inicioJogo', {salaId:sid, oponente:op.nome, fotoOponente:op.foto||null, pergunta:p1[0]});
       op.socket.emit('inicioJogo', {salaId:sid, oponente:nome, fotoOponente:foto||null, pergunta:p2[0]});
       duelTimer(sid);
@@ -2753,14 +2753,36 @@ ioduelo.on('connection', (socket) => {
   socket.on('chatDuelo',(d)=>{ const sala=duelSalas[d.salaId]; if(!sala) return; socket.to(d.salaId).emit('chatDuelo',{msg:d.msg,nome:d.nome}); });
   socket.on('enviarResposta', (d) => {
     const sala = duelSalas[d.salaId]; if (!sala) return;
+    if (sala.advancing) return;
     const j = sala.j.find(x => x.id === socket.id);
     if (j && !j.resp) {
       j.resp = true;
       const p = (j.perguntas||perguntasDuelo[j.lang]||perguntasDuelo.pt)[sala.qi];
-      if (d.escolha === p.c) j.pts += 100 + (sala.t * 5);
+      const acertou = d.escolha === p.c;
+      if (acertou) j.pts += 100 + (sala.t * 5);
       const op = sala.j.find(x => x.id !== socket.id);
       if (op) ioduelo.to(op.id).emit('oponenteRespondeu');
-      if (sala.j.every(x => x.resp)) { clearInterval(sala.timer); setTimeout(() => duelProxima(d.salaId), 1500); }
+      // Uma resposta correta vence a rodada: ambos avançam sem esperar o cronómetro.
+      if (acertou) {
+        sala.advancing = true;
+        clearInterval(sala.timer);
+        ioduelo.to(d.salaId).emit('rodadaEncerrada', { vencedor: j.nome });
+        setTimeout(() => {
+          const atual = duelSalas[d.salaId];
+          if (!atual) return;
+          atual.advancing = false;
+          duelProxima(d.salaId);
+        }, 850);
+      } else if (sala.j.every(x => x.resp)) {
+        sala.advancing = true;
+        clearInterval(sala.timer);
+        setTimeout(() => {
+          const atual = duelSalas[d.salaId];
+          if (!atual) return;
+          atual.advancing = false;
+          duelProxima(d.salaId);
+        }, 850);
+      }
     }
   });
 
@@ -2820,6 +2842,7 @@ function duelTimer(sid) {
 
 function duelProxima(sid) {
   const sala = duelSalas[sid]; if (!sala) return;
+  clearInterval(sala.timer);
   sala.qi++; sala.j.forEach(j => j.resp = false);
   if (sala.qi < 10) {
     sala.j.forEach(j => {
