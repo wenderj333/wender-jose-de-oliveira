@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, UserPlus, Mail, Lock, User, MessageCircle, Heart, ShieldCheck } from 'lucide-react';
+import { getChristianChatCopy } from '../i18n/christianChatCopy';
 
 // Google Analytics conversion events
 function trackSignUpEvent() {
@@ -16,7 +17,8 @@ function trackSignUpEvent() {
 export default function Register() {
   const { register, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const c = getChristianChatCopy(i18n.language);
   const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'member' });
   const [error, setError] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -47,13 +49,13 @@ export default function Register() {
     <div style={{ minHeight: '100vh', padding: '32px 16px', background: 'linear-gradient(145deg,#f4f8ff 0%,#ffffff 62%)' }}>
       <div className="register-layout" style={{ maxWidth: 980, margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(280px,.9fr) minmax(360px,1fr)', gap: 28, alignItems: 'center' }}>
       <aside style={{ color: '#1e2240' }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#eaf2ff', color: '#3568b8', padding: '8px 12px', borderRadius: 99, fontWeight: 800, fontSize: 13 }}><MessageCircle size={16}/> Comunidade Sigo com Fé</span>
-        <h2 style={{ fontSize: 'clamp(2rem,4vw,3.2rem)', lineHeight: 1.08, margin: '17px 0 12px', letterSpacing: '-.03em' }}>Crie a sua conta e entre na Sala de Conversa Cristã</h2>
-        <p style={{ color: '#59627d', fontSize: '1.03rem', lineHeight: 1.65, marginBottom: 22 }}>Partilhe fé, versículos e pedidos de oração numa comunidade acolhedora. O registo é gratuito.</p>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#eaf2ff', color: '#3568b8', padding: '8px 12px', borderRadius: 99, fontWeight: 800, fontSize: 13 }}><MessageCircle size={16}/> {c.brand}</span>
+        <h2 style={{ fontSize: 'clamp(2rem,4vw,3.2rem)', lineHeight: 1.08, margin: '17px 0 12px', letterSpacing: '-.03em' }}>{c.signupTitle}</h2>
+        <p style={{ color: '#59627d', fontSize: '1.03rem', lineHeight: 1.65, marginBottom: 22 }}>{c.signupDesc}</p>
         <div style={{ display: 'grid', gap: 12 }}>
-          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><MessageCircle size={20} color="#3568b8" style={{ flexShrink: 0 }}/><div><strong>Sala de conversa ao vivo</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>Converse com respeito, conheça pessoas e caminhe na fé.</p></div></div>
-          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><Heart size={20} color="#c49a28" style={{ flexShrink: 0 }}/><div><strong>Oração e encorajamento</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>Envie pedidos de oração e partilhe uma palavra de esperança.</p></div></div>
-          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><ShieldCheck size={20} color="#6c3fa0" style={{ flexShrink: 0 }}/><div><strong>Ambiente respeitoso</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>Uma comunidade feita para acolher, sem spam e com respeito.</p></div></div>
+          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><MessageCircle size={20} color="#3568b8" style={{ flexShrink: 0 }}/><div><strong>{c.liveFeature}</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>{c.liveFeatureDesc}</p></div></div>
+          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><Heart size={20} color="#c49a28" style={{ flexShrink: 0 }}/><div><strong>{c.prayerFeature}</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>{c.prayerFeatureDesc}</p></div></div>
+          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><ShieldCheck size={20} color="#6c3fa0" style={{ flexShrink: 0 }}/><div><strong>{c.safeFeature}</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>{c.safeFeatureDesc}</p></div></div>
         </div>
       </aside>
       <div className="card auth-card" style={{ margin: 0, boxShadow: '0 15px 40px rgba(53,104,184,.12)' }}>
