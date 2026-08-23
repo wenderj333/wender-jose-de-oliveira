@@ -512,6 +512,26 @@ export default function MuralGrid() {
   const musicRef = useRef(null);
   const [activeLive, setActiveLive] = useState(null);
 
+  // Recebe um diploma vindo do Duelo Bíblico, abre o compositor e deixa a
+  // publicação sempre sob a confirmação do próprio jogador.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const diploma = params.get('dueloDiploma');
+    if (diploma) {
+      const safeDiploma = diploma.slice(0, 1800);
+      localStorage.setItem('sigo_diploma_pendente', safeDiploma);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+    const pendingDiploma = localStorage.getItem('sigo_diploma_pendente');
+    if (user && pendingDiploma) {
+      setPostText(pendingDiploma);
+      setPostCategory('testemunho');
+      setPostVisibility('public');
+      setShowForm(true);
+      localStorage.removeItem('sigo_diploma_pendente');
+    }
+  }, [user]);
+
   useEffect(() => {
     const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
     const checkLive = async () => {
