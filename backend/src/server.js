@@ -2734,6 +2734,8 @@ ioduelo.on('connection', (socket) => {
     const lang = d.idioma || 'pt';
     const nome = d.nome || 'Jogador';
     const foto = d.foto || null;
+    // O bot não entra nesta lista: ela deve conter apenas pessoas reais.
+    jogadoresOnline[socket.id] = { nome, foto, socketId: socket.id };
     const sid = 'bot_' + Date.now();
     const perguntas = shuffleArray(perguntasDuelo[lang] || perguntasDuelo.pt).slice(0, 10);
     socket.join(sid);
@@ -2919,7 +2921,8 @@ app.get('/api/duelo/online-jogadores', (req, res) => {
 });
 
 app.get('/api/duelo/online', (req, res) => {
-  const online = Object.keys(duelSalas).length * 2 + (duelEsperando ? 1 : 0);
+  // Conta conexões humanas ativas (em partida ou à espera), nunca o Bot Bíblico.
+  const online = Object.keys(jogadoresOnline).length;
   res.json({ online });
 });
 
