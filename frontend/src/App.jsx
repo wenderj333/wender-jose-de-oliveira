@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 
 import "./sidebar.css";
 
-import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
 
@@ -38,6 +38,8 @@ import Settings from "./pages/Settings";
 import Members from "./pages/Members";
 
 import Groups from "./pages/Groups";
+import GroupDetail from "./pages/GroupDetail";
+import PrayerGroupsLanding from "./pages/PrayerGroupsLanding";
 
 import MusicLibrary from "./pages/MusicLibrary";
 
@@ -85,6 +87,7 @@ import Friends from "./pages/Friends";
 import Notifications from "./pages/Notifications";
 
 import LiveCommunity from "./pages/LiveCommunity";
+import ChristianChatLanding from "./pages/ChristianChatLanding";
 
 
 
@@ -364,7 +367,7 @@ export default function App() {
 
       <div style={{width:50,height:50,border:'4px solid #e0e6f5',borderTopColor:'#4a80d4',borderRadius:'50%',animation:'spin 1s linear infinite'}}/>
 
-      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.2rem',fontWeight:600,color:'#3568b8'}}>Sigo com FÃÂ©...</p>
+      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.2rem',fontWeight:600,color:'#3568b8'}}>Sigo com Fé...</p>
 
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
 
@@ -387,10 +390,11 @@ export default function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/mural" element={<MuralGrid />} />
+        <Route path="/grupos-oracao" element={<PrayerGroupsLanding />} />
 
         <Route path="/perfil/:userId" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="/configuracoes" element={<Settings />} /><Route path="/configuracoes" element={<Settings />} />
+        <Route path="/configuracoes" element={<Settings />} />
 
             <Route path="/membros" element={<Members />} />
 
@@ -401,8 +405,7 @@ export default function App() {
         <Route path="/musica" element={<MusicLibrary />} />
 
         <Route path="/comunidade-ao-vivo" element={<LiveCommunity />} />
-
-        <Route path="/login" element={<Login />} />
+        <Route path="/chat-cristao" element={<ChristianChatLanding />} />
 
         <Route path="*" element={<Login />} />
 
@@ -432,7 +435,8 @@ export default function App() {
 
         <Link to="/" style={{display:'flex',alignItems:'center',gap:'9px',textDecoration:'none'}}>
 
-          <img src='/logo-new.png' alt='Sigo com Fe' style={{height:38,width:38,objectFit:'cover',borderRadius:10}} />
+          <img src='/logo-new.png' alt='Sigo com Fé' style={{height:40,width:40,objectFit:'cover',borderRadius:12}} />
+          <span className="brand-lockup"><strong>Sigo com Fé</strong><small>Comunidade cristã</small></span>
 
         </Link>
 
@@ -570,7 +574,7 @@ export default function App() {
 
               ['/musica', <Music size={20}/>, t('nav.music')],
 
-              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA BÃÂ­blica')],
+              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA Bíblica')],
 
               ['/grupos', <Users size={20}/>, t('nav.groups')],
 
@@ -646,7 +650,7 @@ export default function App() {
 
             <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.live_community','Chat')} {unreadMessages>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{unreadMessages}</span>}</span></Link>
 
-            <Link to="/notificacoes" className={isActive('/notificacoes')}><Bell size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.notifications','NotificaÃÂ§ÃÂµes')}</span></Link>
+            <Link to="/notificacoes" className={isActive('/notificacoes')}><Bell size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.notifications','Notificações')}</span></Link>
 
           </div>
 
@@ -656,7 +660,7 @@ export default function App() {
 
           <div className="menu-group">
 
-            <p className="menu-title">{t('menu.you','VOCÃ')}</p>
+            <p className="menu-title">{t('menu.you','VOCÊ')}</p>
 
             <Link to="/amigos" className={isActive('/amigos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.friends','Amigos')} {pendingRequests>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{pendingRequests}</span>}</span></Link>
 
@@ -688,17 +692,17 @@ export default function App() {
 
             <p className="menu-title">{t('menu.spiritual','ESPIRITUAL')}</p>
 
-            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bible_ai','IA BÃÂ­blica')}</span></Link>
+            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bible_ai','IA Bíblica')}</span></Link>
 
-            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','OraÃÂ§ÃÂµes')}</span></Link>
+            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','Orações')}</span></Link>
 
             <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_life','Ajuda ao Proximo')}</span></Link>
 
-            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','ReflexÃÂ£o')}</span></Link>
+            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','Reflexão')}</span></Link>
 
-            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','MÃºsica')}</span></Link>
+            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','Música')}</span></Link>
 
-            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','ConsagraÃÂ§ÃÂ£o')}</span></Link>
+            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','Consagração')}</span></Link>
 
           </div>
 
@@ -738,9 +742,7 @@ export default function App() {
 
             <Route path="/" element={<MuralGrid />} />
 
-            <Route path="/perfil/:userId" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/configuracoes" element={<Settings />} />
+            <Route path="/login" element={<Navigate to="/" replace />} />
 
             <Route path="/perfil/:userId" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
@@ -757,6 +759,7 @@ export default function App() {
             <Route path="/journeys" element={<FaithJourneys />} />
 
             <Route path="/grupos" element={<Groups />} />
+            <Route path="/grupos/:id" element={<GroupDetail />} />
 
             <Route path="/musica" element={<MusicLibrary />} />
 
@@ -793,6 +796,7 @@ export default function App() {
             <Route path='/live' element={<LiveStream />} />
 
             <Route path='/comunidade-ao-vivo' element={<LiveCommunity />} />
+            <Route path='/chat-cristao' element={<ChristianChatLanding />} />
 
           <Route path='/privacidade' element={<PrivacyPolicy />} />
 
@@ -942,7 +946,7 @@ export default function App() {
 
                     <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}>
 
-                      <b style={{color:'var(--fb)'}}>{prayer.author_name || 'AnÃ³nimo'}</b> {prayer.content.length > 40 ? prayer.content.substring(0, 40) + '...' : prayer.content}
+                      <b style={{color:'var(--fb)'}}>{prayer.author_name || 'Anónimo'}</b> {prayer.content.length > 40 ? prayer.content.substring(0, 40) + '...' : prayer.content}
 
                     </p>
 
@@ -994,7 +998,7 @@ export default function App() {
 
                 <p style={{fontSize:'0.8rem',fontWeight:600,color:'var(--text)'}}>Culto Dominical</p>
 
-                <p style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h ÃÂ· Online</p>
+                <p style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h · Online</p>
 
               </div>
 
@@ -1116,4 +1120,3 @@ export default function App() {
 
 
 // force deploy
-
