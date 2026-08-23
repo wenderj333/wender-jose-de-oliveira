@@ -112,16 +112,16 @@ function PastorDashboard() {
   const verse = verses[Math.floor(Math.random() * verses.length)];
 
   const sections = [
-    { id: 'minha-igreja', icon: '🏛️', label: 'Minha Igreja', Ico: ShieldCheck },
-    { id: 'membros', icon: '👥', label: 'Membros', Ico: Users },
-    { id: 'dizimos', icon: '💰', label: 'Dízimos', Ico: DollarSign },
-    { id: 'oracoes', icon: '🙏', label: 'Orações', Ico: Heart },
-    { id: 'chat', icon: '💬', label: 'Chat', Ico: MessageCircle },
-    { id: 'despesas', icon: '⚙️', label: 'Despesas', Ico: Settings },
-    { id: 'estudos', icon: '📖', label: 'Estudos', Ico: BookOpen },
-    { id: 'comunicados', icon: '📢', label: 'Comunicados', Ico: Megaphone },
-    { id: 'agenda', icon: '📅', label: 'Agenda', Ico: Calendar },
-    { id: 'relatorios', icon: '📊', label: 'Relatórios', Ico: BarChart3 },
+    { id: 'minha-igreja', label: 'Minha igreja', Ico: ShieldCheck },
+    { id: 'membros', label: 'Membros', Ico: Users },
+    { id: 'oracoes', label: 'Orações', Ico: Heart },
+    { id: 'chat', label: 'Conversas', Ico: MessageCircle },
+    { id: 'comunicados', label: 'Comunicados', Ico: Megaphone },
+    { id: 'agenda', label: 'Agenda', Ico: Calendar },
+    { id: 'estudos', label: 'Estudos', Ico: BookOpen },
+    { id: 'dizimos', label: 'Registos', Ico: DollarSign },
+    { id: 'despesas', label: 'Despesas', Ico: Settings },
+    { id: 'relatorios', label: 'Relatórios', Ico: BarChart3 },
   ];
 
   const handleSection = (id) => {
@@ -135,7 +135,7 @@ function PastorDashboard() {
   return (
     <div style={styles.page}>
       <div style={styles.header}>
-        <div style={styles.headerTitle}><ShieldCheck size={24} /> {t('pastorDashboard.title')}</div>
+        <div style={styles.headerTitle}><ShieldCheck size={24} /> Sala do Pastor</div>
         <div style={styles.verse}>{verse}</div>
         {overview?.church && <div style={{ fontSize: 13, opacity: 0.8, paddingBottom: 8 }}>{overview.church?.name || overview.church}</div>}
       </div>
@@ -144,37 +144,27 @@ function PastorDashboard() {
           <>
             {loadingOverview ? <div style={styles.loading}>{t('pastorDashboard.loading')}</div> : stats && (
               <div style={styles.statGrid}>
-                <div style={styles.statCard}><div style={styles.statNum}>{stats.members ?? 0}</div><div style={styles.statLabel}>{t('pastorDashboard.membersCount')}</div></div>
-                <div style={styles.statCard}><div style={styles.statNum}>{stats.prayers ?? 0}</div><div style={styles.statLabel}>{t('pastorDashboard.prayersCount')}</div></div>
-                <div style={styles.statCard}><div style={{ ...styles.statNum, color: GOLD }}>{formatCurrency((stats.tithesTotal || 0) + (stats.offeringsTotal || 0))}</div><div style={styles.statLabel}>{t('pastorDashboard.monthlyIncome')}</div></div>
-                <div style={styles.statCard}><div style={styles.statNum}>{stats.activeChats ?? 0}</div><div style={styles.statLabel}>{t('pastorDashboard.activeChats')}</div></div>
+                <div style={styles.statCard}><Users size={20} color={PURPLE} /><div style={styles.statNum}>{stats.members ?? 0}</div><div style={styles.statLabel}>Membros ativos</div></div>
+                <div style={styles.statCard}><Heart size={20} color="#c2417b" /><div style={styles.statNum}>{stats.prayers ?? 0}</div><div style={styles.statLabel}>Pedidos de oração</div></div>
+                <div style={styles.statCard}><DollarSign size={20} color={GOLD} /><div style={{ ...styles.statNum, color: GOLD }}>{formatCurrency((stats.tithesTotal || 0) + (stats.offeringsTotal || 0))}</div><div style={styles.statLabel}>Registos do mês</div></div>
+                <div style={styles.statCard}><MessageCircle size={20} color="#2563eb" /><div style={styles.statNum}>{stats.activeChats ?? 0}</div><div style={styles.statLabel}>Conversas ativas</div></div>
               </div>
             )}
-            
-            {/* Pastor Dashboard Welcome */}
-            <div style={{ background: 'linear-gradient(135deg, rgba(108,63,160,0.08), rgba(212,168,67,0.1))', border: '1px solid rgba(108,63,160,0.2)', borderRadius: 16, padding: '1rem', marginBottom: '1rem' }}>
-              <h3 style={{ fontSize: '1rem', color: '#4A2270', margin: '0 0 0.5rem' }}>{t('pastorDashboard.welcomeTitle')}</h3>
-              <p style={{ fontSize: '0.85rem', color: '#555', lineHeight: 1.5, margin: '0 0 0.5rem' }}>
-                {t('pastorDashboard.welcomeText')}
-              </p>
-              <div style={{ fontSize: '0.78rem', color: '#666', lineHeight: 1.6 }}>
-                {t('pastorDashboard.welcomeMembers')}<br/>
-                {t('pastorDashboard.welcomeTithes')}<br/>
-                {t('pastorDashboard.welcomePrayers')}<br/>
-                {t('pastorDashboard.welcomeChat')}<br/>
-                {t('pastorDashboard.welcomeExpenses')}<br/>
-                📖 <strong>Estudos</strong> — crie e compartilhe estudos bíblicos<br/>
-                📢 <strong>Comunicados</strong> — envie avisos para toda a igreja<br/>
-                📅 <strong>Agenda</strong> — organize eventos e cultos<br/>
-                📊 <strong>Relat\u00f3rios</strong> — veja resumos financeiros e de atividades
+            <div style={{ background: '#fff', border: '1px solid #ebe4f4', borderRadius: 18, padding: '20px', marginBottom: '18px', boxShadow: '0 6px 20px rgba(47,27,78,.06)' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:8 }}><ShieldCheck size={21} color={PURPLE} /><h3 style={{ fontSize:'1.05rem', color:PURPLE_DARK, margin:0 }}>Comece a organizar a sua comunidade</h3></div>
+              <p style={{ fontSize:'0.88rem', color:'#64748b', lineHeight:1.55, margin:'0 0 14px' }}>A Sala do Pastor reúne a sua igreja num único lugar. Os pagamentos não estão ativos: a área financeira serve apenas para registos internos.</p>
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(190px, 1fr))', gap:10 }}>
+                <button onClick={()=>setSection('minha-igreja')} style={{ textAlign:'left', background:'#f8fafc', border:'1px solid #e2e8f0', borderRadius:12, padding:12, cursor:'pointer', color:'#334155' }}><b>1. Complete a igreja</b><br/><span style={{fontSize:12}}>Dados, morada e página pública</span></button>
+                <button onClick={()=>setSection('membros')} style={{ textAlign:'left', background:'#f8fafc', border:'1px solid #e2e8f0', borderRadius:12, padding:12, cursor:'pointer', color:'#334155' }}><b>2. Convide membros</b><br/><span style={{fontSize:12}}>Veja quem escolheu seguir a igreja</span></button>
+                <button onClick={()=>setSection('comunicados')} style={{ textAlign:'left', background:'#f8fafc', border:'1px solid #e2e8f0', borderRadius:12, padding:12, cursor:'pointer', color:'#334155' }}><b>3. Publique um comunicado</b><br/><span style={{fontSize:12}}>Partilhe cultos, eventos e avisos</span></button>
               </div>
             </div>
             <div style={styles.grid}>
               {sections.map(s => (
-                <div key={s.id} style={styles.card(false)} onClick={() => handleSection(s.id)}>
-                  <div style={styles.cardIcon}>{s.icon}</div>
+                <button key={s.id} type="button" style={{ ...styles.card(false), fontFamily:'inherit' }} onClick={() => handleSection(s.id)}>
+                  <div style={styles.cardIcon}><s.Ico size={27} color={PURPLE} /></div>
                   <div style={styles.cardLabel}>{s.label}</div>
-                </div>
+                </button>
               ))}
             </div>
           </>
