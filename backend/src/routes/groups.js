@@ -90,6 +90,20 @@ router.post('/:id/requests/:userId', authenticate, async (req,res) => {
   } catch { res.status(500).json({ error:'Não foi possível atualizar o pedido.' }); }
 });
 
+router.patch('/:id/members/:userId/role', authenticate, async (req, res) => {
+  try {
+    const group = (await db.query('SELECT creator_id FROM groups WHERE id=$1', [req.params.id])).rows[0];
+    if (!group) return res.status(404).json({ error: 'Grupo não encontrado.' });
+    if (group.creator_id !== req.user.id) return res.status(403).json({ error: 'Só o criador pode gerir moderadores.' });
+    if (req.params.userId === group.creator_id) return res.status(400).json({ error: 'O criador permanece administrador.' });
+    const role = req.body?.role;
+    if (!['member', 'moderator'].includes(role)) return res.status(400).json({ error: 'Função inválida.' });
+    const result = await db.query('UPDATE group_members SET role=$1 WHERE group_id=$2 AND user_id=$3 RETURNING role', [role, req.params.id, req.params.userId]);
+    if (!result.rows[0]) return res.status(404).json({ error: 'Membro não encontrado.' });
+    res.json({ success: true, role: result.rows[0].role });
+  } catch { res.status(500).json({ error: 'Não foi possível atualizar o moderador.' }); }
+});
+
 router.patch('/:id/settings', authenticate, async (req,res) => {
   try {
     if (!await manager(req,res)) return;

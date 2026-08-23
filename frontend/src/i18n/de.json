@@ -725,7 +725,9 @@
     "publishing": "Wird veröffentlicht...",
     "comments": "Kommentare",
     "loadingComments": "Kommentare werden geladen...",
-    "commentPlaceholder": "Einen Kommentar schreiben..."
+    "commentPlaceholder": "Einen Kommentar schreiben...",
+    "makeModerator": "Zum Moderator machen",
+    "removeModerator": "Moderator entfernen"
   },
   "consecration": {
     "title": "Consecration",
