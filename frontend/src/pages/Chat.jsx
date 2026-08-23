@@ -312,7 +312,7 @@ export default function Chat() {
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 2 }}>
                         <span style={{ fontSize: '0.78rem', color: conv.unread > 0 ? 'var(--text)' : 'var(--muted)', fontWeight: conv.unread > 0 ? 600 : 400, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 140 }}>
-                          {conv.last_content}
+                          {String(conv.last_content || '').startsWith(VOICE_PREFIX) ? 'Mensagem de voz' : conv.last_content}
                         </span>
                         {conv.unread > 0 && (
                           <span style={{ background: 'var(--fb,#4a80d4)', color: 'white', borderRadius: '50%', width: 18, height: 18, fontSize: '0.65rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -350,9 +350,9 @@ export default function Chat() {
                     {friendStatus === 'accepted' ? '✓ Amigos' : friendStatus === 'pending' ? '⏳ Pedido enviado' : ''}
                   </p>
                 </div>
-                <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
-                  <button type="button" onClick={() => startCall('audio')} aria-label="Chamada de voz" style={{ width: 34, height: 34, borderRadius: '50%', border: '1px solid var(--border)', background: '#fff', color: '#3568b8', cursor: 'pointer' }}><Phone size={16}/></button>
-                  <button type="button" onClick={() => startCall('video')} aria-label="Videochamada" style={{ width: 34, height: 34, borderRadius: '50%', border: '1px solid var(--border)', background: '#fff', color: '#3568b8', cursor: 'pointer' }}><Video size={16}/></button>
+                <div style={{ marginLeft: 'auto', display: 'flex', gap: 7 }}>
+                  <button type="button" onClick={() => startCall('audio')} style={{ display: 'flex', alignItems: 'center', gap: 5, borderRadius: 9, border: '1px solid #bcd2f3', background: '#eef5ff', color: '#245ea7', cursor: 'pointer', padding: '8px 10px', fontWeight: 700, fontSize: 12 }}><Phone size={15}/> Ligar</button>
+                  <button type="button" onClick={() => startCall('video')} style={{ display: 'flex', alignItems: 'center', gap: 5, borderRadius: 9, border: '1px solid #bcd2f3', background: '#eef5ff', color: '#245ea7', cursor: 'pointer', padding: '8px 10px', fontWeight: 700, fontSize: 12 }}><Video size={15}/> Vídeo</button>
                 </div>
               </>
             )}
