@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { Send, Search, ArrowLeft, UserPlus, MessageCircle, Check, CheckCheck, Mic, MicOff, Trash2 } from 'lucide-react';
+import { Send, Search, ArrowLeft, UserPlus, MessageCircle, Check, CheckCheck, Mic, MicOff, Trash2, Phone, PhoneOff, Video } from 'lucide-react';
+import { useWebSocket } from '../context/WebSocketContext';
 
 const API = import.meta.env.VITE_API_URL || '';
 const CLOUDINARY_BASE = 'https://api.cloudinary.com/v1_1/degxiuf43/video/upload';
@@ -32,6 +33,7 @@ function playMessageSound(type) {
 export default function Chat() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
+  const { send: sendSocket, on: onSocket, off: offSocket } = useWebSocket();
   const { userId } = useParams(); // /mensagens/:userId
   const navigate = useNavigate();
 
@@ -52,10 +54,25 @@ export default function Chat() {
   const [audioUrl, setAudioUrl] = useState(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const peerRef = useRef(null);
+  const localStreamRef = useRef(null);
+  const localVideoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
+  const callRef = useRef(null);
+  const [call, setCall] = useState(null);
+  const setCurrentCall = value => { callRef.current = value; setCall(value); };
   const startRecording = async () => { try { const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); const mediaRecorder = new MediaRecorder(stream); mediaRecorderRef.current = mediaRecorder; audioChunksRef.current = []; mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunksRef.current.push(e.data); }; mediaRecorder.onstop = () => { const blob = new Blob(audioChunksRef.current, { type: "audio/webm" }); setAudioBlob(blob); setAudioUrl(URL.createObjectURL(blob)); stream.getTracks().forEach(t => t.stop()); }; mediaRecorder.start(); setRecording(true); } catch(e) { alert("Erro ao aceder ao microfone"); } };
   const stopRecording = () => { if (mediaRecorderRef.current) { mediaRecorderRef.current.stop(); setRecording(false); } };
   const cancelAudio = () => { setAudioBlob(null); setAudioUrl(null); };
   const pollRef = useRef(null);
+
+  const closeCall = (notify = true) => { const active = callRef.current; if (notify && active?.id) sendSocket?.({ type: 'call_end', callId: active.id }); peerRef.current?.close(); peerRef.current = null; localStreamRef.current?.getTracks().forEach(track => track.stop()); localStreamRef.current = null; setCurrentCall(null); };
+  const setupCall = async (active, initiator) => { const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: active.mode === 'video' }); localStreamRef.current = stream; const peer = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }); peerRef.current = peer; stream.getTracks().forEach(track => peer.addTrack(track, stream)); peer.ontrack = event => { if (remoteVideoRef.current) remoteVideoRef.current.srcObject = event.streams[0]; }; peer.onicecandidate = event => { if (event.candidate) sendSocket?.({ type: 'call_signal', callId: active.id, signal: { candidate: event.candidate } }); }; setCurrentCall({ ...active, status: 'active' }); setTimeout(() => { if (localVideoRef.current) localVideoRef.current.srcObject = stream; }, 0); if (initiator) { const offer = await peer.createOffer(); await peer.setLocalDescription(offer); sendSocket?.({ type: 'call_signal', callId: active.id, signal: { offer } }); } };
+  const startCall = mode => { if (!otherUser?.id || !sendSocket) return; const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`; const active = { id, mode, status: 'calling', otherName: otherUser.full_name, otherAvatar: otherUser.avatar_url }; setCurrentCall(active); sendSocket({ type: 'call_request', callId: id, targetUserId: otherUser.id, mode, callerName: user.full_name, callerAvatar: user.avatar_url }); };
+  const acceptCall = async () => { const active = callRef.current; if (!active) return; try { await setupCall(active, false); sendSocket?.({ type: 'call_response', callId: active.id, accepted: true }); } catch (_) { sendSocket?.({ type: 'call_response', callId: active.id, accepted: false }); closeCall(false); alert('Não foi possível aceder ao microfone ou câmara.'); } };
+  const declineCall = () => { if (callRef.current?.id) sendSocket?.({ type: 'call_response', callId: callRef.current.id, accepted: false }); closeCall(false); };
+  useEffect(() => { const incoming = data => setCurrentCall({ id: data.callId, mode: data.mode, status: 'incoming', otherName: data.callerName, otherAvatar: data.callerAvatar }); const accepted = async data => { const active = callRef.current; if (active?.id === data.callId) try { await setupCall(active, true); } catch (_) { closeCall(true); alert('Não foi possível aceder ao microfone ou câmara.'); } }; const ended = data => { if (callRef.current?.id === data.callId) closeCall(false); }; const unavailable = data => { if (callRef.current?.id === data.callId) { closeCall(false); alert('Esta pessoa não está disponível para chamada agora.'); } }; const signal = async data => { const active = callRef.current; if (!active || active.id !== data.callId) return; try { if (!peerRef.current) await setupCall(active, false); const peer = peerRef.current; if (data.signal.offer) { await peer.setRemoteDescription(new RTCSessionDescription(data.signal.offer)); const answer = await peer.createAnswer(); await peer.setLocalDescription(answer); sendSocket?.({ type: 'call_signal', callId: active.id, signal: { answer } }); } if (data.signal.answer) await peer.setRemoteDescription(new RTCSessionDescription(data.signal.answer)); if (data.signal.candidate) await peer.addIceCandidate(new RTCIceCandidate(data.signal.candidate)); } catch (_) { closeCall(true); } }; onSocket?.('call_incoming', incoming); onSocket?.('call_accepted', accepted); onSocket?.('call_declined', ended); onSocket?.('call_ended', ended); onSocket?.('call_unavailable', unavailable); onSocket?.('call_signal', signal); return () => { offSocket?.('call_incoming', incoming); offSocket?.('call_accepted', accepted); offSocket?.('call_declined', ended); offSocket?.('call_ended', ended); offSocket?.('call_unavailable', unavailable); offSocket?.('call_signal', signal); }; }, [onSocket, offSocket, sendSocket]);
+  useEffect(() => () => closeCall(false), []);
 
   const translateMessage = async (msgId, content) => {
     if (translations[msgId]) {
@@ -333,6 +350,10 @@ export default function Chat() {
                     {friendStatus === 'accepted' ? '✓ Amigos' : friendStatus === 'pending' ? '⏳ Pedido enviado' : ''}
                   </p>
                 </div>
+                <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
+                  <button type="button" onClick={() => startCall('audio')} aria-label="Chamada de voz" style={{ width: 34, height: 34, borderRadius: '50%', border: '1px solid var(--border)', background: '#fff', color: '#3568b8', cursor: 'pointer' }}><Phone size={16}/></button>
+                  <button type="button" onClick={() => startCall('video')} aria-label="Videochamada" style={{ width: 34, height: 34, borderRadius: '50%', border: '1px solid var(--border)', background: '#fff', color: '#3568b8', cursor: 'pointer' }}><Video size={16}/></button>
+                </div>
               </>
             )}
           </div>
@@ -476,6 +497,14 @@ export default function Chat() {
           </p>
         </div>
       )}
+      {call && <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(15,23,42,.78)', display: 'grid', placeItems: 'center', padding: 16 }}>
+        <div style={{ width: 'min(680px,100%)', background: '#101b33', color: '#fff', borderRadius: 20, padding: 20, textAlign: 'center', boxShadow: '0 22px 70px rgba(0,0,0,.35)' }}>
+          <p style={{ margin: 0, opacity: .75 }}>{call.status === 'incoming' ? 'Chamada recebida' : call.status === 'calling' ? 'A chamar...' : call.mode === 'video' ? 'Videochamada em curso' : 'Chamada de voz em curso'}</p>
+          <h2 style={{ margin: '9px 0 16px' }}>{call.otherName}</h2>
+          {call.mode === 'video' ? <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 16 }}><video ref={remoteVideoRef} autoPlay playsInline style={{ width: '100%', minHeight: 180, background: '#050912', borderRadius: 12, objectFit: 'cover' }}/><video ref={localVideoRef} autoPlay muted playsInline style={{ width: '100%', minHeight: 180, background: '#050912', borderRadius: 12, objectFit: 'cover' }}/></div> : <audio ref={remoteVideoRef} autoPlay />}
+          {call.status === 'incoming' ? <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}><button onClick={declineCall} style={{ border: 0, borderRadius: 12, padding: '12px 18px', background: '#c0392b', color: '#fff', cursor: 'pointer', fontWeight: 700 }}><PhoneOff size={16} style={{ verticalAlign: 'middle' }}/> Recusar</button><button onClick={acceptCall} style={{ border: 0, borderRadius: 12, padding: '12px 18px', background: '#27894d', color: '#fff', cursor: 'pointer', fontWeight: 700 }}><Phone size={16} style={{ verticalAlign: 'middle' }}/> Aceitar</button></div> : <button onClick={() => closeCall(true)} style={{ border: 0, borderRadius: 12, padding: '12px 20px', background: '#c0392b', color: '#fff', cursor: 'pointer', fontWeight: 700 }}><PhoneOff size={16} style={{ verticalAlign: 'middle' }}/> Encerrar</button>}
+        </div>
+      </div>}
     </div>
   );
 }

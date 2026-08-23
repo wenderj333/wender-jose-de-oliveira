@@ -5,7 +5,7 @@ import { playNotificationSound } from '../utils/notification-sound';
 const WebSocketContext = createContext(null);
 
 export function WebSocketProvider({ children }) {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const wsRef = useRef(null);
   const reconnectTimer = useRef(null);
   const lastSoundTime = useRef(0);
@@ -75,7 +75,7 @@ export function WebSocketProvider({ children }) {
       ws.onopen = () => {
         console.log('WebSocket conectado');
         if (user) {
-          ws.send(JSON.stringify({ type: 'identify', userId: user.id, churchId: user.churchId }));
+          ws.send(JSON.stringify({ type: 'identify', userId: user.id, churchId: user.churchId, token }));
         }
         ws.send(JSON.stringify({ type: 'live_list' }));
       };

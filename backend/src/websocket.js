@@ -1,5 +1,7 @@
 ﻿const { WebSocketServer } = require('ws');
 const Anthropic = require('@anthropic-ai/sdk');
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = require('./middleware/auth');
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 async function translateWithClaude(text, sourceLang, targetLang) {
@@ -16,6 +18,7 @@ const PastorSession = require('./models/PastorSession');
 
 const clients = new Map(); // ws -> { userId, churchId }
 const liveStreams = new Map(); // streamId -> { id, broadcasterId, broadcasterName, broadcasterWs, viewers: Map<viewerId, ws> }
+const privateCalls = new Map();
 
 // Used by HTTP routes (such as direct messages) to notify a logged-in user
 // immediately, without waiting for the next polling request.
@@ -60,7 +63,11 @@ function setupWebSocket(server) {
             handleGameQueue(ws, msg);
             break;
           case 'identify':
-            clients.set(ws, { userId: msg.userId, churchId: msg.churchId });
+            try {
+              const decoded = jwt.verify(msg.token, JWT_SECRET);
+              if (decoded.id !== msg.userId) throw new Error('user mismatch');
+              clients.set(ws, { userId: decoded.id, churchId: msg.churchId });
+            } catch (_) { ws.close(1008, 'authentication required'); break; }
             // Send current live sessions
             const liveSessions = await PastorSession.getLiveSessions();
             const liveCount = await PastorSession.getLiveCount();
@@ -70,6 +77,41 @@ function setupWebSocket(server) {
               totalChurchesPraying: liveCount,
             }));
             break;
+
+          case 'call_request': {
+            const caller = clients.get(ws);
+            if (!caller?.userId || !msg.targetUserId || !['audio', 'video'].includes(msg.mode)) break;
+            const target = [...clients.entries()].find(([, info]) => info?.userId === msg.targetUserId)?.[0];
+            if (!target || target.readyState !== 1) { ws.send(JSON.stringify({ type: 'call_unavailable', callId: msg.callId })); break; }
+            privateCalls.set(msg.callId, { callerId: caller.userId, receiverId: msg.targetUserId, mode: msg.mode });
+            target.send(JSON.stringify({ type: 'call_incoming', callId: msg.callId, callerId: caller.userId, callerName: msg.callerName, callerAvatar: msg.callerAvatar || null, mode: msg.mode }));
+            break;
+          }
+          case 'call_response': {
+            const call = privateCalls.get(msg.callId); const responder = clients.get(ws);
+            if (!call || responder?.userId !== call.receiverId) break;
+            const callerWs = [...clients.entries()].find(([, info]) => info?.userId === call.callerId)?.[0];
+            if (callerWs?.readyState === 1) callerWs.send(JSON.stringify({ type: msg.accepted ? 'call_accepted' : 'call_declined', callId: msg.callId, mode: call.mode }));
+            if (!msg.accepted) privateCalls.delete(msg.callId);
+            break;
+          }
+          case 'call_signal': {
+            const call = privateCalls.get(msg.callId); const sender = clients.get(ws);
+            if (!call || !sender?.userId || ![call.callerId, call.receiverId].includes(sender.userId)) break;
+            const recipientId = sender.userId === call.callerId ? call.receiverId : call.callerId;
+            const recipient = [...clients.entries()].find(([, info]) => info?.userId === recipientId)?.[0];
+            if (recipient?.readyState === 1) recipient.send(JSON.stringify({ type: 'call_signal', callId: msg.callId, signal: msg.signal }));
+            break;
+          }
+          case 'call_end': {
+            const call = privateCalls.get(msg.callId); const sender = clients.get(ws);
+            if (!call || !sender?.userId || ![call.callerId, call.receiverId].includes(sender.userId)) break;
+            const recipientId = sender.userId === call.callerId ? call.receiverId : call.callerId;
+            const recipient = [...clients.entries()].find(([, info]) => info?.userId === recipientId)?.[0];
+            if (recipient?.readyState === 1) recipient.send(JSON.stringify({ type: 'call_ended', callId: msg.callId }));
+            privateCalls.delete(msg.callId);
+            break;
+          }
 
           case 'pastor_start_praying':
             const session = await PastorSession.startSession(
