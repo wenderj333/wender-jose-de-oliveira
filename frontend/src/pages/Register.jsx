@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, UserPlus, Mail, Lock, User } from 'lucide-react';
+import { BookOpen, UserPlus, Mail, Lock, User, MessageCircle, Heart, ShieldCheck } from 'lucide-react';
 
 // Google Analytics conversion events
 function trackSignUpEvent() {
@@ -44,8 +44,19 @@ export default function Register() {
   };
 
   return (
-    <div className="form-page">
-      <div className="card auth-card">
+    <div style={{ minHeight: '100vh', padding: '32px 16px', background: 'linear-gradient(145deg,#f4f8ff 0%,#ffffff 62%)' }}>
+      <div className="register-layout" style={{ maxWidth: 980, margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(280px,.9fr) minmax(360px,1fr)', gap: 28, alignItems: 'center' }}>
+      <aside style={{ color: '#1e2240' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#eaf2ff', color: '#3568b8', padding: '8px 12px', borderRadius: 99, fontWeight: 800, fontSize: 13 }}><MessageCircle size={16}/> Comunidade Sigo com Fé</span>
+        <h2 style={{ fontSize: 'clamp(2rem,4vw,3.2rem)', lineHeight: 1.08, margin: '17px 0 12px', letterSpacing: '-.03em' }}>Crie a sua conta e entre na Sala de Conversa Cristã</h2>
+        <p style={{ color: '#59627d', fontSize: '1.03rem', lineHeight: 1.65, marginBottom: 22 }}>Partilhe fé, versículos e pedidos de oração numa comunidade acolhedora. O registo é gratuito.</p>
+        <div style={{ display: 'grid', gap: 12 }}>
+          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><MessageCircle size={20} color="#3568b8" style={{ flexShrink: 0 }}/><div><strong>Sala de conversa ao vivo</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>Converse com respeito, conheça pessoas e caminhe na fé.</p></div></div>
+          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><Heart size={20} color="#c49a28" style={{ flexShrink: 0 }}/><div><strong>Oração e encorajamento</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>Envie pedidos de oração e partilhe uma palavra de esperança.</p></div></div>
+          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><ShieldCheck size={20} color="#6c3fa0" style={{ flexShrink: 0 }}/><div><strong>Ambiente respeitoso</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>Uma comunidade feita para acolher, sem spam e com respeito.</p></div></div>
+        </div>
+      </aside>
+      <div className="card auth-card" style={{ margin: 0, boxShadow: '0 15px 40px rgba(53,104,184,.12)' }}>
         <div className="auth-brand">
           <BookOpen size={40} style={{ color: 'var(--gold)' }} />
           <h1>{t('brand')}</h1>
@@ -106,13 +117,15 @@ export default function Register() {
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--gray-500)' }}>
+        <div style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--gray-500)' }}>
           <div style={{background:'#f0f9ff',border:'1px solid #bae6fd',borderRadius:8,padding:'12px 16px',marginTop:16,marginBottom:8,fontSize:13,color:'#0369a1',display:'flex',alignItems:'center',gap:8}}>
-          ✉ {t('register.emailVerify', 'Apos o registo recebes um email de confirmacao. Verifica a tua caixa de entrada.')}
+          ✉ {t('register.emailVerify', 'Depois do registo, recebe um email de boas-vindas. Verifica a tua caixa de entrada.')}
         </div>
         {t('register.hasAccount')} <Link to="/login" style={{ color: 'var(--green)', fontWeight: 600 }}>{t('register.signIn')}</Link>
-        </p>
+        </div>
       </div>
+      </div>
+      <style>{`@media(max-width:760px){.register-layout{grid-template-columns:1fr !important}.register-layout aside{display:none}}`}</style>
     </div>
   );
 }
