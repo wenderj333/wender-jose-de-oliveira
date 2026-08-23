@@ -286,6 +286,21 @@ const { Pool: MigratePool } = require('pg');
         created_at TIMESTAMPTZ DEFAULT NOW()
       );
     `);
+    await mp.query(`ALTER TABLE groups ADD COLUMN IF NOT EXISTS cover_url TEXT`);
+    await mp.query(`ALTER TABLE groups ADD COLUMN IF NOT EXISTS rules TEXT`);
+    await mp.query(`ALTER TABLE groups ADD COLUMN IF NOT EXISTS category VARCHAR(80)`);
+    await mp.query(`ALTER TABLE groups ADD COLUMN IF NOT EXISTS require_approval BOOLEAN NOT NULL DEFAULT false`);
+    await mp.query(`ALTER TABLE groups ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW()`);
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS group_join_requests (
+        group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        message TEXT,
+        status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'declined')),
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        PRIMARY KEY (group_id, user_id)
+      )
+    `);
 
     // Consecrations
     await mp.query(`
