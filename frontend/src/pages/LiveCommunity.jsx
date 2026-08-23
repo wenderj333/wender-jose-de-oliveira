@@ -82,7 +82,22 @@ export default function LiveCommunity() {
       <aside style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <section style={{ ...card, padding: 18 }}><div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#3568b8', fontWeight: 800 }}><ShieldCheck size={19}/> Como cuidamos da sala</div><ul style={{ paddingLeft: 18, margin: '13px 0 0', color: '#59627d', fontSize: 13, lineHeight: 1.65 }}><li>Fale com respeito e gentileza.</li><li>Não publique dados pessoais ou conteúdo ofensivo.</li><li>Pedidos urgentes precisam de ajuda local profissional.</li></ul></section>
         <section style={{ ...card, padding: 18 }}><div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 800 }}><Heart size={19} color="#c49a28"/> Uma sala para acolher</div><p style={{ color: '#667085', fontSize: 13, lineHeight: 1.6, marginBottom: 0 }}>Todos podem ouvir. Para escrever e conhecer a comunidade, entre com a sua conta gratuita.</p></section>
-        <section style={{ ...card, padding: 18 }}><div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 800 }}><Music size={19} color="#6c3fa0"/> Louvor ambiente</div>{songs[currentSongIndex] ? <><p style={{ fontSize: 14, margin: '11px 0 3px', fontWeight: 700 }}>{songs[currentSongIndex].title}</p><p style={{ color: '#7b83a6', fontSize: 12, margin: '0 0 12px' }}>{songs[currentSongIndex].artist}</p></> : <p style={{ color: '#7b83a6', fontSize: 13 }}>Nenhuma música selecionada agora.</p>}<div style={{ display: 'flex', gap: 8 }}><button onClick={toggleMusic} disabled={!songs.length} style={{ flex: 1, border: 0, borderRadius: 10, padding: 10, background: '#6c3fa0', color: '#fff', cursor: songs.length ? 'pointer' : 'not-allowed', fontWeight: 700 }}>{isPlaying ? <><Pause size={15} style={{ verticalAlign: 'middle'}/> Pausar</> : <><Play size={15} style={{ verticalAlign: 'middle'}/> Ouvir</>}</button><button onClick={nextSong} disabled={!songs.length} aria-label="Próxima música" style={{ width: 42, border: '1px solid #d7dfef', borderRadius: 10, background: '#fff', cursor: 'pointer' }}><Volume2 size={17}/></button></div><audio ref={audioRef} onEnded={nextSong} onPause={() => setIsPlaying(false)} onPlay={() => setIsPlaying(true)} /></section>
+        <section style={{ ...card, padding: 18 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 800 }}><Music size={19} color="#6c3fa0"/> Louvor ambiente</div>
+          {songs[currentSongIndex] ? (
+            <div>
+              <p style={{ fontSize: 14, margin: '11px 0 3px', fontWeight: 700 }}>{songs[currentSongIndex].title}</p>
+              <p style={{ color: '#7b83a6', fontSize: 12, margin: '0 0 12px' }}>{songs[currentSongIndex].artist}</p>
+            </div>
+          ) : <p style={{ color: '#7b83a6', fontSize: 13 }}>Nenhuma música selecionada agora.</p>}
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button onClick={toggleMusic} disabled={!songs.length} style={{ flex: 1, border: 0, borderRadius: 10, padding: 10, background: '#6c3fa0', color: '#fff', cursor: songs.length ? 'pointer' : 'not-allowed', fontWeight: 700 }}>
+              {isPlaying ? <span><Pause size={15} style={{ verticalAlign: 'middle' }}/> Pausar</span> : <span><Play size={15} style={{ verticalAlign: 'middle' }}/> Ouvir</span>}
+            </button>
+            <button onClick={nextSong} disabled={!songs.length} aria-label="Próxima música" style={{ width: 42, border: '1px solid #d7dfef', borderRadius: 10, background: '#fff', cursor: 'pointer' }}><Volume2 size={17}/></button>
+          </div>
+          <audio ref={audioRef} onEnded={nextSong} onPause={() => setIsPlaying(false)} onPlay={() => setIsPlaying(true)} />
+        </section>
       </aside>
     </div>
     <style>{`@media(max-width:800px){.christian-chat-layout{grid-template-columns:1fr !important}}`}</style>
