@@ -710,7 +710,22 @@
     "join": "Gruppe beitreten",
     "leave": "Gruppe verlassen",
     "writePlaceholder": "In der Gruppe schreiben...",
-    "back": "Zurück"
+    "back": "Zurück",
+    "posts": "Beiträge",
+    "prayerAgenda": "Gebet & Termine",
+    "about": "Über die Gruppe",
+    "invite": "Einladen",
+    "manage": "Gruppe verwalten",
+    "createdBy": "Erstellt von",
+    "groupSpace": "Das ist ein Gemeinschaftsbereich",
+    "groupSpaceDesc": "Tritt der Gruppe bei, um Beiträge, Mitglieder und Werkzeuge zu sehen.",
+    "photoVideo": "Foto oder Video",
+    "changeFile": "Datei ändern",
+    "publish": "Veröffentlichen",
+    "publishing": "Wird veröffentlicht...",
+    "comments": "Kommentare",
+    "loadingComments": "Kommentare werden geladen...",
+    "commentPlaceholder": "Einen Kommentar schreiben..."
   },
   "consecration": {
     "title": "Consecration",
