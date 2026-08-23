@@ -2730,6 +2730,17 @@ const jogadoresOnline = {};
 const ioduelo = new SocketServer(server, { cors: { origin: '*' }, path: '/duelo/socket.io' });
 
 ioduelo.on('connection', (socket) => {
+  socket.on('jogarComBot', (d) => {
+    const lang = d.idioma || 'pt';
+    const nome = d.nome || 'Jogador';
+    const foto = d.foto || null;
+    const sid = 'bot_' + Date.now();
+    const perguntas = shuffleArray(perguntasDuelo[lang] || perguntasDuelo.pt).slice(0, 10);
+    socket.join(sid);
+    duelSalas[sid] = { j:[{id:socket.id,nome,lang,pts:0,resp:false,foto,perguntas},{id:'bot_'+sid,nome:'Bot Bíblico',lang,pts:0,resp:false,bot:true,perguntas}], qi:0, t:15, timer:null, advancing:false };
+    socket.emit('inicioJogo', {salaId:sid, oponente:'Bot Bíblico', pergunta:perguntas[0]});
+    duelTimer(sid);
+  });
   socket.on('procurarPartida', (d) => {
     const lang = d.idioma || 'pt';
     const fotoRaw = d.foto || null; const foto = fotoRaw && fotoRaw.startsWith('http') ? fotoRaw : (fotoRaw && fotoRaw.length < 5000 ? fotoRaw : null);
@@ -2838,6 +2849,31 @@ function duelTimer(sid) {
     ioduelo.to(sid).emit('atualizarTimer', sala.t);
     if (sala.t <= 0) { clearInterval(sala.timer); duelProxima(sid); }
   }, 1000);
+  duelBotResponder(sid, sala.qi);
+}
+
+function duelBotResponder(sid, questionIndex) {
+  const sala = duelSalas[sid]; if (!sala) return;
+  const bot = sala.j.find(j => j.bot); if (!bot) return;
+  const delay = 3200 + Math.floor(Math.random() * 4200);
+  setTimeout(() => {
+    const atual = duelSalas[sid];
+    if (!atual || atual.qi !== questionIndex || atual.advancing || bot.resp) return;
+    bot.resp = true;
+    const acertou = Math.random() < 0.58;
+    if (acertou) {
+      bot.pts += 100 + (atual.t * 5);
+      atual.advancing = true;
+      clearInterval(atual.timer);
+      ioduelo.to(sid).emit('oponenteRespondeu');
+      ioduelo.to(sid).emit('rodadaEncerrada', { vencedor: bot.nome });
+      setTimeout(() => { const salaNova = duelSalas[sid]; if (!salaNova) return; salaNova.advancing=false; duelProxima(sid); }, 850);
+    } else if (atual.j.every(j => j.resp)) {
+      atual.advancing = true;
+      clearInterval(atual.timer);
+      setTimeout(() => { const salaNova = duelSalas[sid]; if (!salaNova) return; salaNova.advancing=false; duelProxima(sid); }, 850);
+    }
+  }, delay);
 }
 
 function duelProxima(sid) {
