@@ -1,169 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useTranslation } from 'react-i18next';
+import { ArrowRight, BookOpen, Heart, MessageCircleHeart, Play, ShieldCheck, Sparkles, Trophy, UsersRound } from 'lucide-react';
 import LanguageSelector from '../components/LanguageSwitcher';
 
+const styles = `
+.sf-home{min-height:100vh;background:linear-gradient(180deg,#f8f8fc 0%,#f2f5f7 100%);color:#22203a;font-family:Inter,Segoe UI,Arial,sans-serif}.sf-home *{box-sizing:border-box}.sf-nav{height:76px;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,6vw,85px);border-bottom:1px solid #e8e7ed;position:sticky;top:0;z-index:5;backdrop-filter:blur(10px)}.sf-brand{display:flex;align-items:center;gap:10px;color:#59358e;font-size:23px;font-weight:900}.sf-brand img{height:33px;width:33px;object-fit:contain}.sf-actions{display:flex;align-items:center;gap:10px}.sf-btn{border:0;border-radius:12px;padding:12px 17px;font-weight:800;cursor:pointer;font-size:14px;transition:.2s}.sf-btn:hover{transform:translateY(-2px)}.sf-btn-main{background:#633da0;color:#fff;box-shadow:0 9px 20px #633da042}.sf-btn-outline{background:#fff;color:#59358e;border:1px solid #d9cdea}.sf-btn-gold{background:#efb92e;color:#2c194d}.sf-hero{max-width:1180px;margin:auto;padding:74px 28px 65px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px}.sf-kicker{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:99px;background:#ece6f7;color:#633da0;font-size:13px;font-weight:800}.sf-hero h1{font-size:clamp(41px,5vw,66px);line-height:1.02;letter-spacing:-2.6px;margin:20px 0;color:#261044}.sf-hero h1 span{color:#5e987b}.sf-hero p{font-size:19px;line-height:1.6;color:#657084;margin:0 0 27px;max-width:560px}.sf-hero-buttons{display:flex;gap:11px;flex-wrap:wrap}.sf-hero-buttons button{display:inline-flex;align-items:center;gap:8px;font-size:16px;padding:15px 19px}.sf-safe{display:flex;gap:16px;flex-wrap:wrap;color:#71798b;font-size:13px;margin-top:20px}.sf-safe span{display:flex;gap:5px;align-items:center}.sf-preview{padding:14px;border-radius:27px;background:linear-gradient(145deg,#e6f1e9,#e1d7f2);box-shadow:0 26px 52px #3e28621f}.sf-phone{overflow:hidden;border-radius:20px;background:#fff;box-shadow:0 8px 22px #1f163718}.sf-feed-head{height:54px;display:flex;align-items:center;gap:9px;padding:0 16px;border-bottom:1px solid #eee;font-size:13px;font-weight:800}.sf-avatar{height:31px;width:31px;border-radius:50%;display:grid;place-items:center;background:#633da0;color:white;font-size:12px;font-weight:900}.sf-card{margin:13px;padding:14px;border:1px solid #edf0f0;border-radius:16px}.sf-card-top{display:flex;gap:9px;align-items:center;font-size:13px;font-weight:800}.sf-card small{display:block;font-weight:500;color:#8891a1;margin-top:2px}.sf-card p{font-size:14px;color:#465064;line-height:1.5;margin:10px 0}.sf-prayer{background:#f7fbf8;border-color:#dcece1}.sf-pray-tag{display:inline-flex;align-items:center;gap:5px;background:#e1f0e6;color:#36704f;padding:6px 9px;border-radius:8px;font-size:12px;font-weight:800}.sf-group{margin:13px;padding:11px;display:flex;gap:10px;align-items:center;border-radius:14px;background:#f7f4fb}.sf-group-icon{height:39px;width:39px;display:grid;place-items:center;border-radius:12px;background:#633da0;color:#fff}.sf-group b{font-size:13px}.sf-group small{display:block;color:#788194;font-size:12px;margin-top:3px}.sf-section{max-width:1180px;padding:4px 28px 72px;margin:auto}.sf-heading{text-align:center;max-width:680px;margin:0 auto 30px}.sf-heading h2{font-size:34px;margin:0 0 9px;color:#281448;letter-spacing:-1px}.sf-heading p{color:#6d7587;line-height:1.55;margin:0}.sf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.sf-feature{background:#fff;border:1px solid #e9e9ef;border-radius:20px;padding:25px;min-height:215px;box-shadow:0 8px 24px #2413440a}.sf-icon{height:47px;width:47px;display:grid;place-items:center;border-radius:14px;margin-bottom:16px}.sf-feature h3{margin:0 0 8px;color:#2c1949;font-size:19px}.sf-feature p{margin:0;color:#6b7486;font-size:14px;line-height:1.55}.sf-link{background:none;border:0;color:#603a9a;font-weight:800;padding:0;margin-top:17px;display:inline-flex;align-items:center;gap:5px;cursor:pointer}.sf-cta{max-width:1124px;margin:0 auto 65px;background:linear-gradient(120deg,#523187,#7951ad);padding:32px clamp(23px,5vw,54px);border-radius:25px;color:#fff;display:flex;gap:25px;align-items:center;justify-content:space-between}.sf-cta h2{margin:0 0 7px;font-size:28px}.sf-cta p{margin:0;color:#e8e0f3}.sf-cta .sf-btn{background:#fff;color:#59358e;white-space:nowrap}.sf-footer{text-align:center;color:#7b8292;font-size:13px;padding:0 20px 38px}@media(max-width:850px){.sf-nav{height:67px;padding:0 18px}.sf-brand{font-size:20px}.sf-actions .sf-btn-outline{display:none}.sf-actions .sf-btn{padding:10px 12px;font-size:13px}.sf-hero{padding:48px 21px;grid-template-columns:1fr;gap:36px;text-align:center}.sf-hero p{margin-left:auto;margin-right:auto}.sf-hero-buttons,.sf-safe{justify-content:center}.sf-section{padding:0 21px 49px}.sf-grid{grid-template-columns:1fr}.sf-cta{margin:0 21px 52px;display:block;text-align:center}.sf-cta .sf-btn{margin-top:20px}}
+`;
+
 export default function Landing() {
-  const { loginWithGoogle } = useAuth();
   const navigate = useNavigate();
-  const { t } = useTranslation();
-  const [online, setOnline] = useState(Math.floor(Math.random()*80)+100);
-  const [soloPartidas, setSoloPartidas] = useState(()=>parseInt(localStorage.getItem('solo_partidas')||'0'));
-  const [showSolo, setShowSolo] = useState(false);
-  const [prayer, setPrayer] = useState('');
-  const [prayerSent, setPrayerSent] = useState(false);
-
-  useEffect(() => {
-    const i = setInterval(() => setOnline(n => Math.max(80, n + Math.floor(Math.random()*5)-2)), 3000);
-    return () => clearInterval(i);
-  }, []);
-
-  const sendPrayer = async () => {
-    if (!prayer.trim()) return;
-    try {
-      const { getFirestore, collection, addDoc, serverTimestamp } = await import('firebase/firestore');
-      const { default: app } = await import('../firebase');
-      const db = getFirestore(app);
-      await addDoc(collection(db, 'prayer_requests'), {
-        text: prayer,
-        createdAt: serverTimestamp(),
-        status: 'pending',
-        lang: navigator.language || 'pt',
-      });
-    } catch (e) { console.error(e); }
-    setPrayerSent(true);
-  };
-
-  const benefits = [
-    'Personas orando por ti en tiempo real',
-    'Chat cristiano 24h',
-    'Apoyo cuando mas lo necesitas',
-    'Reflexiones que fortalecen tu fe',
-    'Musica que conecta con Dios',
-  ];
-
-  return (
-    <div style={{ minHeight:'100vh', background:'#f8f9ff', fontFamily:"'Segoe UI',sans-serif" }}>
-      <nav style={{ background:'white', padding:'12px 32px', display:'flex', justifyContent:'space-between', alignItems:'center', boxShadow:'0 2px 8px rgba(0,0,0,0.08)', position:'sticky', top:0, zIndex:100 }}>
-        <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-          <img src='/logo-new.png' alt='Logo' style={{ height:36, width:36, borderRadius:8 }} />
-          <span style={{ fontSize:'clamp(16px,2vw,22px)', fontWeight:800, color:'#6C3FA0' }}>Sigo com Fé</span>
-        </div>
-        <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-          <LanguageSelector variant="light" />
-          <button onClick={()=>setShowSolo(true)} style={{ padding:'8px 18px', borderRadius:8, border:'none', background:'linear-gradient(135deg,#f0c040,#e67e22)', color:'#1a0a3e', fontWeight:700, cursor:'pointer' }}>🎮 {t('landing.playFree','Jogar Grátis')}</button>
-          <button onClick={() => navigate('/login')} style={{ padding:'8px 18px', borderRadius:8, border:'1px solid #6C3FA0', background:'white', color:'#6C3FA0', fontWeight:600, cursor:'pointer' }}>{t('auth.login','Entrar')}</button>
-          <button onClick={() => navigate('/register')} style={{ padding:'8px 18px', borderRadius:8, border:'none', background:'#6C3FA0', color:'white', fontWeight:600, cursor:'pointer' }}>{t('landing.joinFree','Crear cuenta gratis')}</button>
-        </div>
-      </nav>
-      <div style={{ background:'#e74c3c', padding:'10px 24px', textAlign:'center' }}>
-        <span style={{ color:'white', fontSize:14, fontWeight:600 }}>+{online} {t('landing.praying','personas orando ahora mismo')}</span>
-      </div>
-      <div style={{ maxWidth:900, margin:'0 auto', padding:'70px 24px 50px', textAlign:'center' }}>
-        <h1 style={{ fontSize:'clamp(28px,5vw,52px)', fontWeight:900, color:'#1a0a3e', lineHeight:1.15, margin:'0 0 20px' }}>
-          {t('landing.title1','No camines solo en tu fe')}
-        </h1>
-        <p style={{ fontSize:'clamp(16px,2vw,22px)', color:'#555', lineHeight:1.7, margin:'0 0 32px', maxWidth:640, marginLeft:'auto', marginRight:'auto' }}>
-          {t('landing.subtitle','Te has sentido solo? Aqui siempre hay alguien para ti.')}
-        </p>
-        <div style={{ background:'white', borderRadius:16, padding:24, boxShadow:'0 4px 20px rgba(0,0,0,0.08)', maxWidth:540, margin:'0 auto 24px' }}>
-          {!prayerSent ? (
-            <div>
-              <p style={{ fontWeight:700, color:'#6C3FA0', marginBottom:12 }}>{t('landing.prayerTitle','Escribe tu peticion de oracion')}</p>
-              <textarea value={prayer} onChange={e => setPrayer(e.target.value)} placeholder={t('landing.prayerPlaceholder','Escribe tu peticion aqui...')} style={{ width:'100%', border:'2px solid #e0d0f0', borderRadius:10, padding:12, fontSize:14, resize:'none', height:80, outline:'none', boxSizing:'border-box' }}/>
-              <button onClick={sendPrayer} style={{ width:'100%', marginTop:10, padding:'12px', borderRadius:10, border:'none', background:'#6C3FA0', color:'white', fontWeight:700, cursor:'pointer', fontSize:15 }}>{t('landing.sendPrayer','Enviar peticion')}</button>
-            </div>
-          ) : (
-            <div style={{ textAlign:'center', padding:'12px 0' }}>
-              <p style={{ fontWeight:700, color:'#1a0a3e', fontSize:16, marginBottom:8 }}>🙏 {t('landing.prayerReceived','Tu peticion fue recibida! Los pastores y la comunidad estaran orando por tu causa. No estas solo, Dios te escucha y nosotros tambien.')}</p>
-              <button onClick={() => navigate('/register')} style={{ padding:'12px 28px', borderRadius:10, border:'none', background:'#27ae60', color:'white', fontWeight:700, cursor:'pointer', fontSize:15 }}>{t('landing.createAccount','Crear cuenta gratis')}</button>
-            </div>
-          )}
-        </div>
-        <button onClick={() => navigate('/register')} style={{ padding:'18px 40px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#6C3FA0,#4A2270)', color:'white', fontWeight:900, cursor:'pointer', fontSize:'clamp(16px,2vw,22px)', boxShadow:'0 6px 20px rgba(108,63,160,0.4)', display:'block', margin:'0 auto 12px' }}>
-          {t('landing.cta1','Quiero entrar y no estar solo')}
-        </button>
-        <p style={{ fontSize:13, color:'#888' }}>{t('landing.free','Gratis')} - {t('landing.noCard','Sin tarjeta')} - {t('landing.instant','Acceso inmediato')}</p>
-      </div>
-      <div style={{ background:'white', padding:'50px 24px' }}>
-        <h2 style={{ textAlign:'center', fontSize:28, fontWeight:800, color:'#1a0a3e', marginBottom:32 }}>{t('landing.benefitsTitle','Aqui no es solo una red social')}</h2>
-        <div style={{ maxWidth:760, margin:'0 auto', display:'flex', flexDirection:'column', gap:16 }}>
-          {benefits.map((b,i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:16, background:'#f8f9ff', borderRadius:12, padding:'16px 20px' }}>
-              <span style={{ fontSize:16, fontWeight:600, color:'#1a0a3e' }}>{b}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div style={{ background:'linear-gradient(135deg,#6C3FA0,#4A2270)', padding:'48px 24px', textAlign:'center' }}>
-        <p style={{ color:'white', fontSize:22, fontWeight:700, marginBottom:20 }}>{t('landing.urgency','Ahora mismo hay personas esperando para orar contigo')}</p>
-        <button onClick={() => navigate('/register')} style={{ padding:'16px 40px', borderRadius:12, border:'none', background:'#27ae60', color:'white', fontWeight:800, cursor:'pointer', fontSize:18 }}>{t('landing.joinNow','Unirme ahora')}</button>
-      </div>
-      
-      <div style={{ background:'white', padding:'40px 24px', textAlign:'center' }}>
-        <p style={{ fontSize:18, fontWeight:700, color:'#1a0a3e', marginBottom:8 }}>Partilha com os teus amigos cristãos 🙏</p>
-        <p style={{ fontSize:14, color:'#888', marginBottom:24 }}>Cada pessoa que convidas é uma bênção para a comunidade</p>
-        <div style={{ display:'flex', justifyContent:'center', gap:12, flexWrap:'wrap' }}>
-          <a href={'https://wa.me/?text=Encontrei esta rede social cristã gratuita! Entra e conecta-te com cristãos do mundo inteiro https://sigo-com-fe.vercel.app'} target='_blank' rel='noreferrer' style={{ padding:'12px 20px', borderRadius:12, background:'#25D366', color:'white', fontWeight:700, fontSize:15, textDecoration:'none', display:'flex', alignItems:'center', gap:8 }}>
-            📱 WhatsApp
-          </a>
-          <a href={'https://t.me/share/url?url=https://sigo-com-fe.vercel.app&text=Encontrei esta rede social cristã gratuita! Entra e conecta-te com cristãos do mundo inteiro'} target='_blank' rel='noreferrer' style={{ padding:'12px 20px', borderRadius:12, background:'#0088cc', color:'white', fontWeight:700, fontSize:15, textDecoration:'none', display:'flex', alignItems:'center', gap:8 }}>
-            ✈️ Telegram
-          </a>
-          <a href={'https://www.facebook.com/sharer/sharer.php?u=https://sigo-com-fe.vercel.app'} target='_blank' rel='noreferrer' style={{ padding:'12px 20px', borderRadius:12, background:'#1877F2', color:'white', fontWeight:700, fontSize:15, textDecoration:'none', display:'flex', alignItems:'center', gap:8 }}>
-            👍 Facebook
-          </a>
-          <button onClick={() => { navigator.clipboard.writeText('https://sigo-com-fe.vercel.app'); alert('Link copiado!'); }} style={{ padding:'12px 20px', borderRadius:12, background:'#6C3FA0', color:'white', fontWeight:700, fontSize:15, border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:8 }}>
-            🔗 Copiar link
-          </button>
-        </div>
-      </div>
-      <div style={{ background:'#1a0a3e', padding:'60px 24px', textAlign:'center' }}>
-        <p style={{ color:'rgba(255,255,255,0.7)', fontSize:14, marginBottom:8 }}>{t('landing.notCasual','No llegaste aqui por casualidad')}</p>
-        <h2 style={{ color:'white', fontSize:32, fontWeight:900, margin:'0 0 12px' }}>{t('landing.ctaFinalText','Dios puede usar este momento para cambiar algo en tu vida.')}</h2>
-        <button onClick={() => navigate('/register')} style={{ padding:'18px 48px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#6C3FA0,#4A2270)', color:'white', fontWeight:900, cursor:'pointer', fontSize:'clamp(16px,2vw,22px)', marginTop:16 }}>{t('landing.ctaFinal','Crear cuenta gratis ahora')}</button>
-      </div>
-      {showSolo && (
-        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.7)',zIndex:9999,display:'flex',alignItems:'center',justifyContent:'center',padding:24}}>
-          <div style={{background:'linear-gradient(135deg,#1a0a3e,#2d1054)',borderRadius:20,padding:32,maxWidth:420,width:'100%',color:'white',textAlign:'center',boxShadow:'0 20px 60px rgba(0,0,0,0.5)'}}>
-            {soloPartidas < 2 ? (
-              <>
-                <div style={{fontSize:48,marginBottom:12}}>🎮</div>
-                <h2 style={{fontSize:22,fontWeight:900,marginBottom:8}}>{t('landing.soloTitle','Desafio Bíblico Grátis!')}</h2>
-                <p style={{opacity:0.8,marginBottom:8,fontSize:14}}>{t('landing.soloDesc','Testa os teus conhecimentos da Bíblia!')}</p>
-                <div style={{background:'rgba(240,192,64,0.2)',border:'1px solid #f0c040',borderRadius:12,padding:'10px 16px',marginBottom:20}}>
-                  <p style={{color:'#f0c040',fontWeight:700,fontSize:13,margin:0}}>✨ {t('landing.soloFree','Partidas grátis restantes')}: {2 - soloPartidas}/2</p>
-                </div>
-                <button onClick={()=>{
-                  const p = soloPartidas + 1;
-                  localStorage.setItem('solo_partidas', p);
-                  setSoloPartidas(p);
-                  setShowSolo(false);
-                  navigate('/desafio-biblico?modo=solo');
-                }} style={{width:'100%',padding:'14px',borderRadius:12,border:'none',background:'linear-gradient(135deg,#f0c040,#e67e22)',color:'#1a0a3e',fontWeight:900,cursor:'pointer',fontSize:16,marginBottom:10}}>
-                  🎮 {t('landing.startGame','Jogar Agora!')}
-                </button>
-                <button onClick={()=>setShowSolo(false)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Fechar</button>
-              </>
-            ) : (
-              <>
-                <div style={{fontSize:48,marginBottom:12}}>🏆</div>
-                <h2 style={{fontSize:22,fontWeight:900,marginBottom:8}}>{t('landing.soloUsed','Gostaste do jogo?')}</h2>
-                <p style={{opacity:0.8,marginBottom:16,fontSize:14}}>{t('landing.soloRegister','Regista-te grátis para jogar ilimitado e entrar no ranking!')}</p>
-                <div style={{background:'rgba(39,174,96,0.2)',border:'1px solid #27ae60',borderRadius:12,padding:'12px 16px',marginBottom:20}}>
-                  <p style={{color:'#27ae60',fontWeight:700,fontSize:13,margin:0}}>🎁 {t('landing.soloBonus','Registo grátis • Sem cartão • Acesso imediato')}</p>
-                </div>
-                <button onClick={()=>navigate('/register')} style={{width:'100%',padding:'14px',borderRadius:12,border:'none',background:'#27ae60',color:'white',fontWeight:900,cursor:'pointer',fontSize:16,marginBottom:10}}>
-                  ✅ {t('landing.createFree','Criar conta grátis')}
-                </button>
-                <button onClick={()=>setShowSolo(false)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',fontSize:13}}>Fechar</button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  const duel = () => { window.location.href = 'https://duelo-biblico.vercel.app'; };
+  return <main className="sf-home"><style>{styles}</style>
+    <nav className="sf-nav"><div className="sf-brand"><img src="/logo-new.png" alt="Sigo com Fé" />Sigo com Fé</div><div className="sf-actions"><LanguageSelector variant="light" /><button className="sf-btn sf-btn-outline" onClick={() => navigate('/login')}>Entrar</button><button className="sf-btn sf-btn-main" onClick={() => navigate('/register')}>Criar conta grátis</button></div></nav>
+    <section className="sf-hero"><div><div className="sf-kicker"><Sparkles size={15} /> Uma comunidade para viver a fé</div><h1>A tua fé merece uma <span>comunidade.</span></h1><p>Conhece pessoas, partilha pedidos de oração, entra em grupos que fortalecem a tua caminhada e diverte-te com desafios bíblicos.</p><div className="sf-hero-buttons"><button className="sf-btn sf-btn-main" onClick={() => navigate('/register')}>Criar a minha conta <ArrowRight size={18} /></button><button className="sf-btn sf-btn-gold" onClick={duel}><Play size={17} fill="currentColor" /> Experimentar o Duelo</button></div><div className="sf-safe"><span><ShieldCheck size={15} color="#5e987b" /> Conta gratuita</span><span><Heart size={15} color="#5e987b" /> Sem cartão</span><span><UsersRound size={15} color="#5e987b" /> Comunidade cristã</span></div></div>
+      <div className="sf-preview"><div className="sf-phone"><div className="sf-feed-head"><div className="sf-avatar">SF</div>Comunidade Sigo com Fé</div><article className="sf-card sf-prayer"><div className="sf-card-top"><div className="sf-avatar" style={{background:'#5d987a'}}>A</div><div>Ana Martins<small>Há poucos minutos</small></div></div><p>“Peço oração pela minha família nesta semana.”</p><span className="sf-pray-tag"><Heart size={13} fill="currentColor" /> 12 pessoas estão a orar</span></article><div className="sf-group"><div className="sf-group-icon"><UsersRound size={20} /></div><div><b>Grupo de oração — Caminho de Fé</b><small>Conversas, pedidos e reflexões todos os dias</small></div></div><article className="sf-card"><div className="sf-card-top"><div className="sf-avatar" style={{background:'#e0a91e'}}>R</div><div>Rui Costa<small>Hoje</small></div></div><p>Completei o Duelo Bíblico e quero desafiar mais irmãos!</p></article></div></div>
+    </section>
+    <section className="sf-section"><div className="sf-heading"><h2>Mais do que uma rede social</h2><p>Um lugar seguro para criar ligações, cuidar da vida espiritual e caminhar com outras pessoas.</p></div><div className="sf-grid"><article className="sf-feature"><div className="sf-icon" style={{background:'#e8f4ed',color:'#4d8d6c'}}><MessageCircleHeart size={25} /></div><h3>Mural de fé</h3><p>Partilha testemunhos, versículos, fotos e palavras que podem fortalecer alguém.</p><button className="sf-link" onClick={() => navigate('/register')}>Entrar no mural <ArrowRight size={14} /></button></article><article className="sf-feature"><div className="sf-icon" style={{background:'#eee8f8',color:'#623ba0'}}><UsersRound size={25} /></div><h3>Grupos de oração</h3><p>Encontra ou cria uma comunidade com privacidade, conversas e espaço para orar.</p><button className="sf-link" onClick={() => navigate('/grupos-oracao')}>Conhecer os grupos <ArrowRight size={14} /></button></article><article className="sf-feature"><div className="sf-icon" style={{background:'#fff2d9',color:'#c58616'}}><Trophy size={25} /></div><h3>Duelo Bíblico</h3><p>Joga com amigos ou contra o Bot Bíblico, ganha medalhas e partilha a tua vitória.</p><button className="sf-link" onClick={duel}>Jogar gratuitamente <ArrowRight size={14} /></button></article></div></section>
+    <section className="sf-cta"><div><h2>Começa hoje a tua caminhada em comunidade.</h2><p>Cria a tua conta em poucos segundos e escolhe como queres participar.</p></div><button className="sf-btn" onClick={() => navigate('/register')}>Criar conta grátis <ArrowRight size={17} /></button></section><footer className="sf-footer">Sigo com Fé · Comunidade cristã online</footer>
+  </main>;
 }
-// force deploy
