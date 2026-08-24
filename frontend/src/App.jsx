@@ -69,6 +69,7 @@ import Reflection from "./pages/Reflection";
 
 import DesafioBiblico from "./pages/DesafioBiblico";
 import DueloBiblico from "./pages/DueloBiblico";
+import DuelLanding from "./pages/DuelLanding";
 
 import AjudaUmaVida from "./pages/AjudaUmaVida";
 
@@ -407,6 +408,7 @@ export default function App() {
 
         <Route path="/comunidade-ao-vivo" element={<LiveCommunity />} />
         <Route path="/chat-cristao" element={<ChristianChatLanding />} />
+        <Route path="/duelo-biblico" element={<DuelLanding />} />
 
         <Route path="*" element={<Login />} />
 

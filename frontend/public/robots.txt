@@ -8,4 +8,7 @@ Allow: /desafio-biblico
 Allow: /pedidos-ajuda
 Allow: /reflexao
 Allow: /mural
+Allow: /grupos-oracao
+Allow: /chat-cristao
+Allow: /duelo-biblico
 Allow: /register
