@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { HeartHandshake, Radio, Users, MessageCircle, HandHeart, X, Play, Sparkles } from 'lucide-react';
+import { HeartHandshake, Radio, Users, MessageCircle, HandHeart, X, Sparkles, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
@@ -11,11 +11,17 @@ const activityFor = (session, index) => {
 };
 
 export default function PrayerPlaza() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const { liveSessions = [], totalChurchesPraying = 0, send, on, off } = useWebSocket();
   const [selected, setSelected] = useState(null);
   const [mySessionId, setMySessionId] = useState(null);
   const [focus, setFocus] = useState('');
+  const [showRequest, setShowRequest] = useState(false);
+  const [requestContent, setRequestContent] = useState('');
+  const [requestAnonymous, setRequestAnonymous] = useState(false);
+  const [requestUrgent, setRequestUrgent] = useState(false);
+  const [requestTargets, setRequestTargets] = useState([]);
+  const [requestStatus, setRequestStatus] = useState('');
   const isLeader = ['pastor', 'admin'].includes(user?.role);
   const active = useMemo(() => liveSessions.map((session, index) => ({ ...session, activity: activityFor(session, index) })), [liveSessions]);
 
@@ -31,6 +37,22 @@ export default function PrayerPlaza() {
   const start = () => {
     if (!user?.churchId && !user?.church_id) return window.alert('Primeiro cria ou associa a tua igreja na Sala do Pastor.');
     send({ type: 'pastor_start_praying', pastorId: user.id, churchId: user.churchId || user.church_id, churchName: user.church_name || 'Minha igreja', pastorName: user.full_name, prayerFocus: focus });
+  };
+  const openRequest = (churchIds) => {
+    if (!user) return window.alert('Entra na tua conta para enviar um pedido de oração.');
+    setRequestTargets(churchIds.filter(Boolean)); setRequestStatus(''); setShowRequest(true);
+  };
+  const sendRequest = async () => {
+    if (!requestContent.trim()) return setRequestStatus('Escreve o teu pedido antes de enviar.');
+    if (!requestTargets.length) return setRequestStatus('Não há uma igreja em oração disponível neste momento.');
+    setRequestStatus('A enviar...');
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/help-posts`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ content: requestContent, post_type: 'request', is_anonymous: requestAnonymous, is_urgent: requestUrgent, target_church_ids: requestTargets }) });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Não foi possível enviar.');
+      setRequestStatus(`Pedido enviado a ${data.churches_notified || requestTargets.length} igreja(s). Vais receber uma notificação quando responderem.`);
+      setRequestContent('');
+    } catch (error) { setRequestStatus(error.message || 'Não foi possível enviar o pedido.'); }
   };
 
   return (
@@ -57,14 +79,15 @@ export default function PrayerPlaza() {
       </section>
 
       <section className="prayer-plaza__actions">
-        <Link to="/ajuda-uma-vida"><HeartHandshake size={22}/><span><b>Pedir oração</b><small>Partilha o teu pedido com respeito e privacidade.</small></span></Link>
+        <button onClick={() => openRequest(active.map(session => session.church_id || session.churchId))}><HeartHandshake size={22}/><span><b>Pedir oração</b><small>Envia a todas as igrejas que estão a orar agora.</small></span></button>
         <Link to="/comunidade-ao-vivo"><MessageCircle size={22}/><span><b>Chat de oração</b><small>Conversa, agradece e apoia a comunidade.</small></span></Link>
         {isLeader && <button onClick={mySessionId ? () => send({ type: 'pastor_stop_praying', sessionId: mySessionId }) : start}><Radio size={22}/><span><b>{mySessionId ? 'Terminar minha oração' : 'Minha igreja vai orar'}</b><small>Faz a tua igreja aparecer na praça.</small></span></button>}
       </section>
 
       {isLeader && !mySessionId && <div className="prayer-plaza__leader"><label>Foco da oração (opcional)</label><input value={focus} onChange={(e) => setFocus(e.target.value)} placeholder="Ex.: famílias, saúde, cidade..."/></div>}
 
-      {selected && <div className="prayer-plaza__modal" role="dialog" aria-modal="true"><div><button className="close" onClick={() => setSelected(null)} aria-label="Fechar"><X/></button><span className="live"><Radio size={16}/> oração ao vivo</span><h2>{selected.church_name || selected.churchName}</h2><p>Conduzida por {selected.pastor_name || selected.pastorName || 'um pastor'}.</p>{(selected.prayer_focus || selected.prayerFocus) && <blockquote>“{selected.prayer_focus || selected.prayerFocus}”</blockquote>}<button className="join" onClick={() => { setSelected(null); window.location.hash = 'orar-junto'; }}><HandHeart size={19}/> Entrar para orar junto</button><small>O áudio/vídeo aparece aqui apenas quando a igreja iniciar uma transmissão. Nunca mostramos uma transmissão sem autorização.</small></div></div>}
+      {selected && <div className="prayer-plaza__modal" role="dialog" aria-modal="true"><div><button className="close" onClick={() => setSelected(null)} aria-label="Fechar"><X/></button><span className="live"><Radio size={16}/> oração ao vivo</span><h2>{selected.church_name || selected.churchName}</h2><p>Conduzida por {selected.pastor_name || selected.pastorName || 'um pastor'}.</p>{(selected.prayer_focus || selected.prayerFocus) && <blockquote>“{selected.prayer_focus || selected.prayerFocus}”</blockquote>}<button className="join" onClick={() => { const churchId = selected.church_id || selected.churchId; setSelected(null); openRequest([churchId]); }}><HandHeart size={19}/> Pedir oração a esta igreja</button><small>O áudio/vídeo aparece aqui apenas quando a igreja iniciar uma transmissão. Nunca mostramos uma transmissão sem autorização.</small></div></div>}
+      {showRequest && <div className="prayer-plaza__modal" role="dialog" aria-modal="true"><div><button className="close" onClick={() => setShowRequest(false)} aria-label="Fechar"><X/></button><span className="live"><HeartHandshake size={16}/> pedido protegido</span><h2>Como podemos orar por ti?</h2><p>O pedido será visto apenas pelos pastores das {requestTargets.length} igreja(s) que escolheste.</p><textarea value={requestContent} onChange={(e) => setRequestContent(e.target.value)} placeholder="Escreve o teu pedido de oração..." style={{ width: '100%', minHeight: 105, boxSizing: 'border-box', border: '1px solid #cfe0d5', borderRadius: 12, padding: 12, font: 'inherit', margin: '8px 0' }}/><label style={{ display: 'block', marginTop: 8 }}><input type="checkbox" checked={requestAnonymous} onChange={(e) => setRequestAnonymous(e.target.checked)}/> Enviar como anónimo</label><label style={{ display: 'block', margin: '9px 0 14px' }}><input type="checkbox" checked={requestUrgent} onChange={(e) => setRequestUrgent(e.target.checked)}/> É urgente</label><button className="join" onClick={sendRequest}><Send size={18}/> Enviar pedido</button>{requestStatus && <p style={{ marginTop: 13, color: requestStatus.includes('enviado') ? '#167244' : '#a04c16', fontWeight: 700, lineHeight: 1.45 }}>{requestStatus}</p>}<small>Não publiques dados bancários, documentos ou informação médica detalhada.</small></div></div>}
     </div>
   );
 }

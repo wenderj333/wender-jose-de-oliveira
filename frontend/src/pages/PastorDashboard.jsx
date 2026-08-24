@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { ShieldCheck, Users, Heart, BookOpen, MessageCircle, DollarSign, Calendar, ArrowLeft, Megaphone, HandHeart, BarChart3, Settings, Plus, Send, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
@@ -92,8 +92,9 @@ const styles = {
 function PastorDashboard() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, token } = useAuth();
-  const [section, setSection] = useState(null);
+  const [section, setSection] = useState(() => new URLSearchParams(location.search).get('secao') || null);
   const [overview, setOverview] = useState(null);
   const [loadingOverview, setLoadingOverview] = useState(true);
 
@@ -125,7 +126,7 @@ function PastorDashboard() {
   ];
 
   const handleSection = (id) => {
-    if (id === 'oracoes') return navigate('/oracoes');
+    if (id === 'oracoes') return setSection('oracoes');
     if (id === 'chat') return navigate('/chat-pastoral');
     setSection(id);
   };
@@ -464,7 +465,7 @@ function OracoesSection({ apiFetch }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    apiFetch('/api/help-posts?limit=50')
+    apiFetch('/api/help-posts/pastor/requests')
       .then(d => setPosts(d.posts || []))
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -474,20 +475,24 @@ function OracoesSection({ apiFetch }) {
     if (!d) return '';
     return new Date(d).toLocaleDateString();
   };
+  const confirmPrayer = async (id) => {
+    const response = await apiFetch(`/api/help-posts/${id}/church-praying`, { method: 'POST' });
+    if (response?.acknowledged) setPosts(current => current.map(post => post.id === id ? { ...post, acknowledged: true, church_ack_count: Number(post.church_ack_count || 0) + 1 } : post));
+  };
 
   return (
     <div>
       <div style={styles.sectionTitle}>🙏 {t('pastorDashboard.prayerRequests', 'Pedidos de Oração')}</div>
-      <SectionHelp title={t('pastorDashboard.prayerHelpTitle', '❓ Pedidos de oração da comunidade')} steps={[
-        t('pastorDashboard.prayerHelp1', 'Veja os pedidos de oração enviados pelos membros.'),
-        t('pastorDashboard.prayerHelp2', 'Clique em "Orar" para registar que orou por alguém.'),
-        t('pastorDashboard.prayerHelp3', 'Acompanhe as necessidades espirituais da sua comunidade.'),
+      <SectionHelp title="❓ Pedidos enviados à tua igreja" steps={[
+        'Aqui aparecem apenas pedidos que escolheram a tua igreja na Praça Mundial de Oração.',
+        'Ao confirmar, a pessoa recebe uma notificação de que a tua igreja está a orar.',
+        'Nunca partilhes o pedido fora da equipa autorizada da tua igreja.',
       ]} />
 
       {loading ? (
         <div style={styles.loading}>{t('common.loading', 'Carregando...')}</div>
       ) : !posts.length ? (
-        <div style={styles.empty}>🕊️ {t('pastorDashboard.noPrayerRequests', 'Nenhum pedido de oração ainda.')}</div>
+        <div style={styles.empty}>🕊️ Ainda não há pedidos enviados à tua igreja.</div>
       ) : (
         <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
           {(posts || []).map((p, i) => (
@@ -501,10 +506,14 @@ function OracoesSection({ apiFetch }) {
               <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 2 }}>
                 {p.is_anonymous ? t('ajudaProximo.anonymous', 'Anónimo') : (p.author_name || 'Membro')}
               </div>
+              <div style={{ fontSize: 11, color: '#29805b', fontWeight: 700, marginBottom: 5 }}>⛪ Enviado para {p.church_name}</div>
               <div style={{ fontSize: 13, color: '#555', lineHeight: 1.5 }}>{p.content}</div>
               <div style={{ marginTop: 6, fontSize: 12, color: '#888' }}>
                 🙏 {p.prayer_count || 0} {t('ajudaProximo.peoplePreyed', 'pessoas oraram')}
               </div>
+              <button disabled={p.acknowledged} onClick={() => confirmPrayer(p.id)} style={{ ...styles.btn(p.acknowledged ? '#9ab6a5' : '#258357'), marginTop: 10, opacity: p.acknowledged ? .8 : 1 }}>
+                {p.acknowledged ? '✓ A tua igreja já confirmou oração' : '🙏 A nossa igreja está a orar'}
+              </button>
             </div>
           ))}
         </div>

@@ -45,6 +45,19 @@ const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
       )
     `);
     await db.query('ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS is_urgent BOOLEAN DEFAULT false');
+    await db.query(`CREATE TABLE IF NOT EXISTS help_post_churches (
+      post_id UUID REFERENCES help_posts(id) ON DELETE CASCADE,
+      church_id UUID REFERENCES churches(id) ON DELETE CASCADE,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      PRIMARY KEY (post_id, church_id)
+    )`);
+    await db.query(`CREATE TABLE IF NOT EXISTS help_post_church_acknowledgements (
+      post_id UUID REFERENCES help_posts(id) ON DELETE CASCADE,
+      church_id UUID REFERENCES churches(id) ON DELETE CASCADE,
+      pastor_id UUID REFERENCES users(id) ON DELETE SET NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      PRIMARY KEY (post_id, church_id)
+    )`);
     console.log('✅ help_posts tables ready');
   } catch (err) {
     console.error('❌ help_posts migration error:', err.message);
@@ -84,6 +97,7 @@ router.get('/', optionalAuth, async (req, res) => {
           ) AS user_prayed
         FROM help_posts hp
         LEFT JOIN users u ON u.id = hp.user_id
+        WHERE NOT EXISTS (SELECT 1 FROM help_post_churches hpt WHERE hpt.post_id = hp.id) OR hp.user_id = $1
         ORDER BY hp.created_at DESC
         LIMIT 30
       `;
@@ -98,6 +112,7 @@ router.get('/', optionalAuth, async (req, res) => {
           false AS user_prayed
         FROM help_posts hp
         LEFT JOIN users u ON u.id = hp.user_id
+        WHERE NOT EXISTS (SELECT 1 FROM help_post_churches hpt WHERE hpt.post_id = hp.id)
         ORDER BY hp.created_at DESC
         LIMIT 30
       `;
@@ -115,7 +130,7 @@ router.get('/', optionalAuth, async (req, res) => {
 // POST /api/help-posts — criar post (requer autenticação)
 router.post('/', authenticate, async (req, res) => {
   try {
-    const { content, category = 'general', post_type, is_anonymous = false, is_urgent = false, media_url, pix_key, type } = req.body;
+    const { content, category = 'general', post_type, is_anonymous = false, is_urgent = false, media_url, pix_key, type, target_church_ids = [] } = req.body;
 
     if (!content || !content.trim()) {
       return res.status(400).json({ error: 'Conteúdo é obrigatório' });
@@ -128,11 +143,55 @@ router.post('/', authenticate, async (req, res) => {
       [req.user.id, category, post_type || type || 'request', content.trim(), is_anonymous, is_urgent, media_url || null, pix_key || null]
     );
 
-    res.status(201).json({ post: result.rows[0] });
+    const churchIds = [...new Set((Array.isArray(target_church_ids) ? target_church_ids : []).filter(Boolean))];
+    if (churchIds.length) {
+      const churches = await db.query('SELECT id, name, pastor_id FROM churches WHERE id = ANY($1::uuid[])', [churchIds]);
+      for (const church of churches.rows) {
+        await db.query('INSERT INTO help_post_churches (post_id, church_id) VALUES ($1, $2) ON CONFLICT DO NOTHING', [result.rows[0].id, church.id]);
+        if (church.pastor_id) {
+          await createNotification(church.pastor_id, 'prayer_request', 'Novo pedido de oração para a tua igreja 🙏', `Uma pessoa pediu oração à ${church.name}.`, { postId: result.rows[0].id, churchId: church.id, path: '/sala-pastor?secao=oracoes' });
+        }
+      }
+    }
+    res.status(201).json({ post: result.rows[0], churches_notified: churchIds.length });
   } catch (err) {
     console.error('Erro ao criar help-post:', err);
     res.status(500).json({ error: 'Erro interno' });
   }
+});
+
+// GET /api/help-posts/pastor/requests — pedidos dirigidos à igreja do pastor
+router.get('/pastor/requests', authenticate, async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT hp.*, c.id AS church_id, c.name AS church_name,
+        CASE WHEN hp.is_anonymous THEN 'Anónimo' ELSE u.full_name END AS author_name,
+        (SELECT COUNT(*) FROM help_post_church_acknowledgements a WHERE a.post_id = hp.id) AS church_ack_count,
+        EXISTS(SELECT 1 FROM help_post_church_acknowledgements a WHERE a.post_id=hp.id AND a.church_id=c.id) AS acknowledged
+      FROM help_post_churches target
+      JOIN help_posts hp ON hp.id=target.post_id
+      JOIN churches c ON c.id=target.church_id
+      LEFT JOIN users u ON u.id=hp.user_id
+      WHERE c.pastor_id=$1 OR $2='admin'
+      ORDER BY hp.is_urgent DESC, hp.created_at DESC
+      LIMIT 60`, [req.user.id, req.user.role]);
+    res.json({ posts: result.rows });
+  } catch (err) { console.error('Erro ao buscar pedidos da igreja:', err); res.status(500).json({ error: 'Não foi possível carregar os pedidos.' }); }
+});
+
+// POST /api/help-posts/:id/church-praying — pastor confirma oração da igreja
+router.post('/:id/church-praying', authenticate, async (req, res) => {
+  try {
+    const target = await db.query(`SELECT c.id, c.name FROM help_post_churches hpt JOIN churches c ON c.id=hpt.church_id WHERE hpt.post_id=$1 AND (c.pastor_id=$2 OR $3='admin') LIMIT 1`, [req.params.id, req.user.id, req.user.role]);
+    if (!target.rows.length) return res.status(403).json({ error: 'Este pedido não foi enviado à tua igreja.' });
+    const church = target.rows[0];
+    const inserted = await db.query('INSERT INTO help_post_church_acknowledgements (post_id, church_id, pastor_id) VALUES ($1,$2,$3) ON CONFLICT DO NOTHING RETURNING post_id', [req.params.id, church.id, req.user.id]);
+    if (inserted.rows.length) {
+      const post = await db.query('SELECT user_id FROM help_posts WHERE id=$1', [req.params.id]);
+      if (post.rows[0]?.user_id) await createNotification(post.rows[0].user_id, 'prayer', `${church.name} está a orar por ti 🙏`, 'O teu pedido foi recebido por uma igreja. Não estás sozinho.', { postId: req.params.id, churchId: church.id });
+    }
+    res.json({ acknowledged: true, church_name: church.name });
+  } catch (err) { console.error('Erro ao confirmar oração:', err); res.status(500).json({ error: 'Não foi possível confirmar a oração.' }); }
 });
 
 // POST /api/help-posts/:id/pray — toggle oração (requer autenticação)
