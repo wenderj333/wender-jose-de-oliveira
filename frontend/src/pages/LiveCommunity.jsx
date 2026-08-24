@@ -21,7 +21,7 @@ export default function LiveCommunity() {
   const { user, isGuest } = useAuth();
   const { i18n } = useTranslation();
   const c = getChristianChatCopy(i18n.language);
-  const { send, on, off } = useWebSocket();
+  const { send, on, off, isConnected } = useWebSocket();
   const [songs, setSongs] = useState([]);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [chatMessages, setChatMessages] = useState([]);
@@ -57,9 +57,15 @@ export default function LiveCommunity() {
     on('live_room_presence', handlePresence);
     if (user && !isGuest) send({ type: 'live_join', roomId, userId: user.id, userName: user.full_name, userAvatar: user.avatar_url });
     return () => { off('live_chat_broadcast', handleMessage); off('live_room_presence', handlePresence); if (user && !isGuest) send({ type: 'live_leave', roomId, userId: user.id }); };
-  }, [send, on, off, user, isGuest, roomId]);
+  }, [send, on, off, user, isGuest, roomId, isConnected]);
 
-  useEffect(() => { setChatMessages([]); setOnlineCount(0); }, [roomId]);
+  useEffect(() => {
+    setChatMessages([]); setOnlineCount(0);
+    fetch(`${API_BASE}/api/live-community/history?roomId=${encodeURIComponent(roomId)}`)
+      .then(response => response.json())
+      .then(data => setChatMessages(data.messages || []))
+      .catch(() => {});
+  }, [roomId]);
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [chatMessages]);
   useEffect(() => { if (songs.length && audioRef.current) audioRef.current.src = songs[currentSongIndex]?.file_url || ''; }, [songs, currentSongIndex]);
@@ -69,6 +75,10 @@ export default function LiveCommunity() {
     const text = messageInput.trim();
     if (!text || !send) return;
     send({ type: 'live_chat_message', roomId, userId: user.id, userName: user.full_name, userAvatar: user.avatar_url, text });
+    fetch(`${API_BASE}/api/live-community/history`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ roomId, userId: user.id, userName: user.full_name, userAvatar: user.avatar_url, message: text }),
+    }).catch(() => {});
     setMessageInput('');
   };
   const toggleMusic = () => {

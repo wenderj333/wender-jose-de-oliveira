@@ -5,6 +5,7 @@ const db = require('../db/connection');
 async function ensureTables() {
   await db.query(`CREATE TABLE IF NOT EXISTS live_community_users (user_id VARCHAR(100) PRIMARY KEY, last_seen TIMESTAMP DEFAULT NOW())`);
   await db.query(`CREATE TABLE IF NOT EXISTS live_chat_history (id SERIAL PRIMARY KEY, user_id VARCHAR(100), user_name VARCHAR(100), user_avatar TEXT, message TEXT, created_at TIMESTAMP DEFAULT NOW())`);
+  await db.query(`ALTER TABLE live_chat_history ADD COLUMN IF NOT EXISTS room_id VARCHAR(10) NOT NULL DEFAULT 'pt'`);
 }
 ensureTables().catch(console.error);
 
@@ -44,15 +45,16 @@ router.post('/leave', async (req, res) => {
 
 router.get('/history', async (req, res) => {
   try {
-    const r = await db.query(`SELECT user_id as "userId", user_name as "userName", user_avatar as "userAvatar", message as text, created_at as time FROM live_chat_history ORDER BY created_at DESC LIMIT 50`);
+    const roomId = String(req.query.roomId || 'pt').slice(0, 10);
+    const r = await db.query(`SELECT user_id as "userId", user_name as "userName", user_avatar as "userAvatar", message as text, created_at as time FROM live_chat_history WHERE room_id = $1 ORDER BY created_at DESC LIMIT 50`, [roomId]);
     res.json({ messages: r.rows.reverse() });
   } catch (err) { res.json({ messages: [] }); }
 });
 
 router.post('/history', async (req, res) => {
-  const { userId, userName, userAvatar, message } = req.body;
+  const { roomId, userId, userName, userAvatar, message } = req.body;
   try {
-    await db.query(`INSERT INTO live_chat_history (user_id, user_name, user_avatar, message) VALUES ($1, $2, $3, $4)`, [userId, userName, userAvatar, message]);
+    await db.query(`INSERT INTO live_chat_history (room_id, user_id, user_name, user_avatar, message) VALUES ($1, $2, $3, $4, $5)`, [String(roomId || 'pt').slice(0, 10), userId, userName, userAvatar, message]);
     await db.query(`DELETE FROM live_chat_history WHERE id NOT IN (SELECT id FROM live_chat_history ORDER BY created_at DESC LIMIT 200)`);
     res.json({ ok: true });
   } catch (err) { res.json({ ok: false }); }

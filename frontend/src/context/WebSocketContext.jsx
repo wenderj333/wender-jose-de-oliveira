@@ -14,6 +14,7 @@ export function WebSocketProvider({ children }) {
   const [totalChurchesPraying, setTotalChurchesPraying] = useState(0);
   const [lastEvent, setLastEvent] = useState(null);
   const [liveStreams, setLiveStreams] = useState([]);
+  const [isConnected, setIsConnected] = useState(false);
 
   function playSoundThrottled() {
     const now = Date.now();
@@ -74,6 +75,7 @@ export function WebSocketProvider({ children }) {
 
       ws.onopen = () => {
         console.log('WebSocket conectado');
+        setIsConnected(true);
         if (user) {
           ws.send(JSON.stringify({ type: 'identify', userId: user.id, churchId: user.churchId, token }));
         }
@@ -156,6 +158,7 @@ export function WebSocketProvider({ children }) {
 
       ws.onclose = () => {
         console.log('WebSocket desconectado');
+        setIsConnected(false);
         wsRef.current = null;
         // Reconnect after 30 seconds (not 3!)
         if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
@@ -187,7 +190,7 @@ export function WebSocketProvider({ children }) {
   }, []);
 
   return (
-    <WebSocketContext.Provider value={{ liveSessions, totalChurchesPraying, lastEvent, send, on, off, liveStreams }}>
+    <WebSocketContext.Provider value={{ liveSessions, totalChurchesPraying, lastEvent, send, on, off, liveStreams, isConnected }}>
       {children}
     </WebSocketContext.Provider>
   );
