@@ -37,6 +37,14 @@ export default function LiveCommunity() {
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
 
+  // The global language selector should bring the person to the matching
+  // public room as well. This avoids two people thinking they are together
+  // while one is in Portuguese and the other is in Spanish.
+  useEffect(() => {
+    const selectedLanguage = i18n.language?.slice(0, 2);
+    if (ROOMS.some(room => room.id === selectedLanguage)) setRoomId(selectedLanguage);
+  }, [i18n.language]);
+
   useEffect(() => {
     fetch(`${API_BASE}/api/live-community/playlist`).then(r => r.json()).then(data => setSongs(data.songs || [])).catch(() => {});
   }, []);
