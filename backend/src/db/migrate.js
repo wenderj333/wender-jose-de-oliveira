@@ -423,6 +423,17 @@ async function migrate() {
       tempo_medio FLOAT DEFAULT 0,
       criado_em TIMESTAMP DEFAULT NOW()
     )`);
+
+  await pool.query(`CREATE TABLE IF NOT EXISTS daily_challenge_results (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      challenge_date DATE NOT NULL,
+      question_index INTEGER NOT NULL,
+      correct BOOLEAN NOT NULL DEFAULT false,
+      completed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE(user_id, challenge_date)
+    )`);
+  await pool.query('CREATE INDEX IF NOT EXISTS idx_daily_challenge_user_date ON daily_challenge_results(user_id, challenge_date DESC)');
  
   console.log('quiz_resultados OK');
   console.log('✅ Migração PostgreSQL concluída com sucesso! (20+ tabelas criadas)');
