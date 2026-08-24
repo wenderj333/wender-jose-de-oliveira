@@ -124,6 +124,7 @@ export default function Register() {
           ✉ {t('register.emailVerify', 'Depois do registo, recebe um email de boas-vindas. Verifica a tua caixa de entrada.')}
         </div>
         {t('register.hasAccount')} <Link to="/login" style={{ color: 'var(--green)', fontWeight: 600 }}>{t('register.signIn')}</Link>
+        <p style={{ margin: '14px 0 0', fontSize: 12, lineHeight: 1.5, color: '#6b7280' }}>Ao criar uma conta, concordas com os nossos <Link to="/termos" style={{ color: '#3568b8' }}>Termos de Uso</Link> e a <Link to="/privacidade" style={{ color: '#3568b8' }}>Política de Privacidade</Link>.</p>
         </div>
       </div>
       </div>
