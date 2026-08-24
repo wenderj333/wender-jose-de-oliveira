@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
-import { Loader2, Settings, MessageCircle, Phone, Video } from "lucide-react";
+import { Loader2, Settings, MessageCircle, Phone, Video, Flag } from "lucide-react";
 import PhotoModal from "../components/PhotoModal";
 import PhotoUploader from "../components/PhotoUploader";
+import ReportModal from "../components/ReportModal";
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
 
 class ProfileErrorBoundary extends React.Component {
@@ -50,6 +51,7 @@ function ProfileContent() {
   const [mediaVisibility, setMediaVisibility] = useState("public");
   const [mediaSaving, setMediaSaving] = useState(false);
   const [musicCovers, setMusicCovers] = useState({});
+  const [reportProfile, setReportProfile] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -199,6 +201,7 @@ function ProfileContent() {
                   <button onClick={() => navigate(`/mensagens/${userId}`)} title="Enviar mensagem" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#eef5ff", color: "#245ea7", border: "1px solid #bcd2f3", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><MessageCircle size={15}/> Mensagem</button>
                   <button onClick={() => navigate(`/mensagens/${userId}?call=audio`)} title="Chamada de voz" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#eef8f0", color: "#287a48", border: "1px solid #bfe0c8", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><Phone size={15}/> Ligar</button>
                   <button onClick={() => navigate(`/mensagens/${userId}?call=video`)} title="Videochamada" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#f5effb", color: "#6C3FA0", border: "1px solid #ddcfef", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><Video size={15}/> Vídeo</button>
+                  <button type="button" onClick={() => setReportProfile(true)} title="Denunciar perfil" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#fff6f5", color: "#b42318", border: "1px solid #f2c7c2", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><Flag size={15}/> Denunciar</button>
                 </div>
               )}
             </div>
@@ -346,6 +349,7 @@ function ProfileContent() {
           </div>
         )}
         {showUploader && <PhotoUploader token={token} onSuccess={p => { setPhotos(prev => [p, ...prev]); setShowUploader(false); }} onClose={() => setShowUploader(false)} />}
+        {reportProfile && <ReportModal type="user" targetId={userId} targetName={user?.full_name || user?.username} onClose={() => setReportProfile(false)} />}
       </div>
     </div>
   );
