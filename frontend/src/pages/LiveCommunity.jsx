@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Heart, MessageCircle, Music, Pause, Play, Send, ShieldCheck, Smile, Users, Volume2 } from 'lucide-react';
+import { Heart, MessageCircle, Music, Pause, Play, Send, ShieldCheck, Smile, Users, Volume2, Globe2, LockKeyhole, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +9,12 @@ import { getChristianChatCopy } from '../i18n/christianChatCopy';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const card = { background: '#fff', border: '1px solid #e0e6f5', borderRadius: 18, boxShadow: '0 8px 28px rgba(74,128,212,0.08)' };
+const ROOMS = [
+  { id: 'pt', flag: '🇧🇷', title: 'Sala em Português', subtitle: 'Brasil, Portugal e países lusófonos' },
+  { id: 'es', flag: '🇪🇸', title: 'Sala en Español', subtitle: 'Hable con hermanos de habla hispana' },
+  { id: 'de', flag: '🇩🇪', title: 'Deutschsprachiger Raum', subtitle: 'Gemeinschaft auf Deutsch' },
+  { id: 'en', flag: '🇬🇧', title: 'English Prayer Room', subtitle: 'Christian community in English' },
+];
 
 export default function LiveCommunity() {
   const { user, isGuest } = useAuth();
@@ -20,6 +27,7 @@ export default function LiveCommunity() {
   const [messageInput, setMessageInput] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
   const [onlineCount, setOnlineCount] = useState(0);
+  const [roomId, setRoomId] = useState(() => (ROOMS.some(room => room.id === i18n.language?.slice(0, 2)) ? i18n.language.slice(0, 2) : 'pt'));
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
@@ -32,14 +40,23 @@ export default function LiveCommunity() {
 
   useEffect(() => {
     if (!send || !on || !off) return undefined;
-    const handleMessage = data => setChatMessages(prev => {
+    const handleMessage = data => {
+      if (data?.roomId && data.roomId !== roomId) return;
+      setChatMessages(prev => {
       if (data?.id && prev.some(message => message.id === data.id)) return prev;
       return [...prev, data].slice(-100);
-    });
+      });
+    };
+    const handlePresence = data => {
+      if (data?.roomId === roomId) setOnlineCount(Number(data.onlineCount) || 0);
+    };
     on('live_chat_broadcast', handleMessage);
-    if (user && !isGuest) send({ type: 'live_join', userId: user.id, userName: user.full_name, userAvatar: user.avatar_url });
-    return () => { off('live_chat_broadcast', handleMessage); if (user && !isGuest) send({ type: 'live_leave', userId: user.id }); };
-  }, [send, on, off, user, isGuest]);
+    on('live_room_presence', handlePresence);
+    if (user && !isGuest) send({ type: 'live_join', roomId, userId: user.id, userName: user.full_name, userAvatar: user.avatar_url });
+    return () => { off('live_chat_broadcast', handleMessage); off('live_room_presence', handlePresence); if (user && !isGuest) send({ type: 'live_leave', roomId, userId: user.id }); };
+  }, [send, on, off, user, isGuest, roomId]);
+
+  useEffect(() => { setChatMessages([]); setOnlineCount(0); }, [roomId]);
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [chatMessages]);
   useEffect(() => { if (songs.length && audioRef.current) audioRef.current.src = songs[currentSongIndex]?.file_url || ''; }, [songs, currentSongIndex]);
@@ -48,7 +65,7 @@ export default function LiveCommunity() {
     if (!user || isGuest) return setShowGuestPrompt(true);
     const text = messageInput.trim();
     if (!text || !send) return;
-    send({ type: 'live_chat_message', userId: user.id, userName: user.full_name, userAvatar: user.avatar_url, text });
+    send({ type: 'live_chat_message', roomId, userId: user.id, userName: user.full_name, userAvatar: user.avatar_url, text });
     setMessageInput('');
   };
   const toggleMusic = () => {
@@ -72,10 +89,16 @@ export default function LiveCommunity() {
         <p style={{ margin: 0, fontSize: '1rem', opacity: .92 }}>{c.intro}</p>
       </div>
     </section>
+    <div style={{ maxWidth: 1120, margin: '0 auto 18px', padding: '0 8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}><div><h2 style={{ margin: 0, fontSize: '1.1rem' }}>Escolha uma sala</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>Entre na conversa no idioma que prefere.</p></div><Link to="/mensagens" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: '#3568b8', textDecoration: 'none', fontWeight: 800, fontSize: 14 }}><LockKeyhole size={16}/> Conversas privadas <ChevronRight size={16}/></Link></div>
+      <div className="christian-room-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,minmax(0,1fr))', gap: 10 }}>
+        {ROOMS.map(room => <button key={room.id} type="button" onClick={() => setRoomId(room.id)} style={{ textAlign: 'left', padding: 14, borderRadius: 15, border: roomId === room.id ? '2px solid #3568b8' : '1px solid #dce4f2', background: roomId === room.id ? '#edf4ff' : '#fff', cursor: 'pointer', boxShadow: roomId === room.id ? '0 7px 18px rgba(53,104,184,.12)' : 'none' }}><div style={{ fontSize: 21, marginBottom: 7 }}>{room.flag}</div><strong style={{ display: 'block', color: '#1e2240', fontSize: 13 }}>{room.title}</strong><span style={{ display: 'block', color: '#68738f', fontSize: 11, marginTop: 4, lineHeight: 1.35 }}>{room.subtitle}</span></button>)}
+      </div>
+    </div>
     <div className="christian-chat-layout" style={{ maxWidth: 1120, margin: '0 auto', padding: '0 8px', display: 'grid', gridTemplateColumns: 'minmax(0,1.8fr) minmax(260px,.8fr)', gap: 18 }}>
       <section style={{ ...card, minHeight: 540, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <header style={{ padding: '18px 20px', borderBottom: '1px solid #e0e6f5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          <div><h2 style={{ margin: 0, fontSize: '1.15rem' }}>{c.conversation}</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>{c.share}</p></div>
+          <div><h2 style={{ margin: 0, fontSize: '1.15rem' }}>{ROOMS.find(room => room.id === roomId)?.title || c.conversation}</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>{c.share}</p></div>
           <span style={{ background: onlineCount ? '#eaf7ef' : '#f4f6fa', color: onlineCount ? '#287a4b' : '#667085', borderRadius: 999, padding: '8px 10px', fontSize: 12, fontWeight: 700 }}><Users size={14} style={{ verticalAlign: 'middle', marginRight: 5 }}/>{onlineLabel}</span>
         </header>
         <div style={{ flex: 1, overflowY: 'auto', padding: 20, background: '#fbfcff' }}>
@@ -113,7 +136,7 @@ export default function LiveCommunity() {
         </section>
       </aside>
     </div>
-    <style>{`@media(max-width:800px){.christian-chat-layout{grid-template-columns:1fr !important}}`}</style>
+    <style>{`@media(max-width:800px){.christian-chat-layout{grid-template-columns:1fr !important}.christian-room-list{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}`}</style>
     <GuestPrompt show={showGuestPrompt} onClose={() => setShowGuestPrompt(false)} feature={c.room} />
   </div>;
 }

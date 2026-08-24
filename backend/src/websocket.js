@@ -278,9 +278,11 @@ function setupWebSocket(server) {
           }
 
           case 'live_chat_message': {
-            // Community live chat broadcast
-            const communityChat = { type: 'live_chat_broadcast', userId: msg.userId, userName: msg.userName, userAvatar: msg.userAvatar, text: msg.text, id: Date.now().toString(), time: new Date().toISOString() };
-            broadcast(wss, communityChat);
+            // Community chat messages are only delivered inside the chosen room.
+            const clientInfo = clients.get(ws) || {};
+            const roomId = String(msg.roomId || clientInfo.liveCommunityRoom || 'pt');
+            const communityChat = { type: 'live_chat_broadcast', roomId, userId: msg.userId, userName: msg.userName, userAvatar: msg.userAvatar, text: msg.text, id: Date.now().toString(), time: new Date().toISOString() };
+            broadcastToCommunityRoom(clients, roomId, communityChat);
             break;
           }
           case 'live_chat': {
@@ -359,20 +361,19 @@ function setupWebSocket(server) {
           // ===== LIVE COMMUNITY CHAT =====
 
           case 'live_join': {
-            broadcast(wss, {
-              type: 'live_user_joined',
-              userId: msg.userId,
-              userName: msg.userName,
-              userAvatar: msg.userAvatar,
-            });
+            const clientInfo = clients.get(ws) || {};
+            clientInfo.liveCommunityRoom = String(msg.roomId || 'pt');
+            clients.set(ws, clientInfo);
+            broadcastCommunityPresence(clients, clientInfo.liveCommunityRoom);
             break;
           }
 
           case 'live_leave': {
-            broadcast(wss, {
-              type: 'live_user_left',
-              userId: msg.userId,
-            });
+            const clientInfo = clients.get(ws) || {};
+            const roomId = clientInfo.liveCommunityRoom || String(msg.roomId || 'pt');
+            clientInfo.liveCommunityRoom = null;
+            clients.set(ws, clientInfo);
+            broadcastCommunityPresence(clients, roomId);
             break;
           }
         }
@@ -408,6 +409,21 @@ function setupWebSocket(server) {
   });
 
   return wss; // returned to server.js
+}
+
+function broadcastToCommunityRoom(clients, roomId, data) {
+  const message = JSON.stringify(data);
+  for (const [ws, client] of clients.entries()) {
+    if (client?.liveCommunityRoom === roomId && ws.readyState === 1) {
+      try { ws.send(message); } catch (_) {}
+    }
+  }
+}
+
+function broadcastCommunityPresence(clients, roomId) {
+  let onlineCount = 0;
+  for (const [, client] of clients.entries()) if (client?.liveCommunityRoom === roomId) onlineCount += 1;
+  broadcastToCommunityRoom(clients, roomId, { type: 'live_room_presence', roomId, onlineCount });
 }
 
 function broadcast(wss, data) {
