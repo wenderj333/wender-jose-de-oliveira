@@ -20,9 +20,10 @@ async function authenticate(req, res, next) {
   try {
     const token = header.split(' ')[1];
     const decoded = jwt.verify(token, JWT_SECRET);
-    const result = await db.query('SELECT id, email, full_name, role, avatar_url FROM users WHERE id = $1', [decoded.id]);
+    const result = await db.query('SELECT id, email, full_name, role, avatar_url, is_suspended FROM users WHERE id = $1', [decoded.id]);
     const user = result.rows[0];
     if (!user) return res.status(401).json({ error: 'Usuário não encontrado' });
+    if (user.is_suspended) return res.status(403).json({ error: 'Esta conta foi suspensa pela moderação.' });
     req.user = user;
     next();
   } catch (err) {

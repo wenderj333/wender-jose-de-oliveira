@@ -88,6 +88,7 @@ import Notifications from "./pages/Notifications";
 
 import LiveCommunity from "./pages/LiveCommunity";
 import ChristianChatLanding from "./pages/ChristianChatLanding";
+import SafetyCenter from "./pages/SafetyCenter";
 
 
 
@@ -725,6 +726,10 @@ export default function App() {
 
             )}
 
+            {user.role === 'admin' && (
+              <Link to="/seguranca" className={isActive('/seguranca')}><Shield size={17}/><span className="nav-text" style={{marginLeft:10}}>Segurança e moderação</span></Link>
+            )}
+
             <button className="menu-link logout-btn" onClick={logout} style={{marginTop:4}}>
 
               <LogOut size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('auth.logout','Sair')}</span>
@@ -783,6 +788,8 @@ export default function App() {
             <Route path="/amigos" element={<Friends />} />
 
             <Route path="/notificacoes" element={<Notifications />} />
+
+            <Route path="/seguranca" element={<ProtectedRoute role="admin"><SafetyCenter /></ProtectedRoute>} />
 
             <Route path="/pedidos-ajuda" element={<HelpRequests />} />
 
