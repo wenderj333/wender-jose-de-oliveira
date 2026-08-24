@@ -128,6 +128,8 @@ function setupWebSocket(server) {
               action: 'started',
               session: {
                 id: session.id,
+                pastorId: msg.pastorId,
+                churchId: msg.churchId,
                 churchName: msg.churchName,
                 pastorName: msg.pastorName,
                 prayerFocus: msg.prayerFocus,
