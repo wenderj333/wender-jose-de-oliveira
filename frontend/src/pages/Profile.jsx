@@ -102,7 +102,8 @@ function ProfileContent() {
   const handleFollow = async () => {
     if (!token || friendStatus) return;
     try {
-      await fetch(API + "/friends/request", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + token }, body: JSON.stringify({ addresseeId: userId }) });
+      const response = await fetch(API + "/friends/request", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + token }, body: JSON.stringify({ addressee_id: userId }) });
+      if (!response.ok) throw new Error("Não foi possível enviar o pedido");
       setFriendStatus("pending");
     } catch(e) {}
   };

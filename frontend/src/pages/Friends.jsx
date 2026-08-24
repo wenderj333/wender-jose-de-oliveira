@@ -17,6 +17,10 @@ export default function Friends() {
   const [activeTab, setActiveTab] = useState(tabFromUrl || 'my');
   const [requests, setRequests] = useState([]);
 
+  useEffect(() => {
+    setActiveTab(new URLSearchParams(location.search).get('tab') || 'my');
+  }, [location.search]);
+
   const loadData = async () => {
     setLoading(true);
     try {
@@ -36,6 +40,13 @@ export default function Friends() {
       await loadData();
       alert('Amizade aceite!');
     } catch(e) { console.error(e); }
+  };
+  const rejectRequest = async (friendshipId) => {
+    try {
+      const res = await fetch(API + '/friends/reject/' + friendshipId, { method: 'PUT', headers: { Authorization: 'Bearer ' + token } });
+      if (!res.ok) throw new Error('Não foi possível recusar');
+      await loadData();
+    } catch(e) { console.error(e); alert('Não foi possível recusar o pedido.'); }
   };
   useEffect(() => { loadData(); }, [token]);
 
@@ -84,7 +95,7 @@ export default function Friends() {
         ) : activeTab === 'requests' ? (
           requests.length > 0 ? requests.map(req => (
             <div key={req.friendship_id} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'15px', background:'#fff', borderRadius:'15px', border:'1px solid #dbdbdb' }}>
-              <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>
+              <div onClick={() => navigate(`/perfil/${req.id}`)} style={{ display:'flex', alignItems:'center', gap:'12px', cursor:'pointer' }}>
                 <div style={{ width:'50px', height:'50px', borderRadius:'50%', overflow:'hidden', background:'#eee', border:'2px solid #0095f6' }}>
                   {req.avatar_url ? <img src={req.avatar_url} style={{ width:'100%', height:'100%', objectFit:'cover' }} /> : <User color='#ccc' size={30} />}
                 </div>
@@ -93,9 +104,10 @@ export default function Friends() {
                   <div style={{ fontSize:'12px', color:'#8e8e8e' }}>Quer ser teu amigo</div>
                 </div>
               </div>
-              <button onClick={() => acceptRequest(req.friendship_id)} style={{ padding:'8px 16px', borderRadius:'8px', border:'none', background:'#0095f6', color:'white', fontWeight:'600', cursor:'pointer' }}>
-                ✅ Aceitar
-              </button>
+              <div style={{ display:'flex', gap:8 }}>
+                <button onClick={() => acceptRequest(req.friendship_id)} style={{ padding:'8px 16px', borderRadius:'8px', border:'none', background:'#0095f6', color:'white', fontWeight:'600', cursor:'pointer' }}>✅ Aceitar</button>
+                <button onClick={() => rejectRequest(req.friendship_id)} style={{ padding:'8px 12px', borderRadius:'8px', border:'1px solid #f3c3c3', background:'#fff', color:'#c24141', fontWeight:'600', cursor:'pointer' }}>Recusar</button>
+              </div>
             </div>
           )) : <p style={{ textAlign:'center', color:'#8e8e8e' }}>Sem pedidos pendentes.</p>
         ) : friends.length > 0 ? (

@@ -4,8 +4,6 @@ import { Bell, CheckCircle, XCircle, Info, Trash, MessageCircle } from 'lucide-r
 import { useNavigate } from 'react-router-dom';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
-const FRONTEND_URL = 'https://sigo-com-fe.vercel.app'; // Or wherever your frontend is deployed
-
 function notificationData(notification) {
   if (!notification?.data) return {};
   if (typeof notification.data === 'object') return notification.data;
@@ -74,27 +72,29 @@ export default function NotificationsPage() {
 
   const getNotificationLink = (notification) => {
     const data = notificationData(notification);
-    if (data.url) {
-      return data.url.startsWith('/') ? `${FRONTEND_URL}${data.url}` : data.url;
-    }
+    // A navegação deve ficar dentro da aplicação. URLs externas ou malformadas
+    // eram enviadas ao router e podiam deixar a página em branco.
+    if (typeof data.url === 'string' && data.url.startsWith('/')) return data.url;
     switch (notification.type) {
       case 'flagged_post': 
-        return `${FRONTEND_URL}/mural?postId=${data.postId}`;
+        return data.postId ? `/?postId=${encodeURIComponent(data.postId)}` : '/';
       case 'like':
-        return data.postId ? `${FRONTEND_URL}/mural?postId=${data.postId}` : `${FRONTEND_URL}/mural`;
+        return data.postId ? `/?postId=${encodeURIComponent(data.postId)}` : '/';
       case 'new_direct_message':
       case 'message':
         // Se tem senderId, vai direto para o chat com essa pessoa
         if (data.senderId) {
-          return `${FRONTEND_URL}/mensagens/${data.senderId}`;
+          return `/mensagens/${data.senderId}`;
         }
-        return `${FRONTEND_URL}/mensagens`;
+        return '/mensagens';
       case 'friend_request':
+        // O pedido deve abrir a área onde pode ser aceite ou recusado.
+        return '/amigos?tab=requests';
       case 'friend_accepted':
-        return data.from ? `${FRONTEND_URL}/perfil/${data.from}` : `${FRONTEND_URL}/amigos`;
+        return '/amigos';
       case 'prayer':
       case 'new_help_request':
-        return `${FRONTEND_URL}/pedidos-ajuda`;
+        return '/pedidos-ajuda';
       default: 
         return '#';
     }
@@ -128,7 +128,7 @@ export default function NotificationsPage() {
           {notifications.map(n => {
             const link = getNotificationLink(n);
             const canOpen = link && link !== '#';
-            return <button key={n.id} type="button" onClick={()=>{ markAsRead(n.id); if (canOpen) navigate(link.replace(FRONTEND_URL, '')); }} style={{
+            return <button key={n.id} type="button" onClick={()=>{ markAsRead(n.id); if (canOpen) navigate(link); }} style={{
               display: 'flex', alignItems: 'center', gap: 12, padding: '1rem',
               background: n.is_read ? '#f0fff4' : '#fff', borderRadius: 12, border: n.is_read ? '2px solid #86efac' : '2px solid #daa520', transition: 'background 0.3s',
               boxShadow: n.is_read ? 'none' : '0 0 0 2px #daa52030',

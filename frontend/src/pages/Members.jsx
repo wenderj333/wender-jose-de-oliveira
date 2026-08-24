@@ -59,6 +59,11 @@ export default function Members() {
 
   return (
     <div style={{ maxWidth:"900px", margin:"0 auto", padding:"24px 16px" }}>
+      <style>{`
+        .sigo-members-grid { display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:16px; }
+        @media (max-width: 820px) { .sigo-members-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px; } }
+        @media (max-width: 480px) { .sigo-members-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; } }
+      `}</style>
       <h2 style={{ fontSize:"22px", fontWeight:"800", marginBottom:"20px", color:"#1a1a1a" }}>
         Membros da Comunidade
       </h2>
@@ -81,11 +86,7 @@ export default function Members() {
       </div>
 
       {/* Grid de Cards */}
-      <div style={{
-        display:'grid',
-        gridTemplateColumns:'repeat(auto-fill, minmax(160px, 1fr))',
-        gap:'16px'
-      }}>
+      <div className="sigo-members-grid">
         {filtered.length === 0 ? (
           <p style={{ color:'#aaa', gridColumn:'1/-1', textAlign:'center' }}>Nenhum membro encontrado.</p>
         ) : (
