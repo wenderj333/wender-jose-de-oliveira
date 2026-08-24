@@ -3,7 +3,8 @@ const router = express.Router();
 const db = require('../db/connection');
 
 async function ensureTables() {
-  await db.query(`CREATE TABLE IF NOT EXISTS live_community_users (user_id VARCHAR(100) PRIMARY KEY, last_seen TIMESTAMP DEFAULT NOW())`);
+  await db.query(`CREATE TABLE IF NOT EXISTS live_community_users (user_id VARCHAR(100) PRIMARY KEY, room_id VARCHAR(10) NOT NULL DEFAULT 'pt', last_seen TIMESTAMP DEFAULT NOW())`);
+  await db.query(`ALTER TABLE live_community_users ADD COLUMN IF NOT EXISTS room_id VARCHAR(10) NOT NULL DEFAULT 'pt'`);
   await db.query(`CREATE TABLE IF NOT EXISTS live_chat_history (id SERIAL PRIMARY KEY, user_id VARCHAR(100), user_name VARCHAR(100), user_avatar TEXT, message TEXT, created_at TIMESTAMP DEFAULT NOW())`);
   await db.query(`ALTER TABLE live_chat_history ADD COLUMN IF NOT EXISTS room_id VARCHAR(10) NOT NULL DEFAULT 'pt'`);
 }
@@ -18,18 +19,20 @@ router.get('/playlist', async (req, res) => {
 
 router.get('/stats', async (req, res) => {
   try {
+    const roomId = String(req.query.roomId || 'pt').slice(0, 10);
     await db.query(`DELETE FROM live_community_users WHERE last_seen < NOW() - INTERVAL '10 minutes'`);
-    const r = await db.query('SELECT COUNT(*) FROM live_community_users');
+    const r = await db.query('SELECT COUNT(*) FROM live_community_users WHERE room_id = $1', [roomId]);
     res.json({ onlineCount: parseInt(r.rows[0].count) });
   } catch (err) { res.json({ onlineCount: 0 }); }
 });
 
 router.post('/join', async (req, res) => {
-  const { userId } = req.body;
+  const { userId, roomId } = req.body;
   try {
-    if (userId) await db.query(`INSERT INTO live_community_users (user_id, last_seen) VALUES ($1, NOW()) ON CONFLICT (user_id) DO UPDATE SET last_seen = NOW()`, [userId]);
+    const room = String(roomId || 'pt').slice(0, 10);
+    if (userId) await db.query(`INSERT INTO live_community_users (user_id, room_id, last_seen) VALUES ($1, $2, NOW()) ON CONFLICT (user_id) DO UPDATE SET room_id = EXCLUDED.room_id, last_seen = NOW()`, [userId, room]);
     await db.query(`DELETE FROM live_community_users WHERE last_seen < NOW() - INTERVAL '10 minutes'`);
-    const r = await db.query('SELECT COUNT(*) FROM live_community_users');
+    const r = await db.query('SELECT COUNT(*) FROM live_community_users WHERE room_id = $1', [room]);
     res.json({ onlineCount: parseInt(r.rows[0].count) });
   } catch (err) { res.json({ onlineCount: 0 }); }
 });

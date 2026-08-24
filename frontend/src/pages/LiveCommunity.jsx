@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Heart, MessageCircle, Music, Pause, Play, Send, ShieldCheck, Smile, Users, Volume2, LockKeyhole, ChevronRight, Flag, EyeOff } from 'lucide-react';
+import { Heart, MessageCircle, Music, Pause, Play, Send, ShieldCheck, Smile, Users, Volume2, LockKeyhole, ChevronRight, Flag, EyeOff, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
@@ -32,13 +32,13 @@ export default function LiveCommunity() {
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
   const [reportMessage, setReportMessage] = useState(null);
   const [hiddenUserIds, setHiddenUserIds] = useState(() => new Set());
+  const [showRoomInfo, setShowRoomInfo] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
 
   useEffect(() => {
     fetch(`${API_BASE}/api/live-community/playlist`).then(r => r.json()).then(data => setSongs(data.songs || [])).catch(() => {});
-    fetch(`${API_BASE}/api/live-community/stats`).then(r => r.json()).then(data => setOnlineCount(Number(data.onlineCount) || 0)).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -47,6 +47,7 @@ export default function LiveCommunity() {
       if (data?.roomId && data.roomId !== roomId) return;
       setChatMessages(prev => {
       if (data?.id && prev.some(message => message.id === data.id)) return prev;
+      if (prev.some(message => message.userId === data.userId && (message.text || message.message) === (data.text || data.message))) return prev;
       return [...prev, data].slice(-100);
       });
     };
@@ -61,11 +62,35 @@ export default function LiveCommunity() {
 
   useEffect(() => {
     setChatMessages([]); setOnlineCount(0);
-    fetch(`${API_BASE}/api/live-community/history?roomId=${encodeURIComponent(roomId)}`)
+    const loadHistory = () => fetch(`${API_BASE}/api/live-community/history?roomId=${encodeURIComponent(roomId)}`)
       .then(response => response.json())
-      .then(data => setChatMessages(data.messages || []))
+      .then(data => setChatMessages(previous => {
+        const incoming = data.messages || [];
+        const confirmed = incoming.map(message => {
+          const localCopy = previous.find(item => item.userId === message.userId && (item.text || item.message) === (message.text || message.message));
+          return localCopy ? { ...message, id: localCopy.id } : message;
+        });
+        const pending = previous.filter(message => String(message.id || '').startsWith('local-') && !incoming.some(item => item.userId === message.userId && (item.text || item.message) === (message.text || message.message)));
+        return [...confirmed, ...pending].sort((a, b) => new Date(a.time || 0) - new Date(b.time || 0)).slice(-100);
+      }))
       .catch(() => {});
+    loadHistory();
+    const timer = setInterval(loadHistory, 6000);
+    return () => clearInterval(timer);
   }, [roomId]);
+
+  useEffect(() => {
+    if (!user || isGuest) return undefined;
+    const updatePresence = () => fetch(`${API_BASE}/api/live-community/join`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id, roomId }),
+    }).then(response => response.json()).then(data => setOnlineCount(Number(data.onlineCount) || 0)).catch(() => {});
+    updatePresence();
+    const timer = setInterval(updatePresence, 60000);
+    return () => {
+      clearInterval(timer);
+      fetch(`${API_BASE}/api/live-community/leave`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id }) }).catch(() => {});
+    };
+  }, [user, isGuest, roomId]);
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [chatMessages]);
   useEffect(() => { if (songs.length && audioRef.current) audioRef.current.src = songs[currentSongIndex]?.file_url || ''; }, [songs, currentSongIndex]);
@@ -74,7 +99,9 @@ export default function LiveCommunity() {
     if (!user || isGuest) return setShowGuestPrompt(true);
     const text = messageInput.trim();
     if (!text || !send) return;
-    send({ type: 'live_chat_message', roomId, userId: user.id, userName: user.full_name, userAvatar: user.avatar_url, text });
+    const localMessage = { id: `local-${Date.now()}`, roomId, userId: user.id, userName: user.full_name, userAvatar: user.avatar_url, text, time: new Date().toISOString() };
+    setChatMessages(previous => [...previous, localMessage].slice(-100));
+    send({ type: 'live_chat_message', ...localMessage });
     fetch(`${API_BASE}/api/live-community/history`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ roomId, userId: user.id, userName: user.full_name, userAvatar: user.avatar_url, message: text }),
@@ -132,7 +159,7 @@ export default function LiveCommunity() {
           <button onClick={sendMessage} aria-label="Enviar mensagem" style={{ width: 46, border: 0, borderRadius: 12, background: '#3568b8', color: '#fff', cursor: 'pointer', display: 'grid', placeItems: 'center' }}><Send size={19}/></button>
         </footer>
       </section>
-      <aside style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <aside className="chat-info-desktop" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <section style={{ ...card, padding: 18 }}><div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#3568b8', fontWeight: 800 }}><ShieldCheck size={19}/> {c.rules}</div><ul style={{ paddingLeft: 18, margin: '13px 0 0', color: '#59627d', fontSize: 13, lineHeight: 1.65 }}><li>{c.rule1}</li><li>{c.rule2}</li><li>{c.rule3}</li></ul></section>
         <section style={{ ...card, padding: 18 }}><div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 800 }}><Heart size={19} color="#c49a28"/> {c.welcome}</div><p style={{ color: '#667085', fontSize: 13, lineHeight: 1.6, marginBottom: 0 }}>{c.welcomeText}</p></section>
         <section style={{ ...card, padding: 18 }}>
@@ -153,7 +180,17 @@ export default function LiveCommunity() {
         </section>
       </aside>
     </div>
-    <style>{`@media(max-width:800px){.christian-chat-layout{grid-template-columns:1fr !important}.christian-room-list{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}`}</style>
+    <section className="chat-info-mobile" style={{ ...card, maxWidth: 1120, margin: '14px auto 0', padding: 14 }}>
+      <button type="button" onClick={() => setShowRoomInfo(open => !open)} style={{ width: '100%', border: 0, background: 'transparent', padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#3568b8', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><Info size={19}/> Informações da sala</span><ChevronRight size={18} style={{ transform: showRoomInfo ? 'rotate(90deg)' : 'none', transition: 'transform .2s' }}/>
+      </button>
+      {showRoomInfo && <div style={{ marginTop: 14, borderTop: '1px solid #e0e6f5', paddingTop: 13, color: '#59627d', fontSize: 13, lineHeight: 1.65 }}>
+        <strong style={{ color: '#1e2240' }}>{c.rules}</strong>
+        <ul style={{ paddingLeft: 18, margin: '8px 0 12px' }}><li>{c.rule1}</li><li>{c.rule2}</li><li>{c.rule3}</li></ul>
+        <strong style={{ color: '#1e2240' }}>{c.welcome}</strong><p style={{ margin: '5px 0 0' }}>{c.welcomeText}</p>
+      </div>}
+    </section>
+    <style>{` .chat-info-mobile{display:none}@media(max-width:800px){.christian-chat-layout{grid-template-columns:1fr !important}.christian-room-list{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.chat-info-desktop{display:none !important}.chat-info-mobile{display:block !important}}`}</style>
     <GuestPrompt show={showGuestPrompt} onClose={() => setShowGuestPrompt(false)} feature={c.room} />
     {reportMessage && <ReportModal type="user" targetId={reportMessage.userId} targetName={reportMessage.userName} onClose={() => setReportMessage(null)} />}
   </div>;

@@ -66,7 +66,10 @@ function setupWebSocket(server) {
             try {
               const decoded = jwt.verify(msg.token, JWT_SECRET);
               if (decoded.id !== msg.userId) throw new Error('user mismatch');
-              clients.set(ws, { userId: decoded.id, churchId: msg.churchId });
+              // Keep the room selected while the identity is validated. Without
+              // this merge, an early `live_join` could be erased and the user
+              // would appear as offline to everyone else in the room.
+              clients.set(ws, { ...(clients.get(ws) || {}), userId: decoded.id, churchId: msg.churchId });
             } catch (_) { ws.close(1008, 'authentication required'); break; }
             // Send current live sessions
             const liveSessions = await PastorSession.getLiveSessions();

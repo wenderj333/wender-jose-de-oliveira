@@ -71,7 +71,7 @@ export default function LanguageSwitcher({ variant = 'dark' }) {
             onClick={() => setOpen(false)}
           />
           {/* Dropdown */}
-          <div style={{
+          <div className="language-dropdown" style={{
             position: 'absolute',
             top: 'calc(100% + 6px)',
             right: 0,
@@ -115,7 +115,19 @@ export default function LanguageSwitcher({ variant = 'dark' }) {
           </div>
         </>
       )}
-    </div>
+      <style>{`@media (max-width: 600px) {
+        .language-dropdown {
+          position: fixed !important;
+          top: auto !important;
+          right: 12px !important;
+          bottom: 12px !important;
+          width: calc(100vw - 24px);
+          min-width: 0 !important;
+          max-height: 70vh;
+          overflow-y: auto;
+        }
+      }`}</style>
+    </div>
   );
 }
 
