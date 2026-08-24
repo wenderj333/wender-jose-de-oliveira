@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Flame, Medal, Sparkles, CheckCircle2, XCircle, CalendarDays } from 'lucide-react';
+import { Flame, Medal, Sparkles, CheckCircle2, XCircle, CalendarDays, Share2, MessageCircle, Copy, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
@@ -19,6 +19,7 @@ export default function DailyFaithChallenge() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   const load = async () => {
     const token = localStorage.getItem('token');
@@ -46,6 +47,20 @@ export default function DailyFaithChallenge() {
     } catch (err) { setError(err.message || 'Não foi possível guardar a resposta.'); }
   };
 
+  const shareUrl = `${window.location.origin}/desafio-diario`;
+  const shareText = `🙏 Participei no Desafio Diário de Fé no Sigo com Fé! ${data?.correct ? `Estou numa sequência de ${data.streak} dia(s).` : 'Vem fortalecer a tua fé comigo.'}`;
+  const nativeShare = async () => {
+    try {
+      if (navigator.share) await navigator.share({ title: 'Desafio Diário de Fé | Sigo com Fé', text: shareText, url: shareUrl });
+      else await copyLink();
+    } catch (_) {}
+  };
+  const copyLink = async () => {
+    try { await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`); setCopied(true); setTimeout(() => setCopied(false), 2500); }
+    catch (_) { setError('Não foi possível copiar a ligação.'); }
+  };
+  const openShare = (url) => window.open(url, '_blank', 'noopener,noreferrer');
+
   const medal = (data?.streak || 0) >= 7 ? 'Ouro' : (data?.streak || 0) >= 3 ? 'Prata' : 'Bronze';
   return <div style={{ maxWidth: 760, margin: '0 auto', padding: '28px 16px 48px' }}>
     <section style={{ borderRadius: 24, padding: '30px 26px', color: '#fff', background: 'linear-gradient(135deg,#2b6cb0,#7051b6)', boxShadow: '0 16px 38px rgba(57,74,148,.22)' }}>
@@ -66,5 +81,17 @@ export default function DailyFaithChallenge() {
       </>}
     </section>
     {data && <div style={{ marginTop: 18, display: 'flex', alignItems: 'center', gap: 14, background: '#fff8e7', border: '1px solid #f4d58d', borderRadius: 18, padding: 18 }}><Medal size={34} color="#d28b00"/><div><strong>Medalha {medal}</strong><div style={{ color: '#6b7280', fontSize: '.9rem', marginTop: 3 }}>3 dias: Prata · 7 dias: Ouro</div></div></div>}
+    {data?.completed && <section style={{ marginTop: 18, borderRadius: 22, padding: 22, color: '#fff', background: 'linear-gradient(135deg,#263b84,#6b3fa0)', boxShadow: '0 12px 28px rgba(55,54,122,.23)' }}>
+      <div style={{ opacity: .82, fontSize: '.78rem', fontWeight: 800, letterSpacing: 1 }}>SIGO COM FÉ · DESAFIO DIÁRIO</div>
+      <h2 style={{ margin: '9px 0 7px', fontSize: '1.35rem' }}>{data.correct ? `🏅 ${data.streak} ${text.streak}` : '🙏 A fé cresce todos os dias'}</h2>
+      <p style={{ margin: 0, opacity: .9 }}>Convida alguém para fazer o próximo desafio contigo.</p>
+      <div style={{ display: 'flex', gap: 9, flexWrap: 'wrap', marginTop: 18 }}>
+        <button onClick={nativeShare} style={{ border: 0, borderRadius: 11, padding: '11px 14px', background: '#fff', color: '#303c89', fontWeight: 800, cursor: 'pointer' }}><Share2 size={17} style={{ verticalAlign: 'text-bottom' }}/> Partilhar</button>
+        <button onClick={() => openShare(`https://wa.me/?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`)} style={{ border: 0, borderRadius: 11, padding: '11px 14px', background: '#25d366', color: '#fff', fontWeight: 800, cursor: 'pointer' }}><MessageCircle size={17} style={{ verticalAlign: 'text-bottom' }}/> WhatsApp</button>
+        <button onClick={() => openShare(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`)} style={{ border: 0, borderRadius: 11, padding: '11px 14px', background: '#1877f2', color: '#fff', fontWeight: 800, cursor: 'pointer' }}>f Facebook</button>
+        <button onClick={copyLink} style={{ border: '1px solid rgba(255,255,255,.5)', borderRadius: 11, padding: '11px 14px', background: 'transparent', color: '#fff', fontWeight: 800, cursor: 'pointer' }}>{copied ? <Check size={17} style={{ verticalAlign: 'text-bottom' }}/> : <Copy size={17} style={{ verticalAlign: 'text-bottom' }/>} {copied ? 'Copiado' : 'Copiar'}</button>
+      </div>
+      <p style={{ margin: '12px 0 0', opacity: .72, fontSize: '.78rem' }}>No telemóvel, “Partilhar” também mostra Instagram e outras aplicações instaladas.</p>
+    </section>}
   </div>;
 }
