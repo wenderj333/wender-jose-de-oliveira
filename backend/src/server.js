@@ -2831,13 +2831,8 @@ ioduelo.on('connection', (socket) => {
       if (sala.j.find(x => x.id === socket.id)) {
         clearInterval(sala.timer);
         ioduelo.to(sid).emit('oponenteSaiu');
-    
-    resultado.forEach(async j => {
-      try {
-        await pool.query('INSERT INTO duelo_ranking (nome,pontos,foto) VALUES ($1,$2,$3) ON CONFLICT (nome) DO UPDATE SET pontos=duelo_ranking.pontos+$2, foto=COALESCE($3,duelo_ranking.foto), updated_at=NOW()', [j.nome,j.pontos,j.foto||null]);
-      } catch(e){}
-    });
-    delete duelSalas[sid];
+        // Uma partida interrompida não entra no ranking e deve apenas limpar a sala.
+        delete duelSalas[sid];
       }
     }
   });
