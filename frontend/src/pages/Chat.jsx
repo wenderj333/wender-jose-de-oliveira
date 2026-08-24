@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Send, Search, ArrowLeft, UserPlus, MessageCircle, Check, CheckCheck, Mic, MicOff, Trash2, Phone, PhoneOff, Video } from 'lucide-react';
@@ -36,6 +36,7 @@ export default function Chat() {
   const { send: sendSocket, on: onSocket, off: offSocket } = useWebSocket();
   const { userId } = useParams(); // /mensagens/:userId
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -59,6 +60,7 @@ export default function Chat() {
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const callRef = useRef(null);
+  const autoCallStartedRef = useRef(false);
   const [call, setCall] = useState(null);
   const setCurrentCall = value => { callRef.current = value; setCall(value); };
   const startRecording = async () => { try { const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); const mediaRecorder = new MediaRecorder(stream); mediaRecorderRef.current = mediaRecorder; audioChunksRef.current = []; mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunksRef.current.push(e.data); }; mediaRecorder.onstop = () => { const blob = new Blob(audioChunksRef.current, { type: "audio/webm" }); setAudioBlob(blob); setAudioUrl(URL.createObjectURL(blob)); stream.getTracks().forEach(t => t.stop()); }; mediaRecorder.start(); setRecording(true); } catch(e) { alert("Erro ao aceder ao microfone"); } };
@@ -69,6 +71,13 @@ export default function Chat() {
   const closeCall = (notify = true) => { const active = callRef.current; if (notify && active?.id) sendSocket?.({ type: 'call_end', callId: active.id }); peerRef.current?.close(); peerRef.current = null; localStreamRef.current?.getTracks().forEach(track => track.stop()); localStreamRef.current = null; setCurrentCall(null); };
   const setupCall = async (active, initiator) => { const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: active.mode === 'video' }); localStreamRef.current = stream; const peer = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }); peerRef.current = peer; stream.getTracks().forEach(track => peer.addTrack(track, stream)); peer.ontrack = event => { if (remoteVideoRef.current) remoteVideoRef.current.srcObject = event.streams[0]; }; peer.onicecandidate = event => { if (event.candidate) sendSocket?.({ type: 'call_signal', callId: active.id, signal: { candidate: event.candidate } }); }; setCurrentCall({ ...active, status: 'active' }); setTimeout(() => { if (localVideoRef.current) localVideoRef.current.srcObject = stream; }, 0); if (initiator) { const offer = await peer.createOffer(); await peer.setLocalDescription(offer); sendSocket?.({ type: 'call_signal', callId: active.id, signal: { offer } }); } };
   const startCall = mode => { if (!otherUser?.id || !sendSocket) return; const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`; const active = { id, mode, status: 'calling', otherName: otherUser.full_name, otherAvatar: otherUser.avatar_url }; setCurrentCall(active); sendSocket({ type: 'call_request', callId: id, targetUserId: otherUser.id, mode, callerName: user.full_name, callerAvatar: user.avatar_url }); };
+  useEffect(() => {
+    const mode = new URLSearchParams(location.search).get('call');
+    if (!['audio', 'video'].includes(mode) || !otherUser?.id || !sendSocket || autoCallStartedRef.current) return;
+    autoCallStartedRef.current = true;
+    navigate(`/mensagens/${userId}`, { replace: true });
+    startCall(mode);
+  }, [location.search, otherUser?.id, sendSocket, userId, navigate]);
   const acceptCall = async () => { const active = callRef.current; if (!active) return; try { await setupCall(active, false); sendSocket?.({ type: 'call_response', callId: active.id, accepted: true }); } catch (_) { sendSocket?.({ type: 'call_response', callId: active.id, accepted: false }); closeCall(false); alert('Não foi possível aceder ao microfone ou câmara.'); } };
   const declineCall = () => { if (callRef.current?.id) sendSocket?.({ type: 'call_response', callId: callRef.current.id, accepted: false }); closeCall(false); };
   useEffect(() => { const incoming = data => setCurrentCall({ id: data.callId, mode: data.mode, status: 'incoming', otherName: data.callerName, otherAvatar: data.callerAvatar }); const accepted = async data => { const active = callRef.current; if (active?.id === data.callId) try { await setupCall(active, true); } catch (_) { closeCall(true); alert('Não foi possível aceder ao microfone ou câmara.'); } }; const ended = data => { if (callRef.current?.id === data.callId) closeCall(false); }; const unavailable = data => { if (callRef.current?.id === data.callId) { closeCall(false); alert('Esta pessoa não está disponível para chamada agora.'); } }; const signal = async data => { const active = callRef.current; if (!active || active.id !== data.callId) return; try { if (!peerRef.current) await setupCall(active, false); const peer = peerRef.current; if (data.signal.offer) { await peer.setRemoteDescription(new RTCSessionDescription(data.signal.offer)); const answer = await peer.createAnswer(); await peer.setLocalDescription(answer); sendSocket?.({ type: 'call_signal', callId: active.id, signal: { answer } }); } if (data.signal.answer) await peer.setRemoteDescription(new RTCSessionDescription(data.signal.answer)); if (data.signal.candidate) await peer.addIceCandidate(new RTCIceCandidate(data.signal.candidate)); } catch (_) { closeCall(true); } }; onSocket?.('call_incoming', incoming); onSocket?.('call_accepted', accepted); onSocket?.('call_declined', ended); onSocket?.('call_ended', ended); onSocket?.('call_unavailable', unavailable); onSocket?.('call_signal', signal); return () => { offSocket?.('call_incoming', incoming); offSocket?.('call_accepted', accepted); offSocket?.('call_declined', ended); offSocket?.('call_ended', ended); offSocket?.('call_unavailable', unavailable); offSocket?.('call_signal', signal); }; }, [onSocket, offSocket, sendSocket]);

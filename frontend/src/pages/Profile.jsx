@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
-import { Loader2, Settings } from "lucide-react";
+import { Loader2, Settings, MessageCircle, Phone, Video } from "lucide-react";
 import PhotoModal from "../components/PhotoModal";
 import PhotoUploader from "../components/PhotoUploader";
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
@@ -172,9 +172,14 @@ function ProfileContent() {
                   <Settings size={18} style={{ cursor: "pointer" }} onClick={() => navigate("/settings")} />
                 </>
               ) : (
-                <button onClick={handleFollow} disabled={!!friendStatus} style={{ background: friendStatus === "accepted" ? "#6C3FA0" : "transparent", color: friendStatus === "accepted" ? "white" : "#6C3FA0", border: "1px solid #6C3FA0", borderRadius: "20px", padding: "4px 14px", fontSize: "13px", cursor: friendStatus ? "default" : "pointer" }}>
-                  {friendStatus === "accepted" ? t("profile.brothers","Irmaos") : friendStatus === "pending" ? t("profile.requestSent","Pedido enviado") : t("profile.follow","Seguir")}
-                </button>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <button onClick={handleFollow} disabled={!!friendStatus} style={{ background: friendStatus === "accepted" ? "#6C3FA0" : "transparent", color: friendStatus === "accepted" ? "white" : "#6C3FA0", border: "1px solid #6C3FA0", borderRadius: "20px", padding: "6px 14px", fontSize: "13px", cursor: friendStatus ? "default" : "pointer", fontWeight: 700 }}>
+                    {friendStatus === "accepted" ? t("profile.brothers","Irmaos") : friendStatus === "pending" ? t("profile.requestSent","Pedido enviado") : t("profile.follow","Seguir")}
+                  </button>
+                  <button onClick={() => navigate(`/mensagens/${userId}`)} title="Enviar mensagem" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#eef5ff", color: "#245ea7", border: "1px solid #bcd2f3", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><MessageCircle size={15}/> Mensagem</button>
+                  <button onClick={() => navigate(`/mensagens/${userId}?call=audio`)} title="Chamada de voz" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#eef8f0", color: "#287a48", border: "1px solid #bfe0c8", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><Phone size={15}/> Ligar</button>
+                  <button onClick={() => navigate(`/mensagens/${userId}?call=video`)} title="Videochamada" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#f5effb", color: "#6C3FA0", border: "1px solid #ddcfef", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><Video size={15}/> Vídeo</button>
+                </div>
               )}
             </div>
             <div style={{ display: "flex", gap: "24px", marginBottom: "12px" }}>
