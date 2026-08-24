@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Heart, MessageCircle, Music, Pause, Play, Send, ShieldCheck, Smile, Users, Volume2, Globe2, LockKeyhole, ChevronRight } from 'lucide-react';
+import { Heart, MessageCircle, Music, Pause, Play, Send, ShieldCheck, Smile, Users, Volume2, LockKeyhole, ChevronRight, Flag, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useTranslation } from 'react-i18next';
 import GuestPrompt from '../components/GuestPrompt';
+import ReportModal from '../components/ReportModal';
 import { getChristianChatCopy } from '../i18n/christianChatCopy';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
@@ -29,6 +30,8 @@ export default function LiveCommunity() {
   const [onlineCount, setOnlineCount] = useState(0);
   const [roomId, setRoomId] = useState(() => (ROOMS.some(room => room.id === i18n.language?.slice(0, 2)) ? i18n.language.slice(0, 2) : 'pt'));
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
+  const [reportMessage, setReportMessage] = useState(null);
+  const [hiddenUserIds, setHiddenUserIds] = useState(() => new Set());
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
@@ -80,6 +83,10 @@ export default function LiveCommunity() {
     setShowEmojis(false);
   };
   const onlineLabel = c.online(onlineCount);
+  const hideUser = userId => {
+    if (!userId) return;
+    setHiddenUserIds(previous => new Set([...previous, userId]));
+  };
 
   return <div style={{ minHeight: '100vh', padding: '20px 0 36px', color: '#1e2240' }}>
     <section style={{ maxWidth: 1120, margin: '0 auto 18px', padding: '0 8px' }}>
@@ -103,7 +110,7 @@ export default function LiveCommunity() {
         </header>
         <div style={{ flex: 1, overflowY: 'auto', padding: 20, background: '#fbfcff' }}>
           {!chatMessages.length && <div style={{ maxWidth: 390, margin: '80px auto 0', textAlign: 'center', color: '#667085' }}><MessageCircle size={35} style={{ color: '#4a80d4', marginBottom: 10 }}/><h3 style={{ margin: '0 0 8px', color: '#1e2240' }}>{c.ready}</h3><p style={{ margin: 0, lineHeight: 1.6 }}>{c.empty}</p></div>}
-          {chatMessages.map((message, index) => <article key={message.id || `${message.userName}-${index}`} style={{ marginBottom: 12, padding: '11px 13px', background: '#fff', border: '1px solid #e6ebf6', borderRadius: '4px 14px 14px 14px', maxWidth: '85%' }}><strong style={{ color: '#3568b8', fontSize: 13 }}>{message.userName || 'Membro'}</strong><p style={{ margin: '4px 0 0', lineHeight: 1.45 }}>{message.text || message.message}</p></article>)}
+          {chatMessages.filter(message => !hiddenUserIds.has(message.userId)).map((message, index) => <article key={message.id || `${message.userName}-${index}`} style={{ marginBottom: 12, padding: '11px 13px', background: '#fff', border: '1px solid #e6ebf6', borderRadius: '4px 14px 14px 14px', maxWidth: '85%' }}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><strong style={{ color: '#3568b8', fontSize: 13, flex: 1 }}>{message.userName || 'Membro'}</strong>{message.userId && message.userId !== user?.id && <><button type="button" onClick={() => setReportMessage(message)} title="Denunciar utilizador" style={{ border: 0, background: 'transparent', color: '#c73c3c', cursor: 'pointer', padding: 3 }}><Flag size={15}/></button><button type="button" onClick={() => hideUser(message.userId)} title="Ocultar mensagens desta pessoa" style={{ border: 0, background: 'transparent', color: '#77829a', cursor: 'pointer', padding: 3 }}><EyeOff size={15}/></button></>}</div><p style={{ margin: '4px 0 0', lineHeight: 1.45 }}>{message.text || message.message}</p></article>)}
           <div ref={chatEndRef} />
         </div>
         <footer style={{ padding: 14, borderTop: '1px solid #e0e6f5', display: 'flex', gap: 9, position: 'relative' }}>
@@ -138,5 +145,6 @@ export default function LiveCommunity() {
     </div>
     <style>{`@media(max-width:800px){.christian-chat-layout{grid-template-columns:1fr !important}.christian-room-list{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}`}</style>
     <GuestPrompt show={showGuestPrompt} onClose={() => setShowGuestPrompt(false)} feature={c.room} />
+    {reportMessage && <ReportModal type="user" targetId={reportMessage.userId} targetName={reportMessage.userName} onClose={() => setReportMessage(null)} />}
   </div>;
 }
