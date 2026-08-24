@@ -11,4 +11,5 @@ Allow: /mural
 Allow: /grupos-oracao
 Allow: /chat-cristao
 Allow: /duelo-biblico
+Allow: /praca-oracao
 Allow: /register
