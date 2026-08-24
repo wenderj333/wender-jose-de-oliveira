@@ -44,6 +44,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
         created_at TIMESTAMPTZ DEFAULT NOW()
       )
     `);
+    await db.query('ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS is_urgent BOOLEAN DEFAULT false');
     console.log('✅ help_posts tables ready');
   } catch (err) {
     console.error('❌ help_posts migration error:', err.message);
@@ -114,17 +115,17 @@ router.get('/', optionalAuth, async (req, res) => {
 // POST /api/help-posts — criar post (requer autenticação)
 router.post('/', authenticate, async (req, res) => {
   try {
-    const { content, category = 'general', post_type = 'request', is_anonymous = false, media_url, pix_key, type } = req.body;
+    const { content, category = 'general', post_type, is_anonymous = false, is_urgent = false, media_url, pix_key, type } = req.body;
 
     if (!content || !content.trim()) {
       return res.status(400).json({ error: 'Conteúdo é obrigatório' });
     }
 
     const result = await db.query(
-      `INSERT INTO help_posts (user_id, category, post_type, content, is_anonymous, media_url, pix_key)
-       VALUES ($1, $2, $3, $4, $5, $6)
+      `INSERT INTO help_posts (user_id, category, post_type, content, is_anonymous, is_urgent, media_url, pix_key)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING *`,
-      [req.user.id, category, post_type || type || 'request', content.trim(), is_anonymous, media_url || null, pix_key || null]
+      [req.user.id, category, post_type || type || 'request', content.trim(), is_anonymous, is_urgent, media_url || null, pix_key || null]
     );
 
     res.status(201).json({ post: result.rows[0] });

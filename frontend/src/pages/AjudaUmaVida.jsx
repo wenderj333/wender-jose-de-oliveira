@@ -65,8 +65,10 @@ export default function AjudaUmaVida() {
       const url = activeTab === "all" ? API+"/help-posts" : API+"/help-posts?type="+activeTab;
       const res = await fetch(url, { headers: authHeaders });
       const data = await res.json();
-      setPosts(Array.isArray(data) ? data : []);
-      setStats({ total: data.length||0, prayers: data.reduce((a,p)=>a+(p.prayer_count||0),0), helping: 0 });
+      const list = Array.isArray(data) ? data : (data.posts || []);
+      const filtered = activeTab === 'all' ? list : list.filter(post => (post.post_type || post.type) === activeTab);
+      setPosts(filtered);
+      setStats({ total: filtered.length, prayers: filtered.reduce((a,p)=>a+(Number(p.prayer_count)||0),0), helping: 0 });
     } catch(e) { setPosts([]); }
     setLoading(false);
   };
@@ -74,10 +76,12 @@ export default function AjudaUmaVida() {
   const handlePray = async (postId) => {
     if (!user) return alert("Faz login para orar!");
     try {
-      await fetch(API+"/help-posts/"+postId+"/pray", { method:"POST", headers:authHeaders });
-      setPrayedIds(prev => new Set([...prev, postId]));
-      setPosts(prev => prev.map(p => p.id===postId ? {...p, prayer_count:(p.prayer_count||0)+1} : p));
-      setSuccessMsg(t("ajuda.prayerSent","+1 oracao enviada. Esta pessoa nao esta sozinha."));
+      const response = await fetch(API+"/help-posts/"+postId+"/pray", { method:"POST", headers:authHeaders });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'Não foi possível registar a oração.');
+      setPrayedIds(prev => { const next = new Set(prev); payload.prayed ? next.add(postId) : next.delete(postId); return next; });
+      setPosts(prev => prev.map(p => p.id===postId ? {...p, prayer_count:payload.prayer_count, user_prayed:payload.prayed} : p));
+      setSuccessMsg(payload.prayed ? t("ajuda.prayerSent","+1 oracao enviada. Esta pessoa nao esta sozinha.") : 'O teu apoio foi removido.');
       setTimeout(() => setSuccessMsg(""), 4000);
       if (navigator.vibrate) navigator.vibrate(50);
       const hc = parseInt(localStorage.getItem("helped_count")||"0")+1;
@@ -93,12 +97,16 @@ export default function AjudaUmaVida() {
     if (!user) return alert("Faz login para publicar!");
     setSubmitting(true);
     try {
-      const res = await fetch(API+"/help-posts", { method:"POST", headers:{...authHeaders,"Content-Type":"application/json"}, body:JSON.stringify({content, type:postType, is_anonymous:isAnon, is_urgent:isUrgent, pix_key:pixKey}) });
+      let media_url = null;
+      if (mediaFile) { setUploading(true); media_url = await uploadToCloudinary(mediaFile); setUploading(false); }
+      const res = await fetch(API+"/help-posts", { method:"POST", headers:{...authHeaders,"Content-Type":"application/json"}, body:JSON.stringify({content, post_type:postType, is_anonymous:isAnon, is_urgent:isUrgent, media_url, pix_key:pixKey}) });
+      if (!res.ok) throw new Error('Não foi possível publicar o pedido.');
       setContent(""); setShowForm(false);
+      setMediaFile(null); setPixKey(""); setIsUrgent(false);
       setSuccessMsg(t("ajuda.requestReceived","O teu pedido foi recebido. Pessoas vao orar por ti."));
       setTimeout(()=>setSuccessMsg(""),5000);
       await loadPosts();
-    } catch(e) {}
+    } catch(e) { setSuccessMsg(e.message || 'Não foi possível publicar.'); }
     setSubmitting(false);
   };
 
@@ -216,8 +224,8 @@ export default function AjudaUmaVida() {
             <p>Nenhum pedido ainda. Sê o primeiro!</p>
           </div>
         ) : posts.map(post => {
-          const cfg = TYPE_CONFIG[post.type] || TYPE_CONFIG.request;
-          const prayed = prayedIds.has(post.id);
+          const cfg = TYPE_CONFIG[post.post_type || post.type] || TYPE_CONFIG.request;
+          const prayed = prayedIds.has(post.id) || post.user_prayed;
           return (
             <div key={post.id} style={{background:"white",borderRadius:16,padding:16,marginBottom:14,boxShadow:"0 2px 12px rgba(0,0,0,0.06)",border:post.is_urgent?"2px solid #e74c3c":"1px solid #f0eaff",position:"relative"}}>
               {post.is_urgent && <div style={{background:"#e74c3c",color:"white",fontSize:11,fontWeight:700,padding:"2px 10px",borderRadius:20,marginBottom:8,display:"inline-block"}}>🔴 URGENTE</div>}
