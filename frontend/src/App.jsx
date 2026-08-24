@@ -514,37 +514,34 @@ export default function App() {
 
       {mobileMenuOpen && (
 
-        <div style={{position:'fixed',inset:0,zIndex:299,background:'rgba(0,0,0,0.92)',padding:'60px 20px 20px',overflowY:'auto'}}>
+        <div style={{position:'fixed',top:108,left:0,right:0,bottom:0,zIndex:299,background:'#f6f8fc',padding:'14px 14px 24px',overflowY:'auto'}}>
+
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',background:'linear-gradient(135deg,#356c5c,#638e7b)',borderRadius:15,padding:'11px 13px',marginBottom:12,color:'white'}}>
+            <div><strong style={{display:'block'}}>Menu</strong><span style={{fontSize:12,opacity:.82}}>{user?.full_name || 'Sigo com Fé'}</span></div>
+            <button type="button" aria-label="Fechar menu" onClick={() => setMobileMenuOpen(false)} style={{display:'grid',placeItems:'center',width:35,height:35,border:0,borderRadius:10,color:'white',background:'rgba(255,255,255,.16)'}}><X size={22}/></button>
+          </div>
 
           <div style={{marginBottom:'20px'}}>
 
-            <p style={{color:'#c9a84c',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'10px',paddingLeft:'16px'}}>{t('nav.spiritual_life')}</p>
+            <p style={{color:'#356c5c',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'10px',paddingLeft:'16px'}}>Acesso rápido</p>
 
             {[
 
-              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_study', 'Biblia')],
+              ['/', <Home size={20}/>, t('nav.mural', 'Mural')],
 
-              ['/pedidos-ajuda', <Heart size={20}/>, t('nav.prayers')],
+              ['/mensagens', <MessageCircle size={20}/>, t('nav.messages', 'Mensagens'), unreadMessages],
 
-              ['/consagracao', <PlayCircle size={20}/>, t('nav.consecration')],
+              ['/comunidade-ao-vivo', <MessageCircle size={20}/>, t('nav.live_community', 'Chat cristão')],
 
-              ['/reflexao', <Sun size={20}/>, t('nav.reflection')],
+              ['/amigos', <Users size={20}/>, t('nav.friends', 'Amigos'), pendingRequests],
 
-              ['/curso-biblico', <BookOpen size={20}/>, t('course.title')],
+              ['/grupos', <Users size={20}/>, t('nav.groups', 'Grupos')],
 
-              ['/ajuda-uma-vida', <Heart size={20}/>, t('nav.help_life')],
-
-              ['/journeys', <Globe size={20}/>, t('nav.journeys')],
-
-              ['/live', <PlayCircle size={20}/>, '🔴 Directo'],
-
-              ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
-
-              ['/diario-com-deus', <BookOpen size={20}/>, t('nav.diary')],
+              ['/notificacoes', <Bell size={20}/>, t('nav.notifications', 'Notificações')],
 
             ].map(([to, icon, label, badge]) => (
 
-              <Link key={to} to={to} onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'white',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
+              <Link key={to} to={to} onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'#304a52',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid #e7eeea',background:'white'}}>
 
                 {icon} {label}
 
@@ -558,31 +555,39 @@ export default function App() {
 
           <div style={{marginBottom:'20px'}}>
 
-            <p style={{color:'rgba(255,255,255,0.5)',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'10px',paddingLeft:'16px'}}>Menu</p>
+            <p style={{color:'#69837b',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'10px',paddingLeft:'16px'}}>{t('nav.spiritual_life')}</p>
 
             {[
 
-              ['/', <Home size={20}/>, t('nav.mural')],
+              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA Bíblica')],
 
-              ['/mensagens', <MessageCircle size={20}/>, t('nav.messages', 'Mensagens'), unreadMessages],
+              ['/pedidos-ajuda', <Heart size={20}/>, t('nav.prayers')],
 
-              ['/amigos', <Users size={20}/>, t('nav.friends', 'Amigos'), pendingRequests],
+              ['/diario-com-deus', <BookOpen size={20}/>, t('nav.diary')],
+
+              ['/reflexao', <Sun size={20}/>, t('nav.reflection')],
+
+              ['/consagracao', <PlayCircle size={20}/>, t('nav.consecration')],
+
+              ['/curso-biblico', <BookOpen size={20}/>, t('course.title')],
+
+              ['/musica', <Music size={20}/>, t('nav.music')],
+
+              ['/journeys', <Globe size={20}/>, t('nav.journeys')],
+
+              ['/live', <PlayCircle size={20}/>, '🔴 Directo'],
+
+              ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
 
               ['/membros', <Users size={20}/>, t('nav.members')],
 
               ['/igrejas', <Globe size={20}/>, t('churches.title', 'Igrejas')],
 
-              ['/musica', <Music size={20}/>, t('nav.music')],
-
-              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA Bíblica')],
-
-              ['/grupos', <Users size={20}/>, t('nav.groups')],
-
               ['/ajuda-uma-vida', <Heart size={20}/>, t('nav.help_life', 'Ajuda ao Proximo')],
 
             ].map(([to, icon, label]) => (
 
-              <Link key={to} to={to} onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'white',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
+              <Link key={to} to={to} onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'#304a52',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid #e7eeea',background:'white'}}>
 
                 {icon} {label}
 
@@ -592,7 +597,7 @@ export default function App() {
 
             {user?.role === 'pastor' && (
 
-              <Link to="/sala-pastor" onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'#c9a84c',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid rgba(255,255,255,0.08)',fontWeight:600}}>
+              <Link to="/sala-pastor" onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'#87641a',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid #e7eeea',background:'white',fontWeight:600}}>
 
                 <BookOpen size={20}/> 🕊️ <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span>
 
@@ -602,7 +607,7 @@ export default function App() {
 
           </div>
 
-          <button onClick={logout} style={{display:'flex',alignItems:'center',gap:'12px',color:'#ff6b6b',fontSize:'1rem',background:'none',border:'none',textAlign:'left',width:'100%',padding:'11px 16px',cursor:'pointer'}}>
+          <button onClick={logout} style={{display:'flex',alignItems:'center',gap:'12px',color:'#c84039',fontSize:'1rem',background:'white',border:'1px solid #f1d5d2',borderRadius:12,textAlign:'left',width:'100%',padding:'12px 16px',cursor:'pointer'}}>
 
             <LogOut size={20}/> {t('auth.logout')}
 
@@ -1060,7 +1065,7 @@ export default function App() {
 
       <nav style={{
 
-        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 300,
+        position: 'fixed', top: 58, left: 0, right: 0, zIndex: 298,
 
         background: 'white', borderTop: '1px solid #e0e0e0',
 
