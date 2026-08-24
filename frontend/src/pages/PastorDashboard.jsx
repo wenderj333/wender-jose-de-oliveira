@@ -463,6 +463,8 @@ function OracoesSection({ apiFetch }) {
   const { t } = useTranslation();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [replyingId, setReplyingId] = useState(null);
+  const [replyText, setReplyText] = useState('');
 
   useEffect(() => {
     apiFetch('/api/help-posts/pastor/requests')
@@ -478,6 +480,15 @@ function OracoesSection({ apiFetch }) {
   const confirmPrayer = async (id) => {
     const response = await apiFetch(`/api/help-posts/${id}/church-praying`, { method: 'POST' });
     if (response?.acknowledged) setPosts(current => current.map(post => post.id === id ? { ...post, acknowledged: true, church_ack_count: Number(post.church_ack_count || 0) + 1 } : post));
+  };
+  const sendPastoralReply = async (id) => {
+    const content = replyText.trim();
+    if (!content) return;
+    const response = await apiFetch(`/api/help-posts/${id}/pastoral-reply`, { method: 'POST', body: JSON.stringify({ content }) });
+    if (response?.reply) {
+      setPosts(current => current.map(post => post.id === id ? { ...post, pastoral_reply: response.reply.content, pastoral_reply_church: response.reply.church_name } : post));
+      setReplyText(''); setReplyingId(null);
+    }
   };
 
   return (
@@ -514,6 +525,7 @@ function OracoesSection({ apiFetch }) {
               <button disabled={p.acknowledged} onClick={() => confirmPrayer(p.id)} style={{ ...styles.btn(p.acknowledged ? '#9ab6a5' : '#258357'), marginTop: 10, opacity: p.acknowledged ? .8 : 1 }}>
                 {p.acknowledged ? '✓ A tua igreja já confirmou oração' : '🙏 A nossa igreja está a orar'}
               </button>
+              {p.pastoral_reply ? <div style={{ marginTop: 10, padding: 10, borderRadius: 9, background: '#edf8f0', color: '#236346', fontSize: 13 }}><b>Resposta enviada pela tua igreja:</b><br/>{p.pastoral_reply}</div> : replyingId === p.id ? <div style={{ marginTop: 10 }}><textarea value={replyText} onChange={(e) => setReplyText(e.target.value)} rows={3} placeholder="Escreve uma palavra de apoio e oração..." style={{ width: '100%', boxSizing: 'border-box', padding: 9, borderRadius: 8, border: '1px solid #cfe0d5' }}/><div style={{ display: 'flex', gap: 8, marginTop: 7 }}><button onClick={() => sendPastoralReply(p.id)} style={styles.btn('#6c47d4')}>Enviar resposta</button><button onClick={() => { setReplyingId(null); setReplyText(''); }} style={styles.btn('#98a4a0')}>Cancelar</button></div></div> : <button onClick={() => { setReplyingId(p.id); setReplyText(''); }} style={{ ...styles.btn('#6c47d4'), marginTop: 8 }}>💬 Responder à pessoa</button>}
             </div>
           ))}
         </div>

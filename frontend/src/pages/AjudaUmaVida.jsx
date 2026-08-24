@@ -1,268 +1,48 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
-import { useAuth } from "../context/AuthContext";
+import React, { useEffect, useMemo, useState } from 'react';
+import { HeartHandshake, HandHeart, ShieldCheck, Send, UsersRound, X, MapPin, PackageOpen, HeartPulse, Utensils, Bus, Home, CircleHelp } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
-const API = (import.meta.env.VITE_API_URL || "") + "/api";
-const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || "degxiuf43";
-const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || "sigo_com_fe";
-async function uploadToCloudinary(file) {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-  const rt = file.type.startsWith("video") ? "video" : "image";
-  const res = await fetch("https://api.cloudinary.com/v1_1/" + CLOUDINARY_CLOUD_NAME + "/" + rt + "/upload", { method: "POST", body: formData });
-  const data = await res.json();
-  return data.secure_url;
-}
-
-function timeAgo(dateStr) {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "agora";
-  if (mins < 60) return mins + " min";
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return hours + "h";
-  return Math.floor(hours / 24) + "d";
-}
-
-const TYPE_CONFIG = {
-  request:   { label: "🙏 Peticao",    color: "#6c47d4", bg: "#f3eeff" },
-  testimony: { label: "💛 Testemunho", color: "#c9a84c", bg: "#fffbec" },
-  gratitude: { label: "✨ Gratidao",   color: "#1e8a5a", bg: "#edfff5" },
-  offer:     { label: "❤️ Ajuda",      color: "#d44747", bg: "#fff0f0" },
-};
+const API = `${import.meta.env.VITE_API_URL || ''}/api`;
+const CATEGORIES = { food: { label: 'Alimentação', Icon: Utensils, color: '#d97706' }, health: { label: 'Saúde e medicamentos', Icon: HeartPulse, color: '#cc4b5b' }, transport: { label: 'Transporte', Icon: Bus, color: '#3876b9' }, housing: { label: 'Moradia', Icon: Home, color: '#377f70' }, essentials: { label: 'Necessidades básicas', Icon: PackageOpen, color: '#7c5ab5' }, other: { label: 'Outro apoio', Icon: CircleHelp, color: '#60747a' } };
+const STATUS = { open: { label: 'Precisa de apoio', color: '#b65a37' }, in_progress: { label: 'Em acompanhamento', color: '#a87918' }, completed: { label: 'Resolvido', color: '#268158' } };
+const ago = (value) => { const m = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / 60000)); return m < 1 ? 'agora' : m < 60 ? `${m} min` : m < 1440 ? `${Math.floor(m / 60)} h` : `${Math.floor(m / 1440)} d`; };
 
 export default function AjudaUmaVida() {
-  const { t } = useTranslation();
   const { user, token } = useAuth();
-  const feedRef = useRef(null);
+  const [posts, setPosts] = useState([]), [tab, setTab] = useState('all'), [open, setOpen] = useState(false), [loading, setLoading] = useState(true), [notice, setNotice] = useState(''), [supporters, setSupporters] = useState({}), [offerId, setOfferId] = useState(null), [offerMessage, setOfferMessage] = useState('');
+  const [form, setForm] = useState({ content: '', category: 'food', is_anonymous: false, is_urgent: false });
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  const visible = useMemo(() => posts.filter((post) => tab === 'all' || post.category === tab), [posts, tab]);
+  const load = async () => { setLoading(true); try { const r = await fetch(`${API}/help-posts`, { headers }); const d = await r.json(); setPosts((d.posts || []).filter((post) => post.post_type === 'social_help')); } catch { setPosts([]); } setLoading(false); };
+  useEffect(() => { load(); }, [token]);
+  const publish = async () => { if (!form.content.trim()) return setNotice('Escreve o que precisas e como alguém pode ajudar.'); try { const r = await fetch(`${API}/help-posts`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ content: form.content, category: form.category, post_type: 'social_help', is_anonymous: form.is_anonymous, is_urgent: form.is_urgent }) }); const d = await r.json(); if (!r.ok) throw new Error(d.error || 'Não foi possível publicar.'); setOpen(false); setNotice('Pedido publicado. As pessoas podem oferecer ajuda sem ver os teus contactos privados.'); setTimeout(() => setNotice(''), 5500); load(); } catch (e) { setNotice(e.message || 'Não foi possível publicar.'); } };
+  const offerHelp = async () => { const id = offerId; try { const r = await fetch(`${API}/help-posts/${id}/offer-help`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: offerMessage }) }); const d = await r.json(); if (!r.ok) throw new Error(d.error || 'Não foi possível enviar.'); setOfferId(null); setOfferMessage(''); setNotice(d.already_offered ? 'Já tinhas demonstrado interesse em ajudar esta pessoa.' : 'A tua oferta foi enviada. A pessoa decide se quer aceitar e entrar em contacto.'); setTimeout(() => setNotice(''), 5000); } catch (e) { setNotice(e.message || 'Não foi possível enviar.'); } };
+  const updateStatus = async (id, status) => { const r = await fetch(`${API}/help-posts/${id}/help-status`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) }); const d = await r.json(); if (r.ok) setPosts((all) => all.map((post) => post.id === id ? { ...post, help_status: d.help_status } : post)); };
+  const showSupporters = async (id) => { if (supporters[id]) return setSupporters((all) => ({ ...all, [id]: null })); const r = await fetch(`${API}/help-posts/${id}/supporters`, { headers }); const d = await r.json(); if (r.ok) setSupporters((all) => ({ ...all, [id]: d.supporters || [] })); };
 
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("all");
-  const [content, setContent] = useState("");
-  const [postType, setPostType] = useState("request");
-  const [isAnon, setIsAnon] = useState(false);
-  const [isUrgent, setIsUrgent] = useState(false);
-  const [helpedCount, setHelpedCount] = useState(()=>parseInt(localStorage.getItem("helped_count")||"0"));
-  const [showContinue, setShowContinue] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [pixKey, setPixKey] = useState("");
-  const [mediaFile, setMediaFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [prayedIds, setPrayedIds] = useState(new Set());
-  const [successMsg, setSuccessMsg] = useState("");
-  const [showForm, setShowForm] = useState(false);
-  const [stats, setStats] = useState({ total: 0, prayers: 0, helping: 0 });
-
-  const authHeaders = token ? { Authorization: "Bearer " + token } : {};
-
-  useEffect(() => { loadPosts(); }, [activeTab]);
-
-  const loadPosts = async () => {
-    setLoading(true);
-    try {
-      const url = activeTab === "all" ? API+"/help-posts" : API+"/help-posts?type="+activeTab;
-      const res = await fetch(url, { headers: authHeaders });
-      const data = await res.json();
-      const list = Array.isArray(data) ? data : (data.posts || []);
-      const filtered = activeTab === 'all' ? list : list.filter(post => (post.post_type || post.type) === activeTab);
-      setPosts(filtered);
-      setStats({ total: filtered.length, prayers: filtered.reduce((a,p)=>a+(Number(p.prayer_count)||0),0), helping: 0 });
-    } catch(e) { setPosts([]); }
-    setLoading(false);
-  };
-
-  const handlePray = async (postId) => {
-    if (!user) return alert("Faz login para orar!");
-    try {
-      const response = await fetch(API+"/help-posts/"+postId+"/pray", { method:"POST", headers:authHeaders });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.error || 'Não foi possível registar a oração.');
-      setPrayedIds(prev => { const next = new Set(prev); payload.prayed ? next.add(postId) : next.delete(postId); return next; });
-      setPosts(prev => prev.map(p => p.id===postId ? {...p, prayer_count:payload.prayer_count, user_prayed:payload.prayed} : p));
-      setSuccessMsg(payload.prayed ? t("ajuda.prayerSent","+1 oracao enviada. Esta pessoa nao esta sozinha.") : 'O teu apoio foi removido.');
-      setTimeout(() => setSuccessMsg(""), 4000);
-      if (navigator.vibrate) navigator.vibrate(50);
-      const hc = parseInt(localStorage.getItem("helped_count")||"0")+1;
-      localStorage.setItem("helped_count", hc);
-      setHelpedCount(hc);
-      setShowContinue(true);
-      setTimeout(()=>setShowContinue(false), 8000);
-    } catch(e) {}
-  };
-
-  const handleSubmit = async () => {
-    if (!content.trim()) return;
-    if (!user) return alert("Faz login para publicar!");
-    setSubmitting(true);
-    try {
-      let media_url = null;
-      if (mediaFile) { setUploading(true); media_url = await uploadToCloudinary(mediaFile); setUploading(false); }
-      const res = await fetch(API+"/help-posts", { method:"POST", headers:{...authHeaders,"Content-Type":"application/json"}, body:JSON.stringify({content, post_type:postType, is_anonymous:isAnon, is_urgent:isUrgent, media_url, pix_key:pixKey}) });
-      if (!res.ok) throw new Error('Não foi possível publicar o pedido.');
-      setContent(""); setShowForm(false);
-      setMediaFile(null); setPixKey(""); setIsUrgent(false);
-      setSuccessMsg(t("ajuda.requestReceived","O teu pedido foi recebido. Pessoas vao orar por ti."));
-      setTimeout(()=>setSuccessMsg(""),5000);
-      await loadPosts();
-    } catch(e) { setSuccessMsg(e.message || 'Não foi possível publicar.'); }
-    setSubmitting(false);
-  };
-
-  const TABS = [
-    { key:"all", label:t("ajuda.all","Todos") },
-    { key:"request", label:t("ajuda.requests","Peticoes") },
-    { key:"testimony", label:t("ajuda.testimonies","Testemunhos") },
-    { key:"gratitude", label:t("ajuda.gratitude","Gratidao") },
-  ];
-
-  const QUICK = [
-    { icon:"🙏", label:t("ajuda.askHelp","Pedir ajuda agora"), color:"#6c47d4", action:()=>{setPostType("request");setShowForm(true);} },
-    { icon:"🤲", label:t("ajuda.prayForSomeone","Orar por alguem"), color:"#e67e22", action:()=>setActiveTab("request") },
-    { icon:"🤝", label:t("ajuda.offerHelp","Oferecer ajuda"), color:"#27ae60", action:()=>{setPostType("offer");setShowForm(true);} },
-    { icon:"💛", label:t("ajuda.shareTestimony","Partilhar testemunho"), color:"#c9a84c", action:()=>{setPostType("testimony");setShowForm(true);} },
-  ];
-
-  return (
-    <div style={{maxWidth:680,margin:"0 auto",padding:"0 0 40px",fontFamily:"Segoe UI,sans-serif"}}>
-
-      {/* HERO */}
-      <div style={{background:"linear-gradient(135deg,#7a9e7e,#8fac7a,#c4b89a)",borderRadius:"0 0 28px 28px",padding:"16px 24px 16px",textAlign:"center",color:"white",marginBottom:20,position:"relative",overflow:"hidden"}}>
-        <div style={{position:"absolute",top:0,right:0,fontSize:120,opacity:0.06,lineHeight:1}}>🕊️</div>
-        <div style={{position:"relative",zIndex:1}}>
-          <p style={{margin:"0 0 6px",fontSize:"0.75rem",opacity:0.7,letterSpacing:2,textTransform:"uppercase"}}>✨ Sigo com Fe</p>
-          <h1 style={{margin:"0 0 8px",fontSize:"clamp(1rem,3vw,1.4rem)",fontWeight:900}}>{t('ajuda.title','🕊 Ajuda uma Vida')}</h1>
-          <p style={{opacity:0.85,fontSize:14,margin:"0 0 16px"}}>{t('ajuda.subtitle','Seja resposta de oracao na vida de alguem')}</p>
-          {helpedCount > 0 && <p style={{color:"#f0c040",fontWeight:700,fontSize:13,margin:"0 0 8px"}}>✨ Hoje tocaste {helpedCount} {helpedCount===1?"vida":"vidas"}</p>}
-          <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
-            <div style={{background:"rgba(255,255,255,0.15)",borderRadius:20,padding:"6px 16px",fontSize:13,fontWeight:700}}>
-              🔥 {stats.helping} {t('ajuda.helpingNow','pessoas ajudando agora')}
-            </div>
-            <div style={{background:"rgba(255,255,255,0.15)",borderRadius:20,padding:"6px 16px",fontSize:13,fontWeight:700}}>
-              🙏 {stats.prayers} oracoes hoje
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* MENSAGEM SUCESSO */}
-      {successMsg && (
-        <div style={{background:"linear-gradient(135deg,#27ae60,#1e8a5a)",borderRadius:14,padding:"14px 20px",marginBottom:16,color:"white",fontWeight:700,textAlign:"center",fontSize:15}}>
-          {successMsg}
-        </div>
-      )}
-
-      {/* 4 ACOES RAPIDAS */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:12,padding:"0 16px",marginBottom:20}}>
-        {QUICK.map((q,i) => (
-          <button key={i} onClick={q.action} style={{background:"white",borderRadius:16,padding:16,border:"2px solid "+q.color+"33",cursor:"pointer",textAlign:"left",boxShadow:"0 2px 12px rgba(0,0,0,0.06)",transition:"all 0.2s"}}
-            onMouseEnter={e=>e.currentTarget.style.transform="scale(1.03)"}
-            onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
-            <div style={{fontSize:28,marginBottom:6}}>{q.icon}</div>
-            <p style={{color:q.color,fontWeight:800,margin:0,fontSize:13}}>{q.label}</p>
-          </button>
-        ))}
-      </div>
-
-      {showContinue && (<div style={{background:"linear-gradient(135deg,#27ae60,#1e8a5a)",borderRadius:14,padding:"14px 20px",margin:"0 16px 16px",color:"white",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}><p style={{margin:0,fontWeight:700,fontSize:14}}>{t('ajuda.stillNeed','Ainda ha pessoas que precisam de ti agora')} 🙏</p><button onClick={()=>{setShowContinue(false);window.scrollTo({top:400,behavior:"smooth"});}} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"white",color:"#27ae60",fontWeight:700,cursor:"pointer",fontSize:13}}>{t('ajuda.continueHelp','Continuar')} 🙏</button></div>)}
-      {/* FORMULARIO */}
-      {showForm && (
-        <div style={{background:"linear-gradient(135deg,#7a9e7e,#8fac7a)",borderRadius:16,padding:20,margin:"0 16px 20px",color:"white"}}>
-          <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
-            {["request","testimony","gratitude","offer"].map(type => (
-              <button key={type} onClick={()=>setPostType(type)} style={{padding:"6px 14px",borderRadius:20,border:"none",background:postType===type?"#f0c040":"rgba(255,255,255,0.15)",color:postType===type?"#1a0a3e":"white",fontWeight:700,cursor:"pointer",fontSize:12}}>
-                {TYPE_CONFIG[type]?.label || type}
-              </button>
-            ))}
-          </div>
-          <label style={{display:"block",cursor:"pointer",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:10,marginBottom:8,color:"white",fontSize:13,textAlign:"center"}}><input type="file" accept="image/*,video/*" style={{display:"none"}} onChange={e=>setMediaFile(e.target.files[0])}/>{mediaFile ? "📸 " + mediaFile.name : "📸 Adicionar foto/video (opcional)"}</label>
-          <textarea value={content} onChange={e=>setContent(e.target.value)} placeholder="Partilha o teu pedido ou testemunho..." style={{width:"100%",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:12,color:"white",fontSize:14,resize:"none",outline:"none",boxSizing:"border-box"}} rows={4}/>
-          {(postType==="request" || postType==="offer") && (
-            <input value={pixKey} onChange={e=>setPixKey(e.target.value)} placeholder="Chave PIX (opcional) - para receber doações" style={{width:"100%",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:12,padding:12,color:"white",fontSize:13,outline:"none",boxSizing:"border-box",marginTop:8}} />
-          )}
-          <div style={{display:"flex",gap:10,marginTop:10,alignItems:"center"}}>
-            <label style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer",fontSize:13,color:"rgba(255,255,255,0.8)"}}>
-              <input type="checkbox" checked={isAnon} onChange={e=>setIsAnon(e.target.checked)}/> Anonimo
-            </label>
-            <label style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer",fontSize:13,color:"rgba(255,100,100,0.9)"}}>
-              <input type="checkbox" checked={isUrgent} onChange={e=>setIsUrgent(e.target.checked)}/> 🔴 Urgente
-            </label>
-            <button onClick={handleSubmit} disabled={submitting} style={{flex:1,padding:"10px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#f0c040,#e67e22)",color:"#1a0a3e",fontWeight:900,cursor:"pointer",fontSize:14}}>
-              {submitting ? "..." : t("ajuda.submitBtn","Publicar") + " 🙏"}
-            </button>
-            <button onClick={()=>setShowForm(false)} style={{padding:"10px 16px",borderRadius:12,border:"1px solid rgba(255,255,255,0.3)",background:"transparent",color:"white",cursor:"pointer",fontSize:13}}>✕</button>
-          </div>
-        </div>
-      )}
-
-      {/* BOTAO PUBLICAR */}
-      {!showForm && (
-        <div style={{padding:"0 16px",marginBottom:16,textAlign:"center"}}>
-          <button onClick={()=>setShowForm(true)} style={{padding:"12px 32px",borderRadius:14,border:"none",background:"linear-gradient(135deg,#6c47d4,#4A2270)",color:"white",fontWeight:900,cursor:"pointer",fontSize:15,boxShadow:"0 4px 15px rgba(108,71,212,0.4)"}}>
-            ✍️ {t('ajuda.placeholder','Partilhar pedido ou testemunho')}
-          </button>
-        </div>
-      )}
-
-      {/* FILTROS */}
-      <div style={{display:"flex",gap:8,padding:"0 16px",marginBottom:16,overflowX:"auto"}}>
-        {TABS.map(tab => (
-          <button key={tab.key} onClick={()=>setActiveTab(tab.key)} style={{padding:"8px 16px",borderRadius:20,border:"none",background:activeTab===tab.key?"linear-gradient(135deg,#6c47d4,#4A2270)":"rgba(108,71,212,0.1)",color:activeTab===tab.key?"white":"#6c47d4",fontWeight:700,cursor:"pointer",fontSize:13,whiteSpace:"nowrap"}}>
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* LISTA DE POSTS */}
-      <div ref={feedRef} style={{padding:"0 16px"}}>
-        {loading ? (
-          <div style={{textAlign:"center",padding:40,color:"#6c47d4"}}>🙏 A carregar...</div>
-        ) : posts.length === 0 ? (
-          <div style={{textAlign:"center",padding:40,color:"#aaa",background:"white",borderRadius:16}}>
-            <div style={{fontSize:40,marginBottom:12}}>🕊️</div>
-            <p>Nenhum pedido ainda. Sê o primeiro!</p>
-          </div>
-        ) : posts.map(post => {
-          const cfg = TYPE_CONFIG[post.post_type || post.type] || TYPE_CONFIG.request;
-          const prayed = prayedIds.has(post.id) || post.user_prayed;
-          return (
-            <div key={post.id} style={{background:"white",borderRadius:16,padding:16,marginBottom:14,boxShadow:"0 2px 12px rgba(0,0,0,0.06)",border:post.is_urgent?"2px solid #e74c3c":"1px solid #f0eaff",position:"relative"}}>
-              {post.is_urgent && <div style={{background:"#e74c3c",color:"white",fontSize:11,fontWeight:700,padding:"2px 10px",borderRadius:20,marginBottom:8,display:"inline-block"}}>🔴 URGENTE</div>}
-              <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
-                {post.avatar_url ? (
-                  <img src={post.avatar_url} style={{width:38,height:38,borderRadius:"50%",objectFit:"cover"}}/>
-                ) : (
-                  <div style={{width:38,height:38,borderRadius:"50%",background:"linear-gradient(135deg,#6c47d4,#4A2270)",display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontWeight:700,fontSize:16,flexShrink:0}}>
-                    {post.is_anonymous ? "?" : (post.full_name||"?").charAt(0).toUpperCase()}
-                  </div>
-                )}
-                <div style={{flex:1}}>
-                  <p style={{fontWeight:700,margin:0,fontSize:14,color:"#1a0a3e"}}>{post.is_anonymous ? "Anonimo" : (post.full_name||"Anonimo")}</p>
-                  <p style={{color:"#aaa",margin:0,fontSize:11}}>{timeAgo(post.created_at)}</p>
-                </div>
-                <span style={{background:cfg.bg,color:cfg.color,fontSize:11,fontWeight:700,padding:"3px 10px",borderRadius:20}}>{cfg.label}</span>
-              </div>
-              <p style={{color:"#333",fontSize:14,lineHeight:1.6,margin:"0 0 12px"}}>{post.content}</p>{post.media_url&&(post.media_url.includes("video")?<video src={post.media_url} controls style={{width:"100%",borderRadius:12,marginBottom:12}}/>:<img src={post.media_url} style={{width:"100%",borderRadius:12,marginBottom:12,objectFit:"cover",maxHeight:300}}/>)}
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                <span style={{color:"#6c47d4",fontSize:12,fontWeight:600}}>🙏 {post.prayer_count||0} pessoas contigo nesta oracao</span>
-                <button onClick={()=>handlePray(post.id)} disabled={prayed} style={{padding:"8px 18px",borderRadius:20,border:"none",background:prayed?"#eee":"linear-gradient(135deg,#6c47d4,#4A2270)",color:prayed?"#aaa":"white",fontWeight:700,cursor:prayed?"default":"pointer",fontSize:13,transition:"all 0.2s"}}>
-                  {prayed ? "✓ " + t("ajuda.prayNow","Orei") : t("ajuda.prayNow","🙏 Orar agora")}
-                </button>
-                  {post.pix_key && (<button onClick={()=>{navigator.clipboard.writeText(post.pix_key);alert('Chave PIX copiada: ' + post.pix_key);}} style={{padding:'8px 18px',borderRadius:20,border:'none',background:'linear-gradient(135deg,#27ae60,#1e8a5a)',color:'white',fontWeight:700,cursor:'pointer',fontSize:13,marginLeft:8}}>💚 Doar PIX</button>)}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* RODAPE ESPIRITUAL */}
-      <div style={{margin:"24px 16px 0",background:"linear-gradient(135deg,#7a9e7e,#8fac7a)",borderRadius:20,padding:24,textAlign:"center",color:"white"}}>
-        <div style={{fontSize:36,marginBottom:8}}>🕊️</div>
-        <p style={{fontWeight:800,fontSize:16,margin:"0 0 6px"}}>{t('ajuda.notAlone','Tu nao estas sozinho')}</p>
-        <p style={{opacity:0.7,fontSize:13,margin:0}}>{t('ajuda.godWorks','Deus age atraves de pessoas')}</p>
-        <p style={{opacity:0.5,fontSize:12,margin:0,fontStyle:'italic'}}>{t('ajuda.prayerDifference','Cada oracao faz diferenca')} 🙏</p>
-      </div>
-    </div>
-  );
+  return <main style={{ maxWidth: 1000, margin: '0 auto', padding: '22px 16px 48px', color: '#26383c' }}>
+    <section style={{ borderRadius: 24, padding: '30px clamp(20px,5vw,46px)', background: 'linear-gradient(122deg,#174c4d,#3a7e70 58%,#9aae70)', color: '#fff', boxShadow: '0 16px 36px rgba(30,79,72,.17)' }}><span style={{ display: 'inline-flex', gap: 7, alignItems: 'center', fontWeight: 800, fontSize: 13 }}><HeartHandshake size={17}/> AÇÃO SOCIAL · SIGO COM FÉ</span><h1 style={{ fontSize: 'clamp(1.85rem,4vw,2.85rem)', lineHeight: 1.05, margin: '12px 0 10px' }}>Ajuda uma Vida</h1><p style={{ maxWidth: 650, fontSize: '1.05rem', lineHeight: 1.6, margin: 0 }}>Pessoas e igrejas unidas para apoiar necessidades reais: alimentação, saúde, medicamentos, transporte, moradia e cuidados essenciais.</p><div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 22 }}><span style={pill}><ShieldCheck size={16}/> apoio sem expor contactos</span><span style={pill}><UsersRound size={16}/> voluntários da comunidade</span><span style={pill}><HandHeart size={16}/> acompanhamento até resolver</span></div></section>
+    <section style={{ display: 'grid', gridTemplateColumns: '1.2fr .8fr', gap: 14, margin: '18px 0' }}><div style={panel}><b style={{ fontSize: 17 }}>Precisas de apoio agora?</b><p style={muted}>Cria um pedido objetivo. Quem quiser ajudar demonstra interesse; os teus dados pessoais continuam privados.</p><button onClick={() => { if (!user) return window.alert('Entra na tua conta para criar um pedido de ajuda.'); setForm({ content: '', category: 'food', is_anonymous: false, is_urgent: false }); setOpen(true); }} style={primary}><Send size={17}/> Pedir ajuda</button></div><div style={{ ...panel, background: '#fff9ed' }}><b style={{ fontSize: 17 }}>Queres ajudar alguém?</b><p style={muted}>Escolhe um pedido, oferece o que podes fazer e a pessoa decide aceitar o apoio.</p><span style={{ color: '#88621f', fontWeight: 750, fontSize: 13 }}>Nunca envies dinheiro por pressão.</span></div></section>
+    {notice && <div style={{ margin: '15px 0', padding: 14, borderRadius: 13, background: '#e9f6ee', color: '#17613f', fontWeight: 700 }}>{notice}</div>}
+    <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 7, margin: '17px 0' }}><button onClick={() => setTab('all')} style={tab === 'all' ? activeChip : chip}>Todos</button>{Object.entries(CATEGORIES).map(([key, item]) => <button key={key} onClick={() => setTab(key)} style={tab === key ? activeChip : chip}>{item.label}</button>)}</div>
+    {loading ? <Empty text="A carregar pedidos de apoio..."/> : visible.length === 0 ? <Empty text="Ainda não há pedidos nesta categoria. A comunidade está pronta para ajudar."/> : <section style={{ display: 'grid', gap: 13 }}>{visible.map((post) => <HelpCard key={post.id} post={post} currentUser={user} onOffer={() => { if (!user) return window.alert('Entra na tua conta para oferecer ajuda.'); setOfferId(post.id); setOfferMessage(''); }} onStatus={updateStatus} onSupporters={showSupporters} supporters={supporters[post.id]}/>)}</section>}
+    <section style={{ marginTop: 24, padding: 18, borderRadius: 17, border: '1px solid #d7e5df', background: '#f8fcfa' }}><b>Como protegemos as pessoas</b><ul style={{ color: '#607279', lineHeight: 1.65, marginBottom: 0 }}><li>Não são permitidos dados bancários, documentos, moradas nem informação médica detalhada.</li><li>O contacto só deve acontecer depois de a pessoa aceitar a oferta de ajuda.</li><li>Pedidos urgentes de saúde ou perigo devem também procurar os serviços de emergência locais.</li><li>Denuncia pedidos falsos, assédio ou tentativas de fraude.</li></ul></section>
+    {open && <div style={overlay}><section style={modal}><button onClick={() => setOpen(false)} style={close}><X/></button><span style={{ color: '#347667', fontWeight: 800, fontSize: 13 }}>PEDIDO DE APOIO SOCIAL</span><h2 style={{ margin: '8px 0' }}>Como podemos ajudar?</h2><p style={muted}>Escreve apenas o necessário. Não publiques PIX, telefone, morada, documentos nem receitas médicas.</p><label style={label}>Tipo de necessidade<select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} style={input}>{Object.entries(CATEGORIES).map(([key, item]) => <option key={key} value={key}>{item.label}</option>)}</select></label><label style={label}>Explica a necessidade<textarea rows={5} value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} placeholder="Ex.: Preciso de uma cesta básica esta semana para a minha família..." style={{ ...input, resize: 'vertical' }}/></label><div style={{ display: 'flex', flexWrap: 'wrap', gap: 15, margin: '14px 0' }}><label><input type="checkbox" checked={form.is_anonymous} onChange={(e) => setForm({ ...form, is_anonymous: e.target.checked })}/> Publicar como anónimo</label><label><input type="checkbox" checked={form.is_urgent} onChange={(e) => setForm({ ...form, is_urgent: e.target.checked })}/> É urgente</label></div><button onClick={publish} style={{ ...primary, width: '100%', justifyContent: 'center' }}><Send size={17}/> Publicar pedido de ajuda</button></section></div>}
+    {offerId && <div style={overlay}><section style={modal}><button onClick={() => setOfferId(null)} style={close}><X/></button><span style={{ color: '#347667', fontWeight: 800, fontSize: 13 }}>OFERECER APOIO</span><h2 style={{ margin: '8px 0' }}>O que consegues fazer?</h2><p style={muted}>A pessoa recebe a tua oferta. Não partilhes dinheiro nem contactos nesta mensagem.</p><textarea rows={4} value={offerMessage} onChange={(e) => setOfferMessage(e.target.value)} placeholder="Ex.: Posso entregar alimentos esta semana / posso acompanhar ao hospital..." style={{ ...input, resize: 'vertical' }}/><button onClick={offerHelp} style={{ ...primary, marginTop: 15, width: '100%', justifyContent: 'center' }}><HandHeart size={17}/> Enviar oferta de ajuda</button></section></div>}
+  </main>;
 }
+
+function HelpCard({ post, currentUser, onOffer, onStatus, onSupporters, supporters }) { const cat = CATEGORIES[post.category] || CATEGORIES.other; const st = STATUS[post.help_status] || STATUS.open; const Icon = cat.Icon; const own = currentUser?.id === post.user_id; return <article style={{ padding: 18, borderRadius: 18, background: '#fff', border: post.is_urgent ? '2px solid #e16b50' : '1px solid #dfeae6', boxShadow: '0 4px 16px rgba(35,77,66,.055)' }}><header style={{ display: 'flex', alignItems: 'center', gap: 10 }}><span style={{ display: 'grid', placeItems: 'center', width: 40, height: 40, borderRadius: 12, color: cat.color, background: `${cat.color}18` }}><Icon size={21}/></span><div style={{ flex: 1 }}><b>{post.is_anonymous ? 'Pessoa da comunidade' : post.author_name || 'Membro'}</b><small style={{ display: 'block', color: '#87979a', marginTop: 2 }}>{ago(post.created_at)}</small></div><span style={{ color: st.color, background: `${st.color}13`, borderRadius: 999, padding: '5px 9px', fontWeight: 800, fontSize: 12 }}>{st.label}</span></header>{post.is_urgent && <p style={{ margin: '12px 0 0', color: '#b94d34', fontWeight: 850, fontSize: 12 }}>● PEDIDO URGENTE</p>}<p style={{ color: '#33474a', lineHeight: 1.62, margin: '13px 0' }}>{post.content}</p><footer style={{ display: 'flex', flexWrap: 'wrap', gap: 8, borderTop: '1px solid #edf2f0', paddingTop: 12 }}>{own ? <><button onClick={() => onSupporters(post.id)} style={secondary}><UsersRound size={16}/> {supporters ? 'Fechar voluntários' : 'Ver quem quer ajudar'}</button><select value={post.help_status || 'open'} onChange={(e) => onStatus(post.id, e.target.value)} style={{ ...secondary, cursor: 'pointer' }}><option value="open">Ainda preciso de apoio</option><option value="in_progress">Estou a receber apoio</option><option value="completed">Pedido resolvido</option></select></> : post.help_status !== 'completed' ? <button onClick={onOffer} style={primary}><HandHeart size={16}/> Quero ajudar</button> : <span style={{ color: '#268158', fontWeight: 800 }}>✓ Pedido resolvido</span>}</footer>{supporters && <div style={{ marginTop: 12, paddingTop: 11, borderTop: '1px solid #e7efeb' }}><b style={{ fontSize: 13 }}>Pessoas que ofereceram ajuda</b>{supporters.length === 0 ? <p style={muted}>Ainda ninguém se ofereceu.</p> : supporters.map((person) => <div key={person.id} style={{ marginTop: 9, padding: 10, borderRadius: 10, background: '#f3faf6' }}><b>{person.full_name}</b>{person.message && <small style={{ display: 'block', color: '#536d68', marginTop: 3 }}>{person.message}</small>}</div>)}</div>}</article>; }
+function Empty({ text }) { return <div style={{ padding: 44, textAlign: 'center', borderRadius: 18, border: '1px dashed #c9dcd5', background: '#fff', color: '#73868a' }}><HeartHandshake size={36} color="#5c9a82"/><p>{text}</p></div>; }
+const pill = { display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.16)', padding: '7px 10px', borderRadius: 999, fontSize: 13, fontWeight: 700 };
+const panel = { padding: 18, borderRadius: 17, background: '#fff', border: '1px solid #dce9e5', boxShadow: '0 4px 14px rgba(35,77,66,.05)' };
+const muted = { color: '#64767b', lineHeight: 1.55, fontSize: 14 };
+const primary = { border: 0, display: 'inline-flex', alignItems: 'center', gap: 7, borderRadius: 11, padding: '10px 14px', color: '#fff', background: '#2c7561', fontWeight: 850, cursor: 'pointer' };
+const secondary = { border: '1px solid #cfe0da', display: 'inline-flex', alignItems: 'center', gap: 7, borderRadius: 10, padding: '8px 10px', color: '#41665c', background: '#fff', fontWeight: 750 };
+const chip = { border: '1px solid #d7e4df', background: '#fff', color: '#526a68', borderRadius: 999, padding: '9px 13px', whiteSpace: 'nowrap', fontWeight: 750, cursor: 'pointer' };
+const activeChip = { ...chip, border: 0, background: '#2c7561', color: '#fff' };
+const overlay = { position: 'fixed', zIndex: 1000, inset: 0, background: 'rgba(17,45,38,.55)', display: 'grid', placeItems: 'center', padding: 16 };
+const modal = { position: 'relative', width: 'min(590px,100%)', boxSizing: 'border-box', maxHeight: '90vh', overflowY: 'auto', background: '#fff', padding: 22, borderRadius: 20 };
+const close = { position: 'absolute', right: 12, top: 12, border: 0, borderRadius: 99, padding: 7, background: '#edf3f0', cursor: 'pointer' };
+const label = { display: 'block', color: '#405a57', fontSize: 13, fontWeight: 800, margin: '14px 0 6px' };
+const input = { display: 'block', width: '100%', boxSizing: 'border-box', marginTop: 6, border: '1px solid #cadbd4', borderRadius: 11, padding: 11, color: '#273b3e', font: 'inherit' };
