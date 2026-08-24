@@ -2724,18 +2724,53 @@ function shuffleArray(arr) {
 }
 let duelEsperando = null;
 let duelSalas = {};
+// Convites diretos ficam ligados ao socket da pessoa convidada. Assim uma
+// aceitação sempre abre uma partida entre as duas pessoas certas.
+const desafiosPendentes = new Map();
 
 const { Server: SocketServer } = require('socket.io');
 const jogadoresOnline = {};
 const ioduelo = new SocketServer(server, { cors: { origin: '*' }, path: '/duelo/socket.io' });
 
+function jogadorEstaEmPartida(socketId) {
+  return Object.values(duelSalas).some(sala => sala.j.some(jogador => jogador.id === socketId));
+}
+
+function tirarDaFila(socketId) {
+  if (duelEsperando && duelEsperando.socket.id === socketId) duelEsperando = null;
+}
+
+function iniciarDueloDireto(socketA, jogadorA, socketB, jogadorB) {
+  const sid = 'duelo_' + Date.now();
+  const perguntasA = shuffleArray(perguntasDuelo[jogadorA.lang] || perguntasDuelo.pt).slice(0, 10);
+  const perguntasB = shuffleArray(perguntasDuelo[jogadorB.lang] || perguntasDuelo.pt).slice(0, 10);
+  socketA.join(sid);
+  socketB.join(sid);
+  duelSalas[sid] = {
+    j: [
+      { id: socketA.id, nome: jogadorA.nome, lang: jogadorA.lang, pts: 0, resp: false, foto: jogadorA.foto || null, perguntas: perguntasA },
+      { id: socketB.id, nome: jogadorB.nome, lang: jogadorB.lang, pts: 0, resp: false, foto: jogadorB.foto || null, perguntas: perguntasB }
+    ],
+    qi: 0, t: 15, timer: null, advancing: false
+  };
+  socketA.emit('inicioJogo', { salaId: sid, oponente: jogadorB.nome, fotoOponente: jogadorB.foto || null, pergunta: perguntasA[0] });
+  socketB.emit('inicioJogo', { salaId: sid, oponente: jogadorA.nome, fotoOponente: jogadorA.foto || null, pergunta: perguntasB[0] });
+  duelTimer(sid);
+}
+
 ioduelo.on('connection', (socket) => {
+  socket.on('registrarJogador', (d = {}) => {
+    const nome = String(d.nome || '').trim();
+    if (!nome) return;
+    jogadoresOnline[socket.id] = { nome, foto: d.foto || null, socketId: socket.id, lang: d.idioma || 'pt' };
+  });
+
   socket.on('jogarComBot', (d) => {
     const lang = d.idioma || 'pt';
     const nome = d.nome || 'Jogador';
     const foto = d.foto || null;
     // O bot não entra nesta lista: ela deve conter apenas pessoas reais.
-    jogadoresOnline[socket.id] = { nome, foto, socketId: socket.id };
+    jogadoresOnline[socket.id] = { nome, foto, socketId: socket.id, lang };
     const sid = 'bot_' + Date.now();
     const perguntas = shuffleArray(perguntasDuelo[lang] || perguntasDuelo.pt).slice(0, 10);
     socket.join(sid);
@@ -2747,7 +2782,7 @@ ioduelo.on('connection', (socket) => {
     const lang = d.idioma || 'pt';
     const fotoRaw = d.foto || null; const foto = fotoRaw && fotoRaw.startsWith('http') ? fotoRaw : (fotoRaw && fotoRaw.length < 5000 ? fotoRaw : null);
     const nome = d.nome || 'Jogador';
-    jogadoresOnline[socket.id] = { nome, foto, socketId: socket.id };
+    jogadoresOnline[socket.id] = { nome, foto, socketId: socket.id, lang };
     if (!duelEsperando) {
       duelEsperando = { socket, nome, lang, foto };
       socket.emit('status', 'Aguardando...');
@@ -2807,24 +2842,43 @@ ioduelo.on('connection', (socket) => {
     }
   });
 
-  socket.on('desafiarJogador', (d) => {
-    const { de, para } = d;
-    const alvo = Object.values(jogadoresOnline).find(j => j.nome === para);
-    if (alvo) {
-      ioduelo.to(alvo.socketId).emit('desafioRecebido', de);
+  socket.on('desafiarJogador', (d = {}) => {
+    const desafiante = jogadoresOnline[socket.id];
+    const alvo = Object.values(jogadoresOnline).find(j => j.nome === d.para);
+    if (!desafiante || !alvo || alvo.socketId === socket.id || jogadorEstaEmPartida(socket.id) || jogadorEstaEmPartida(alvo.socketId)) {
+      socket.emit('desafioIndisponivel');
+      return;
     }
+    desafiosPendentes.set(alvo.socketId, socket.id);
+    ioduelo.to(alvo.socketId).emit('desafioRecebido', { nome: desafiante.nome, id: socket.id });
   });
 
-  socket.on('aceitarDesafio', (d) => {
-    const { de, para } = d;
-    const quemDesafiou = Object.values(jogadoresOnline).find(j => j.nome === de);
-    if (quemDesafiou) {
-      ioduelo.to(quemDesafiou.socketId).emit('desafioAceite', para);
+  socket.on('aceitarDesafio', (d = {}) => {
+    const desafianteId = d.deId || desafiosPendentes.get(socket.id);
+    if (!desafianteId || desafiosPendentes.get(socket.id) !== desafianteId) {
+      socket.emit('desafioIndisponivel');
+      return;
     }
+    const desafiante = jogadoresOnline[desafianteId];
+    const convidado = jogadoresOnline[socket.id];
+    const socketDesafiante = ioduelo.sockets.sockets.get(desafianteId);
+    desafiosPendentes.delete(socket.id);
+    if (!desafiante || !convidado || !socketDesafiante || jogadorEstaEmPartida(desafianteId) || jogadorEstaEmPartida(socket.id)) {
+      socket.emit('desafioIndisponivel');
+      return;
+    }
+    tirarDaFila(desafianteId);
+    tirarDaFila(socket.id);
+    socketDesafiante.emit('desafioAceite', { nome: convidado.nome });
+    iniciarDueloDireto(socketDesafiante, desafiante, socket, convidado);
   });
 
   socket.on('disconnect', () => {
     delete jogadoresOnline[socket.id];
+    desafiosPendentes.delete(socket.id);
+    for (const [convidadoId, desafianteId] of desafiosPendentes.entries()) {
+      if (desafianteId === socket.id) desafiosPendentes.delete(convidadoId);
+    }
 
     if (duelEsperando && duelEsperando.socket.id === socket.id) duelEsperando = null;
     for (const [sid, sala] of Object.entries(duelSalas)) {
