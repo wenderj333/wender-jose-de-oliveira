@@ -88,10 +88,10 @@ export default function NotificationsPage() {
         }
         return '/mensagens';
       case 'friend_request':
-        // O pedido deve abrir a área onde pode ser aceite ou recusado.
-        return '/amigos?tab=requests';
+        // Open the sender profile, where the request can be accepted or declined.
+        return data.from ? `/perfil/${data.from}` : '/amigos?tab=requests';
       case 'friend_accepted':
-        return '/amigos';
+        return data.from ? `/perfil/${data.from}` : '/amigos';
       case 'prayer':
       case 'new_help_request':
         return '/pedidos-ajuda';

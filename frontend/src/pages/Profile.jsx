@@ -37,6 +37,8 @@ function ProfileContent() {
   const [showUploader, setShowUploader] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [friendStatus, setFriendStatus] = useState(null);
+  const [friendDirection, setFriendDirection] = useState(null);
+  const [friendshipId, setFriendshipId] = useState(null);
   const [playingPost, setPlayingPost] = useState(null);
   const audioRef = React.useRef(null);
   const [postAmens, setPostAmens] = useState({});
@@ -96,16 +98,30 @@ function ProfileContent() {
   }, [targetId, token]);
   useEffect(() => {
     if (!token || !userId || isOwner) return;
-    fetch(API + "/friends", { headers: { Authorization: "Bearer " + token } })
-      .then(r => r.json()).then(d => { if ((d.friends || []).find(f => f.id === userId)) setFriendStatus("accepted"); }).catch(() => {});
-  }, [token, userId]);
+    fetch(API + "/friends/status/" + encodeURIComponent(userId), { headers: { Authorization: "Bearer " + token } })
+      .then(r => r.json()).then(d => {
+        setFriendStatus(d?.status || "none");
+        setFriendDirection(d?.direction || null);
+        setFriendshipId(d?.friendship_id || null);
+      }).catch(() => {});
+  }, [token, userId, isOwner]);
   const handleFollow = async () => {
     if (!token || friendStatus) return;
     try {
       const response = await fetch(API + "/friends/request", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + token }, body: JSON.stringify({ addressee_id: userId }) });
       if (!response.ok) throw new Error("Não foi possível enviar o pedido");
       setFriendStatus("pending");
+      setFriendDirection("sent");
     } catch(e) {}
+  };
+  const respondToFriendRequest = async (action) => {
+    if (!friendshipId || !token) return;
+    try {
+      const response = await fetch(API + `/friends/${action}/${friendshipId}`, { method: "PUT", headers: { Authorization: "Bearer " + token } });
+      if (!response.ok) throw new Error();
+      if (action === "accept") { setFriendStatus("accepted"); setFriendDirection(null); }
+      else { setFriendStatus("none"); setFriendDirection(null); setFriendshipId(null); }
+    } catch (_) { alert("Não foi possível atualizar o pedido. Tente novamente."); }
   };
   const openPhoto = (index) => setCurrentIndex(index);
   const closePhoto = () => setCurrentIndex(null);
@@ -174,9 +190,12 @@ function ProfileContent() {
                 </>
               ) : (
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  <button onClick={handleFollow} disabled={!!friendStatus} style={{ background: friendStatus === "accepted" ? "#6C3FA0" : "transparent", color: friendStatus === "accepted" ? "white" : "#6C3FA0", border: "1px solid #6C3FA0", borderRadius: "20px", padding: "6px 14px", fontSize: "13px", cursor: friendStatus ? "default" : "pointer", fontWeight: 700 }}>
+                  {friendStatus === "pending" && friendDirection === "received" ? <>
+                    <button onClick={() => respondToFriendRequest("accept")} style={{ background: "#6C3FA0", color: "white", border: "1px solid #6C3FA0", borderRadius: "20px", padding: "6px 14px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}>Aceitar amizade</button>
+                    <button onClick={() => respondToFriendRequest("reject")} style={{ background: "transparent", color: "#a13a3a", border: "1px solid #e0aaaa", borderRadius: "20px", padding: "6px 14px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}>Recusar</button>
+                  </> : <button onClick={handleFollow} disabled={friendStatus === "accepted" || friendStatus === "pending"} style={{ background: friendStatus === "accepted" ? "#6C3FA0" : "transparent", color: friendStatus === "accepted" ? "white" : "#6C3FA0", border: "1px solid #6C3FA0", borderRadius: "20px", padding: "6px 14px", fontSize: "13px", cursor: friendStatus === "none" || !friendStatus ? "pointer" : "default", fontWeight: 700 }}>
                     {friendStatus === "accepted" ? t("profile.brothers","Irmaos") : friendStatus === "pending" ? t("profile.requestSent","Pedido enviado") : t("profile.follow","Seguir")}
-                  </button>
+                  </button>}
                   <button onClick={() => navigate(`/mensagens/${userId}`)} title="Enviar mensagem" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#eef5ff", color: "#245ea7", border: "1px solid #bcd2f3", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><MessageCircle size={15}/> Mensagem</button>
                   <button onClick={() => navigate(`/mensagens/${userId}?call=audio`)} title="Chamada de voz" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#eef8f0", color: "#287a48", border: "1px solid #bfe0c8", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><Phone size={15}/> Ligar</button>
                   <button onClick={() => navigate(`/mensagens/${userId}?call=video`)} title="Videochamada" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#f5effb", color: "#6C3FA0", border: "1px solid #ddcfef", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><Video size={15}/> Vídeo</button>
