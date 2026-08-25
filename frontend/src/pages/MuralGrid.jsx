@@ -205,7 +205,7 @@ function MusicPickerModal({ onClose, onSelect }) {
                 <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</div>
                 <div style={{ fontSize: 11, color: '#888' }}>{song.artist}</div>
               </div>
-              <Play size={14} color="#4a80d4" />
+              <audio controls preload="none" src={song.url} onClick={e => e.stopPropagation()} style={{ width: 145, height: 28 }} />
             </div>
           ))}
         </div>
@@ -664,6 +664,7 @@ export default function MuralGrid() {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ bg_music_url: audioUrl || null, bg_music_start: null, bg_music_duration: null,
+          music_title: selectedMusicSong?.title || musicName || null,
           content: postText || '📸',
           category: postCategory,
           visibility: postVisibility,
@@ -768,6 +769,7 @@ export default function MuralGrid() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedMusicSong.title}</div>
                 <div style={{ fontSize: 11, color: '#888' }}>{selectedMusicSong.artist}</div>
+                <audio controls preload="metadata" src={selectedMusicSong.url} style={{ width: '100%', height: 28, marginTop: 7 }} />
               </div>
               <button onClick={() => setSelectedMusicSong(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}><X size={14} /></button>
             </div>
