@@ -531,6 +531,7 @@ app.use('/api/help-posts', require('./routes/help-posts'));
 app.use('/api/live-community', require('./routes/live-community'));
 app.use('/api/diary', require('./routes/diary'));
 app.use('/api/reflection', require('./routes/reflection'));
+app.use('/api/calls', require('./routes/calls'));
 
 // Log OpenClaw routes for debugging
 console.log('âœ… OpenClaw routes registered: /api/openclaw/health, /api/openclaw/users/new');
@@ -3076,6 +3077,7 @@ async function addProfileColumns() {
 addProfileColumns();
 
 // favorite_verse column added via addProfileColumns()
+
 
 
 

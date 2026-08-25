@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -69,7 +69,8 @@ export default function Chat() {
   const pollRef = useRef(null);
 
   const closeCall = (notify = true) => { const active = callRef.current; if (notify && active?.id) sendSocket?.({ type: 'call_end', callId: active.id }); peerRef.current?.close(); peerRef.current = null; localStreamRef.current?.getTracks().forEach(track => track.stop()); localStreamRef.current = null; setCurrentCall(null); };
-  const setupCall = async (active, initiator) => { const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: active.mode === 'video' }); localStreamRef.current = stream; const peer = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }); peerRef.current = peer; stream.getTracks().forEach(track => peer.addTrack(track, stream)); peer.ontrack = event => { if (remoteVideoRef.current) remoteVideoRef.current.srcObject = event.streams[0]; }; peer.onicecandidate = event => { if (event.candidate) sendSocket?.({ type: 'call_signal', callId: active.id, signal: { candidate: event.candidate } }); }; setCurrentCall({ ...active, status: 'active' }); setTimeout(() => { if (localVideoRef.current) localVideoRef.current.srcObject = stream; }, 0); if (initiator) { const offer = await peer.createOffer(); await peer.setLocalDescription(offer); sendSocket?.({ type: 'call_signal', callId: active.id, signal: { offer } }); } };
+  const getIceServers = async () => { try { const response = await fetch(`${API}/api/calls/ice-servers`, { headers: { Authorization: `Bearer ${token}` } }); if (response.ok) { const data = await response.json(); if (Array.isArray(data.iceServers) && data.iceServers.length) return data.iceServers; } } catch (_) {} return [{ urls: 'stun:stun.l.google.com:19302' }]; };
+  const setupCall = async (active, initiator) => { const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: active.mode === 'video' }); localStreamRef.current = stream; const iceServers = await getIceServers(); const peer = new RTCPeerConnection({ iceServers }); peerRef.current = peer; stream.getTracks().forEach(track => peer.addTrack(track, stream)); peer.ontrack = event => { if (remoteVideoRef.current) remoteVideoRef.current.srcObject = event.streams[0]; }; peer.onicecandidate = event => { if (event.candidate) sendSocket?.({ type: 'call_signal', callId: active.id, signal: { candidate: event.candidate } }); }; setCurrentCall({ ...active, status: 'active' }); setTimeout(() => { if (localVideoRef.current) localVideoRef.current.srcObject = stream; }, 0); if (initiator) { const offer = await peer.createOffer(); await peer.setLocalDescription(offer); sendSocket?.({ type: 'call_signal', callId: active.id, signal: { offer } }); } };
   const startCall = mode => { if (!otherUser?.id || !sendSocket) return; const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`; const active = { id, mode, status: 'calling', otherName: otherUser.full_name, otherAvatar: otherUser.avatar_url }; setCurrentCall(active); sendSocket({ type: 'call_request', callId: id, targetUserId: otherUser.id, mode, callerName: user.full_name, callerAvatar: user.avatar_url }); };
   useEffect(() => {
     const mode = new URLSearchParams(location.search).get('call');
@@ -78,9 +79,9 @@ export default function Chat() {
     navigate(`/mensagens/${userId}`, { replace: true });
     startCall(mode);
   }, [location.search, otherUser?.id, sendSocket, userId, navigate]);
-  const acceptCall = async () => { const active = callRef.current; if (!active) return; try { await setupCall(active, false); sendSocket?.({ type: 'call_response', callId: active.id, accepted: true }); } catch (_) { sendSocket?.({ type: 'call_response', callId: active.id, accepted: false }); closeCall(false); alert('Não foi possível aceder ao microfone ou câmara.'); } };
+  const acceptCall = async () => { const active = callRef.current; if (!active) return; try { await setupCall(active, false); sendSocket?.({ type: 'call_response', callId: active.id, accepted: true }); } catch (_) { sendSocket?.({ type: 'call_response', callId: active.id, accepted: false }); closeCall(false); alert('NÃ£o foi possÃ­vel aceder ao microfone ou cÃ¢mara.'); } };
   const declineCall = () => { if (callRef.current?.id) sendSocket?.({ type: 'call_response', callId: callRef.current.id, accepted: false }); closeCall(false); };
-  useEffect(() => { const incoming = data => setCurrentCall({ id: data.callId, mode: data.mode, status: 'incoming', otherName: data.callerName, otherAvatar: data.callerAvatar }); const accepted = async data => { const active = callRef.current; if (active?.id === data.callId) try { await setupCall(active, true); } catch (_) { closeCall(true); alert('Não foi possível aceder ao microfone ou câmara.'); } }; const ended = data => { if (callRef.current?.id === data.callId) closeCall(false); }; const unavailable = data => { if (callRef.current?.id === data.callId) { closeCall(false); alert('Esta pessoa não está disponível para chamada agora.'); } }; const signal = async data => { const active = callRef.current; if (!active || active.id !== data.callId) return; try { if (!peerRef.current) await setupCall(active, false); const peer = peerRef.current; if (data.signal.offer) { await peer.setRemoteDescription(new RTCSessionDescription(data.signal.offer)); const answer = await peer.createAnswer(); await peer.setLocalDescription(answer); sendSocket?.({ type: 'call_signal', callId: active.id, signal: { answer } }); } if (data.signal.answer) await peer.setRemoteDescription(new RTCSessionDescription(data.signal.answer)); if (data.signal.candidate) await peer.addIceCandidate(new RTCIceCandidate(data.signal.candidate)); } catch (_) { closeCall(true); } }; onSocket?.('call_incoming', incoming); onSocket?.('call_accepted', accepted); onSocket?.('call_declined', ended); onSocket?.('call_ended', ended); onSocket?.('call_unavailable', unavailable); onSocket?.('call_signal', signal); return () => { offSocket?.('call_incoming', incoming); offSocket?.('call_accepted', accepted); offSocket?.('call_declined', ended); offSocket?.('call_ended', ended); offSocket?.('call_unavailable', unavailable); offSocket?.('call_signal', signal); }; }, [onSocket, offSocket, sendSocket]);
+  useEffect(() => { const incoming = data => setCurrentCall({ id: data.callId, mode: data.mode, status: 'incoming', otherName: data.callerName, otherAvatar: data.callerAvatar }); const accepted = async data => { const active = callRef.current; if (active?.id === data.callId) try { await setupCall(active, true); } catch (_) { closeCall(true); alert('NÃ£o foi possÃ­vel aceder ao microfone ou cÃ¢mara.'); } }; const ended = data => { if (callRef.current?.id === data.callId) closeCall(false); }; const unavailable = data => { if (callRef.current?.id === data.callId) { closeCall(false); alert('Esta pessoa nÃ£o estÃ¡ disponÃ­vel para chamada agora.'); } }; const signal = async data => { const active = callRef.current; if (!active || active.id !== data.callId) return; try { if (!peerRef.current) await setupCall(active, false); const peer = peerRef.current; if (data.signal.offer) { await peer.setRemoteDescription(new RTCSessionDescription(data.signal.offer)); const answer = await peer.createAnswer(); await peer.setLocalDescription(answer); sendSocket?.({ type: 'call_signal', callId: active.id, signal: { answer } }); } if (data.signal.answer) await peer.setRemoteDescription(new RTCSessionDescription(data.signal.answer)); if (data.signal.candidate) await peer.addIceCandidate(new RTCIceCandidate(data.signal.candidate)); } catch (_) { closeCall(true); } }; onSocket?.('call_incoming', incoming); onSocket?.('call_accepted', accepted); onSocket?.('call_declined', ended); onSocket?.('call_ended', ended); onSocket?.('call_unavailable', unavailable); onSocket?.('call_signal', signal); return () => { offSocket?.('call_incoming', incoming); offSocket?.('call_accepted', accepted); offSocket?.('call_declined', ended); offSocket?.('call_ended', ended); offSocket?.('call_unavailable', unavailable); offSocket?.('call_signal', signal); }; }, [onSocket, offSocket, sendSocket]);
   useEffect(() => () => closeCall(false), []);
 
   const translateMessage = async (msgId, content) => {
@@ -103,7 +104,7 @@ export default function Chat() {
 
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
-  // ── Load conversations list ────────────────────────────────────────────────
+  // â”€â”€ Load conversations list â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const loadConversations = useCallback(async () => {
     try {
       const res = await fetch(`${API}/api/messages/conversations`, { headers });
@@ -117,7 +118,7 @@ export default function Chat() {
 
   useEffect(() => { loadConversations(); }, [loadConversations]);
 
-  // ── Load messages for active chat ─────────────────────────────────────────
+  // â”€â”€ Load messages for active chat â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const loadMessages = useCallback(async () => {
     if (!userId) return;
     try {
@@ -153,7 +154,7 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // ── Send message ──────────────────────────────────────────────────────────
+  // â”€â”€ Send message â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const postMessage = async (content) => {
     if (!content || !userId || sending) return false;
     setSending(true);
@@ -183,7 +184,7 @@ export default function Chat() {
 
   const sendAudio = async () => {
     if (!audioBlob || sending) return;
-    if (audioBlob.size > 12 * 1024 * 1024) { alert('A mensagem de voz é muito grande. Grave uma mensagem menor.'); return; }
+    if (audioBlob.size > 12 * 1024 * 1024) { alert('A mensagem de voz Ã© muito grande. Grave uma mensagem menor.'); return; }
     setSending(true);
     try {
       const form = new FormData();
@@ -192,16 +193,16 @@ export default function Chat() {
       form.append('folder', 'sigo-com-fe/voice-messages');
       const upload = await fetch(CLOUDINARY_BASE, { method: 'POST', body: form });
       const data = await upload.json();
-      if (!upload.ok || !data.secure_url) throw new Error('Não foi possível enviar o áudio.');
+      if (!upload.ok || !data.secure_url) throw new Error('NÃ£o foi possÃ­vel enviar o Ã¡udio.');
       setSending(false);
       if (await postMessage(`${VOICE_PREFIX}${data.secure_url}`)) cancelAudio();
     } catch (error) {
       setSending(false);
-      alert(error.message || 'Não foi possível enviar o áudio.');
+      alert(error.message || 'NÃ£o foi possÃ­vel enviar o Ã¡udio.');
     }
   };
 
-  // ── Send friend request ───────────────────────────────────────────────────
+  // â”€â”€ Send friend request â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const sendFriendRequest = async () => {
     if (!userId || requestSent) return;
     try {
@@ -217,7 +218,7 @@ export default function Chat() {
     } catch (_) {}
   };
 
-  // ── Filtered conversations ────────────────────────────────────────────────
+  // â”€â”€ Filtered conversations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const filtered = conversations.filter(c =>
     c.other_name?.toLowerCase().includes(search.toLowerCase())
   );
@@ -226,7 +227,7 @@ export default function Chat() {
   const showList = !userId || !isMobile;
   const showChat = !!userId;
 
-  // ─── Helpers ──────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const formatTime = (ts) => {
     if (!ts) return '';
     const d = new Date(ts);
@@ -257,7 +258,7 @@ export default function Chat() {
       border: '1px solid var(--border)', boxShadow: '0 4px 20px rgba(74,128,212,0.08)',
     }}>
 
-      {/* ── LEFT: Conversations List ─────────────────────────────────────── */}
+      {/* â”€â”€ LEFT: Conversations List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {showList && (
         <div style={{
           width: userId ? 300 : '100%', maxWidth: userId ? 300 : '100%',
@@ -267,7 +268,7 @@ export default function Chat() {
           {/* Header */}
           <div style={{ padding: '16px 14px 10px', borderBottom: '1px solid var(--border)' }}>
             <h2 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
-              💬 Mensagens
+              ðŸ’¬ Mensagens
             </h2>
             {/* Search */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--bg)', borderRadius: 20, padding: '7px 12px', border: '1px solid var(--border)' }}>
@@ -287,7 +288,7 @@ export default function Chat() {
               <div style={{ padding: 24, textAlign: 'center', color: 'var(--muted)', fontSize: '0.85rem' }}>A carregar...</div>
             ) : filtered.length === 0 ? (
               <div style={{ padding: 32, textAlign: 'center' }}>
-                <div style={{ fontSize: '2rem', marginBottom: 8 }}>💬</div>
+                <div style={{ fontSize: '2rem', marginBottom: 8 }}>ðŸ’¬</div>
                 <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>Nenhuma conversa ainda</p>
                 <p style={{ color: 'var(--muted)', fontSize: '0.78rem', marginTop: 4 }}>Vai ao perfil de um amigo e envia uma mensagem!</p>
               </div>
@@ -338,7 +339,7 @@ export default function Chat() {
         </div>
       )}
 
-      {/* ── RIGHT: Chat Window ───────────────────────────────────────────── */}
+      {/* â”€â”€ RIGHT: Chat Window â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {showChat ? (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
           {/* Chat header */}
@@ -356,28 +357,28 @@ export default function Chat() {
                 <div>
                   <p style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--text)', margin: 0 }}>{otherUser.full_name}</p>
                   <p style={{ fontSize: '0.72rem', color: 'var(--muted)', margin: 0 }}>
-                    {friendStatus === 'accepted' ? '✓ Amigos' : friendStatus === 'pending' ? '⏳ Pedido enviado' : ''}
+                    {friendStatus === 'accepted' ? 'âœ“ Amigos' : friendStatus === 'pending' ? 'â³ Pedido enviado' : ''}
                   </p>
                 </div>
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 7 }}>
                   <button type="button" onClick={() => startCall('audio')} style={{ display: 'flex', alignItems: 'center', gap: 5, borderRadius: 9, border: '1px solid #bcd2f3', background: '#eef5ff', color: '#245ea7', cursor: 'pointer', padding: '8px 10px', fontWeight: 700, fontSize: 12 }}><Phone size={15}/> Ligar</button>
-                  <button type="button" onClick={() => startCall('video')} style={{ display: 'flex', alignItems: 'center', gap: 5, borderRadius: 9, border: '1px solid #bcd2f3', background: '#eef5ff', color: '#245ea7', cursor: 'pointer', padding: '8px 10px', fontWeight: 700, fontSize: 12 }}><Video size={15}/> Vídeo</button>
+                  <button type="button" onClick={() => startCall('video')} style={{ display: 'flex', alignItems: 'center', gap: 5, borderRadius: 9, border: '1px solid #bcd2f3', background: '#eef5ff', color: '#245ea7', cursor: 'pointer', padding: '8px 10px', fontWeight: 700, fontSize: 12 }}><Video size={15}/> VÃ­deo</button>
                 </div>
               </>
             )}
           </div>
 
-          {/* NOT FRIENDS — show friend request prompt */}
+          {/* NOT FRIENDS â€” show friend request prompt */}
           {false ? (
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 14, padding: 32, textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem' }}>🤝</div>
+              <div style={{ fontSize: '3rem' }}>ðŸ¤</div>
               {otherUser && <Avatar url={otherUser.avatar_url} name={otherUser.full_name} size={64} />}
               <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1.3rem', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
                 {otherUser?.full_name}
               </h3>
               <p style={{ color: 'var(--muted)', fontSize: '0.9rem', maxWidth: 300 }}>
                 {friendStatus === 'pending' || requestSent
-                  ? 'Pedido de amizade enviado! Quando aceitar, poderão conversar. ✝️'
+                  ? 'Pedido de amizade enviado! Quando aceitar, poderÃ£o conversar. âœï¸'
                   : 'Para enviar mensagens, precisam ser amigos primeiro.'}
               </p>
               {friendStatus === 'none' && !requestSent && (
@@ -390,7 +391,7 @@ export default function Chat() {
               )}
               {(friendStatus === 'pending' || requestSent) && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 22px', borderRadius: 12, background: '#f0f5ff', color: 'var(--fb)', fontSize: '0.88rem', fontWeight: 600, border: '1px solid #dde8fa' }}>
-                  <Check size={15} /> Pedido enviado — aguardando aprovação
+                  <Check size={15} /> Pedido enviado â€” aguardando aprovaÃ§Ã£o
                 </div>
               )}
             </div>
@@ -404,8 +405,8 @@ export default function Chat() {
               <div style={{ flex: 1, overflowY: 'auto', padding: '16px 16px 8px', display: 'flex', flexDirection: 'column', gap: 4 }}>
                 {messages.length === 0 && (
                   <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--muted)' }}>
-                    <div style={{ fontSize: '2rem', marginBottom: 8 }}>🕊️</div>
-                    <p style={{ fontSize: '0.88rem' }}>Nenhuma mensagem ainda. Diga olá! 👋</p>
+                    <div style={{ fontSize: '2rem', marginBottom: 8 }}>ðŸ•Šï¸</div>
+                    <p style={{ fontSize: '0.88rem' }}>Nenhuma mensagem ainda. Diga olÃ¡! ðŸ‘‹</p>
                   </div>
                 )}
 
@@ -437,7 +438,7 @@ export default function Chat() {
                           {String(msg.content || '').startsWith(VOICE_PREFIX) ? <audio controls preload="metadata" src={msg.content.slice(VOICE_PREFIX.length)} style={{ display: 'block', maxWidth: 230, height: 34 }} /> : msg.content}
                           {translations[msg.id] && (
                             <div style={{ marginTop: 6, paddingTop: 6, borderTop: isMe ? '1px solid rgba(255,255,255,0.3)' : '1px solid var(--border)', fontSize: '0.8rem', fontStyle: 'italic', opacity: 0.85 }}>
-                              🌐 {translations[msg.id]}
+                              ðŸŒ {translations[msg.id]}
                             </div>
                           )}
                         </div>
@@ -447,7 +448,7 @@ export default function Chat() {
                             style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.7rem', color: 'var(--muted)', padding: '2px 4px', marginTop: 1, display: 'flex', alignItems: 'center', gap: 3 }}
                             title="Traduzir mensagem"
                           >
-                            {translating[msg.id] ? '⏳' : translations[msg.id] ? '✕ ocultar' : '🌐 traduzir'}
+                            {translating[msg.id] ? 'â³' : translations[msg.id] ? 'âœ• ocultar' : 'ðŸŒ traduzir'}
                           </button>
                         )}
                         {showTime && (
@@ -470,7 +471,7 @@ export default function Chat() {
               <form onSubmit={sendMessage} style={{ display: 'flex', gap: 10, padding: '12px 14px', borderTop: '1px solid var(--border)', background: 'var(--card)', alignItems: 'flex-end' }}>
                 <Avatar url={user?.avatar_url} name={user?.full_name} size={34} />
                 {audioBlob ? <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, background: '#eef6ff', border: '1px solid #cfe0fb', borderRadius: 18, padding: '7px 10px' }}><audio controls src={audioUrl} style={{ height: 30, minWidth: 0, flex: 1 }} /><button type="button" onClick={cancelAudio} aria-label="Apagar mensagem de voz" style={{ border: 0, background: 'transparent', color: '#c0392b', cursor: 'pointer' }}><Trash2 size={17}/></button><button type="button" onClick={sendAudio} disabled={sending} style={{ border: 0, borderRadius: 16, background: '#3568b8', color: '#fff', padding: '8px 11px', cursor: 'pointer', fontWeight: 700 }}>Enviar voz</button></div> : <>
-                <button type="button" onClick={recording ? stopRecording : startRecording} aria-label={recording ? 'Parar gravação' : 'Gravar mensagem de voz'} style={{ width: 38, height: 38, borderRadius: '50%', background: recording ? '#e74c3c' : '#eef4ff', color: recording ? '#fff' : '#3568b8', border: '1px solid #cfe0fb', cursor: 'pointer', display: 'grid', placeItems: 'center', flexShrink: 0 }}>{recording ? <MicOff size={17}/> : <Mic size={17}/>}</button>
+                <button type="button" onClick={recording ? stopRecording : startRecording} aria-label={recording ? 'Parar gravaÃ§Ã£o' : 'Gravar mensagem de voz'} style={{ width: 38, height: 38, borderRadius: '50%', background: recording ? '#e74c3c' : '#eef4ff', color: recording ? '#fff' : '#3568b8', border: '1px solid #cfe0fb', cursor: 'pointer', display: 'grid', placeItems: 'center', flexShrink: 0 }}>{recording ? <MicOff size={17}/> : <Mic size={17}/>}</button>
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: 'var(--bg)', borderRadius: 22, padding: '8px 14px', border: '1px solid var(--border)', gap: 8 }}>
                   <input
                     value={text}
@@ -517,3 +518,4 @@ export default function Chat() {
     </div>
   );
 }
+
