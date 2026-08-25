@@ -441,7 +441,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       {showComments && (
         <div style={{ padding: '0 16px 14px', borderTop: '1px solid #f0f0f0' }}>
           {comments.length === 0 && (
-            <p style={{ color: '#aaa', fontSize: 13, textAlign: 'center', padding: '12px 0' }}>Seja o primeiro a comentar ðŸ™</p>
+            <p style={{ color: '#aaa', fontSize: 13, textAlign: 'center', padding: '12px 0' }}>{t('mural.beFirstComment', 'Seja o primeiro a comentar')}</p>
           )}
           {comments.map((c, i) => (
             <div key={c.id || i} style={{ padding: '10px 0', borderBottom: '1px solid #f5f5f5' }}>
@@ -455,13 +455,9 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
                     <p style={{ color: '#444', fontSize: 13, margin: '4px 0 0', lineHeight: 1.5 }}>{c.content}</p>
                   </div>
                   <div style={{ display: 'flex', gap: 12, marginTop: 4, paddingLeft: 4 }}>
-                    <button onClick={() => toggleCommentAmen(c.id || i)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: commentAmens[c.id || i] ? '#e11d48' : '#888', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
-                       ðŸ™ AmÃ©m {commentAmens[c.id || i] ? 'âœ“' : ''}
-                    </button>
+                    <button onClick={() => toggleCommentAmen(c.id || i)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: commentAmens[c.id || i] ? '#e11d48' : '#888', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>{t('mural.amen', 'Amen')} {commentAmens[c.id || i] ? 'OK' : ''}</button>
                     {user && (
-                      <button onClick={() => setReplyTo(replyTo === (c.id || i) ? null : (c.id || i))} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#888', fontWeight: 600 }}>
-                        â†© Responder
-                      </button>
+                      <button onClick={() => setReplyTo(replyTo === (c.id || i) ? null : (c.id || i))} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#888', fontWeight: 600 }}>{t('mural.reply', 'Responder')}</button>
                     )}
                   </div>
                   {replyTo === (c.id || i) && user && (
@@ -839,7 +835,7 @@ export default function MuralGrid() {
 
       <div style={{display:"flex",gap:10,marginBottom:16,flexWrap:"wrap"}}>
         
-        <button onClick={()=>window.location.href="/duelo-biblico"} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"linear-gradient(135deg,#c0392b,#922b21)",color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>âš”ï¸ Duelo BÃ­blico</button>
+        <button onClick={()=>window.location.href="/duelo-biblico"} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"linear-gradient(135deg,#c0392b,#922b21)",color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>Duelo Biblico</button>
       
         <button aria-pressed={soundEnabled} onClick={() => { const next = !soundEnabled; setSoundEnabled(next); localStorage.setItem('sigo_mural_sound', next ? 'on' : 'off'); }} style={{padding:"8px 16px",borderRadius:20,border:"none",background:soundEnabled ? '#1f8b4c' : '#456fd0',color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>
           {soundLabel}
