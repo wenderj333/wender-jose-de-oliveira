@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 import { useState, useEffect, useRef } from "react";
 
@@ -371,7 +371,7 @@ export default function App() {
 
       <div style={{width:50,height:50,border:'4px solid #e0e6f5',borderTopColor:'#4a80d4',borderRadius:'50%',animation:'spin 1s linear infinite'}}/>
 
-      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.2rem',fontWeight:600,color:'#3568b8'}}>Sigo com Fé...</p>
+      <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:'1.2rem',fontWeight:600,color:'#3568b8'}}>Sigo com FÃ©...</p>
 
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
 
@@ -410,6 +410,7 @@ export default function App() {
 
         <Route path="/comunidade-ao-vivo" element={<LiveCommunity />} />
         <Route path="/praca-oracao" element={<PrayerPlaza />} />
+        <Route path="/praca-de-oracao" element={<PrayerPlaza />} />
         <Route path="/chat-cristao" element={<ChristianChatLanding />} />
         <Route path="/duelo-biblico" element={<DuelLanding />} />
 
@@ -441,8 +442,8 @@ export default function App() {
 
         <Link to="/" style={{display:'flex',alignItems:'center',gap:'9px',textDecoration:'none'}}>
 
-          <img src='/logo-new.png' alt='Sigo com Fé' style={{height:40,width:40,objectFit:'cover',borderRadius:12}} />
-          <span className="brand-lockup"><strong>Sigo com Fé</strong><small>Comunidade cristã</small></span>
+          <img src='/logo-new.png' alt='Sigo com FÃ©' style={{height:40,width:40,objectFit:'cover',borderRadius:12}} />
+          <span className="brand-lockup"><strong>Sigo com FÃ©</strong><small>Comunidade cristÃ£</small></span>
 
         </Link>
 
@@ -523,13 +524,13 @@ export default function App() {
         <div style={{position:'fixed',top:108,left:0,right:0,bottom:0,zIndex:299,background:'#f6f8fc',padding:'14px 14px 24px',overflowY:'auto'}}>
 
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',background:'linear-gradient(135deg,#356c5c,#638e7b)',borderRadius:15,padding:'11px 13px',marginBottom:12,color:'white'}}>
-            <div><strong style={{display:'block'}}>Menu</strong><span style={{fontSize:12,opacity:.82}}>{user?.full_name || 'Sigo com Fé'}</span></div>
+            <div><strong style={{display:'block'}}>Menu</strong><span style={{fontSize:12,opacity:.82}}>{user?.full_name || 'Sigo com FÃ©'}</span></div>
             <button type="button" aria-label="Fechar menu" onClick={() => setMobileMenuOpen(false)} style={{display:'grid',placeItems:'center',width:35,height:35,border:0,borderRadius:10,color:'white',background:'rgba(255,255,255,.16)'}}><X size={22}/></button>
           </div>
 
           <div style={{marginBottom:'20px'}}>
 
-            <p style={{color:'#356c5c',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'10px',paddingLeft:'16px'}}>Acesso rápido</p>
+            <p style={{color:'#356c5c',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'10px',paddingLeft:'16px'}}>Acesso rÃ¡pido</p>
 
             {[
 
@@ -537,13 +538,15 @@ export default function App() {
 
               ['/mensagens', <MessageCircle size={20}/>, t('nav.messages', 'Mensagens'), unreadMessages],
 
-              ['/comunidade-ao-vivo', <MessageCircle size={20}/>, t('nav.live_community', 'Chat cristão')],
+              ['/comunidade-ao-vivo', <MessageCircle size={20}/>, t('nav.live_community', 'Chat cristÃ£o')],
 
               ['/amigos', <Users size={20}/>, t('nav.friends', 'Amigos'), pendingRequests],
 
               ['/grupos', <Users size={20}/>, t('nav.groups', 'Grupos')],
 
-              ['/notificacoes', <Bell size={20}/>, t('nav.notifications', 'Notificações')],
+              ['/praca-oracao', <Heart size={20}/>, 'PraÃ§a Mundial de OraÃ§Ã£o'],
+
+              ['/notificacoes', <Bell size={20}/>, t('nav.notifications', 'NotificaÃ§Ãµes')],
 
             ].map(([to, icon, label, badge]) => (
 
@@ -565,13 +568,13 @@ export default function App() {
 
             {[
 
-              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA Bíblica')],
+              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA BÃ­blica')],
 
               ['/pedidos-ajuda', <Heart size={20}/>, t('nav.prayers')],
 
               ['/diario-com-deus', <BookOpen size={20}/>, t('nav.diary')],
 
-              ['/desafio-diario', <Sun size={20}/>, 'Desafio Diário'],
+              ['/desafio-diario', <Sun size={20}/>, 'Desafio DiÃ¡rio'],
 
               ['/reflexao', <Sun size={20}/>, t('nav.reflection')],
 
@@ -583,9 +586,9 @@ export default function App() {
 
               ['/journeys', <Globe size={20}/>, t('nav.journeys')],
 
-              ['/live', <PlayCircle size={20}/>, '🔴 Directo'],
+              ['/live', <PlayCircle size={20}/>, 'ðŸ”´ Directo'],
 
-              ['/praca-oracao', <Heart size={20}/>, 'Praça de Oração'],
+              ['/praca-oracao', <Heart size={20}/>, 'PraÃ§a de OraÃ§Ã£o'],
 
               ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
 
@@ -609,7 +612,7 @@ export default function App() {
 
               <Link to="/sala-pastor" onClick={() => setMobileMenuOpen(false)} style={{display:'flex',alignItems:'center',gap:'12px',color:'#87641a',fontSize:'1rem',textDecoration:'none',padding:'11px 16px',borderBottom:'1px solid #e7eeea',background:'white',fontWeight:600}}>
 
-                <BookOpen size={20}/> 🕊️ <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span>
+                <BookOpen size={20}/> ðŸ•Šï¸ <span className="nav-text" style={{marginLeft:8}}>Sala do Pastor</span>
 
               </Link>
 
@@ -631,13 +634,13 @@ export default function App() {
 
       {/* MAIN LAYOUT */}
 
-      {sidebarOpen&&<div style={{position:'fixed',top:0,left:0,right:0,bottom:0,zIndex:199,background:'rgba(0,0,0,0.5)'}} onClick={()=>setSidebarOpen(false)}/>}{sidebarOpen&&<aside style={{position:'fixed',top:0,left:0,width:260,height:'100vh',background:'#1a1a2e',zIndex:200,overflowY:'auto',padding:'16px 0'}}><button onClick={()=>setSidebarOpen(false)} style={{position:'absolute',top:12,right:12,background:'none',border:'none',color:'white',fontSize:22,cursor:'pointer'}}>&#x2715;</button><div style={{padding:'40px 16px 16px'}}><p style={{color:'#f0c040',fontWeight:700,marginBottom:16}}>{user.full_name}</p>{[['/','Mural'],['/diario-com-deus',t('nav.diary')],['/desafio-diario','Desafio Diário'],['/pedidos-ajuda',t('nav.prayers')],['/membros',t('nav.members')],['/amigos',t('nav.friends')],['/mensagens',t('nav.messages')],['/musica',t('nav.music')],['/chat-pastoral',t('nav.pastoral_chat')]].map(([to,label])=><Link key={to} to={to} onClick={()=>setSidebarOpen(false)} style={{display:'block',color:'white',textDecoration:'none',padding:'10px 0',borderBottom:'1px solid rgba(255,255,255,0.1)',fontSize:14}}>{label}</Link>)}</div></aside>}
+      {sidebarOpen&&<div style={{position:'fixed',top:0,left:0,right:0,bottom:0,zIndex:199,background:'rgba(0,0,0,0.5)'}} onClick={()=>setSidebarOpen(false)}/>}{sidebarOpen&&<aside style={{position:'fixed',top:0,left:0,width:260,height:'100vh',background:'#1a1a2e',zIndex:200,overflowY:'auto',padding:'16px 0'}}><button onClick={()=>setSidebarOpen(false)} style={{position:'absolute',top:12,right:12,background:'none',border:'none',color:'white',fontSize:22,cursor:'pointer'}}>&#x2715;</button><div style={{padding:'40px 16px 16px'}}><p style={{color:'#f0c040',fontWeight:700,marginBottom:16}}>{user.full_name}</p>{[['/','Mural'],['/diario-com-deus',t('nav.diary')],['/desafio-diario','Desafio DiÃ¡rio'],['/pedidos-ajuda',t('nav.prayers')],['/membros',t('nav.members')],['/amigos',t('nav.friends')],['/mensagens',t('nav.messages')],['/musica',t('nav.music')],['/chat-pastoral',t('nav.pastoral_chat')]].map(([to,label])=><Link key={to} to={to} onClick={()=>setSidebarOpen(false)} style={{display:'block',color:'white',textDecoration:'none',padding:'10px 0',borderBottom:'1px solid rgba(255,255,255,0.1)',fontSize:14}}>{label}</Link>)}</div></aside>}
 
       {user && !user.avatar_url && (
 
         <div style={{background:'#fff3cd',borderBottom:'2px solid #f0c040',padding:'10px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:10}}>
 
-          <span style={{fontSize:13,color:'#856404'}}>📸 Adiciona uma foto de perfil para a comunidade te conhecer!</span>
+          <span style={{fontSize:13,color:'#856404'}}>ðŸ“¸ Adiciona uma foto de perfil para a comunidade te conhecer!</span>
 
           <a href={`/perfil/${user.id}`} style={{background:'#f0c040',color:'#856404',padding:'6px 14px',borderRadius:20,fontSize:12,fontWeight:700,textDecoration:'none'}}>Adicionar foto</a>
 
@@ -665,7 +668,7 @@ export default function App() {
 
             <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.live_community','Chat')} {unreadMessages>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{unreadMessages}</span>}</span></Link>
 
-            <Link to="/notificacoes" className={isActive('/notificacoes')}><Bell size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.notifications','Notificações')}</span></Link>
+            <Link to="/notificacoes" className={isActive('/notificacoes')}><Bell size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.notifications','NotificaÃ§Ãµes')}</span></Link>
 
           </div>
 
@@ -675,7 +678,7 @@ export default function App() {
 
           <div className="menu-group">
 
-            <p className="menu-title">{t('menu.you','VOCÊ')}</p>
+            <p className="menu-title">{t('menu.you','VOCÃŠ')}</p>
 
             <Link to="/amigos" className={isActive('/amigos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.friends','Amigos')} {pendingRequests>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{pendingRequests}</span>}</span></Link>
 
@@ -697,6 +700,8 @@ export default function App() {
 
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.groups','Grupos')}</span></Link>
 
+            <Link to="/praca-oracao" className={isActive('/praca-oracao') || isActive('/praca-de-oracao')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>PraÃ§a Mundial de OraÃ§Ã£o</span></Link>
+
           </div>
 
 
@@ -707,17 +712,17 @@ export default function App() {
 
             <p className="menu-title">{t('menu.spiritual','ESPIRITUAL')}</p>
 
-            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bible_ai','IA Bíblica')}</span></Link>
+            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bible_ai','IA BÃ­blica')}</span></Link>
 
-            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','Orações')}</span></Link>
+            <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','OraÃ§Ãµes')}</span></Link>
 
             <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_life','Ajuda ao Proximo')}</span></Link>
 
-            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','Reflexão')}</span></Link>
+            <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','ReflexÃ£o')}</span></Link>
 
-            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','Música')}</span></Link>
+            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','MÃºsica')}</span></Link>
 
-            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','Consagração')}</span></Link>
+            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','ConsagraÃ§Ã£o')}</span></Link>
 
           </div>
 
@@ -736,7 +741,7 @@ export default function App() {
             )}
 
             {user.role === 'admin' && (
-              <Link to="/seguranca" className={isActive('/seguranca')}><Shield size={17}/><span className="nav-text" style={{marginLeft:10}}>Segurança e moderação</span></Link>
+              <Link to="/seguranca" className={isActive('/seguranca')}><Shield size={17}/><span className="nav-text" style={{marginLeft:10}}>SeguranÃ§a e moderaÃ§Ã£o</span></Link>
             )}
 
             <button className="menu-link logout-btn" onClick={logout} style={{marginTop:4}}>
@@ -817,6 +822,7 @@ export default function App() {
 
             <Route path='/live' element={<LiveStream />} />
             <Route path='/praca-oracao' element={<PrayerPlaza />} />
+            <Route path='/praca-de-oracao' element={<PrayerPlaza />} />
 
             <Route path='/comunidade-ao-vivo' element={<LiveCommunity />} />
             <Route path='/chat-cristao' element={<ChristianChatLanding />} />
@@ -841,7 +847,7 @@ export default function App() {
 
           <div style={{background:'linear-gradient(135deg,#6C3FA0,#4A2270)',borderRadius:14,padding:16,marginBottom:14,color:'white'}}>
 
-            <p style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',opacity:0.8,marginBottom:8}}>📖 {t('sidebar.verse','VERSICULO DO DIA')}</p>
+            <p style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',opacity:0.8,marginBottom:8}}>ðŸ“– {t('sidebar.verse','VERSICULO DO DIA')}</p>
 
             <p style={{fontSize:13,fontStyle:'italic',lineHeight:1.6,marginBottom:6}}>
 
@@ -875,7 +881,7 @@ export default function App() {
 
 
 
-          {/* LIVE Widget Ã¢â¬â golden theme */}
+          {/* LIVE Widget ÃƒÂ¢Ã¢Â‚Â¬Ã¢Â€Â golden theme */}
 
           <div style={{background:'linear-gradient(135deg,#3568b8 0%,#4a80d4 60%,#6a9ade 100%)',borderRadius:14,padding:18,marginBottom:14,color:'white',position:'relative',overflow:'hidden',border:'1px solid rgba(240,192,64,0.3)'}}>
 
@@ -959,7 +965,7 @@ export default function App() {
 
                     ) : (
 
-                      <span>🙏</span>
+                      <span>ðŸ™</span>
 
                     )}
 
@@ -969,7 +975,7 @@ export default function App() {
 
                     <p style={{fontSize:'0.76rem',color:'var(--text)',lineHeight:1.4}}>
 
-                      <b style={{color:'var(--fb)'}}>{prayer.author_name || 'Anónimo'}</b> {prayer.content.length > 40 ? prayer.content.substring(0, 40) + '...' : prayer.content}
+                      <b style={{color:'var(--fb)'}}>{prayer.author_name || 'AnÃ³nimo'}</b> {prayer.content.length > 40 ? prayer.content.substring(0, 40) + '...' : prayer.content}
 
                     </p>
 
@@ -1021,7 +1027,7 @@ export default function App() {
 
                 <p style={{fontSize:'0.8rem',fontWeight:600,color:'var(--text)'}}>Culto Dominical</p>
 
-                <p style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h · Online</p>
+                <p style={{fontSize:'0.7rem',color:'var(--muted)'}}>10:00h Â· Online</p>
 
               </div>
 
@@ -1035,11 +1041,11 @@ export default function App() {
 
           <div style={{marginTop:16,background:'linear-gradient(135deg,#667eea,#764ba2)',borderRadius:12,padding:'14px 16px',textAlign:'center'}}>
 
-            <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>📲 Instalar App</p>
+            <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>ðŸ“² Instalar App</p>
 
             <p style={{color:'rgba(255,255,255,0.8)',fontSize:'0.75rem',margin:'0 0 10px'}}>Acede mais rapido no teu telemovel</p>
 
-            <button onClick={handleInstallClick} style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',border:'none',cursor:'pointer'}}>📲 Instalar</button>
+            <button onClick={handleInstallClick} style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',border:'none',cursor:'pointer'}}>ðŸ“² Instalar</button>
 
           </div>
 
@@ -1143,3 +1149,4 @@ export default function App() {
 
 
 // force deploy
+
