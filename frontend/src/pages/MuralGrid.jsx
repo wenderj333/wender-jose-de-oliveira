@@ -154,7 +154,7 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
   );
 }
 
-// �"?�"?�"? Music Picker Modal �"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?�"?
+// ï¿½"?ï¿½"?ï¿½"? Music Picker Modal ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?ï¿½"?
 function MusicPickerModal({ onClose, onSelect }) {
   const { t } = useTranslation();
   const [songs, setSongs] = useState([]);
@@ -178,7 +178,7 @@ function MusicPickerModal({ onClose, onSelect }) {
       onClick={e => e.target === e.currentTarget && onClose()}>
       <div style={{ background: 'white', borderRadius: '20px 20px 0 0', width: '100%', maxWidth: 900, maxHeight: '50vh', display: 'flex', flexDirection: 'column', padding: 20, boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>🎵 {t('mural.pickMusic')}</h3>
+          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>ðŸŽµ {t('mural.pickMusic')}</h3>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}><X size={20} /></button>
         </div>
         <div style={{ position: 'relative', marginBottom: 12 }}>
@@ -188,7 +188,7 @@ function MusicPickerModal({ onClose, onSelect }) {
         </div>
         <div style={{ flex: 1, overflowY: 'auto' }}>
           {loading ? (
-            <div style={{ textAlign: 'center', padding: 24, color: '#888' }}>A carregar músicas...</div>
+            <div style={{ textAlign: 'center', padding: 24, color: '#888' }}>A carregar mÃºsicas...</div>
           ) : filtered.length === 0 ? (
             <div style={{ textAlign: 'center', padding: 24, color: '#888', fontSize: 14 }}>{t('music.noSongs')}</div>
           ) : filtered.map(song => (
@@ -198,7 +198,7 @@ function MusicPickerModal({ onClose, onSelect }) {
             }}
               onMouseEnter={e => e.currentTarget.style.background = '#f5f5f5'}
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-              <div style={{ width: 36, height: 36, borderRadius: 8, background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 18 }}>🎵</div>
+              <div style={{ width: 36, height: 36, borderRadius: 8, background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 18 }}>ðŸŽµ</div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</div>
                 <div style={{ fontSize: 11, color: '#888' }}>{song.artist}</div>
@@ -212,12 +212,13 @@ function MusicPickerModal({ onClose, onSelect }) {
   );
 }
 
-function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause, onVideoNode, soundEnabled }) {
+function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause, onVideoNode, soundEnabled, onCommentAdded }) {
   const { t } = useTranslation(); // Add useTranslation
   const color = getCatColor(post.category || post.type);
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(post.comments || []);
+  const [commentError, setCommentError] = useState('');
   const loadComments = async () => {
     try {
       const res = await fetch(`${API}/feed/${post.id}/comments`, {
@@ -253,16 +254,17 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const postCardRef = useRef(null);
 
-  const isVideo = mediaUrl && mediaUrl.match(/\.(mp4|webm|mov|ogg)(\?|$)/i);
-  const isImage = mediaUrl && !mediaUrl.match(/\.(mp4|webm|mov|ogg|mp3|wav|aac|m4a)(\?|$)/i);
-
-  // Depois do primeiro toque em "Ativar som", os videos podem tocar com som.
+  const isVideo = post.media_type === 'video' || Boolean(mediaUrl && mediaUrl.match(/\.(mp4|webm|mov|ogg)(\?|$)/i));
+  const isAudio = post.media_type === 'audio' || Boolean(mediaUrl && mediaUrl.match(/\.(mp3|wav|aac|m4a|ogg)(\?|$)/i));
+  const isImage = Boolean(mediaUrl) && !isVideo && !isAudio;
+  // Som automatico so e permitido pelo navegador depois de uma acao do utilizador.
   useEffect(() => {
-    if (!soundEnabled || !videoRef.current) return;
-    videoRef.current.muted = false;
-    videoRef.current.volume = musicUrl ? 0.3 : 1;
-    setIsMuted(false);
-  }, [soundEnabled, musicUrl]);
+    const video = videoRef.current;
+    if (!video || !isVideo) return;
+    video.muted = !soundEnabled;
+    video.volume = soundEnabled ? (musicUrl ? 0.3 : 1) : 0;
+    setIsMuted(!soundEnabled);
+  }, [soundEnabled, isVideo, musicUrl]);
   const videoPoster = isVideo && mediaUrl && mediaUrl.includes('cloudinary.com') ? mediaUrl.replace('/video/upload/', '/video/upload/so_0,w_600/').replace(/\.(mp4|webm|mov|ogg)/i, '.jpg') : null;
 
   // Effect to manage video play/pause based on `isPlaying` prop
@@ -307,23 +309,6 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       observer.disconnect();
     };
   }, [musicUrl, isImage]);
-
-  // Autoplay local do video ao entrar no centro do mural.
-  useEffect(() => {
-    if (!postCardRef.current || !isVideo) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      const visible = entry.isIntersecting && entry.intersectionRatio >= 0.65;
-      if (visible) {
-        videoRef.current?.play().catch(() => {});
-        if (musicUrl) setIsMusicPlaying(true);
-      } else {
-        videoRef.current?.pause();
-        if (musicUrl) setIsMusicPlaying(false);
-      }
-    }, { threshold: [0, 0.65, 1] });
-    observer.observe(postCardRef.current);
-    return () => observer.disconnect();
-  }, [isVideo, musicUrl]);
   const handleInternalVideoPlay = () => {
     onVideoPlay(post.id); // Notify parent that this video is playing
   };
@@ -348,19 +333,22 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 
   const submitComment = async (e) => {
     e.preventDefault();
-    if (!comment.trim()) return;
+    const value = comment.trim();
+    if (!value || !token) return;
+    setCommentError('');
     try {
       const res = await fetch(`${API}/feed/${post.id}/comments`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: comment })
+        body: JSON.stringify({ content: value })
       });
-      const data = await res.json();
-      if (data.comment) setComments([...comments, data.comment]);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.comment) throw new Error(data.error || 'Nao foi possivel enviar o comentario.');
+      setComments(prev => [...prev, data.comment]);
       setComment('');
-    } catch (e) {
-      setComments([...comments, { id: Date.now(), content: comment, full_name: t('common.user') }]);
-      setComment('');
+      onCommentAdded?.(post.id);
+    } catch (error) {
+      setCommentError(error.message || 'Nao foi possivel enviar o comentario.');
     }
   };
 
@@ -372,7 +360,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         </div>
         <div style={{ flex: 1 }}>
           <div onClick={()=>window.location.href='/perfil/'+(post.author_id||post.user_id)} style={{ fontWeight: 600, fontSize: 14, color: '#1a1a2e', cursor:'pointer' }}>{authorName}</div>
-          <div style={{ fontSize: 12, color: '#888' }}>{post.church || ''}{post.church ? ' · ' : ''}{post.created_at ? new Date(post.created_at).toLocaleDateString(t('locale')) : t('time.now')}</div>
+          <div style={{ fontSize: 12, color: '#888' }}>{post.church || ''}{post.church ? ' Â· ' : ''}{post.created_at ? new Date(post.created_at).toLocaleDateString(t('locale')) : t('time.now')}</div>
         </div>
         <span style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 20, background: `${color}18`, color, border: `1px solid ${color}44` }}>
           {CATEGORIES_CONFIG.find(c => c.value === (post.category || post.type))?.labelKey ? t(CATEGORIES_CONFIG.find(c => c.value === (post.category || post.type)).labelKey) : (post.category || post.type)}
@@ -417,7 +405,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         {(post.category || post.type) === 'versiculo' ? (
           <div style={{ background: `linear-gradient(135deg,${color}12,white)`, borderLeft: `4px solid ${color}`, borderRadius: 8, padding: '12px 14px' }}>
             <p style={{ fontStyle: 'italic', color: '#333', fontSize: 15, lineHeight: 1.6, margin: 0 }}>"{post.content}"</p>
-            {post.verse_reference && <p style={{ fontWeight: 700, color, marginTop: 8, marginBottom: 0, fontSize: 13 }}>— {post.verse_reference}</p>}
+            {post.verse_reference && <p style={{ fontWeight: 700, color, marginTop: 8, marginBottom: 0, fontSize: 13 }}>â€” {post.verse_reference}</p>}
           </div>
         ) : (
           <><p style={{ color: '#333', fontSize: 14, lineHeight: 1.65, margin: 0 }}>{post.content}</p>{musicUrl && !isImage && !isVideo && (<MiniAudioPlayer src={musicUrl} onPlay={()=>setIsMusicPlaying(true)} onPause={()=>setIsMusicPlaying(false)} onEnded={()=>setIsMusicPlaying(false)} />)}</>
@@ -453,7 +441,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       {showComments && (
         <div style={{ padding: '0 16px 14px', borderTop: '1px solid #f0f0f0' }}>
           {comments.length === 0 && (
-            <p style={{ color: '#aaa', fontSize: 13, textAlign: 'center', padding: '12px 0' }}>Seja o primeiro a comentar 🙏</p>
+            <p style={{ color: '#aaa', fontSize: 13, textAlign: 'center', padding: '12px 0' }}>Seja o primeiro a comentar ðŸ™</p>
           )}
           {comments.map((c, i) => (
             <div key={c.id || i} style={{ padding: '10px 0', borderBottom: '1px solid #f5f5f5' }}>
@@ -468,11 +456,11 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
                   </div>
                   <div style={{ display: 'flex', gap: 12, marginTop: 4, paddingLeft: 4 }}>
                     <button onClick={() => toggleCommentAmen(c.id || i)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: commentAmens[c.id || i] ? '#e11d48' : '#888', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
-                       🙏 Amém {commentAmens[c.id || i] ? '✓' : ''}
+                       ðŸ™ AmÃ©m {commentAmens[c.id || i] ? 'âœ“' : ''}
                     </button>
                     {user && (
                       <button onClick={() => setReplyTo(replyTo === (c.id || i) ? null : (c.id || i))} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#888', fontWeight: 600 }}>
-                        ↩ Responder
+                        â†© Responder
                       </button>
                     )}
                   </div>
@@ -486,6 +474,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
               </div>
             </div>
           ))}
+          {commentError && <p style={{ color: '#b42318', fontSize: '.86rem', margin: '8px 0' }}>{commentError}</p>}
           {user && (
             <form onSubmit={submitComment} style={{ display: 'flex', gap: 8, marginTop: 12 }}>
               <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>
@@ -502,13 +491,24 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 }
 
 export default function MuralGrid() {
-  const { t } = useTranslation(); // Use useTranslation
+  const { t, i18n } = useTranslation();
+  const soundCopy = {
+    pt: { on: 'Som automatico ativo', off: 'Ativar som automatico' },
+    es: { on: 'Sonido automatico activado', off: 'Activar sonido automatico' },
+    de: { on: 'Automatischer Ton aktiv', off: 'Automatischen Ton aktivieren' },
+    en: { on: 'Automatic sound on', off: 'Enable automatic sound' },
+    fr: { on: 'Son automatique active', off: 'Activer le son automatique' },
+    ro: { on: 'Sunet automat activat', off: 'Activeaza sunetul automat' },
+    ru: { on: 'Avtozvuk vkluchen', off: 'Vklyuchit avtozvuk' }
+  };
+  const currentLanguage = (i18n?.language || 'pt').slice(0, 2);
   const { user, token } = useAuth();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('todas');
   const [viewMode, setViewMode] = useState('feed');
   const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem('sigo_mural_sound') === 'on');
+  const soundLabel = (soundCopy[currentLanguage] || soundCopy.pt)[soundEnabled ? 'on' : 'off'];
   const [showForm, setShowForm] = useState(false);
   const [postText, setPostText] = useState('');
   const [postVisibility, setPostVisibility] = useState('public');
@@ -531,8 +531,8 @@ export default function MuralGrid() {
   const musicRef = useRef(null);
   const [activeLive, setActiveLive] = useState(null);
 
-  // Recebe um diploma vindo do Duelo Bíblico, abre o compositor e deixa a
-  // publicação sempre sob a confirmação do próprio jogador.
+  // Recebe um diploma vindo do Duelo BÃ­blico, abre o compositor e deixa a
+  // publicaÃ§Ã£o sempre sob a confirmaÃ§Ã£o do prÃ³prio jogador.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const diploma = params.get('dueloDiploma');
@@ -615,7 +615,7 @@ export default function MuralGrid() {
 
     // Observe all video post elements
     posts.forEach(post => {
-      if (post.media_url && post.media_url.match(/\.(mp4|webm|mov|ogg)(\?|$)/i)) {
+      if (post.media_type === 'video' || (post.media_url && post.media_url.match(/\.(mp4|webm|mov|ogg)(\?|$)/i))) {
         const videoElement = videoRefs.current[post.id];
         if (videoElement) {
           observer.observe(videoElement);
@@ -640,20 +640,27 @@ export default function MuralGrid() {
   }, [activeVideoId]);
 
   const handleLike = async (postId) => {
-    if (!user) return;
-    setPosts(posts.map(p => p.id === postId ? { ...p, liked: !p.liked, like_count: p.liked ? (p.like_count || 1) - 1 : (p.like_count || 0) + 1 } : p));
+    if (!user || !token) return;
     try {
-      await fetch(`${API}/feed/${postId}/like`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
-    } catch (e) { console.error(e); }
+      const res = await fetch(`${API}/feed/${postId}/like`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) throw new Error('Nao foi possivel atualizar o Amen.');
+      await fetchPosts();
+    } catch (error) {
+      console.error(error);
+      alert('Nao foi possivel atualizar o Amen. Tente novamente.');
+    }
   };
 
   const handleDelete = async (postId) => {
     if (!window.confirm(t('mural.confirmDelete'))) return;
     try {
-      await fetch(`${API}/feed/${postId}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
-      setPosts(posts.filter(p => p.id !== postId));
-    } catch (e) {
-      setPosts(posts.filter(p => p.id !== postId));
+      const res = await fetch(`${API}/feed/${postId}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Nao foi possivel apagar a publicacao.');
+      setPosts(prev => prev.filter(p => p.id !== postId));
+    } catch (error) {
+      console.error(error);
+      alert(error.message || 'Nao foi possivel apagar a publicacao.');
     }
   };
 
@@ -671,7 +678,7 @@ export default function MuralGrid() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!postText.trim() && !mediaFile) return;
+    if (!postText.trim() && !mediaFile && !musicFile && !selectedMusicSong) return;
     setUploading(true); setUploadError(null);
     try {
       let mediaUrl = null, audioUrl = null;
@@ -684,7 +691,7 @@ export default function MuralGrid() {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ bg_music_url: audioUrl || null, bg_music_start: null, bg_music_duration: null,
           music_title: selectedMusicSong?.title || musicName || null,
-          content: postText || '📸',
+          content: postText || 'Publicacao com media',
           category: postCategory,
           visibility: postVisibility,
           media_url: mediaUrl || undefined,
@@ -726,10 +733,10 @@ export default function MuralGrid() {
         <div onClick={() => window.location.href='/live-stream'} style={{ background:'linear-gradient(135deg,#e74c3c,#c0392b)', borderRadius:12, padding:'14px 20px', marginBottom:16, cursor:'pointer', display:'flex', alignItems:'center', gap:12, boxShadow:'0 4px 15px rgba(231,76,60,0.4)' }}>
           <div style={{ width:12, height:12, background:'white', borderRadius:'50%' }}/>
           <div style={{ flex:1 }}>
-            <p style={{ color:'white', fontWeight:800, fontSize:16, margin:0 }}>🔴 AO VIVO agora!</p>
-            <p style={{ color:'rgba(255,255,255,0.85)', fontSize:13, margin:0 }}>{activeLive?.user_name} está transmitindo</p>
+            <p style={{ color:'white', fontWeight:800, fontSize:16, margin:0 }}>ðŸ”´ AO VIVO agora!</p>
+            <p style={{ color:'rgba(255,255,255,0.85)', fontSize:13, margin:0 }}>{activeLive?.user_name} estÃ¡ transmitindo</p>
           </div>
-          <span style={{ color:'white', fontSize:13, fontWeight:600 }}>Entrar →</span>
+          <span style={{ color:'white', fontSize:13, fontWeight:600 }}>Entrar â†’</span>
         </div>
       )}
     <div style={{ maxWidth: 900, margin: '0 auto', padding: 16 }}>
@@ -784,7 +791,7 @@ export default function MuralGrid() {
           {/* Selected music from library */}
           {selectedMusicSong && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, background: '#f0f5ff', border: '1px solid #4a80d444', borderRadius: 10, padding: '10px 14px' }}>
-               <span style={{ fontSize: 20 }}>🎵</span>
+               <span style={{ fontSize: 20 }}>ðŸŽµ</span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedMusicSong.title}</div>
                 <div style={{ fontSize: 11, color: '#888' }}>{selectedMusicSong.artist}</div>
@@ -797,19 +804,19 @@ export default function MuralGrid() {
           <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
             <button onClick={() => photoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Image size={16} style={{ color: '#f43f5e' }} /> {t('media.photo')}</button>
             <button onClick={() => videoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Video size={16} style={{ color: '#3b82f6' }} /> {t('media.video')}</button>
-             <button onClick={() => { const input = document.createElement("input"); input.type = "file"; input.accept = "video/*"; input.capture = "environment"; input.onchange = e => handleMediaSelect(e, "video"); input.click(); }} style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 20, border: "1px solid #e2e8f0", background: "white", cursor: "pointer", fontSize: 13 }}>🎥 Gravar</button>
+             <button onClick={() => { const input = document.createElement("input"); input.type = "file"; input.accept = "video/*"; input.capture = "environment"; input.onchange = e => handleMediaSelect(e, "video"); input.click(); }} style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 20, border: "1px solid #e2e8f0", background: "white", cursor: "pointer", fontSize: 13 }}>ðŸŽ¥ Gravar</button>
             <button onClick={() => musicRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Music size={16} style={{ color: '#a855f7' }} /> {t('media.audio')}</button>
-             <button onClick={() => setShowMusicPicker(true)} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #4a80d444', background: '#f0f5ff', cursor: 'pointer', fontSize: 13, color: '#4a80d4', fontWeight: 600 }}>🎵 {t('mural.addMusic')}</button>
+             <button onClick={() => setShowMusicPicker(true)} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #4a80d444', background: '#f0f5ff', cursor: 'pointer', fontSize: 13, color: '#4a80d4', fontWeight: 600 }}>ðŸŽµ {t('mural.addMusic')}</button>
           </div>
 
-           {uploadError && <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#e11d48' }}>⚠️ {uploadError}</div>}
+           {uploadError && <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#e11d48' }}>âš ï¸ {uploadError}</div>}
 
           {/* Selector de visibilidade */}
           <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
             {[
-              { value: 'public', label: '🌍 ' + t('mural.visPublic', 'Público'), color: '#27ae60' },
-              { value: 'members', label: '👥 ' + t('mural.visMembers', 'Membros'), color: '#2980b9' },
-              { value: 'private', label: '🔒 ' + t('mural.visPrivate', 'Privado'), color: '#7f8c8d' },
+              { value: 'public', label: 'ðŸŒ ' + t('mural.visPublic', 'PÃºblico'), color: '#27ae60' },
+              { value: 'members', label: 'ðŸ‘¥ ' + t('mural.visMembers', 'Membros'), color: '#2980b9' },
+              { value: 'private', label: 'ðŸ”’ ' + t('mural.visPrivate', 'Privado'), color: '#7f8c8d' },
             ].map(opt => (
               <button key={opt.value} type="button" onClick={() => setPostVisibility(opt.value)}
                 style={{ flex: 1, padding: '6px 4px', borderRadius: 8, border: `2px solid ${postVisibility === opt.value ? opt.color : '#eee'}`, background: postVisibility === opt.value ? opt.color : 'white', color: postVisibility === opt.value ? 'white' : '#666', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
@@ -832,7 +839,11 @@ export default function MuralGrid() {
 
       <div style={{display:"flex",gap:10,marginBottom:16,flexWrap:"wrap"}}>
         
-        <button onClick={()=>window.location.href="/duelo-biblico"} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"linear-gradient(135deg,#c0392b,#922b21)",color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>⚔️ Duelo Bíblico</button>
+        <button onClick={()=>window.location.href="/duelo-biblico"} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"linear-gradient(135deg,#c0392b,#922b21)",color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>âš”ï¸ Duelo BÃ­blico</button>
+      
+        <button aria-pressed={soundEnabled} onClick={() => { const next = !soundEnabled; setSoundEnabled(next); localStorage.setItem('sigo_mural_sound', next ? 'on' : 'off'); }} style={{padding:"8px 16px",borderRadius:20,border:"none",background:soundEnabled ? '#1f8b4c' : '#456fd0',color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>
+          {soundLabel}
+        </button>
       </div>
       {/* Loading */}
       {loading && (
@@ -876,19 +887,13 @@ export default function MuralGrid() {
       )}
 
       {/* Feed View */}
-      {!loading && viewMode === 'feed' && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '0 0 12px' }}>
-          <button onClick={() => { const next = !soundEnabled; setSoundEnabled(next); localStorage.setItem('sigo_mural_sound', next ? 'on' : 'off'); }} style={{ border: 0, borderRadius: 20, padding: '10px 15px', background: soundEnabled ? '#1f8b4c' : '#456fd0', color: '#fff', fontWeight: 800, cursor: 'pointer' }}>
-            {soundEnabled ? 'ðŸ”Š Som automatico ativo' : 'ðŸ”‡ Ativar som automatico'}
-          </button>
-        </div>
-      )}
       {!loading && viewMode === 'feed' && filteredPosts.map(post => (
         <PostCard
           key={post.id}
           post={post} bgMusicStart={post.bg_music_start} bgMusicDuration={post.bg_music_duration}
           onLike={handleLike}
           onDelete={handleDelete}
+          onCommentAdded={(postId) => setPosts(prev => prev.map(item => item.id === postId ? { ...item, comment_count: Number(item.comment_count || 0) + 1 } : item))}
           token={token}
           user={user}
           isPlaying={activeVideoId === post.id} // Pass isPlaying prop
@@ -911,7 +916,7 @@ export default function MuralGrid() {
       {selectedPost && (
         <div onClick={() => setSelectedPost(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: "white", borderRadius: 20, overflow: "hidden", maxWidth: 500, width: "100%", maxHeight: "90vh", overflowY: "auto", position: "relative" }}>
-            <button onClick={() => setSelectedPost(null)} style={{ position: "absolute", top: 12, right: 12, zIndex: 10, background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%", width: 36, height: 36, color: "white", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>×</button>
+            <button onClick={() => setSelectedPost(null)} style={{ position: "absolute", top: 12, right: 12, zIndex: 10, background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%", width: 36, height: 36, color: "white", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>Ã—</button>
             {selectedPost.media_url && selectedPost.media_url.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
               <video src={selectedPost.media_url} controls autoPlay playsInline style={{ width: "100%", maxHeight: 400, background: "#000", display: "block" }} />
             ) : selectedPost.media_url && !selectedPost.media_url.match(/\.(mp3|wav|aac|m4a)(\?|$)/i) ? (
@@ -944,6 +949,7 @@ export default function MuralGrid() {
     </div>
   );
 }
+
 
 
 
