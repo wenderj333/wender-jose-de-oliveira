@@ -300,6 +300,22 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
     };
   }, [musicUrl, isImage]);
 
+  // Autoplay local do video ao entrar no centro do mural.
+  useEffect(() => {
+    if (!postCardRef.current || !isVideo) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      const visible = entry.isIntersecting && entry.intersectionRatio >= 0.65;
+      if (visible) {
+        videoRef.current?.play().catch(() => {});
+        if (musicUrl) setIsMusicPlaying(true);
+      } else {
+        videoRef.current?.pause();
+        if (musicUrl) setIsMusicPlaying(false);
+      }
+    }, { threshold: [0, 0.65, 1] });
+    observer.observe(postCardRef.current);
+    return () => observer.disconnect();
+  }, [isVideo, musicUrl]);
   const handleInternalVideoPlay = () => {
     onVideoPlay(post.id); // Notify parent that this video is playing
   };
