@@ -76,8 +76,6 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
 
   const toggle = async () => {
     if (!audioRef.current) return;
-    if (propIsPlaying !== undefined) return; // If controlled externally, disable internal toggle
-
     try {
       if (internalPlaying) { audioRef.current.pause(); }
       else { await audioRef.current.play(); }
@@ -214,7 +212,7 @@ function MusicPickerModal({ onClose, onSelect }) {
   );
 }
 
-function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause }) {
+function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause, onVideoNode }) {
   const { t } = useTranslation(); // Add useTranslation
   const color = getCatColor(post.category || post.type);
   const [showComments, setShowComments] = useState(false);
@@ -366,7 +364,8 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       {isVideo && (
         <div style={{ background: '#000', position: 'relative' }}> {/* Add position: 'relative' for mute button positioning */}
           <video
-            ref={videoRef}
+            ref={(node) => { videoRef.current = node; onVideoNode?.(post.id, node); }}
+            data-post-id={post.id}
             src={mediaUrl}
             controls
             playsInline
@@ -399,7 +398,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       {musicUrl && (isImage || isVideo) && (
         <div style={{ padding: '10px 16px 0', background: '#fbfcff' }}>
           <div style={{ fontSize: 12, color: '#64748b', fontWeight: 700, marginBottom: 6 }}>Musica desta publicacao</div>
-          <MiniAudioPlayer src={musicUrl} onPlay={() => setIsMusicPlaying(true)} onPause={() => setIsMusicPlaying(false)} onEnded={() => setIsMusicPlaying(false)} />
+          <MiniAudioPlayer src={musicUrl} isPlaying={isMusicPlaying} onPlay={() => setIsMusicPlaying(true)} onPause={() => setIsMusicPlaying(false)} onEnded={() => setIsMusicPlaying(false)} />
         </div>
       )}
       <div style={{ padding: '12px 16px' }}>
@@ -875,6 +874,7 @@ export default function MuralGrid() {
           isPlaying={activeVideoId === post.id} // Pass isPlaying prop
           onVideoPlay={handleVideoPlay}
           onVideoPause={handleVideoPause}
+          onVideoNode={(id, node) => { if (node) videoRefs.current[id] = node; else delete videoRefs.current[id]; }}
         />
       ))}
 
