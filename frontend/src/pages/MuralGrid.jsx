@@ -395,6 +395,13 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         </div>
       )}
 
+
+      {musicUrl && (isImage || isVideo) && (
+        <div style={{ padding: '10px 16px 0', background: '#fbfcff' }}>
+          <div style={{ fontSize: 12, color: '#64748b', fontWeight: 700, marginBottom: 6 }}>Musica desta publicacao</div>
+          <MiniAudioPlayer src={musicUrl} onPlay={() => setIsMusicPlaying(true)} onPause={() => setIsMusicPlaying(false)} onEnded={() => setIsMusicPlaying(false)} />
+        </div>
+      )}
       <div style={{ padding: '12px 16px' }}>
         {(post.category || post.type) === 'versiculo' ? (
           <div style={{ background: `linear-gradient(135deg,${color}12,white)`, borderLeft: `4px solid ${color}`, borderRadius: 8, padding: '12px 14px' }}>
