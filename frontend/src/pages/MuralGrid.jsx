@@ -212,7 +212,7 @@ function MusicPickerModal({ onClose, onSelect }) {
   );
 }
 
-function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause, onVideoNode }) {
+function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause, onVideoNode, soundEnabled }) {
   const { t } = useTranslation(); // Add useTranslation
   const color = getCatColor(post.category || post.type);
   const [showComments, setShowComments] = useState(false);
@@ -248,13 +248,21 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 
   const videoRef = useRef(null);
   const recordRef = useRef(null);
-  const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay
+  const [isMuted, setIsMuted] = useState(!soundEnabled);
   const [imageModal, setImageModal] = useState(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const postCardRef = useRef(null);
 
   const isVideo = mediaUrl && mediaUrl.match(/\.(mp4|webm|mov|ogg)(\?|$)/i);
   const isImage = mediaUrl && !mediaUrl.match(/\.(mp4|webm|mov|ogg|mp3|wav|aac|m4a)(\?|$)/i);
+
+  // Depois do primeiro toque em "Ativar som", os videos podem tocar com som.
+  useEffect(() => {
+    if (!soundEnabled || !videoRef.current) return;
+    videoRef.current.muted = false;
+    videoRef.current.volume = musicUrl ? 0.3 : 1;
+    setIsMuted(false);
+  }, [soundEnabled, musicUrl]);
   const videoPoster = isVideo && mediaUrl && mediaUrl.includes('cloudinary.com') ? mediaUrl.replace('/video/upload/', '/video/upload/so_0,w_600/').replace(/\.(mp4|webm|mov|ogg)/i, '.jpg') : null;
 
   // Effect to manage video play/pause based on `isPlaying` prop
@@ -500,6 +508,7 @@ export default function MuralGrid() {
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('todas');
   const [viewMode, setViewMode] = useState('feed');
+  const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem('sigo_mural_sound') === 'on');
   const [showForm, setShowForm] = useState(false);
   const [postText, setPostText] = useState('');
   const [postVisibility, setPostVisibility] = useState('public');
@@ -867,6 +876,13 @@ export default function MuralGrid() {
       )}
 
       {/* Feed View */}
+      {!loading && viewMode === 'feed' && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '0 0 12px' }}>
+          <button onClick={() => { const next = !soundEnabled; setSoundEnabled(next); localStorage.setItem('sigo_mural_sound', next ? 'on' : 'off'); }} style={{ border: 0, borderRadius: 20, padding: '10px 15px', background: soundEnabled ? '#1f8b4c' : '#456fd0', color: '#fff', fontWeight: 800, cursor: 'pointer' }}>
+            {soundEnabled ? 'ðŸ”Š Som automatico ativo' : 'ðŸ”‡ Ativar som automatico'}
+          </button>
+        </div>
+      )}
       {!loading && viewMode === 'feed' && filteredPosts.map(post => (
         <PostCard
           key={post.id}
@@ -879,6 +895,7 @@ export default function MuralGrid() {
           onVideoPlay={handleVideoPlay}
           onVideoPause={handleVideoPause}
           onVideoNode={(id, node) => { if (node) videoRefs.current[id] = node; else delete videoRefs.current[id]; }}
+          soundEnabled={soundEnabled}
         />
       ))}
 
