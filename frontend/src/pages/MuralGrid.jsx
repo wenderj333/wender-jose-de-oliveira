@@ -4,6 +4,7 @@ import { Plus, X, Send, Image, Video, Music, Heart, MessageCircle, Share2, Play,
 import { useAuth } from '../context/AuthContext';
 import LiveViewers from '../components/LiveViewers';
 import ReportModal from '../components/ReportModal';
+import { repairMojibake } from '../utils/textEncoding';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
@@ -178,7 +179,7 @@ function MusicPickerModal({ onClose, onSelect }) {
       onClick={e => e.target === e.currentTarget && onClose()}>
       <div style={{ background: 'white', borderRadius: '20px 20px 0 0', width: '100%', maxWidth: 900, maxHeight: '50vh', display: 'flex', flexDirection: 'column', padding: 20, boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>ðŸŽµ {t('mural.pickMusic')}</h3>
+          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>🎵 {t('mural.pickMusic')}</h3>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}><X size={20} /></button>
         </div>
         <div style={{ position: 'relative', marginBottom: 12 }}>
@@ -188,7 +189,7 @@ function MusicPickerModal({ onClose, onSelect }) {
         </div>
         <div style={{ flex: 1, overflowY: 'auto' }}>
           {loading ? (
-            <div style={{ textAlign: 'center', padding: 24, color: '#888' }}>A carregar mÃºsicas...</div>
+            <div style={{ textAlign: 'center', padding: 24, color: '#888' }}>A carregar músicas...</div>
           ) : filtered.length === 0 ? (
             <div style={{ textAlign: 'center', padding: 24, color: '#888', fontSize: 14 }}>{t('music.noSongs')}</div>
           ) : filtered.map(song => (
@@ -198,7 +199,7 @@ function MusicPickerModal({ onClose, onSelect }) {
             }}
               onMouseEnter={e => e.currentTarget.style.background = '#f5f5f5'}
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-              <div style={{ width: 36, height: 36, borderRadius: 8, background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 18 }}>ðŸŽµ</div>
+              <div style={{ width: 36, height: 36, borderRadius: 8, background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 18 }}>🎵</div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</div>
                 <div style={{ fontSize: 11, color: '#888' }}>{song.artist}</div>
@@ -241,7 +242,8 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       [commentId]: !prev[commentId]
     }));
   };
-  const authorName = post.full_name || post.author_name || post.authorName || t('common.user');
+  const authorName = repairMojibake(post.full_name || post.author_name || post.authorName) || t('common.user');
+  const postContent = repairMojibake(post.content || '');
   const authorInitials = authorName.slice(0, 2).toUpperCase();
   const mediaUrl = post.media_url || post.mediaUrl;
   const musicUrl = post.audio_url || post.musicUrl;
@@ -360,7 +362,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         </div>
         <div style={{ flex: 1 }}>
           <div onClick={()=>window.location.href='/perfil/'+(post.author_id||post.user_id)} style={{ fontWeight: 600, fontSize: 14, color: '#1a1a2e', cursor:'pointer' }}>{authorName}</div>
-          <div style={{ fontSize: 12, color: '#888' }}>{post.church || ''}{post.church ? ' Â· ' : ''}{post.created_at ? new Date(post.created_at).toLocaleDateString(t('locale')) : t('time.now')}</div>
+          <div style={{ fontSize: 12, color: '#888' }}>{repairMojibake(post.church) || ''}{post.church ? ' · ' : ''}{post.created_at ? new Date(post.created_at).toLocaleDateString(t('locale')) : t('time.now')}</div>
         </div>
         <span style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 20, background: `${color}18`, color, border: `1px solid ${color}44` }}>
           {CATEGORIES_CONFIG.find(c => c.value === (post.category || post.type))?.labelKey ? t(CATEGORIES_CONFIG.find(c => c.value === (post.category || post.type)).labelKey) : (post.category || post.type)}
@@ -404,11 +406,11 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       <div style={{ padding: '12px 16px' }}>
         {(post.category || post.type) === 'versiculo' ? (
           <div style={{ background: `linear-gradient(135deg,${color}12,white)`, borderLeft: `4px solid ${color}`, borderRadius: 8, padding: '12px 14px' }}>
-            <p style={{ fontStyle: 'italic', color: '#333', fontSize: 15, lineHeight: 1.6, margin: 0 }}>"{post.content}"</p>
-            {post.verse_reference && <p style={{ fontWeight: 700, color, marginTop: 8, marginBottom: 0, fontSize: 13 }}>â€” {post.verse_reference}</p>}
+            <p style={{ fontStyle: 'italic', color: '#333', fontSize: 15, lineHeight: 1.6, margin: 0 }}>"{postContent}"</p>
+            {post.verse_reference && <p style={{ fontWeight: 700, color, marginTop: 8, marginBottom: 0, fontSize: 13 }}>— {repairMojibake(post.verse_reference)}</p>}
           </div>
         ) : (
-          <><p style={{ color: '#333', fontSize: 14, lineHeight: 1.65, margin: 0 }}>{post.content}</p>{musicUrl && !isImage && !isVideo && (<MiniAudioPlayer src={musicUrl} onPlay={()=>setIsMusicPlaying(true)} onPause={()=>setIsMusicPlaying(false)} onEnded={()=>setIsMusicPlaying(false)} />)}</>
+          <><p style={{ color: '#333', fontSize: 14, lineHeight: 1.65, margin: 0 }}>{postContent}</p>{musicUrl && !isImage && !isVideo && (<MiniAudioPlayer src={musicUrl} onPlay={()=>setIsMusicPlaying(true)} onPause={()=>setIsMusicPlaying(false)} onEnded={()=>setIsMusicPlaying(false)} />)}</>
         )}
       </div>
 
@@ -420,7 +422,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         <button onClick={() => { if (!showComments) loadComments(); setShowComments(!showComments); }} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#888', fontSize: 13, fontWeight: 600, padding: '6px 10px', borderRadius: 8 }}>
           <MessageCircle size={18} /> {post.comment_count || post.commentCount || comments.length} {t('common.comment')}
         </button>
-        <button onClick={() => { const url = window.location.origin + "/mural?post=" + post.id; if (navigator.share) { navigator.share({ title: "Sigo com Fe", text: post.content, url }); } else { navigator.clipboard.writeText(url); alert("Link copiado!"); } }} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", color: "#888", fontSize: 13, marginLeft: "auto", padding: "6px 10px", borderRadius: 8 }}><Share2 size={18} /> {t("common.share")}</button>
+        <button onClick={() => { const url = window.location.origin + "/mural?post=" + post.id; if (navigator.share) { navigator.share({ title: "Sigo com Fé", text: postContent, url }); } else { navigator.clipboard.writeText(url); alert("Link copiado!"); } }} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", color: "#888", fontSize: 13, marginLeft: "auto", padding: "6px 10px", borderRadius: 8 }}><Share2 size={18} /> {t("common.share")}</button>
         {user && !isOwner && (
           <button onClick={() => setReportOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', padding: '6px 8px', borderRadius: 8, display: 'flex', alignItems: 'center' }} title={t('report.title')}
             onMouseEnter={e => e.currentTarget.style.color = '#e11d48'} onMouseLeave={e => e.currentTarget.style.color = '#ccc'}>
@@ -451,8 +453,8 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ background: '#f7f7f7', borderRadius: 12, padding: '8px 12px' }}>
-                    <span style={{ fontWeight: 700, color: '#1a1a2e', fontSize: 13 }}>{c.full_name || c.author_name || t('common.user')}</span>
-                    <p style={{ color: '#444', fontSize: 13, margin: '4px 0 0', lineHeight: 1.5 }}>{c.content}</p>
+                    <span style={{ fontWeight: 700, color: '#1a1a2e', fontSize: 13 }}>{repairMojibake(c.full_name || c.author_name) || t('common.user')}</span>
+                    <p style={{ color: '#444', fontSize: 13, margin: '4px 0 0', lineHeight: 1.5 }}>{repairMojibake(c.content)}</p>
                   </div>
                   <div style={{ display: 'flex', gap: 12, marginTop: 4, paddingLeft: 4 }}>
                     <button onClick={() => toggleCommentAmen(c.id || i)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: commentAmens[c.id || i] ? '#e11d48' : '#888', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>{t('mural.amen', 'Amen')} {commentAmens[c.id || i] ? 'OK' : ''}</button>
@@ -527,8 +529,8 @@ export default function MuralGrid() {
   const musicRef = useRef(null);
   const [activeLive, setActiveLive] = useState(null);
 
-  // Recebe um diploma vindo do Duelo BÃ­blico, abre o compositor e deixa a
-  // publicaÃ§Ã£o sempre sob a confirmaÃ§Ã£o do prÃ³prio jogador.
+  // Recebe um diploma vindo do Duelo Bíblico, abre o compositor e deixa a
+  // publicação sempre sob a confirmação do próprio jogador.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const diploma = params.get('dueloDiploma');
@@ -729,10 +731,10 @@ export default function MuralGrid() {
         <div onClick={() => window.location.href='/live-stream'} style={{ background:'linear-gradient(135deg,#e74c3c,#c0392b)', borderRadius:12, padding:'14px 20px', marginBottom:16, cursor:'pointer', display:'flex', alignItems:'center', gap:12, boxShadow:'0 4px 15px rgba(231,76,60,0.4)' }}>
           <div style={{ width:12, height:12, background:'white', borderRadius:'50%' }}/>
           <div style={{ flex:1 }}>
-            <p style={{ color:'white', fontWeight:800, fontSize:16, margin:0 }}>ðŸ”´ AO VIVO agora!</p>
-            <p style={{ color:'rgba(255,255,255,0.85)', fontSize:13, margin:0 }}>{activeLive?.user_name} estÃ¡ transmitindo</p>
+            <p style={{ color:'white', fontWeight:800, fontSize:16, margin:0 }}>🔴 AO VIVO agora!</p>
+            <p style={{ color:'rgba(255,255,255,0.85)', fontSize:13, margin:0 }}>{repairMojibake(activeLive?.user_name)} está transmitindo</p>
           </div>
-          <span style={{ color:'white', fontSize:13, fontWeight:600 }}>Entrar â†’</span>
+          <span style={{ color:'white', fontSize:13, fontWeight:600 }}>Entrar →</span>
         </div>
       )}
     <div style={{ maxWidth: 900, margin: '0 auto', padding: 16 }}>
@@ -787,7 +789,7 @@ export default function MuralGrid() {
           {/* Selected music from library */}
           {selectedMusicSong && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, background: '#f0f5ff', border: '1px solid #4a80d444', borderRadius: 10, padding: '10px 14px' }}>
-               <span style={{ fontSize: 20 }}>ðŸŽµ</span>
+               <span style={{ fontSize: 20 }}>🎵</span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedMusicSong.title}</div>
                 <div style={{ fontSize: 11, color: '#888' }}>{selectedMusicSong.artist}</div>
@@ -800,19 +802,19 @@ export default function MuralGrid() {
           <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
             <button onClick={() => photoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Image size={16} style={{ color: '#f43f5e' }} /> {t('media.photo')}</button>
             <button onClick={() => videoRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Video size={16} style={{ color: '#3b82f6' }} /> {t('media.video')}</button>
-             <button onClick={() => { const input = document.createElement("input"); input.type = "file"; input.accept = "video/*"; input.capture = "environment"; input.onchange = e => handleMediaSelect(e, "video"); input.click(); }} style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 20, border: "1px solid #e2e8f0", background: "white", cursor: "pointer", fontSize: 13 }}>ðŸŽ¥ Gravar</button>
+             <button onClick={() => { const input = document.createElement("input"); input.type = "file"; input.accept = "video/*"; input.capture = "environment"; input.onchange = e => handleMediaSelect(e, "video"); input.click(); }} style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 20, border: "1px solid #e2e8f0", background: "white", cursor: "pointer", fontSize: 13 }}>🎥 Gravar</button>
             <button onClick={() => musicRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #e2e8f0', background: 'white', cursor: 'pointer', fontSize: 13 }}><Music size={16} style={{ color: '#a855f7' }} /> {t('media.audio')}</button>
-             <button onClick={() => setShowMusicPicker(true)} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #4a80d444', background: '#f0f5ff', cursor: 'pointer', fontSize: 13, color: '#4a80d4', fontWeight: 600 }}>ðŸŽµ {t('mural.addMusic')}</button>
+             <button onClick={() => setShowMusicPicker(true)} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 20, border: '1px solid #4a80d444', background: '#f0f5ff', cursor: 'pointer', fontSize: 13, color: '#4a80d4', fontWeight: 600 }}>🎵 {t('mural.addMusic')}</button>
           </div>
 
-           {uploadError && <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#e11d48' }}>âš ï¸ {uploadError}</div>}
+           {uploadError && <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#e11d48' }}>⚠️ {repairMojibake(uploadError)}</div>}
 
           {/* Selector de visibilidade */}
           <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
             {[
-              { value: 'public', label: 'ðŸŒ ' + t('mural.visPublic', 'PÃºblico'), color: '#27ae60' },
-              { value: 'members', label: 'ðŸ‘¥ ' + t('mural.visMembers', 'Membros'), color: '#2980b9' },
-              { value: 'private', label: 'ðŸ”’ ' + t('mural.visPrivate', 'Privado'), color: '#7f8c8d' },
+              { value: 'public', label: '🌍 ' + t('mural.visPublic', 'Público'), color: '#27ae60' },
+              { value: 'members', label: '👥 ' + t('mural.visMembers', 'Membros'), color: '#2980b9' },
+              { value: 'private', label: '🔒 ' + t('mural.visPrivate', 'Privado'), color: '#7f8c8d' },
             ].map(opt => (
               <button key={opt.value} type="button" onClick={() => setPostVisibility(opt.value)}
                 style={{ flex: 1, padding: '6px 4px', borderRadius: 8, border: `2px solid ${postVisibility === opt.value ? opt.color : '#eee'}`, background: postVisibility === opt.value ? opt.color : 'white', color: postVisibility === opt.value ? 'white' : '#666', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
@@ -872,7 +874,7 @@ export default function MuralGrid() {
                   )
                 ) : (
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(135deg,${color}22,white)`, padding: 8 }}>
-                    <p style={{ color: '#333', fontSize: 11, textAlign: 'center', lineHeight: 1.4, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', margin: 0 }}>{post.content}</p>
+                    <p style={{ color: '#333', fontSize: 11, textAlign: 'center', lineHeight: 1.4, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', margin: 0 }}>{repairMojibake(post.content)}</p>
                   </div>
                 )}
                 <div style={{ position: 'absolute', bottom: 4, right: 4, width: 8, height: 8, borderRadius: '50%', background: color }} />
@@ -912,7 +914,7 @@ export default function MuralGrid() {
       {selectedPost && (
         <div onClick={() => setSelectedPost(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
           <div onClick={e => e.stopPropagation()} style={{ background: "white", borderRadius: 20, overflow: "hidden", maxWidth: 500, width: "100%", maxHeight: "90vh", overflowY: "auto", position: "relative" }}>
-            <button onClick={() => setSelectedPost(null)} style={{ position: "absolute", top: 12, right: 12, zIndex: 10, background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%", width: 36, height: 36, color: "white", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>Ã—</button>
+            <button onClick={() => setSelectedPost(null)} style={{ position: "absolute", top: 12, right: 12, zIndex: 10, background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%", width: 36, height: 36, color: "white", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>×</button>
             {selectedPost.media_url && selectedPost.media_url.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
               <video src={selectedPost.media_url} controls autoPlay playsInline style={{ width: "100%", maxHeight: 400, background: "#000", display: "block" }} />
             ) : selectedPost.media_url && !selectedPost.media_url.match(/\.(mp3|wav|aac|m4a)(\?|$)/i) ? (

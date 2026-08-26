@@ -1,5 +1,5 @@
 import React from 'react';
-// GlobalChat placeholder â€” future implementation
+// GlobalChat placeholder — future implementation
 export default function GlobalChat() {
   return null;
 }

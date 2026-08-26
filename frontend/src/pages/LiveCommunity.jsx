@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import GuestPrompt from '../components/GuestPrompt';
 import ReportModal from '../components/ReportModal';
 import { getChristianChatCopy } from '../i18n/christianChatCopy';
+import { repairMojibake } from '../utils/textEncoding';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const card = { background: '#fff', border: '1px solid #e0e6f5', borderRadius: 18, boxShadow: '0 8px 28px rgba(74,128,212,0.08)' };
@@ -155,7 +156,7 @@ export default function LiveCommunity() {
         </header>
         <div style={{ flex: 1, overflowY: 'auto', padding: 20, background: '#fbfcff' }}>
           {!chatMessages.length && <div style={{ maxWidth: 390, margin: '80px auto 0', textAlign: 'center', color: '#667085' }}><MessageCircle size={35} style={{ color: '#4a80d4', marginBottom: 10 }}/><h3 style={{ margin: '0 0 8px', color: '#1e2240' }}>{c.ready}</h3><p style={{ margin: 0, lineHeight: 1.6 }}>{c.empty}</p></div>}
-          {chatMessages.filter(message => !hiddenUserIds.has(message.userId)).map((message, index) => <article key={message.id || `${message.userName}-${index}`} style={{ marginBottom: 12, padding: '11px 13px', background: '#fff', border: '1px solid #e6ebf6', borderRadius: '4px 14px 14px 14px', maxWidth: '85%' }}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><strong style={{ color: '#3568b8', fontSize: 13, flex: 1 }}>{message.userName || 'Membro'}</strong>{message.userId && message.userId !== user?.id && <><button type="button" onClick={() => setReportMessage(message)} title="Denunciar utilizador" style={{ border: 0, background: 'transparent', color: '#c73c3c', cursor: 'pointer', padding: 3 }}><Flag size={15}/></button><button type="button" onClick={() => hideUser(message.userId)} title="Ocultar mensagens desta pessoa" style={{ border: 0, background: 'transparent', color: '#77829a', cursor: 'pointer', padding: 3 }}><EyeOff size={15}/></button></>}</div><p style={{ margin: '4px 0 0', lineHeight: 1.45 }}>{message.text || message.message}</p></article>)}
+          {chatMessages.filter(message => !hiddenUserIds.has(message.userId)).map((message, index) => <article key={message.id || `${message.userName}-${index}`} style={{ marginBottom: 12, padding: '11px 13px', background: '#fff', border: '1px solid #e6ebf6', borderRadius: '4px 14px 14px 14px', maxWidth: '85%' }}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><strong style={{ color: '#3568b8', fontSize: 13, flex: 1 }}>{repairMojibake(message.userName) || 'Membro'}</strong>{message.userId && message.userId !== user?.id && <><button type="button" onClick={() => setReportMessage(message)} title="Denunciar utilizador" style={{ border: 0, background: 'transparent', color: '#c73c3c', cursor: 'pointer', padding: 3 }}><Flag size={15}/></button><button type="button" onClick={() => hideUser(message.userId)} title="Ocultar mensagens desta pessoa" style={{ border: 0, background: 'transparent', color: '#77829a', cursor: 'pointer', padding: 3 }}><EyeOff size={15}/></button></>}</div><p style={{ margin: '4px 0 0', lineHeight: 1.45 }}>{repairMojibake(message.text || message.message)}</p></article>)}
           <div ref={chatEndRef} />
         </div>
         <footer style={{ padding: 14, borderTop: '1px solid #e0e6f5', display: 'flex', gap: 9, position: 'relative' }}>
@@ -174,8 +175,8 @@ export default function LiveCommunity() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 800 }}><Music size={19} color="#6c3fa0"/> {c.worship}</div>
           {songs[currentSongIndex] ? (
             <div>
-              <p style={{ fontSize: 14, margin: '11px 0 3px', fontWeight: 700 }}>{songs[currentSongIndex].title}</p>
-              <p style={{ color: '#7b83a6', fontSize: 12, margin: '0 0 12px' }}>{songs[currentSongIndex].artist}</p>
+              <p style={{ fontSize: 14, margin: '11px 0 3px', fontWeight: 700 }}>{repairMojibake(songs[currentSongIndex].title)}</p>
+              <p style={{ color: '#7b83a6', fontSize: 12, margin: '0 0 12px' }}>{repairMojibake(songs[currentSongIndex].artist)}</p>
             </div>
           ) : <p style={{ color: '#7b83a6', fontSize: 13 }}>{c.noMusic}</p>}
           <div style={{ display: 'flex', gap: 8 }}>
