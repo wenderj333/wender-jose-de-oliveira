@@ -34,6 +34,7 @@ import Register from "./pages/Register";
 
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import GlobalMemberSearch from "./components/GlobalMemberSearch";
 
 import Members from "./pages/Members";
 
@@ -481,6 +482,8 @@ export default function App() {
 
         <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8}}>
 
+          <GlobalMemberSearch />
+
           <LanguageSelector />
 
           <Link to="/notificacoes" style={{position:'relative',background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',textDecoration:'none'}}>
@@ -527,6 +530,8 @@ export default function App() {
             <div><strong style={{display:'block'}}>Menu</strong><span style={{fontSize:12,opacity:.82}}>{user?.full_name || 'Sigo com Fé'}</span></div>
             <button type="button" aria-label="Fechar menu" onClick={() => setMobileMenuOpen(false)} style={{display:'grid',placeItems:'center',width:35,height:35,border:0,borderRadius:10,color:'white',background:'rgba(255,255,255,.16)'}}><X size={22}/></button>
           </div>
+
+          <div style={{ marginBottom: 14 }}><GlobalMemberSearch mobile /></div>
 
           <div style={{marginBottom:'20px'}}>
 
