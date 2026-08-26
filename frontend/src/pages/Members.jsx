@@ -43,7 +43,6 @@ export default function Members() {
       }
     }
     fetchMembers();
-    fetchMembers();
   }, [token]);
 
   const filtered = [...users].sort((a,b) => (b.avatar_url?1:0)-(a.avatar_url?1:0)).filter(u =>

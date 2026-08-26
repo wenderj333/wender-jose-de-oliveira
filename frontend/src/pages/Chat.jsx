@@ -33,7 +33,7 @@ function playMessageSound(type) {
 export default function Chat() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
-  const { send: sendSocket, on: onSocket, off: offSocket } = useWebSocket();
+  const { send: sendSocket, on: onSocket, off: offSocket, isConnected: socketConnected } = useWebSocket();
   const { userId } = useParams(); // /mensagens/:userId
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,6 +61,8 @@ export default function Chat() {
   const remoteVideoRef = useRef(null);
   const callRef = useRef(null);
   const autoCallStartedRef = useRef(false);
+  const pendingCandidatesRef = useRef([]);
+  const callTimeoutRef = useRef(null);
   const [call, setCall] = useState(null);
   const setCurrentCall = value => { callRef.current = value; setCall(value); };
   const startRecording = async () => { try { const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); const mediaRecorder = new MediaRecorder(stream); mediaRecorderRef.current = mediaRecorder; audioChunksRef.current = []; mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunksRef.current.push(e.data); }; mediaRecorder.onstop = () => { const blob = new Blob(audioChunksRef.current, { type: "audio/webm" }); setAudioBlob(blob); setAudioUrl(URL.createObjectURL(blob)); stream.getTracks().forEach(t => t.stop()); }; mediaRecorder.start(); setRecording(true); } catch(e) { alert("Erro ao aceder ao microfone"); } };
@@ -68,10 +70,65 @@ export default function Chat() {
   const cancelAudio = () => { setAudioBlob(null); setAudioUrl(null); };
   const pollRef = useRef(null);
 
-  const closeCall = (notify = true) => { const active = callRef.current; if (notify && active?.id) sendSocket?.({ type: 'call_end', callId: active.id }); peerRef.current?.close(); peerRef.current = null; localStreamRef.current?.getTracks().forEach(track => track.stop()); localStreamRef.current = null; setCurrentCall(null); };
+  const closeCall = (notify = true) => { const active = callRef.current; if (notify && active?.id) sendSocket?.({ type: 'call_end', callId: active.id }); if (callTimeoutRef.current) clearTimeout(callTimeoutRef.current); callTimeoutRef.current = null; pendingCandidatesRef.current = []; peerRef.current?.close(); peerRef.current = null; localStreamRef.current?.getTracks().forEach(track => track.stop()); localStreamRef.current = null; setCurrentCall(null); };
+  const mediaErrorMessage = error => {
+    if (!navigator.mediaDevices?.getUserMedia) return 'Este navegador não permite chamadas de voz ou vídeo.';
+    if (error?.name === 'NotAllowedError' || error?.name === 'SecurityError') return 'Permita o acesso ao microfone e à câmara nas definições do navegador e tente novamente.';
+    if (error?.name === 'NotFoundError' || error?.name === 'DevicesNotFoundError') return 'Não foi encontrado um microfone ou uma câmara disponível.';
+    if (error?.name === 'NotReadableError' || error?.name === 'TrackStartError') return 'O microfone ou a câmara está a ser usado por outra aplicação.';
+    return 'Não foi possível iniciar a chamada. Verifique a ligação e tente novamente.';
+  };
   const getIceServers = async () => { try { const response = await fetch(`${API}/api/calls/ice-servers`, { headers: { Authorization: `Bearer ${token}` } }); if (response.ok) { const data = await response.json(); if (Array.isArray(data.iceServers) && data.iceServers.length) return data.iceServers; } } catch (_) {} return [{ urls: 'stun:stun.l.google.com:19302' }]; };
-  const setupCall = async (active, initiator) => { const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: active.mode === 'video' }); localStreamRef.current = stream; const iceServers = await getIceServers(); const peer = new RTCPeerConnection({ iceServers }); peerRef.current = peer; stream.getTracks().forEach(track => peer.addTrack(track, stream)); peer.ontrack = event => { if (remoteVideoRef.current) remoteVideoRef.current.srcObject = event.streams[0]; }; peer.onicecandidate = event => { if (event.candidate) sendSocket?.({ type: 'call_signal', callId: active.id, signal: { candidate: event.candidate } }); }; setCurrentCall({ ...active, status: 'active' }); setTimeout(() => { if (localVideoRef.current) localVideoRef.current.srcObject = stream; }, 0); if (initiator) { const offer = await peer.createOffer(); await peer.setLocalDescription(offer); sendSocket?.({ type: 'call_signal', callId: active.id, signal: { offer } }); } };
-  const startCall = mode => { if (!otherUser?.id || !sendSocket) return; const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`; const active = { id, mode, status: 'calling', otherName: otherUser.full_name, otherAvatar: otherUser.avatar_url }; setCurrentCall(active); sendSocket({ type: 'call_request', callId: id, targetUserId: otherUser.id, mode, callerName: user.full_name, callerAvatar: user.avatar_url }); };
+  const setupCall = async (active, initiator) => {
+    if (peerRef.current) return peerRef.current;
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: active.mode === 'video' });
+    localStreamRef.current = stream;
+    const peer = new RTCPeerConnection({ iceServers: await getIceServers() });
+    peerRef.current = peer;
+    stream.getTracks().forEach(track => peer.addTrack(track, stream));
+    peer.ontrack = event => { if (remoteVideoRef.current) remoteVideoRef.current.srcObject = event.streams[0]; };
+    peer.onicecandidate = event => { if (event.candidate) sendSocket?.({ type: 'call_signal', callId: active.id, signal: { candidate: event.candidate } }); };
+    peer.onconnectionstatechange = () => {
+      if (peer.connectionState === 'connected') {
+        if (callTimeoutRef.current) clearTimeout(callTimeoutRef.current);
+        callTimeoutRef.current = null;
+        setCurrentCall({ ...callRef.current, status: 'active' });
+      } else if (['failed', 'disconnected'].includes(peer.connectionState)) {
+        closeCall(true);
+        alert('A chamada foi interrompida. Verifique a ligação à internet e tente novamente.');
+      }
+    };
+    setCurrentCall({ ...active, status: 'connecting' });
+    setTimeout(() => { if (localVideoRef.current) localVideoRef.current.srcObject = stream; }, 0);
+    if (initiator) {
+      const offer = await peer.createOffer();
+      await peer.setLocalDescription(offer);
+      sendSocket?.({ type: 'call_signal', callId: active.id, signal: { offer } });
+    }
+    return peer;
+  };
+  const startCall = mode => {
+    if (!otherUser?.id || !sendSocket) return;
+    if (!socketConnected) {
+      alert('A ligação ao chat ainda está a ser restabelecida. Aguarde alguns segundos e tente novamente.');
+      return;
+    }
+    const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
+    const active = { id, mode, status: 'calling', otherName: otherUser.full_name, otherAvatar: otherUser.avatar_url };
+    setCurrentCall(active);
+    const sent = sendSocket({ type: 'call_request', callId: id, targetUserId: otherUser.id, mode, callerName: user.full_name, callerAvatar: user.avatar_url });
+    if (!sent) {
+      closeCall(false);
+      alert('Não foi possível contactar a outra pessoa. Verifique a ligação e tente novamente.');
+      return;
+    }
+    callTimeoutRef.current = setTimeout(() => {
+      if (callRef.current?.id === id && callRef.current.status === 'calling') {
+        closeCall(true);
+        alert('A pessoa não atendeu à chamada.');
+      }
+    }, 45000);
+  };
   useEffect(() => {
     const mode = new URLSearchParams(location.search).get('call');
     if (!['audio', 'video'].includes(mode) || !otherUser?.id || !sendSocket || autoCallStartedRef.current) return;
@@ -79,9 +136,9 @@ export default function Chat() {
     navigate(`/mensagens/${userId}`, { replace: true });
     startCall(mode);
   }, [location.search, otherUser?.id, sendSocket, userId, navigate]);
-  const acceptCall = async () => { const active = callRef.current; if (!active) return; try { await setupCall(active, false); sendSocket?.({ type: 'call_response', callId: active.id, accepted: true }); } catch (_) { sendSocket?.({ type: 'call_response', callId: active.id, accepted: false }); closeCall(false); alert('NÃ£o foi possÃ­vel aceder ao microfone ou cÃ¢mara.'); } };
+  const acceptCall = async () => { const active = callRef.current; if (!active) return; try { await setupCall(active, false); sendSocket?.({ type: 'call_response', callId: active.id, accepted: true }); } catch (error) { sendSocket?.({ type: 'call_response', callId: active.id, accepted: false }); closeCall(false); alert(mediaErrorMessage(error)); } };
   const declineCall = () => { if (callRef.current?.id) sendSocket?.({ type: 'call_response', callId: callRef.current.id, accepted: false }); closeCall(false); };
-  useEffect(() => { const incoming = data => setCurrentCall({ id: data.callId, mode: data.mode, status: 'incoming', otherName: data.callerName, otherAvatar: data.callerAvatar }); const accepted = async data => { const active = callRef.current; if (active?.id === data.callId) try { await setupCall(active, true); } catch (_) { closeCall(true); alert('NÃ£o foi possÃ­vel aceder ao microfone ou cÃ¢mara.'); } }; const ended = data => { if (callRef.current?.id === data.callId) closeCall(false); }; const unavailable = data => { if (callRef.current?.id === data.callId) { closeCall(false); alert('Esta pessoa nÃ£o estÃ¡ disponÃ­vel para chamada agora.'); } }; const signal = async data => { const active = callRef.current; if (!active || active.id !== data.callId) return; try { if (!peerRef.current) await setupCall(active, false); const peer = peerRef.current; if (data.signal.offer) { await peer.setRemoteDescription(new RTCSessionDescription(data.signal.offer)); const answer = await peer.createAnswer(); await peer.setLocalDescription(answer); sendSocket?.({ type: 'call_signal', callId: active.id, signal: { answer } }); } if (data.signal.answer) await peer.setRemoteDescription(new RTCSessionDescription(data.signal.answer)); if (data.signal.candidate) await peer.addIceCandidate(new RTCIceCandidate(data.signal.candidate)); } catch (_) { closeCall(true); } }; onSocket?.('call_incoming', incoming); onSocket?.('call_accepted', accepted); onSocket?.('call_declined', ended); onSocket?.('call_ended', ended); onSocket?.('call_unavailable', unavailable); onSocket?.('call_signal', signal); return () => { offSocket?.('call_incoming', incoming); offSocket?.('call_accepted', accepted); offSocket?.('call_declined', ended); offSocket?.('call_ended', ended); offSocket?.('call_unavailable', unavailable); offSocket?.('call_signal', signal); }; }, [onSocket, offSocket, sendSocket]);
+  useEffect(() => { const incoming = data => setCurrentCall({ id: data.callId, mode: data.mode, status: 'incoming', otherName: data.callerName, otherAvatar: data.callerAvatar }); const accepted = async data => { const active = callRef.current; if (active?.id === data.callId) try { await setupCall(active, true); } catch (error) { closeCall(true); alert(mediaErrorMessage(error)); } }; const ended = data => { if (callRef.current?.id === data.callId) closeCall(false); }; const unavailable = data => { if (callRef.current?.id === data.callId) { closeCall(false); alert('Esta pessoa não está disponível para chamada agora.'); } }; const signal = async data => { const active = callRef.current; if (!active || active.id !== data.callId) return; try { const peer = peerRef.current || await setupCall(active, false); if (data.signal.offer) { await peer.setRemoteDescription(new RTCSessionDescription(data.signal.offer)); const answer = await peer.createAnswer(); await peer.setLocalDescription(answer); sendSocket?.({ type: 'call_signal', callId: active.id, signal: { answer } }); } if (data.signal.answer) await peer.setRemoteDescription(new RTCSessionDescription(data.signal.answer)); if (data.signal.candidate) { if (peer.remoteDescription) await peer.addIceCandidate(new RTCIceCandidate(data.signal.candidate)); else pendingCandidatesRef.current.push(data.signal.candidate); } if (peer.remoteDescription && pendingCandidatesRef.current.length) { const candidates = pendingCandidatesRef.current.splice(0); for (const candidate of candidates) await peer.addIceCandidate(new RTCIceCandidate(candidate)); } } catch (_) { closeCall(true); alert('Não foi possível estabelecer a chamada. Verifique a ligação e tente novamente.'); } }; onSocket?.('call_incoming', incoming); onSocket?.('call_accepted', accepted); onSocket?.('call_declined', ended); onSocket?.('call_ended', ended); onSocket?.('call_unavailable', unavailable); onSocket?.('call_signal', signal); return () => { offSocket?.('call_incoming', incoming); offSocket?.('call_accepted', accepted); offSocket?.('call_declined', ended); offSocket?.('call_ended', ended); offSocket?.('call_unavailable', unavailable); offSocket?.('call_signal', signal); }; }, [onSocket, offSocket, sendSocket]);
   useEffect(() => () => closeCall(false), []);
 
   const translateMessage = async (msgId, content) => {
@@ -184,7 +241,7 @@ export default function Chat() {
 
   const sendAudio = async () => {
     if (!audioBlob || sending) return;
-    if (audioBlob.size > 12 * 1024 * 1024) { alert('A mensagem de voz Ã© muito grande. Grave uma mensagem menor.'); return; }
+    if (audioBlob.size > 12 * 1024 * 1024) { alert('A mensagem de voz é muito grande. Grave uma mensagem menor.'); return; }
     setSending(true);
     try {
       const form = new FormData();
@@ -193,12 +250,12 @@ export default function Chat() {
       form.append('folder', 'sigo-com-fe/voice-messages');
       const upload = await fetch(CLOUDINARY_BASE, { method: 'POST', body: form });
       const data = await upload.json();
-      if (!upload.ok || !data.secure_url) throw new Error('NÃ£o foi possÃ­vel enviar o Ã¡udio.');
+      if (!upload.ok || !data.secure_url) throw new Error('Não foi possível enviar o áudio.');
       setSending(false);
       if (await postMessage(`${VOICE_PREFIX}${data.secure_url}`)) cancelAudio();
     } catch (error) {
       setSending(false);
-      alert(error.message || 'NÃ£o foi possÃ­vel enviar o Ã¡udio.');
+      alert(error.message || 'Não foi possível enviar o áudio.');
     }
   };
 
@@ -268,7 +325,7 @@ export default function Chat() {
           {/* Header */}
           <div style={{ padding: '16px 14px 10px', borderBottom: '1px solid var(--border)' }}>
             <h2 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
-              ðŸ’¬ Mensagens
+              💬 Mensagens
             </h2>
             {/* Search */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--bg)', borderRadius: 20, padding: '7px 12px', border: '1px solid var(--border)' }}>
@@ -288,7 +345,7 @@ export default function Chat() {
               <div style={{ padding: 24, textAlign: 'center', color: 'var(--muted)', fontSize: '0.85rem' }}>A carregar...</div>
             ) : filtered.length === 0 ? (
               <div style={{ padding: 32, textAlign: 'center' }}>
-                <div style={{ fontSize: '2rem', marginBottom: 8 }}>ðŸ’¬</div>
+                <div style={{ fontSize: '2rem', marginBottom: 8 }}>💬</div>
                 <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>Nenhuma conversa ainda</p>
                 <p style={{ color: 'var(--muted)', fontSize: '0.78rem', marginTop: 4 }}>Vai ao perfil de um amigo e envia uma mensagem!</p>
               </div>
@@ -362,7 +419,7 @@ export default function Chat() {
                 </div>
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 7 }}>
                   <button type="button" onClick={() => startCall('audio')} style={{ display: 'flex', alignItems: 'center', gap: 5, borderRadius: 9, border: '1px solid #bcd2f3', background: '#eef5ff', color: '#245ea7', cursor: 'pointer', padding: '8px 10px', fontWeight: 700, fontSize: 12 }}><Phone size={15}/> Ligar</button>
-                  <button type="button" onClick={() => startCall('video')} style={{ display: 'flex', alignItems: 'center', gap: 5, borderRadius: 9, border: '1px solid #bcd2f3', background: '#eef5ff', color: '#245ea7', cursor: 'pointer', padding: '8px 10px', fontWeight: 700, fontSize: 12 }}><Video size={15}/> VÃ­deo</button>
+                  <button type="button" onClick={() => startCall('video')} style={{ display: 'flex', alignItems: 'center', gap: 5, borderRadius: 9, border: '1px solid #bcd2f3', background: '#eef5ff', color: '#245ea7', cursor: 'pointer', padding: '8px 10px', fontWeight: 700, fontSize: 12 }}><Video size={15}/> Vídeo</button>
                 </div>
               </>
             )}
@@ -371,14 +428,14 @@ export default function Chat() {
           {/* NOT FRIENDS â€” show friend request prompt */}
           {false ? (
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 14, padding: 32, textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem' }}>ðŸ¤</div>
+              <div style={{ fontSize: '3rem' }}>🤝</div>
               {otherUser && <Avatar url={otherUser.avatar_url} name={otherUser.full_name} size={64} />}
               <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '1.3rem', fontWeight: 700, color: 'var(--text)', margin: 0 }}>
                 {otherUser?.full_name}
               </h3>
               <p style={{ color: 'var(--muted)', fontSize: '0.9rem', maxWidth: 300 }}>
                 {friendStatus === 'pending' || requestSent
-                  ? 'Pedido de amizade enviado! Quando aceitar, poderÃ£o conversar. âœï¸'
+                  ? 'Pedido de amizade enviado! Quando aceitar, poderão conversar. ✝️'
                   : 'Para enviar mensagens, precisam ser amigos primeiro.'}
               </p>
               {friendStatus === 'none' && !requestSent && (
@@ -391,7 +448,7 @@ export default function Chat() {
               )}
               {(friendStatus === 'pending' || requestSent) && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 22px', borderRadius: 12, background: '#f0f5ff', color: 'var(--fb)', fontSize: '0.88rem', fontWeight: 600, border: '1px solid #dde8fa' }}>
-                  <Check size={15} /> Pedido enviado â€” aguardando aprovaÃ§Ã£o
+                  <Check size={15} /> Pedido enviado — aguardando aprovação
                 </div>
               )}
             </div>
@@ -405,8 +462,8 @@ export default function Chat() {
               <div style={{ flex: 1, overflowY: 'auto', padding: '16px 16px 8px', display: 'flex', flexDirection: 'column', gap: 4 }}>
                 {messages.length === 0 && (
                   <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--muted)' }}>
-                    <div style={{ fontSize: '2rem', marginBottom: 8 }}>ðŸ•Šï¸</div>
-                    <p style={{ fontSize: '0.88rem' }}>Nenhuma mensagem ainda. Diga olÃ¡! ðŸ‘‹</p>
+                    <div style={{ fontSize: '2rem', marginBottom: 8 }}>🕊️</div>
+                    <p style={{ fontSize: '0.88rem' }}>Nenhuma mensagem ainda. Diga olá! 👋</p>
                   </div>
                 )}
 
@@ -438,7 +495,7 @@ export default function Chat() {
                           {String(msg.content || '').startsWith(VOICE_PREFIX) ? <audio controls preload="metadata" src={msg.content.slice(VOICE_PREFIX.length)} style={{ display: 'block', maxWidth: 230, height: 34 }} /> : msg.content}
                           {translations[msg.id] && (
                             <div style={{ marginTop: 6, paddingTop: 6, borderTop: isMe ? '1px solid rgba(255,255,255,0.3)' : '1px solid var(--border)', fontSize: '0.8rem', fontStyle: 'italic', opacity: 0.85 }}>
-                              ðŸŒ {translations[msg.id]}
+                              🌐 {translations[msg.id]}
                             </div>
                           )}
                         </div>
@@ -448,7 +505,7 @@ export default function Chat() {
                             style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.7rem', color: 'var(--muted)', padding: '2px 4px', marginTop: 1, display: 'flex', alignItems: 'center', gap: 3 }}
                             title="Traduzir mensagem"
                           >
-                            {translating[msg.id] ? 'â³' : translations[msg.id] ? 'âœ• ocultar' : 'ðŸŒ traduzir'}
+                            {translating[msg.id] ? '⏳' : translations[msg.id] ? '✕ ocultar' : '🌐 traduzir'}
                           </button>
                         )}
                         {showTime && (
@@ -471,7 +528,7 @@ export default function Chat() {
               <form onSubmit={sendMessage} style={{ display: 'flex', gap: 10, padding: '12px 14px', borderTop: '1px solid var(--border)', background: 'var(--card)', alignItems: 'flex-end' }}>
                 <Avatar url={user?.avatar_url} name={user?.full_name} size={34} />
                 {audioBlob ? <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, background: '#eef6ff', border: '1px solid #cfe0fb', borderRadius: 18, padding: '7px 10px' }}><audio controls src={audioUrl} style={{ height: 30, minWidth: 0, flex: 1 }} /><button type="button" onClick={cancelAudio} aria-label="Apagar mensagem de voz" style={{ border: 0, background: 'transparent', color: '#c0392b', cursor: 'pointer' }}><Trash2 size={17}/></button><button type="button" onClick={sendAudio} disabled={sending} style={{ border: 0, borderRadius: 16, background: '#3568b8', color: '#fff', padding: '8px 11px', cursor: 'pointer', fontWeight: 700 }}>Enviar voz</button></div> : <>
-                <button type="button" onClick={recording ? stopRecording : startRecording} aria-label={recording ? 'Parar gravaÃ§Ã£o' : 'Gravar mensagem de voz'} style={{ width: 38, height: 38, borderRadius: '50%', background: recording ? '#e74c3c' : '#eef4ff', color: recording ? '#fff' : '#3568b8', border: '1px solid #cfe0fb', cursor: 'pointer', display: 'grid', placeItems: 'center', flexShrink: 0 }}>{recording ? <MicOff size={17}/> : <Mic size={17}/>}</button>
+                <button type="button" onClick={recording ? stopRecording : startRecording} aria-label={recording ? 'Parar gravação' : 'Gravar mensagem de voz'} style={{ width: 38, height: 38, borderRadius: '50%', background: recording ? '#e74c3c' : '#eef4ff', color: recording ? '#fff' : '#3568b8', border: '1px solid #cfe0fb', cursor: 'pointer', display: 'grid', placeItems: 'center', flexShrink: 0 }}>{recording ? <MicOff size={17}/> : <Mic size={17}/>}</button>
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: 'var(--bg)', borderRadius: 22, padding: '8px 14px', border: '1px solid var(--border)', gap: 8 }}>
                   <input
                     value={text}
@@ -509,7 +566,7 @@ export default function Chat() {
       )}
       {call && <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(15,23,42,.78)', display: 'grid', placeItems: 'center', padding: 16 }}>
         <div style={{ width: 'min(680px,100%)', background: '#101b33', color: '#fff', borderRadius: 20, padding: 20, textAlign: 'center', boxShadow: '0 22px 70px rgba(0,0,0,.35)' }}>
-          <p style={{ margin: 0, opacity: .75 }}>{call.status === 'incoming' ? 'Chamada recebida' : call.status === 'calling' ? 'A chamar...' : call.mode === 'video' ? 'Videochamada em curso' : 'Chamada de voz em curso'}</p>
+          <p style={{ margin: 0, opacity: .75 }}>{call.status === 'incoming' ? 'Chamada recebida' : call.status === 'calling' ? 'A chamar...' : call.status === 'connecting' ? 'A estabelecer ligação segura...' : call.mode === 'video' ? 'Videochamada em curso' : 'Chamada de voz em curso'}</p>
           <h2 style={{ margin: '9px 0 16px' }}>{call.otherName}</h2>
           {call.mode === 'video' ? <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 16 }}><video ref={remoteVideoRef} autoPlay playsInline style={{ width: '100%', minHeight: 180, background: '#050912', borderRadius: 12, objectFit: 'cover' }}/><video ref={localVideoRef} autoPlay muted playsInline style={{ width: '100%', minHeight: 180, background: '#050912', borderRadius: 12, objectFit: 'cover' }}/></div> : <audio ref={remoteVideoRef} autoPlay />}
           {call.status === 'incoming' ? <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}><button onClick={declineCall} style={{ border: 0, borderRadius: 12, padding: '12px 18px', background: '#c0392b', color: '#fff', cursor: 'pointer', fontWeight: 700 }}><PhoneOff size={16} style={{ verticalAlign: 'middle' }}/> Recusar</button><button onClick={acceptCall} style={{ border: 0, borderRadius: 12, padding: '12px 18px', background: '#27894d', color: '#fff', cursor: 'pointer', fontWeight: 700 }}><Phone size={16} style={{ verticalAlign: 'middle' }}/> Aceitar</button></div> : <button onClick={() => closeCall(true)} style={{ border: 0, borderRadius: 12, padding: '12px 20px', background: '#c0392b', color: '#fff', cursor: 'pointer', fontWeight: 700 }}><PhoneOff size={16} style={{ verticalAlign: 'middle' }}/> Encerrar</button>}

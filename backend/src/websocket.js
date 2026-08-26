@@ -42,7 +42,7 @@ function setupWebSocket(server) {
   }, 25000);
 
   wss.on('connection', (ws) => {
-    console.log('ðŸ”Œ Nova conexÃ£o WebSocket');
+    console.log('Nova conexão WebSocket');
 
     ws.on('message', async (data) => {
       try {
@@ -218,7 +218,7 @@ function setupWebSocket(server) {
           case 'live_join': {
             const stream = liveStreams.get(msg.streamId);
             if (!stream) { ws.send(JSON.stringify({ type: 'live_stopped', streamId: msg.streamId })); break; }
-            if (stream.viewers.size >= 10) { ws.send(JSON.stringify({ type: 'live_error', error: 'Stream cheio (mÃ¡x. 10 espectadores)' })); break; }
+            if (stream.viewers.size >= 10) { ws.send(JSON.stringify({ type: 'live_error', error: 'Transmissão cheia (máx. 10 espectadores)' })); break; }
             stream.viewers.set(msg.viewerId, ws);
             const ci2 = clients.get(ws) || {};
             ci2.liveStreamId = msg.streamId;

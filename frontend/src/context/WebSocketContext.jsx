@@ -160,9 +160,10 @@ export function WebSocketProvider({ children }) {
         console.log('WebSocket desconectado');
         setIsConnected(false);
         wsRef.current = null;
-        // Reconnect after 30 seconds (not 3!)
+        // Calls and chat depend on this connection. Reconnect quickly while
+        // keeping a small delay to avoid a tight retry loop.
         if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
-        reconnectTimer.current = setTimeout(connect, 30000);
+        reconnectTimer.current = setTimeout(connect, 3000);
       };
 
       ws.onerror = () => {
@@ -186,7 +187,9 @@ export function WebSocketProvider({ children }) {
   const send = useCallback((data) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(data));
+      return true;
     }
+    return false;
   }, []);
 
   return (

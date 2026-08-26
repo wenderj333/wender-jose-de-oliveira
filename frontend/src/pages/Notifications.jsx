@@ -74,6 +74,7 @@ export default function NotificationsPage() {
     const data = notificationData(notification);
     // A navegação deve ficar dentro da aplicação. URLs externas ou malformadas
     // eram enviadas ao router e podiam deixar a página em branco.
+    if (typeof data.destination === 'string' && data.destination.startsWith('/')) return data.destination;
     if (typeof data.url === 'string' && data.url.startsWith('/')) return data.url;
     switch (notification.type) {
       case 'flagged_post': 

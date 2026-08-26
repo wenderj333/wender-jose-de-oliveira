@@ -5,6 +5,17 @@ const { generateToken, authenticate } = require('../middleware/auth');
 
 // POST /api/auth/register
 const { sendWelcomeEmail } = require('../services/email');
+const { createNotification } = require('./notifications');
+
+function createWelcomeNotification(user) {
+  return createNotification(
+    user.id,
+    'welcome',
+    'Bem-vindo ao Sigo com Fé!',
+    'Que alegria ter você aqui. Complete o seu perfil, encontre irmãos e participe da comunidade.',
+    { destination: `/perfil/${user.id}` }
+  );
+}
 
 router.post('/register', async (req, res) => {
   try {
@@ -28,6 +39,7 @@ router.post('/register', async (req, res) => {
 
     const token = generateToken(user);
     sendWelcomeEmail(email, full_name).catch(()=>{});
+    createWelcomeNotification(user).catch(()=>{});
     res.status(201).json({ user, token });
   } catch (err) {
     console.error('Erro no registro:', err);
@@ -75,6 +87,7 @@ async function socialLoginHandler(req, res) {
 
     // Check if user already exists (by email)
     let user = await User.findByEmail(email);
+    let isNewUser = false;
     if (!user) {
       // Create local user with a random password (won't be used for Google users)
       const crypto = require('crypto');
@@ -85,6 +98,7 @@ async function socialLoginHandler(req, res) {
         full_name: full_name || email,
         role: 'member'
       });
+      isNewUser = true;
       // Update avatar if provided
       if (photo) {
         const { pool } = require('../config/connection');
@@ -96,6 +110,10 @@ async function socialLoginHandler(req, res) {
     // Generate our own JWT for this user
     const token = generateToken(user);
     await User.updateLastSeen(user.id);
+    if (isNewUser) {
+      sendWelcomeEmail(email, full_name || user.full_name).catch(()=>{});
+      createWelcomeNotification(user).catch(()=>{});
+    }
 
     res.json({
       user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, avatar_url: user.avatar_url },
