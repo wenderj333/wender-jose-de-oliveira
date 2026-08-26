@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-const API = "https://sigo-com-fe-api.onrender.com/api";
+const API = (import.meta.env.VITE_API_URL || "https://sigo-com-fe-api.onrender.com") + "/api";
 
 export default function Settings() {
   const { t } = useTranslation();
@@ -16,6 +16,7 @@ export default function Settings() {
     avatar_url: "", cover_url: ""
   });
   const [msg, setMsg] = useState("");
+  const [visibility, setVisibility] = useState({ personal: "friends", church: "public", faith: "public", bio: "public" });
   const [loading, setLoading] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const avatarInputRef = React.useRef(null);
@@ -25,12 +26,19 @@ export default function Settings() {
     if (!token) return;
     fetch(API + "/auth/me", { headers: { Authorization: "Bearer " + token } })
       .then(r => r.json())
-      .then(d => {
-        const u = d?.user || d;
+      .then(async d => {
+        const me = d?.user || d;
+        if (!me?.id) return null;
+        const response = await fetch(API + "/profile/" + me.id, { headers: { Authorization: "Bearer " + token } });
+        const profile = await response.json();
+        return profile?.user || me;
+      })
+      .then(u => {
         if (u?.id) {
           setForm(prev => ({
             ...prev,
             full_name: u.full_name || "",
+            birth_date: u.birthdate || "",
             city: u.city || "",
             country: u.country || "",
             profession: u.profession || "",
@@ -46,6 +54,7 @@ export default function Settings() {
             interests: u.interests || [],
             objectives: u.objectives || []
           }));
+          setVisibility(prev => ({ ...prev, ...(u.profile_visibility || {}) }));
         }
       }).catch(() => {});
   }, []);
@@ -93,7 +102,10 @@ export default function Settings() {
           favorite_verse: form.favorite_verse,
           testimony: form.testimony,
           avatar_url: form.avatar_url,
-          cover_url: form.cover_url
+          cover_url: form.cover_url,
+          birth_date: form.birth_date,
+          ministry: form.ministry,
+          profile_visibility: visibility
         })
       });
       const data = await res.json();
@@ -119,12 +131,35 @@ export default function Settings() {
   const labelStyle = { display: "block", fontWeight: "bold", marginBottom: "5px", color: "#333", fontSize: "14px" };
   const inputStyle = { width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ccc", boxSizing: "border-box", marginBottom: "12px" };
   const radioGroupStyle = { display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "12px" };
+  const privacyOptions = [
+    ["public", "Todos"],
+    ["friends", "Apenas amigos"],
+    ["private", "Só eu"]
+  ];
 
   return (
     <div style={{ padding: "25px", background: "#ffffff", borderRadius: "14px", border: "1px solid #e0e0e0", margin: "20px auto", maxWidth: "700px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", fontFamily: "sans-serif" }}>
       <h2 style={{ color: "#6C3FA0", marginBottom: "20px", borderBottom: "2px solid #f0c040", paddingBottom: "10px", textAlign: "center" }}>{t('profile.title','SOBRE MIM / MEU PERFIL')}</h2>
 
       {msg && <p style={{ color: msg.includes("Erro") ? "#e11d48" : "#16a34a", fontWeight: "bold", marginBottom: "15px", textAlign: "center", fontSize: "16px" }}>{msg}</p>}
+
+      <div style={sectionStyle}>
+        <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: 8, fontSize: "16px", borderBottom: "1px solid #ddd", paddingBottom: 8 }}>🔒 Privacidade do perfil</h3>
+        <p style={{ margin: "0 0 14px", color: "#666", fontSize: 13 }}>Escolha quem pode ver cada grupo de informações. O seu nome e a foto continuam visíveis para que os membros reconheçam você.</p>
+        {[
+          ["personal", "Informações pessoais"],
+          ["church", "Igreja e ministério"],
+          ["faith", "Versículo e testemunho"],
+          ["bio", "Sobre mim"]
+        ].map(([key, label]) => (
+          <label key={key} style={{ ...labelStyle, display: "grid", gridTemplateColumns: "1fr minmax(150px, 220px)", alignItems: "center", gap: 10, marginBottom: 12 }}>
+            <span>{label}</span>
+            <select value={visibility[key]} onChange={event => setVisibility(prev => ({ ...prev, [key]: event.target.value }))} style={{ ...inputStyle, marginBottom: 0 }}>
+              {privacyOptions.map(([value, text]) => <option key={value} value={value}>{text}</option>)}
+            </select>
+          </label>
+        ))}
+      </div>
 
       <div style={{...sectionStyle, textAlign:"center"}}>
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>📸 {t('profile.photoTitle','Foto de Perfil')}</h3>
