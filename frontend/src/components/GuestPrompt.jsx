@@ -81,7 +81,7 @@ export default function GuestPrompt({ show, onClose, feature = 'esta funcionalid
             marginBottom: '8px',
           }}
         >
-          âœ¨ Criar conta grátis
+          ✨ Criar conta grátis
         </button>
 
         <button

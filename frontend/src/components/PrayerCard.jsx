@@ -45,7 +45,7 @@ export default function PrayerCard({ prayer, onPray, user }) {
         <div>
           <div className="prayer-card__author">{prayer.author_name}</div>
           <div className="prayer-card__church">
-            {prayer.church_name && (<><Church size={12} style={{ verticalAlign: 'middle' }} /> {prayer.church_name} Â· </>)}
+            {prayer.church_name && (<><Church size={12} style={{ verticalAlign: 'middle' }} /> {prayer.church_name} · </>)}
             {timeAgo(prayer.created_at)}
           </div>
         </div>

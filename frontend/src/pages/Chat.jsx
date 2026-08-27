@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Send, Search, ArrowLeft, UserPlus, MessageCircle, Check, CheckCheck, Mic, MicOff, Trash2, Phone, PhoneOff, Video } from 'lucide-react';
 import { useWebSocket } from '../context/WebSocketContext';
+import { repairMojibake } from '../utils/textEncoding';
 
 const API = import.meta.env.VITE_API_URL || '';
 const CLOUDINARY_BASE = 'https://api.cloudinary.com/v1_1/degxiuf43/video/upload';
@@ -373,13 +374,13 @@ export default function Chat() {
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span style={{ fontWeight: conv.unread > 0 ? 700 : 500, fontSize: '0.88rem', color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 130 }}>
-                          {conv.other_name}
+                          {repairMojibake(conv.other_name)}
                         </span>
                         <span style={{ fontSize: '0.68rem', color: 'var(--muted)', flexShrink: 0 }}>{formatTime(conv.last_at)}</span>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 2 }}>
                         <span style={{ fontSize: '0.78rem', color: conv.unread > 0 ? 'var(--text)' : 'var(--muted)', fontWeight: conv.unread > 0 ? 600 : 400, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 140 }}>
-                          {String(conv.last_content || '').startsWith(VOICE_PREFIX) ? 'Mensagem de voz' : conv.last_content}
+                          {String(conv.last_content || '').startsWith(VOICE_PREFIX) ? 'Mensagem de voz' : repairMojibake(conv.last_content)}
                         </span>
                         {conv.unread > 0 && (
                           <span style={{ background: 'var(--fb,#4a80d4)', color: 'white', borderRadius: '50%', width: 18, height: 18, fontSize: '0.65rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -412,9 +413,9 @@ export default function Chat() {
                   <Avatar url={otherUser.avatar_url} name={otherUser.full_name} size={38} />
                 </Link>
                 <div>
-                  <p style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--text)', margin: 0 }}>{otherUser.full_name}</p>
+                  <p style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--text)', margin: 0 }}>{repairMojibake(otherUser.full_name)}</p>
                   <p style={{ fontSize: '0.72rem', color: 'var(--muted)', margin: 0 }}>
-                    {friendStatus === 'accepted' ? 'âœ“ Amigos' : friendStatus === 'pending' ? 'â³ Pedido enviado' : ''}
+                    {friendStatus === 'accepted' ? '✓ Amigos' : friendStatus === 'pending' ? '⏳ Pedido enviado' : ''}
                   </p>
                 </div>
                 <div style={{ marginLeft: 'auto', display: 'flex', gap: 7 }}>
@@ -492,7 +493,7 @@ export default function Chat() {
                           wordBreak: 'break-word',
                           boxShadow: isMe ? '0 2px 8px rgba(53,104,184,0.25)' : '0 1px 4px rgba(0,0,0,0.06)',
                         }}>
-                          {String(msg.content || '').startsWith(VOICE_PREFIX) ? <audio controls preload="metadata" src={msg.content.slice(VOICE_PREFIX.length)} style={{ display: 'block', maxWidth: 230, height: 34 }} /> : msg.content}
+                  {String(msg.content || '').startsWith(VOICE_PREFIX) ? <audio controls preload="metadata" src={msg.content.slice(VOICE_PREFIX.length)} style={{ display: 'block', maxWidth: 230, height: 34 }} /> : repairMojibake(msg.content)}
                           {translations[msg.id] && (
                             <div style={{ marginTop: 6, paddingTop: 6, borderTop: isMe ? '1px solid rgba(255,255,255,0.3)' : '1px solid var(--border)', fontSize: '0.8rem', fontStyle: 'italic', opacity: 0.85 }}>
                               🌐 {translations[msg.id]}

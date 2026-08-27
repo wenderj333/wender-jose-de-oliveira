@@ -16,15 +16,15 @@ const API = `${API_BASE}/api`;
 
 const REASONS = [
 
-  { value: 'inappropriate', icon: 'Ã°Å¸Å¡Â«' },
+  { value: 'inappropriate', icon: '🚫' },
 
-  { value: 'disrespectful', icon: 'Ã°Å¸ËÂ¡' },
+  { value: 'disrespectful', icon: '😡' },
 
-  { value: 'spam', icon: 'Ã°Å¸âÂ¢' },
+  { value: 'spam', icon: '📢' },
 
-  { value: 'harassment', icon: 'Ã°Å¸ËÂ°' },
+  { value: 'harassment', icon: '😰' },
 
-  { value: 'other', icon: 'Ã¢Ââ' },
+  { value: 'other', icon: '❓' },
 
 ];
 
@@ -138,7 +138,7 @@ export default function ReportModal({ type, targetId, targetName, onClose }) {
 
           <h2 style={{ margin: 0, fontSize: 18, color: 'var(--text, #1a1a2e)', fontWeight: 700 }}>
 
-            Ã°Å¸Å¡Â© {t('report.title')} {targetName ? `Ã¢â¬â ${targetName}` : ''}
+            🚩 {t('report.title')} {targetName ? `— ${targetName}` : ''}
 
           </h2>
 
@@ -152,7 +152,7 @@ export default function ReportModal({ type, targetId, targetName, onClose }) {
 
         <p style={{ margin: '0 0 20px', fontSize: 13, color: '#888' }}>
 
-          {t('report.subtitle')} Ã¢ÅÂÃ¯Â¸Â
+          {t('report.subtitle')} ✝️
 
         </p>
 
@@ -164,7 +164,7 @@ export default function ReportModal({ type, targetId, targetName, onClose }) {
 
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
 
-            <div style={{ fontSize: 48, marginBottom: 12 }}>Ã¢Åâ¦</div>
+            <div style={{ fontSize: 48, marginBottom: 12 }}>✅</div>
 
             <p style={{ fontWeight: 700, color: '#2e7d32', fontSize: 15, margin: '0 0 20px' }}>
 
