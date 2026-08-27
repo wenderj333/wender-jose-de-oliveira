@@ -776,6 +776,7 @@ export default function App() {
             <Route path="/" element={<MuralGrid />} />
 
             <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route path="/register" element={<Register />} />
 
             <Route path="/perfil/:userId" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
