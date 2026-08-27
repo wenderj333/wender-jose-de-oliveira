@@ -2788,6 +2788,10 @@ ioduelo.on('connection', (socket) => {
       duelEsperando = { socket, nome, lang, foto };
       socket.emit('status', 'Aguardando...');
     } else {
+      if (duelEsperando.socket.id === socket.id) {
+        socket.emit('status', 'Aguardando um adversário real...');
+        return;
+      }
       const op = duelEsperando; duelEsperando = null;
       const sid = 'duelo_' + Date.now();
       socket.join(sid); op.socket.join(sid);
@@ -2968,7 +2972,7 @@ let pixValor = 'R$ 10,00';
 // Rota para ver ranking
 
 app.get('/api/duelo/online-jogadores', (req, res) => {
-  const jogadores = Object.values(jogadoresOnline).map(j => j.nome);
+  const jogadores = Object.values(jogadoresOnline).map(j => ({ nome: j.nome, foto: j.foto || null }));
   res.json({ jogadores });
 });
 
