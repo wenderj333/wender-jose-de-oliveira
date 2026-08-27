@@ -2981,7 +2981,9 @@ app.get('/api/duelo/online', (req, res) => {
 
 app.get('/api/duelo/ranking', async (req, res) => {
   try {
-    const r = await pool.query('SELECT nome,pontos,foto FROM duelo_ranking ORDER BY pontos DESC LIMIT 10');
+    const r = await pool.query(`SELECT nome, pontos, foto,
+      ROW_NUMBER() OVER (ORDER BY pontos DESC, updated_at ASC) AS posicao
+      FROM duelo_ranking ORDER BY pontos DESC, updated_at ASC LIMIT 10`);
     res.json({ ranking: r.rows, pix: pixValor });
   } catch(e) {
     res.json({ ranking: [], pix: pixValor });
@@ -2991,7 +2993,7 @@ app.get('/api/duelo/ranking', async (req, res) => {
 // Rota admin para activar/desactivar PIX
 app.post('/api/duelo/pix', (req, res) => {
   const { token, ativo, valor } = req.body;
-  if (token !== process.env.ADMIN_SECRET && token !== 'sigocomfe-admin-2026') {
+  if (!process.env.ADMIN_SECRET || token !== process.env.ADMIN_SECRET) {
     return res.status(401).json({ error: 'Nao autorizado' });
   }
   pixAtivo = ativo;
@@ -3004,7 +3006,7 @@ app.post('/api/duelo/pix', (req, res) => {
 // Rota para zerar ranking manualmente
 app.post('/api/duelo/zerar', (req, res) => {
   const { token } = req.body;
-  if (token !== process.env.ADMIN_SECRET && token !== 'sigocomfe-admin-2026') {
+  if (!process.env.ADMIN_SECRET || token !== process.env.ADMIN_SECRET) {
     return res.status(401).json({ error: 'Nao autorizado' });
   }
   rankingSemanal = {};

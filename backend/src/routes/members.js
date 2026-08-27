@@ -3,10 +3,10 @@ const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
 
-const ADMIN_SECRET = 'sigo333wenderj';
+const ADMIN_SECRET = process.env.ADMIN_SECRET;
 
 router.get('/admin', async (req, res) => {
-  if (req.headers['x-admin-secret'] !== ADMIN_SECRET) {
+  if (!ADMIN_SECRET || req.headers['x-admin-secret'] !== ADMIN_SECRET) {
     return res.status(401).json({ error: 'Nao autorizado' });
   }
   try {

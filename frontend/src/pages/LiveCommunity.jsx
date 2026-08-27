@@ -11,17 +11,23 @@ import { repairMojibake } from '../utils/textEncoding';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const card = { background: '#fff', border: '1px solid #e0e6f5', borderRadius: 18, boxShadow: '0 8px 28px rgba(74,128,212,0.08)' };
-const ROOMS = [
-  { id: 'pt', flag: '🇧🇷', title: 'Sala em Português', subtitle: 'Brasil, Portugal e países lusófonos' },
-  { id: 'es', flag: '🇪🇸', title: 'Sala en Español', subtitle: 'Hable con hermanos de habla hispana' },
-  { id: 'de', flag: '🇩🇪', title: 'Deutschsprachiger Raum', subtitle: 'Gemeinschaft auf Deutsch' },
-  { id: 'en', flag: '🇬🇧', title: 'English Prayer Room', subtitle: 'Christian community in English' },
-];
+const ROOM_IDS = ['pt', 'es', 'de', 'en'];
+const ROOM_UI = {
+  pt: { choose: 'Escolha uma sala', chooseDesc: 'Entre na conversa no idioma que prefere.', private: 'Conversas privadas', info: 'Informações da sala', report: 'Denunciar utilizador', hide: 'Ocultar mensagens desta pessoa', emoji: 'Adicionar emoji', send: 'Enviar mensagem', next: 'Próxima música', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brasil, Portugal e países lusófonos' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Fale com irmãos de fala espanhola' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Gemeinschaft auf Deutsch' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Christian community in English' }] },
+  es: { choose: 'Elige una sala', chooseDesc: 'Entra en la conversación en el idioma que prefieras.', private: 'Conversaciones privadas', info: 'Información de la sala', report: 'Denunciar usuario', hide: 'Ocultar mensajes de esta persona', emoji: 'Añadir emoji', send: 'Enviar mensaje', next: 'Siguiente canción', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brasil, Portugal y países lusófonos' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Habla con hermanos hispanohablantes' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Comunidad en alemán' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Comunidad cristiana en inglés' }] },
+  en: { choose: 'Choose a room', chooseDesc: 'Join the conversation in your preferred language.', private: 'Private conversations', info: 'Room information', report: 'Report user', hide: 'Hide this person’s messages', emoji: 'Add emoji', send: 'Send message', next: 'Next song', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brazil, Portugal and Lusophone countries' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Speak with Spanish-speaking believers' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'German-speaking community' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Christian community in English' }] },
+  de: { choose: 'Wähle einen Raum', chooseDesc: 'Tritt der Unterhaltung in deiner bevorzugten Sprache bei.', private: 'Private Gespräche', info: 'Rauminformationen', report: 'Nutzer melden', hide: 'Nachrichten dieser Person ausblenden', emoji: 'Emoji hinzufügen', send: 'Nachricht senden', next: 'Nächstes Lied', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brasilien, Portugal und lusophone Länder' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Sprich mit spanischsprachigen Glaubensgeschwistern' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Deutschsprachige Gemeinschaft' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Christliche Gemeinschaft auf Englisch' }] },
+  fr: { choose: 'Choisissez un salon', chooseDesc: 'Entrez dans la conversation dans la langue de votre choix.', private: 'Conversations privées', info: 'Informations du salon', report: 'Signaler cet utilisateur', hide: 'Masquer les messages de cette personne', emoji: 'Ajouter un emoji', send: 'Envoyer le message', next: 'Chanson suivante', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brésil, Portugal et pays lusophones' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Échangez avec des croyants hispanophones' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Communauté germanophone' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Communauté chrétienne anglophone' }] },
+  ro: { choose: 'Alege o cameră', chooseDesc: 'Intră în conversație în limba preferată.', private: 'Conversații private', info: 'Informații despre cameră', report: 'Raportează utilizatorul', hide: 'Ascunde mesajele acestei persoane', emoji: 'Adaugă emoji', send: 'Trimite mesajul', next: 'Următoarea melodie', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brazilia, Portugalia și țările lusofone' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Vorbește cu creștini vorbitori de spaniolă' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Comunitate de limbă germană' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Comunitate creștină în engleză' }] },
+  ru: { choose: 'Выберите комнату', chooseDesc: 'Присоединяйтесь к беседе на удобном для вас языке.', private: 'Личные беседы', info: 'Информация о комнате', report: 'Пожаловаться на пользователя', hide: 'Скрыть сообщения этого человека', emoji: 'Добавить эмодзи', send: 'Отправить сообщение', next: 'Следующая песня', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Бразилия, Португалия и португалоязычные страны' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Общайтесь с испаноязычными христианами' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Немецкоязычное сообщество' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Христианское сообщество на английском' }] },
+};
+const getRoomUi = language => ROOM_UI[language?.split('-')[0]] || ROOM_UI.pt;
 
 export default function LiveCommunity() {
   const { user, isGuest } = useAuth();
   const { i18n } = useTranslation();
   const c = getChristianChatCopy(i18n.language);
+  const roomUi = getRoomUi(i18n.language);
   const { send, on, off, isConnected } = useWebSocket();
   const [songs, setSongs] = useState([]);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
@@ -29,7 +35,7 @@ export default function LiveCommunity() {
   const [messageInput, setMessageInput] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
   const [onlineCount, setOnlineCount] = useState(0);
-  const [roomId, setRoomId] = useState(() => (ROOMS.some(room => room.id === i18n.language?.slice(0, 2)) ? i18n.language.slice(0, 2) : 'pt'));
+  const [roomId, setRoomId] = useState(() => (ROOM_IDS.includes(i18n.language?.slice(0, 2)) ? i18n.language.slice(0, 2) : 'pt'));
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
   const [reportMessage, setReportMessage] = useState(null);
   const [hiddenUserIds, setHiddenUserIds] = useState(() => new Set());
@@ -43,7 +49,7 @@ export default function LiveCommunity() {
   // while one is in Portuguese and the other is in Spanish.
   useEffect(() => {
     const selectedLanguage = i18n.language?.slice(0, 2);
-    if (ROOMS.some(room => room.id === selectedLanguage)) setRoomId(selectedLanguage);
+    if (ROOM_IDS.includes(selectedLanguage)) setRoomId(selectedLanguage);
   }, [i18n.language]);
 
   useEffect(() => {
@@ -143,29 +149,29 @@ export default function LiveCommunity() {
       </div>
     </section>
     <div style={{ maxWidth: 1120, margin: '0 auto 18px', padding: '0 8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}><div><h2 style={{ margin: 0, fontSize: '1.1rem' }}>Escolha uma sala</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>Entre na conversa no idioma que prefere.</p></div><Link to="/mensagens" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: '#3568b8', textDecoration: 'none', fontWeight: 800, fontSize: 14 }}><LockKeyhole size={16}/> Conversas privadas <ChevronRight size={16}/></Link></div>
-      <div className="christian-room-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,minmax(0,1fr))', gap: 10 }}>
-        {ROOMS.map(room => <button key={room.id} type="button" onClick={() => setRoomId(room.id)} style={{ textAlign: 'left', padding: 14, borderRadius: 15, border: roomId === room.id ? '2px solid #3568b8' : '1px solid #dce4f2', background: roomId === room.id ? '#edf4ff' : '#fff', cursor: 'pointer', boxShadow: roomId === room.id ? '0 7px 18px rgba(53,104,184,.12)' : 'none' }}><div style={{ fontSize: 21, marginBottom: 7 }}>{room.flag}</div><strong style={{ display: 'block', color: '#1e2240', fontSize: 13 }}>{room.title}</strong><span style={{ display: 'block', color: '#68738f', fontSize: 11, marginTop: 4, lineHeight: 1.35 }}>{room.subtitle}</span></button>)}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 14, flexWrap: 'wrap' }}><div><h2 style={{ margin: 0, fontSize: '1.1rem' }}>{roomUi.choose}</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>{roomUi.chooseDesc}</p></div><Link to="/mensagens" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: '#3568b8', textDecoration: 'none', fontWeight: 800, fontSize: 14 }}><LockKeyhole size={16}/> {roomUi.private} <ChevronRight size={16}/></Link></div>
+      <div className="christian-room-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,minmax(118px,1fr))', gap: 18, justifyItems: 'center' }}>
+        {roomUi.rooms.map(room => <button key={room.id} type="button" onClick={() => setRoomId(room.id)} aria-label={room.title} style={{ width: '100%', maxWidth: 156, aspectRatio: '1', textAlign: 'center', padding: 13, borderRadius: '50%', border: roomId === room.id ? '3px solid #3568b8' : '1px solid #dce4f2', background: roomId === room.id ? 'linear-gradient(145deg,#e8f2ff,#f8fbff)' : '#fff', cursor: 'pointer', boxShadow: roomId === room.id ? '0 10px 22px rgba(53,104,184,.16)' : '0 5px 13px rgba(30,34,64,.06)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', transition: 'transform .2s, box-shadow .2s' }} onMouseEnter={event => { event.currentTarget.style.transform = 'translateY(-3px)'; }} onMouseLeave={event => { event.currentTarget.style.transform = 'translateY(0)'; }}><div style={{ fontSize: 27, marginBottom: 5 }}>{room.flag}</div><strong style={{ display: 'block', color: '#1e2240', fontSize: 13 }}>{room.title}</strong><span style={{ display: 'block', color: '#68738f', fontSize: 10, marginTop: 4, lineHeight: 1.25, maxWidth: 112 }}>{room.subtitle}</span></button>)}
       </div>
     </div>
     <div className="christian-chat-layout" style={{ maxWidth: 1120, margin: '0 auto', padding: '0 8px', display: 'grid', gridTemplateColumns: 'minmax(0,1.8fr) minmax(260px,.8fr)', gap: 18 }}>
       <section style={{ ...card, minHeight: 540, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <header style={{ padding: '18px 20px', borderBottom: '1px solid #e0e6f5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          <div><h2 style={{ margin: 0, fontSize: '1.15rem' }}>{ROOMS.find(room => room.id === roomId)?.title || c.conversation}</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>{c.share}</p></div>
+          <div><h2 style={{ margin: 0, fontSize: '1.15rem' }}>{roomUi.rooms.find(room => room.id === roomId)?.title || c.conversation}</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>{c.share}</p></div>
           <span style={{ background: onlineCount ? '#eaf7ef' : '#f4f6fa', color: onlineCount ? '#287a4b' : '#667085', borderRadius: 999, padding: '8px 10px', fontSize: 12, fontWeight: 700 }}><Users size={14} style={{ verticalAlign: 'middle', marginRight: 5 }}/>{onlineLabel}</span>
         </header>
         <div style={{ flex: 1, overflowY: 'auto', padding: 20, background: '#fbfcff' }}>
           {!chatMessages.length && <div style={{ maxWidth: 390, margin: '80px auto 0', textAlign: 'center', color: '#667085' }}><MessageCircle size={35} style={{ color: '#4a80d4', marginBottom: 10 }}/><h3 style={{ margin: '0 0 8px', color: '#1e2240' }}>{c.ready}</h3><p style={{ margin: 0, lineHeight: 1.6 }}>{c.empty}</p></div>}
-          {chatMessages.filter(message => !hiddenUserIds.has(message.userId)).map((message, index) => <article key={message.id || `${message.userName}-${index}`} style={{ marginBottom: 12, padding: '11px 13px', background: '#fff', border: '1px solid #e6ebf6', borderRadius: '4px 14px 14px 14px', maxWidth: '85%' }}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><strong style={{ color: '#3568b8', fontSize: 13, flex: 1 }}>{repairMojibake(message.userName) || 'Membro'}</strong>{message.userId && message.userId !== user?.id && <><button type="button" onClick={() => setReportMessage(message)} title="Denunciar utilizador" style={{ border: 0, background: 'transparent', color: '#c73c3c', cursor: 'pointer', padding: 3 }}><Flag size={15}/></button><button type="button" onClick={() => hideUser(message.userId)} title="Ocultar mensagens desta pessoa" style={{ border: 0, background: 'transparent', color: '#77829a', cursor: 'pointer', padding: 3 }}><EyeOff size={15}/></button></>}</div><p style={{ margin: '4px 0 0', lineHeight: 1.45 }}>{repairMojibake(message.text || message.message)}</p></article>)}
+          {chatMessages.filter(message => !hiddenUserIds.has(message.userId)).map((message, index) => <article key={message.id || `${message.userName}-${index}`} style={{ marginBottom: 12, padding: '11px 13px', background: '#fff', border: '1px solid #e6ebf6', borderRadius: '4px 14px 14px 14px', maxWidth: '85%' }}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><strong style={{ color: '#3568b8', fontSize: 13, flex: 1 }}>{repairMojibake(message.userName) || 'Membro'}</strong>{message.userId && message.userId !== user?.id && <><button type="button" onClick={() => setReportMessage(message)} title={roomUi.report} style={{ border: 0, background: 'transparent', color: '#c73c3c', cursor: 'pointer', padding: 3 }}><Flag size={15}/></button><button type="button" onClick={() => hideUser(message.userId)} title={roomUi.hide} style={{ border: 0, background: 'transparent', color: '#77829a', cursor: 'pointer', padding: 3 }}><EyeOff size={15}/></button></>}</div><p style={{ margin: '4px 0 0', lineHeight: 1.45 }}>{repairMojibake(message.text || message.message)}</p></article>)}
           <div ref={chatEndRef} />
         </div>
         <footer style={{ padding: 14, borderTop: '1px solid #e0e6f5', display: 'flex', gap: 9, position: 'relative' }}>
           {showEmojis && <div style={{ position: 'absolute', left: 14, bottom: 66, zIndex: 4, display: 'flex', gap: 4, flexWrap: 'wrap', width: 238, padding: 9, borderRadius: 12, border: '1px solid #d7dfef', background: '#fff', boxShadow: '0 10px 25px rgba(30,34,64,.18)' }}>
             {['🙏', '❤️', '😊', '🙌', '📖', '✨', '🕊️', '🔥', '👏', '🤍', '🌿', '💬'].map(emoji => <button key={emoji} type="button" onClick={() => addEmoji(emoji)} aria-label={`Adicionar ${emoji}`} style={{ width: 32, height: 32, border: 0, borderRadius: 8, background: '#f5f8ff', cursor: 'pointer', fontSize: 18 }}>{emoji}</button>)}
           </div>}
-          <button type="button" onClick={() => setShowEmojis(open => !open)} aria-label="Adicionar emoji" style={{ width: 42, border: '1px solid #d7dfef', borderRadius: 12, background: showEmojis ? '#eaf2ff' : '#fff', color: '#3568b8', cursor: 'pointer', display: 'grid', placeItems: 'center' }}><Smile size={19}/></button>
+          <button type="button" onClick={() => setShowEmojis(open => !open)} aria-label={roomUi.emoji} style={{ width: 42, border: '1px solid #d7dfef', borderRadius: 12, background: showEmojis ? '#eaf2ff' : '#fff', color: '#3568b8', cursor: 'pointer', display: 'grid', placeItems: 'center' }}><Smile size={19}/></button>
           <input value={messageInput} onChange={event => setMessageInput(event.target.value)} onKeyDown={event => event.key === 'Enter' && sendMessage()} onFocus={() => (!user || isGuest) && setShowGuestPrompt(true)} placeholder={user && !isGuest ? c.write : c.account} readOnly={!user || isGuest} style={{ minWidth: 0, flex: 1, padding: '12px 14px', border: '1px solid #d7dfef', borderRadius: 12, fontSize: 14, outlineColor: '#4a80d4' }}/>
-          <button onClick={sendMessage} aria-label="Enviar mensagem" style={{ width: 46, border: 0, borderRadius: 12, background: '#3568b8', color: '#fff', cursor: 'pointer', display: 'grid', placeItems: 'center' }}><Send size={19}/></button>
+          <button onClick={sendMessage} aria-label={roomUi.send} style={{ width: 46, border: 0, borderRadius: 12, background: '#3568b8', color: '#fff', cursor: 'pointer', display: 'grid', placeItems: 'center' }}><Send size={19}/></button>
         </footer>
       </section>
       <aside className="chat-info-desktop" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -183,7 +189,7 @@ export default function LiveCommunity() {
             <button onClick={toggleMusic} disabled={!songs.length} style={{ flex: 1, border: 0, borderRadius: 10, padding: 10, background: '#6c3fa0', color: '#fff', cursor: songs.length ? 'pointer' : 'not-allowed', fontWeight: 700 }}>
               {isPlaying ? <span><Pause size={15} style={{ verticalAlign: 'middle' }}/> {c.pause}</span> : <span><Play size={15} style={{ verticalAlign: 'middle' }}/> {c.listen}</span>}
             </button>
-            <button onClick={nextSong} disabled={!songs.length} aria-label="Próxima música" style={{ width: 42, border: '1px solid #d7dfef', borderRadius: 10, background: '#fff', cursor: 'pointer' }}><Volume2 size={17}/></button>
+            <button onClick={nextSong} disabled={!songs.length} aria-label={roomUi.next} style={{ width: 42, border: '1px solid #d7dfef', borderRadius: 10, background: '#fff', cursor: 'pointer' }}><Volume2 size={17}/></button>
           </div>
           <audio ref={audioRef} onEnded={nextSong} onPause={() => setIsPlaying(false)} onPlay={() => setIsPlaying(true)} />
         </section>
@@ -191,7 +197,7 @@ export default function LiveCommunity() {
     </div>
     <section className="chat-info-mobile" style={{ ...card, maxWidth: 1120, margin: '14px auto 0', padding: 14 }}>
       <button type="button" onClick={() => setShowRoomInfo(open => !open)} style={{ width: '100%', border: 0, background: 'transparent', padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#3568b8', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><Info size={19}/> Informações da sala</span><ChevronRight size={18} style={{ transform: showRoomInfo ? 'rotate(90deg)' : 'none', transition: 'transform .2s' }}/>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><Info size={19}/> {roomUi.info}</span><ChevronRight size={18} style={{ transform: showRoomInfo ? 'rotate(90deg)' : 'none', transition: 'transform .2s' }}/>
       </button>
       {showRoomInfo && <div style={{ marginTop: 14, borderTop: '1px solid #e0e6f5', paddingTop: 13, color: '#59627d', fontSize: 13, lineHeight: 1.65 }}>
         <strong style={{ color: '#1e2240' }}>{c.rules}</strong>
