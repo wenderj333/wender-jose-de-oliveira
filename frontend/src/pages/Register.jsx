@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, UserPlus, Mail, Lock, User, MessageCircle, Heart, ShieldCheck } from 'lucide-react';
+import { BookOpen, UserPlus, Mail, Lock, User, MessageCircle, Heart, ShieldCheck, Music, Sparkles, Users } from 'lucide-react';
 import { getChristianChatCopy } from '../i18n/christianChatCopy';
 
 // Google Analytics conversion events
@@ -14,11 +14,22 @@ function trackSignUpEvent() {
   }
 }
 
+const REGISTER_STORY = {
+  pt: { title: <>A verdadeira alegria começa <span style={{ color: '#b5801c' }}>com fé.</span></>, prayer: 'Oração e adoração', worship: 'Louvor que inspira', bible: 'Bíblia, amigos e esperança', free: 'Conta gratuita', community: 'Comunidade cristã' },
+  es: { title: <>La verdadera alegría comienza <span style={{ color: '#b5801c' }}>con fe.</span></>, prayer: 'Oración y adoración', worship: 'Alabanza que inspira', bible: 'Biblia, amigos y esperanza', free: 'Cuenta gratuita', community: 'Comunidad cristiana' },
+  en: { title: <>True joy begins <span style={{ color: '#b5801c' }}>with faith.</span></>, prayer: 'Prayer and worship', worship: 'Worship that inspires', bible: 'Bible, friends and hope', free: 'Free account', community: 'Christian community' },
+  de: { title: <>Wahre Freude beginnt <span style={{ color: '#b5801c' }}>mit Glauben.</span></>, prayer: 'Gebet und Anbetung', worship: 'Lobpreis, der inspiriert', bible: 'Bibel, Freunde und Hoffnung', free: 'Kostenloses Konto', community: 'Christliche Gemeinschaft' },
+  fr: { title: <>La vraie joie commence <span style={{ color: '#b5801c' }}>avec la foi.</span></>, prayer: 'Prière et adoration', worship: 'Louange qui inspire', bible: 'Bible, amis et espérance', free: 'Compte gratuit', community: 'Communauté chrétienne' },
+  ro: { title: <>Adevărata bucurie începe <span style={{ color: '#b5801c' }}>cu credință.</span></>, prayer: 'Rugăciune și închinare', worship: 'Închinare care inspiră', bible: 'Biblie, prieteni și speranță', free: 'Cont gratuit', community: 'Comunitate creștină' },
+  ru: { title: <>Истинная радость начинается <span style={{ color: '#b5801c' }}>с веры.</span></>, prayer: 'Молитва и поклонение', worship: 'Вдохновляющее прославление', bible: 'Библия, друзья и надежда', free: 'Бесплатный аккаунт', community: 'Христианское сообщество' },
+};
+
 export default function Register() {
   const { register, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const c = getChristianChatCopy(i18n.language);
+  const story = REGISTER_STORY[i18n.language?.split('-')[0]] || REGISTER_STORY.pt;
   const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'member' });
   const [error, setError] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -46,19 +57,21 @@ export default function Register() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', padding: '32px 16px', background: 'linear-gradient(145deg,#f4f8ff 0%,#ffffff 62%)' }}>
-      <div className="register-layout" style={{ maxWidth: 980, margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(280px,.9fr) minmax(360px,1fr)', gap: 28, alignItems: 'center' }}>
-      <aside style={{ color: '#1e2240' }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#eaf2ff', color: '#3568b8', padding: '8px 12px', borderRadius: 99, fontWeight: 800, fontSize: 13 }}><MessageCircle size={16}/> {c.brand}</span>
-        <h2 style={{ fontSize: 'clamp(2rem,4vw,3.2rem)', lineHeight: 1.08, margin: '17px 0 12px', letterSpacing: '-.03em' }}>{c.signupTitle}</h2>
-        <p style={{ color: '#59627d', fontSize: '1.03rem', lineHeight: 1.65, marginBottom: 22 }}>{c.signupDesc}</p>
-        <div style={{ display: 'grid', gap: 12 }}>
-          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><MessageCircle size={20} color="#3568b8" style={{ flexShrink: 0 }}/><div><strong>{c.liveFeature}</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>{c.liveFeatureDesc}</p></div></div>
-          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><Heart size={20} color="#c49a28" style={{ flexShrink: 0 }}/><div><strong>{c.prayerFeature}</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>{c.prayerFeatureDesc}</p></div></div>
-          <div style={{ display: 'flex', gap: 11, alignItems: 'flex-start', background: '#fff', border: '1px solid #e0e6f5', borderRadius: 14, padding: 14 }}><ShieldCheck size={20} color="#6c3fa0" style={{ flexShrink: 0 }}/><div><strong>{c.safeFeature}</strong><p style={{ margin: '3px 0 0', color: '#667085', fontSize: 13, lineHeight: 1.45 }}>{c.safeFeatureDesc}</p></div></div>
+    <div className="register-page" style={{ minHeight: '100vh', padding: 'clamp(16px,4vw,48px)', background: 'radial-gradient(circle at 8% 12%,#f5ebd2 0,transparent 23%), linear-gradient(145deg,#fbfaf8 0%,#f1f3fa 58%,#fff 100%)' }}>
+      <div className="register-layout" style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(300px,1.1fr) minmax(360px,.9fr)', gap: 'clamp(30px,6vw,86px)', alignItems: 'center' }}>
+      <aside className="register-story" style={{ color: '#231b3a' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#eee6fb', color: '#633da0', padding: '8px 13px', borderRadius: 99, fontWeight: 800, fontSize: 13 }}><Sparkles size={16}/> {c.brand}</span>
+        <h2 style={{ fontSize: 'clamp(2.45rem,5vw,4.65rem)', lineHeight: .98, margin: '20px 0 16px', letterSpacing: '-.055em', maxWidth: 590 }}>{story.title}</h2>
+        <p style={{ color: '#626b80', fontSize: '1.04rem', lineHeight: 1.65, margin: '0 0 27px', maxWidth: 540 }}>{c.signupDesc}</p>
+        <div className="faith-collage" style={{ position: 'relative', minHeight: 392, maxWidth: 570, margin: '0 auto 18px' }}>
+          <div style={{ position: 'absolute', left: 36, top: 26, width: '52%', height: 278, overflow: 'hidden', borderRadius: '28px 28px 65px 28px', background: 'linear-gradient(145deg,#271044,#6e3fa4)', boxShadow: '0 22px 45px rgba(53,30,87,.24)' }}><img src="/fundo-consagracao.png" alt={story.prayer} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: .88 }}/><div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(39,16,68,.62),transparent 65%)' }}/><span style={{ position: 'absolute', left: 16, bottom: 15, color: '#fff', display: 'inline-flex', alignItems: 'center', gap: 7, fontWeight: 800, fontSize: 13 }}><Heart size={16} fill="currentColor"/> {story.prayer}</span></div>
+          <div style={{ position: 'absolute', right: 24, top: 95, width: '42%', height: 210, padding: 13, borderRadius: 24, background: '#fff', boxShadow: '0 18px 36px rgba(35,27,58,.18)', transform: 'rotate(2deg)' }}><img src="/avatar7.jpg" alt={story.community} style={{ width: '100%', height: 137, objectFit: 'cover', borderRadius: 15 }}/><div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingTop: 11, color: '#55358a', fontWeight: 800, fontSize: 13 }}><Music size={17}/> {story.worship}</div></div>
+          <div style={{ position: 'absolute', left: 0, bottom: 5, width: 154, height: 154, display: 'grid', placeItems: 'center', borderRadius: '50%', border: '7px solid #fff', background: 'linear-gradient(145deg,#e6bd50,#7242a7)', boxShadow: '0 13px 27px rgba(70,40,110,.22)', overflow: 'hidden' }}><img src="/avatar3.jpg" alt="Membro da comunidade Sigo com Fé" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/></div>
+          <div style={{ position: 'absolute', right: 0, bottom: 8, display: 'flex', alignItems: 'center', gap: 9, padding: '12px 15px', borderRadius: 18, background: '#fff', boxShadow: '0 10px 25px rgba(35,27,58,.13)', color: '#5e3d95', fontWeight: 800, fontSize: 13 }}><BookOpen size={19} color="#b5801c"/> {story.bible}</div>
         </div>
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', color: '#6b7486', fontSize: 13, fontWeight: 700 }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><ShieldCheck size={16} color="#5d987a"/> {story.free}</span><span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><Users size={16} color="#5d987a"/> {story.community}</span></div>
       </aside>
-      <div className="card auth-card" style={{ margin: 0, boxShadow: '0 15px 40px rgba(53,104,184,.12)' }}>
+      <div className="card auth-card register-card" style={{ margin: 0, background: 'rgba(255,255,255,.94)', borderRadius: 26, border: '1px solid rgba(92,65,139,.12)', boxShadow: '0 24px 60px rgba(53,36,91,.14)', padding: 'clamp(24px,4vw,42px)' }}>
         <div className="auth-brand">
           <BookOpen size={40} style={{ color: 'var(--gold)' }} />
           <h1>{t('brand')}</h1>
@@ -128,7 +141,7 @@ export default function Register() {
         </div>
       </div>
       </div>
-      <style>{`@media(max-width:760px){.register-layout{grid-template-columns:1fr !important}.register-layout aside{display:none}}`}</style>
+      <style>{`.register-card .auth-brand h1{color:#2b1b47}.register-card .auth-brand p{color:#687184}.register-card .form-group input{border-radius:12px;border-color:#dcd9e6;padding:13px 14px}.register-card .btn-primary{background:linear-gradient(135deg,#633da0,#8255b7);border-radius:13px;box-shadow:0 10px 20px rgba(99,61,160,.23)}.register-card .btn-google{border-radius:13px}.register-card .auth-divider{margin:20px 0}@media(max-width:820px){.register-layout{grid-template-columns:1fr !important}.register-story{max-width:620px;margin:0 auto}.faith-collage{min-height:340px !important}}@media(max-width:520px){.register-page{padding:16px 12px !important}.register-story h2{font-size:2.5rem !important}.faith-collage{transform:scale(.9);transform-origin:top center;margin-bottom:-15px !important}.register-card{padding:24px 18px !important}}`}</style>
     </div>
   );
 }
