@@ -78,7 +78,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 
         ...content.paragraphs,
 
-        ...content.verses.map(v => v.text + ' Ã¢â¬â ' + v.ref),
+        ...content.verses.map(v => v.text + ' — ' + v.ref),
 
         content.challenge,
 
@@ -144,7 +144,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 
     paragraphs: content.paragraphs,
 
-    verses: content.verses.map(v => v.text + '\nÃ¢â¬â ' + v.ref),
+    verses: content.verses.map(v => v.text + '\n— ' + v.ref),
 
     challenge: content.challenge,
 
@@ -190,13 +190,13 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 
         }}>
 
-          Ã¢â Â Voltar ao Curso
+          ← Voltar ao Curso
 
         </button>
 
         <div style={{ color: '#aaa', fontSize: '0.9rem', fontWeight: 600 }}>
 
-          LiÃ§Ã£o {currentIndex + 1} de {totalLessons}
+          Lição {currentIndex + 1} de {totalLessons}
 
         </div>
 
@@ -212,7 +212,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 
         }}>
 
-          {translating ? 'Ã¢ÂÂ³ Traduzindo...' : 'Ã°Å¸ÅÂ Traduzir'}
+          {translating ? '⏳ Traduzindo...' : '🌐 Traduzir'}
 
         </button>
 
@@ -262,7 +262,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 
           }}>
 
-            Ã°Å¸ââ ConteÃºdo VIP Premium
+            👑 Conteúdo VIP Premium
 
           </span>
 
@@ -368,7 +368,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 
             }}>
 
-              Ã°Å¸ââ {translated ? c.verses[i].split('Ã¢â¬â')[1]?.trim() || verse.ref : verse.ref}
+              📖 {translated ? c.verses[i].split('—')[1]?.trim() || verse.ref : verse.ref}
 
             </p>
 
@@ -390,7 +390,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 
         }}>
 
-          <div style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>Ã°Å¸Å½Â¯ Desafio PrÃ¡tico</div>
+          <div style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🎯 Desafio Prático</div>
 
           <p style={{
 
@@ -414,7 +414,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 
           <div style={{ color: '#aaa', fontSize: '0.95rem', fontWeight: 600, marginBottom: '0.75rem' }}>
 
-            Ã°Å¸âÂ Suas AnotaÃ§Ãµes
+            📝 Suas Anotações
 
           </div>
 
@@ -424,7 +424,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 
             onChange={handleNotesChange}
 
-            placeholder="Escreva suas anotaÃ§Ãµes aqui..."
+            placeholder="Escreva suas anotações aqui..."
 
             style={{
 
@@ -496,7 +496,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 
           >
 
-            Ã¢â Â LiÃ§Ã£o Anterior
+            ← Lição Anterior
 
           </button>
 
@@ -526,7 +526,7 @@ const LessonReader = ({ lessons, lessonContents, currentIndex, totalLessons, cou
 
           >
 
-            PrÃ³xima LiÃ§Ã£o Ã¢â â
+            Próxima Lição →
 
           </button>
 
