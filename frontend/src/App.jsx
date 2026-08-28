@@ -523,6 +523,10 @@ export default function App() {
 
           <LanguageSelector />
 
+          <Link to="/configuracoes" aria-label={t('nav.settings','Configurações')} title={t('nav.settings','Configurações')} style={{position:'relative',background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',textDecoration:'none'}}>
+            <SettingsIcon size={17}/>
+          </Link>
+
           <Link to="/notificacoes" style={{position:'relative',background:'rgba(255,255,255,0.2)',border:'none',borderRadius:'50%',width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',color:'white',cursor:'pointer',textDecoration:'none'}}>
 
             <Bell size={17}/>{unreadMessages > 0 && <span style={{ position:'absolute', top:-6, right:-6, background:'#e11d48', color:'white', borderRadius:'50%', minWidth:16, height:16, fontSize:9, fontWeight:700, display:'flex', alignItems:'center', justifyContent:'center', padding:'0 3px', boxShadow:'0 0 0 2px white' }}>{unreadMessages > 9 ? '9+' : unreadMessages}</span>}
