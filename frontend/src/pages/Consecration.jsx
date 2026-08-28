@@ -282,7 +282,7 @@ export default function Consecration() {
         <div style={{position:'relative',zIndex:2,height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'space-between',padding:'20px 16px'}}>
           <button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} style={{position:'absolute',top:12,left:12,padding:'8px 16px',borderRadius:20,border:'none',background:'rgba(0,0,0,0.5)',color:'white',cursor:'pointer',fontWeight:700,fontSize:13,backdropFilter:'blur(8px)',zIndex:10}}>⬆️ Topo</button>
 
-          <div style={{textAlign:'center',color:'white',width:'100%',position:'relative',zIndex:2}}>
+          <div style={{textAlign:'center',color:'white',width:'100%'}}>
             <div style={{display:'flex',gap:10,justifyContent:'center',marginBottom:12,flexWrap:'wrap'}}>
               <div style={{background:'rgba(255,255,255,0.12)',backdropFilter:'blur(8px)',borderRadius:20,padding:'6px 14px',fontSize:12,color:'white',fontWeight:700}}>
                 🔥 {stats.activeFasting||0} {t('consecration.fastingLabel','almas em jejum agora')}
