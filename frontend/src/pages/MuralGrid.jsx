@@ -389,6 +389,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             muted={isMuted}
             poster={videoPoster || undefined}
             style={{ width: '100%', maxHeight: 400, objectFit: 'contain', display: 'block' }}
+            onCanPlay={e => { e.currentTarget.muted = true; e.currentTarget.play().catch(() => {}); }}
             onPlay={handleInternalVideoPlay}
             onPause={handleInternalVideoPause}
           />
@@ -602,8 +603,8 @@ export default function MuralGrid() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.6) { // Changed threshold to 0.6
-            // If a video is 60% visible, set it as active
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+            // Começa assim que uma parte confortável do vídeo estiver visível.
             setActiveVideoId(entry.target.dataset.postId);
           } else if (!entry.isIntersecting) {
             // Pausa somente o vídeo que saiu da área visível.
@@ -611,7 +612,7 @@ export default function MuralGrid() {
           }
         });
       },
-      { threshold: 0.6 } // Changed threshold to 0.6
+      { threshold: [0.25, 0.35, 0.6] }
     );
 
     // Observe all video post elements
