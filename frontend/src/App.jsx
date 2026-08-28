@@ -316,6 +316,11 @@ export default function App() {
 
   useEffect(() => {
 
+    if (lastEvent?.type === 'call_incoming' && lastEvent.callerId && !location.pathname.startsWith('/mensagens')) {
+      const params = new URLSearchParams({ incoming: lastEvent.mode || 'audio', callId: lastEvent.callId || '', callerName: lastEvent.callerName || '' });
+      navigate(`/mensagens/${lastEvent.callerId}?${params.toString()}`);
+    }
+
     if (lastEvent?.type === 'direct_message' && lastEvent.senderId !== user?.id) {
 
       if (!location.pathname.startsWith('/mensagens')) {
@@ -424,6 +429,7 @@ export default function App() {
 
         <Route path="/mural" element={<MuralGrid />} />
         <Route path="/grupos-oracao" element={<PrayerGroupsLanding />} />
+        <Route path="/consagracao" element={<Consecration />} />
 
         <Route path="/perfil/:userId" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />

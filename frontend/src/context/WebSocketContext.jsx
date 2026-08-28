@@ -114,6 +114,13 @@ export function WebSocketProvider({ children }) {
                 }
               }
               break;
+            case 'call_incoming':
+              setLastEvent(data);
+              playSoundThrottled();
+              if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+                try { new Notification(`📞 Chamada de ${data.callerName || 'um contacto'}`, { body: data.mode === 'video' ? 'Videochamada recebida' : 'Chamada de voz recebida', icon: data.callerAvatar || '/logo.jpg' }); } catch (_) {}
+              }
+              break;
             case 'chat_new_message':
             case 'new_help_request':
             case 'new_prayer_response':
