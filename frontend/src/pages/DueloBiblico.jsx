@@ -8,6 +8,12 @@ export default function DueloBiblico() {
   const { i18n } = useTranslation();
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'duel_entry', { page: 'duelo_biblico' });
+    }
+  }, []);
+
+  useEffect(() => {
     const iframe = iframeRef.current;
     if (!iframe) return;
     iframe.onload = () => {
