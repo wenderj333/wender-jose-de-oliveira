@@ -150,6 +150,7 @@ export default function App() {
   const navigate = useNavigate();
 
   const location = useLocation();
+  const analyticsPathRef = useRef(null);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -202,6 +203,18 @@ export default function App() {
   const [soundEnabled, setSoundEnabled] = React.useState(localStorage.getItem('scf_sound') !== 'off');
 
   const [recentPrayers, setRecentPrayers] = useState([]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
+    const path = location.pathname + location.search;
+    if (analyticsPathRef.current === null) {
+      analyticsPathRef.current = path;
+      return;
+    }
+    if (analyticsPathRef.current === path) return;
+    analyticsPathRef.current = path;
+    window.gtag('event', 'page_view', { page_location: window.location.href, page_path: path, page_title: document.title });
+  }, [location.pathname, location.search]);
 
 
 

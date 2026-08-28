@@ -44,6 +44,9 @@ export default function Settings() {
         });
         if (!response.ok) throw new Error("register");
       }
+      if (typeof window !== "undefined" && typeof window.gtag === "function") {
+        window.gtag("event", "notification_opt_in", { method: "browser_push" });
+      }
       setNotificationStatus("Notificações e som ativados neste dispositivo.");
     } catch (_) {
       setNotificationStatus("Não foi possível ativar agora. Tente novamente neste navegador.");
