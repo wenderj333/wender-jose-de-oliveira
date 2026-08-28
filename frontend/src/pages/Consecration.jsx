@@ -291,13 +291,13 @@ export default function Consecration() {
                 🙏 {stats.totalConsecrations||0} {t('consecration.soulsNow','almas buscando a Deus agora')}
               </div>
             </div>
-            <div aria-label="Pessoas em jejum agora" style={{position:'relative',width:'100%',maxWidth:560,height:230,margin:'8px auto 12px',overflow:'hidden',borderRadius:18}}>
+            <div aria-label="Pessoas em jejum agora" style={{position:'absolute',top:58,left:8,right:8,height:'56%',margin:0,overflow:'hidden',borderRadius:18,pointerEvents:'none',zIndex:1}}>
               {displayParticipants.map((person, index) => {
                 const size = Math.min(72, 42 + Math.floor(Math.max(0, (Date.now() - new Date(person.start_date || Date.now()).getTime()) / 3600000)) * 3);
                 const offset = bubbleOffsets[index] || { x: 0, y: 0 };
                 const startLeft = 5 + ((index * 37) % 84);
                 const startTop = 8 + ((index * 53) % 67);
-                return <div key={person.user_id || index} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:3,position:'absolute',left:`calc(${startLeft}% + ${offset.x}px)`,top:`calc(${startTop}% + ${offset.y}px)`,transition:dragRef.current?.index===index?'none':'left .25s ease, top .25s ease',touchAction:'none',cursor:'grab',zIndex:3,animation:`consecrationBubbleFloat ${16 + (index % 4) * 2}s ease-in-out ${index * -1.1}s infinite`}} onPointerDown={e=>handleBubblePointerDown(e,person,index)} onPointerMove={handleBubblePointerMove} onPointerUp={handleBubblePointerUp} onPointerCancel={handleBubblePointerUp}>
+                return <div key={person.user_id || index} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:3,position:'absolute',left:`calc(${startLeft}% + ${offset.x}px)`,top:`calc(${startTop}% + ${offset.y}px)`,transition:dragRef.current?.index===index?'none':'left .25s ease, top .25s ease',touchAction:'none',cursor:'grab',pointerEvents:'auto',zIndex:3,animation:`consecrationBubbleFloat ${16 + (index % 4) * 2}s ease-in-out ${index * -1.1}s infinite`}} onPointerDown={e=>handleBubblePointerDown(e,person,index)} onPointerMove={handleBubblePointerMove} onPointerUp={handleBubblePointerUp} onPointerCancel={handleBubblePointerUp}>
                   <div style={{width:size,height:size,borderRadius:'50%',padding:3,background:'linear-gradient(145deg,#f0c040,#9b59b6)',boxShadow:'0 4px 12px rgba(0,0,0,.25)',boxSizing:'border-box',animation:`consecrationBubbleBounce ${5 + (index % 3) * .8}s ease-in-out infinite`}}>
                     <img src={person.avatar_url || '/pro.jpg'} alt={person.name} onError={e=>{e.currentTarget.src='/pro.jpg';}} style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%',border:'2px solid rgba(255,255,255,.8)'}} />
                   </div>
