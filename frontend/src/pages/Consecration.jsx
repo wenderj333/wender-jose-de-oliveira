@@ -157,7 +157,7 @@ export default function Consecration() {
   };
 
   if (silentMode) return (
-    <div style={{position:'fixed',inset:0,backgroundImage:'url(/fundo-consagracao.png)',backgroundSize:'cover',backgroundPosition:'center',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:'white',textAlign:'center',padding:24,zIndex:100}}>
+    <div style={{position:'fixed',inset:0,backgroundImage:'url(/biblia-register.png)',backgroundSize:'cover',backgroundPosition:'center',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:'white',textAlign:'center',padding:24,zIndex:100}}>
       <div style={{position:'absolute',inset:0,background:'rgba(0,0,0,0.75)'}}/>
       <div style={{position:'relative',zIndex:1}}>
         <div style={{fontSize:60,marginBottom:16}}>🕯️</div>
@@ -181,7 +181,7 @@ export default function Consecration() {
   );
 
   if (entering) return (
-    <div style={{position:'fixed',inset:0,backgroundImage:'url(/fundo-consagracao.png)',backgroundSize:'cover',backgroundPosition:'center',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:'white',textAlign:'center',padding:24,zIndex:100}}>
+    <div style={{position:'fixed',inset:0,backgroundImage:'url(/biblia-register.png)',backgroundSize:'cover',backgroundPosition:'center',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',color:'white',textAlign:'center',padding:24,zIndex:100}}>
       <div style={{position:'absolute',inset:0,background:'rgba(0,0,0,0.8)'}}/>
       <div style={{position:'relative',zIndex:1}}>
         <div style={{fontSize:60,marginBottom:16}}>🔥</div>
@@ -195,7 +195,7 @@ export default function Consecration() {
 
   return (
     <div style={{maxWidth:700,margin:'0 auto',padding:'0.5rem',fontFamily:'Segoe UI,sans-serif'}}>
-      <div style={{position:'relative',width:'100%',minHeight:'92vh',borderRadius:16,overflow:'hidden',backgroundImage:'url(/fundo-consagracao.png)',backgroundSize:'cover',backgroundPosition:'center'}}>
+      <div style={{position:'relative',width:'100%',minHeight:'92vh',borderRadius:16,overflow:'hidden',backgroundImage:'url(/biblia-register.png)',backgroundSize:'cover',backgroundPosition:'center'}}>
         <div style={{position:'absolute',inset:0,background:isActive?'rgba(0,0,0,0.3)':'rgba(0,0,0,0.55)',borderRadius:16,transition:'background 1s'}}/>
         <div style={{position:'relative',zIndex:2,height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'space-between',padding:'20px 16px'}}>
           <button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} style={{position:'absolute',top:12,left:12,padding:'8px 16px',borderRadius:20,border:'none',background:'rgba(0,0,0,0.5)',color:'white',cursor:'pointer',fontWeight:700,fontSize:13,backdropFilter:'blur(8px)',zIndex:10}}>⬆️ Topo</button>
