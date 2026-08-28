@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "./context/AuthContext";
 
 import { useWebSocket } from "./context/WebSocketContext";
+import { messaging, onMessage } from "./firebase";
 
 import {
 
@@ -265,20 +266,34 @@ export default function App() {
   }, [token]);
 
   useEffect(() => {
-
     if (!token) return;
-
-    fetch((import.meta.env.VITE_API_URL || '') + '/api/notifications/unread-count', {
-
+    let first = true;
+    const fetchUnread = () => fetch((import.meta.env.VITE_API_URL || '') + '/api/notifications/unread-count', {
       headers: { Authorization: 'Bearer ' + token }
-
     }).then(r => r.json()).then(data => {
-
-      if (data && data.count !== undefined) setUnreadMessages(data.count);
-
+      const count = Number(data?.count);
+      if (!Number.isFinite(count)) return;
+      setUnreadMessages(previous => {
+        if (!first && count > previous && !location.pathname.startsWith('/notificacoes') && !location.pathname.startsWith('/mensagens')) playNotifSound();
+        return count;
+      });
+      first = false;
     }).catch(() => {});
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 30000);
+    return () => clearInterval(interval);
+  }, [token, soundEnabled, location.pathname]);
 
-  }, [token]);
+  useEffect(() => {
+    if (!messaging || typeof onMessage !== 'function') return undefined;
+    return onMessage(messaging, payload => {
+      if (soundEnabled) playNotifSound();
+      const notification = payload?.notification;
+      if (notification && Notification.permission === 'granted' && document.visibilityState === 'hidden') {
+        try { new Notification(notification.title || 'Sigo com Fé', { body: notification.body || 'Você recebeu uma nova notificação.' }); } catch (_) {}
+      }
+    });
+  }, [soundEnabled]);
 
   const wsCtx = useWebSocket();
 

@@ -66,6 +66,21 @@ router.get('/unread-count', authenticate, async (req, res) => {
   }
 });
 
+// POST /api/notifications/fcm-token — guardar o token do dispositivo sem o expor em logs
+router.post('/fcm-token', authenticate, async (req, res) => {
+  const token = typeof req.body?.token === 'string' ? req.body.token.trim() : '';
+  if (token.length < 20 || token.length > 4096) {
+    return res.status(400).json({ error: 'Token de notificações inválido' });
+  }
+  try {
+    await db.query('UPDATE users SET fcm_token = $1 WHERE id = $2', [token, req.user.id]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error saving notification token:', err.message);
+    res.status(500).json({ error: 'Não foi possível ativar as notificações' });
+  }
+});
+
 // POST /api/notifications/read-all — marcar todas como lidas
 router.post('/read-all', authenticate, async (req, res) => {
   try {

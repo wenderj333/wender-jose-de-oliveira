@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { requestNotificationPermission } from "../firebase";
+import { enableNotificationSound } from "../utils/notification-sound";
 
 const API = (import.meta.env.VITE_API_URL || "https://sigo-com-fe-api.onrender.com") + "/api";
 
@@ -19,7 +21,34 @@ export default function Settings() {
   const [visibility, setVisibility] = useState({ personal: "friends", church: "public", faith: "public", bio: "public" });
   const [loading, setLoading] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [notificationStatus, setNotificationStatus] = useState("");
   const avatarInputRef = React.useRef(null);
+
+  const enableNotifications = async () => {
+    setNotificationStatus("A pedir permissão…");
+    try {
+      if (typeof Notification === "undefined") throw new Error("unsupported");
+      const permission = Notification.permission === "default" ? await Notification.requestPermission() : Notification.permission;
+      if (permission !== "granted") {
+        setNotificationStatus("Permissão bloqueada. Ative as notificações nas definições do navegador.");
+        return;
+      }
+      enableNotificationSound();
+      const fcmToken = await requestNotificationPermission();
+      const token = localStorage.getItem("token");
+      if (fcmToken && token) {
+        const response = await fetch(API + "/notifications/fcm-token", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+          body: JSON.stringify({ token: fcmToken })
+        });
+        if (!response.ok) throw new Error("register");
+      }
+      setNotificationStatus("Notificações e som ativados neste dispositivo.");
+    } catch (_) {
+      setNotificationStatus("Não foi possível ativar agora. Tente novamente neste navegador.");
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -142,6 +171,15 @@ export default function Settings() {
       <h2 style={{ color: "#6C3FA0", marginBottom: "20px", borderBottom: "2px solid #f0c040", paddingBottom: "10px", textAlign: "center" }}>{t('profile.title','SOBRE MIM / MEU PERFIL')}</h2>
 
       {msg && <p style={{ color: msg.includes("Erro") ? "#e11d48" : "#16a34a", fontWeight: "bold", marginBottom: "15px", textAlign: "center", fontSize: "16px" }}>{msg}</p>}
+
+      <div style={{ ...sectionStyle, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
+        <div>
+          <h3 style={{ color: "#4A2270", margin: 0, fontSize: "16px" }}>🔔 Notificações com som</h3>
+          <p style={{ margin: "6px 0 0", color: "#666", fontSize: 13 }}>Receba avisos de mensagens, pedidos e respostas. O navegador pode pedir autorização.</p>
+          {notificationStatus && <p style={{ margin: "7px 0 0", color: notificationStatus.includes("não") || notificationStatus.includes("bloqueada") ? "#b42318" : "#16803c", fontSize: 13 }}>{notificationStatus}</p>}
+        </div>
+        <button type="button" onClick={enableNotifications} style={{ background: "#6C3FA0", color: "#fff", border: 0, borderRadius: 9, padding: "10px 14px", fontWeight: 700, cursor: "pointer" }}>Ativar notificações</button>
+      </div>
 
       <div style={sectionStyle}>
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: 8, fontSize: "16px", borderBottom: "1px solid #ddd", paddingBottom: 8 }}>🔒 Privacidade do perfil</h3>
