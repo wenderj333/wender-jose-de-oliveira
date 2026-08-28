@@ -22,6 +22,12 @@ const BIBLICAL_GUIDE = {
   en: { button: 'Biblical fast', title: 'Biblical fast: watchfulness and dedication', intro: 'Set aside time to seek God with sincerity, prayer and wisdom.', watch: 'Watchfulness in what you see', watchText: 'Guard what enters through your eyes: choose things that build you up and keep your heart attentive to the Word.', benefits: 'Fruit of a sincere dedication', benefitsText: 'Greater spiritual clarity, self-control, sensitivity to God and renewed love for people.', steps: ['Begin with prayer and a clear purpose.', 'Choose a safe period and stay hydrated as needed.', 'Replace distractions with Scripture, silence and prayer.', 'Finish with thanksgiving and return to food gently.'], note: 'Fasting does not replace medical care. If you have a health condition, seek professional advice.' },
 };
 
+const CHALLENGE_COPY = {
+  pt: { title: 'Desafio de 7 dias', intro: 'Caminha um dia de cada vez com oração, Palavra e atitudes de fé.', mark: 'Marcar dia como concluído', done: 'Dia concluído', invite: 'Convidar amigos', reminder: 'Ativar lembrete diário', reminderOn: 'Lembrete ativado neste dispositivo', reminderInfo: 'O lembrete funciona neste dispositivo enquanto permitido.' },
+  es: { title: 'Desafío de 7 días', intro: 'Camina un día a la vez con oración, Palabra y actitudes de fe.', mark: 'Marcar día como completado', done: 'Día completado', invite: 'Invitar amigos', reminder: 'Activar recordatorio diario', reminderOn: 'Recordatorio activado en este dispositivo', reminderInfo: 'El recordatorio funciona en este dispositivo mientras esté permitido.' },
+  en: { title: '7-day challenge', intro: 'Walk one day at a time with prayer, Scripture and acts of faith.', mark: 'Mark day complete', done: 'Day complete', invite: 'Invite friends', reminder: 'Enable daily reminder', reminderOn: 'Reminder enabled on this device', reminderInfo: 'The reminder works on this device while permission is allowed.' },
+};
+
 // Avatares demonstrativos para a sala não ficar vazia antes da chegada de participantes reais.
 // Eles são sempre identificados como exemplo e não entram nas contagens do servidor.
 const DEMO_PARTICIPANTS = Array.from({ length: 10 }, (_, index) => ({
@@ -46,6 +52,8 @@ export default function Consecration() {
   const [postType, setPostType] = useState('prayer');
   const [showForm, setShowForm] = useState(false);
   const [showBiblicalGuide, setShowBiblicalGuide] = useState(false);
+  const [challengeDone, setChallengeDone] = useState(() => Number(localStorage.getItem('consecration_challenge_day') || 0));
+  const [reminderEnabled, setReminderEnabled] = useState(() => localStorage.getItem('consecration_reminder') === 'true');
   const [shareMsg, setShareMsg] = useState('');
   const [dayCount, setDayCount] = useState(1);
   const [prayCount, setPrayCount] = useState(()=>{
@@ -67,6 +75,8 @@ export default function Consecration() {
   const verse = VERSES[today % VERSES.length];
   const todayAction = ACTIONS[today % ACTIONS.length];
   const guide = BIBLICAL_GUIDE[i18n.language?.split('-')[0]] || BIBLICAL_GUIDE.pt;
+  const challenge = CHALLENGE_COPY[i18n.language?.split('-')[0]] || CHALLENGE_COPY.pt;
+  const challengeDay = Math.min(7, Math.max(1, dayCount));
   const flameIcon = dayCount >= 21 ? '🔥🔥🔥' : dayCount >= 7 ? '🔥🔥' : dayCount >= 3 ? '🔥' : '🕯️';
   const displayParticipants = participants.length ? participants : DEMO_PARTICIPANTS;
   const showingDemoParticipants = participants.length === 0;
@@ -178,6 +188,22 @@ export default function Consecration() {
       if (navigator.share) await navigator.share({ title: t('consecration.shareTitle', 'Jejum Mundial'), text, url });
       else { await navigator.clipboard?.writeText(`${text} ${url}`); setShareMsg(t('consecration.shareCopied', 'Link copiado para partilhar!')); setTimeout(() => setShareMsg(''), 3000); }
     } catch (error) { if (error?.name !== 'AbortError') setShareMsg(t('consecration.shareUnavailable', 'Partilha indisponível neste momento.')); }
+  };
+
+  const markChallengeDay = () => {
+    const next = Math.min(7, Math.max(challengeDone, challengeDay));
+    setChallengeDone(next);
+    localStorage.setItem('consecration_challenge_day', String(next));
+    setShareMsg(next >= 7 ? `${challenge.done} 🎉` : `${challenge.done} ${next}/7`);
+    setTimeout(() => setShareMsg(''), 3000);
+  };
+
+  const enableReminder = async () => {
+    if (!('Notification' in window)) return setShareMsg(challenge.reminderInfo);
+    const permission = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
+    if (permission === 'granted') { setReminderEnabled(true); localStorage.setItem('consecration_reminder', 'true'); setShareMsg(challenge.reminderOn); }
+    else setShareMsg(challenge.reminderInfo);
+    setTimeout(() => setShareMsg(''), 3000);
   };
 
   const handlePost = () => {
@@ -360,6 +386,12 @@ export default function Consecration() {
         <ol style={{margin:'16px 0 10px',paddingLeft:22,color:'#4f4260',fontSize:13,lineHeight:1.7}}>{guide.steps.map(step=><li key={step}>{step}</li>)}</ol>
         <p style={{margin:'12px 0 0',fontSize:11,color:'#7b6d83',fontStyle:'italic'}}>⚕️ {guide.note}</p>
       </div>}
+
+      <div style={{marginTop:14,borderRadius:18,padding:20,background:'linear-gradient(135deg,#e9f6f0,#f5edff)',border:'1px solid rgba(92,65,139,.16)',boxShadow:'0 10px 24px rgba(60,35,95,.1)',color:'#25143e'}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'start',gap:12,flexWrap:'wrap'}}><div><h3 style={{margin:'0 0 5px',fontSize:19,color:'#4b267e'}}>🔥 {challenge.title}</h3><p style={{margin:0,fontSize:13,color:'#625873',lineHeight:1.45}}>{challenge.intro}</p></div><strong style={{color:'#4b267e',fontSize:14}}>{challengeDone}/7</strong></div>
+        <div style={{display:'flex',gap:7,margin:'16px 0',flexWrap:'wrap'}}>{Array.from({length:7},(_,i)=>{const complete=i+1<=challengeDone; return <span key={i} title={`Dia ${i+1}`} style={{width:30,height:30,borderRadius:'50%',display:'grid',placeItems:'center',fontSize:12,fontWeight:800,color:complete?'white':'#6c3fa0',background:complete?'#6c3fa0':'rgba(108,63,160,.12)',border:'1px solid rgba(108,63,160,.25)'}}>{complete?'✓':i+1}</span>;})}</div>
+        <div style={{display:'flex',gap:8,flexWrap:'wrap'}}><button type="button" onClick={markChallengeDay} style={{border:0,borderRadius:14,padding:'10px 14px',background:'#6c3fa0',color:'white',fontWeight:800,cursor:'pointer',fontSize:12}}>{challengeDone>=challengeDay&&challengeDone>0?'✓ '+challenge.done:challenge.mark}</button><button type="button" onClick={shareFasting} style={{border:'1px solid #6c3fa0',borderRadius:14,padding:'10px 14px',background:'transparent',color:'#4b267e',fontWeight:800,cursor:'pointer',fontSize:12}}>📤 {challenge.invite}</button><button type="button" onClick={enableReminder} disabled={reminderEnabled} style={{border:'1px solid #5d987a',borderRadius:14,padding:'10px 14px',background:reminderEnabled?'rgba(93,152,122,.18)':'transparent',color:'#356c5c',fontWeight:800,cursor:reminderEnabled?'default':'pointer',fontSize:12}}>🔔 {reminderEnabled?challenge.reminderOn:challenge.reminder}</button></div>
+      </div>
 
       {showForm && (
         <div style={{background:'linear-gradient(135deg,#1a0a3e,#2d1054)',borderRadius:16,padding:20,marginTop:12,color:'white'}}>
