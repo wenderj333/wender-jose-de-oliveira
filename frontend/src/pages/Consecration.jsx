@@ -236,7 +236,7 @@ export default function Consecration() {
 
   return (
     <div style={{maxWidth:700,margin:'0 auto',padding:'0.5rem',fontFamily:'Segoe UI,sans-serif'}}>
-      <style>{`@keyframes consecrationBubbleFloat { 0%,100% { transform: translate(0,0) scale(1); } 25% { transform: translate(9px,-7px) scale(1.03); } 50% { transform: translate(-5px,8px) scale(.98); } 75% { transform: translate(-10px,-3px) scale(1.02); } } @keyframes consecrationBubbleBounce { 0%,100% { box-shadow: 0 4px 12px rgba(0,0,0,.25); } 50% { box-shadow: 0 11px 22px rgba(240,192,64,.5); } }`}</style>
+      <style>{`@keyframes consecrationBubbleFloat { 0%,100% { transform: translate(0,0) scale(1); } 25% { transform: translate(86px,-42px) scale(1.03); } 50% { transform: translate(-72px,58px) scale(.98); } 75% { transform: translate(-105px,-24px) scale(1.02); } } @keyframes consecrationBubbleBounce { 0%,100% { box-shadow: 0 4px 12px rgba(0,0,0,.25); } 50% { box-shadow: 0 11px 22px rgba(240,192,64,.5); } }`}</style>
       <div style={{position:'relative',width:'100%',minHeight:'92vh',borderRadius:16,overflow:'hidden',backgroundImage:'url(/biblia-register.png)',backgroundSize:'cover',backgroundPosition:'center'}}>
         <div style={{position:'absolute',inset:0,background:isActive?'rgba(0,0,0,0.3)':'rgba(0,0,0,0.55)',borderRadius:16,transition:'background 1s'}}/>
         <div style={{position:'relative',zIndex:2,height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'space-between',padding:'20px 16px'}}>
@@ -251,11 +251,13 @@ export default function Consecration() {
                 🙏 {stats.totalConsecrations||0} {t('consecration.soulsNow','almas buscando a Deus agora')}
               </div>
             </div>
-            <div aria-label="Pessoas em jejum agora" style={{display:'flex',justifyContent:'center',alignItems:'end',gap:8,minHeight:92,margin:'8px auto 12px',flexWrap:'wrap'}}>
+            <div aria-label="Pessoas em jejum agora" style={{position:'relative',width:'100%',maxWidth:560,height:230,margin:'8px auto 12px',overflow:'hidden',borderRadius:18}}>
               {displayParticipants.map((person, index) => {
                 const size = Math.min(72, 42 + Math.floor(Math.max(0, (Date.now() - new Date(person.start_date || Date.now()).getTime()) / 3600000)) * 3);
                 const offset = bubbleOffsets[index] || { x: 0, y: 0 };
-                return <div key={person.user_id || index} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:3,position:'relative',left:offset.x,top:offset.y,transition:dragRef.current?.index===index?'none':'left .25s ease, top .25s ease',touchAction:'none',cursor:'grab'}} onPointerDown={e=>handleBubblePointerDown(e,person,index)} onPointerMove={handleBubblePointerMove} onPointerUp={handleBubblePointerUp} onPointerCancel={handleBubblePointerUp}>
+                const startLeft = 5 + ((index * 37) % 84);
+                const startTop = 8 + ((index * 53) % 67);
+                return <div key={person.user_id || index} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:3,position:'absolute',left:`calc(${startLeft}% + ${offset.x}px)`,top:`calc(${startTop}% + ${offset.y}px)`,transition:dragRef.current?.index===index?'none':'left .25s ease, top .25s ease',touchAction:'none',cursor:'grab',zIndex:3}} onPointerDown={e=>handleBubblePointerDown(e,person,index)} onPointerMove={handleBubblePointerMove} onPointerUp={handleBubblePointerUp} onPointerCancel={handleBubblePointerUp}>
                   <div style={{width:size,height:size,borderRadius:'50%',padding:3,background:'linear-gradient(145deg,#f0c040,#9b59b6)',boxShadow:'0 4px 12px rgba(0,0,0,.25)',boxSizing:'border-box',animation:`consecrationBubbleFloat ${6 + (index % 4)}s ease-in-out ${index * -0.45}s infinite, consecrationBubbleBounce ${2.8 + (index % 3) * .4}s ease-in-out infinite`}}>
                     <img src={person.avatar_url || '/pro.jpg'} alt={person.name} onError={e=>{e.currentTarget.src='/pro.jpg';}} style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%',border:'2px solid rgba(255,255,255,.8)'}} />
                   </div>
