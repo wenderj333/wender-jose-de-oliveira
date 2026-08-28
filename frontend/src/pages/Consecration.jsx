@@ -16,6 +16,15 @@ const VERSES = [
 
 const ACTIONS = ['dayGuide_1','dayGuide_2','dayGuide_3','dayGuide_4','dayGuide_5','dayGuide_6','dayGuide_7'];
 
+// Avatares demonstrativos para a sala não ficar vazia antes da chegada de participantes reais.
+// Eles são sempre identificados como exemplo e não entram nas contagens do servidor.
+const DEMO_PARTICIPANTS = Array.from({ length: 10 }, (_, index) => ({
+  user_id: `demo-${index + 1}`,
+  name: ['Ana', 'João', 'Maria', 'Rui', 'Sara', 'Davi', 'Ester', 'Lucas', 'Noemi', 'Paulo'][index],
+  start_date: new Date(Date.now() - (index + 1) * 2 * 3600000).toISOString(),
+  avatar_url: '/pro.jpg',
+}));
+
 export default function Consecration() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
@@ -47,6 +56,8 @@ export default function Consecration() {
   const verse = VERSES[today % VERSES.length];
   const todayAction = ACTIONS[today % ACTIONS.length];
   const flameIcon = dayCount >= 21 ? '🔥🔥🔥' : dayCount >= 7 ? '🔥🔥' : dayCount >= 3 ? '🔥' : '🕯️';
+  const displayParticipants = participants.length ? participants : DEMO_PARTICIPANTS;
+  const showingDemoParticipants = participants.length === 0;
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -210,7 +221,7 @@ export default function Consecration() {
               </div>
             </div>
             <div aria-label="Pessoas em jejum agora" style={{display:'flex',justifyContent:'center',alignItems:'end',gap:8,minHeight:92,margin:'8px auto 12px',flexWrap:'wrap'}}>
-              {participants.map((person, index) => {
+              {displayParticipants.map((person, index) => {
                 const size = Math.min(72, 42 + Math.floor(Math.max(0, (Date.now() - new Date(person.start_date || Date.now()).getTime()) / 3600000)) * 3);
                 return <div key={person.user_id || index} title={`${person.name} · ${fastingDuration(person.start_date)}`} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:3}}>
                   <div style={{width:size,height:size,borderRadius:'50%',padding:3,background:'linear-gradient(145deg,#f0c040,#9b59b6)',boxShadow:'0 4px 12px rgba(0,0,0,.25)',boxSizing:'border-box'}}>
@@ -219,8 +230,8 @@ export default function Consecration() {
                   <span style={{fontSize:10,maxWidth:78,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{person.name}</span>
                 </div>;
               })}
-              {!participants.length && <span style={{fontSize:12,color:'rgba(255,255,255,.72)'}}>Seja a primeira pessoa a entrar no jejum mundial</span>}
             </div>
+            {showingDemoParticipants && <span style={{fontSize:11,color:'rgba(255,255,255,.68)',display:'block',marginBottom:8}}>{t('consecration.demoParticipants','Exemplo visual — entre para aparecer com seu nome')}</span>}
             <h1 style={{fontSize:'clamp(1.6rem,4vw,2.4rem)',fontWeight:900,color:'white',margin:'0 0 6px',textShadow:'0 2px 8px rgba(0,0,0,0.5)'}}>{t('consecration.title','Consagração e Jejum')}</h1>
             <p style={{color:'rgba(255,255,255,0.8)',fontSize:13,margin:'0 0 6px'}}>{t('consecration.subtitle','Jejum mundial e oração')}</p>
             <p style={{color:'rgba(255,255,255,0.55)',fontSize:12,fontStyle:'italic',margin:0}}>{t('consecration.bibleRef','Como Jesus se retirou ao Deserto...')}</p>
