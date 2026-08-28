@@ -282,7 +282,7 @@ export default function Consecration() {
         <div style={{position:'relative',zIndex:2,height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'space-between',padding:'20px 16px'}}>
           <button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} style={{position:'absolute',top:12,left:12,padding:'8px 16px',borderRadius:20,border:'none',background:'rgba(0,0,0,0.5)',color:'white',cursor:'pointer',fontWeight:700,fontSize:13,backdropFilter:'blur(8px)',zIndex:10}}>⬆️ Topo</button>
 
-          <div style={{textAlign:'center',color:'white',width:'100%'}}>
+          <div style={{textAlign:'center',color:'white',width:'100%',position:'relative',zIndex:2}}>
             <div style={{display:'flex',gap:10,justifyContent:'center',marginBottom:12,flexWrap:'wrap'}}>
               <div style={{background:'rgba(255,255,255,0.12)',backdropFilter:'blur(8px)',borderRadius:20,padding:'6px 14px',fontSize:12,color:'white',fontWeight:700}}>
                 🔥 {stats.activeFasting||0} {t('consecration.fastingLabel','almas em jejum agora')}
@@ -291,7 +291,7 @@ export default function Consecration() {
                 🙏 {stats.totalConsecrations||0} {t('consecration.soulsNow','almas buscando a Deus agora')}
               </div>
             </div>
-            <div aria-label="Pessoas em jejum agora" style={{position:'absolute',top:58,left:8,right:8,height:'56%',margin:0,overflow:'hidden',borderRadius:18,pointerEvents:'none',zIndex:1}}>
+            <div aria-label="Pessoas em jejum agora" style={{position:'absolute',top:0,bottom:0,left:8,right:8,height:'auto',margin:0,overflow:'hidden',borderRadius:18,pointerEvents:'none',zIndex:1}}>
               {displayParticipants.map((person, index) => {
                 const size = Math.min(72, 42 + Math.floor(Math.max(0, (Date.now() - new Date(person.start_date || Date.now()).getTime()) / 3600000)) * 3);
                 const offset = bubbleOffsets[index] || { x: 0, y: 0 };
