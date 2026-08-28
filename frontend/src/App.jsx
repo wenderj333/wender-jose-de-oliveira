@@ -586,6 +586,8 @@ export default function App() {
 
               ['/praca-oracao', <Heart size={20}/>, 'Praça Mundial de Oração'],
 
+              ['/consagracao', <PlayCircle size={20}/>, t('nav.consecration', 'Consagração e Jejum')],
+
               ['/notificacoes', <Bell size={20}/>, t('nav.notifications', 'Notificações')],
 
               ['/configuracoes', <SettingsIcon size={20}/>, 'Configurações'],
@@ -619,8 +621,6 @@ export default function App() {
               ['/desafio-diario', <Sun size={20}/>, 'Desafio Diário'],
 
               ['/reflexao', <Sun size={20}/>, t('nav.reflection')],
-
-              ['/consagracao', <PlayCircle size={20}/>, t('nav.consecration')],
 
               ['/curso-biblico', <BookOpen size={20}/>, t('course.title')],
 
@@ -708,6 +708,10 @@ export default function App() {
 
             <Link to="/" className={isActive('/')}><Home size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.mural','Inicio')}</span></Link>
 
+            <Link to="/praca-oracao" className={isActive('/praca-oracao') || isActive('/praca-de-oracao')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>Praça Mundial de Oração</span></Link>
+
+            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','Consagração')}</span></Link>
+
             <Link to="/comunidade-ao-vivo" className={isActive('/comunidade-ao-vivo')}><MessageCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.live_community','Chat')} {unreadMessages>0 && <span style={{background:'#e74c3c',color:'white',borderRadius:10,padding:'1px 6px',fontSize:10,marginLeft:4}}>{unreadMessages}</span>}</span></Link>
 
             <Link to="/notificacoes" className={isActive('/notificacoes')}><Bell size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.notifications','Notificações')}</span></Link>
@@ -742,8 +746,6 @@ export default function App() {
 
             <Link to="/grupos" className={isActive('/grupos')}><Users size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.groups','Grupos')}</span></Link>
 
-            <Link to="/praca-oracao" className={isActive('/praca-oracao') || isActive('/praca-de-oracao')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>Praça Mundial de Oração</span></Link>
-
           </div>
 
 
@@ -763,8 +765,6 @@ export default function App() {
             <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','Reflexão')}</span></Link>
 
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','Música')}</span></Link>
-
-            <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','Consagração')}</span></Link>
 
           </div>
 
