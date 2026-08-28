@@ -195,6 +195,7 @@ export default function App() {
   };
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
 
   const [hideSidebars, setHideSidebars] = useState(false);
 
@@ -620,7 +621,11 @@ export default function App() {
 
           </div>
 
-          <div style={{marginBottom:'20px'}}>
+          <button type="button" onClick={() => setMobileMoreOpen(value => !value)} aria-expanded={mobileMoreOpen} style={{display:'flex',alignItems:'center',justifyContent:'space-between',width:'100%',margin:'0 0 10px',padding:'12px 16px',border:'1px solid #dce8e1',borderRadius:12,background:'white',color:'#356c5c',fontWeight:800,fontSize:14,cursor:'pointer'}}>
+            <span>☰ Mais opções</span><span aria-hidden="true">{mobileMoreOpen ? '−' : '+'}</span>
+          </button>
+
+          {mobileMoreOpen && <div style={{marginBottom:'20px'}}>
 
             <p style={{color:'#69837b',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',marginBottom:'10px',paddingLeft:'16px'}}>{t('nav.spiritual_life')}</p>
 
@@ -672,7 +677,7 @@ export default function App() {
 
             )}
 
-          </div>
+          </div>}
 
           <button onClick={logout} style={{display:'flex',alignItems:'center',gap:'12px',color:'#c84039',fontSize:'1rem',background:'white',border:'1px solid #f1d5d2',borderRadius:12,textAlign:'left',width:'100%',padding:'12px 16px',cursor:'pointer'}}>
 
