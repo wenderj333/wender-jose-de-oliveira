@@ -282,7 +282,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
     video.muted = true;
     video.volume = 0;
     setIsMuted(true);
-  }, [soundEnabled, isVideo, musicUrl]);
+  }, [isVideo, mediaUrl]);
   const videoPoster = isVideo && mediaUrl && mediaUrl.includes('cloudinary.com') ? mediaUrl.replace('/video/upload/', '/video/upload/so_0,w_600/').replace(/\.(mp4|webm|mov|ogg)/i, '.jpg') : null;
 
   // Effect to manage video play/pause based on `isPlaying` prop
