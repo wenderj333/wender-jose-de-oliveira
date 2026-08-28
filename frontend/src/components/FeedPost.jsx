@@ -34,7 +34,7 @@ export default function FeedPost({ post, isPlaying, onVideoPlay, onImageClick })
     if (post.type === 'louvor' || post.video_url) {
       return (
         <div className="feed-post__media" onClick={() => onVideoPlay(post.id)}>
-          <video src={post.video_url} className="feed-post__video" poster={post.thumbnail_url} />
+          <video src={post.video_url} className="feed-post__video" poster={post.thumbnail_url} autoPlay muted playsInline preload="metadata" onCanPlay={e=>e.currentTarget.play().catch(()=>{})} />
           {!isPlaying && <Play className="feed-post__play-icon" size={48} />}
         </div>
       );

@@ -290,6 +290,8 @@ function PostCard({ post, onLike, onDelete }) {
           <video
             src={post.mediaUrl}
             controls
+            autoPlay
+            muted
             playsInline
             style={{ width: '100%', maxHeight: '400px', objectFit: 'contain', display: 'block' }}
             preload="metadata"
