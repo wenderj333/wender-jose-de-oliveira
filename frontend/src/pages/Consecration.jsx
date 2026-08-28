@@ -5,16 +5,22 @@ import { useAuth } from '../context/AuthContext';
 const API = import.meta.env.VITE_API_URL || '';
 
 const VERSES = [
-  { ref: 'Mateus 4:1', text: 'Jesus foi levado pelo Espirito ao deserto.' },
-  { ref: 'Joel 2:12', text: 'Convertei-vos a mim de todo o coracao, com jejum.' },
-  { ref: 'Isaias 58:6', text: 'O jejum que escolhi e soltar os lacos da impiedade.' },
-  { ref: 'Mateus 6:17', text: 'Quando jejuares, unge a cabeca e lava o rosto.' },
-  { ref: 'Daniel 10:3', text: 'Nao comi manjar delicado, nem entrou carne na minha boca.' },
+  { ref: 'Mateus 4:1', text: 'Jesus foi levado pelo Espírito ao deserto.' },
+  { ref: 'Joel 2:12', text: 'Convertei-vos a mim de todo o coração, com jejum.' },
+  { ref: 'Isaías 58:6', text: 'O jejum que escolhi é soltar os laços da impiedade.' },
+  { ref: 'Mateus 6:17', text: 'Quando jejuares, unge a cabeça e lava o rosto.' },
+  { ref: 'Daniel 10:3', text: 'Não comi manjar delicado, nem entrou carne na minha boca.' },
   { ref: 'Lucas 4:2', text: 'Durante quarenta dias foi tentado pelo diabo.' },
   { ref: 'Atos 13:2', text: 'Enquanto ministravam ao Senhor e jejuavam.' },
 ];
 
 const ACTIONS = ['dayGuide_1','dayGuide_2','dayGuide_3','dayGuide_4','dayGuide_5','dayGuide_6','dayGuide_7'];
+
+const BIBLICAL_GUIDE = {
+  pt: { button: 'Jejum Bíblico', title: 'Jejum bíblico: vigia e consagração', intro: 'Um tempo separado para buscar Deus com sinceridade, oração e sabedoria.', watch: 'Vigilância no olhar', watchText: 'Protege o que entra pelos olhos: escolhe conteúdos que edificam e mantém o coração atento à Palavra.', benefits: 'Frutos de uma consagração pura', benefitsText: 'Mais clareza espiritual, domínio próprio, sensibilidade para ouvir Deus e amor renovado pelas pessoas.', steps: ['Começa com oração e um propósito claro.', 'Escolhe um período seguro e hidrata-te quando necessário.', 'Troca distrações por Bíblia, silêncio e oração.', 'Termina agradecendo e retoma a alimentação com cuidado.'], note: 'O jejum não substitui cuidados médicos. Se tens alguma condição de saúde, procura orientação profissional.' },
+  es: { button: 'Ayuno bíblico', title: 'Ayuno bíblico: vigilancia y consagración', intro: 'Un tiempo separado para buscar a Dios con sinceridad, oración y sabiduría.', watch: 'Vigilancia en la mirada', watchText: 'Protege lo que entra por tus ojos: elige contenidos que edifican y mantén el corazón atento a la Palabra.', benefits: 'Frutos de una consagración pura', benefitsText: 'Más claridad espiritual, dominio propio, sensibilidad para escuchar a Dios y amor renovado por las personas.', steps: ['Comienza con oración y un propósito claro.', 'Elige un período seguro y cuida tu hidratación.', 'Cambia distracciones por Biblia, silencio y oración.', 'Termina agradeciendo y vuelve a comer con cuidado.'], note: 'El ayuno no sustituye la atención médica. Si tienes una condición de salud, busca orientación profesional.' },
+  en: { button: 'Biblical fast', title: 'Biblical fast: watchfulness and dedication', intro: 'Set aside time to seek God with sincerity, prayer and wisdom.', watch: 'Watchfulness in what you see', watchText: 'Guard what enters through your eyes: choose things that build you up and keep your heart attentive to the Word.', benefits: 'Fruit of a sincere dedication', benefitsText: 'Greater spiritual clarity, self-control, sensitivity to God and renewed love for people.', steps: ['Begin with prayer and a clear purpose.', 'Choose a safe period and stay hydrated as needed.', 'Replace distractions with Scripture, silence and prayer.', 'Finish with thanksgiving and return to food gently.'], note: 'Fasting does not replace medical care. If you have a health condition, seek professional advice.' },
+};
 
 // Avatares demonstrativos para a sala não ficar vazia antes da chegada de participantes reais.
 // Eles são sempre identificados como exemplo e não entram nas contagens do servidor.
@@ -26,7 +32,7 @@ const DEMO_PARTICIPANTS = Array.from({ length: 10 }, (_, index) => ({
 }));
 
 export default function Consecration() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, token } = useAuth();
   const [stats, setStats] = useState({ totalConsecrations:0, activeFasting:0 });
   const [participants, setParticipants] = useState([]);
@@ -39,6 +45,7 @@ export default function Consecration() {
   const [postText, setPostText] = useState('');
   const [postType, setPostType] = useState('prayer');
   const [showForm, setShowForm] = useState(false);
+  const [showBiblicalGuide, setShowBiblicalGuide] = useState(false);
   const [dayCount, setDayCount] = useState(1);
   const [prayCount, setPrayCount] = useState(()=>{
     const today = new Date().toDateString();
@@ -58,6 +65,7 @@ export default function Consecration() {
   const today = new Date().getDay();
   const verse = VERSES[today % VERSES.length];
   const todayAction = ACTIONS[today % ACTIONS.length];
+  const guide = BIBLICAL_GUIDE[i18n.language?.split('-')[0]] || BIBLICAL_GUIDE.pt;
   const flameIcon = dayCount >= 21 ? '🔥🔥🔥' : dayCount >= 7 ? '🔥🔥' : dayCount >= 3 ? '🔥' : '🕯️';
   const displayParticipants = participants.length ? participants : DEMO_PARTICIPANTS;
   const showingDemoParticipants = participants.length === 0;
@@ -314,11 +322,23 @@ export default function Consecration() {
         <div style={{background:'rgba(240,192,64,0.1)',borderRadius:12,padding:'10px 16px',display:'flex',alignItems:'center',gap:10}}>
           <span style={{fontSize:24}}>✨</span>
           <div>
-            <p style={{color:'#f0c040',fontWeight:700,fontSize:12,margin:'0 0 2px'}}>{t('consecration.dailyAction','Acao de hoje')}</p>
-            <p style={{color:'white',fontSize:14,margin:0}}>{t('consecration.'+todayAction,'Ora pela tua familia')}</p>
+            <p style={{color:'#f0c040',fontWeight:700,fontSize:12,margin:'0 0 2px'}}>{t('consecration.dailyAction','Ação de hoje')}</p>
+            <p style={{color:'white',fontSize:14,margin:0}}>{t('consecration.'+todayAction,'Ora pela tua família')}</p>
           </div>
         </div>
       </div>
+
+      <button onClick={()=>setShowBiblicalGuide(v=>!v)} style={{width:'100%',marginTop:14,padding:'15px 18px',borderRadius:16,border:'1px solid rgba(240,192,64,.45)',background:'linear-gradient(135deg,#f0c040,#e67e22)',color:'#1a0a3e',fontWeight:900,fontSize:15,cursor:'pointer',boxShadow:'0 8px 22px rgba(128,76,20,.22)',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>📖 {guide.button}</span><span style={{fontSize:20}}>{showBiblicalGuide?'−':'+'}</span></button>
+      {showBiblicalGuide && <div style={{marginTop:10,borderRadius:18,padding:20,background:'linear-gradient(145deg,#fffaf0,#f2e9ff)',color:'#25143e',boxShadow:'0 12px 30px rgba(60,35,95,.14)',border:'1px solid rgba(92,65,139,.16)'}}>
+        <h3 style={{margin:'0 0 6px',fontSize:20,color:'#4b267e'}}>{guide.title}</h3>
+        <p style={{margin:'0 0 16px',color:'#625873',lineHeight:1.55,fontSize:14}}>{guide.intro}</p>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(210px,1fr))',gap:10}}>
+          <div style={{padding:14,borderRadius:14,background:'#fff',borderLeft:'4px solid #6c3fa0'}}><strong style={{color:'#4b267e'}}>👁️ {guide.watch}</strong><p style={{margin:'7px 0 0',fontSize:13,lineHeight:1.5,color:'#625873'}}>{guide.watchText}</p></div>
+          <div style={{padding:14,borderRadius:14,background:'#fff',borderLeft:'4px solid #e0a92d'}}><strong style={{color:'#8a5a00'}}>✨ {guide.benefits}</strong><p style={{margin:'7px 0 0',fontSize:13,lineHeight:1.5,color:'#625873'}}>{guide.benefitsText}</p></div>
+        </div>
+        <ol style={{margin:'16px 0 10px',paddingLeft:22,color:'#4f4260',fontSize:13,lineHeight:1.7}}>{guide.steps.map(step=><li key={step}>{step}</li>)}</ol>
+        <p style={{margin:'12px 0 0',fontSize:11,color:'#7b6d83',fontStyle:'italic'}}>⚕️ {guide.note}</p>
+      </div>}
 
       {showForm && (
         <div style={{background:'linear-gradient(135deg,#1a0a3e,#2d1054)',borderRadius:16,padding:20,marginTop:12,color:'white'}}>
