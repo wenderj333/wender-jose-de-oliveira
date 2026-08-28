@@ -17,9 +17,11 @@ export default function DueloBiblico() {
         type: 'LOGIN_DATA',
         user: {
           nome: user?.full_name || user?.name || 'Jogador',
+          nomeDiploma: user?.full_name || user?.name || 'Jogador',
           foto: user?.profile_photo || user?.avatar_url || null,
           token: token || null,
-          idioma: lang
+          idioma: lang,
+          destaqueRanking: '1.º lugar no Duelo Bíblico'
         }
       }, 'https://duelo-biblico.vercel.app');
     };

@@ -5,7 +5,11 @@ const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
 const cloudinary = require('cloudinary').v2;
 
-cloudinary.config({ cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'degxiuf43', api_key: process.env.CLOUDINARY_API_KEY || '914835643241235', api_secret: process.env.CLOUDINARY_API_SECRET || '7Eu52T0NYAAy2hmXHl0i4C0TgUo' });
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 }, fileFilter: (_req, file, callback) => callback(null, /^(image|video)\//.test(file.mimetype)) });
 const uploadToCloud = (buffer, folder) => new Promise((resolve, reject) => { const stream = cloudinary.uploader.upload_stream({ folder, resource_type: 'auto' }, (error, result) => error ? reject(error) : resolve(result)); stream.end(buffer); });
 

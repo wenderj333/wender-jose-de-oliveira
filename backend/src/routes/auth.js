@@ -174,8 +174,8 @@ router.post('/phone', async (req, res) => {
 router.post('/promote', authenticate, async (req, res) => {
   try {
     const { role, secretKey } = req.body;
-    const PROMOTE_SECRET = process.env.PROMOTE_SECRET || 'sigocomfe-pastor-2026';
-    if (secretKey !== PROMOTE_SECRET) {
+    const PROMOTE_SECRET = process.env.PROMOTE_SECRET;
+    if (!PROMOTE_SECRET || secretKey !== PROMOTE_SECRET) {
       return res.status(403).json({ error: 'Chave secreta inválida' });
     }
     if (!['pastor', 'admin'].includes(role)) {
@@ -202,7 +202,7 @@ router.get('/me', authenticate, (req, res) => {
 router.post('/admin/reset-password', async (req, res) => {
   try {
     const { email, newPassword, adminKey } = req.body;
-    if (adminKey !== 'SigoComFe2024Admin') return res.status(403).json({ error: 'Nao autorizado' });
+    if (!process.env.ADMIN_SECRET || adminKey !== process.env.ADMIN_SECRET) return res.status(403).json({ error: 'Nao autorizado' });
     const bcrypt = require('bcryptjs');
     const hash = await bcrypt.hash(newPassword, 10);
     const result = await db.query('UPDATE users SET password_hash = $1 WHERE email = $2 RETURNING id, email, full_name', [hash, email]);

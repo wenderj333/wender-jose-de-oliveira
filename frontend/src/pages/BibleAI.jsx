@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const BOOKS = ["Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth","1 Samuel","2 Samuel","1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Esther","Job","Psalms","Proverbs","Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations","Ezekiel","Daniel","Hosea","Joel","Amos","Obadiah","Jonah","Micah","Nahum","Habakkuk","Zephaniah","Haggai","Zechariah","Malachi","Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus","Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"];
 const LANG_TRANSLATION = {
-  pt: 'almeida', es: 'rva', en: 'kjv', de: 'luther1912', fr: 'martin', ro: 'cornilescu', ru: 'synodal'
+  // bible-api.com supports these reliable public-domain editions.  Use Almeida
+  // as the safe reading edition for languages that are not available there.
+  pt: 'almeida', es: 'almeida', en: 'kjv', de: 'almeida', fr: 'almeida', ro: 'rccv', ru: 'almeida'
 };
 
 const LANG_BOOKS = {
@@ -19,11 +21,11 @@ const LANG_BOOKS = {
 const BOOKS_PT = ["Genesis","Exodo","Levitico","Numeros","Deuteronomio","Josue","Juizes","Rute","1 Samuel","2 Samuel","1 Reis","2 Reis","1 Cronicas","2 Cronicas","Esdras","Neemias","Ester","Jo","Salmos","Proverbios","Eclesiastes","Cantares","Isaias","Jeremias","Lamentacoes","Ezequiel","Daniel","Oseias","Joel","Amos","Obadias","Jonas","Miqueas","Naum","Habacuque","Sofonias","Ageu","Zacarias","Malaquias","Mateus","Marcos","Lucas","Joao","Atos","Romanos","1 Corintios","2 Corintios","Galatas","Efesios","Filipenses","Colossenses","1 Tessalonicenses","2 Tessalonicenses","1 Timoteo","2 Timoteo","Tito","Filemon","Hebreus","Tiago","1 Pedro","2 Pedro","1 Joao","2 Joao","3 Joao","Judas","Apocalipse"];
 
 export default function BibleStudy() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [tab, setTab] = useState("read");
-  const userLang = (navigator.language || 'pt').split('-')[0];
-  const [translation, setTranslation] = useState('kjv');
-  const [bibleLang, setBibleLang] = useState('en');
+  const currentLang = (i18n.language || navigator.language || 'pt').split('-')[0];
+  const [translation, setTranslation] = useState(() => LANG_TRANSLATION[currentLang] || 'almeida');
+  const [bibleLang, setBibleLang] = useState(() => LANG_TRANSLATION[currentLang] ? currentLang : 'pt');
   const booksLocal = LANG_BOOKS[bibleLang] || LANG_BOOKS.en;
   const [selectedBook, setSelectedBook] = useState(null);
   const [selectedBookPt, setSelectedBookPt] = useState(null);
@@ -32,8 +34,31 @@ export default function BibleStudy() {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState(null);
+  const [loadError, setLoadError] = useState("");
   const [favorites, setFavorites] = useState(() => JSON.parse(localStorage.getItem("bible_favs") || "[]"));
   const [showBooks, setShowBooks] = useState(true);
+
+  useEffect(() => {
+    const language = (i18n.language || 'pt').split('-')[0];
+    setTranslation(LANG_TRANSLATION[language] || 'almeida');
+    setBibleLang(LANG_TRANSLATION[language] ? language : 'pt');
+    setShowBooks(true);
+    setVerses([]);
+    setSearchResults(null);
+    setLoadError("");
+  }, [i18n.language]);
+
+  const requestBible = async (url) => {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 12000);
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      if (!response.ok) throw new Error('Bible service unavailable');
+      return await response.json();
+    } finally {
+      window.clearTimeout(timeout);
+    }
+  };
 
   const saveFavs = (f) => { setFavorites(f); localStorage.setItem("bible_favs", JSON.stringify(f)); };
   const isFav = (v) => favorites.some(f => f.key === v.book_name+v.chapter+":"+v.verse);
@@ -44,29 +69,32 @@ export default function BibleStudy() {
   };
 
   const loadChapter = async (book, bookPt, ch) => {
-    setLoading(true); setVerses([]);
+    setLoading(true); setVerses([]); setLoadError("");
     try {
       const bibleUrl = "https://bible-api.com/"+encodeURIComponent(book)+"+"+ch+"?translation="+translation;
-      const res = await fetch("https://api.allorigins.win/get?url="+encodeURIComponent(bibleUrl));
-      const raw = await res.json();
-      const data = JSON.parse(raw.contents);
+      const data = await requestBible(bibleUrl);
+      if (!data.verses?.length) throw new Error('No verses returned');
       setVerses(data.verses || []); setChapter(ch); setShowBooks(false);
       setSelectedBook(book); setSelectedBookPt(bookPt);
-    } catch(e) {}
-    setLoading(false);
+    } catch(e) {
+      setLoadError(t('bible.loadError', 'Não foi possível carregar agora. Tente novamente em alguns segundos.'));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const doSearch = async () => {
     if (!search.trim()) return;
-    setLoading(true);
+    setLoading(true); setLoadError("");
     try {
       const bibleUrl2 = "https://bible-api.com/"+encodeURIComponent(search)+"?translation="+translation;
-      const res = await fetch("https://api.allorigins.win/get?url="+encodeURIComponent(bibleUrl2));
-      const raw = await res.json();
-      const data = JSON.parse(raw.contents);
+      const data = await requestBible(bibleUrl2);
       setSearchResults(data);
-    } catch(e) {}
-    setLoading(false);
+    } catch(e) {
+      setLoadError(t('bible.loadError', 'Não foi possível carregar agora. Tente novamente em alguns segundos.'));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const VerseRow = ({ v }) => (
@@ -85,17 +113,13 @@ export default function BibleStudy() {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: 32 }}>📖</span>
           <div style={{ flex: 1 }}>
-            <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>{t("bible.bibleStudy","Biblia de Estudo")}</h1>
+            <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Ler a Bíblia</h1>
             <p style={{ margin: "4px 0 0", fontSize: 13, opacity: 0.85 }}>Traducao: {translation.toUpperCase()}</p>
           </div>
-          <select value={translation} onChange={e => { const t=e.target.value; setTranslation(t); setBibleLang(Object.keys(LANG_TRANSLATION).find(k=>LANG_TRANSLATION[k]===t)||'en'); setShowBooks(true); }} style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.4)", borderRadius: 8, padding: "6px 10px", color: "white", cursor: "pointer", fontSize: 13 }}>
-            <option value="almeida" style={{color:"#333"}}>PT - Almeida</option>
+          <select value={translation} onChange={e => { const selectedTranslation=e.target.value; setTranslation(selectedTranslation); setBibleLang(Object.keys(LANG_TRANSLATION).find(k=>LANG_TRANSLATION[k]===selectedTranslation)||'en'); setShowBooks(true); setVerses([]); setLoadError(""); }} style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.4)", borderRadius: 8, padding: "6px 10px", color: "white", cursor: "pointer", fontSize: 13 }}>
+            <option value="almeida" style={{color:"#333"}}>Almeida</option>
             <option value="kjv" style={{color:"#333"}}>EN - KJV</option>
-            <option value="rva" style={{color:"#333"}}>ES - RVA</option>
-            <option value="luther1912" style={{color:"#333"}}>DE - Luther</option>
-            <option value="martin" style={{color:"#333"}}>FR - Martin</option>
-            <option value="cornilescu" style={{color:"#333"}}>RO - Cornilescu</option>
-            <option value="synodal" style={{color:"#333"}}>RU - Sinodal</option>
+            <option value="rccv" style={{color:"#333"}}>RO - Cornilescu</option>
           </select>
         </div>
       </div>
@@ -128,6 +152,7 @@ export default function BibleStudy() {
           </div>
         )
       )}
+      {loadError && <div role="alert" style={{ marginTop: 16, padding: 14, borderRadius: 10, background: '#fff4e5', color: '#8a4b08', fontWeight: 600 }}>{loadError}</div>}
       {tab === "search" && (
         <div>
           <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>

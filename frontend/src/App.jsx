@@ -460,7 +460,7 @@ export default function App() {
 
           <Link to="/ia-biblica" className={`nav-item ${location.pathname==='/ia-biblica'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'6px 11px',borderRadius:8,fontSize:'0.84rem',display:'flex',alignItems:'center',gap:6}}>
 
-            <BookOpen size={15}/> {t('nav.bible_ai')}
+            <BookOpen size={15}/> Ler a Bíblia
 
           </Link>
 
@@ -575,7 +575,7 @@ export default function App() {
 
             {[
 
-              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bible_ai', 'IA Bíblica')],
+              ['/ia-biblica', <BookOpen size={20}/>, 'Ler a Bíblia'],
 
               ['/pedidos-ajuda', <Heart size={20}/>, t('nav.prayers')],
 
@@ -719,7 +719,7 @@ export default function App() {
 
             <p className="menu-title">{t('menu.spiritual','ESPIRITUAL')}</p>
 
-            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bible_ai','IA Bíblica')}</span></Link>
+            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>Ler a Bíblia</span></Link>
 
             <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','Orações')}</span></Link>
 
@@ -776,6 +776,7 @@ export default function App() {
             <Route path="/" element={<MuralGrid />} />
 
             <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route path="/register" element={<Register />} />
 
             <Route path="/perfil/:userId" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Mic, MicOff, Video, VideoOff, Users, Send, X, Radio } from "lucide-react";
 
 export default function LiveStream() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const { t } = useTranslation();
   const videoRef = useRef(null);
   const [isLive, setIsLive] = useState(false);
@@ -20,7 +20,10 @@ export default function LiveStream() {
   const [reactions, setReactions] = useState([]);
   const chatEndRef = useRef(null);
   const streamRef = useRef(null);
+  const recorderRef = useRef(null);
+  const recordingChunksRef = useRef([]);
   const reactionId = useRef(0);
+  const [recordingStatus, setRecordingStatus] = useState('idle');
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior:"smooth" }); }, [messages]);
   useEffect(() => {
@@ -29,28 +32,72 @@ export default function LiveStream() {
   }, []);
 
   const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
+  const authorization = { Authorization: `Bearer ${token || localStorage.getItem('token')}` };
+
+  const uploadRecording = async (blob) => {
+    if (!blob?.size) return;
+    setRecordingStatus('saving');
+    try {
+      const signatureResponse = await fetch(API_URL + '/api/live-community/recording-signature', { headers: authorization });
+      const signature = await signatureResponse.json();
+      if (!signatureResponse.ok) throw new Error(signature.error);
+      const form = new FormData();
+      form.append('file', blob, `directo-${Date.now()}.webm`);
+      form.append('api_key', signature.apiKey);
+      form.append('timestamp', signature.timestamp);
+      form.append('signature', signature.signature);
+      form.append('folder', signature.folder);
+      const upload = await fetch(`https://api.cloudinary.com/v1_1/${signature.cloudName}/video/upload`, { method: 'POST', body: form });
+      const uploaded = await upload.json();
+      if (!upload.ok || !uploaded.public_id || !uploaded.secure_url) throw new Error('Falha no envio da gravação.');
+      const saved = await fetch(API_URL + '/api/live-community/recordings', {
+        method: 'POST',
+        headers: { ...authorization, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ publicId: uploaded.public_id, secureUrl: uploaded.secure_url })
+      });
+      if (!saved.ok) throw new Error('Falha ao registar a gravação.');
+      setRecordingStatus('saved');
+    } catch (_) { setRecordingStatus('error'); }
+  };
+
   const startStream = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video:true, audio:true });
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
+      recordingChunksRef.current = [];
+      if (typeof MediaRecorder !== 'undefined') {
+        const preferredType = MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus') ? 'video/webm;codecs=vp8,opus' : 'video/webm';
+        const recorder = new MediaRecorder(stream, { mimeType: preferredType });
+        recorderRef.current = recorder;
+        recorder.ondataavailable = event => { if (event.data.size) recordingChunksRef.current.push(event.data); };
+        recorder.onstop = () => {
+          const blob = new Blob(recordingChunksRef.current, { type: recorder.mimeType || 'video/webm' });
+          recordingChunksRef.current = [];
+          uploadRecording(blob);
+        };
+        recorder.start(10000);
+        setRecordingStatus('recording');
+      }
       setIsLive(true);
       await fetch(API_URL + '/api/live-community/start', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ userId: user.uid, userName: user.full_name || user.displayName, userAvatar: user.photoURL, title: 'Live ao Vivo' })
+        headers: { ...authorization, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName: user.full_name || user.displayName, userAvatar: user.avatar_url || user.photoURL, title: 'Directo ao vivo' })
       });
-    } catch(e) { alert("Nao foi possivel aceder a camara"); }
+    } catch(e) { alert("Não foi possível aceder à câmara e ao microfone."); }
   };
 
   const stopStream = async () => {
+    if (recorderRef.current?.state === 'recording') recorderRef.current.stop();
+    recorderRef.current = null;
     streamRef.current?.getTracks().forEach(t => t.stop());
     setIsLive(false);
     const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
     await fetch(API_URL + '/api/live-community/stop', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ userId: user.uid })
+      headers: { ...authorization, 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
     });
   };
   const toggleMute = () => { streamRef.current?.getAudioTracks().forEach(t => { t.enabled = !t.enabled; }); setIsMuted(m => !m); };
@@ -86,6 +133,7 @@ export default function LiveStream() {
             <div style={{ fontSize:64 }}>📡</div>
             <p style={{ color:"white", fontSize:22, fontWeight:700 }}>Pronto para transmitir?</p>
             <p style={{ color:"rgba(255,255,255,0.6)", fontSize:15, textAlign:"center", maxWidth:300 }}>Partilha a tua fe com o mundo</p>
+            <p style={{ color:"rgba(255,255,255,0.78)", fontSize:13, textAlign:"center", maxWidth:410, lineHeight:1.5 }}>Ao iniciar, o directo será gravado com segurança. A gravação fica guardada durante 2 dias e depois é apagada automaticamente.</p>
             <button onClick={startStream} style={{ padding:"14px 40px", borderRadius:50, border:"none", background:"linear-gradient(135deg,#e74c3c,#c0392b)", color:"white", fontWeight:700, fontSize:18, cursor:"pointer", display:"flex", alignItems:"center", gap:10 }}>
               <Radio size={20}/> Iniciar Live
             </button>
@@ -102,6 +150,7 @@ export default function LiveStream() {
                 <Users size={14} color="white"/>
                 <span style={{ color:"white", fontSize:13 }}>{viewers}</span>
               </div>
+              {recordingStatus === 'recording' && <span style={{ color:'white', fontSize:12, background:'rgba(0,0,0,.5)', borderRadius:20, padding:'5px 10px' }}>● A gravar · apaga em 2 dias</span>}
             </div>
             <button onClick={stopStream} style={{ background:"rgba(0,0,0,0.5)", border:"none", borderRadius:"50%", width:36, height:36, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer" }}>
               <X size={18} color="white"/>
@@ -137,6 +186,9 @@ export default function LiveStream() {
       <div style={{ width:"100%", height:280, display:"flex", flexDirection:"column", background:"rgba(0,0,0,0.85)", borderTop:"1px solid rgba(255,255,255,0.1)" }}>
         <div style={{ padding:"16px 16px 12px", borderBottom:"1px solid rgba(255,255,255,0.1)" }}>
           <p style={{ color:"white", fontWeight:700, fontSize:15 }}>💬 Chat ao Vivo</p>
+          {recordingStatus === 'saving' && <p style={{ color:'#f7d978', fontSize:12, margin:'4px 0 0' }}>A guardar a gravação...</p>}
+          {recordingStatus === 'saved' && <p style={{ color:'#7ee2a8', fontSize:12, margin:'4px 0 0' }}>Gravação guardada por 2 dias.</p>}
+          {recordingStatus === 'error' && <p style={{ color:'#ff9e9e', fontSize:12, margin:'4px 0 0' }}>Não foi possível guardar a gravação. O directo já terminou.</p>}
         </div>
         <div style={{ flex:1, overflowY:"auto", padding:12, display:"flex", flexDirection:"column", gap:8 }}>
           {messages.map(msg => (

@@ -9,9 +9,9 @@ const cloudinary = require('cloudinary').v2;
 
 // Configure Cloudinary
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'degxiuf43',
-  api_key: process.env.CLOUDINARY_API_KEY || '914835643241235',
-  api_secret: process.env.CLOUDINARY_API_SECRET || '7Eu52T0NYAAy2hmXHl0i4C0TgUo',
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 // Multer: store in memory for Cloudinary upload
@@ -41,16 +41,19 @@ function uploadToCloudinary(buffer, mimetype) {
 
 // GET /api/feed/cloudinary-signature — para upload direto do frontend (vídeos grandes)
 router.get('/cloudinary-signature', authenticate, (req, res) => {
+  if (!process.env.CLOUDINARY_API_SECRET || !process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY) {
+    return res.status(503).json({ error: 'Envio de ficheiros temporariamente indisponível.' });
+  }
   const timestamp = Math.round(Date.now() / 1000);
   const signature = cloudinary.utils.api_sign_request(
     { timestamp, folder: 'sigo-com-fe/posts' },
-    process.env.CLOUDINARY_API_SECRET || '7Eu52T0NYAAy2hmXHl0i4C0TgUo'
+    process.env.CLOUDINARY_API_SECRET
   );
   res.json({
     signature,
     timestamp,
-    cloudName: process.env.CLOUDINARY_CLOUD_NAME || 'degxiuf43',
-    apiKey: process.env.CLOUDINARY_API_KEY || '914835643241235',
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    apiKey: process.env.CLOUDINARY_API_KEY,
     folder: 'sigo-com-fe/posts',
   });
 });
