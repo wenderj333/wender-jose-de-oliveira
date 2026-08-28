@@ -634,9 +634,7 @@ export default function App() {
 
               ['/journeys', <Globe size={20}/>, t('nav.journeys')],
 
-              ['/live', <PlayCircle size={20}/>, '🔴 Directo'],
-
-              ['/praca-oracao', <Heart size={20}/>, 'Praça de Oração'],
+              ['/live', <PlayCircle size={20}/>, '🔴 Direto'],
 
               ['/chat-pastoral', <MessageCircle size={20}/>, t('nav.pastoral_chat')],
 
@@ -644,7 +642,7 @@ export default function App() {
 
               ['/igrejas', <Globe size={20}/>, t('churches.title', 'Igrejas')],
 
-              ['/ajuda-uma-vida', <Heart size={20}/>, t('nav.help_life', 'Ajuda ao Proximo')],
+              ['/ajuda-uma-vida', <Heart size={20}/>, t('nav.help_life', 'Ajuda ao Próximo')],
 
             ].map(([to, icon, label]) => (
 
@@ -712,7 +710,7 @@ export default function App() {
 
             <p className="menu-title">{t('menu.principal','PRINCIPAL')}</p>
 
-            <Link to="/" className={isActive('/')}><Home size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.mural','Inicio')}</span></Link>
+            <Link to="/" className={isActive('/')}><Home size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.mural','Mural')}</span></Link>
 
             <Link to="/praca-oracao" className={isActive('/praca-oracao') || isActive('/praca-de-oracao')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>Praça Mundial de Oração</span></Link>
 
@@ -766,7 +764,7 @@ export default function App() {
 
             <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','Orações')}</span></Link>
 
-            <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_life','Ajuda ao Proximo')}</span></Link>
+            <Link to="/ajuda-uma-vida" className={isActive('/ajuda-uma-vida')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.help_life','Ajuda ao Próximo')}</span></Link>
 
             <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','Reflexão')}</span></Link>
 
