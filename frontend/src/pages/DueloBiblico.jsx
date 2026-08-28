@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 
@@ -34,7 +34,8 @@ export default function DueloBiblico() {
   }, [user, i18n.language]);
 
   const lang = i18n.language?.substring(0, 2) || 'pt';
-  const url = `https://duelo-biblico.vercel.app?v=${Date.now()}&lang=${lang}`;
+  // Mantém o src estável; recriá-lo em cada render reiniciava o iframe e a rolagem.
+  const url = useMemo(() => `https://duelo-biblico.vercel.app?lang=${lang}`, [lang]);
 
   return (
     <div style={{ width: '100%', height: 'calc(100vh - 60px)', overflow: 'hidden' }}>
