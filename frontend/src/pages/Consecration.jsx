@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const API = import.meta.env.VITE_API_URL || '';
@@ -26,6 +27,12 @@ const CHALLENGE_COPY = {
   pt: { title: 'Desafio de 7 dias', intro: 'Caminha um dia de cada vez com oração, Palavra e atitudes de fé.', mark: 'Marcar dia como concluído', done: 'Dia concluído', invite: 'Convidar amigos', reminder: 'Ativar lembrete diário', reminderOn: 'Lembrete ativado neste dispositivo', reminderInfo: 'O lembrete funciona neste dispositivo enquanto permitido.' },
   es: { title: 'Desafío de 7 días', intro: 'Camina un día a la vez con oración, Palabra y actitudes de fe.', mark: 'Marcar día como completado', done: 'Día completado', invite: 'Invitar amigos', reminder: 'Activar recordatorio diario', reminderOn: 'Recordatorio activado en este dispositivo', reminderInfo: 'El recordatorio funciona en este dispositivo mientras esté permitido.' },
   en: { title: '7-day challenge', intro: 'Walk one day at a time with prayer, Scripture and acts of faith.', mark: 'Mark day complete', done: 'Day complete', invite: 'Invite friends', reminder: 'Enable daily reminder', reminderOn: 'Reminder enabled on this device', reminderInfo: 'The reminder works on this device while permission is allowed.' },
+};
+
+const CHAT_COPY = {
+  pt: { title: '💬 Chat da Consagração', text: 'Conversa com outras pessoas que estão a jejuar, partilha uma palavra de fé e apoia a comunidade.', button: 'Abrir chat comunitário', note: 'Respeita as pessoas e não partilhes dados pessoais.' },
+  es: { title: '💬 Chat de la consagración', text: 'Habla con otras personas que están ayunando, comparte una palabra de fe y apoya a la comunidad.', button: 'Abrir chat comunitario', note: 'Respeta a las personas y no compartas datos personales.' },
+  en: { title: '💬 Dedication chat', text: 'Talk with people who are fasting, share a word of faith and support the community.', button: 'Open community chat', note: 'Be respectful and do not share personal information.' },
 };
 
 // Avatares demonstrativos para a sala não ficar vazia antes da chegada de participantes reais.
@@ -76,6 +83,7 @@ export default function Consecration() {
   const todayAction = ACTIONS[today % ACTIONS.length];
   const guide = BIBLICAL_GUIDE[i18n.language?.split('-')[0]] || BIBLICAL_GUIDE.pt;
   const challenge = CHALLENGE_COPY[i18n.language?.split('-')[0]] || CHALLENGE_COPY.pt;
+  const chatCopy = CHAT_COPY[i18n.language?.split('-')[0]] || CHAT_COPY.pt;
   const challengeDay = Math.min(7, Math.max(1, dayCount));
   const flameIcon = dayCount >= 21 ? '🔥🔥🔥' : dayCount >= 7 ? '🔥🔥' : dayCount >= 3 ? '🔥' : '🕯️';
   const displayParticipants = participants.length ? participants : DEMO_PARTICIPANTS;
@@ -374,6 +382,13 @@ export default function Consecration() {
           </div>
         </div>
       </div>
+
+      <section style={{marginTop:14,borderRadius:18,padding:18,background:'linear-gradient(135deg,#edf8f2,#f5edff)',border:'1px solid rgba(92,65,139,.16)',boxShadow:'0 10px 24px rgba(60,35,95,.1)',color:'#25143e'}}>
+        <h3 style={{margin:'0 0 6px',fontSize:19,color:'#4b267e'}}>{chatCopy.title}</h3>
+        <p style={{margin:'0 0 12px',fontSize:13,color:'#625873',lineHeight:1.5}}>{chatCopy.text}</p>
+        <Link to="/comunidade-ao-vivo" style={{display:'inline-flex',alignItems:'center',padding:'10px 15px',borderRadius:14,background:'#6c3fa0',color:'white',fontWeight:800,fontSize:12,textDecoration:'none'}}>{chatCopy.button} →</Link>
+        <p style={{margin:'10px 0 0',fontSize:11,color:'#7b6d83'}}>{chatCopy.note}</p>
+      </section>
 
       <button onClick={()=>setShowBiblicalGuide(v=>!v)} style={{width:'100%',marginTop:14,padding:'15px 18px',borderRadius:16,border:'1px solid rgba(240,192,64,.45)',background:'linear-gradient(135deg,#f0c040,#e67e22)',color:'#1a0a3e',fontWeight:900,fontSize:15,cursor:'pointer',boxShadow:'0 8px 22px rgba(128,76,20,.22)',display:'flex',alignItems:'center',justifyContent:'space-between'}}><span>📖 {guide.button}</span><span style={{fontSize:20}}>{showBiblicalGuide?'−':'+'}</span></button>
       {showBiblicalGuide && <div style={{marginTop:10,borderRadius:18,padding:20,background:'linear-gradient(145deg,#fffaf0,#f2e9ff)',color:'#25143e',boxShadow:'0 12px 30px rgba(60,35,95,.14)',border:'1px solid rgba(92,65,139,.16)'}}>
