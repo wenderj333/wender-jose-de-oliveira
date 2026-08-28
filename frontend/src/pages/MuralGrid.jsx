@@ -280,7 +280,8 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
     if (!video || !isVideo) return;
     // Vídeos iniciam silenciosos: assim o navegador permite a reprodução automática.
     video.muted = true;
-    video.volume = 0;
+    // Mantém o volume preparado em 50%; o mute continua ativo para permitir autoplay.
+    video.volume = 0.5;
     setIsMuted(true);
   }, [isVideo, mediaUrl]);
   const videoPoster = isVideo && mediaUrl && mediaUrl.includes('cloudinary.com') ? mediaUrl.replace('/video/upload/', '/video/upload/so_0,w_600/').replace(/\.(mp4|webm|mov|ogg)/i, '.jpg') : null;
@@ -344,7 +345,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       if (!isMuted) { // if it was muted and now unmuting
           videoRef.current.volume = musicUrl ? 0.3 : 1.0;
       } else { // if it was unmuted and now muting
-          videoRef.current.volume = 0;
+          videoRef.current.volume = 0.5;
       }
     }
   };
