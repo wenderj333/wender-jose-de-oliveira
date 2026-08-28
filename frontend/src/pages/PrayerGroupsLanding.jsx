@@ -11,9 +11,23 @@ const features = [
 
 export default function PrayerGroupsLanding() {
   useEffect(() => {
+    const previousTitle = document.title;
+    const canonical = document.querySelector('link[rel="canonical"]');
+    const previousCanonical = canonical?.getAttribute('href');
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    const previousOgTitle = ogTitle?.getAttribute('content');
     document.title = 'Grupos de Oração Online | Sigo com Fé';
     const description = document.querySelector('meta[name="description"]');
+    const previousDescription = description?.getAttribute('content');
     if (description) description.setAttribute('content', 'Encontre grupos de oração online e comunidades cristãs no Sigo com Fé. Ore, partilhe pedidos e cresça na Palavra de Deus.');
+    if (canonical) canonical.setAttribute('href', `${window.location.origin}/grupos-oracao`);
+    if (ogTitle) ogTitle.setAttribute('content', 'Grupos de Oração Online | Sigo com Fé');
+    return () => {
+      document.title = previousTitle;
+      if (description && previousDescription) description.setAttribute('content', previousDescription);
+      if (canonical && previousCanonical) canonical.setAttribute('href', previousCanonical);
+      if (ogTitle && previousOgTitle) ogTitle.setAttribute('content', previousOgTitle);
+    };
   }, []);
 
   return (

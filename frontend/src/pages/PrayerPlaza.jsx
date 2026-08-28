@@ -26,6 +26,18 @@ export default function PrayerPlaza() {
   const active = useMemo(() => liveSessions.map((session, index) => ({ ...session, activity: activityFor(session, index) })), [liveSessions]);
 
   useEffect(() => {
+    const previousTitle = document.title;
+    const description = document.querySelector('meta[name="description"]');
+    const previousDescription = description?.getAttribute('content');
+    document.title = 'Praça de Oração | Sigo com Fé';
+    if (description) description.setAttribute('content', 'Entre na Praça de Oração do Sigo com Fé: faça pedidos, ore com a comunidade e acompanhe momentos de oração ao vivo.');
+    return () => {
+      document.title = previousTitle;
+      if (description && previousDescription) description.setAttribute('content', previousDescription);
+    };
+  }, []);
+
+  useEffect(() => {
     const receive = (event) => {
       if (event.action === 'started' && String(event.session?.pastorId) === String(user?.id)) setMySessionId(event.session.id);
       if (event.action === 'stopped' && event.sessionId === mySessionId) setMySessionId(null);
