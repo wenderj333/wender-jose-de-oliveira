@@ -512,12 +512,12 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 export default function MuralGrid() {
   const { t, i18n } = useTranslation();
   const soundCopy = {
-    pt: { on: 'Som automatico ativo', off: 'Ativar som automatico' },
-    es: { on: 'Sonido automatico activado', off: 'Activar sonido automatico' },
+    pt: { on: 'Som automático ativo', off: 'Ativar som automático' },
+    es: { on: 'Sonido automático activado', off: 'Activar sonido automático' },
     de: { on: 'Automatischer Ton aktiv', off: 'Automatischen Ton aktivieren' },
     en: { on: 'Automatic sound on', off: 'Enable automatic sound' },
-    fr: { on: 'Son automatique active', off: 'Activer le son automatique' },
-    ro: { on: 'Sunet automat activat', off: 'Activeaza sunetul automat' },
+    fr: { on: 'Son automatique activé', off: 'Activer le son automatique' },
+    ro: { on: 'Sunet automat activat', off: 'Activează sunetul automat' },
     ru: { on: 'Avtozvuk vkluchen', off: 'Vklyuchit avtozvuk' }
   };
   const currentLanguage = (i18n?.language || 'pt').slice(0, 2);
@@ -528,6 +528,11 @@ export default function MuralGrid() {
   const [viewMode, setViewMode] = useState('feed');
   const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem('sigo_mural_sound') === 'on');
   const soundLabel = (soundCopy[currentLanguage] || soundCopy.pt)[soundEnabled ? 'on' : 'off'];
+  const trackMuralAction = (name) => {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'mural_action', { action_name: name, page: 'mural' });
+    }
+  };
   const [showForm, setShowForm] = useState(false);
   const [postText, setPostText] = useState('');
   const [postVisibility, setPostVisibility] = useState('public');
@@ -858,9 +863,9 @@ export default function MuralGrid() {
 
       <div style={{display:"flex",gap:10,marginBottom:16,flexWrap:"wrap"}}>
         
-        <button onClick={()=>window.location.href="/duelo-biblico"} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"linear-gradient(135deg,#c0392b,#922b21)",color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>Duelo Biblico</button>
+        <button onClick={()=>{ trackMuralAction('duelo_biblico'); window.location.href="/duelo-biblico"; }} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"linear-gradient(135deg,#c0392b,#922b21)",color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>Duelo Bíblico</button>
       
-        <button aria-pressed={soundEnabled} onClick={() => { const next = !soundEnabled; setSoundEnabled(next); localStorage.setItem('sigo_mural_sound', next ? 'on' : 'off'); }} style={{padding:"8px 16px",borderRadius:20,border:"none",background:soundEnabled ? '#1f8b4c' : '#456fd0',color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>
+        <button aria-pressed={soundEnabled} onClick={() => { const next = !soundEnabled; trackMuralAction(next ? 'enable_sound' : 'disable_sound'); setSoundEnabled(next); localStorage.setItem('sigo_mural_sound', next ? 'on' : 'off'); }} style={{padding:"8px 16px",borderRadius:20,border:"none",background:soundEnabled ? '#1f8b4c' : '#456fd0',color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>
           {soundLabel}
         </button>
       </div>
