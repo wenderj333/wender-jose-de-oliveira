@@ -259,6 +259,21 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const isVideo = post.media_type === 'video' || Boolean(mediaUrl && mediaUrl.match(/\.(mp4|webm|mov|ogg)(\?|$)/i));
   const isAudio = post.media_type === 'audio' || Boolean(mediaUrl && mediaUrl.match(/\.(mp3|wav|aac|m4a|ogg)(\?|$)/i));
   const isImage = Boolean(mediaUrl) && !isVideo && !isAudio;
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !isVideo) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
+        video.muted = true;
+        video.defaultMuted = true;
+        video.play().catch(() => {});
+      } else if (!entry.isIntersecting) {
+        video.pause();
+      }
+    }, { threshold: [0.1, 0.25, 0.5] });
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [isVideo]);
   // Som automatico so e permitido pelo navegador depois de uma acao do utilizador.
   useEffect(() => {
     const video = videoRef.current;
@@ -385,6 +400,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             controls
             autoPlay
             playsInline
+            defaultMuted
             preload="metadata"
             muted={isMuted}
             poster={videoPoster || undefined}
