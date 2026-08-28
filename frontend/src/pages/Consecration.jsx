@@ -46,6 +46,7 @@ export default function Consecration() {
   const [postType, setPostType] = useState('prayer');
   const [showForm, setShowForm] = useState(false);
   const [showBiblicalGuide, setShowBiblicalGuide] = useState(false);
+  const [shareMsg, setShareMsg] = useState('');
   const [dayCount, setDayCount] = useState(1);
   const [prayCount, setPrayCount] = useState(()=>{
     const today = new Date().toDateString();
@@ -168,6 +169,15 @@ export default function Consecration() {
     setActionMsg(t('consecration.actionAdded', '+1 alma orando contigo!'));
     if (navigator.vibrate) navigator.vibrate(50);
     setTimeout(() => setActionMsg(''), 3000);
+  };
+
+  const shareFasting = async () => {
+    const url = `${window.location.origin}/consagracao`;
+    const text = t('consecration.shareText', 'Estou a participar no Jejum Mundial e a orar com a comunidade Sigo com Fé. Junta-te a nós!');
+    try {
+      if (navigator.share) await navigator.share({ title: t('consecration.shareTitle', 'Jejum Mundial'), text, url });
+      else { await navigator.clipboard?.writeText(`${text} ${url}`); setShareMsg(t('consecration.shareCopied', 'Link copiado para partilhar!')); setTimeout(() => setShareMsg(''), 3000); }
+    } catch (error) { if (error?.name !== 'AbortError') setShareMsg(t('consecration.shareUnavailable', 'Partilha indisponível neste momento.')); }
   };
 
   const handlePost = () => {
@@ -297,6 +307,11 @@ export default function Consecration() {
                 ))}
               </div>
             )}
+            {entered && <div style={{display:'flex',gap:8,justifyContent:'center',flexWrap:'wrap',marginBottom:12}}>
+              <button type="button" onClick={shareFasting} style={{border:'1px solid rgba(255,255,255,.45)',borderRadius:18,padding:'9px 15px',background:'rgba(255,255,255,.13)',color:'white',fontWeight:700,cursor:'pointer',fontSize:12}}>📤 {t('consecration.shareBtn','Compartilhar meu jejum')}</button>
+              <a href={`https://wa.me/?text=${encodeURIComponent(`${t('consecration.shareText','Estou a participar no Jejum Mundial e a orar com a comunidade Sigo com Fé. Junta-te a nós!')} ${window.location.origin}/consagracao`)}`} target="_blank" rel="noreferrer" style={{border:'1px solid rgba(116,255,170,.55)',borderRadius:18,padding:'9px 15px',background:'rgba(37,211,102,.22)',color:'white',fontWeight:700,textDecoration:'none',fontSize:12}}>💬 WhatsApp</a>
+            </div>}
+            {shareMsg && <div role="status" style={{color:'#f0c040',fontSize:12,fontWeight:700,marginBottom:8}}>{shareMsg}</div>}
             {!entered ? (
               <button onClick={handleEnter} style={{width:'100%',padding:'18px',borderRadius:14,border:'none',background:'linear-gradient(135deg,#f0c040,#e67e22)',color:'#1a0a3e',fontWeight:900,cursor:'pointer',fontSize:16,boxShadow:'0 8px 25px rgba(240,192,64,0.4)'}}>
                 {t('consecration.enterDesert','🏔 Entrar na Consagração')}
