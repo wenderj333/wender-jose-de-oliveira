@@ -12,4 +12,7 @@ Allow: /grupos-oracao
 Allow: /chat-cristao
 Allow: /duelo-biblico
 Allow: /praca-oracao
+Allow: /consagracao
+Allow: /jejum-mundial
+Allow: /ayuno-mundial
 Allow: /register

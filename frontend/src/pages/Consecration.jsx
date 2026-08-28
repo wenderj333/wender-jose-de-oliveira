@@ -93,11 +93,15 @@ export default function Consecration() {
     const previousTitle = document.title;
     const description = document.querySelector('meta[name="description"]');
     const previousDescription = description?.getAttribute('content');
+    const canonical = document.querySelector('link[rel="canonical"]');
+    const previousCanonical = canonical?.getAttribute('href');
     document.title = 'Jejum Mundial e Consagração | Sigo com Fé';
     if (description) description.setAttribute('content', 'Participe do jejum mundial e da consagração no Sigo com Fé. Ore com a comunidade e acompanhe quem está em jejum.');
+    if (canonical) canonical.setAttribute('href', `${window.location.origin}/consagracao`);
     return () => {
       document.title = previousTitle;
       if (description && previousDescription) description.setAttribute('content', previousDescription);
+      if (canonical && previousCanonical) canonical.setAttribute('href', previousCanonical);
     };
   }, []);
 

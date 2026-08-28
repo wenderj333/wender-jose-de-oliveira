@@ -431,6 +431,8 @@ export default function App() {
         <Route path="/mural" element={<MuralGrid />} />
         <Route path="/grupos-oracao" element={<PrayerGroupsLanding />} />
         <Route path="/consagracao" element={<Consecration />} />
+        <Route path="/jejum-mundial" element={<Consecration />} />
+        <Route path="/ayuno-mundial" element={<Consecration />} />
 
         <Route path="/perfil/:userId" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
@@ -833,6 +835,8 @@ export default function App() {
             <Route path="/musica" element={<MusicLibrary />} />
 
             <Route path="/consagracao" element={<Consecration />} />
+            <Route path="/jejum-mundial" element={<Consecration />} />
+            <Route path="/ayuno-mundial" element={<Consecration />} />
 
             <Route path="/reflexao" element={<Reflection />} />
 
