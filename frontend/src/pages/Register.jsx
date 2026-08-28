@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, UserPlus, Mail, Lock, User, MessageCircle, Heart, ShieldCheck, Music, Sparkles, Users } from 'lucide-react';
@@ -27,6 +27,9 @@ const REGISTER_STORY = {
 export default function Register() {
   const { register, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const requestedNext = new URLSearchParams(location.search).get('next');
+  const nextPage = requestedNext?.startsWith('/') ? requestedNext : '/';
   const { t, i18n } = useTranslation();
   const c = getChristianChatCopy(i18n.language);
   const story = REGISTER_STORY[i18n.language?.split('-')[0]] || REGISTER_STORY.pt;
@@ -50,7 +53,7 @@ export default function Register() {
     try {
       await register(form.email, form.password, form.full_name, form.role, null);
       trackSignUpEvent();
-      navigate('/'); // Navegar para a página inicial após o registo
+      navigate(nextPage); // Navegar para a página inicial após o registo
     } catch (err) {
       setError(err.message);
     }
@@ -86,7 +89,7 @@ export default function Register() {
             // Track Google Analytics conversion event
             trackSignUpEvent();
             // Only navigate if popup was used (returns data). Redirect navigates automatically.
-            if (result) navigate('/');
+            if (result) navigate(nextPage);
           } catch (err) {
             if (err.code !== 'auth/popup-closed-by-user') setError(err.message);
           }
@@ -100,7 +103,7 @@ export default function Register() {
           setError('');
           try {
             const result = await loginWithFacebook();
-            if (result) navigate('/');
+            if (result) navigate(nextPage);
           } catch (err) {
             if (err.code !== 'auth/popup-closed-by-user') setError(err.message);
           }

@@ -3,9 +3,7 @@ import { useTranslation } from "react-i18next";
 
 const BOOKS = ["Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth","1 Samuel","2 Samuel","1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Esther","Job","Psalms","Proverbs","Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations","Ezekiel","Daniel","Hosea","Joel","Amos","Obadiah","Jonah","Micah","Nahum","Habakkuk","Zephaniah","Haggai","Zechariah","Malachi","Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus","Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"];
 const LANG_TRANSLATION = {
-  // bible-api.com supports these reliable public-domain editions.  Use Almeida
-  // as the safe reading edition for languages that are not available there.
-  pt: 'almeida', es: 'almeida', en: 'kjv', de: 'almeida', fr: 'almeida', ro: 'rccv', ru: 'almeida'
+  pt: 'almeida', es: 'rva', en: 'kjv', de: 'luther1912', fr: 'martin', ro: 'cornilescu', ru: 'synodal'
 };
 
 const LANG_BOOKS = {
@@ -113,13 +111,17 @@ export default function BibleStudy() {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: 32 }}>📖</span>
           <div style={{ flex: 1 }}>
-            <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Ler a Bíblia</h1>
+            <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>{t("bible.bibleStudy","Biblia de Estudo")}</h1>
             <p style={{ margin: "4px 0 0", fontSize: 13, opacity: 0.85 }}>Traducao: {translation.toUpperCase()}</p>
           </div>
           <select value={translation} onChange={e => { const selectedTranslation=e.target.value; setTranslation(selectedTranslation); setBibleLang(Object.keys(LANG_TRANSLATION).find(k=>LANG_TRANSLATION[k]===selectedTranslation)||'en'); setShowBooks(true); setVerses([]); setLoadError(""); }} style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.4)", borderRadius: 8, padding: "6px 10px", color: "white", cursor: "pointer", fontSize: 13 }}>
-            <option value="almeida" style={{color:"#333"}}>Almeida</option>
+            <option value="almeida" style={{color:"#333"}}>PT - Almeida</option>
             <option value="kjv" style={{color:"#333"}}>EN - KJV</option>
-            <option value="rccv" style={{color:"#333"}}>RO - Cornilescu</option>
+            <option value="rva" style={{color:"#333"}}>ES - RVA</option>
+            <option value="luther1912" style={{color:"#333"}}>DE - Luther</option>
+            <option value="martin" style={{color:"#333"}}>FR - Martin</option>
+            <option value="cornilescu" style={{color:"#333"}}>RO - Cornilescu</option>
+            <option value="synodal" style={{color:"#333"}}>RU - Sinodal</option>
           </select>
         </div>
       </div>

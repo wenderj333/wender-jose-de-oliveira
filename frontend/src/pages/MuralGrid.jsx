@@ -251,7 +251,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 
   const videoRef = useRef(null);
   const recordRef = useRef(null);
-  const [isMuted, setIsMuted] = useState(!soundEnabled);
+  const [isMuted, setIsMuted] = useState(true);
   const [imageModal, setImageModal] = useState(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const postCardRef = useRef(null);
@@ -263,9 +263,10 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !isVideo) return;
-    video.muted = !soundEnabled;
-    video.volume = soundEnabled ? (musicUrl ? 0.3 : 1) : 0;
-    setIsMuted(!soundEnabled);
+    // Vídeos iniciam silenciosos: assim o navegador permite a reprodução automática.
+    video.muted = true;
+    video.volume = 0;
+    setIsMuted(true);
   }, [soundEnabled, isVideo, musicUrl]);
   const videoPoster = isVideo && mediaUrl && mediaUrl.includes('cloudinary.com') ? mediaUrl.replace('/video/upload/', '/video/upload/so_0,w_600/').replace(/\.(mp4|webm|mov|ogg)/i, '.jpg') : null;
 
@@ -382,7 +383,9 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             data-post-id={post.id}
             src={mediaUrl}
             controls
+            autoPlay
             playsInline
+            preload="metadata"
             muted={isMuted}
             poster={videoPoster || undefined}
             style={{ width: '100%', maxHeight: 400, objectFit: 'contain', display: 'block' }}
@@ -602,9 +605,9 @@ export default function MuralGrid() {
           if (entry.isIntersecting && entry.intersectionRatio >= 0.6) { // Changed threshold to 0.6
             // If a video is 60% visible, set it as active
             setActiveVideoId(entry.target.dataset.postId);
-          } else if (!entry.isIntersecting && entry.target.dataset.postId === activeVideoId) {
-            // If the active video scrolls out of view, pause it
-            setActiveVideoId(null);
+          } else if (!entry.isIntersecting) {
+            // Pausa somente o vídeo que saiu da área visível.
+            setActiveVideoId(current => current === entry.target.dataset.postId ? null : current);
           }
         });
       },
@@ -625,7 +628,7 @@ export default function MuralGrid() {
       observer.disconnect();
       videoRefs.current = {}; // Clear refs on unmount
     };
-  }, [posts, activeVideoId]);
+  }, [posts]);
 
   const handleVideoPlay = useCallback((videoId) => {
     setActiveVideoId(videoId);

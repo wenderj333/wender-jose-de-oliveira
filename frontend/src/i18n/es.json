@@ -33,7 +33,7 @@
     "createWorshipAI": "Creador de Alabanza con IA",
     "popup": {
       "verse": "Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos. Mateo 18:20",
-      "joinCommunity": "Â¡Ãšnete a nuestra comunidad cristiana!",
+      "joinCommunity": "¡Únete a nuestra comunidad cristiana!",
       "bullet1": "Orar juntos",
       "bullet2": "Compartir testimonios",
       "bullet3": "Encontrar iglesias",
@@ -151,7 +151,7 @@
     "helpBtn": "Pedir Ajuda"
   },
   "login": {
-    "welcomeBack": "Â¡Bienvenido(a) de vuelta!",
+    "welcomeBack": "¡Bienvenido(a) de vuelta!",
     "email": "Email",
     "emailPlaceholder": "tu@email.com",
     "password": "Contraseña",
@@ -164,13 +164,13 @@
     "phoneNumber": "Número de teléfono",
     "sendCode": "Enviar código",
     "verifyCode": "Verificar código",
-    "codeSent": "Â¡Código enviado!",
+    "codeSent": "¡Código enviado!",
     "codePlaceholder": "Código de 6 dígitos",
-    "noAccount": "Â¿No tienes cuenta?",
+    "noAccount": "¿No tienes cuenta?",
     "signUp": "Regístrate"
   },
   "register": {
-    "joinCommunity": "Â¡Ãšnete a la Red Social Cristiana!",
+    "joinCommunity": "¡Únete a la Red Social Cristiana!",
     "fullName": "Nombre Completo",
     "fullNamePlaceholder": "Tu nombre completo",
     "email": "Email",
@@ -186,7 +186,7 @@
     "google": "Registrarse con Google",
     "facebook": "Registrarse con Facebook",
     "phone": "Registrarse con Teléfono",
-    "hasAccount": "Â¿Ya tienes cuenta?",
+    "hasAccount": "¿Ya tienes cuenta?",
     "signIn": "Iniciar Sesión",
     "addPhoto": "Añadir foto",
     "emailVerify": "Despues del registro recibiras un email de confirmacion. Revisa tu bandeja de entrada."
@@ -1682,7 +1682,7 @@
   },
   "menu": {
     "principal": "PRINCIPAL",
-    "you": "TÃš",
+    "you": "TÚ",
     "community": "COMUNIDAD",
     "spiritual": "ESPIRITUAL",
     "system": "SISTEMA"
