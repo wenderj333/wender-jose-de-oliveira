@@ -20,6 +20,7 @@ export default function Consecration() {
   const { t } = useTranslation();
   const { user, token } = useAuth();
   const [stats, setStats] = useState({ totalConsecrations:0, activeFasting:0 });
+  const [participants, setParticipants] = useState([]);
   const [isActive, setIsActive] = useState(false);
   const [entering, setEntering] = useState(false);
   const [entered, setEntered] = useState(false);
@@ -48,7 +49,24 @@ export default function Consecration() {
   const flameIcon = dayCount >= 21 ? '🔥🔥🔥' : dayCount >= 7 ? '🔥🔥' : dayCount >= 3 ? '🔥' : '🕯️';
 
   useEffect(() => {
-    fetch(API+'/api/consecration/stats').then(r=>r.json()).then(d=>setStats(d)).catch(()=>{});
+    const previousTitle = document.title;
+    const description = document.querySelector('meta[name="description"]');
+    const previousDescription = description?.getAttribute('content');
+    document.title = 'Jejum Mundial e Consagração | Sigo com Fé';
+    if (description) description.setAttribute('content', 'Participe do jejum mundial e da consagração no Sigo com Fé. Ore com a comunidade e acompanhe quem está em jejum.');
+    return () => {
+      document.title = previousTitle;
+      if (description && previousDescription) description.setAttribute('content', previousDescription);
+    };
+  }, []);
+
+  useEffect(() => {
+    const loadCommunity = () => {
+      fetch(API+'/api/consecration/stats').then(r=>r.json()).then(d=>setStats(d)).catch(()=>{});
+      fetch(API+'/api/consecration/active').then(r=>r.json()).then(d=>setParticipants(d.participants || [])).catch(()=>{});
+    };
+    loadCommunity();
+    const communityTimer = setInterval(loadCommunity, 30000);
     const saved = localStorage.getItem('consecration_start');
     if (saved) {
       const days = Math.floor((Date.now() - parseInt(saved)) / 86400000) + 1;
@@ -60,7 +78,15 @@ export default function Consecration() {
     setPrayCount(pc);
     const mural = JSON.parse(localStorage.getItem('consecration_mural') || '[]');
     setMuralPosts(mural);
+    return () => clearInterval(communityTimer);
   }, []);
+
+  const fastingDuration = (start) => {
+    const minutes = Math.max(0, Math.floor((Date.now() - new Date(start || Date.now()).getTime()) / 60000));
+    if (minutes < 60) return `${minutes} min`;
+    const hours = Math.floor(minutes / 60);
+    return `${hours} h${minutes % 60 ? ` ${minutes % 60} min` : ''}`;
+  };
 
   const handleEnter = async () => {
     if (!user) return alert('Faz login para consagrar!');
@@ -183,8 +209,20 @@ export default function Consecration() {
                 🙏 {stats.totalConsecrations||0} {t('consecration.soulsNow','almas buscando a Deus agora')}
               </div>
             </div>
-            <h1 style={{fontSize:'clamp(1.6rem,4vw,2.4rem)',fontWeight:900,color:'white',margin:'0 0 6px',textShadow:'0 2px 8px rgba(0,0,0,0.5)'}}>{t('consecration.title','Consagracao')}</h1>
-            <p style={{color:'rgba(255,255,255,0.8)',fontSize:13,margin:'0 0 6px'}}>{t('consecration.subtitle','Jejum e oracao')}</p>
+            <div aria-label="Pessoas em jejum agora" style={{display:'flex',justifyContent:'center',alignItems:'end',gap:8,minHeight:92,margin:'8px auto 12px',flexWrap:'wrap'}}>
+              {participants.map((person, index) => {
+                const size = Math.min(72, 42 + Math.floor(Math.max(0, (Date.now() - new Date(person.start_date || Date.now()).getTime()) / 3600000)) * 3);
+                return <div key={person.user_id || index} title={`${person.name} · ${fastingDuration(person.start_date)}`} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:3}}>
+                  <div style={{width:size,height:size,borderRadius:'50%',padding:3,background:'linear-gradient(145deg,#f0c040,#9b59b6)',boxShadow:'0 4px 12px rgba(0,0,0,.25)',boxSizing:'border-box'}}>
+                    <img src={person.avatar_url || '/pro.jpg'} alt={person.name} onError={e=>{e.currentTarget.src='/pro.jpg';}} style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%',border:'2px solid rgba(255,255,255,.8)'}} />
+                  </div>
+                  <span style={{fontSize:10,maxWidth:78,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{person.name}</span>
+                </div>;
+              })}
+              {!participants.length && <span style={{fontSize:12,color:'rgba(255,255,255,.72)'}}>Seja a primeira pessoa a entrar no jejum mundial</span>}
+            </div>
+            <h1 style={{fontSize:'clamp(1.6rem,4vw,2.4rem)',fontWeight:900,color:'white',margin:'0 0 6px',textShadow:'0 2px 8px rgba(0,0,0,0.5)'}}>{t('consecration.title','Consagração e Jejum')}</h1>
+            <p style={{color:'rgba(255,255,255,0.8)',fontSize:13,margin:'0 0 6px'}}>{t('consecration.subtitle','Jejum mundial e oração')}</p>
             <p style={{color:'rgba(255,255,255,0.55)',fontSize:12,fontStyle:'italic',margin:0}}>{t('consecration.bibleRef','Como Jesus se retirou ao Deserto...')}</p>
             {isActive && <div style={{marginTop:8,background:'rgba(240,192,64,0.2)',border:'1px solid #f0c040',borderRadius:12,padding:'5px 14px',fontSize:12,color:'#f0c040',fontWeight:700,display:'inline-block'}}>
               {flameIcon} Dia {dayCount} • {prayCount} {t('consecration.prayingFor','oracoes hoje')}
@@ -211,11 +249,11 @@ export default function Consecration() {
             )}
             {!entered ? (
               <button onClick={handleEnter} style={{width:'100%',padding:'18px',borderRadius:14,border:'none',background:'linear-gradient(135deg,#f0c040,#e67e22)',color:'#1a0a3e',fontWeight:900,cursor:'pointer',fontSize:16,boxShadow:'0 8px 25px rgba(240,192,64,0.4)'}}>
-                {t('consecration.enterDesert','🏔 Entrar na Consagracao')}
+                {t('consecration.enterDesert','🏔 Entrar na Consagração')}
               </button>
             ) : (
               <button onClick={handleExit} style={{width:'100%',padding:'14px',borderRadius:14,border:'1px solid rgba(255,255,255,0.3)',background:'rgba(231,76,60,0.3)',color:'white',fontWeight:700,cursor:'pointer',fontSize:14}}>
-                {t('consecration.endFasting','Terminar Jejum')}
+                {t('consecration.endFasting','Finalizar jejum')}
               </button>
             )}
           </div>

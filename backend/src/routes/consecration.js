@@ -17,6 +17,23 @@ router.get('/stats', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// GET /api/consecration/active — participantes atuais (apenas os dados necessários para as bolhas)
+router.get('/active', async (req, res) => {
+  try {
+    const rows = await db.prepare(
+      `SELECT c.user_id, COALESCE(NULLIF(u.full_name, ''), 'Irmão da comunidade') AS name,
+              u.avatar_url, c.start_date
+       FROM consecrations c
+       LEFT JOIN users u ON u.id = c.user_id
+       WHERE c.created_at >= CURRENT_DATE
+       ORDER BY c.start_date ASC LIMIT 10`
+    ).all();
+    res.json({ participants: rows || [] });
+  } catch (err) {
+    res.status(500).json({ error: 'Não foi possível carregar os participantes' });
+  }
+});
+
 // GET /api/consecration/status — check if current user is fasting today
 router.get('/status', authenticate, async (req, res) => {
   try {
