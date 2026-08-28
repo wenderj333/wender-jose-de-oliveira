@@ -386,7 +386,7 @@ export default function Consecration() {
       <section style={{marginTop:14,borderRadius:18,padding:18,background:'linear-gradient(135deg,#edf8f2,#f5edff)',border:'1px solid rgba(92,65,139,.16)',boxShadow:'0 10px 24px rgba(60,35,95,.1)',color:'#25143e'}}>
         <h3 style={{margin:'0 0 6px',fontSize:19,color:'#4b267e'}}>{chatCopy.title}</h3>
         <p style={{margin:'0 0 12px',fontSize:13,color:'#625873',lineHeight:1.5}}>{chatCopy.text}</p>
-        <Link to="/comunidade-ao-vivo?room=consagracao" style={{display:'inline-flex',alignItems:'center',padding:'10px 15px',borderRadius:14,background:'#6c3fa0',color:'white',fontWeight:800,fontSize:12,textDecoration:'none'}}>{chatCopy.button} →</Link>
+        <Link to="/comunidade-ao-vivo" style={{display:'inline-flex',alignItems:'center',padding:'10px 15px',borderRadius:14,background:'#6c3fa0',color:'white',fontWeight:800,fontSize:12,textDecoration:'none'}}>{chatCopy.button} →</Link>
         <p style={{margin:'10px 0 0',fontSize:11,color:'#7b6d83'}}>{chatCopy.note}</p>
       </section>
 

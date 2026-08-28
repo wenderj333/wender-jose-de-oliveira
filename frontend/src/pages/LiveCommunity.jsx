@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Heart, MessageCircle, Music, Pause, Play, Send, ShieldCheck, Smile, Users, Volume2, LockKeyhole, ChevronRight, Flag, EyeOff, Info } from 'lucide-react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useTranslation } from 'react-i18next';
@@ -24,13 +24,10 @@ const ROOM_UI = {
 const getRoomUi = language => ROOM_UI[language?.split('-')[0]] || ROOM_UI.pt;
 
 export default function LiveCommunity() {
-  const [searchParams] = useSearchParams();
-  const consecrationRoom = searchParams.get('room') === 'consagracao';
   const { user, isGuest } = useAuth();
   const { i18n } = useTranslation();
   const c = getChristianChatCopy(i18n.language);
   const roomUi = getRoomUi(i18n.language);
-  const dedicatedCopy = { pt: { title: 'Chat da Consagração', desc: 'Sala exclusiva para quem está a participar no jejum.' }, es: { title: 'Chat de la Consagración', desc: 'Sala exclusiva para quienes participan en el ayuno.' }, en: { title: 'Consecration chat', desc: 'Private room for people taking part in the fast.' }, de: { title: 'Chat der Weihe', desc: 'Exklusiver Raum für Menschen im Fasten.' } }[i18n.language?.split('-')[0]] || { title: 'Chat da Consagração', desc: 'Sala exclusiva para quem está a participar no jejum.' };
   const { send, on, off, isConnected } = useWebSocket();
   const [songs, setSongs] = useState([]);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
@@ -38,7 +35,7 @@ export default function LiveCommunity() {
   const [messageInput, setMessageInput] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
   const [onlineCount, setOnlineCount] = useState(0);
-  const [roomId, setRoomId] = useState(() => consecrationRoom ? 'consagracao' : (ROOM_IDS.includes(i18n.language?.slice(0, 2)) ? i18n.language.slice(0, 2) : 'pt'));
+  const [roomId, setRoomId] = useState(() => (ROOM_IDS.includes(i18n.language?.slice(0, 2)) ? i18n.language.slice(0, 2) : 'pt'));
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
   const [reportMessage, setReportMessage] = useState(null);
   const [hiddenUserIds, setHiddenUserIds] = useState(() => new Set());
@@ -51,10 +48,9 @@ export default function LiveCommunity() {
   // public room as well. This avoids two people thinking they are together
   // while one is in Portuguese and the other is in Spanish.
   useEffect(() => {
-    if (consecrationRoom) return;
     const selectedLanguage = i18n.language?.slice(0, 2);
     if (ROOM_IDS.includes(selectedLanguage)) setRoomId(selectedLanguage);
-  }, [i18n.language, consecrationRoom]);
+  }, [i18n.language]);
 
   useEffect(() => {
     fetch(`${API_BASE}/api/live-community/playlist`).then(r => r.json()).then(data => setSongs(data.songs || [])).catch(() => {});
@@ -153,15 +149,15 @@ export default function LiveCommunity() {
       </div>
     </section>
     <div style={{ maxWidth: 1120, margin: '0 auto 18px', padding: '0 8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 14, flexWrap: 'wrap' }}><div><h2 style={{ margin: 0, fontSize: '1.1rem' }}>{consecrationRoom ? dedicatedCopy.title : roomUi.choose}</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>{consecrationRoom ? dedicatedCopy.desc : roomUi.chooseDesc}</p></div>{!consecrationRoom && <Link to="/mensagens" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: '#3568b8', textDecoration: 'none', fontWeight: 800, fontSize: 14 }}><LockKeyhole size={16}/> {roomUi.private} <ChevronRight size={16}/></Link>}</div>
-      {!consecrationRoom && <div className="christian-room-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,minmax(118px,1fr))', gap: 18, justifyItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 14, flexWrap: 'wrap' }}><div><h2 style={{ margin: 0, fontSize: '1.1rem' }}>{roomUi.choose}</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>{roomUi.chooseDesc}</p></div><Link to="/mensagens" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: '#3568b8', textDecoration: 'none', fontWeight: 800, fontSize: 14 }}><LockKeyhole size={16}/> {roomUi.private} <ChevronRight size={16}/></Link></div>
+      <div className="christian-room-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,minmax(118px,1fr))', gap: 18, justifyItems: 'center' }}>
         {roomUi.rooms.map(room => <button key={room.id} type="button" onClick={() => setRoomId(room.id)} aria-label={room.title} style={{ width: '100%', maxWidth: 156, aspectRatio: '1', textAlign: 'center', padding: 13, borderRadius: '50%', border: roomId === room.id ? '3px solid #3568b8' : '1px solid #dce4f2', background: roomId === room.id ? 'linear-gradient(145deg,#e8f2ff,#f8fbff)' : '#fff', cursor: 'pointer', boxShadow: roomId === room.id ? '0 10px 22px rgba(53,104,184,.16)' : '0 5px 13px rgba(30,34,64,.06)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', transition: 'transform .2s, box-shadow .2s' }} onMouseEnter={event => { event.currentTarget.style.transform = 'translateY(-3px)'; }} onMouseLeave={event => { event.currentTarget.style.transform = 'translateY(0)'; }}><div style={{ fontSize: 27, marginBottom: 5 }}>{room.flag}</div><strong style={{ display: 'block', color: '#1e2240', fontSize: 13 }}>{room.title}</strong><span style={{ display: 'block', color: '#68738f', fontSize: 10, marginTop: 4, lineHeight: 1.25, maxWidth: 112 }}>{room.subtitle}</span></button>)}
-      </div>}
+      </div>
     </div>
     <div className="christian-chat-layout" style={{ maxWidth: 1120, margin: '0 auto', padding: '0 8px', display: 'grid', gridTemplateColumns: 'minmax(0,1.8fr) minmax(260px,.8fr)', gap: 18 }}>
       <section style={{ ...card, minHeight: 540, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <header style={{ padding: '18px 20px', borderBottom: '1px solid #e0e6f5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          <div><h2 style={{ margin: 0, fontSize: '1.15rem' }}>{consecrationRoom ? dedicatedCopy.title : (roomUi.rooms.find(room => room.id === roomId)?.title || c.conversation)}</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>{consecrationRoom ? dedicatedCopy.desc : c.share}</p></div>
+          <div><h2 style={{ margin: 0, fontSize: '1.15rem' }}>{roomUi.rooms.find(room => room.id === roomId)?.title || c.conversation}</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>{c.share}</p></div>
           <span style={{ background: onlineCount ? '#eaf7ef' : '#f4f6fa', color: onlineCount ? '#287a4b' : '#667085', borderRadius: 999, padding: '8px 10px', fontSize: 12, fontWeight: 700 }}><Users size={14} style={{ verticalAlign: 'middle', marginRight: 5 }}/>{onlineLabel}</span>
         </header>
         <div style={{ flex: 1, overflowY: 'auto', padding: 20, background: '#fbfcff' }}>
