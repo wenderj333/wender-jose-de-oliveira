@@ -214,7 +214,17 @@ function ProfileContent() {
           </section>
         </header>
 
-        {showInfo && (
+                {isOwner && (
+          <section style={{ margin: '0 0 20px', padding: '18px 20px', borderRadius: 16, background: 'linear-gradient(115deg,#2c1550,#6c3fa0 62%,#bd8a20)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', boxShadow: '0 12px 28px rgba(76,42,125,.20)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
+              <span style={{ width: 46, height: 46, display: 'grid', placeItems: 'center', borderRadius: 14, background: 'rgba(255,255,255,.16)', fontSize: 24 }}>🏆</span>
+              <div><strong style={{ display: 'block', fontSize: 17 }}>Desafio Bíblico</strong><span style={{ fontSize: 13, opacity: .9 }}>Teste o seu conhecimento e desafie irmãos da comunidade.</span></div>
+            </div>
+            <button onClick={() => navigate('/duelo-biblico')} style={{ background: '#fff', color: '#4c277d', border: 'none', borderRadius: 10, padding: '10px 16px', fontWeight: 800, cursor: 'pointer', whiteSpace: 'nowrap' }}>Jogar agora</button>
+          </section>
+        )}
+
+{showInfo && (
           <div style={{ marginBottom: 16, display: "flex", flexDirection: "column", gap: 10 }}>
             {(user.city || user.country || user.profession || user.marital_status) && (
               <div style={{ background: "#f9f9fe", borderRadius: 10, padding: 14, border: "1px solid #eee" }}>
