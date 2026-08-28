@@ -38,7 +38,8 @@ export default function NotificationsPage() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { fetchNotifications(); markAllAsRead(); }, []);
+  // Não marcar tudo como lido ao abrir: a pessoa decide quando leu cada aviso.
+  useEffect(() => { fetchNotifications(); }, []);
 
   async function fetchNotifications() {
     if (!user) { setLoading(false); return; }

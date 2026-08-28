@@ -199,6 +199,7 @@ export default function App() {
   const [hideSidebars, setHideSidebars] = useState(false);
 
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [notificationToast, setNotificationToast] = useState(null);
 
   const [soundEnabled, setSoundEnabled] = React.useState(localStorage.getItem('scf_sound') !== 'off');
 
@@ -322,6 +323,8 @@ export default function App() {
     }
 
     if (lastEvent?.type === 'direct_message' && lastEvent.senderId !== user?.id) {
+      setNotificationToast({ text: `💬 ${lastEvent.senderName || 'Nova mensagem'} — toca para abrir`, to: lastEvent.senderId ? `/mensagens/${lastEvent.senderId}` : '/mensagens' });
+      setTimeout(() => setNotificationToast(null), 6000);
 
       if (!location.pathname.startsWith('/mensagens')) {
 
@@ -332,12 +335,16 @@ export default function App() {
     }
 
     if (lastEvent?.type === 'live_chat_broadcast' && !location.pathname.startsWith('/comunidade-ao-vivo')) {
+      setNotificationToast({ text: '💬 Nova mensagem no chat comunitário', to: '/comunidade-ao-vivo' });
+      setTimeout(() => setNotificationToast(null), 6000);
 
       setUnreadMessages(prev => prev + 1); playNotifSound();
 
     }
 
     if (lastEvent?.type === 'friend_request') {
+      setNotificationToast({ text: '👥 Recebeste um novo pedido de amizade', to: '/amigos?tab=requests' });
+      setTimeout(() => setNotificationToast(null), 6000);
 
       setPendingRequests(prev => prev + 1);
 
@@ -469,6 +476,7 @@ export default function App() {
   return (
 
     <div className="app-container">
+      {notificationToast && <button type="button" role="alert" onClick={() => { navigate(notificationToast.to); setNotificationToast(null); }} style={{position:'fixed',top:76,right:18,zIndex:500,maxWidth:'min(360px,calc(100vw - 36px))',padding:'12px 16px',borderRadius:14,border:'1px solid #d7c6ef',background:'#fff',color:'#2f2141',boxShadow:'0 12px 30px rgba(45,24,72,.2)',fontWeight:700,fontSize:13,cursor:'pointer',textAlign:'left'}}>{notificationToast.text}</button>}
 
 
 
