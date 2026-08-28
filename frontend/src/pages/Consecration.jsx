@@ -52,12 +52,34 @@ export default function Consecration() {
   const [timerSec, setTimerSec] = useState(0);
   const [timerActive, setTimerActive] = useState(false);
   const timerRef = useRef(null);
+  const [selectedParticipant, setSelectedParticipant] = useState(null);
+  const [bubbleOffsets, setBubbleOffsets] = useState({});
+  const dragRef = useRef(null);
   const today = new Date().getDay();
   const verse = VERSES[today % VERSES.length];
   const todayAction = ACTIONS[today % ACTIONS.length];
   const flameIcon = dayCount >= 21 ? '🔥🔥🔥' : dayCount >= 7 ? '🔥🔥' : dayCount >= 3 ? '🔥' : '🕯️';
   const displayParticipants = participants.length ? participants : DEMO_PARTICIPANTS;
   const showingDemoParticipants = participants.length === 0;
+
+  const handleBubblePointerDown = (event, person, index) => {
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    const current = bubbleOffsets[index] || { x: 0, y: 0 };
+    dragRef.current = { index, person, startX: event.clientX, startY: event.clientY, originX: current.x, originY: current.y, moved: false };
+  };
+  const handleBubblePointerMove = (event) => {
+    const drag = dragRef.current;
+    if (!drag) return;
+    const dx = event.clientX - drag.startX;
+    const dy = event.clientY - drag.startY;
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) drag.moved = true;
+    setBubbleOffsets(prev => ({ ...prev, [drag.index]: { x: drag.originX + dx, y: drag.originY + dy } }));
+  };
+  const handleBubblePointerUp = () => {
+    const drag = dragRef.current;
+    if (drag && !drag.moved) setSelectedParticipant(drag.person);
+    dragRef.current = null;
+  };
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -206,6 +228,7 @@ export default function Consecration() {
 
   return (
     <div style={{maxWidth:700,margin:'0 auto',padding:'0.5rem',fontFamily:'Segoe UI,sans-serif'}}>
+      <style>{`@keyframes consecrationBubbleFloat { 0%,100% { transform: translate(0,0) scale(1); } 25% { transform: translate(9px,-7px) scale(1.03); } 50% { transform: translate(-5px,8px) scale(.98); } 75% { transform: translate(-10px,-3px) scale(1.02); } } @keyframes consecrationBubbleBounce { 0%,100% { box-shadow: 0 4px 12px rgba(0,0,0,.25); } 50% { box-shadow: 0 11px 22px rgba(240,192,64,.5); } }`}</style>
       <div style={{position:'relative',width:'100%',minHeight:'92vh',borderRadius:16,overflow:'hidden',backgroundImage:'url(/biblia-register.png)',backgroundSize:'cover',backgroundPosition:'center'}}>
         <div style={{position:'absolute',inset:0,background:isActive?'rgba(0,0,0,0.3)':'rgba(0,0,0,0.55)',borderRadius:16,transition:'background 1s'}}/>
         <div style={{position:'relative',zIndex:2,height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'space-between',padding:'20px 16px'}}>
@@ -223,8 +246,9 @@ export default function Consecration() {
             <div aria-label="Pessoas em jejum agora" style={{display:'flex',justifyContent:'center',alignItems:'end',gap:8,minHeight:92,margin:'8px auto 12px',flexWrap:'wrap'}}>
               {displayParticipants.map((person, index) => {
                 const size = Math.min(72, 42 + Math.floor(Math.max(0, (Date.now() - new Date(person.start_date || Date.now()).getTime()) / 3600000)) * 3);
-                return <div key={person.user_id || index} title={`${person.name} · ${fastingDuration(person.start_date)}`} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:3}}>
-                  <div style={{width:size,height:size,borderRadius:'50%',padding:3,background:'linear-gradient(145deg,#f0c040,#9b59b6)',boxShadow:'0 4px 12px rgba(0,0,0,.25)',boxSizing:'border-box'}}>
+                const offset = bubbleOffsets[index] || { x: 0, y: 0 };
+                return <div key={person.user_id || index} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:3,position:'relative',left:offset.x,top:offset.y,transition:dragRef.current?.index===index?'none':'left .25s ease, top .25s ease',touchAction:'none',cursor:'grab'}} onPointerDown={e=>handleBubblePointerDown(e,person,index)} onPointerMove={handleBubblePointerMove} onPointerUp={handleBubblePointerUp} onPointerCancel={handleBubblePointerUp}>
+                  <div style={{width:size,height:size,borderRadius:'50%',padding:3,background:'linear-gradient(145deg,#f0c040,#9b59b6)',boxShadow:'0 4px 12px rgba(0,0,0,.25)',boxSizing:'border-box',animation:`consecrationBubbleFloat ${6 + (index % 4)}s ease-in-out ${index * -0.45}s infinite, consecrationBubbleBounce ${2.8 + (index % 3) * .4}s ease-in-out infinite`}}>
                     <img src={person.avatar_url || '/pro.jpg'} alt={person.name} onError={e=>{e.currentTarget.src='/pro.jpg';}} style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%',border:'2px solid rgba(255,255,255,.8)'}} />
                   </div>
                   <span style={{fontSize:10,maxWidth:78,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{person.name}</span>
@@ -232,6 +256,7 @@ export default function Consecration() {
               })}
             </div>
             {showingDemoParticipants && <span style={{fontSize:11,color:'rgba(255,255,255,.68)',display:'block',marginBottom:8}}>{t('consecration.demoParticipants','Exemplo visual — entre para aparecer com seu nome')}</span>}
+            {selectedParticipant && <div role="status" style={{display:'inline-flex',alignItems:'center',gap:10,margin:'0 auto 10px',padding:'8px 14px',borderRadius:14,background:'rgba(0,0,0,.5)',border:'1px solid rgba(240,192,64,.5)',fontSize:12,color:'white'}}><strong>{selectedParticipant.name}</strong><span>•</span><span>{fastingDuration(selectedParticipant.start_date)}</span><button onClick={()=>setSelectedParticipant(null)} aria-label="Fechar" style={{border:'none',background:'transparent',color:'white',cursor:'pointer',fontSize:16,lineHeight:1}}>×</button></div>}
             <h1 style={{fontSize:'clamp(1.6rem,4vw,2.4rem)',fontWeight:900,color:'white',margin:'0 0 6px',textShadow:'0 2px 8px rgba(0,0,0,0.5)'}}>{t('consecration.title','Consagração e Jejum')}</h1>
             <p style={{color:'rgba(255,255,255,0.8)',fontSize:13,margin:'0 0 6px'}}>{t('consecration.subtitle','Jejum mundial e oração')}</p>
             <p style={{color:'rgba(255,255,255,0.55)',fontSize:12,fontStyle:'italic',margin:0}}>{t('consecration.bibleRef','Como Jesus se retirou ao Deserto...')}</p>
