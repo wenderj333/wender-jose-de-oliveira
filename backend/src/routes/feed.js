@@ -247,6 +247,8 @@ router.get('/liked-posts', authenticate, async (req, res) => {
 router.post('/:id/like', authenticate, async (req, res) => {
   try {
     const postId = req.params.id;
+    const post = await db.prepare('SELECT id, author_id, like_count FROM feed_posts WHERE id = ?').get(postId);
+    if (!post) return res.status(404).json({ error: 'Publicação não encontrada.' });
     const existing = await db.prepare(
       'SELECT id FROM post_likes WHERE post_id = ? AND user_id = ?'
     ).get(postId, req.user.id);
@@ -254,22 +256,24 @@ router.post('/:id/like', authenticate, async (req, res) => {
     if (existing) {
       await db.prepare('DELETE FROM post_likes WHERE post_id = ? AND user_id = ?').run(postId, req.user.id);
       await db.prepare('UPDATE feed_posts SET like_count = GREATEST(like_count - 1, 0) WHERE id = ?').run(postId);
-      res.json({ liked: false });
+      const updated = await db.prepare('SELECT like_count FROM feed_posts WHERE id = ?').get(postId);
+      res.json({ liked: false, likeCount: Number(updated?.like_count || 0) });
     } else {
       await db.prepare('INSERT INTO post_likes (post_id, user_id) VALUES (?, ?)').run(postId, req.user.id);
       await db.prepare('UPDATE feed_posts SET like_count = like_count + 1 WHERE id = ?').run(postId);
       try {
-        const post = await db.prepare('SELECT author_id FROM feed_posts WHERE id = ?').get(postId);
-        if (post && post.author_id && post.author_id !== req.user.id) {
+        if (post.author_id && post.author_id !== req.user.id) {
           const { createNotification } = require('./notifications');
           await createNotification(post.author_id, 'like', (req.user.full_name || 'Alguem') + ' deu Amen!', '', { postId });
         }
       } catch(e) { console.error('Notif like error:', e.message); }
-      res.json({ liked: true });
+      const updated = await db.prepare('SELECT like_count FROM feed_posts WHERE id = ?').get(postId);
+      res.json({ liked: true, likeCount: Number(updated?.like_count || 0) });
     }
   } catch (err) {
     console.error('Erro ao curtir:', err);
-    res.status(500).json({ error: 'Erro interno' });
+    // Mantém a resposta segura, mas dá uma indicação útil à interface.
+    res.status(500).json({ error: 'Não foi possível atualizar o Amém agora. Tenta novamente.' });
   }
 });
 
@@ -341,7 +345,7 @@ router.post('/:id/comments', authenticate, async (req, res) => {
     res.status(201).json({ comment });
   } catch (err) {
     console.error('Erro ao comentar:', err);
-    res.status(500).json({ error: 'Erro interno' });
+    res.status(500).json({ error: 'Não foi possível publicar o comentário agora. Tenta novamente.' });
   }
 });
 

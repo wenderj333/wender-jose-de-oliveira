@@ -353,7 +353,14 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const submitComment = async (e) => {
     e.preventDefault();
     const value = comment.trim();
-    if (!value || !token) return;
+    if (!token) {
+      setCommentError('Inicia sessão para comentar.');
+      return;
+    }
+    if (!value) {
+      setCommentError('Escreve um comentário antes de enviar.');
+      return;
+    }
     setCommentError('');
     try {
       const res = await fetch(`${API}/feed/${post.id}/comments`, {
@@ -362,12 +369,12 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         body: JSON.stringify({ content: value })
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.comment) throw new Error(data.error || 'Nao foi possivel enviar o comentario.');
+      if (!res.ok || !data.comment) throw new Error(data.error || 'Não foi possível enviar o comentário.');
       setComments(prev => [...prev, data.comment]);
       setComment('');
       onCommentAdded?.(post.id);
     } catch (error) {
-      setCommentError(error.message || 'Nao foi possivel enviar o comentario.');
+      setCommentError(error.message || 'Não foi possível enviar o comentário.');
     }
   };
 
@@ -523,6 +530,7 @@ export default function MuralGrid() {
   const currentLanguage = (i18n?.language || 'pt').slice(0, 2);
   const { user, token } = useAuth();
   const [posts, setPosts] = useState([]);
+  const [actionError, setActionError] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('todas');
   const [viewMode, setViewMode] = useState('feed');
@@ -664,14 +672,26 @@ export default function MuralGrid() {
   }, [activeVideoId]);
 
   const handleLike = async (postId) => {
-    if (!user || !token) return;
+    if (!user || !token) {
+      setActionError('Inicia sessão para dizer Amém.');
+      return;
+    }
     try {
       const res = await fetch(`${API}/feed/${postId}/like`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
-      if (!res.ok) throw new Error('Nao foi possivel atualizar o Amen.');
-      await fetchPosts();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || typeof data.liked !== 'boolean') {
+        throw new Error(data.error || 'Não foi possível atualizar o Amém.');
+      }
+      // Atualiza imediatamente o cartão, sem recarregar o mural inteiro.
+      setPosts(prev => prev.map(post => {
+        if (post.id !== postId) return post;
+        const current = Number(post.like_count ?? post.amemCount ?? 0);
+        return { ...post, liked: data.liked, like_count: Number.isFinite(Number(data.likeCount)) ? Number(data.likeCount) : Math.max(0, current + (data.liked ? 1 : -1)) };
+      }));
+      setActionError('');
     } catch (error) {
       console.error(error);
-      alert('Nao foi possivel atualizar o Amen. Tente novamente.');
+      setActionError(error.message || 'Não foi possível atualizar o Amém. Tenta novamente.');
     }
   };
 
@@ -881,6 +901,11 @@ export default function MuralGrid() {
             ))}
           </div>
           <style>{'@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }'}</style>
+        </div>
+      )}
+      {actionError && (
+        <div role="status" style={{ margin: '0 0 12px', padding: '10px 14px', borderRadius: 10, background: '#fff4f2', color: '#b42318', fontSize: 13 }}>
+          {actionError}
         </div>
       )}
 
