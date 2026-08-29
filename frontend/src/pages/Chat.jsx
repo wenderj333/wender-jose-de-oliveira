@@ -270,6 +270,18 @@ export default function Chat() {
   };
 
   // â”€â”€ Send friend request â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  const deleteMessage = async messageId => {
+    if (!messageId || !window.confirm('Apagar esta mensagem?')) return;
+    try {
+      const res = await fetch(`${API}/api/messages/${messageId}`, { method: 'DELETE', headers });
+      if (!res.ok) throw new Error('Não foi possível apagar a mensagem.');
+      setMessages(previous => previous.filter(message => message.id !== messageId));
+      loadConversations();
+    } catch (error) {
+      alert(error.message || 'Não foi possível apagar a mensagem.');
+    }
+  };
+
   const sendFriendRequest = async () => {
     if (!userId || requestSent) return;
     try {
@@ -521,6 +533,7 @@ export default function Chat() {
                         {showTime && (
                           <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginTop: 2, justifyContent: isMe ? 'flex-end' : 'flex-start' }}>
                             <span style={{ fontSize: '0.65rem', color: 'var(--muted)' }}>{formatTime(msg.created_at)}</span>
+                            {isMe && <button type="button" onClick={() => deleteMessage(msg.id)} aria-label="Apagar mensagem" title="Apagar mensagem" style={{ border: 0, background: 'transparent', color: '#c0392b', cursor: 'pointer', padding: 0, display: 'inline-flex', alignItems: 'center' }}><Trash2 size={12}/></button>}
                             {isMe && (msg.is_read
                               ? <CheckCheck size={11} style={{ color: '#4a80d4' }} />
                               : <Check size={11} style={{ color: 'var(--muted)' }} />

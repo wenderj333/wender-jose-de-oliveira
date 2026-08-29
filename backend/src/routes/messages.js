@@ -158,6 +158,18 @@ router.post('/', authenticate, async (req, res) => {
   }
 });
 
+// DELETE a message, restricted to its sender.
+router.delete('/:messageId', authenticate, async (req, res) => {
+  try {
+    const result = await db.query('DELETE FROM direct_messages WHERE id = $1 AND sender_id = $2 RETURNING id', [req.params.messageId, req.user.id]);
+    if (!result.rowCount) return res.status(404).json({ error: 'Mensagem não encontrada ou não pertence a você.' });
+    res.json({ ok: true, id: result.rows[0].id });
+  } catch (err) {
+    console.error('Error deleting message:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ─── POST /api/messages/mark-read ────────────────────────────────────────────
 router.post('/mark-read', authenticate, async (req, res) => {
   try {
