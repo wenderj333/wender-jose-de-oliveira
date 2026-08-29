@@ -342,7 +342,7 @@ export default function Chat() {
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                placeholder="{t('chat.search', 'Procurar conversa...')}"
+                placeholder={t('chat.search', 'Procurar conversa...')}
                 style={{ background: 'none', border: 'none', outline: 'none', fontSize: '0.85rem', color: 'var(--text)', width: '100%' }}
               />
             </div>
