@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Heart, MessageCircle, Music, Pause, Play, Send, ShieldCheck, Smile, Users, Volume2, LockKeyhole, ChevronRight, Flag, EyeOff, Info } from 'lucide-react';
+import { Heart, MessageCircle, Music, Pause, Play, Send, ShieldCheck, Smile, Users, Volume2, VolumeX, LockKeyhole, ChevronRight, Flag, EyeOff, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
@@ -13,10 +13,10 @@ const API_BASE = import.meta.env.VITE_API_URL || '';
 const card = { background: '#fff', border: '1px solid #e0e6f5', borderRadius: 18, boxShadow: '0 8px 28px rgba(74,128,212,0.08)' };
 const ROOM_IDS = ['pt', 'es', 'de', 'en'];
 const ROOM_UI = {
-  pt: { choose: 'Escolha uma sala', chooseDesc: 'Entre na conversa no idioma que prefere.', private: 'Conversas privadas', info: 'Informações da sala', report: 'Denunciar utilizador', hide: 'Ocultar mensagens desta pessoa', emoji: 'Adicionar emoji', send: 'Enviar mensagem', next: 'Próxima música', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brasil, Portugal e países lusófonos' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Fale com irmãos de fala espanhola' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Gemeinschaft auf Deutsch' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Christian community in English' }] },
-  es: { choose: 'Elige una sala', chooseDesc: 'Entra en la conversación en el idioma que prefieras.', private: 'Conversaciones privadas', info: 'Información de la sala', report: 'Denunciar usuario', hide: 'Ocultar mensajes de esta persona', emoji: 'Añadir emoji', send: 'Enviar mensaje', next: 'Siguiente canción', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brasil, Portugal y países lusófonos' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Habla con hermanos hispanohablantes' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Comunidad en alemán' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Comunidad cristiana en inglés' }] },
-  en: { choose: 'Choose a room', chooseDesc: 'Join the conversation in your preferred language.', private: 'Private conversations', info: 'Room information', report: 'Report user', hide: 'Hide this person’s messages', emoji: 'Add emoji', send: 'Send message', next: 'Next song', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brazil, Portugal and Lusophone countries' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Speak with Spanish-speaking believers' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'German-speaking community' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Christian community in English' }] },
-  de: { choose: 'Wähle einen Raum', chooseDesc: 'Tritt der Unterhaltung in deiner bevorzugten Sprache bei.', private: 'Private Gespräche', info: 'Rauminformationen', report: 'Nutzer melden', hide: 'Nachrichten dieser Person ausblenden', emoji: 'Emoji hinzufügen', send: 'Nachricht senden', next: 'Nächstes Lied', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brasilien, Portugal und lusophone Länder' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Sprich mit spanischsprachigen Glaubensgeschwistern' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Deutschsprachige Gemeinschaft' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Christliche Gemeinschaft auf Englisch' }] },
+  pt: { choose: 'Escolha uma sala', chooseDesc: 'Entre na conversa no idioma que prefere.', private: 'Conversas privadas', info: 'Informações da sala', report: 'Denunciar utilizador', hide: 'Ocultar mensagens desta pessoa', emoji: 'Adicionar emoji', send: 'Enviar mensagem', next: 'Próxima música', soundOn: 'Som ativado', soundOff: 'Som desativado', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brasil, Portugal e países lusófonos' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Fale com irmãos de fala espanhola' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Gemeinschaft auf Deutsch' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Christian community in English' }] },
+  es: { choose: 'Elige una sala', chooseDesc: 'Entra en la conversación en el idioma que prefieras.', private: 'Conversaciones privadas', info: 'Información de la sala', report: 'Denunciar usuario', hide: 'Ocultar mensajes de esta persona', emoji: 'Añadir emoji', send: 'Enviar mensaje', next: 'Siguiente canción', soundOn: 'Sonido activado', soundOff: 'Sonido desactivado', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brasil, Portugal y países lusófonos' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Habla con hermanos hispanohablantes' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Comunidad en alemán' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Comunidad cristiana en inglés' }] },
+  en: { choose: 'Choose a room', chooseDesc: 'Join the conversation in your preferred language.', private: 'Private conversations', info: 'Room information', report: 'Report user', hide: 'Hide this person’s messages', emoji: 'Add emoji', send: 'Send message', next: 'Next song', soundOn: 'Sound on', soundOff: 'Sound off', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brazil, Portugal and Lusophone countries' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Speak with Spanish-speaking believers' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'German-speaking community' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Christian community in English' }] },
+  de: { choose: 'Wähle einen Raum', chooseDesc: 'Tritt der Unterhaltung in deiner bevorzugten Sprache bei.', private: 'Private Gespräche', info: 'Rauminformationen', report: 'Nutzer melden', hide: 'Nachrichten dieser Person ausblenden', emoji: 'Emoji hinzufügen', send: 'Nachricht senden', next: 'Nächstes Lied', soundOn: 'Ton an', soundOff: 'Ton aus', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brasilien, Portugal und lusophone Länder' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Sprich mit spanischsprachigen Glaubensgeschwistern' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Deutschsprachige Gemeinschaft' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Christliche Gemeinschaft auf Englisch' }] },
   fr: { choose: 'Choisissez un salon', chooseDesc: 'Entrez dans la conversation dans la langue de votre choix.', private: 'Conversations privées', info: 'Informations du salon', report: 'Signaler cet utilisateur', hide: 'Masquer les messages de cette personne', emoji: 'Ajouter un emoji', send: 'Envoyer le message', next: 'Chanson suivante', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brésil, Portugal et pays lusophones' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Échangez avec des croyants hispanophones' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Communauté germanophone' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Communauté chrétienne anglophone' }] },
   ro: { choose: 'Alege o cameră', chooseDesc: 'Intră în conversație în limba preferată.', private: 'Conversații private', info: 'Informații despre cameră', report: 'Raportează utilizatorul', hide: 'Ascunde mesajele acestei persoane', emoji: 'Adaugă emoji', send: 'Trimite mesajul', next: 'Următoarea melodie', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Brazilia, Portugalia și țările lusofone' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Vorbește cu creștini vorbitori de spaniolă' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Comunitate de limbă germană' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Comunitate creștină în engleză' }] },
   ru: { choose: 'Выберите комнату', chooseDesc: 'Присоединяйтесь к беседе на удобном для вас языке.', private: 'Личные беседы', info: 'Информация о комнате', report: 'Пожаловаться на пользователя', hide: 'Скрыть сообщения этого человека', emoji: 'Добавить эмодзи', send: 'Отправить сообщение', next: 'Следующая песня', rooms: [{ id: 'pt', flag: '🇧🇷', title: 'Português', subtitle: 'Бразилия, Португалия и португалоязычные страны' }, { id: 'es', flag: '🇪🇸', title: 'Español', subtitle: 'Общайтесь с испаноязычными христианами' }, { id: 'de', flag: '🇩🇪', title: 'Deutsch', subtitle: 'Немецкоязычное сообщество' }, { id: 'en', flag: '🇬🇧', title: 'English', subtitle: 'Христианское сообщество на английском' }] },
@@ -41,8 +41,29 @@ export default function LiveCommunity() {
   const [hiddenUserIds, setHiddenUserIds] = useState(() => new Set());
   const [showRoomInfo, setShowRoomInfo] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [chatSoundEnabled, setChatSoundEnabled] = useState(() => localStorage.getItem('live_chat_sound') !== 'false');
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
+
+  const playChatNotification = () => {
+    if (!chatSoundEnabled || typeof window === 'undefined') return;
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const context = new AudioContext();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(740, context.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(980, context.currentTime + 0.09);
+      gain.gain.setValueAtTime(0.0001, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.08, context.currentTime + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.18);
+      oscillator.connect(gain); gain.connect(context.destination);
+      oscillator.start(); oscillator.stop(context.currentTime + 0.2);
+      oscillator.addEventListener('ended', () => context.close().catch(() => {}), { once: true });
+    } catch (_) { /* o navegador pode bloquear áudio até haver interação */ }
+  };
 
   // The global language selector should bring the person to the matching
   // public room as well. This avoids two people thinking they are together
@@ -60,6 +81,8 @@ export default function LiveCommunity() {
     if (!send || !on || !off) return undefined;
     const handleMessage = data => {
       if (data?.roomId && data.roomId !== roomId) return;
+      const isNewMessage = data?.id ? !chatMessages.some(message => message.id === data.id) : true;
+      if (isNewMessage && data?.userId !== user?.id) playChatNotification();
       setChatMessages(prev => {
       if (data?.id && prev.some(message => message.id === data.id)) return prev;
       if (prev.some(message => message.userId === data.userId && (message.text || message.message) === (data.text || data.message))) return prev;
@@ -73,7 +96,7 @@ export default function LiveCommunity() {
     on('live_room_presence', handlePresence);
     if (user && !isGuest) send({ type: 'live_join', roomId, userId: user.id, userName: user.full_name, userAvatar: user.avatar_url });
     return () => { off('live_chat_broadcast', handleMessage); off('live_room_presence', handlePresence); if (user && !isGuest) send({ type: 'live_leave', roomId, userId: user.id }); };
-  }, [send, on, off, user, isGuest, roomId, isConnected]);
+  }, [send, on, off, user, isGuest, roomId, isConnected, chatSoundEnabled]);
 
   useEffect(() => {
     setChatMessages([]); setOnlineCount(0);
@@ -158,7 +181,7 @@ export default function LiveCommunity() {
       <section style={{ ...card, minHeight: 540, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <header style={{ padding: '18px 20px', borderBottom: '1px solid #e0e6f5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
           <div><h2 style={{ margin: 0, fontSize: '1.15rem' }}>{roomUi.rooms.find(room => room.id === roomId)?.title || c.conversation}</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>{c.share}</p></div>
-          <span style={{ background: onlineCount ? '#eaf7ef' : '#f4f6fa', color: onlineCount ? '#287a4b' : '#667085', borderRadius: 999, padding: '8px 10px', fontSize: 12, fontWeight: 700 }}><Users size={14} style={{ verticalAlign: 'middle', marginRight: 5 }}/>{onlineLabel}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><button type="button" onClick={() => { const next = !chatSoundEnabled; setChatSoundEnabled(next); localStorage.setItem('live_chat_sound', String(next)); if (next) playChatNotification(); }} aria-pressed={chatSoundEnabled} aria-label={chatSoundEnabled ? (roomUi.soundOn || 'Som ativado') : (roomUi.soundOff || 'Som desativado')} title={chatSoundEnabled ? (roomUi.soundOn || 'Som ativado') : (roomUi.soundOff || 'Som desativado')} style={{ width: 38, height: 34, border: '1px solid #d7dfef', borderRadius: 10, background: chatSoundEnabled ? '#eaf7ef' : '#f4f6fa', color: chatSoundEnabled ? '#287a4b' : '#667085', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>{chatSoundEnabled ? <Volume2 size={17}/> : <VolumeX size={17}/>}</button><span style={{ background: onlineCount ? '#eaf7ef' : '#f4f6fa', color: onlineCount ? '#287a4b' : '#667085', borderRadius: 999, padding: '8px 10px', fontSize: 12, fontWeight: 700 }}><Users size={14} style={{ verticalAlign: 'middle', marginRight: 5 }}/>{onlineLabel}</span></div>
         </header>
         <div style={{ flex: 1, overflowY: 'auto', padding: 20, background: '#fbfcff' }}>
           {!chatMessages.length && <div style={{ maxWidth: 390, margin: '80px auto 0', textAlign: 'center', color: '#667085' }}><MessageCircle size={35} style={{ color: '#4a80d4', marginBottom: 10 }}/><h3 style={{ margin: '0 0 8px', color: '#1e2240' }}>{c.ready}</h3><p style={{ margin: 0, lineHeight: 1.6 }}>{c.empty}</p></div>}
