@@ -16,7 +16,7 @@ messaging.onBackgroundMessage(function(payload) {
   const { title, body } = payload.notification;
   self.registration.showNotification(title, {
     body,
-    icon: '/logo.png',
+    icon: '/logo.jpg',
     silent: false,
     renotify: true,
     tag: 'sigo-com-fe-notification'

@@ -17,8 +17,9 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const facebookProvider = new FacebookAuthProvider();
 export let messaging = null;
+let messagingServiceWorker = null;
 try {
-  if (typeof window !== "undefined" && "serviceWorker" in navigator && !navigator.userAgent.includes("Safari") || navigator.userAgent.includes("Chrome")) {
+  if (typeof window !== "undefined" && "serviceWorker" in navigator && !/Safari(?!.*Chrome)/.test(navigator.userAgent)) {
     messaging = getMessaging(app);
   }
 } catch(e) { console.log("FCM not supported"); }
@@ -26,12 +27,16 @@ try {
 export async function requestNotificationPermission() {
   try {
     if (!messaging) return null;
+    messagingServiceWorker ||= await navigator.serviceWorker.register('/firebase-messaging-sw.js');
     const token = await getToken(messaging, {
-      vapidKey: "BJJLw29P-fq2YB2PkgAvOePJN-YBgBBIfJTU6bA-gBqPqQT91gOym4Q859eFTieaup6U-JUg402zTRKevISLnpI"
+      vapidKey: "BJJLw29P-fq2YB2PkgAvOePJN-YBgBBIfJTU6bA-gBqPqQT91gOym4Q859eFTieaup6U-JUg402zTRKevISLnpI",
+      serviceWorkerRegistration: messagingServiceWorker
     });
     if (token) return token;
+    return null;
   } catch (error) {
     console.error("Erro ao obter token FCM:", error);
+    return null;
   }
 }
 

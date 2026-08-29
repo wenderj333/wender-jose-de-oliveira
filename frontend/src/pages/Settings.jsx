@@ -53,6 +53,22 @@ export default function Settings() {
     }
   };
 
+  // Re-register silently when permission was already granted (important after
+  // reinstalling the app or changing browser storage on a phone).
+  useEffect(() => {
+    if (typeof Notification === "undefined" || Notification.permission !== "granted") return;
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    requestNotificationPermission().then(fcmToken => {
+      if (!fcmToken) return;
+      fetch(API + "/notifications/fcm-token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+        body: JSON.stringify({ token: fcmToken })
+      }).catch(() => {});
+    }).catch(() => {});
+  }, []);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
