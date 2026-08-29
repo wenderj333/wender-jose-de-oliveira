@@ -462,7 +462,7 @@ export default function PrayerFeed() {
           }}
         >
           <Link
-            to="/cadastro"
+            to="/register"
             style={{ textDecoration: 'none' }}
           >
             <div

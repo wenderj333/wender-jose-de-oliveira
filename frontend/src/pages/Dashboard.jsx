@@ -73,7 +73,7 @@ export default function Dashboard() {
               <div className="stat-card__value">{stats?.totalPrayers || 0}</div>
               <div className="stat-card__label">{t('dashboard.prayerRequests')}</div>
             </div>
-            <Link to="/oracoes?tab=answered" className="stat-card stat-card--gold" style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/pedidos-ajuda?tab=answered" className="stat-card stat-card--gold" style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}>
               <Sparkles size={28} style={{ color: 'var(--gold)', marginBottom: '0.5rem' }} />
               <div className="stat-card__value">{stats?.answeredPrayers || 0}</div>
               <div className="stat-card__label">{t('dashboard.answeredPrayers')}</div>
@@ -103,7 +103,7 @@ export default function Dashboard() {
               <Star size={20} style={{ color: 'var(--gold)' }} /> {t('dashboard.quickActions')}
             </h3>
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              <Link to="/oracoes" style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', borderRadius: 20, border: 'none', padding: '0.5rem 1rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}><Plus size={16} /> {t('dashboard.newPrayerRequest')}</Link>
+              <Link to="/pedidos-ajuda" style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', borderRadius: 20, border: 'none', padding: '0.5rem 1rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}><Plus size={16} /> {t('dashboard.newPrayerRequest')}</Link>
               <Link to="/cadastrar-igreja" style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', borderRadius: 20, border: 'none', padding: '0.5rem 1rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}><Church size={16} /> {t('dashboard.registerChurch')}</Link>
               <Link to="/kids" style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', color: '#fff', borderRadius: 20, border: 'none', padding: '0.5rem 1rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}><BookOpen size={16} /> {t('dashboard.kidsCorner')}</Link>
             </div>
@@ -132,7 +132,7 @@ export default function Dashboard() {
             ) : (
               <p style={{ color: 'var(--gray-500)' }}>{t('dashboard.noActivity')}</p>
             )}
-            <Link to="/oracoes" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginTop: '1rem', color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>
+            <Link to="/pedidos-ajuda" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginTop: '1rem', color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>
               {t('dashboard.viewAll')} <ArrowRight size={14} />
             </Link>
           </div>

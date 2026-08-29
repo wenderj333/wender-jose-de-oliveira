@@ -66,7 +66,7 @@ export default function GuestPrompt({ show, onClose, feature = 'esta funcionalid
         <button
           onClick={() => {
             localStorage.removeItem('guestMode');
-            navigate('/cadastro');
+            navigate('/register');
           }}
           style={{
             width: '100%',

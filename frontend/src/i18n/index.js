@@ -8,35 +8,52 @@ import es from './es.json';
 import de from './de.json';
 import ro from './ro.json';
 import ru from './ru.json';
-import fr from './fr.json';
+import fr from './fr.json';
+
+import { repairMojibake } from '../utils/textEncoding';
+
+// A few older locale files were saved with UTF-8 decoded as Windows-1252.
+// Normalize every translated string at load time so users never see Ã/Ð/ðŸ text.
+function normalizeLocale(value) {
+  if (Array.isArray(value)) return value.map(normalizeLocale);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, normalizeLocale(item)]));
+  }
+  return repairMojibake(value);
+}
+
+const locales = {
+  pt: normalizeLocale(pt), en: normalizeLocale(en), es: normalizeLocale(es),
+  de: normalizeLocale(de), ro: normalizeLocale(ro), ru: normalizeLocale(ru), fr: normalizeLocale(fr),
+};
 
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
-      pt: { translation: pt },
-      'pt-BR': { translation: pt },
-      'pt-PT': { translation: pt },
-      en: { translation: en },
-      'en-US': { translation: en },
-      'en-GB': { translation: en },
-      'en-AU': { translation: en },
-      es: { translation: es },
-      'es-ES': { translation: es },
-      'es-MX': { translation: es },
-      'es-AR': { translation: es },
-      de: { translation: de },
-      'de-DE': { translation: de },
-      'de-AT': { translation: de },
-      'de-CH': { translation: de },
-      ro: { translation: ro },
-      'ro-RO': { translation: ro },
-      ru: { translation: ru },
-      'ru-RU': { translation: ru },
-      fr: { translation: fr },
-      'fr-FR': { translation: fr },
-      'fr-CA': { translation: fr },
+      pt: { translation: locales.pt },
+      'pt-BR': { translation: locales.pt },
+      'pt-PT': { translation: locales.pt },
+      en: { translation: locales.en },
+      'en-US': { translation: locales.en },
+      'en-GB': { translation: locales.en },
+      'en-AU': { translation: locales.en },
+      es: { translation: locales.es },
+      'es-ES': { translation: locales.es },
+      'es-MX': { translation: locales.es },
+      'es-AR': { translation: locales.es },
+      de: { translation: locales.de },
+      'de-DE': { translation: locales.de },
+      'de-AT': { translation: locales.de },
+      'de-CH': { translation: locales.de },
+      ro: { translation: locales.ro },
+      'ro-RO': { translation: locales.ro },
+      ru: { translation: locales.ru },
+      'ru-RU': { translation: locales.ru },
+      fr: { translation: locales.fr },
+      'fr-FR': { translation: locales.fr },
+      'fr-CA': { translation: locales.fr },
     },
     // ⚠️ NÃO definir 'lng' aqui — deixa o LanguageDetector detectar automaticamente
     fallbackLng: 'pt', // só fallback se o idioma do browser não for suportado

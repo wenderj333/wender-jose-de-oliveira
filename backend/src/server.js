@@ -900,7 +900,7 @@ app.post('/api/duelo/zerar', (req, res) => {
 // ========== FIM RANKING SEMANAL PIX ==========
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', name: 'Sigo com FÃ© API', version: '1.0.0' });
+  res.json({ status: 'ok', name: 'Sigo com Fé API', version: '1.0.0' });
 });
 
 // WebSocket
@@ -964,7 +964,6 @@ async function addProfileColumns() {
 addProfileColumns();
 
 // favorite_verse column added via addProfileColumns()
-
 
 
 

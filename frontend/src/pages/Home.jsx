@@ -126,7 +126,7 @@ export default function Home() {
             </Link>
           ) : (
             <>
-              <Link to="/cadastro" style={{ textDecoration: 'none' }}>
+              <Link to="/register" style={{ textDecoration: 'none' }}>
                 <button style={{
                   padding: '0.8rem 2rem',
                   borderRadius: 25,
@@ -210,7 +210,7 @@ export default function Home() {
             {liveStreams.map(stream => (
               <div
                 key={stream.streamId}
-                onClick={() => navigate(`/directo?watch=${stream.streamId}`)}
+                onClick={() => navigate(`/live?watch=${stream.streamId}`)}
                 style={{
                   background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
                   borderRadius: 14,
@@ -363,7 +363,7 @@ export default function Home() {
         <p style={{ fontSize: '1rem', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem', opacity: 0.9 }}>
           {t('home.forPastorsDesc', 'Ferramentas completas para gerenciar sua congregação, finanças, campanhas e muito mais.')}
         </p>
-        <Link to="/cadastro" style={{ textDecoration: 'none' }}>
+        <Link to="/register" style={{ textDecoration: 'none' }}>
           <button style={{
             padding: '0.8rem 2rem',
             borderRadius: 25,

@@ -175,7 +175,7 @@ export default function TheologyCourse() {
 
       {/* Footer links */}
       <div style={{ textAlign: 'center', padding: '1rem', borderTop: '1px solid rgba(100,130,200,0.1)' }}>
-        <Link to="/curso-financas" style={{ color: '#d4af37', textDecoration: 'none', marginRight: 20 }}>{'←'} Finanças Bíblicas</Link>
+        <Link to="/curso-biblico" style={{ color: '#d4af37', textDecoration: 'none', marginRight: 20 }}>{'←'} Finanças Bíblicas</Link>
         <Link to="/curso-biblico" style={{ color: '#8b5cf6', textDecoration: 'none' }}>Curso Bíblico {'→'}</Link>
       </div>
     </div>

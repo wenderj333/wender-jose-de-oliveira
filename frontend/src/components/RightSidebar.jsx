@@ -172,7 +172,7 @@ export default function RightSidebar({ showInstall, onInstall, activeLive }) {
               <span style={{ fontSize: 13, fontWeight: 700 }}>AO VIVO</span>
             </div>
             <p style={{ fontSize: 12, marginBottom: 12 }}>{activeLive.user_name} esta transmitindo</p>
-            <button onClick={() => navigate("/live-stream")} style={{ width: "100%", padding: 10, borderRadius: 10, background: "linear-gradient(135deg,#e74c3c,#c0392b)", color: "white", fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer" }}>
+            <button onClick={() => navigate("/live")} style={{ width: "100%", padding: 10, borderRadius: 10, background: "linear-gradient(135deg,#e74c3c,#c0392b)", color: "white", fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer" }}>
               Entrar no Live
             </button>
           </div>
@@ -183,7 +183,7 @@ export default function RightSidebar({ showInstall, onInstall, activeLive }) {
               <span style={{ fontSize: 12, fontWeight: 700 }}>Comunidade ativa agora</span>
             </div>
             <p style={{ fontSize: 20, fontWeight: 800, marginBottom: 4 }}>{online} <span style={{ fontSize: 12, fontWeight: 400 }}>pessoas online</span></p>
-            <button onClick={() => navigate("/live-stream")} style={{ width: "100%", padding: 10, borderRadius: 10, background: "linear-gradient(135deg,#c49a28,#f0c040)", color: "#1e2240", fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+            <button onClick={() => navigate("/live")} style={{ width: "100%", padding: 10, borderRadius: 10, background: "linear-gradient(135deg,#c49a28,#f0c040)", color: "#1e2240", fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
               <Radio size={14} /> {t("live.start", "Iniciar Live")}
             </button>
           </div>
@@ -277,7 +277,7 @@ export default function RightSidebar({ showInstall, onInstall, activeLive }) {
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, marginBottom: 12 }}>
           Convida o teu amigo, o teu pastor e prova a tua capacidade biblica!
         </p>
-        <a href='/duelo' style={{ display: 'block', padding: '10px 0', borderRadius: 10, background: 'linear-gradient(135deg,#f6d860,#e5b800)', color: '#1a0a3e', fontWeight: 800, fontSize: 13, textDecoration: 'none', marginBottom: 8 }}>
+        <a href='/duelo-biblico' style={{ display: 'block', padding: '10px 0', borderRadius: 10, background: 'linear-gradient(135deg,#f6d860,#e5b800)', color: '#1a0a3e', fontWeight: 800, fontSize: 13, textDecoration: 'none', marginBottom: 8 }}>
           Jogar Agora
         </a>
       </div>

@@ -29,7 +29,7 @@ export default function LiveViewers({ activeLive }) {
   if (!activeLive) return null;
 
   return (
-    <div onClick={() => navigate('/live-stream')}
+    <div onClick={() => navigate('/live')}
       style={{ background:'linear-gradient(135deg,#1a0a2e,#2d1054)', borderBottom:'2px solid #e74c3c', padding:'10px 16px', display:'flex', alignItems:'center', gap:12, cursor:'pointer', position:'sticky', top:0, zIndex:100 }}>
       <div style={{ display:'flex', alignItems:'center', gap:6, flexShrink:0 }}>
         <div style={{ width:10, height:10, background:'#e74c3c', borderRadius:'50%' }} />

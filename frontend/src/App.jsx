@@ -84,6 +84,8 @@ import Churches from "./pages/Churches";
 import ChurchProfile from "./pages/ChurchProfile";
 
 import PastorDashboard from "./pages/PastorDashboard";
+import Kids from "./pages/Kids";
+import BiblicalFinance from "./pages/BiblicalFinance";
 
 import Offerings from "./pages/Offerings";
 
@@ -435,6 +437,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
 
         <Route path="/register" element={<Register />} />
+        <Route path="/cadastro" element={<Register />} />
 
         <Route path="/mural" element={<MuralGrid />} />
         <Route path="/grupos-oracao" element={<PrayerGroupsLanding />} />
@@ -829,6 +832,7 @@ export default function App() {
 
             <Route path="/login" element={<Navigate to="/" replace />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/cadastro" element={<Register />} />
 
             <Route path="/perfil/:userId" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
@@ -841,6 +845,8 @@ export default function App() {
             <Route path="/chat-pastoral" element={<PastorChat />} />
 
             <Route path="/curso-biblico" element={<BiblicalCourse />} />
+            <Route path="/curso-teologia" element={<BiblicalCourse />} />
+            <Route path="/curso-financas" element={<BiblicalFinance />} />
 
             <Route path="/journeys" element={<FaithJourneys />} />
 
@@ -857,6 +863,7 @@ export default function App() {
 
             <Route path="/desafio-biblico" element={<DesafioBiblico />} />
             <Route path="/desafio-diario" element={<DailyFaithChallenge />} />
+            <Route path="/kids" element={<Kids />} />
             <Route path="/duelo-biblico" element={<DueloBiblico />} />
             <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
 
@@ -871,8 +878,10 @@ export default function App() {
             <Route path="/seguranca" element={<ProtectedRoute role="admin"><SafetyCenter /></ProtectedRoute>} />
 
             <Route path="/pedidos-ajuda" element={<HelpRequests />} />
+            <Route path="/oracoes" element={<HelpRequests />} />
 
             <Route path="/pastor-dashboard" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
+            <Route path="/pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
 
             <Route path="/igrejas" element={<Churches />} />
 
