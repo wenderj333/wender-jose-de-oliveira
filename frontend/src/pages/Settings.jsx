@@ -24,6 +24,16 @@ export default function Settings() {
   const [notificationStatus, setNotificationStatus] = useState("");
   const avatarInputRef = React.useRef(null);
 
+  const saveNotificationToken = async (fcmToken, token) => {
+    if (!fcmToken || !token) throw new Error("token");
+    const response = await fetch(API + "/notifications/fcm-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+      body: JSON.stringify({ token: fcmToken })
+    });
+    if (!response.ok) throw new Error("register");
+  };
+
   const enableNotifications = async () => {
     setNotificationStatus("A pedir permissão…");
     try {
@@ -36,20 +46,13 @@ export default function Settings() {
       enableNotificationSound();
       const fcmToken = await requestNotificationPermission();
       const token = localStorage.getItem("token");
-      if (fcmToken && token) {
-        const response = await fetch(API + "/notifications/fcm-token", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
-          body: JSON.stringify({ token: fcmToken })
-        });
-        if (!response.ok) throw new Error("register");
-      }
+      await saveNotificationToken(fcmToken, token);
       if (typeof window !== "undefined" && typeof window.gtag === "function") {
         window.gtag("event", "notification_opt_in", { method: "browser_push" });
       }
       setNotificationStatus("Notificações e som ativados neste dispositivo.");
     } catch (_) {
-      setNotificationStatus("Não foi possível ativar agora. Tente novamente neste navegador.");
+      setNotificationStatus("O navegador permitiu a notificação, mas não conseguiu registrar este telefone. Recarregue a página e tente novamente.");
     }
   };
 
@@ -60,12 +63,7 @@ export default function Settings() {
     const token = localStorage.getItem("token");
     if (!token) return;
     requestNotificationPermission().then(fcmToken => {
-      if (!fcmToken) return;
-      fetch(API + "/notifications/fcm-token", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
-        body: JSON.stringify({ token: fcmToken })
-      }).catch(() => {});
+      saveNotificationToken(fcmToken, token).catch(() => {});
     }).catch(() => {});
   }, []);
 

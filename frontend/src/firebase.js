@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging, getToken, onMessage, isSupported } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA2BCit2HeaB_j_xbz-NWqKXosSdvuVX9M",
@@ -26,8 +26,9 @@ try {
 
 export async function requestNotificationPermission() {
   try {
-    if (!messaging) return null;
-    messagingServiceWorker ||= await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    if (!messaging || !(await isSupported())) return null;
+    messagingServiceWorker ||= await navigator.serviceWorker.register('/firebase-messaging-sw.js', { updateViaCache: 'none' });
+    await messagingServiceWorker.update().catch(() => {});
     const token = await getToken(messaging, {
       vapidKey: "BJJLw29P-fq2YB2PkgAvOePJN-YBgBBIfJTU6bA-gBqPqQT91gOym4Q859eFTieaup6U-JUg402zTRKevISLnpI",
       serviceWorkerRegistration: messagingServiceWorker
