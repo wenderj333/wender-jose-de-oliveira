@@ -22,6 +22,13 @@ allprojects {
         google()
         mavenCentral()
     }
+
+    // Capacitor and older plugins can bring the legacy Kotlin JDK bridge
+    // alongside kotlin-stdlib, which causes duplicate classes on modern AGP.
+    configurations.configureEach {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+    }
 }
 
 task clean(type: Delete) {
