@@ -14,3 +14,5 @@ services:
         value: https://sigo-com-fe.vercel.app
       - key: NODE_ENV
         value: production
+      - key: FCM_SERVICE_ACCOUNT_JSON
+        sync: false
