@@ -1,22 +1,24 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const { user, login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnTo = location.pathname.startsWith("/mensagens/") ? `${location.pathname}${location.search}` : "/mural";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  React.useEffect(() => { if (user) navigate("/mural"); }, [user]);
+  React.useEffect(() => { if (user) navigate(returnTo, { replace: true }); }, [user, returnTo, navigate]);
   const handleGoogle = async () => {
-    try { await loginWithGoogle(); navigate("/mural"); }
+    try { await loginWithGoogle(); navigate(returnTo, { replace: true }); }
     catch (err) { setError("Erro ao entrar com Google"); }
   };
   const handleSubmit = async (e) => {
     e.preventDefault(); setLoading(true); setError("");
-    try { await login(email, password); navigate("/mural"); }
+    try { await login(email, password); navigate(returnTo, { replace: true }); }
     catch (err) { setError("Email ou senha incorretos"); }
     setLoading(false);
   };
