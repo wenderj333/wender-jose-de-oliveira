@@ -5,7 +5,6 @@ import { useAuth } from '../context/AuthContext';
 import LiveViewers from '../components/LiveViewers';
 import ReportModal from '../components/ReportModal';
 import { repairMojibake } from '../utils/textEncoding';
-import surpriseVerses from '../data/biblia-livre-surpresas.json';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
@@ -517,24 +516,73 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   );
 }
 
+const MULTILINGUAL_SURPRISES = [
+  {
+    id: 'courage', icon: '🦁', color: '#f59e0b',
+    title: { pt: 'Coragem', es: 'Valentía', en: 'Courage', de: 'Mut', fr: 'Courage', ro: 'Curaj', ru: 'Мужество' },
+    hint: { pt: 'Fortaleça o coração', es: 'Fortalece el corazón', en: 'Strengthen your heart', de: 'Stärke dein Herz', fr: 'Fortifie ton cœur', ro: 'Întărește-ți inima', ru: 'Укрепи сердце' },
+    ref: { pt: 'Isaías 41:10', es: 'Isaías 41:10', en: 'Isaiah 41:10', de: 'Jesaja 41,10', fr: 'Ésaïe 41:10', ro: 'Isaia 41:10', ru: 'Исаия 41:10' },
+    text: {
+      pt: 'Não temas, porque eu sou contigo; não te assombres, porque eu sou teu Deus; eu te fortaleço, e te ajudo, e te sustento com a minha destra fiel.',
+      es: 'No temas, porque yo estoy contigo; no desmayes, porque yo soy tu Dios que te esfuerzo; siempre te ayudaré, siempre te sustentaré con la diestra de mi justicia.',
+      en: 'Fear thou not; for I am with thee: be not dismayed; for I am thy God: I will strengthen thee; yea, I will help thee.',
+      de: 'Fürchte dich nicht, ich bin mit dir; weiche nicht, denn ich bin dein Gott. Ich stärke dich, ich helfe dir auch.',
+      fr: 'Ne crains rien, car je suis avec toi; ne promène pas des regards inquiets, car je suis ton Dieu; je te fortifie, je viens à ton secours.',
+      ro: 'Nu te teme, căci Eu sunt cu tine; nu te uita cu îngrijorare, căci Eu sunt Dumnezeul tău; Eu te întăresc, tot Eu îți vin în ajutor.',
+      ru: 'не бойся, ибо Я с тобою; не смущайся, ибо Я Бог твой; Я укреплю тебя, и помогу тебе.'
+    }
+  },
+  {
+    id: 'hope', icon: '🌿', color: '#42a77a',
+    title: { pt: 'Esperança', es: 'Esperanza', en: 'Hope', de: 'Hoffnung', fr: 'Espérance', ro: 'Speranță', ru: 'Надежда' },
+    hint: { pt: 'Uma promessa para hoje', es: 'Una promesa para hoy', en: 'A promise for today', de: 'Eine Verheißung für heute', fr: 'Une promesse pour aujourd’hui', ro: 'O promisiune pentru azi', ru: 'Обетование на сегодня' },
+    ref: { pt: 'Jeremias 29:11', es: 'Jeremías 29:11', en: 'Jeremiah 29:11', de: 'Jeremia 29,11', fr: 'Jérémie 29:11', ro: 'Ieremia 29:11', ru: 'Иеремия 29:11' },
+    text: {
+      pt: 'Porque eu bem sei os pensamentos que tenho a vosso respeito, diz o Senhor; pensamentos de paz, e não de mal, para vos dar o fim que esperais.',
+      es: 'Porque yo sé los pensamientos que tengo acerca de vosotros, dice el Señor, pensamientos de paz, y no de mal, para daros el fin que esperáis.',
+      en: 'For I know the thoughts that I think toward you, saith the Lord, thoughts of peace, and not of evil, to give you an expected end.',
+      de: 'Denn ich weiß wohl, was ich für Gedanken über euch habe, spricht der Herr: Gedanken des Friedens und nicht des Leides, dass ich euch gebe Zukunft und Hoffnung.',
+      fr: 'Car je connais les projets que j’ai formés sur vous, dit l’Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l’espérance.',
+      ro: 'Căci Eu știu gândurile pe care le am cu privire la voi, zice Domnul, gânduri de pace și nu de nenorocire, ca să vă dau un viitor și o nădejde.',
+      ru: 'Ибо только Я знаю намерения, какие имею о вас, говорит Господь, намерения во благо, а не на зло, чтобы дать вам будущность и надежду.'
+    }
+  },
+  {
+    id: 'guidance', icon: '🕊️', color: '#7651b8',
+    title: { pt: 'Direção', es: 'Dirección', en: 'Guidance', de: 'Führung', fr: 'Direction', ro: 'Călăuzire', ru: 'Направление' },
+    hint: { pt: 'Sabedoria para o caminho', es: 'Sabiduría para tu camino', en: 'Wisdom for your path', de: 'Weisheit für deinen Weg', fr: 'Sagesse pour ton chemin', ro: 'Înțelepciune pentru drumul tău', ru: 'Мудрость для пути' },
+    ref: { pt: 'Provérbios 3:5-6', es: 'Proverbios 3:5-6', en: 'Proverbs 3:5-6', de: 'Sprüche 3,5-6', fr: 'Proverbes 3:5-6', ro: 'Proverbe 3:5-6', ru: 'Притчи 3:5-6' },
+    text: {
+      pt: 'Confia no Senhor de todo o teu coração, e não te estribes no teu próprio entendimento. Reconhece-o em todos os teus caminhos, e ele endireitará as tuas veredas.',
+      es: 'Fíate del Señor de todo tu corazón, y no te apoyes en tu propia prudencia. Reconócelo en todos tus caminos, y él enderezará tus veredas.',
+      en: 'Trust in the Lord with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.',
+      de: 'Verlass dich auf den Herrn von ganzem Herzen und verlass dich nicht auf deinen Verstand; sondern gedenke an ihn in allen deinen Wegen, so wird er dich recht führen.',
+      fr: 'Confie-toi en l’Éternel de tout ton cœur, et ne t’appuie pas sur ta sagesse; reconnais-le dans toutes tes voies, et il aplanira tes sentiers.',
+      ro: 'Încrede-te în Domnul din toată inima ta și nu te bizui pe înțelepciunea ta. Recunoaște-L în toate căile tale, și El îți va netezi cărările.',
+      ru: 'Надейся на Господа всем сердцем твоим и не полагайся на разум твой. Во всех путях твоих познавай Его, и Он направит стези твои.'
+    }
+  }
+];
+
 function DailySurpriseBoxes() {
   const { i18n } = useTranslation();
   const [message, setMessage] = useState(null);
   const today = new Date().toISOString().slice(0, 10);
-  const storageKey = `sigo_mural_surprise_${today}`;
+  const storageKey = `sigo_mural_surprise_v2_${today}`;
   const lang = (i18n.language || navigator.language || 'pt').split('-')[0];
-  const boxes = [
-    { icon: '🦁', color: '#f59e0b', title: { pt: 'Coragem', es: 'Valentía', en: 'Courage' }, hint: { pt: 'Fortaleça o coração', es: 'Fortalece el corazón', en: 'Strengthen your heart' } },
-    { icon: '🌿', color: '#42a77a', title: { pt: 'Esperança', es: 'Esperanza', en: 'Hope' }, hint: { pt: 'Uma promessa para hoje', es: 'Una promesa para hoy', en: 'A promise for today' } },
-    { icon: '🕊️', color: '#7651b8', title: { pt: 'Direção', es: 'Dirección', en: 'Guidance' }, hint: { pt: 'Sabedoria para o caminho', es: 'Sabiduría para tu camino', en: 'Wisdom for your path' } },
-  ];
-  const copy = { choose: { pt: 'Escolha uma surpresa', es: 'Elige una sorpresa', en: 'Choose a surprise' }, done: { pt: 'Você já recebeu sua palavra hoje', es: 'Ya recibiste tu palabra de hoy', en: "You already received today's word" }, share: { pt: 'Compartilhar esta palavra', es: 'Compartir esta palabra', en: 'Share this word' }, fallback: { pt: '', es: 'Texto disponível em português', en: 'Text available in Portuguese' } };
+  const copy = {
+    choose: { pt: 'Escolha uma surpresa', es: 'Elige una sorpresa', en: 'Choose a surprise', de: 'Wähle eine Überraschung', fr: 'Choisis une surprise', ro: 'Alege o surpriză', ru: 'Выберите сюрприз' },
+    intro: { pt: 'Uma palavra especial para a sua caminhada', es: 'Una palabra especial para tu camino', en: 'A special word for your journey', de: 'Ein besonderes Wort für deinen Weg', fr: 'Une parole spéciale pour ton chemin', ro: 'Un cuvânt special pentru drumul tău', ru: 'Особое слово для вашего пути' },
+    done: { pt: 'Você já recebeu sua palavra hoje', es: 'Ya recibiste tu palabra de hoy', en: "You already received today's word", de: 'Du hast dein Wort für heute bereits erhalten', fr: 'Tu as déjà reçu ta parole du jour', ro: 'Ai primit deja cuvântul pentru astăzi', ru: 'Вы уже получили слово на сегодня' },
+    share: { pt: 'Compartilhar esta palavra', es: 'Compartir esta palabra', en: 'Share this word', de: 'Dieses Wort teilen', fr: 'Partager cette parole', ro: 'Distribuie acest cuvânt', ru: 'Поделиться этим словом' },
+    source: { pt: 'Textos bíblicos em domínio público', es: 'Textos bíblicos de dominio público', en: 'Public-domain Bible texts', de: 'Bibeltexte gemeinfrei', fr: 'Textes bibliques du domaine public', ro: 'Texte biblice din domeniul public', ru: 'Библейские тексты в общественном достоянии' }
+  };
   useEffect(() => { try { const saved = JSON.parse(localStorage.getItem(storageKey)); if (saved) setMessage(saved); } catch (_) {} }, [storageKey]);
-  const choose = box => { if (message) return; const pool = surpriseVerses.filter(word => word.category === ({ Coragem: 'coragem', Esperança: 'esperanca', Direção: 'direcao' }[box.title.pt] || 'coragem')); const word = pool[Math.floor(Math.random() * pool.length)] || surpriseVerses[Math.floor(Math.random() * surpriseVerses.length)]; const value = { ...word, box: box.title.pt }; setMessage(value); localStorage.setItem(storageKey, JSON.stringify(value)); };
-  const verseText = message ? (message[lang] || message.pt) : '';
-  const isFallback = Boolean(message && lang !== 'pt' && !message[lang]);
-  const share = async () => { if (!message) return; const body = `${verseText}\n— ${message.ref}\nSigo com Fé`; try { if (navigator.share) await navigator.share({ title: 'Palavra do dia', text: body }); else await navigator.clipboard.writeText(body); } catch (_) {} };
-  return <section aria-label={copy.choose[lang] || copy.choose.pt} style={{ marginBottom: 20, padding: '18px 16px', borderRadius: 18, background: 'linear-gradient(135deg,#fffaf1,#f6f3ff)', border: '1px solid #eadff3', boxShadow: '0 8px 24px rgba(70,45,100,.08)' }}><div style={{ textAlign: 'center', marginBottom: 14 }}><div style={{ fontSize: 22 }}>✨</div><h2 style={{ margin: '2px 0 3px', color: '#30204f', fontSize: 19 }}>{message ? (copy.done[lang] || copy.done.pt) : (copy.choose[lang] || copy.choose.pt)}</h2><p style={{ margin: 0, color: '#756b80', fontSize: 12 }}>{message ? verseText : 'Uma palavra especial para a sua caminhada'}</p>{isFallback && <small style={{ display: 'block', marginTop: 6, color: '#8a7896', fontSize: 10 }}>{copy.fallback[lang] || copy.fallback.en}</small>}</div>{!message ? <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10 }}>{boxes.map(box => <button key={box.title.pt} type="button" onClick={() => choose(box)} style={{ border: 'none', borderRadius: 14, padding: '15px 8px', color: 'white', background: `linear-gradient(145deg,${box.color},${box.color}cc)`, cursor: 'pointer', minHeight: 105, boxShadow: '0 6px 14px rgba(56,35,80,.16)', transition: 'transform .2s' }} onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; }} onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}><span style={{ display: 'block', fontSize: 28, marginBottom: 6 }}>{box.icon}</span><strong style={{ display: 'block', fontSize: 14 }}>{box.title[lang] || box.title.pt}</strong><small style={{ display: 'block', marginTop: 5, opacity: .9, lineHeight: 1.2 }}>{box.hint[lang] || box.hint.pt}</small></button>)}</div> : <div style={{ textAlign: 'center' }}><div style={{ color: '#7c6d90', fontSize: 12, marginBottom: 12 }}>{message.ref}</div><button type="button" onClick={share} style={{ border: 'none', borderRadius: 20, padding: '9px 17px', color: 'white', background: '#6d47a8', cursor: 'pointer', fontWeight: 700 }}>↗ {copy.share[lang] || copy.share.pt}</button></div>}<div style={{ marginTop: 12, textAlign: 'center', color: '#9a8ca8', fontSize: 10 }}>Textos: Bíblia Livre (BLIVRE), CC BY 3.0 BR</div></section>;
+  const choose = box => { if (message) return; setMessage(box); localStorage.setItem(storageKey, JSON.stringify(box)); };
+  const verseText = message ? (message.text[lang] || message.text.en || message.text.pt) : '';
+  const verseRef = message ? (message.ref[lang] || message.ref.en || message.ref.pt) : '';
+  const share = async () => { if (!message) return; const body = `${verseText}\n— ${verseRef}\nSigo com Fé`; try { if (navigator.share) await navigator.share({ title: 'Palavra do dia', text: body }); else await navigator.clipboard.writeText(body); } catch (_) {} };
+  return <section aria-label={copy.choose[lang] || copy.choose.pt} style={{ marginBottom: 20, padding: '18px 16px', borderRadius: 18, background: 'linear-gradient(135deg,#fffaf1,#f6f3ff)', border: '1px solid #eadff3', boxShadow: '0 8px 24px rgba(70,45,100,.08)' }}><div style={{ textAlign: 'center', marginBottom: 14 }}><div style={{ fontSize: 22 }}>✨</div><h2 style={{ margin: '2px 0 3px', color: '#30204f', fontSize: 19 }}>{message ? (copy.done[lang] || copy.done.pt) : (copy.choose[lang] || copy.choose.pt)}</h2><p style={{ margin: 0, color: '#756b80', fontSize: 12 }}>{message ? verseText : (copy.intro[lang] || copy.intro.pt)}</p></div>{!message ? <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10 }}>{MULTILINGUAL_SURPRISES.map(box => <button key={box.id} type="button" onClick={() => choose(box)} style={{ border: 'none', borderRadius: 14, padding: '15px 8px', color: 'white', background: `linear-gradient(145deg,${box.color},${box.color}cc)`, cursor: 'pointer', minHeight: 105, boxShadow: '0 6px 14px rgba(56,35,80,.16)', transition: 'transform .2s' }} onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; }} onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}><span style={{ display: 'block', fontSize: 28, marginBottom: 6 }}>{box.icon}</span><strong style={{ display: 'block', fontSize: 14 }}>{box.title[lang] || box.title.en || box.title.pt}</strong><small style={{ display: 'block', marginTop: 5, opacity: .9, lineHeight: 1.2 }}>{box.hint[lang] || box.hint.en || box.hint.pt}</small></button>)}</div> : <div style={{ textAlign: 'center' }}><div style={{ color: '#7c6d90', fontSize: 12, marginBottom: 12 }}>{verseRef}</div><button type="button" onClick={share} style={{ border: 'none', borderRadius: 20, padding: '9px 17px', color: 'white', background: '#6d47a8', cursor: 'pointer', fontWeight: 700 }}>↗ {copy.share[lang] || copy.share.pt}</button></div>}<div style={{ marginTop: 12, textAlign: 'center', color: '#9a8ca8', fontSize: 10 }}>{copy.source[lang] || copy.source.en}</div></section>;
 }
 
 export default function MuralGrid() {
