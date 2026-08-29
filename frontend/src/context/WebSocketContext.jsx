@@ -7,6 +7,8 @@ const WebSocketContext = createContext(null);
 export function WebSocketProvider({ children }) {
   const { user, token } = useAuth();
   const wsRef = useRef(null);
+  const userRef = useRef(user);
+  const tokenRef = useRef(token);
   const reconnectTimer = useRef(null);
   const lastSoundTime = useRef(0);
   const eventListeners = useRef(new Map()); // event type -> Set of callbacks
@@ -15,6 +17,14 @@ export function WebSocketProvider({ children }) {
   const [lastEvent, setLastEvent] = useState(null);
   const [liveStreams, setLiveStreams] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
+
+  // Keep reconnect callbacks in sync with the latest authenticated session.
+  // A login can finish after the first socket is opened; using refs prevents
+  // that socket's retry callback from reusing an expired/empty token.
+  useEffect(() => {
+    userRef.current = user;
+    tokenRef.current = token;
+  }, [user, token]);
 
   function playSoundThrottled() {
     const now = Date.now();
@@ -76,8 +86,10 @@ export function WebSocketProvider({ children }) {
       ws.onopen = () => {
         console.log('WebSocket conectado');
         setIsConnected(true);
-        if (user) {
-          ws.send(JSON.stringify({ type: 'identify', userId: user.id, churchId: user.churchId, token }));
+        const currentUser = userRef.current;
+        const currentToken = tokenRef.current;
+        if (currentUser && currentToken) {
+          ws.send(JSON.stringify({ type: 'identify', userId: currentUser.id, churchId: currentUser.churchId, token: currentToken }));
         }
         ws.send(JSON.stringify({ type: 'live_list' }));
       };
@@ -165,6 +177,9 @@ export function WebSocketProvider({ children }) {
 
       ws.onclose = () => {
         console.log('WebSocket desconectado');
+        // Ignore close events from sockets replaced during a login/session
+        // change; otherwise cleanup can schedule a stale reconnect.
+        if (wsRef.current !== ws) return;
         setIsConnected(false);
         wsRef.current = null;
         // Calls and chat depend on this connection. Reconnect quickly while
@@ -189,7 +204,7 @@ export function WebSocketProvider({ children }) {
       if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
       if (wsRef.current) wsRef.current.close();
     };
-  }, [user]);
+  }, [user, token]);
 
   const send = useCallback((data) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
