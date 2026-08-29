@@ -52,6 +52,7 @@ function ProfileContent() {
   const [mediaSaving, setMediaSaving] = useState(false);
   const [musicCovers, setMusicCovers] = useState({});
   const [reportProfile, setReportProfile] = useState(false);
+  const [followError, setFollowError] = useState("");
 
   useEffect(() => {
     if (!token) return;
@@ -108,13 +109,14 @@ function ProfileContent() {
       }).catch(() => {});
   }, [token, userId, isOwner]);
   const handleFollow = async () => {
-    if (!token || friendStatus) return;
+    if (!token || friendStatus === "accepted" || friendStatus === "pending") return;
+    setFollowError("");
     try {
       const response = await fetch(API + "/friends/request", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + token }, body: JSON.stringify({ addressee_id: userId }) });
       if (!response.ok) throw new Error("Não foi possível enviar o pedido");
       setFriendStatus("pending");
       setFriendDirection("sent");
-    } catch(e) {}
+    } catch(e) { setFollowError("Não foi possível enviar o pedido. Tente novamente."); }
   };
   const respondToFriendRequest = async (action) => {
     if (!friendshipId || !token) return;
@@ -202,6 +204,7 @@ function ProfileContent() {
                   <button onClick={() => navigate(`/mensagens/${userId}?call=audio`)} title="Chamada de voz" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#eef8f0", color: "#287a48", border: "1px solid #bfe0c8", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><Phone size={15}/> Ligar</button>
                   <button onClick={() => navigate(`/mensagens/${userId}?call=video`)} title="Videochamada" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#f5effb", color: "#6C3FA0", border: "1px solid #ddcfef", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><Video size={15}/> Vídeo</button>
                   <button type="button" onClick={() => setReportProfile(true)} title="Denunciar perfil" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#fff6f5", color: "#b42318", border: "1px solid #f2c7c2", borderRadius: "20px", padding: "6px 12px", fontSize: "13px", cursor: "pointer", fontWeight: 700 }}><Flag size={15}/> Denunciar</button>
+                  {followError && <span role="alert" style={{ flexBasis: "100%", color: "#b42318", fontSize: 12 }}>{followError}</span>}
                 </div>
               )}
             </div>

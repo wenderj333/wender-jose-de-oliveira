@@ -517,7 +517,7 @@ export default function App() {
 
           <Link to="/ia-biblica" className={`nav-item ${location.pathname==='/ia-biblica'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'6px 11px',borderRadius:8,fontSize:'0.84rem',display:'flex',alignItems:'center',gap:6}}>
 
-            <BookOpen size={15}/> Ler a Bíblia
+            <BookOpen size={15}/> {t('nav.bibleStudyNav', 'Bíblia')}
 
           </Link>
 
@@ -539,7 +539,7 @@ export default function App() {
 
         <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8}}>
 
-          <GlobalMemberSearch />
+          <div className="topbar-search"><GlobalMemberSearch /></div>
 
           <LanguageSelector />
 
@@ -610,7 +610,7 @@ export default function App() {
 
               ['/grupos', <Users size={20}/>, t('nav.groups', 'Grupos')],
 
-              ['/praca-oracao', <Heart size={20}/>, 'Praça Mundial de Oração'],
+              ['/praca-oracao', <Heart size={20}/>, t('nav.prayerPlaza', 'Praça Mundial de Oração')],
 
               ['/consagracao', <PlayCircle size={20}/>, t('nav.consecration', 'Consagração e Jejum')],
 
@@ -642,7 +642,7 @@ export default function App() {
 
             {[
 
-              ['/ia-biblica', <BookOpen size={20}/>, 'Ler a Bíblia'],
+              ['/ia-biblica', <BookOpen size={20}/>, t('nav.bibleStudyNav', 'Bíblia')],
 
               ['/pedidos-ajuda', <Heart size={20}/>, t('nav.prayers')],
 
@@ -736,7 +736,7 @@ export default function App() {
 
             <Link to="/" className={isActive('/')}><Home size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.mural','Mural')}</span></Link>
 
-            <Link to="/praca-oracao" className={isActive('/praca-oracao') || isActive('/praca-de-oracao')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>Praça Mundial de Oração</span></Link>
+            <Link to="/praca-oracao" className={isActive('/praca-oracao') || isActive('/praca-de-oracao')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayerPlaza','Praça Mundial de Oração')}</span></Link>
 
             <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','Consagração')}</span></Link>
 
@@ -784,7 +784,7 @@ export default function App() {
 
             <p className="menu-title">{t('menu.spiritual','ESPIRITUAL')}</p>
 
-            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>Ler a Bíblia</span></Link>
+            <Link to="/ia-biblica" className={isActive('/ia-biblica')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.bibleStudyNav','Bíblia')}</span></Link>
 
             <Link to="/pedidos-ajuda" className={isActive('/pedidos-ajuda')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayers','Orações')}</span></Link>
 

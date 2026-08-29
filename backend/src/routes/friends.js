@@ -147,7 +147,7 @@ router.get('/status/:targetId', async (req, res) => {
     const { targetId } = req.params;
     const userId = req.user.id;
     const db = require('../db/connection');
-    const friendship = db.prepare('SELECT id, status, requester_id FROM friendships WHERE (requester_id = ? AND addressee_id = ?) OR (requester_id = ? AND addressee_id = ?)').get(userId, targetId, targetId, userId);
+    const friendship = await db.prepare('SELECT id, status, requester_id FROM friendships WHERE (requester_id = ? AND addressee_id = ?) OR (requester_id = ? AND addressee_id = ?)').get(userId, targetId, targetId, userId);
     if (!friendship) return res.json({ status: 'none' });
     res.json({ status: friendship.status, friendship_id: friendship.id, direction: friendship.requester_id == userId ? 'sent' : 'received' });
   } catch (err) {

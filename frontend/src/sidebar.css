@@ -255,6 +255,7 @@
   .topbar > a > img { width: 34px !important; height: 34px !important; border-radius: 10px !important; }
   .brand-lockup strong { font-size: .9rem; }
   .topbar > div { gap: 5px !important; }
+  .topbar-search { display: none !important; }
   .topbar .icon-btn { padding: 5px !important; }
 
   .modern-layout {

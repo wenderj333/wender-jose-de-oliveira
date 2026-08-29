@@ -419,8 +419,8 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
           />
         </div>
       )}      {isImage && (
-        <div style={{ width: '100%', maxHeight: 500, overflow: 'hidden', background: '#f8f9ff', display: 'flex', justifyContent: 'center' }}>
-          <img src={mediaUrl} alt="post" onClick={() => setImageModal(mediaUrl)} style={{ width: '100%', objectFit: 'contain', display: 'block', cursor: 'zoom-in', background: '#f8f9ff' }} />
+        <div style={{ width: '100%', height: 'clamp(220px, 48vw, 420px)', overflow: 'hidden', background: 'linear-gradient(135deg,#f3f6fb,#eef1f8)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <img src={mediaUrl} alt="post" loading="lazy" onClick={() => setImageModal(mediaUrl)} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', cursor: 'zoom-in' }} />
         </div>
       )}
 
