@@ -77,6 +77,14 @@ router.get('/:userId', authenticate, async (req, res) => {
       UPDATE direct_messages SET is_read = true
       WHERE sender_id = $1 AND receiver_id = $2 AND is_read = false
     `, [other, me]);
+    // A mensagem também cria uma notificação persistente. Marque as duas
+    // fontes como lidas ao abrir esta conversa para o contador não voltar.
+    await db.query(`
+      UPDATE notifications
+      SET is_read = true
+      WHERE user_id = $1 AND type = 'message' AND is_read = false
+        AND data->>'senderId' = $2
+    `, [me, other]);
 
     // Get other user info
     const userInfo = await db.query(

@@ -195,6 +195,7 @@ export default function Chat() {
         const newMsgs = data.messages || [];
         if (prev > 0 && newMsgs.length > prev && newMsgs[newMsgs.length-1]?.sender_id !== user?.id) { playMessageSound(); }
         setMessages(newMsgs);
+        setConversations(prev => prev.map(conv => conv.other_id === userId ? { ...conv, unread: 0 } : conv));
         setFriendStatus(data.friendshipStatus || 'none');
         setOtherUser(data.otherUser || null);
       }
