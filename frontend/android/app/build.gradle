@@ -22,6 +22,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    // Release signing is provided through environment variables so the private
+    // upload key and password never enter the repository.
+    def uploadKeystore = System.getenv('SIGOCOMFE_UPLOAD_KEYSTORE')
+    def uploadStorePassword = System.getenv('SIGOCOMFE_UPLOAD_STORE_PASSWORD')
+    def uploadKeyAlias = System.getenv('SIGOCOMFE_UPLOAD_KEY_ALIAS')
+    def uploadKeyPassword = System.getenv('SIGOCOMFE_UPLOAD_KEY_PASSWORD')
+    if (uploadKeystore && uploadStorePassword && uploadKeyAlias && uploadKeyPassword) {
+        signingConfigs {
+            release {
+                storeFile file(uploadKeystore)
+                storePassword uploadStorePassword
+                keyAlias uploadKeyAlias
+                keyPassword uploadKeyPassword
+            }
+        }
+        buildTypes.release.signingConfig signingConfigs.release
+    }
 }
 
 repositories {
