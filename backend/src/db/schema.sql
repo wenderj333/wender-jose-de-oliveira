@@ -14,6 +14,7 @@ CREATE TABLE users (
   full_name VARCHAR(255) NOT NULL,
   display_name VARCHAR(100),
   avatar_url TEXT,
+  fcm_token TEXT,
   phone VARCHAR(30),
   bio TEXT,
   role VARCHAR(20) DEFAULT 'member' CHECK (role IN ('member', 'leader', 'pastor', 'admin')),

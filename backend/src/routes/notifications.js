@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
+const { sendPushNotification } = require('../services/notifications');
 
 // Helper para criar notificações
 async function createNotification(userId, type, title, body, data = {}) {
@@ -19,15 +20,7 @@ async function createNotification(userId, type, title, body, data = {}) {
     const userRes = await db.query('SELECT fcm_token FROM users WHERE id = $1', [userId]);
     const fcmToken = userRes.rows[0]?.fcm_token;
     if (fcmToken) {
-      const { GoogleAuth } = require('google-auth-library');
-      const creds = require('../firebase-adminsdk.json');
-      const auth = new GoogleAuth({ credentials: creds, scopes: ['https://www.googleapis.com/auth/firebase.messaging'] });
-      const token = await auth.getAccessToken();
-      await fetch('https://fcm.googleapis.com/v1/projects/' + creds.project_id + '/messages:send', {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: { token: fcmToken, notification: { title, body: body || title } } })
-      });
+      await sendPushNotification(fcmToken, title, body || title, data);
     }
   } catch(fcmErr) { console.error('FCM error:', fcmErr.message); }
 }

@@ -12,6 +12,7 @@ import { useAuth } from "./context/AuthContext";
 
 import { useWebSocket } from "./context/WebSocketContext";
 import { messaging, onMessage } from "./firebase";
+import { setupNativeNotifications } from "./nativeNotifications";
 
 import {
 
@@ -302,11 +303,18 @@ export default function App() {
   }, [token, soundEnabled, location.pathname]);
 
   useEffect(() => {
+    if (!token) return undefined;
+    let cleanup;
+    setupNativeNotifications(token).then(handle => { cleanup = handle; });
+    return () => { cleanup?.(); };
+  }, [token]);
+
+  useEffect(() => {
     if (!messaging || typeof onMessage !== 'function') return undefined;
     return onMessage(messaging, payload => {
       if (soundEnabled) playNotifSound();
       const notification = payload?.notification;
-      if (notification && Notification.permission === 'granted' && document.visibilityState === 'hidden') {
+      if (notification && typeof Notification !== 'undefined' && Notification.permission === 'granted' && document.visibilityState === 'hidden') {
         try { new Notification(notification.title || 'Sigo com Fé', { body: notification.body || 'Você recebeu uma nova notificação.' }); } catch (_) {}
       }
     });
