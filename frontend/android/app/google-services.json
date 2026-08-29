@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "77579516493",
+    "project_id": "sigo-com-fe",
+    "storage_bucket": "sigo-com-fe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77579516493:android:c3adbd024281a240c77a04",
+        "android_client_info": {
+          "package_name": "com.sigocomfe.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "77579516493-hjf79cjn9vk5g130unm27rdjko80jf88.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOrXBGJcjwN8ITaUM7kpZN5hF3kLl4kHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "77579516493-hjf79cjn9vk5g130unm27rdjko80jf88.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
