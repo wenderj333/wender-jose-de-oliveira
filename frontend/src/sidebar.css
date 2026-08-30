@@ -280,3 +280,21 @@
     font-size: 9px !important;
   }
 }
+
+/* Duelo Bíblico: experiência sem os painéis laterais da rede. */
+.modern-layout.duel-layout {
+  grid-template-columns: minmax(0, 1fr) !important;
+  max-width: none !important;
+  padding: 0 !important;
+}
+
+.duel-layout .sidebar-left,
+.duel-layout .sidebar-right {
+  display: none !important;
+}
+
+.duel-layout .main-content-area {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 0 !important;
+}

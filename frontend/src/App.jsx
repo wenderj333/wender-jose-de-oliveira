@@ -719,7 +719,7 @@ export default function App() {
 
       )}
 
-      <div className="modern-layout" style={isDuelPage ? { gridTemplateColumns: 'minmax(0, 1fr)', maxWidth: 'none', padding: 0 } : undefined}>
+      <div className={`modern-layout${isDuelPage ? ' duel-layout' : ''}`}>
 
 
 
