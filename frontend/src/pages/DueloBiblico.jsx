@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function DueloBiblico() {
   const iframeRef = useRef(null);
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const { i18n } = useTranslation();
   const dueloOrigin = 'https://duelo-biblico.vercel.app';
 
@@ -12,7 +12,7 @@ export default function DueloBiblico() {
     const iframe = iframeRef.current;
     if (!iframe?.contentWindow) return;
 
-    const token = localStorage.getItem('token');
+    const accessToken = token || localStorage.getItem('token');
     const lang = i18n.language?.substring(0, 2) || 'pt';
     iframe.contentWindow.postMessage({
       type: 'LOGIN_DATA',
@@ -20,12 +20,12 @@ export default function DueloBiblico() {
         nome: user?.full_name || user?.name || 'Jogador',
         nomeDiploma: user?.full_name || user?.name || 'Jogador',
         foto: user?.profile_photo || user?.avatar_url || null,
-        token: token || null,
+        token: accessToken || null,
         idioma: lang,
         destaqueRanking: '1.º lugar no Duelo Bíblico'
       }
     }, dueloOrigin);
-  }, [i18n.language, user]);
+  }, [i18n.language, token, user]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
@@ -37,16 +37,17 @@ export default function DueloBiblico() {
     const iframe = iframeRef.current;
     if (!iframe) return;
     const aoCarregar = () => {
-      window.setTimeout(enviarSessaoAoDuelo, 150);
+      [100, 450, 1200, 2500].forEach(delay => window.setTimeout(enviarSessaoAoDuelo, delay));
     };
     const aoPedirSessao = (event) => {
-      if (event.origin === dueloOrigin && event.data?.type === 'SIGO_AUTH_READY') {
+      if (event.origin === dueloOrigin && ['SIGO_AUTH_READY', 'SIGO_AUTH_REQUIRED'].includes(event.data?.type)) {
         enviarSessaoAoDuelo();
       }
     };
 
     iframe.addEventListener('load', aoCarregar);
     window.addEventListener('message', aoPedirSessao);
+    aoCarregar();
     return () => {
       iframe.removeEventListener('load', aoCarregar);
       window.removeEventListener('message', aoPedirSessao);
