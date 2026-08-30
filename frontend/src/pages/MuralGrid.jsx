@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import LiveViewers from '../components/LiveViewers';
 import ReportModal from '../components/ReportModal';
 import { repairMojibake } from '../utils/textEncoding';
+import surpriseMessages from '../data/surpresas-biblicas-traduzidas.json';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
@@ -569,7 +570,7 @@ function DailySurpriseBoxes() {
   const [message, setMessage] = useState(null);
   const [showBoxes, setShowBoxes] = useState(false);
   const today = new Date().toISOString().slice(0, 10);
-  const storageKey = `sigo_mural_surprise_v2_${today}`;
+  const storageKey = `sigo_mural_surprise_v3_${today}`;
   const lang = (i18n.language || navigator.language || 'pt').split('-')[0];
   const copy = {
     choose: { pt: 'Escolha uma surpresa', es: 'Elige una sorpresa', en: 'Choose a surprise', de: 'Wähle eine Überraschung', fr: 'Choisis une surprise', ro: 'Alege o surpriză', ru: 'Выберите сюрприз' },
@@ -581,7 +582,17 @@ function DailySurpriseBoxes() {
     source: { pt: 'Textos bíblicos em domínio público', es: 'Textos bíblicos de dominio público', en: 'Public-domain Bible texts', de: 'Bibeltexte gemeinfrei', fr: 'Textes bibliques du domaine public', ro: 'Texte biblice din domeniul public', ru: 'Библейские тексты в общественном достоянии' }
   };
   useEffect(() => { try { const saved = JSON.parse(localStorage.getItem(storageKey)); if (saved) setMessage(saved); } catch (_) {} }, [storageKey]);
-  const choose = box => { if (message) return; setMessage(box); localStorage.setItem(storageKey, JSON.stringify(box)); };
+  const choose = box => {
+    if (message) return;
+    const categories = { courage: 'coragem', hope: 'esperanca', guidance: 'direcao' };
+    const list = surpriseMessages.filter(item => item.category === categories[box.id]);
+    const start = Date.UTC(new Date().getUTCFullYear(), 0, 1);
+    const day = Math.floor((Date.now() - start) / 86400000);
+    const verse = list[day % list.length];
+    const value = { ...box, ref: Object.fromEntries(['pt','es','en','de','fr','ro','ru'].map(locale => [locale, verse.ref])), text: verse.texts };
+    setMessage(value);
+    localStorage.setItem(storageKey, JSON.stringify(value));
+  };
   const verseText = message ? (message.text[lang] || message.text.en || message.text.pt) : '';
   const verseRef = message ? (message.ref[lang] || message.ref.en || message.ref.pt) : '';
   const share = async () => { if (!message) return; const body = `${verseText}\n— ${verseRef}\nSigo com Fé`; try { if (navigator.share) await navigator.share({ title: 'Palavra do dia', text: body }); else await navigator.clipboard.writeText(body); } catch (_) {} };
