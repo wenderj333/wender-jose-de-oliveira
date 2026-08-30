@@ -520,7 +520,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 const MULTILINGUAL_SURPRISES = [
   {
     id: 'courage', icon: '🦁', color: '#f59e0b',
-    title: { pt: 'Coragem', es: 'Valentía', en: 'Courage', de: 'Mut', fr: 'Courage', ro: 'Curaj', ru: 'Мужество' },
+    title: { pt: 'Baú da Coragem', es: 'Cofre de Valentía', en: 'Chest of Courage', de: 'Mut-Schatztruhe', fr: 'Coffre du Courage', ro: 'Cufărul Curajului', ru: 'Сундук мужества' },
     hint: { pt: 'Fortaleça o coração', es: 'Fortalece el corazón', en: 'Strengthen your heart', de: 'Stärke dein Herz', fr: 'Fortifie ton cœur', ro: 'Întărește-ți inima', ru: 'Укрепи сердце' },
     ref: { pt: 'Isaías 41:10', es: 'Isaías 41:10', en: 'Isaiah 41:10', de: 'Jesaja 41,10', fr: 'Ésaïe 41:10', ro: 'Isaia 41:10', ru: 'Исаия 41:10' },
     text: {
@@ -535,7 +535,7 @@ const MULTILINGUAL_SURPRISES = [
   },
   {
     id: 'hope', icon: '🌿', color: '#42a77a',
-    title: { pt: 'Esperança', es: 'Esperanza', en: 'Hope', de: 'Hoffnung', fr: 'Espérance', ro: 'Speranță', ru: 'Надежда' },
+    title: { pt: 'Baú da Esperança', es: 'Cofre de Esperanza', en: 'Chest of Hope', de: 'Hoffnungs-Schatztruhe', fr: 'Coffre de l’Espérance', ro: 'Cufărul Speranței', ru: 'Сундук надежды' },
     hint: { pt: 'Uma promessa para hoje', es: 'Una promesa para hoy', en: 'A promise for today', de: 'Eine Verheißung für heute', fr: 'Une promesse pour aujourd’hui', ro: 'O promisiune pentru azi', ru: 'Обетование на сегодня' },
     ref: { pt: 'Jeremias 29:11', es: 'Jeremías 29:11', en: 'Jeremiah 29:11', de: 'Jeremia 29,11', fr: 'Jérémie 29:11', ro: 'Ieremia 29:11', ru: 'Иеремия 29:11' },
     text: {
@@ -550,7 +550,7 @@ const MULTILINGUAL_SURPRISES = [
   },
   {
     id: 'guidance', icon: '🕊️', color: '#7651b8',
-    title: { pt: 'Direção', es: 'Dirección', en: 'Guidance', de: 'Führung', fr: 'Direction', ro: 'Călăuzire', ru: 'Направление' },
+    title: { pt: 'Baú da Direção', es: 'Cofre de Dirección', en: 'Chest of Guidance', de: 'Schatztruhe der Führung', fr: 'Coffre de la Direction', ro: 'Cufărul Călăuzirii', ru: 'Сундук направления' },
     hint: { pt: 'Sabedoria para o caminho', es: 'Sabiduría para tu camino', en: 'Wisdom for your path', de: 'Weisheit für deinen Weg', fr: 'Sagesse pour ton chemin', ro: 'Înțelepciune pentru drumul tău', ru: 'Мудрость для пути' },
     ref: { pt: 'Provérbios 3:5-6', es: 'Proverbios 3:5-6', en: 'Proverbs 3:5-6', de: 'Sprüche 3,5-6', fr: 'Proverbes 3:5-6', ro: 'Proverbe 3:5-6', ru: 'Притчи 3:5-6' },
     text: {
@@ -701,6 +701,42 @@ export default function MuralGrid() {
   const videoRef = useRef(null);
   const musicRef = useRef(null);
   const [activeLive, setActiveLive] = useState(null);
+
+  // Informação clara para o Google e para quem partilha esta página.
+  useEffect(() => {
+    const seo = {
+      pt: { title: 'Baús Bíblicos Diários: coragem, esperança e direção | Sigo com Fé', description: 'Abra um Baú Bíblico Diário e receba uma palavra de coragem, esperança ou direção. Comunidade cristã Sigo com Fé.' },
+      es: { title: 'Cofres Bíblicos Diarios: valentía, esperanza y dirección | Sigo com Fé', description: 'Abre un Cofre Bíblico Diario y recibe una palabra de valentía, esperanza o dirección en la comunidad cristiana Sigo com Fé.' },
+      en: { title: 'Daily Bible Chests: courage, hope and guidance | Sigo com Fé', description: 'Open a Daily Bible Chest and receive a word of courage, hope or guidance in the Sigo com Fé Christian community.' },
+      de: { title: 'Tägliche Bibel-Schatztruhen: Mut, Hoffnung und Führung | Sigo com Fé', description: 'Öffne eine tägliche Bibel-Schatztruhe und empfange ein Wort voller Mut, Hoffnung oder Führung.' },
+      fr: { title: 'Coffres bibliques quotidiens : courage, espérance et direction | Sigo com Fé', description: 'Ouvre un coffre biblique quotidien et reçois une parole de courage, d’espérance ou de direction.' },
+      ro: { title: 'Cufere biblice zilnice: curaj, speranță și călăuzire | Sigo com Fé', description: 'Deschide un cufăr biblic zilnic și primește un cuvânt de curaj, speranță sau călăuzire.' },
+      ru: { title: 'Ежедневные библейские сундуки: мужество, надежда и направление | Sigo com Fé', description: 'Откройте ежедневный библейский сундук и получите слово мужества, надежды или направления.' }
+    }[currentLanguage] || { title: 'Baús Bíblicos Diários: coragem, esperança e direção | Sigo com Fé', description: 'Abra um Baú Bíblico Diário e receba uma palavra de coragem, esperança ou direção.' };
+    const description = document.querySelector('meta[name="description"]');
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    const canonical = document.querySelector('link[rel="canonical"]');
+    const previous = { title: document.title, description: description?.content, ogTitle: ogTitle?.content, ogDescription: ogDescription?.content, canonical: canonical?.href };
+    document.title = seo.title;
+    if (description) description.content = seo.description;
+    if (ogTitle) ogTitle.content = seo.title;
+    if (ogDescription) ogDescription.content = seo.description;
+    if (canonical) canonical.href = 'https://sigo-com-fe.vercel.app/mural';
+    const schema = document.createElement('script');
+    schema.id = 'mural-bible-chests-schema';
+    schema.type = 'application/ld+json';
+    schema.text = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: seo.title, description: seo.description, url: 'https://sigo-com-fe.vercel.app/mural', about: ['Baú da Coragem', 'Baú da Esperança', 'Baú da Direção'] });
+    document.head.appendChild(schema);
+    return () => {
+      document.title = previous.title;
+      if (description && previous.description) description.content = previous.description;
+      if (ogTitle && previous.ogTitle) ogTitle.content = previous.ogTitle;
+      if (ogDescription && previous.ogDescription) ogDescription.content = previous.ogDescription;
+      if (canonical && previous.canonical) canonical.href = previous.canonical;
+      schema.remove();
+    };
+  }, [currentLanguage]);
 
   // Recebe um diploma vindo do Duelo Bíblico, abre o compositor e deixa a
   // publicação sempre sob a confirmação do próprio jogador.
