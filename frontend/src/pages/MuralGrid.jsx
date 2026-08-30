@@ -617,7 +617,7 @@ function DailySurpriseBoxes() {
       return [button, handler];
     });
     return () => handlers.forEach(([button, handler]) => button.removeEventListener('click', handler, true));
-  }, [lang, message, openingBox]);
+  }, [lang, message, openingBox, showBoxes]);
   const verseText = message ? (message.text[lang] || message.text.en || message.text.pt) : '';
   const verseRef = message ? (message.ref[lang] || message.ref.en || message.ref.pt) : '';
   const share = async () => { if (!message) return; const body = `${verseText}\n— ${verseRef}\nSigo com Fé`; try { if (navigator.share) await navigator.share({ title: 'Palavra do dia', text: body }); else await navigator.clipboard.writeText(body); } catch (_) {} };
