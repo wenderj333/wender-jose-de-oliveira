@@ -191,6 +191,7 @@ function ProfileContent() {
                 <>
                   <button onClick={() => navigate("/settings")} style={{ background: "transparent", border: "1px solid #dbdbdb", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>{t("profile.editProfile","Editar perfil")}</button>
                   <Settings size={18} style={{ cursor: "pointer" }} onClick={() => navigate("/settings")} />
+                  <button onClick={() => navigate('/duelo-biblico')} style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 7, background: "linear-gradient(115deg,#2c1550,#6c3fa0 62%,#bd8a20)", color: "white", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: "13px", cursor: "pointer", fontWeight: 800, whiteSpace: "nowrap", boxShadow: "0 7px 15px rgba(76,42,125,.22)" }}>🏆 Desafio Bíblico <span style={{ opacity: .9 }}>Jogar</span></button>
                 </>
               ) : (
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -217,16 +218,6 @@ function ProfileContent() {
             {hasProfileInfo && <button type="button" onClick={() => setShowInfo(value => !value)} aria-expanded={showInfo} style={{ marginTop: 10, background: showInfo ? "#f4effb" : "#6C3FA0", color: showInfo ? "#4A2270" : "white", border: showInfo ? "1px solid #d9cbed" : "none", borderRadius: 20, padding: "7px 13px", fontSize: 13, cursor: "pointer", fontWeight: 700 }}>{showInfo ? "⌃ Minimizar informações" : "⌄ Ler informações do perfil"}</button>}
           </section>
         </header>
-
-                {isOwner && (
-          <section style={{ margin: '0 0 20px', padding: '18px 20px', borderRadius: 16, background: 'linear-gradient(115deg,#2c1550,#6c3fa0 62%,#bd8a20)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', boxShadow: '0 12px 28px rgba(76,42,125,.20)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
-              <span style={{ width: 46, height: 46, display: 'grid', placeItems: 'center', borderRadius: 14, background: 'rgba(255,255,255,.16)', fontSize: 24 }}>🏆</span>
-              <div><strong style={{ display: 'block', fontSize: 17 }}>Desafio Bíblico</strong><span style={{ fontSize: 13, opacity: .9 }}>Teste o seu conhecimento e desafie irmãos da comunidade.</span></div>
-            </div>
-            <button onClick={() => navigate('/duelo-biblico')} style={{ background: '#fff', color: '#4c277d', border: 'none', borderRadius: 10, padding: '10px 16px', fontWeight: 800, cursor: 'pointer', whiteSpace: 'nowrap' }}>Jogar agora</button>
-          </section>
-        )}
 
 {showInfo && (
           <div style={{ marginBottom: 16, display: "flex", flexDirection: "column", gap: 10 }}>
