@@ -201,6 +201,7 @@ export default function App() {
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
 
   const [hideSidebars, setHideSidebars] = useState(false);
+  const isDuelPage = location.pathname === '/duelo-biblico';
 
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [notificationToast, setNotificationToast] = useState(null);
@@ -718,13 +719,13 @@ export default function App() {
 
       )}
 
-      <div className="modern-layout">
+      <div className="modern-layout" style={isDuelPage ? { gridTemplateColumns: 'minmax(0, 1fr)', maxWidth: 'none', padding: 0 } : undefined}>
 
 
 
         {/* LEFT SIDEBAR */}
 
-        <aside className="sidebar-left desktop-only">
+        <aside className="sidebar-left desktop-only" style={{ display: isDuelPage ? 'none' : undefined }}>
 
 
 
@@ -832,7 +833,7 @@ export default function App() {
 
         {/* CENTER FEED */}
 
-        <main className="main-content-area">
+        <main className="main-content-area" style={isDuelPage ? { padding: 0 } : undefined}>
 
           <Routes>
 
@@ -920,7 +921,7 @@ export default function App() {
 
         {/* RIGHT SIDEBAR */}
 
-        <aside className="sidebar-right desktop-only" style={{ display: hideSidebars ? "none" : undefined }}>
+        <aside className="sidebar-right desktop-only" style={{ display: hideSidebars || isDuelPage ? "none" : undefined }}>
 
 
 
