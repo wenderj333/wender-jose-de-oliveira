@@ -169,6 +169,7 @@ function ProfileContent() {
   const filteredPosts = userPosts.filter(p => activeTab === "foto" ? (p.media_url && !isVideo(p)) : activeTab === "video" ? (p.media_url && isVideo(p)) : true);
   const filteredGallery = galleryItems.filter(item => activeTab === "all" || (activeTab === "video" ? isVideo(item) : !isVideo(item)));
   const displayPosts = [...filteredPosts, ...filteredGallery];
+  const hasProfileInfo = Boolean(user.bio || user.city || user.country || user.profession || user.marital_status || user.church_name || user.church_denomination || user.faith_years || user.favorite_verse || user.testimony);
   return (
     <div style={{ maxWidth: "935px", margin: "0 auto", padding: "0" }}>
       {user.cover_url && (
@@ -189,7 +190,6 @@ function ProfileContent() {
               {isOwner ? (
                 <>
                   <button onClick={() => navigate("/settings")} style={{ background: "transparent", border: "1px solid #dbdbdb", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>{t("profile.editProfile","Editar perfil")}</button>
-                  <button onClick={() => setShowInfo(!showInfo)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>{showInfo ? t("profile.close","Fechar") : t("profile.viewProfile","Ver Perfil")}</button>
                   <Settings size={18} style={{ cursor: "pointer" }} onClick={() => navigate("/settings")} />
                 </>
               ) : (
@@ -213,7 +213,8 @@ function ProfileContent() {
               <span><strong>{photos.length}</strong> {t("profile.photos","fotos")}</span>
               <span><strong>0</strong> {t("profile.brothers","irmaos")}</span>
             </div>
-            <div><b>{user.full_name}</b><p style={{ margin: "4px 0", color: "#555" }}>{user.bio || ""}</p></div>
+            <div><b>{user.full_name}</b></div>
+            {hasProfileInfo && <button type="button" onClick={() => setShowInfo(value => !value)} aria-expanded={showInfo} style={{ marginTop: 10, background: showInfo ? "#f4effb" : "#6C3FA0", color: showInfo ? "#4A2270" : "white", border: showInfo ? "1px solid #d9cbed" : "none", borderRadius: 20, padding: "7px 13px", fontSize: 13, cursor: "pointer", fontWeight: 700 }}>{showInfo ? "⌃ Minimizar informações" : "⌄ Ler informações do perfil"}</button>}
           </section>
         </header>
 
