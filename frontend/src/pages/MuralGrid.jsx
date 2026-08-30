@@ -565,7 +565,7 @@ const MULTILINGUAL_SURPRISES = [
   }
 ];
 
-function DailySurpriseBoxes() {
+function DailySurpriseBoxes({ onPublish, publishing }) {
   const { i18n } = useTranslation();
   const [message, setMessage] = useState(null);
   const [showBoxes, setShowBoxes] = useState(false);
@@ -580,6 +580,8 @@ function DailySurpriseBoxes() {
     back: { pt: 'Voltar às caixinhas', es: 'Volver a las cajitas', en: 'Back to the boxes', de: 'Zurück zu den Kästchen', fr: 'Retour aux boîtes', ro: 'Înapoi la căsuțe', ru: 'Вернуться к коробочкам' },
     saved: { pt: 'A sua palavra de hoje continua guardada.', es: 'Tu palabra de hoy sigue guardada.', en: 'Your word for today is still saved.', de: 'Dein Wort für heute bleibt gespeichert.', fr: 'Ta parole du jour reste enregistrée.', ro: 'Cuvântul tău de astăzi rămâne salvat.', ru: 'Ваше слово на сегодня сохранено.' },
     share: { pt: 'Compartilhar esta palavra', es: 'Compartir esta palabra', en: 'Share this word', de: 'Dieses Wort teilen', fr: 'Partager cette parole', ro: 'Distribuie acest cuvânt', ru: 'Поделиться этим словом' },
+    publish: { pt: 'Publicar no meu mural', es: 'Publicar en mi mural', en: 'Post on my wall', de: 'In meinem Feed veröffentlichen', fr: 'Publier sur mon mur', ro: 'Publică pe muralul meu', ru: 'Опубликовать на моей стене' },
+    publishing: { pt: 'Publicando...', es: 'Publicando...', en: 'Posting...', de: 'Wird veröffentlicht...', fr: 'Publication...', ro: 'Se publică...', ru: 'Публикация...' },
     source: { pt: 'Textos bíblicos em domínio público', es: 'Textos bíblicos de dominio público', en: 'Public-domain Bible texts', de: 'Bibeltexte gemeinfrei', fr: 'Textes bibliques du domaine public', ro: 'Texte biblice din domeniul public', ru: 'Библейские тексты в общественном достоянии' }
   };
   useEffect(() => { try { const saved = JSON.parse(localStorage.getItem(storageKey)); if (saved) setMessage(saved); } catch (_) {} }, [storageKey]);
@@ -621,6 +623,7 @@ function DailySurpriseBoxes() {
   const verseText = message ? (message.text[lang] || message.text.en || message.text.pt) : '';
   const verseRef = message ? (message.ref[lang] || message.ref.en || message.ref.pt) : '';
   const share = async () => { if (!message) return; const body = `${verseText}\n— ${verseRef}\nSigo com Fé`; try { if (navigator.share) await navigator.share({ title: 'Palavra do dia', text: body }); else await navigator.clipboard.writeText(body); } catch (_) {} };
+  const publish = () => onPublish?.({ content: `“${verseText}”\n— ${verseRef}` });
   const showingMessage = message && !showBoxes;
   return (
     <section aria-label={copy.choose[lang] || copy.choose.pt} style={{ marginBottom: 20, padding: '18px 16px', borderRadius: 18, background: 'linear-gradient(135deg,#fffaf1,#f6f3ff)', border: '1px solid #eadff3', boxShadow: '0 8px 24px rgba(70,45,100,.08)' }}>
@@ -648,6 +651,7 @@ function DailySurpriseBoxes() {
         <div style={{ display: 'flex', justifyContent: 'center', gap: 8, flexWrap: 'wrap', marginTop: 18 }}>
           <button type="button" onClick={() => setShowBoxes(true)} style={{ border: '1px solid #a96525', borderRadius: 20, padding: '9px 17px', color: '#6a340c', background: 'white', cursor: 'pointer', fontWeight: 700 }}>← {copy.back[lang] || copy.back.pt}</button>
           <button type="button" onClick={share} style={{ border: 'none', borderRadius: 20, padding: '9px 17px', color: '#fff7de', background: '#78410f', cursor: 'pointer', fontWeight: 700 }}>↗ {copy.share[lang] || copy.share.pt}</button>
+          <button type="button" onClick={publish} disabled={publishing} style={{ border: 'none', borderRadius: 20, padding: '9px 17px', color: '#fff', background: '#5d987a', cursor: publishing ? 'wait' : 'pointer', fontWeight: 700, opacity: publishing ? .7 : 1 }}>✦ {publishing ? (copy.publishing[lang] || copy.publishing.pt) : (copy.publish[lang] || copy.publish.pt)}</button>
         </div>
       </div>}
       <div style={{ marginTop: 12, textAlign: 'center', color: '#9a8ca8', fontSize: 10 }}>{copy.source[lang] || copy.source.en}</div>
@@ -696,6 +700,7 @@ export default function MuralGrid() {
   const [selectedMusicSong, setSelectedMusicSong] = useState(null);
   const [showMusicPicker, setShowMusicPicker] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [publishingSurprise, setPublishingSurprise] = useState(false);
   const [uploadError, setUploadError] = useState(null);
   const photoRef = useRef(null);
   const videoRef = useRef(null);
@@ -934,6 +939,28 @@ export default function MuralGrid() {
     } finally { setUploading(false); }
   };
 
+  const publishSurprise = async ({ content }) => {
+    if (!user || !token || !content) return;
+    setPublishingSurprise(true);
+    try {
+      const res = await fetch(`${API}/feed`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content, category: 'versiculo', visibility: 'public' })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Não foi possível publicar a palavra.');
+      const newPost = { ...(data.post || {}), liked: false, full_name: user.full_name, like_count: 0, comment_count: 0 };
+      setPosts(prev => [newPost, ...prev]);
+      setActiveFilter('todas');
+      trackMuralAction('publish_daily_surprise');
+    } catch (error) {
+      alert(error.message || 'Não foi possível publicar a palavra.');
+    } finally {
+      setPublishingSurprise(false);
+    }
+  };
+
   const filteredPosts = activeFilter === 'todas' ? posts : posts.filter(p => (p.category || p.type) === activeFilter);
 
   const FILTERS_CONFIG = [
@@ -978,7 +1005,7 @@ export default function MuralGrid() {
         </div>
       </div>
 
-      <DailySurpriseBoxes />
+      <DailySurpriseBoxes onPublish={publishSurprise} publishing={publishingSurprise} />
 
       {/* Form */}
       {showForm && (
