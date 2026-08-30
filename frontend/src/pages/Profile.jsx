@@ -170,6 +170,7 @@ function ProfileContent() {
   const filteredGallery = galleryItems.filter(item => activeTab === "all" || (activeTab === "video" ? isVideo(item) : !isVideo(item)));
   const displayPosts = [...filteredPosts, ...filteredGallery];
   const hasProfileInfo = Boolean(user.bio || user.city || user.country || user.profession || user.marital_status || user.church_name || user.church_denomination || user.faith_years || user.favorite_verse || user.testimony);
+  const profileInfoButton = hasProfileInfo ? <button type="button" onClick={() => setShowInfo(value => !value)} aria-expanded={showInfo} style={{ background: showInfo ? "#f4effb" : "#6C3FA0", color: showInfo ? "#4A2270" : "white", border: showInfo ? "1px solid #d9cbed" : "none", borderRadius: 20, padding: "7px 13px", fontSize: 13, cursor: "pointer", fontWeight: 700 }}>{showInfo ? "⌃ Minimizar informações" : "⌄ Ler informações do perfil"}</button> : null;
   return (
     <div style={{ maxWidth: "935px", margin: "0 auto", padding: "0" }}>
       {user.cover_url && (
@@ -191,7 +192,10 @@ function ProfileContent() {
                 <>
                   <button onClick={() => navigate("/settings")} style={{ background: "transparent", border: "1px solid #dbdbdb", borderRadius: "4px", padding: "5px 9px", fontSize: "13px", cursor: "pointer" }}>{t("profile.editProfile","Editar perfil")}</button>
                   <Settings size={18} style={{ cursor: "pointer" }} onClick={() => navigate("/settings")} />
-                  <button onClick={() => navigate('/duelo-biblico')} style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 7, background: "linear-gradient(115deg,#2c1550,#6c3fa0 62%,#bd8a20)", color: "white", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: "13px", cursor: "pointer", fontWeight: 800, whiteSpace: "nowrap", boxShadow: "0 7px 15px rgba(76,42,125,.22)" }}>🏆 Desafio Bíblico <span style={{ opacity: .9 }}>Jogar</span></button>
+                  <div style={{ marginLeft: "auto", display: "flex", flexDirection: "column", gap: 7, alignItems: "stretch" }}>
+                    <button onClick={() => navigate('/duelo-biblico')} style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "linear-gradient(115deg,#2c1550,#6c3fa0 62%,#bd8a20)", color: "white", border: "none", borderRadius: 10, padding: "9px 14px", fontSize: "13px", cursor: "pointer", fontWeight: 800, whiteSpace: "nowrap", boxShadow: "0 7px 15px rgba(76,42,125,.22)" }}>🏆 Desafio Bíblico <span style={{ opacity: .9 }}>Jogar</span></button>
+                    {profileInfoButton}
+                  </div>
                 </>
               ) : (
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -215,7 +219,7 @@ function ProfileContent() {
               <span><strong>0</strong> {t("profile.brothers","irmaos")}</span>
             </div>
             <div><b>{user.full_name}</b></div>
-            {hasProfileInfo && <button type="button" onClick={() => setShowInfo(value => !value)} aria-expanded={showInfo} style={{ marginTop: 10, background: showInfo ? "#f4effb" : "#6C3FA0", color: showInfo ? "#4A2270" : "white", border: showInfo ? "1px solid #d9cbed" : "none", borderRadius: 20, padding: "7px 13px", fontSize: 13, cursor: "pointer", fontWeight: 700 }}>{showInfo ? "⌃ Minimizar informações" : "⌄ Ler informações do perfil"}</button>}
+            {!isOwner && <div style={{ marginTop: 10 }}>{profileInfoButton}</div>}
           </section>
         </header>
 
