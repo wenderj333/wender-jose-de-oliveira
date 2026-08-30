@@ -569,6 +569,7 @@ function DailySurpriseBoxes() {
   const { i18n } = useTranslation();
   const [message, setMessage] = useState(null);
   const [showBoxes, setShowBoxes] = useState(false);
+  const [openingBox, setOpeningBox] = useState('');
   const today = new Date().toISOString().slice(0, 10);
   const storageKey = `sigo_mural_surprise_v3_${today}`;
   const lang = (i18n.language || navigator.language || 'pt').split('-')[0];
@@ -593,6 +594,30 @@ function DailySurpriseBoxes() {
     setMessage(value);
     localStorage.setItem(storageKey, JSON.stringify(value));
   };
+  const openChest = box => {
+    if (message || openingBox) return;
+    setOpeningBox(box.id);
+    window.setTimeout(() => choose(box), 560);
+  };
+  useEffect(() => {
+    const styleId = 'sf-mural-chest-effect';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `.sf-mural-chest{position:relative!important;overflow:visible!important;background:linear-gradient(155deg,#a96525,#512307 62%,#2c1205)!important;border:2px solid #f5ca5e!important;box-shadow:0 8px 0 #3a1806,0 15px 25px rgba(117,73,12,.28)!important;animation:sfChestFloat 2.8s ease-in-out infinite}.sf-mural-chest:before{content:'';position:absolute;left:7px;right:7px;top:-10px;height:25px;border:2px solid #f7d171;border-bottom:0;border-radius:11px 11px 4px 4px;background:linear-gradient(#d99a42,#754015);transform-origin:bottom;transition:transform .5s}.sf-mural-chest:after{content:'✦  ✧  ✦';position:absolute;top:-30px;left:0;right:0;color:#ffe99b;font-size:16px;opacity:.9;animation:sfChestSparkle 1.7s ease-in-out infinite}.sf-mural-chest.sf-opening:before{transform:rotateX(70deg) translateY(-8px)}.sf-mural-chest.sf-opening:after{animation:sfChestBurst .55s ease-out forwards}@keyframes sfChestFloat{50%{transform:translateY(-5px)}}@keyframes sfChestSparkle{50%{opacity:.25;transform:translateY(-5px)}}@keyframes sfChestBurst{to{opacity:0;transform:translateY(-30px) scale(1.8)}}@media (prefers-reduced-motion:reduce){.sf-mural-chest,.sf-mural-chest:after{animation:none!important}}`;
+      document.head.appendChild(style);
+    }
+    const titles = MULTILINGUAL_SURPRISES.flatMap(box => Object.values(box.title));
+    const buttons = [...document.querySelectorAll('button')].filter(button => titles.includes(button.querySelector('strong')?.textContent?.trim()));
+    const handlers = buttons.map(button => {
+      button.classList.add('sf-mural-chest');
+      const box = MULTILINGUAL_SURPRISES.find(item => Object.values(item.title).includes(button.querySelector('strong')?.textContent?.trim()));
+      const handler = event => { if (!message && box) { event.stopPropagation(); button.classList.add('sf-opening'); openChest(box); } };
+      button.addEventListener('click', handler, true);
+      return [button, handler];
+    });
+    return () => handlers.forEach(([button, handler]) => button.removeEventListener('click', handler, true));
+  }, [lang, message, openingBox]);
   const verseText = message ? (message.text[lang] || message.text.en || message.text.pt) : '';
   const verseRef = message ? (message.ref[lang] || message.ref.en || message.ref.pt) : '';
   const share = async () => { if (!message) return; const body = `${verseText}\n— ${verseRef}\nSigo com Fé`; try { if (navigator.share) await navigator.share({ title: 'Palavra do dia', text: body }); else await navigator.clipboard.writeText(body); } catch (_) {} };
