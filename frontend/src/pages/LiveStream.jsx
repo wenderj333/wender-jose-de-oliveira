@@ -5,8 +5,8 @@ import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
-const primary = { border:0, borderRadius:13, background:'linear-gradient(135deg,#f1b52b,#c77c15)', color:'#241332', fontWeight:850, padding:'13px 14px', display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor:'pointer', fontSize:14 };
-const secondary = { border:'1px solid rgba(255,255,255,.35)', borderRadius:13, background:'rgba(255,255,255,.1)', color:'#fff', fontWeight:750, padding:'13px 14px', display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor:'pointer', fontSize:14 };
+const primary = { border:0, borderRadius:13, background:'linear-gradient(135deg,#e6bc51,#c89528)', color:'#24372f', fontWeight:850, padding:'13px 14px', display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor:'pointer', fontSize:14 };
+const secondary = { border:'1px solid #bfd0c1', borderRadius:13, background:'#fff', color:'#365747', fontWeight:750, padding:'13px 14px', display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor:'pointer', fontSize:14 };
 const COPY = {
   pt: { badge:'SALA DE ORAÇÃO AO VIVO', title:'Oremos juntos', intro:'O pastor pode transmitir em vídeo ou somente em áudio. Todos podem ouvir e orar juntos.', entering:'A ligar à sala de oração...', unavailable:'Não foi possível entrar na sala.', hostOnly:'Apenas o pastor ou administrador pode iniciar a oração ao vivo.', ended:'A oração terminou ou a ligação foi encerrada.', radioStarted:'Rádio de oração ao vivo iniciado.', videoStarted:'Vídeo de oração ao vivo iniciado.', listening:'Você está a ouvir a oração ao vivo.', joined:'Você entrou na sala de oração.', waiting:'Aguardando o pastor iniciar', ready:'Sala pronta para oração', mode:'Você pode entrar em vídeo ou só ouvir, como numa rádio cristã.', hosting:'Você está a conduzir', participate:'Participe da oração', video:'Iniciar vídeo de oração', radio:'Iniciar como rádio', watch:'Entrar e assistir', listen:'Ouvir como rádio', leave:'Sair da sala', saving:'Use o modo rádio quando quiser poupar internet ou apenas escutar a oração.' },
   es: { badge:'SALA DE ORACIÓN EN VIVO', title:'Oremos juntos', intro:'El pastor puede transmitir en vídeo o solo en audio. Todos pueden escuchar y orar juntos.', entering:'Conectando a la sala de oración...', unavailable:'No fue posible entrar a la sala.', hostOnly:'Solo el pastor o administrador puede iniciar la oración en vivo.', ended:'La oración terminó o la conexión se cerró.', radioStarted:'Radio de oración en vivo iniciada.', videoStarted:'Vídeo de oración en vivo iniciado.', listening:'Estás escuchando la oración en vivo.', joined:'Entraste en la sala de oración.', waiting:'Esperando que el pastor inicie', ready:'Sala lista para orar', mode:'Puedes entrar en vídeo o solo escuchar, como en una radio cristiana.', hosting:'Estás conduciendo', participate:'Participa en la oración', video:'Iniciar vídeo de oración', radio:'Iniciar como radio', watch:'Entrar y ver', listen:'Escuchar como radio', leave:'Salir de la sala', saving:'Usa el modo radio cuando quieras ahorrar internet o solamente escuchar la oración.' },
@@ -91,31 +91,31 @@ export default function LiveStream() {
   const toggleCamera = async () => { const next=!cameraOff; await roomRef.current?.localParticipant.setCameraEnabled(!next); setCameraOff(next); };
   useEffect(() => () => roomRef.current?.disconnect(), []);
 
-  return <main style={{minHeight:'100vh',background:'radial-gradient(circle at top,#39205a,#100d1d 62%)',color:'#fff',padding:'36px 18px'}}>
+  return <main style={{minHeight:'100vh',background:'radial-gradient(circle at top,#fffdf5 0%,#f2f7f0 48%,#edf3ee 100%)',color:'#294438',padding:'36px 18px'}}>
     <section style={{maxWidth:1050,margin:'0 auto'}}>
       <header style={{textAlign:'center',marginBottom:24}}>
-        <span style={{display:'inline-flex',gap:8,alignItems:'center',padding:'7px 13px',borderRadius:999,background:'rgba(255,255,255,.12)',color:'#f5cf62',fontWeight:800,fontSize:13}}><Radio size={16}/> {c.badge}</span>
+        <span style={{display:'inline-flex',gap:8,alignItems:'center',padding:'7px 13px',borderRadius:999,background:'#fff8df',border:'1px solid #ead89a',color:'#8a6818',fontWeight:800,fontSize:13}}><Radio size={16}/> {c.badge}</span>
         <h1 style={{margin:'14px 0 8px',fontSize:'clamp(30px,5vw,52px)'}}>{c.title}</h1>
-        <p style={{margin:0,color:'#d7cae9',fontSize:17}}>{c.intro}</p>
+        <p style={{margin:0,color:'#5b7667',fontSize:17}}>{c.intro}</p>
       </header>
       <div style={{display:'grid',gridTemplateColumns:'minmax(0,2fr) minmax(260px,1fr)',gap:22}}>
-        <div style={{borderRadius:24,overflow:'hidden',minHeight:430,background:'#171125',border:'1px solid rgba(255,255,255,.14)',position:'relative'}}>
+        <div style={{borderRadius:24,overflow:'hidden',minHeight:430,background:'#fbfdf9',border:'1px solid #d6e2d7',boxShadow:'0 12px 30px rgba(65,101,77,.1)',position:'relative'}}>
           <div ref={remoteMediaRef} style={{position:'absolute',inset:0,display:'grid',placeItems:'center'}}>
-            {hosting && !cameraOff ? <video ref={localVideoRef} autoPlay muted playsInline style={{width:'100%',height:'100%',objectFit:'cover'}}/> : <div style={{textAlign:'center',padding:30}}><Radio size={52} color="#f5cf62"/><h2>{connected?c.waiting:c.ready}</h2><p style={{color:'#d7cae9'}}>{c.mode}</p></div>}
+            {hosting && !cameraOff ? <video ref={localVideoRef} autoPlay muted playsInline style={{width:'100%',height:'100%',objectFit:'cover'}}/> : <div style={{textAlign:'center',padding:30}}><Radio size={52} color="#c7962c"/><h2>{connected?c.waiting:c.ready}</h2><p style={{color:'#668172'}}>{c.mode}</p></div>}
           </div>
-          {connected && <><div style={{position:'absolute',top:16,left:16,display:'flex',gap:8,alignItems:'center',background:'#d83b4d',padding:'7px 11px',borderRadius:999,fontWeight:800,fontSize:13}}><span style={{width:8,height:8,borderRadius:'50%',background:'#fff'}}/> AO VIVO</div><div style={{position:'absolute',top:16,right:16,display:'flex',gap:7,alignItems:'center',background:'rgba(0,0,0,.52)',padding:'7px 11px',borderRadius:999,fontWeight:700,fontSize:13}}><Users size={16}/> {people}</div></>}
+          {connected && <><div style={{position:'absolute',top:16,left:16,display:'flex',gap:8,alignItems:'center',background:'#a95858',color:'#fff',padding:'7px 11px',borderRadius:999,fontWeight:800,fontSize:13}}><span style={{width:8,height:8,borderRadius:'50%',background:'#fff'}}/> AO VIVO</div><div style={{position:'absolute',top:16,right:16,display:'flex',gap:7,alignItems:'center',background:'rgba(38,72,53,.72)',color:'#fff',padding:'7px 11px',borderRadius:999,fontWeight:700,fontSize:13}}><Users size={16}/> {people}</div></>}
         </div>
-        <aside style={{borderRadius:24,background:'rgba(255,255,255,.08)',border:'1px solid rgba(255,255,255,.14)',padding:22,alignSelf:'start'}}>
-          <h2 style={{marginTop:0,fontSize:23}}>{hosting?c.hosting:c.participate}</h2><p style={{color:'#d7cae9',lineHeight:1.55}}>{message}</p>
+        <aside style={{borderRadius:24,background:'#fff',border:'1px solid #d6e2d7',boxShadow:'0 12px 30px rgba(65,101,77,.08)',padding:22,alignSelf:'start'}}>
+          <h2 style={{marginTop:0,fontSize:23}}>{hosting?c.hosting:c.participate}</h2><p style={{color:'#668172',lineHeight:1.55}}>{message}</p>
           {!connected ? <div style={{display:'grid',gap:11}}>
             {canHost && <><button onClick={()=>enter({host:true})} style={primary}><Camera size={18}/> {c.video}</button><button onClick={()=>enter({host:true,audioOnly:true})} style={secondary}><AudioLines size={18}/> {c.radio}</button></>}
             <button onClick={()=>enter()} style={secondary}><Camera size={18}/> {c.watch}</button><button onClick={()=>enter({audioOnly:true})} style={secondary}><Radio size={18}/> {c.listen}</button>
-          </div> : <div style={{display:'grid',gap:11}}>{hosting && <div style={{display:'flex',gap:10}}><button onClick={toggleMic} style={circle}>{muted?<MicOff/>:<Mic/>}</button><button onClick={toggleCamera} style={circle}>{cameraOff?<CameraOff/>:<Camera/>}</button></div>}<button onClick={leave} style={{...secondary,borderColor:'rgba(255,120,130,.55)',color:'#ffd5d8'}}><LogOut size={18}/> {c.leave}</button></div>}
-          <p style={{fontSize:12,color:'#bcaed2',lineHeight:1.45,marginTop:20}}>{c.saving}</p>
+          </div> : <div style={{display:'grid',gap:11}}>{hosting && <div style={{display:'flex',gap:10}}><button onClick={toggleMic} style={circle}>{muted?<MicOff/>:<Mic/>}</button><button onClick={toggleCamera} style={circle}>{cameraOff?<CameraOff/>:<Camera/>}</button></div>}<button onClick={leave} style={{...secondary,borderColor:'#dfb9b9',color:'#a14343'}}><LogOut size={18}/> {c.leave}</button></div>}
+          <p style={{fontSize:12,color:'#718879',lineHeight:1.45,marginTop:20}}>{c.saving}</p>
         </aside>
       </div>
     </section><div ref={audioRef}/>
   </main>;
 }
 
-const circle = {width:48,height:48,borderRadius:'50%',border:'1px solid rgba(255,255,255,.35)',background:'rgba(255,255,255,.11)',color:'#fff',display:'grid',placeItems:'center',cursor:'pointer'};
+const circle = {width:48,height:48,borderRadius:'50%',border:'1px solid #bfd0c1',background:'#f5f9f4',color:'#365747',display:'grid',placeItems:'center',cursor:'pointer'};
