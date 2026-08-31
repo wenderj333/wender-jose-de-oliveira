@@ -627,7 +627,7 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
   const share = async () => { if (!message) return; const body = `${verseText}\n— ${verseRef}\nSigo com Fé`; try { if (navigator.share) await navigator.share({ title: 'Palavra do dia', text: body }); else await navigator.clipboard.writeText(body); } catch (_) {} };
   const publish = () => onPublish?.({ content: `“${verseText}”\n— ${verseRef}` });
   const showingMessage = message && !showBoxes;
-  if (!expanded && !message) return <section style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}>
+  if (!expanded && !message) return <section style={{ margin: 0, display: 'flex', justifyContent: 'center' }}>
     <button type="button" onClick={() => setExpanded(true)} style={{ border: '1px solid #ead49d', borderRadius: 20, padding: '9px 16px', background: '#fffaf0', color: '#8a6818', cursor: 'pointer', fontSize: 13, fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: 7 }}>✨ {copy.open[lang] || copy.open.pt}</button>
   </section>;
   return (
@@ -1017,19 +1017,19 @@ export default function MuralGrid() {
           <span style={{ color:'white', fontSize:13, fontWeight:600 }}>Entrar →</span>
         </div>
       )}
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: 16 }}>
+    <div style={{ maxWidth: 900, margin: '0 auto', padding: '18px 16px 34px' }}>
       {/* Header */}
-      <div style={{ background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', borderRadius: 16, padding: '20px 24px', marginBottom: 20, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ background: '#fff', borderRadius: 18, padding: '20px 24px', marginBottom: 12, color: '#264839', border: '1px solid #e0e9e1', boxShadow: '0 8px 22px rgba(45,74,56,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap:12 }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>{t('mural.title')}</h1>
-          <p style={{ margin: '4px 0 0', fontSize: 13, opacity: 0.85 }}>{t('mural.subtitle')}</p>
+          <h1 style={{ margin: 0, fontSize: 25, fontWeight: 800, letterSpacing:'-.02em' }}>{t('mural.title')}</h1>
+          <p style={{ margin: '5px 0 0', fontSize: 13, color:'#6b8473' }}>{t('mural.subtitle')}</p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={() => setViewMode(viewMode === 'feed' ? 'grid' : 'feed')} style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.4)', borderRadius: 10, padding: '8px 12px', color: 'white', cursor: 'pointer' }}>
+          <button title={viewMode === 'feed' ? 'Ver em grade' : 'Ver publicações'} onClick={() => setViewMode(viewMode === 'feed' ? 'grid' : 'feed')} style={{ background: '#f6faf6', border: '1px solid #d6e4d7', borderRadius: 10, padding: '8px 12px', color: '#426853', cursor: 'pointer' }}>
             {viewMode === 'feed' ? <Grid size={16} /> : <List size={16} />}
           </button>
           {user && (
-            <button onClick={toggleComposer} style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.4)', borderRadius: 12, padding: '10px 16px', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 600 }}>
+            <button onClick={toggleComposer} style={{ background: '#6a42a0', border: '1px solid #6a42a0', borderRadius: 11, padding: '10px 16px', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 800, whiteSpace:'nowrap' }}>
               {showForm ? <X size={16} /> : <Plus size={16} />}
               {showForm ? t('mural.cancel') : t('mural.newPost', 'Criar publicação')}
             </button>
@@ -1047,7 +1047,12 @@ export default function MuralGrid() {
         </div>
       </section>}
 
-      <DailySurpriseBoxes onPublish={publishSurprise} publishing={publishingSurprise} />
+      <div style={{ marginBottom:16, padding:'8px', borderRadius:15, background:'#fff', border:'1px solid #e0e9e1', boxShadow:'0 5px 16px rgba(45,74,56,.05)', display:'flex', alignItems:'center', justifyContent:'center', gap:8, flexWrap:'wrap' }}>
+        {user && <button type="button" onClick={() => setShowForm(true)} style={{ border:0, borderRadius:10, padding:'9px 14px', background:'#6a42a0', color:'#fff', fontWeight:800, cursor:'pointer', fontSize:13, display:'flex', alignItems:'center', gap:6 }}><Send size={15}/>{t('mural.newPost', 'Publicar')}</button>}
+        <DailySurpriseBoxes onPublish={publishSurprise} publishing={publishingSurprise} />
+        <button type="button" onClick={() => { trackMuralAction('duelo_biblico'); window.location.href='/duelo-biblico'; }} style={{ border:'1px solid #ead49d', borderRadius:10, padding:'9px 14px', background:'#fffaf0', color:'#8a6818', fontWeight:800, cursor:'pointer', fontSize:13, display:'flex', alignItems:'center', gap:6 }}><Play size={15}/>Duelo Bíblico</button>
+        <button title={soundLabel} aria-pressed={soundEnabled} onClick={() => { const next = !soundEnabled; trackMuralAction(next ? 'enable_sound' : 'disable_sound'); setSoundEnabled(next); localStorage.setItem('sigo_mural_sound', next ? 'on' : 'off'); }} style={{ width:36, height:36, border:'1px solid #d6e4d7', borderRadius:10, background:'#f6faf6', color:'#426853', cursor:'pointer', display:'grid', placeItems:'center' }}>{soundEnabled ? <Volume2 size={17}/> : <VolumeX size={17}/>}</button>
+      </div>
 
       {/* Form */}
       {showForm && (
@@ -1121,19 +1126,10 @@ export default function MuralGrid() {
       )}
 
       {/* Filtros */}
-      <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4, marginBottom: 16, scrollbarWidth: 'none' }}>
+      <div style={{ display: 'flex', gap: 6, overflowX: 'auto', padding: '7px', marginBottom: 18, scrollbarWidth: 'none', background:'#fff', border:'1px solid #e0e9e1', borderRadius:14 }}>
         {FILTERS_CONFIG.map(f => (
-          <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{ padding: '8px 16px', borderRadius: 20, whiteSpace: 'nowrap', border: activeFilter === f.key ? 'none' : '1px solid #e2e8f0', background: activeFilter === f.key ? 'linear-gradient(135deg,#7a9e7e,#c4b89a)' : 'white', color: activeFilter === f.key ? 'white' : '#555', cursor: 'pointer', fontSize: 13, fontWeight: 500 }}>{t(f.labelKey)}</button>
+          <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{ padding: '8px 14px', borderRadius: 10, whiteSpace: 'nowrap', border: 'none', background: activeFilter === f.key ? '#edf5ee' : 'transparent', color: activeFilter === f.key ? '#326247' : '#65746b', cursor: 'pointer', fontSize: 13, fontWeight: activeFilter === f.key ? 800 : 600, boxShadow: activeFilter === f.key ? 'inset 0 -2px #4f8a62' : 'none' }}>{t(f.labelKey)}</button>
         ))}
-      </div>
-
-      <div style={{display:"flex",gap:10,marginBottom:16,flexWrap:"wrap"}}>
-        
-        <button onClick={()=>{ trackMuralAction('duelo_biblico'); window.location.href="/duelo-biblico"; }} style={{padding:"8px 16px",borderRadius:20,border:"none",background:"linear-gradient(135deg,#c0392b,#922b21)",color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>Duelo Bíblico</button>
-      
-        <button aria-pressed={soundEnabled} onClick={() => { const next = !soundEnabled; trackMuralAction(next ? 'enable_sound' : 'disable_sound'); setSoundEnabled(next); localStorage.setItem('sigo_mural_sound', next ? 'on' : 'off'); }} style={{padding:"8px 16px",borderRadius:20,border:"none",background:soundEnabled ? '#1f8b4c' : '#456fd0',color:"white",cursor:"pointer",fontSize:13,fontWeight:700,display:"flex",alignItems:"center",gap:6}}>
-          {soundLabel}
-        </button>
       </div>
       {/* Loading */}
       {loading && (
