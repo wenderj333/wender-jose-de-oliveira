@@ -65,39 +65,38 @@ export function AuthProvider({ children }) {
     return () => unsubscribe();
   }, []);
 
-  // Check for existing local auth (email/password) on mount
+  // Check the saved session on every start. This prevents an expired token from
+  // looking like a logged-in account and makes a valid session stay available.
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser && !user) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (e) {
-        // localStorage.removeItem('user');
-      }
-    }
-    if (token && !user) {
+    let active = true;
+    if (token) {
       fetch(`${API}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((r) => (r.ok ? r.json() : Promise.reject()))
         .then((data) => {
+          if (!active) return;
           const u = { ...data.user, photoURL: data.user.photoURL || data.user.avatar_url };
           setUser(u);
           localStorage.setItem('user', JSON.stringify(u));
         })
         .catch(() => {
-          // Token invalid, keep any Firebase user if present
-          // Nao limpar user do localStorage - manter sessao
+          if (!active) return;
+          // Keep a Firebase session when there is one; otherwise remove only an
+          // invalid local session so the person can sign in once again.
           if (!auth.currentUser) {
             localStorage.removeItem('token');
+            localStorage.removeItem('user');
             setToken(null);
+            setUser(null);
           }
         })
-        .finally(() => setLoading(false));
+        .finally(() => { if (active) setLoading(false); });
     } else {
       setLoading(false);
     }
-  }, []);
+    return () => { active = false; };
+  }, [token]);
 
   const login = async (email, password) => {
     const res = await fetch(`${API}/auth/login`, {

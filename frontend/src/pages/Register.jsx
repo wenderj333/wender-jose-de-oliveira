@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
@@ -45,7 +45,7 @@ const REGISTER_EMAIL_UPDATES = {
 };
 
 export default function Register() {
-  const { register, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
+  const { register, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode, user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const requestedNext = new URLSearchParams(location.search).get('next');
@@ -69,6 +69,11 @@ export default function Register() {
   const [codeSent, setCodeSent] = useState(false);
   const [phoneLoading, setPhoneLoading] = useState(false);
 
+  // A member who is already signed in must not be asked to register again.
+  useEffect(() => {
+    if (!loading && user) navigate(nextPage, { replace: true });
+  }, [loading, user, navigate, nextPage]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -82,6 +87,8 @@ export default function Register() {
       setError(err.message);
     }
   };
+
+  if (loading) return <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', color: '#633da0', fontWeight: 700 }}>A preparar a sua conta...</div>;
 
   return (
     <div className="register-page" style={{ minHeight: '100vh', padding: 'clamp(16px,4vw,48px)', background: 'radial-gradient(circle at 8% 12%,#f5ebd2 0,transparent 23%), linear-gradient(145deg,#fbfaf8 0%,#f1f3fa 58%,#fff 100%)' }}>

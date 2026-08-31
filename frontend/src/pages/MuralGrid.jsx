@@ -903,6 +903,10 @@ export default function MuralGrid() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!postText.trim() && !mediaFile && !musicFile && !selectedMusicSong) return;
+    if (!user || !token) {
+      setUploadError(t('mural.loginRequired', 'Entre na sua conta para publicar no mural.'));
+      return;
+    }
     setUploading(true); setUploadError(null);
     try {
       let mediaUrl = null, audioUrl = null;
@@ -940,7 +944,11 @@ export default function MuralGrid() {
   };
 
   const publishSurprise = async ({ content }) => {
-    if (!user || !token || !content) return;
+    if (!content) return;
+    if (!user || !token) {
+      setActionError(t('mural.loginRequired', 'Entre na sua conta para publicar no mural.'));
+      return;
+    }
     setPublishingSurprise(true);
     try {
       const res = await fetch(`${API}/feed`, {
@@ -962,6 +970,13 @@ export default function MuralGrid() {
   };
 
   const filteredPosts = activeFilter === 'todas' ? posts : posts.filter(p => (p.category || p.type) === activeFilter);
+  const toggleComposer = () => {
+    if (!user || !token) {
+      setActionError(t('mural.loginRequired', 'Entre na sua conta para publicar no mural.'));
+      return;
+    }
+    setShowForm(value => !value);
+  };
 
   const FILTERS_CONFIG = [
     { key: 'todas', labelKey: 'mural.filters.all' },
@@ -997,9 +1012,9 @@ export default function MuralGrid() {
             {viewMode === 'feed' ? <Grid size={16} /> : <List size={16} />}
           </button>
           {user && (
-            <button onClick={() => setShowForm(!showForm)} style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.4)', borderRadius: 12, padding: '10px 16px', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 600 }}>
+            <button onClick={toggleComposer} style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.4)', borderRadius: 12, padding: '10px 16px', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 600 }}>
               {showForm ? <X size={16} /> : <Plus size={16} />}
-              {showForm ? t('mural.cancel') : t('mural.newPost')}
+              {showForm ? t('mural.cancel') : t('mural.newPost', 'Criar publicação')}
             </button>
           )}
         </div>
