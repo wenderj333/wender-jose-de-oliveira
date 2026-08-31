@@ -1,7 +1,7 @@
 ﻿User-agent: *
 Allow: /
 
-Sitemap: https://sigo-com-fe.vercel.app/sitemap.xml
+Sitemap: https://www.sigocomfe.com/sitemap.xml
 
 # Paginas prioritarias
 Allow: /desafio-biblico
