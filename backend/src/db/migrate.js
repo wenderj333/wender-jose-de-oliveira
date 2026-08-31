@@ -24,6 +24,7 @@ async function migrate() {
       phone VARCHAR(30),
       bio TEXT,
       role VARCHAR(20) DEFAULT 'member' CHECK (role IN ('member', 'leader', 'pastor', 'admin')),
+      email_updates_opt_in BOOLEAN NOT NULL DEFAULT false,
       country_code CHAR(2) DEFAULT 'BR',
       language VARCHAR(5) DEFAULT 'pt-BR',
       is_active BOOLEAN DEFAULT true,
@@ -307,6 +308,7 @@ async function migrate() {
  
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_private BOOLEAN DEFAULT false`);
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_suspended BOOLEAN NOT NULL DEFAULT false`);
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS email_updates_opt_in BOOLEAN NOT NULL DEFAULT false`);
   await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS media_type VARCHAR(10)`);
   await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS is_flagged BOOLEAN DEFAULT false`);
   await pool.query(`ALTER TABLE feed_posts ADD COLUMN IF NOT EXISTS flag_reason TEXT`);

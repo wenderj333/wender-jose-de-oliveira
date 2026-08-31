@@ -2,14 +2,14 @@ const db = require('../db/connection');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const User = {
-  async create({ email, password, full_name, role = 'member' }) {
+  async create({ email, password, full_name, role = 'member', email_updates_opt_in = false }) {
     const password_hash = await bcrypt.hash(password, 12);
     const id = uuidv4();
     await db.query(
-      'INSERT INTO users (id, email, password_hash, full_name, role) VALUES ($1, $2, $3, $4, $5)',
-      [id, email, password_hash, full_name, role]
+      'INSERT INTO users (id, email, password_hash, full_name, role, email_updates_opt_in) VALUES ($1, $2, $3, $4, $5, $6)',
+      [id, email, password_hash, full_name, role, email_updates_opt_in]
     );
-    return { id, email, full_name, role, created_at: new Date().toISOString() };
+    return { id, email, full_name, role, email_updates_opt_in, created_at: new Date().toISOString() };
   },
   async findByEmail(email) {
     const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);

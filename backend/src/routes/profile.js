@@ -31,7 +31,7 @@ router.get('/:userId', async (req, res) => {
     const currentViewerId = viewerId(req);
     const result = await db.query(`SELECT id, full_name, email, role, avatar_url, cover_url, bio,
       church_name, city, country, profession, work, birthdate, marital_status, favorite_verse,
-      testimony, church_denomination, faith_years, ministry, profile_visibility
+      testimony, church_denomination, faith_years, ministry, profile_visibility, email_updates_opt_in
       FROM users WHERE id = $1`, [userId]);
     const user = result.rows[0];
     if (!user) return res.status(404).json({ error: 'Utilizador não encontrado' });
@@ -46,7 +46,10 @@ router.get('/:userId', async (req, res) => {
     }
 
     const visibility = normalizedVisibility(user.profile_visibility);
-    if (!isOwner) delete user.email;
+    if (!isOwner) {
+      delete user.email;
+      delete user.email_updates_opt_in;
+    }
     if (!canSee(visibility.personal, isOwner, isFriend)) {
       ['city', 'country', 'profession', 'work', 'birthdate', 'marital_status'].forEach(field => delete user[field]);
     }
@@ -80,8 +83,9 @@ router.patch('/', authenticate, async (req, res) => {
     const userId = req.user.id;
     const { full_name, bio, city, country, profession, marital_status, church_name, denomination,
       christian_years, favorite_verse, testimony, avatar_url, cover_url, birth_date, ministry,
-      profile_visibility } = req.body;
+      profile_visibility, email_updates_opt_in } = req.body;
     const visibility = normalizedVisibility(profile_visibility);
+    const emailUpdatesOptIn = typeof email_updates_opt_in === 'boolean' ? email_updates_opt_in : null;
     await db.query(`UPDATE users SET
       full_name=COALESCE(NULLIF($1,''), full_name), bio=COALESCE($2, bio),
       city=COALESCE($3, city), country=COALESCE($4, country), profession=COALESCE($5, profession),
@@ -90,13 +94,14 @@ router.patch('/', authenticate, async (req, res) => {
       favorite_verse=COALESCE($10, favorite_verse), testimony=COALESCE($11, testimony),
       avatar_url=COALESCE(NULLIF($12,''), avatar_url), cover_url=COALESCE(NULLIF($13,''), cover_url),
       birthdate=COALESCE($14, birthdate), ministry=COALESCE($15, ministry),
-      profile_visibility=$16::jsonb, updated_at=NOW() WHERE id=$17`,
+      profile_visibility=$16::jsonb, email_updates_opt_in=COALESCE($17, email_updates_opt_in),
+      updated_at=NOW() WHERE id=$18`,
       [full_name, bio, city, country, profession, marital_status, church_name, denomination,
         christian_years, favorite_verse, testimony, avatar_url, cover_url, birth_date, ministry,
-        JSON.stringify(visibility), userId]);
+        JSON.stringify(visibility), emailUpdatesOptIn, userId]);
     const result = await db.query(`SELECT id, full_name, email, role, avatar_url, cover_url, bio,
       church_name, city, country, profession, marital_status, favorite_verse, testimony,
-      church_denomination, faith_years, birthdate, ministry, profile_visibility
+      church_denomination, faith_years, birthdate, ministry, profile_visibility, email_updates_opt_in
       FROM users WHERE id = $1`, [userId]);
     res.json({ success: true, user: result.rows[0] });
   } catch (err) { res.status(500).json({ error: err.message }); }

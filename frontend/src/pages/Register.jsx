@@ -34,6 +34,16 @@ const REGISTER_PROOF = {
   ru: { quick: 'Займёт меньше минуты', free: 'Бесплатно и безопасно', together: 'Молитва, Библия и общение', duel: 'Сохраняйте свои баллы и играйте в Библейскую дуэль с другими верующими.' },
 };
 
+const REGISTER_EMAIL_UPDATES = {
+  pt: { label: 'Quero receber novidades por e-mail', description: 'Receba novidades e convites do Sigo com Fé. Você pode parar de receber quando quiser.' },
+  es: { label: 'Quiero recibir novedades por correo', description: 'Recibe novedades e invitaciones de Sigo com Fé. Puedes dejar de recibirlas cuando quieras.' },
+  en: { label: 'I want to receive email updates', description: 'Receive Sigo com Fé news and invitations. You can unsubscribe whenever you want.' },
+  de: { label: 'Ich möchte Neuigkeiten per E-Mail erhalten', description: 'Erhalte Neuigkeiten und Einladungen von Sigo com Fé. Du kannst sie jederzeit abbestellen.' },
+  fr: { label: 'Je souhaite recevoir les nouveautés par e-mail', description: 'Recevez les nouveautés et invitations de Sigo com Fé. Vous pouvez vous désinscrire à tout moment.' },
+  ro: { label: 'Vreau să primesc noutăți prin e-mail', description: 'Primește noutăți și invitații de la Sigo com Fé. Te poți dezabona oricând.' },
+  ru: { label: 'Я хочу получать новости по электронной почте', description: 'Получайте новости и приглашения от Sigo com Fé. Вы можете отказаться в любое время.' },
+};
+
 export default function Register() {
   const { register, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
   const navigate = useNavigate();
@@ -45,8 +55,9 @@ export default function Register() {
   const language = i18n.language?.split('-')[0];
   const story = REGISTER_STORY[language] || REGISTER_STORY.pt;
   const proof = REGISTER_PROOF[language] || REGISTER_PROOF.pt;
+  const emailUpdates = REGISTER_EMAIL_UPDATES[language] || REGISTER_EMAIL_UPDATES.pt;
   const cameFromDuel = nextPage === '/duelo-biblico';
-  const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'member' });
+  const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'member', email_updates_opt_in: false });
   const [error, setError] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -64,7 +75,7 @@ export default function Register() {
     if (form.password.length < 6) return setError(t('register.passwordError'));
     // avatar optional - user can add later
     try {
-      await register(form.email, form.password, form.full_name, form.role, null);
+      await register(form.email, form.password, form.full_name, form.role, null, form.email_updates_opt_in);
       trackSignUpEvent();
       navigate(nextPage); // Navegar para a página inicial após o registo
     } catch (err) {
@@ -151,6 +162,10 @@ export default function Register() {
             <label><Lock size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.password')}</label>
             <input type="password" autoComplete="new-password" minLength="6" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder={t('register.passwordPlaceholder')} required />
           </div>
+          <label className="email-updates-opt-in">
+            <input type="checkbox" checked={form.email_updates_opt_in} onChange={(e) => setForm({ ...form, email_updates_opt_in: e.target.checked })} />
+            <span><strong>{emailUpdates.label}</strong><small>{emailUpdates.description}</small></span>
+          </label>
           <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
             <UserPlus size={18} /> {t('register.submit')}
           </button>
@@ -165,7 +180,7 @@ export default function Register() {
         </div>
       </div>
       </div>
-      <style>{`.register-card .auth-brand h1{color:#2b1b47}.register-card .auth-brand p{color:#687184}.register-proof{margin:0 0 18px;padding:12px;border:1px solid #e5ddf4;border-radius:14px;background:#faf8fe}.register-proof-items{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.register-proof-items span{display:inline-flex;align-items:center;gap:5px;color:#5a477a;font-size:12px;font-weight:750}.register-proof-items svg{color:#6b3faf}.register-duel-note{display:flex;align-items:center;justify-content:center;gap:7px;margin:0 0 10px;color:#563194;font-size:13px;font-weight:800;text-align:center}.register-duel-note svg{color:#bf8616}.register-card .form-group input{border-radius:12px;border-color:#dcd9e6;padding:13px 14px}.register-card .btn-primary{background:linear-gradient(135deg,#633da0,#8255b7);border-radius:13px;box-shadow:0 10px 20px rgba(99,61,160,.23)}.register-card .btn-google{border-radius:13px}.register-card .auth-divider{margin:20px 0}@media(max-width:820px){.register-layout{grid-template-columns:1fr !important}.register-story{max-width:620px;margin:0 auto}.faith-collage{min-height:340px !important}}@media(max-width:520px){.register-page{padding:16px 12px !important}.register-story h2{font-size:2.5rem !important}.faith-collage{transform:scale(.9);transform-origin:top center;margin-bottom:-15px !important}.register-card{padding:24px 18px !important}.register-proof-items{justify-content:flex-start}.register-proof-items span{font-size:11px}}`}</style>
+      <style>{`.register-card .auth-brand h1{color:#2b1b47}.register-card .auth-brand p{color:#687184}.register-proof{margin:0 0 18px;padding:12px;border:1px solid #e5ddf4;border-radius:14px;background:#faf8fe}.register-proof-items{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.register-proof-items span{display:inline-flex;align-items:center;gap:5px;color:#5a477a;font-size:12px;font-weight:750}.register-proof-items svg{color:#6b3faf}.register-duel-note{display:flex;align-items:center;justify-content:center;gap:7px;margin:0 0 10px;color:#563194;font-size:13px;font-weight:800;text-align:center}.register-duel-note svg{color:#bf8616}.register-card .form-group input{border-radius:12px;border-color:#dcd9e6;padding:13px 14px}.email-updates-opt-in{display:flex;align-items:flex-start;gap:10px;margin:-2px 0 18px;padding:11px 12px;border:1px solid #e2dbef;border-radius:12px;background:#faf8fe;cursor:pointer;color:#4f3a70}.email-updates-opt-in input{width:17px;height:17px;margin:2px 0 0;accent-color:#6b3faf;flex:0 0 auto}.email-updates-opt-in strong{display:block;font-size:13px;line-height:1.35}.email-updates-opt-in small{display:block;margin-top:3px;color:#736b83;font-size:11px;line-height:1.35}.register-card .btn-primary{background:linear-gradient(135deg,#633da0,#8255b7);border-radius:13px;box-shadow:0 10px 20px rgba(99,61,160,.23)}.register-card .btn-google{border-radius:13px}.register-card .auth-divider{margin:20px 0}@media(max-width:820px){.register-layout{grid-template-columns:1fr !important}.register-story{max-width:620px;margin:0 auto}.faith-collage{min-height:340px !important}}@media(max-width:520px){.register-page{padding:16px 12px !important}.register-story h2{font-size:2.5rem !important}.faith-collage{transform:scale(.9);transform-origin:top center;margin-bottom:-15px !important}.register-card{padding:24px 18px !important}.register-proof-items{justify-content:flex-start}.register-proof-items span{font-size:11px}}`}</style>
     </div>
   );
 }

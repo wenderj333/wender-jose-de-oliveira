@@ -19,7 +19,7 @@ function createWelcomeNotification(user) {
 
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, full_name, role, avatar_url } = req.body;
+    const { email, password, full_name, role, avatar_url, email_updates_opt_in } = req.body;
     if (!email || !password || !full_name) {
       return res.status(400).json({ error: 'Email, senha e nome completo são obrigatórios' });
     }
@@ -28,7 +28,7 @@ router.post('/register', async (req, res) => {
     const existing = await User.findByEmail(email);
     if (existing) return res.status(409).json({ error: 'Email já cadastrado' });
 
-    const user = await User.create({ email, password, full_name, role });
+    const user = await User.create({ email, password, full_name, role, email_updates_opt_in: email_updates_opt_in === true });
 
     // Salvar avatar se fornecido
     if (avatar_url) {

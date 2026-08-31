@@ -6,7 +6,16 @@ import { enableNotificationSound } from "../utils/notification-sound";
 const API = (import.meta.env.VITE_API_URL || "https://sigo-com-fe-api.onrender.com") + "/api";
 
 export default function Settings() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const emailUpdatesCopy = ({
+    pt: { title: 'Novidades por e-mail', label: 'Quero receber novidades por e-mail', description: 'Receba novidades e convites do Sigo com Fé. Você pode desativar quando quiser.' },
+    es: { title: 'Novedades por correo', label: 'Quiero recibir novedades por correo', description: 'Recibe novedades e invitaciones de Sigo com Fé. Puedes desactivarlo cuando quieras.' },
+    en: { title: 'Email updates', label: 'I want to receive email updates', description: 'Receive Sigo com Fé news and invitations. You can unsubscribe whenever you want.' },
+    de: { title: 'Neuigkeiten per E-Mail', label: 'Ich möchte Neuigkeiten per E-Mail erhalten', description: 'Erhalte Neuigkeiten und Einladungen von Sigo com Fé. Du kannst sie jederzeit abbestellen.' },
+    fr: { title: 'Nouveautés par e-mail', label: 'Je souhaite recevoir les nouveautés par e-mail', description: 'Recevez les nouveautés et invitations de Sigo com Fé. Vous pouvez vous désinscrire à tout moment.' },
+    ro: { title: 'Noutăți prin e-mail', label: 'Vreau să primesc noutăți prin e-mail', description: 'Primește noutăți și invitații de la Sigo com Fé. Te poți dezabona oricând.' },
+    ru: { title: 'Новости по электронной почте', label: 'Я хочу получать новости по электронной почте', description: 'Получайте новости и приглашения от Sigo com Fé. Вы можете отказаться в любое время.' }
+  })[i18n.language?.split('-')[0]] || { title: 'Novidades por e-mail', label: 'Quero receber novidades por e-mail', description: 'Receba novidades e convites do Sigo com Fé. Você pode desativar quando quiser.' };
   const [form, setForm] = useState({
     full_name: "", birth_date: "", gender: "", city: "", country: "", profession: "", marital_status: "",
     christian_years: "", church_name: "", denomination: "", pastor_name: "",
@@ -15,7 +24,7 @@ export default function Settings() {
     favorite_verse: "", favorite_worship: "", favorite_book: "", testimony: "", bio: "",
     interests: [], objectives: [],
     prayer_request: "", final_message: "",
-    avatar_url: "", cover_url: ""
+    avatar_url: "", cover_url: "", email_updates_opt_in: false
   });
   const [msg, setMsg] = useState("");
   const [visibility, setVisibility] = useState({ personal: "friends", church: "public", faith: "public", bio: "public" });
@@ -97,6 +106,7 @@ export default function Settings() {
             bio: u.bio || "",
             avatar_url: u.avatar_url || "",
             cover_url: u.cover_url || "",
+            email_updates_opt_in: u.email_updates_opt_in === true,
             interests: u.interests || [],
             objectives: u.objectives || []
           }));
@@ -151,7 +161,8 @@ export default function Settings() {
           cover_url: form.cover_url,
           birth_date: form.birth_date,
           ministry: form.ministry,
-          profile_visibility: visibility
+          profile_visibility: visibility,
+          email_updates_opt_in: form.email_updates_opt_in
         })
       });
       const data = await res.json();
@@ -196,6 +207,14 @@ export default function Settings() {
           {notificationStatus && <p style={{ margin: "7px 0 0", color: notificationStatus.includes("não") || notificationStatus.includes("bloqueada") ? "#b42318" : "#16803c", fontSize: 13 }}>{notificationStatus}</p>}
         </div>
         <button type="button" onClick={enableNotifications} style={{ background: "#6C3FA0", color: "#fff", border: 0, borderRadius: 9, padding: "10px 14px", fontWeight: 700, cursor: "pointer" }}>Ativar notificações</button>
+      </div>
+
+      <div style={sectionStyle}>
+        <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: 8, fontSize: "16px" }}>✉️ {emailUpdatesCopy.title}</h3>
+        <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", color: "#333" }}>
+          <input type="checkbox" checked={form.email_updates_opt_in} onChange={e => setForm({ ...form, email_updates_opt_in: e.target.checked })} style={{ width: 18, height: 18, marginTop: 2, accentColor: "#6C3FA0" }} />
+          <span><strong style={{ display: "block", fontSize: 14 }}>{emailUpdatesCopy.label}</strong><small style={{ display: "block", marginTop: 4, color: "#666", lineHeight: 1.4 }}>{emailUpdatesCopy.description}</small></span>
+        </label>
       </div>
 
       <div style={sectionStyle}>
