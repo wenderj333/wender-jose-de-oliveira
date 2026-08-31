@@ -1,216 +1,109 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useAuth } from "../context/AuthContext";
-import { useTranslation } from "react-i18next";
-import { Mic, MicOff, Video, VideoOff, Users, Send, X, Radio } from "lucide-react";
+import React, { useEffect, useRef, useState } from 'react';
+import { Room, RoomEvent, Track } from 'livekit-client';
+import { AudioLines, Camera, CameraOff, LogOut, Mic, MicOff, Radio, Users } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+
+const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
+const primary = { border:0, borderRadius:13, background:'linear-gradient(135deg,#f1b52b,#c77c15)', color:'#241332', fontWeight:850, padding:'13px 14px', display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor:'pointer', fontSize:14 };
+const secondary = { border:'1px solid rgba(255,255,255,.35)', borderRadius:13, background:'rgba(255,255,255,.1)', color:'#fff', fontWeight:750, padding:'13px 14px', display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor:'pointer', fontSize:14 };
 
 export default function LiveStream() {
   const { user, token } = useAuth();
-  const { t } = useTranslation();
-  const videoRef = useRef(null);
-  const [isLive, setIsLive] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isCamOff, setIsCamOff] = useState(false);
-  const [viewers, setViewers] = useState(Math.floor(Math.random()*50)+10);
-  const [messages, setMessages] = useState([
-    {id:1, name:"Maria", text:"Aleluia! Que bencao!", color:"#f39c12"},
-    {id:2, name:"Joao", text:"Amen! Deus seja louvado!", color:"#27ae60"},
-    {id:3, name:"Ana", text:"Que bencao!", color:"#e74c3c"},
-  ]);
-  const [input, setInput] = useState("");
-  const [reactions, setReactions] = useState([]);
-  const chatEndRef = useRef(null);
-  const streamRef = useRef(null);
-  const recorderRef = useRef(null);
-  const recordingChunksRef = useRef([]);
-  const reactionId = useRef(0);
-  const [recordingStatus, setRecordingStatus] = useState('idle');
+  const roomRef = useRef(null);
+  const localVideoRef = useRef(null);
+  const remoteMediaRef = useRef(null);
+  const audioRef = useRef(null);
+  const listenOnlyRef = useRef(false);
+  const [connected, setConnected] = useState(false);
+  const [hosting, setHosting] = useState(false);
+  const [listenOnly, setListenOnly] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [cameraOff, setCameraOff] = useState(false);
+  const [people, setPeople] = useState(0);
+  const [message, setMessage] = useState('Entre para participar da oração ao vivo.');
+  const canHost = user?.role === 'pastor' || user?.role === 'admin';
 
-  useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior:"smooth" }); }, [messages]);
-  useEffect(() => {
-    const i = setInterval(() => setViewers(v => Math.max(1, v + Math.floor(Math.random()*3)-1)), 5000);
-    return () => clearInterval(i);
-  }, []);
+  const clearMedia = () => {
+    remoteMediaRef.current?.replaceChildren();
+    audioRef.current?.replaceChildren();
+  };
+  const updatePeople = room => setPeople(room.remoteParticipants.size + 1);
+  const attachTrack = track => {
+    const element = track.attach();
+    if (track.kind === Track.Kind.Audio) {
+      element.autoplay = true;
+      audioRef.current?.appendChild(element);
+    } else if (!listenOnlyRef.current && remoteMediaRef.current) {
+      element.autoplay = true; element.playsInline = true;
+      element.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:18px;';
+      remoteMediaRef.current.replaceChildren(element);
+    }
+  };
 
-  const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
-  const authorization = { Authorization: `Bearer ${token || localStorage.getItem('token')}` };
-
-  const uploadRecording = async (blob) => {
-    if (!blob?.size) return;
-    setRecordingStatus('saving');
+  const enter = async ({ host = false, audioOnly = false } = {}) => {
     try {
-      const signatureResponse = await fetch(API_URL + '/api/live-community/recording-signature', { headers: authorization });
-      const signature = await signatureResponse.json();
-      if (!signatureResponse.ok) throw new Error(signature.error);
-      const form = new FormData();
-      form.append('file', blob, `directo-${Date.now()}.webm`);
-      form.append('api_key', signature.apiKey);
-      form.append('timestamp', signature.timestamp);
-      form.append('signature', signature.signature);
-      form.append('folder', signature.folder);
-      const upload = await fetch(`https://api.cloudinary.com/v1_1/${signature.cloudName}/video/upload`, { method: 'POST', body: form });
-      const uploaded = await upload.json();
-      if (!upload.ok || !uploaded.public_id || !uploaded.secure_url) throw new Error('Falha no envio da gravação.');
-      const saved = await fetch(API_URL + '/api/live-community/recordings', {
-        method: 'POST',
-        headers: { ...authorization, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ publicId: uploaded.public_id, secureUrl: uploaded.secure_url })
+      setMessage('A ligar à sala de oração...');
+      const response = await fetch(`${API_URL}/api/calls/prayer-room-token`, {
+        method:'POST', headers:{ Authorization:`Bearer ${token || localStorage.getItem('token')}` }
       });
-      if (!saved.ok) throw new Error('Falha ao registar a gravação.');
-      setRecordingStatus('saved');
-    } catch (_) { setRecordingStatus('error'); }
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Não foi possível entrar na sala.');
+      if (host && !data.canHost) throw new Error('Apenas o pastor ou administrador pode iniciar a oração ao vivo.');
+      const room = new Room({ adaptiveStream:true, dynacast:true, disconnectOnPageLeave:true });
+      roomRef.current = room;
+      setHosting(host); setListenOnly(audioOnly); listenOnlyRef.current = audioOnly;
+      room.on(RoomEvent.TrackSubscribed, track => attachTrack(track));
+      room.on(RoomEvent.TrackUnsubscribed, track => track.detach());
+      room.on(RoomEvent.ParticipantConnected, () => updatePeople(room));
+      room.on(RoomEvent.ParticipantDisconnected, () => updatePeople(room));
+      room.on(RoomEvent.Disconnected, () => { clearMedia(); setConnected(false); setPeople(0); setMessage('A oração terminou ou a ligação foi encerrada.'); });
+      await room.connect(data.url, data.token);
+      updatePeople(room);
+      if (host) {
+        await room.localParticipant.setMicrophoneEnabled(true);
+        await room.localParticipant.setCameraEnabled(!audioOnly);
+        const camera = room.localParticipant.getTrackPublication(Track.Source.Camera);
+        if (camera?.track && localVideoRef.current) camera.track.attach(localVideoRef.current);
+        setCameraOff(audioOnly); setMuted(false);
+        setMessage(audioOnly ? 'Rádio de oração ao vivo iniciado.' : 'Vídeo de oração ao vivo iniciado.');
+      } else setMessage(audioOnly ? 'Você está a ouvir a oração ao vivo.' : 'Você entrou na sala de oração.');
+      setConnected(true);
+    } catch (error) {
+      roomRef.current?.disconnect(); roomRef.current = null;
+      setMessage(error.message || 'Não foi possível entrar na sala de oração.');
+    }
   };
 
-  const startStream = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video:true, audio:true });
-      streamRef.current = stream;
-      if (videoRef.current) videoRef.current.srcObject = stream;
-      recordingChunksRef.current = [];
-      if (typeof MediaRecorder !== 'undefined') {
-        const preferredType = MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus') ? 'video/webm;codecs=vp8,opus' : 'video/webm';
-        const recorder = new MediaRecorder(stream, { mimeType: preferredType });
-        recorderRef.current = recorder;
-        recorder.ondataavailable = event => { if (event.data.size) recordingChunksRef.current.push(event.data); };
-        recorder.onstop = () => {
-          const blob = new Blob(recordingChunksRef.current, { type: recorder.mimeType || 'video/webm' });
-          recordingChunksRef.current = [];
-          uploadRecording(blob);
-        };
-        recorder.start(10000);
-        setRecordingStatus('recording');
-      }
-      setIsLive(true);
-      await fetch(API_URL + '/api/live-community/start', {
-        method: 'POST',
-        headers: { ...authorization, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userName: user.full_name || user.displayName, userAvatar: user.avatar_url || user.photoURL, title: 'Directo ao vivo' })
-      });
-    } catch(e) { alert("Não foi possível aceder à câmara e ao microfone."); }
-  };
+  const leave = () => roomRef.current?.disconnect();
+  const toggleMic = async () => { const next=!muted; await roomRef.current?.localParticipant.setMicrophoneEnabled(!next); setMuted(next); };
+  const toggleCamera = async () => { const next=!cameraOff; await roomRef.current?.localParticipant.setCameraEnabled(!next); setCameraOff(next); };
+  useEffect(() => () => roomRef.current?.disconnect(), []);
 
-  const stopStream = async () => {
-    if (recorderRef.current?.state === 'recording') recorderRef.current.stop();
-    recorderRef.current = null;
-    streamRef.current?.getTracks().forEach(t => t.stop());
-    setIsLive(false);
-    const API_URL = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
-    await fetch(API_URL + '/api/live-community/stop', {
-      method: 'POST',
-      headers: { ...authorization, 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
-    });
-  };
-  const toggleMute = () => { streamRef.current?.getAudioTracks().forEach(t => { t.enabled = !t.enabled; }); setIsMuted(m => !m); };
-  const toggleCam = () => { streamRef.current?.getVideoTracks().forEach(t => { t.enabled = !t.enabled; }); setIsCamOff(c => !c); };
-
-  const sendMessage = () => {
-    if (!input.trim()) return;
-    setMessages(prev => [...prev, { id:Date.now(), name:user.full_name?.split(" ")[0]||"Eu", text:input, color:"#667eea" }]);
-    setInput("");
-  };
-
-  const addReaction = (emoji, label) => {
-    const id = reactionId.current++;
-    setReactions(prev => [...prev, { id, emoji, x:Math.random()*60+20 }]);
-    setTimeout(() => setReactions(prev => prev.filter(r => r.id !== id)), 2500);
-    setMessages(prev => [...prev, { id:Date.now(), name:user.full_name?.split(" ")[0]||"Eu", text:emoji+" "+label, color:"#f39c12" }]);
-  };
-
-  const REACTIONS = [
-    { emoji:"🙏", label:"Aleluia" },
-    { emoji:"🙌", label:"Amen" },
-    { emoji:"✝️", label:"Deus seja louvado" },
-    { emoji:"❤️", label:"Amor" },
-    { emoji:"🔥", label:"Fogo" },
-  ];
-
-  return (
-    <div style={{ position:"fixed", top:0, left:0, right:0, bottom:0, background:"#000", zIndex:1000, display:"flex", flexDirection:"column" }}>
-      <div style={{ flex:1, position:"relative" }}>
-        <video ref={videoRef} autoPlay muted playsInline style={{ width:"100%", height:"100%", objectFit:"cover" }} />
-        {!isLive && (
-          <div style={{ position:"absolute", inset:0, background:"rgba(0,0,0,0.85)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:16 }}>
-            <div style={{ fontSize:64 }}>📡</div>
-            <p style={{ color:"white", fontSize:22, fontWeight:700 }}>Pronto para transmitir?</p>
-            <p style={{ color:"rgba(255,255,255,0.6)", fontSize:15, textAlign:"center", maxWidth:300 }}>Partilha a tua fe com o mundo</p>
-            <p style={{ color:"rgba(255,255,255,0.78)", fontSize:13, textAlign:"center", maxWidth:410, lineHeight:1.5 }}>Ao iniciar, o directo será gravado com segurança. A gravação fica guardada durante 2 dias e depois é apagada automaticamente.</p>
-            <button onClick={startStream} style={{ padding:"14px 40px", borderRadius:50, border:"none", background:"linear-gradient(135deg,#e74c3c,#c0392b)", color:"white", fontWeight:700, fontSize:18, cursor:"pointer", display:"flex", alignItems:"center", gap:10 }}>
-              <Radio size={20}/> Iniciar Live
-            </button>
+  return <main style={{minHeight:'100vh',background:'radial-gradient(circle at top,#39205a,#100d1d 62%)',color:'#fff',padding:'36px 18px'}}>
+    <section style={{maxWidth:1050,margin:'0 auto'}}>
+      <header style={{textAlign:'center',marginBottom:24}}>
+        <span style={{display:'inline-flex',gap:8,alignItems:'center',padding:'7px 13px',borderRadius:999,background:'rgba(255,255,255,.12)',color:'#f5cf62',fontWeight:800,fontSize:13}}><Radio size={16}/> SALA DE ORAÇÃO AO VIVO</span>
+        <h1 style={{margin:'14px 0 8px',fontSize:'clamp(30px,5vw,52px)'}}>Oremos juntos</h1>
+        <p style={{margin:0,color:'#d7cae9',fontSize:17}}>O pastor pode transmitir em vídeo ou somente em áudio. Todos podem ouvir e orar juntos.</p>
+      </header>
+      <div style={{display:'grid',gridTemplateColumns:'minmax(0,2fr) minmax(260px,1fr)',gap:22}}>
+        <div style={{borderRadius:24,overflow:'hidden',minHeight:430,background:'#171125',border:'1px solid rgba(255,255,255,.14)',position:'relative'}}>
+          <div ref={remoteMediaRef} style={{position:'absolute',inset:0,display:'grid',placeItems:'center'}}>
+            {hosting && !cameraOff ? <video ref={localVideoRef} autoPlay muted playsInline style={{width:'100%',height:'100%',objectFit:'cover'}}/> : <div style={{textAlign:'center',padding:30}}><Radio size={52} color="#f5cf62"/><h2>{connected?'Aguardando o pastor iniciar':'Sala pronta para oração'}</h2><p style={{color:'#d7cae9'}}>Você pode entrar em vídeo ou só ouvir, como numa rádio cristã.</p></div>}
           </div>
-        )}
-        {isLive && (
-          <div style={{ position:"absolute", top:0, left:0, right:0, padding:"16px 20px", display:"flex", justifyContent:"space-between", alignItems:"center", background:"linear-gradient(to bottom,rgba(0,0,0,0.6),transparent)" }}>
-            <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-              <div style={{ display:"flex", alignItems:"center", gap:6, background:"#e74c3c", borderRadius:20, padding:"4px 12px" }}>
-                <span style={{ width:8, height:8, background:"white", borderRadius:"50%", display:"inline-block" }}></span>
-                <span style={{ color:"white", fontSize:13, fontWeight:700 }}>AO VIVO</span>
-              </div>
-              <div style={{ display:"flex", alignItems:"center", gap:6, background:"rgba(0,0,0,0.5)", borderRadius:20, padding:"4px 12px" }}>
-                <Users size={14} color="white"/>
-                <span style={{ color:"white", fontSize:13 }}>{viewers}</span>
-              </div>
-              {recordingStatus === 'recording' && <span style={{ color:'white', fontSize:12, background:'rgba(0,0,0,.5)', borderRadius:20, padding:'5px 10px' }}>● A gravar · apaga em 2 dias</span>}
-            </div>
-            <button onClick={stopStream} style={{ background:"rgba(0,0,0,0.5)", border:"none", borderRadius:"50%", width:36, height:36, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer" }}>
-              <X size={18} color="white"/>
-            </button>
-          </div>
-        )}
-        {isLive && (
-          <div style={{ position:"absolute", bottom:0, left:0, right:0, padding:"20px", background:"linear-gradient(to top,rgba(0,0,0,0.7),transparent)" }}>
-            <div style={{ display:"flex", gap:10, marginBottom:16, justifyContent:"center" }}>
-              {REACTIONS.map(r => (
-                <button key={r.label} onClick={() => addReaction(r.emoji, r.label)} style={{ background:"rgba(255,255,255,0.15)", border:"none", borderRadius:50, padding:"10px 16px", cursor:"pointer", fontSize:22 }}>
-                  {r.emoji}
-                </button>
-              ))}
-            </div>
-            <div style={{ display:"flex", justifyContent:"center", gap:16 }}>
-              <button onClick={toggleMute} style={{ background:isMuted?"#e74c3c":"rgba(255,255,255,0.2)", border:"none", borderRadius:"50%", width:56, height:56, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer" }}>
-                {isMuted ? <MicOff size={22} color="white"/> : <Mic size={22} color="white"/>}
-              </button>
-              <button onClick={stopStream} style={{ background:"#e74c3c", border:"none", borderRadius:"50%", width:72, height:72, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer" }}>
-                <Radio size={28} color="white"/>
-              </button>
-              <button onClick={toggleCam} style={{ background:isCamOff?"#e74c3c":"rgba(255,255,255,0.2)", border:"none", borderRadius:"50%", width:56, height:56, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer" }}>
-                {isCamOff ? <VideoOff size={22} color="white"/> : <Video size={22} color="white"/>}
-              </button>
-            </div>
-          </div>
-        )}
-        {reactions.map(r => (
-          <div key={r.id} style={{ position:"absolute", bottom:120, left:r.x+"%", fontSize:36, pointerEvents:"none" }}>{r.emoji}</div>
-        ))}
+          {connected && <><div style={{position:'absolute',top:16,left:16,display:'flex',gap:8,alignItems:'center',background:'#d83b4d',padding:'7px 11px',borderRadius:999,fontWeight:800,fontSize:13}}><span style={{width:8,height:8,borderRadius:'50%',background:'#fff'}}/> AO VIVO</div><div style={{position:'absolute',top:16,right:16,display:'flex',gap:7,alignItems:'center',background:'rgba(0,0,0,.52)',padding:'7px 11px',borderRadius:999,fontWeight:700,fontSize:13}}><Users size={16}/> {people}</div></>}
+        </div>
+        <aside style={{borderRadius:24,background:'rgba(255,255,255,.08)',border:'1px solid rgba(255,255,255,.14)',padding:22,alignSelf:'start'}}>
+          <h2 style={{marginTop:0,fontSize:23}}>{hosting?'Você está a conduzir':'Participe da oração'}</h2><p style={{color:'#d7cae9',lineHeight:1.55}}>{message}</p>
+          {!connected ? <div style={{display:'grid',gap:11}}>
+            {canHost && <><button onClick={()=>enter({host:true})} style={primary}><Camera size={18}/> Iniciar vídeo de oração</button><button onClick={()=>enter({host:true,audioOnly:true})} style={secondary}><AudioLines size={18}/> Iniciar como rádio</button></>}
+            <button onClick={()=>enter()} style={secondary}><Camera size={18}/> Entrar e assistir</button><button onClick={()=>enter({audioOnly:true})} style={secondary}><Radio size={18}/> Ouvir como rádio</button>
+          </div> : <div style={{display:'grid',gap:11}}>{hosting && <div style={{display:'flex',gap:10}}><button onClick={toggleMic} style={circle}>{muted?<MicOff/>:<Mic/>}</button><button onClick={toggleCamera} style={circle}>{cameraOff?<CameraOff/>:<Camera/>}</button></div>}<button onClick={leave} style={{...secondary,borderColor:'rgba(255,120,130,.55)',color:'#ffd5d8'}}><LogOut size={18}/> Sair da sala</button></div>}
+          <p style={{fontSize:12,color:'#bcaed2',lineHeight:1.45,marginTop:20}}>Use o modo rádio quando quiser poupar internet ou apenas escutar a oração.</p>
+        </aside>
       </div>
-      <div style={{ width:"100%", height:280, display:"flex", flexDirection:"column", background:"rgba(0,0,0,0.85)", borderTop:"1px solid rgba(255,255,255,0.1)" }}>
-        <div style={{ padding:"16px 16px 12px", borderBottom:"1px solid rgba(255,255,255,0.1)" }}>
-          <p style={{ color:"white", fontWeight:700, fontSize:15 }}>💬 Chat ao Vivo</p>
-          {recordingStatus === 'saving' && <p style={{ color:'#f7d978', fontSize:12, margin:'4px 0 0' }}>A guardar a gravação...</p>}
-          {recordingStatus === 'saved' && <p style={{ color:'#7ee2a8', fontSize:12, margin:'4px 0 0' }}>Gravação guardada por 2 dias.</p>}
-          {recordingStatus === 'error' && <p style={{ color:'#ff9e9e', fontSize:12, margin:'4px 0 0' }}>Não foi possível guardar a gravação. O directo já terminou.</p>}
-        </div>
-        <div style={{ flex:1, overflowY:"auto", padding:12, display:"flex", flexDirection:"column", gap:8 }}>
-          {messages.map(msg => (
-            <div key={msg.id} style={{ display:"flex", gap:8, alignItems:"flex-start" }}>
-              <div style={{ width:28, height:28, borderRadius:"50%", background:msg.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:"white", flexShrink:0 }}>
-                {msg.name.charAt(0)}
-              </div>
-              <div>
-                <span style={{ color:msg.color, fontSize:12, fontWeight:700 }}>{msg.name} </span>
-                <span style={{ color:"white", fontSize:13 }}>{msg.text}</span>
-              </div>
-            </div>
-          ))}
-          <div ref={chatEndRef}/>
-        </div>
-        <div style={{ padding:12, borderTop:"1px solid rgba(255,255,255,0.1)", display:"flex", gap:8 }}>
-          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==="Enter" && sendMessage()} placeholder="Escreve uma mensagem..." style={{ flex:1, background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.2)", borderRadius:20, padding:"8px 14px", color:"white", fontSize:13, outline:"none" }}/>
-          <button onClick={sendMessage} style={{ background:"#6C3FA0", border:"none", borderRadius:"50%", width:36, height:36, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer" }}>
-            <Send size={16} color="white"/>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    </section><div ref={audioRef}/>
+  </main>;
 }
+
+const circle = {width:48,height:48,borderRadius:'50%',border:'1px solid rgba(255,255,255,.35)',background:'rgba(255,255,255,.11)',color:'#fff',display:'grid',placeItems:'center',cursor:'pointer'};
