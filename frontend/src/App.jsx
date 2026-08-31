@@ -440,7 +440,7 @@ export default function App() {
 
       <Routes>
 
-        <Route path="/" element={<Register />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/inicio" element={<Landing />} />
 
         <Route path="/login" element={<Login />} />
