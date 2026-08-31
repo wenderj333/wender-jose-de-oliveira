@@ -65,6 +65,7 @@ import TermsOfUse from './pages/TermsOfUse';
 import DiarioComDeus from './pages/DiarioComDeus';
 
 import LiveStream from './pages/LiveStream';
+import LivePrayerLanding from './pages/LivePrayerLanding';
 import PrayerPlaza from './pages/PrayerPlaza';
 
 import FaithJourneys from "./pages/FaithJourneys";
@@ -467,6 +468,7 @@ export default function App() {
         <Route path="/musica" element={<MusicLibrary />} />
 
         <Route path="/comunidade-ao-vivo" element={<LiveCommunity />} />
+        <Route path="/oracao-ao-vivo" element={<LivePrayerLanding />} />
         <Route path="/praca-oracao" element={<PrayerPlaza />} />
         <Route path="/praca-de-oracao" element={<PrayerPlaza />} />
         <Route path="/chat-cristao" element={<ChristianChatLanding />} />
@@ -903,6 +905,7 @@ export default function App() {
                     <Route path='/diario-com-deus' element={<DiarioComDeus />} />
 
             <Route path='/live' element={<LiveStream />} />
+            <Route path='/oracao-ao-vivo' element={<LivePrayerLanding />} />
             <Route path='/praca-oracao' element={<PrayerPlaza />} />
             <Route path='/praca-de-oracao' element={<PrayerPlaza />} />
 
