@@ -706,6 +706,18 @@ export default function MuralGrid() {
   const videoRef = useRef(null);
   const musicRef = useRef(null);
   const [activeLive, setActiveLive] = useState(null);
+  const [showWelcome, setShowWelcome] = useState(() => localStorage.getItem('sigo_welcome_seen') !== '1');
+  const welcomeCopy = {
+    pt: { title: 'Bem-vindo ao Sigo com Fé', text: 'Comece em três passos simples para a comunidade conhecer você.', post: 'Fazer a primeira publicação', photo: 'Adicionar foto de perfil', duel: 'Jogar o Duelo Bíblico', close: 'Já entendi' },
+    es: { title: 'Bienvenido a Sigo com Fé', text: 'Comienza con tres pasos sencillos para que la comunidad te conozca.', post: 'Hacer mi primera publicación', photo: 'Añadir foto de perfil', duel: 'Jugar el Duelo Bíblico', close: 'Ya lo entiendo' },
+    en: { title: 'Welcome to Sigo com Fé', text: 'Start with three simple steps so the community can get to know you.', post: 'Make my first post', photo: 'Add a profile photo', duel: 'Play Bible Duel', close: 'Got it' },
+    de: { title: 'Willkommen bei Sigo com Fé', text: 'Beginne mit drei einfachen Schritten, damit dich die Gemeinschaft kennenlernen kann.', post: 'Ersten Beitrag erstellen', photo: 'Profilfoto hinzufügen', duel: 'Bibelduell spielen', close: 'Verstanden' },
+    fr: { title: 'Bienvenue sur Sigo com Fé', text: 'Commencez par trois étapes simples pour que la communauté vous connaisse.', post: 'Faire ma première publication', photo: 'Ajouter une photo de profil', duel: 'Jouer au Duel biblique', close: 'J’ai compris' },
+    ro: { title: 'Bine ai venit la Sigo com Fé', text: 'Începe cu trei pași simpli pentru ca comunitatea să te cunoască.', post: 'Prima mea postare', photo: 'Adaugă o fotografie de profil', duel: 'Joacă Duelul Biblic', close: 'Am înțeles' },
+    ru: { title: 'Добро пожаловать в Sigo com Fé', text: 'Начните с трёх простых шагов, чтобы сообщество могло вас узнать.', post: 'Сделать первую публикацию', photo: 'Добавить фото профиля', duel: 'Играть в Библейскую дуэль', close: 'Понятно' }
+  };
+  const welcome = welcomeCopy[currentLanguage] || welcomeCopy.pt;
+  const dismissWelcome = () => { localStorage.setItem('sigo_welcome_seen', '1'); setShowWelcome(false); };
 
   // Informação clara para o Google e para quem partilha esta página.
   useEffect(() => {
@@ -1019,6 +1031,15 @@ export default function MuralGrid() {
           )}
         </div>
       </div>
+
+      {user && showWelcome && <section style={{ marginBottom:20, padding:'18px 20px', borderRadius:16, background:'linear-gradient(135deg,#f7f0ff,#fffdf6)', border:'1px solid #e7d8f5', boxShadow:'0 5px 18px rgba(75,48,120,.07)' }}>
+        <div style={{ display:'flex', gap:12, alignItems:'flex-start', justifyContent:'space-between' }}><div><h2 style={{ margin:0, color:'#442469', fontSize:18 }}>✨ {welcome.title}</h2><p style={{ margin:'6px 0 0', color:'#70627f', fontSize:13, lineHeight:1.45 }}>{welcome.text}</p></div><button type="button" aria-label={welcome.close} onClick={dismissWelcome} style={{ border:0, background:'transparent', color:'#78698a', cursor:'pointer', padding:2 }}><X size={18}/></button></div>
+        <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginTop:14 }}>
+          <button type="button" onClick={() => { setShowForm(true); dismissWelcome(); }} style={{ border:0, borderRadius:10, padding:'9px 12px', background:'#6a42a0', color:'#fff', fontWeight:800, cursor:'pointer', fontSize:12 }}><Send size={14} style={{ verticalAlign:'middle', marginRight:5 }}/>{welcome.post}</button>
+          {!user.avatar_url && <button type="button" onClick={() => { window.location.href=`/perfil/${user.id}`; }} style={{ border:'1px solid #cbb7e8', borderRadius:10, padding:'9px 12px', background:'#fff', color:'#5c368c', fontWeight:800, cursor:'pointer', fontSize:12 }}><Image size={14} style={{ verticalAlign:'middle', marginRight:5 }}/>{welcome.photo}</button>}
+          <button type="button" onClick={() => { window.location.href='/duelo-biblico'; }} style={{ border:'1px solid #efd49a', borderRadius:10, padding:'9px 12px', background:'#fffaf0', color:'#92600d', fontWeight:800, cursor:'pointer', fontSize:12 }}><Play size={14} style={{ verticalAlign:'middle', marginRight:5 }}/>{welcome.duel}</button>
+        </div>
+      </section>}
 
       <DailySurpriseBoxes onPublish={publishSurprise} publishing={publishingSurprise} />
 
