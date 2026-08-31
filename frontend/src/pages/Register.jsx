@@ -9,9 +9,12 @@ import { getChristianChatCopy } from '../i18n/christianChatCopy';
 function trackSignUpEvent() {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'sign_up', { method: 'email' });
-    window.gtag('event', 'login', { method: 'email' });
-    console.log('✅ Google Analytics: sign_up & login events tracked');
+    console.log('Google Analytics: sign_up event tracked');
   }
+}
+
+function trackLoginEvent(method) {
+  if (typeof window !== 'undefined' && window.gtag) window.gtag('event', 'login', { method });
 }
 
 const REGISTER_STORY = {
@@ -74,6 +77,10 @@ export default function Register() {
     if (!loading && user) navigate(nextPage, { replace: true });
   }, [loading, user, navigate, nextPage]);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.gtag) window.gtag('event', 'view_sign_up', { page: 'register' });
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -125,8 +132,8 @@ export default function Register() {
           setError('');
           try {
             const result = await loginWithGoogle();
-            // Track Google Analytics conversion event
-            trackSignUpEvent();
+            // A Google login may be an existing member. Do not count it as a new registration.
+            trackLoginEvent('google');
             // Only navigate if popup was used (returns data). Redirect navigates automatically.
             if (result) navigate(nextPage);
           } catch (err) {

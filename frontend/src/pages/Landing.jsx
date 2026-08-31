@@ -38,6 +38,9 @@ export default function Landing() {
     if (canonical) canonical.href = 'https://www.sigocomfe.com/';
     return () => { document.title = previous.title; if (description && previous.description) description.content = previous.description; if (canonical && previous.canonical) canonical.href = previous.canonical; };
   }, [i18n.language]);
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.gtag) window.gtag('event', 'view_landing', { page: 'home' });
+  }, []);
   const trackCta = (name) => {
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'cta_click', { cta_name: name, page: 'landing' });

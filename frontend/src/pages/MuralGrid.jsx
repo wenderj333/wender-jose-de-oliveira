@@ -949,6 +949,9 @@ export default function MuralGrid() {
 
       const newPost = { ...(data.post || {}), liked: false, full_name: user?.full_name, like_count: 0, comment_count: 0 };
       setPosts([newPost, ...posts]);
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        window.gtag('event', 'create_post', { category: postCategory, visibility: postVisibility, has_media: Boolean(mediaFile || musicFile || selectedMusicSong) });
+      }
       setPostText(''); setPostCategory('testemunho');
       clearMedia(); setMusicFile(null); setMusicName(null); setSelectedMusicSong(null);
       if (musicRef.current) musicRef.current.value = '';
@@ -979,6 +982,7 @@ export default function MuralGrid() {
       setPosts(prev => [newPost, ...prev]);
       setActiveFilter('todas');
       trackMuralAction('publish_daily_surprise');
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') window.gtag('event', 'share_daily_word');
     } catch (error) {
       alert(error.message || 'Não foi possível publicar a palavra.');
     } finally {
