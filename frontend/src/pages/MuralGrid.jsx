@@ -568,6 +568,7 @@ const MULTILINGUAL_SURPRISES = [
 function DailySurpriseBoxes({ onPublish, publishing }) {
   const { i18n } = useTranslation();
   const [message, setMessage] = useState(null);
+  const [expanded, setExpanded] = useState(false);
   const [showBoxes, setShowBoxes] = useState(false);
   const [openingBox, setOpeningBox] = useState('');
   const today = new Date().toISOString().slice(0, 10);
@@ -575,6 +576,7 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
   const lang = (i18n.language || navigator.language || 'pt').split('-')[0];
   const copy = {
     choose: { pt: 'Escolha uma surpresa', es: 'Elige una sorpresa', en: 'Choose a surprise', de: 'Wähle eine Überraschung', fr: 'Choisis une surprise', ro: 'Alege o surpriză', ru: 'Выберите сюрприз' },
+    open: { pt: 'Receber a palavra de hoje', es: 'Recibir la palabra de hoy', en: "Receive today's word", de: 'Das Wort für heute erhalten', fr: 'Recevoir la parole du jour', ro: 'Primește cuvântul zilei', ru: 'Получить слово на сегодня' },
     intro: { pt: 'Uma palavra especial para a sua caminhada', es: 'Una palabra especial para tu camino', en: 'A special word for your journey', de: 'Ein besonderes Wort für deinen Weg', fr: 'Une parole spéciale pour ton chemin', ro: 'Un cuvânt special pentru drumul tău', ru: 'Особое слово для вашего пути' },
     done: { pt: 'Você já recebeu sua palavra hoje', es: 'Ya recibiste tu palabra de hoy', en: "You already received today's word", de: 'Du hast dein Wort für heute bereits erhalten', fr: 'Tu as déjà reçu ta parole du jour', ro: 'Ai primit deja cuvântul pentru astăzi', ru: 'Вы уже получили слово на сегодня' },
     back: { pt: 'Voltar às caixinhas', es: 'Volver a las cajitas', en: 'Back to the boxes', de: 'Zurück zu den Kästchen', fr: 'Retour aux boîtes', ro: 'Înapoi la căsuțe', ru: 'Вернуться к коробочкам' },
@@ -625,6 +627,9 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
   const share = async () => { if (!message) return; const body = `${verseText}\n— ${verseRef}\nSigo com Fé`; try { if (navigator.share) await navigator.share({ title: 'Palavra do dia', text: body }); else await navigator.clipboard.writeText(body); } catch (_) {} };
   const publish = () => onPublish?.({ content: `“${verseText}”\n— ${verseRef}` });
   const showingMessage = message && !showBoxes;
+  if (!expanded && !message) return <section style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}>
+    <button type="button" onClick={() => setExpanded(true)} style={{ border: '1px solid #ead49d', borderRadius: 20, padding: '9px 16px', background: '#fffaf0', color: '#8a6818', cursor: 'pointer', fontSize: 13, fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: 7 }}>✨ {copy.open[lang] || copy.open.pt}</button>
+  </section>;
   return (
     <section aria-label={copy.choose[lang] || copy.choose.pt} style={{ marginBottom: 20, padding: '18px 16px', borderRadius: 18, background: 'linear-gradient(135deg,#fffaf1,#f6f3ff)', border: '1px solid #eadff3', boxShadow: '0 8px 24px rgba(70,45,100,.08)' }}>
       {!showingMessage && <div style={{ textAlign: 'center', marginBottom: 14 }}>
@@ -1032,12 +1037,13 @@ export default function MuralGrid() {
         </div>
       </div>
 
-      {user && showWelcome && <section style={{ marginBottom:20, padding:'18px 20px', borderRadius:16, background:'linear-gradient(135deg,#f7f0ff,#fffdf6)', border:'1px solid #e7d8f5', boxShadow:'0 5px 18px rgba(75,48,120,.07)' }}>
-        <div style={{ display:'flex', gap:12, alignItems:'flex-start', justifyContent:'space-between' }}><div><h2 style={{ margin:0, color:'#442469', fontSize:18 }}>✨ {welcome.title}</h2><p style={{ margin:'6px 0 0', color:'#70627f', fontSize:13, lineHeight:1.45 }}>{welcome.text}</p></div><button type="button" aria-label={welcome.close} onClick={dismissWelcome} style={{ border:0, background:'transparent', color:'#78698a', cursor:'pointer', padding:2 }}><X size={18}/></button></div>
-        <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginTop:14 }}>
-          <button type="button" onClick={() => { setShowForm(true); dismissWelcome(); }} style={{ border:0, borderRadius:10, padding:'9px 12px', background:'#6a42a0', color:'#fff', fontWeight:800, cursor:'pointer', fontSize:12 }}><Send size={14} style={{ verticalAlign:'middle', marginRight:5 }}/>{welcome.post}</button>
-          {!user.avatar_url && <button type="button" onClick={() => { window.location.href=`/perfil/${user.id}`; }} style={{ border:'1px solid #cbb7e8', borderRadius:10, padding:'9px 12px', background:'#fff', color:'#5c368c', fontWeight:800, cursor:'pointer', fontSize:12 }}><Image size={14} style={{ verticalAlign:'middle', marginRight:5 }}/>{welcome.photo}</button>}
-          <button type="button" onClick={() => { window.location.href='/duelo-biblico'; }} style={{ border:'1px solid #efd49a', borderRadius:10, padding:'9px 12px', background:'#fffaf0', color:'#92600d', fontWeight:800, cursor:'pointer', fontSize:12 }}><Play size={14} style={{ verticalAlign:'middle', marginRight:5 }}/>{welcome.duel}</button>
+      {user && showWelcome && <section style={{ marginBottom:16, padding:'11px 14px', borderRadius:14, background:'#fff', border:'1px solid #e4dfed', display:'flex', gap:10, alignItems:'center', justifyContent:'space-between', flexWrap:'wrap' }}>
+        <strong style={{ color:'#56357f', fontSize:13 }}>✨ {welcome.title}</strong>
+        <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'center' }}>
+          <button type="button" onClick={() => { setShowForm(true); dismissWelcome(); }} style={{ border:0, borderRadius:10, padding:'8px 10px', background:'#6a42a0', color:'#fff', fontWeight:800, cursor:'pointer', fontSize:12 }}><Send size={14} style={{ verticalAlign:'middle', marginRight:5 }}/>{welcome.post}</button>
+          {!user.avatar_url && <button type="button" onClick={() => { window.location.href=`/perfil/${user.id}`; }} style={{ border:'1px solid #cbb7e8', borderRadius:10, padding:'8px 10px', background:'#fff', color:'#5c368c', fontWeight:800, cursor:'pointer', fontSize:12 }}><Image size={14} style={{ verticalAlign:'middle', marginRight:5 }}/>{welcome.photo}</button>}
+          <button type="button" onClick={() => { window.location.href='/duelo-biblico'; }} style={{ border:'1px solid #efd49a', borderRadius:10, padding:'8px 10px', background:'#fffaf0', color:'#92600d', fontWeight:800, cursor:'pointer', fontSize:12 }}><Play size={14} style={{ verticalAlign:'middle', marginRight:5 }}/>{welcome.duel}</button>
+          <button type="button" aria-label={welcome.close} onClick={dismissWelcome} style={{ border:0, background:'transparent', color:'#78698a', cursor:'pointer', padding:3 }}><X size={17}/></button>
         </div>
       </section>}
 
