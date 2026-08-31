@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, UserPlus, Mail, Lock, User, MessageCircle, Heart, ShieldCheck, Music, Sparkles, Users } from 'lucide-react';
+import { BookOpen, UserPlus, Mail, Lock, User, Heart, ShieldCheck, Music, Sparkles, Users, Clock3, Trophy } from 'lucide-react';
 import { getChristianChatCopy } from '../i18n/christianChatCopy';
 
 // Google Analytics conversion events
@@ -24,6 +24,16 @@ const REGISTER_STORY = {
   ru: { title: <>Истинная радость начинается <span style={{ color: '#b5801c' }}>с веры.</span></>, prayer: 'Молитва и поклонение', worship: 'Вдохновляющее прославление', bible: 'Библия, друзья и надежда', free: 'Бесплатный аккаунт', community: 'Христианское сообщество', growing: 'Нас становится всё больше' },
 };
 
+const REGISTER_PROOF = {
+  pt: { quick: 'Leva menos de 1 minuto', free: 'Gratuita e segura', together: 'Oração, Bíblia e comunhão', duel: 'Guarde seus pontos e jogue o Duelo Bíblico com outros irmãos.' },
+  es: { quick: 'Toma menos de 1 minuto', free: 'Gratis y segura', together: 'Oración, Biblia y comunión', duel: 'Guarda tus puntos y juega el Duelo Bíblico con otros hermanos.' },
+  en: { quick: 'Takes less than 1 minute', free: 'Free and secure', together: 'Prayer, Bible and fellowship', duel: 'Save your points and play Bible Duel with other believers.' },
+  de: { quick: 'Dauert weniger als 1 Minute', free: 'Kostenlos und sicher', together: 'Gebet, Bibel und Gemeinschaft', duel: 'Speichere deine Punkte und spiele das Bibelduell mit anderen Gläubigen.' },
+  fr: { quick: 'Moins d’une minute suffit', free: 'Gratuit et sécurisé', together: 'Prière, Bible et communion', duel: 'Garde tes points et joue au Duel Biblique avec d’autres croyants.' },
+  ro: { quick: 'Durează mai puțin de un minut', free: 'Gratuit și sigur', together: 'Rugăciune, Biblie și părtășie', duel: 'Păstrează-ți punctele și joacă Duelul Biblic cu alți credincioși.' },
+  ru: { quick: 'Займёт меньше минуты', free: 'Бесплатно и безопасно', together: 'Молитва, Библия и общение', duel: 'Сохраняйте свои баллы и играйте в Библейскую дуэль с другими верующими.' },
+};
+
 export default function Register() {
   const { register, loginWithGoogle, loginWithFacebook, sendPhoneCode, verifyPhoneCode } = useAuth();
   const navigate = useNavigate();
@@ -32,7 +42,10 @@ export default function Register() {
   const nextPage = requestedNext?.startsWith('/') ? requestedNext : '/';
   const { t, i18n } = useTranslation();
   const c = getChristianChatCopy(i18n.language);
-  const story = REGISTER_STORY[i18n.language?.split('-')[0]] || REGISTER_STORY.pt;
+  const language = i18n.language?.split('-')[0];
+  const story = REGISTER_STORY[language] || REGISTER_STORY.pt;
+  const proof = REGISTER_PROOF[language] || REGISTER_PROOF.pt;
+  const cameFromDuel = nextPage === '/duelo-biblico';
   const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'member' });
   const [error, setError] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -80,6 +93,14 @@ export default function Register() {
           <h1>{t('brand')}</h1>
           <p>{t('register.joinCommunity')}</p>
         </div>
+        <div className="register-proof" aria-label={proof.free}>
+          {cameFromDuel && <p className="register-duel-note"><Trophy size={16} /> {proof.duel}</p>}
+          <div className="register-proof-items">
+            <span><Clock3 size={15} /> {proof.quick}</span>
+            <span><ShieldCheck size={15} /> {proof.free}</span>
+            <span><BookOpen size={15} /> {proof.together}</span>
+          </div>
+        </div>
         {error && <p className="form-error" style={{ textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
 
         <button className="btn btn-google" type="button" style={{ width: '100%', marginBottom: '0.5rem' }} onClick={async () => {
@@ -120,15 +141,15 @@ export default function Register() {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label><User size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.fullName')}</label>
-            <input value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} placeholder={t('register.fullNamePlaceholder')} required />
+            <input autoComplete="name" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} placeholder={t('register.fullNamePlaceholder')} required />
           </div>
           <div className="form-group">
             <label><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.email')}</label>
-            <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder={t('register.emailPlaceholder')} required />
+            <input type="email" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder={t('register.emailPlaceholder')} required />
           </div>
           <div className="form-group">
             <label><Lock size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.password')}</label>
-            <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder={t('register.passwordPlaceholder')} required />
+            <input type="password" autoComplete="new-password" minLength="6" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder={t('register.passwordPlaceholder')} required />
           </div>
           <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
             <UserPlus size={18} /> {t('register.submit')}
@@ -144,7 +165,7 @@ export default function Register() {
         </div>
       </div>
       </div>
-      <style>{`.register-card .auth-brand h1{color:#2b1b47}.register-card .auth-brand p{color:#687184}.register-card .form-group input{border-radius:12px;border-color:#dcd9e6;padding:13px 14px}.register-card .btn-primary{background:linear-gradient(135deg,#633da0,#8255b7);border-radius:13px;box-shadow:0 10px 20px rgba(99,61,160,.23)}.register-card .btn-google{border-radius:13px}.register-card .auth-divider{margin:20px 0}@media(max-width:820px){.register-layout{grid-template-columns:1fr !important}.register-story{max-width:620px;margin:0 auto}.faith-collage{min-height:340px !important}}@media(max-width:520px){.register-page{padding:16px 12px !important}.register-story h2{font-size:2.5rem !important}.faith-collage{transform:scale(.9);transform-origin:top center;margin-bottom:-15px !important}.register-card{padding:24px 18px !important}}`}</style>
+      <style>{`.register-card .auth-brand h1{color:#2b1b47}.register-card .auth-brand p{color:#687184}.register-proof{margin:0 0 18px;padding:12px;border:1px solid #e5ddf4;border-radius:14px;background:#faf8fe}.register-proof-items{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.register-proof-items span{display:inline-flex;align-items:center;gap:5px;color:#5a477a;font-size:12px;font-weight:750}.register-proof-items svg{color:#6b3faf}.register-duel-note{display:flex;align-items:center;justify-content:center;gap:7px;margin:0 0 10px;color:#563194;font-size:13px;font-weight:800;text-align:center}.register-duel-note svg{color:#bf8616}.register-card .form-group input{border-radius:12px;border-color:#dcd9e6;padding:13px 14px}.register-card .btn-primary{background:linear-gradient(135deg,#633da0,#8255b7);border-radius:13px;box-shadow:0 10px 20px rgba(99,61,160,.23)}.register-card .btn-google{border-radius:13px}.register-card .auth-divider{margin:20px 0}@media(max-width:820px){.register-layout{grid-template-columns:1fr !important}.register-story{max-width:620px;margin:0 auto}.faith-collage{min-height:340px !important}}@media(max-width:520px){.register-page{padding:16px 12px !important}.register-story h2{font-size:2.5rem !important}.faith-collage{transform:scale(.9);transform-origin:top center;margin-bottom:-15px !important}.register-card{padding:24px 18px !important}.register-proof-items{justify-content:flex-start}.register-proof-items span{font-size:11px}}`}</style>
     </div>
   );
 }
