@@ -739,11 +739,11 @@ export default function MuralGrid() {
     if (description) description.content = seo.description;
     if (ogTitle) ogTitle.content = seo.title;
     if (ogDescription) ogDescription.content = seo.description;
-    if (canonical) canonical.href = 'https://sigo-com-fe.vercel.app/mural';
+    if (canonical) canonical.href = 'https://www.sigocomfe.com/mural';
     const schema = document.createElement('script');
     schema.id = 'mural-bible-chests-schema';
     schema.type = 'application/ld+json';
-    schema.text = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: seo.title, description: seo.description, url: 'https://sigo-com-fe.vercel.app/mural', about: ['Baú da Coragem', 'Baú da Esperança', 'Baú da Direção'] });
+    schema.text = JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name: seo.title, description: seo.description, url: 'https://www.sigocomfe.com/mural', about: ['Baú da Coragem', 'Baú da Esperança', 'Baú da Direção'] });
     document.head.appendChild(schema);
     return () => {
       document.title = previous.title;

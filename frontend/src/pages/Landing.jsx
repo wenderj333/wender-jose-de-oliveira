@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, BookOpen, Heart, MessageCircleHeart, Play, ShieldCheck, Sparkles, Trophy, UsersRound } from 'lucide-react';
@@ -22,6 +22,22 @@ export default function Landing() {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   const moment = PUBLIC_MOMENTS[i18n.language?.split('-')[0]] || PUBLIC_MOMENTS.pt;
+  useEffect(() => {
+    const language = i18n.language?.split('-')[0] || 'pt';
+    const seo = {
+      pt: ['Sigo com Fé | Rede Social Cristã, Oração e Bíblia', 'Sigo com Fé é uma rede social cristã gratuita para oração, Bíblia, grupos, reflexões, testemunhos e Duelo Bíblico.'],
+      es: ['Sigo com Fé | Red social cristiana, oración y Biblia', 'Sigo com Fé es una red social cristiana gratuita para oración, Biblia, grupos, reflexiones, testimonios y Desafío Bíblico.'],
+      en: ['Sigo com Fé | Christian social network, prayer and Bible', 'Sigo com Fé is a free Christian social network for prayer, Bible, groups, reflections, testimonies and Bible Duel.'],
+      de: ['Sigo com Fé | Christliches soziales Netzwerk, Gebet und Bibel', 'Sigo com Fé ist ein kostenloses christliches soziales Netzwerk für Gebet, Bibel, Gruppen, Reflexionen und Bibelduell.'],
+    }[language] || ['Sigo com Fé | Rede Social Cristã, Oração e Bíblia', 'Sigo com Fé é uma rede social cristã gratuita para oração, Bíblia, grupos, reflexões, testemunhos e Duelo Bíblico.'];
+    const description = document.querySelector('meta[name="description"]');
+    const canonical = document.querySelector('link[rel="canonical"]');
+    const previous = { title: document.title, description: description?.content, canonical: canonical?.href };
+    document.title = seo[0];
+    if (description) description.content = seo[1];
+    if (canonical) canonical.href = 'https://www.sigocomfe.com/';
+    return () => { document.title = previous.title; if (description && previous.description) description.content = previous.description; if (canonical && previous.canonical) canonical.href = previous.canonical; };
+  }, [i18n.language]);
   const trackCta = (name) => {
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'cta_click', { cta_name: name, page: 'landing' });
