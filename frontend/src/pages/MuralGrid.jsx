@@ -62,6 +62,7 @@ const getCatColor = (type) => CATEGORIES_CONFIG.find(c => c.value === type)?.col
 function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay, onPause: externalOnPause, onEnded: externalOnEnded }) {
   const { t } = useTranslation(); // Add useTranslation
   const audioRef = useRef(null);
+  const playerId = useRef(`mural-audio-${Math.random().toString(36).slice(2)}`);
   const [internalPlaying, setInternalPlaying] = useState(false);
   const playing = propIsPlaying !== undefined ? propIsPlaying : internalPlaying;
   const [progress, setProgress] = useState(0);
@@ -76,12 +77,24 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
     }
   }, [playing]);
 
+  // Mantém o mural calmo: iniciar uma faixa para imediatamente qualquer outra.
+  useEffect(() => {
+    const pauseForAnotherPlayer = (event) => {
+      if (event.detail?.playerId === playerId.current || audioRef.current?.paused) return;
+      audioRef.current.pause();
+      if (propIsPlaying === undefined) setInternalPlaying(false);
+      externalOnPause?.();
+    };
+    window.addEventListener('sigo:pause-mural-audio', pauseForAnotherPlayer);
+    return () => window.removeEventListener('sigo:pause-mural-audio', pauseForAnotherPlayer);
+  }, [propIsPlaying, externalOnPause]);
+
   const toggle = async () => {
     if (!audioRef.current) return;
     try {
-      if (internalPlaying) { audioRef.current.pause(); }
+      if (playing) { audioRef.current.pause(); }
       else { await audioRef.current.play(); }
-      setInternalPlaying(!internalPlaying);
+      if (propIsPlaying === undefined) setInternalPlaying(!playing);
     } catch (err) { console.error(err); }
   };
 
@@ -98,6 +111,7 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
   };
 
   const handleOnPlay = () => {
+    window.dispatchEvent(new CustomEvent('sigo:pause-mural-audio', { detail: { playerId: playerId.current } }));
     if (propIsPlaying === undefined) setInternalPlaying(true);
     externalOnPlay && externalOnPlay();
   };
@@ -146,10 +160,7 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
         {playing ? <Pause size={16} /> : <Play size={16} />}
       </button>
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>{t('mural.musicLabel')}</div>
-        <div style={{ height: 4, background: '#e2e8f0', borderRadius: 2 }}>
-          <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg,#7a9e7e,#c4b89a)', transition: 'width 0.1s' }} />
-        </div>
+        <div style={{ fontSize: 12, color: '#64748b', fontWeight: 700 }}>{playing ? 'A tocar música' : t('mural.musicLabel')}</div>
       </div>
     </div>
     </div>
@@ -162,6 +173,8 @@ function MusicPickerModal({ onClose, onSelect }) {
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
+  const previewAudioRef = useRef(null);
+  const [previewSongId, setPreviewSongId] = useState(null);
 
   useEffect(() => {
     fetch(`${API}/music?limit=20`)
@@ -171,6 +184,28 @@ function MusicPickerModal({ onClose, onSelect }) {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => () => { previewAudioRef.current?.pause(); }, []);
+
+  const togglePreview = async (event, song) => {
+    event.stopPropagation();
+    const audio = previewAudioRef.current;
+    if (!audio) return;
+    if (previewSongId === song.id && !audio.paused) {
+      audio.pause();
+      setPreviewSongId(null);
+      return;
+    }
+    audio.pause();
+    audio.currentTime = 0;
+    audio.src = song.url;
+    try {
+      await audio.play();
+      setPreviewSongId(song.id);
+    } catch {
+      setPreviewSongId(null);
+    }
+  };
+
   const filtered = songs.filter(s =>
     !query || s.title.toLowerCase().includes(query.toLowerCase()) || (s.artist || '').toLowerCase().includes(query.toLowerCase())
   );
@@ -179,6 +214,7 @@ function MusicPickerModal({ onClose, onSelect }) {
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', zIndex: 3000 }}
       onClick={e => e.target === e.currentTarget && onClose()}>
       <div style={{ background: 'white', borderRadius: '20px 20px 0 0', width: '100%', maxWidth: 900, maxHeight: '50vh', display: 'flex', flexDirection: 'column', padding: 20, boxSizing: 'border-box' }}>
+        <audio ref={previewAudioRef} onEnded={() => setPreviewSongId(null)} preload="none" />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
           <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>🎵 {t('mural.pickMusic')}</h3>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}><X size={20} /></button>
@@ -205,7 +241,9 @@ function MusicPickerModal({ onClose, onSelect }) {
                 <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{song.title}</div>
                 <div style={{ fontSize: 11, color: '#888' }}>{song.artist}</div>
               </div>
-              <audio controls preload="none" src={song.url} onClick={e => e.stopPropagation()} style={{ width: 145, height: 28 }} />
+              <button type="button" aria-label={`Ouvir ${song.title}`} onClick={event => togglePreview(event, song)} style={{ width: 36, height: 36, borderRadius: '50%', border: '1px solid #d7dce8', background: previewSongId === song.id ? '#6a42a0' : '#fff', color: previewSongId === song.id ? '#fff' : '#6a42a0', cursor: 'pointer', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+                {previewSongId === song.id ? <Pause size={16} /> : <Play size={16} />}
+              </button>
             </div>
           ))}
         </div>
@@ -1117,7 +1155,6 @@ export default function MuralGrid() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedMusicSong.title}</div>
                 <div style={{ fontSize: 11, color: '#888' }}>{selectedMusicSong.artist}</div>
-                <audio controls preload="metadata" src={selectedMusicSong.url} style={{ width: '100%', height: 28, marginTop: 7 }} />
               </div>
               <button onClick={() => setSelectedMusicSong(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}><X size={14} /></button>
             </div>
