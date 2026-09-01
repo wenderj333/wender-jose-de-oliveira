@@ -37,6 +37,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import GlobalMemberSearch from "./components/GlobalMemberSearch";
+import RegistrationPromptPopup from "./components/RegistrationPromptPopup";
 
 import Members from "./pages/Members";
 
@@ -161,6 +162,16 @@ export default function App() {
   const [installPrompt, setInstallPrompt] = useState(null);
 
   const [showInstall, setShowInstall] = useState(false);
+  const [showNewMemberPhotoPrompt, setShowNewMemberPhotoPrompt] = useState(false);
+
+  useEffect(() => {
+    if (!user || user.avatar_url || user.photoURL) return;
+    if (sessionStorage.getItem('sigo_show_photo_prompt') === '1') {
+      sessionStorage.removeItem('sigo_show_photo_prompt');
+      const timer = window.setTimeout(() => setShowNewMemberPhotoPrompt(true), 650);
+      return () => window.clearTimeout(timer);
+    }
+  }, [user]);
 
 
 
@@ -491,6 +502,7 @@ export default function App() {
   return (
 
     <div className="app-container">
+      <RegistrationPromptPopup isOpen={showNewMemberPhotoPrompt} onClose={() => setShowNewMemberPhotoPrompt(false)} />
       {notificationToast && <button type="button" role="alert" onClick={() => { navigate(notificationToast.to); setNotificationToast(null); }} style={{position:'fixed',top:76,right:18,zIndex:500,maxWidth:'min(360px,calc(100vw - 36px))',padding:'12px 16px',borderRadius:14,border:'1px solid #d7c6ef',background:'#fff',color:'#2f2141',boxShadow:'0 12px 30px rgba(45,24,72,.2)',fontWeight:700,fontSize:13,cursor:'pointer',textAlign:'left'}}>{notificationToast.text}</button>}
 
 

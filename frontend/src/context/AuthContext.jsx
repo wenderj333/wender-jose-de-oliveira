@@ -209,7 +209,12 @@ export function AuthProvider({ children }) {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Erro ao atualizar foto de perfil');
 
-    const updatedUser = { ...user, avatar_url: data.user.avatar_url || data.user.photoURL, photoURL: data.user.photoURL || data.user.avatar_url };
+    // O perfil devolve a foto no nível principal, enquanto alguns fluxos de
+    // autenticação devolvem dentro de `user`. Aceitamos ambos para a imagem
+    // ficar realmente guardada após o registo.
+    const avatarUrl = data?.user?.avatar_url || data?.user?.photoURL || data?.avatar_url || data?.photoURL;
+    if (!avatarUrl) throw new Error('Não foi possível guardar a foto de perfil.');
+    const updatedUser = { ...user, avatar_url: avatarUrl, photoURL: avatarUrl };
     setUser(updatedUser);
     localStorage.setItem('user', JSON.stringify(updatedUser));
     return updatedUser;

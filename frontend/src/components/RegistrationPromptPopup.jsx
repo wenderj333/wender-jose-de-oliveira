@@ -20,7 +20,6 @@ async function uploadToCloudinary(file) {
 }
 
 function RegistrationPromptPopup({ isOpen, onClose }) {
-  return null; // Desativado
   const { t } = useTranslation();
   const { user, updateProfilePhoto } = useAuth();
   const [avatarFile, setAvatarFile] = useState(null);
@@ -72,18 +71,9 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
     }
   };
 
-  // Prevent closing the modal if user is logged in and needs a photo
-  const handleOverlayClick = (e) => {
-    if (user && !user.photoURL && !user.avatar_url) {
-      e.stopPropagation();
-    } else {
-      onClose();
-    }
-  };
-
   return (
-    <div className="registration-popup-overlay" onClick={handleOverlayClick} style={{ pointerEvents: 'none' }}>
-      <div classNameName="registration-popup-content" onClick={(e) => e.stopPropagation()} style={{
+    <div className="registration-popup-overlay" onClick={onClose} style={{ position:'fixed', inset:0, zIndex:1000, display:'grid', placeItems:'center', padding:18, background:'rgba(30,20,54,.42)', backdropFilter:'blur(4px)' }}>
+      <div className="registration-popup-content" onClick={(e) => e.stopPropagation()} style={{
           padding: '30px',
           borderRadius: '16px',
           maxWidth: '400px',
@@ -95,19 +85,17 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
           border: '1px solid rgba(218,165,32,0.3)',
           position: 'relative',
         }}>
-        {user && !user.photoURL && !user.avatar_url && (
-          <button className="registration-popup-close" onClick={(e) => { e.stopPropagation(); setError('Por favor, faça upload de uma foto para continuar.'); }} style={{
+        <button className="registration-popup-close" aria-label="Agora não" onClick={onClose} style={{
             position: 'absolute', top: '15px', right: '15px',
             background: 'none', border: 'none', color: '#aaa', cursor: 'pointer',
             fontSize: '1.2rem',
           }}><X size={20} /></button>
-        )}
         <Camera size={50} style={{ color: 'var(--gold)', marginBottom: '15px' }} />
         <h3 className="popup-title" style={{ fontSize: '1.5rem', marginBottom: '10px', fontWeight: '700' }}>
           {t('profile.addPhotoPrompt', 'Adicione sua foto de perfil!')}
         </h3>
         <p style={{ fontSize: '0.9rem', color: '#bbb', marginBottom: '25px' }}>
-          {t('profile.addPhotoDesc', 'É obrigatório ter uma foto para interagir na comunidade.')}
+          {t('profile.addPhotoDesc', 'A sua foto ajuda os irmãos a reconhecerem você no mural, nas conversas e no Duelo Bíblico.')}
         </p>
 
         <div style={{ marginBottom: '20px' }}>
@@ -153,6 +141,9 @@ function RegistrationPromptPopup({ isOpen, onClose }) {
           }}
         >
           {uploading ? '📤 A subir...' : <><Upload size={18} /> Subir Foto e Continuar</>}
+        </button>
+        <button type="button" onClick={onClose} disabled={uploading} style={{ marginTop:12, border:0, background:'transparent', color:'#d4c6eb', cursor:'pointer', fontWeight:700, fontSize:13 }}>
+          {t('common.later', 'Fazer isso mais tarde')}
         </button>
       </div>
     </div>

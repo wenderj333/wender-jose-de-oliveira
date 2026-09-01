@@ -89,6 +89,9 @@ export default function Register() {
     try {
       await register(form.email, form.password, form.full_name, form.role, null, form.email_updates_opt_in);
       trackSignUpEvent();
+      // Só uma pessoa que acabou de concluir o registo recebe este convite.
+      // Não mostramos o pedido durante o formulário nem aos membros antigos.
+      sessionStorage.setItem('sigo_show_photo_prompt', '1');
       navigate(nextPage); // Navegar para a página inicial após o registo
     } catch (err) {
       setError(err.message);
