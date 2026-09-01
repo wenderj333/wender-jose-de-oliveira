@@ -619,6 +619,15 @@ const { Server: SocketServer } = require('socket.io');
 const jogadoresOnline = {};
 const ioduelo = new SocketServer(server, { cors: { origin: '*' }, path: '/duelo/socket.io' });
 
+// Retratos pequenos mostrados no Duelo: URL ou imagem compacta escolhida pela pessoa.
+function fotoDueloSegura(valor) {
+  if (typeof valor !== 'string') return null;
+  const foto = valor.trim();
+  if (/^https?:\/\//i.test(foto)) return foto.slice(0, 2000);
+  if (/^data:image\/(png|jpe?g|webp);base64,/i.test(foto) && foto.length <= 180000) return foto;
+  return null;
+}
+
 function jogadorEstaEmPartida(socketId) {
   return Object.values(duelSalas).some(sala => sala.j.some(jogador => jogador.id === socketId));
 }
@@ -649,13 +658,13 @@ ioduelo.on('connection', (socket) => {
   socket.on('registrarJogador', (d = {}) => {
     const nome = String(d.nome || '').trim();
     if (!nome) return;
-    jogadoresOnline[socket.id] = { nome, foto: d.foto || null, socketId: socket.id, lang: d.idioma || 'pt' };
+    jogadoresOnline[socket.id] = { nome, foto: fotoDueloSegura(d.foto), socketId: socket.id, lang: d.idioma || 'pt' };
   });
 
   socket.on('jogarComBot', (d) => {
     const lang = d.idioma || 'pt';
     const nome = d.nome || 'Jogador';
-    const foto = d.foto || null;
+    const foto = fotoDueloSegura(d.foto);
     // O bot não entra nesta lista: ela deve conter apenas pessoas reais.
     jogadoresOnline[socket.id] = { nome, foto, socketId: socket.id, lang };
     const sid = 'bot_' + Date.now();
@@ -667,7 +676,7 @@ ioduelo.on('connection', (socket) => {
   });
   socket.on('procurarPartida', (d) => {
     const lang = d.idioma || 'pt';
-    const fotoRaw = d.foto || null; const foto = fotoRaw && fotoRaw.startsWith('http') ? fotoRaw : (fotoRaw && fotoRaw.length < 5000 ? fotoRaw : null);
+    const foto = fotoDueloSegura(d.foto);
     const nome = d.nome || 'Jogador';
     jogadoresOnline[socket.id] = { nome, foto, socketId: socket.id, lang };
     if (!duelEsperando) {

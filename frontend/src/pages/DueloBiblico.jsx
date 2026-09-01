@@ -19,7 +19,9 @@ export default function DueloBiblico() {
       user: {
         nome: user?.full_name || user?.name || 'Jogador',
         nomeDiploma: user?.full_name || user?.name || 'Jogador',
-        foto: user?.profile_photo || user?.avatar_url || null,
+        // A conta pode vir do e-mail, Google ou Facebook. Em todos os casos
+        // enviamos a melhor foto disponível para o Duelo.
+        foto: user?.profile_photo || user?.avatar_url || user?.photoURL || user?.photo_url || null,
         token: accessToken || null,
         idioma: lang,
         destaqueRanking: '1.º lugar no Duelo Bíblico'
