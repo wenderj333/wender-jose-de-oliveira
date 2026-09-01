@@ -929,6 +929,36 @@ app.post('/api/duelo/zerar', (req, res) => {
   res.json({ ok: true, msg: 'Ranking zerado!' });
 });
 // ========== FIM RANKING SEMANAL PIX ==========
+// Monitorização simples do Duelo. Guarda apenas códigos técnicos anónimos na
+// memória do servidor; não guarda jogadores, fotos, mensagens ou e-mails.
+const duelIssueLog = [];
+const duelIssueCodes = new Set(['browser_error', 'browser_rejection', 'connection_error', 'connection_lost', 'reconnect_failed']);
+
+app.post('/api/duelo/issue', (req, res) => {
+  const code = String(req.body?.code || 'unknown').slice(0, 50);
+  if (!duelIssueCodes.has(code)) return res.status(400).json({ ok: false });
+  duelIssueLog.push({ code, at: Date.now(), inGame: Boolean(req.body?.in_game) });
+  if (duelIssueLog.length > 200) duelIssueLog.splice(0, duelIssueLog.length - 200);
+  res.json({ ok: true });
+});
+
+app.get('/api/duelo/monitor', (req, res) => {
+  const since = Date.now() - 24 * 60 * 60 * 1000;
+  const issues = duelIssueLog.filter(issue => issue.at >= since);
+  const byCode = issues.reduce((total, issue) => {
+    total[issue.code] = (total[issue.code] || 0) + 1;
+    return total;
+  }, {});
+  res.json({
+    status: 'ok',
+    online: Object.keys(jogadoresOnline).length,
+    waiting: Boolean(duelEsperando),
+    active_matches: Object.keys(duelSalas).length,
+    issues_last_24h: issues.length,
+    issues: byCode
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', name: 'Sigo com Fé API', version: '1.0.0' });
