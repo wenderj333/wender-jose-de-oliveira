@@ -1,11 +1,28 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth, googleProvider, facebookProvider } from '../firebase';
-import { signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { signInWithPopup, onAuthStateChanged, signOut, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 const AuthContext = createContext(null);
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const API = `${API_BASE}/api`;
+
+const GOOGLE_LOGIN_HELP = {
+  pt: 'O Google não conseguiu abrir neste navegador. Abra o link no Chrome ou Safari, ou entre com e-mail e senha abaixo.',
+  es: 'Google no pudo abrirse en este navegador. Abra el enlace en Chrome o Safari, o entre con su correo y contraseña abajo.',
+  en: 'Google could not open in this browser. Open the link in Chrome or Safari, or sign in with your email and password below.',
+  de: 'Google konnte in diesem Browser nicht geöffnet werden. Öffne den Link in Chrome oder Safari oder melde dich unten mit E-Mail und Passwort an.',
+  fr: 'Google n’a pas pu s’ouvrir dans ce navigateur. Ouvrez le lien dans Chrome ou Safari, ou connectez-vous avec votre e-mail et votre mot de passe ci-dessous.',
+  ro: 'Google nu s-a putut deschide în acest browser. Deschide linkul în Chrome sau Safari ori conectează-te mai jos cu e-mailul și parola.',
+  ru: 'Не удалось открыть Google в этом браузере. Откройте ссылку в Chrome или Safari либо войдите ниже с помощью электронной почты и пароля.',
+};
+
+function createGoogleBrowserError() {
+  const language = typeof navigator === 'undefined' ? 'pt' : (navigator.language || 'pt').slice(0, 2).toLowerCase();
+  const error = new Error(GOOGLE_LOGIN_HELP[language] || GOOGLE_LOGIN_HELP.pt);
+  error.code = 'auth/browser-session-unavailable';
+  return error;
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => { try { const s = localStorage.getItem('user'); return s ? JSON.parse(s) : null; } catch(e) { return null; } });
@@ -32,23 +49,6 @@ export function AuthProvider({ children }) {
     localStorage.setItem('user', JSON.stringify(data.user));
     return data;
   };
-
-  // Handle redirect result (mobile Google sign-in)
-  useEffect(() => {
-    getRedirectResult(auth).then(async (result) => {
-      if (result?.user) {
-        try {
-          await syncFirebaseUser(result.user);
-          // Redirect to home after successful Google login on mobile
-          if (window.location.pathname === '/login' || window.location.pathname === '/cadastro') {
-            window.location.href = '/';
-          }
-        } catch (e) {
-          // Backend offline, ignore
-        }
-      }
-    }).catch(() => {});
-  }, []);
 
   // Listen for Firebase auth state changes (for page reload with active Google session)
   useEffect(() => {
@@ -115,15 +115,13 @@ export function AuthProvider({ children }) {
 
   const loginWithGoogle = async () => {
     try {
-      // Try popup first (works on desktop and some mobile browsers)
       const result = await signInWithPopup(auth, googleProvider);
       return await syncFirebaseUser(result.user);
     } catch (err) {
-      // If popup blocked/failed on mobile, fall back to redirect
-      if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
-        await signInWithRedirect(auth, googleProvider);
-        return; // Page will reload ÔÇö redirect result handled in useEffect
-      }
+      // Redirect authentication fails in browsers that partition or erase
+      // session storage (common in social-app browsers). Keep the person on
+      // this page and offer the reliable email/password route instead.
+      if (err.code === 'auth/popup-blocked' || err.code === 'auth/cancelled-popup-request') throw createGoogleBrowserError();
       throw err;
     }
   };
@@ -133,10 +131,7 @@ export function AuthProvider({ children }) {
       const result = await signInWithPopup(auth, facebookProvider);
       return await syncFirebaseUser(result.user);
     } catch (err) {
-      if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
-        await signInWithRedirect(auth, facebookProvider);
-        return;
-      }
+      if (err.code === 'auth/popup-blocked' || err.code === 'auth/cancelled-popup-request') throw createGoogleBrowserError();
       throw err;
     }
   };

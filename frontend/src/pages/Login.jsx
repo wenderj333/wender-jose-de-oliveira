@@ -14,7 +14,7 @@ export default function Login() {
   React.useEffect(() => { if (user) navigate(returnTo, { replace: true }); }, [user, returnTo, navigate]);
   const handleGoogle = async () => {
     try { await loginWithGoogle(); navigate(returnTo, { replace: true }); }
-    catch (err) { setError("Erro ao entrar com Google"); }
+    catch (err) { if (err.code !== 'auth/popup-closed-by-user') setError(err.message || "Não foi possível entrar com Google"); }
   };
   const handleSubmit = async (e) => {
     e.preventDefault(); setLoading(true); setError("");
@@ -31,6 +31,7 @@ export default function Login() {
         </div>
         {error && <div style={{ background:"#fff0f0", padding:10, borderRadius:8, color:"#c00", marginBottom:16 }}>{error}</div>}
         <button onClick={handleGoogle} style={{ width:"100%", padding:"12px", borderRadius:10, border:"1px solid #ddd", cursor:"pointer", fontWeight:600, marginBottom:20, fontSize:15 }}>Entrar com Google</button>
+        <p style={{ margin:"-10px 0 18px", color:"#6b6180", fontSize:12, lineHeight:1.4, textAlign:"center" }}>Se o Google não abrir, entre com e-mail e senha abaixo ou abra o link no Chrome/Safari.</p>
         <form onSubmit={handleSubmit}>
           <input type="email" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} required style={{ width:"100%", padding:"12px", borderRadius:10, border:"1.5px solid #e0d0f0", marginBottom:12, boxSizing:"border-box", fontSize:15 }} />
           <input type="password" placeholder="Senha" value={password} onChange={e=>setPassword(e.target.value)} required style={{ width:"100%", padding:"12px", borderRadius:10, border:"1.5px solid #e0d0f0", marginBottom:20, boxSizing:"border-box", fontSize:15 }} />
