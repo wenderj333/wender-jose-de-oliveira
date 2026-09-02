@@ -59,7 +59,7 @@ const CATEGORIES_CONFIG = [
 
 const getCatColor = (type) => CATEGORIES_CONFIG.find(c => c.value === type)?.color || '#888';
 
-function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay, onPause: externalOnPause, onEnded: externalOnEnded, compact = false }) {
+function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay, onPause: externalOnPause, onEnded: externalOnEnded, onAudioNode, compact = false }) {
   const { t } = useTranslation(); // Add useTranslation
   const audioRef = useRef(null);
   const playerId = useRef(`mural-audio-${Math.random().toString(36).slice(2)}`);
@@ -76,6 +76,12 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
       }
     }
   }, [playing]);
+
+  // Permite que um vídeo associado mantenha esta música no mesmo instante.
+  useEffect(() => {
+    onAudioNode?.(audioRef.current);
+    return () => onAudioNode?.(null);
+  }, [onAudioNode]);
 
   // Mantém o mural calmo: iniciar uma faixa para imediatamente qualquer outra.
   useEffect(() => {
@@ -306,6 +312,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const isOwner = user != null && (user.id === post.author_id || user.id === post.user_id);
 
   const videoRef = useRef(null);
+  const musicAudioRef = useRef(null);
   const recordRef = useRef(null);
   const [isMuted, setIsMuted] = useState(true);
   const [imageModal, setImageModal] = useState(null);
@@ -384,11 +391,24 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       observer.disconnect();
     };
   }, [musicUrl, isImage]);
+  const syncMusicWithVideo = (video) => {
+    const audio = musicAudioRef.current;
+    if (!audio || !Number.isFinite(video?.currentTime)) return;
+    // Pequenos milissegundos de diferença são normais. Corrigimos apenas
+    // quando a faixa realmente ficou fora do tempo do vídeo.
+    if (Math.abs(audio.currentTime - video.currentTime) > 0.35) {
+      audio.currentTime = video.currentTime;
+    }
+  };
+
   const handleInternalVideoPlay = () => {
+    syncMusicWithVideo(videoRef.current);
+    if (musicUrl) setIsMusicPlaying(true);
     onVideoPlay(post.id); // Notify parent that this video is playing
   };
 
   const handleInternalVideoPause = () => {
+    if (musicUrl) setIsMusicPlaying(false);
     onVideoPause(post.id); // Notify parent that this video is paused
   };
 
@@ -472,8 +492,10 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             onCanPlay={e => { e.currentTarget.muted = true; e.currentTarget.play().catch(() => {}); }}
             onPlay={handleInternalVideoPlay}
             onPause={handleInternalVideoPause}
+            onTimeUpdate={e => syncMusicWithVideo(e.currentTarget)}
+            onSeeking={e => syncMusicWithVideo(e.currentTarget)}
           />
-          {musicUrl && <div style={{ position: 'absolute', right: 14, bottom: 14, zIndex: 2 }}><MiniAudioPlayer compact src={musicUrl} isPlaying={isMusicPlaying} onPlay={() => setIsMusicPlaying(true)} onPause={() => setIsMusicPlaying(false)} onEnded={() => setIsMusicPlaying(false)} /></div>}
+          {musicUrl && <div style={{ position: 'absolute', right: 14, bottom: 14, zIndex: 2 }}><MiniAudioPlayer compact src={musicUrl} isPlaying={isMusicPlaying} onAudioNode={node => { musicAudioRef.current = node; }} onPlay={() => { syncMusicWithVideo(videoRef.current); videoRef.current?.play().catch(() => {}); setIsMusicPlaying(true); }} onPause={() => { videoRef.current?.pause(); setIsMusicPlaying(false); }} onEnded={() => setIsMusicPlaying(false)} /></div>}
         </div>
       )}      {isImage && (
         <div style={{ width: '100%', height: 'clamp(220px, 48vw, 420px)', overflow: 'hidden', background: 'linear-gradient(135deg,#f3f6fb,#eef1f8)', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
