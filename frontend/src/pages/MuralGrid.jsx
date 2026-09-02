@@ -59,7 +59,7 @@ const CATEGORIES_CONFIG = [
 
 const getCatColor = (type) => CATEGORIES_CONFIG.find(c => c.value === type)?.color || '#888';
 
-function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay, onPause: externalOnPause, onEnded: externalOnEnded }) {
+function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay, onPause: externalOnPause, onEnded: externalOnEnded, compact = false }) {
   const { t } = useTranslation(); // Add useTranslation
   const audioRef = useRef(null);
   const playerId = useRef(`mural-audio-${Math.random().toString(36).slice(2)}`);
@@ -143,19 +143,36 @@ function MiniAudioPlayer({ src, isPlaying: propIsPlaying, onPlay: externalOnPlay
     </div>
   ) : null;
 
+  const audioElement = (
+    <audio
+      ref={audioRef}
+      src={src}
+      onTimeUpdate={handleTimeUpdate}
+      onEnded={handleEnded}
+      onPlay={handleOnPlay}
+      onPause={handleOnPause}
+      preload="metadata"
+    />
+  );
+
+  // Nas fotos e vídeos a música fica num botão sobre a imagem, não numa barra
+  // grande por baixo. Assim continua fácil de ouvir sem poluir o mural.
+  if (compact) {
+    return (
+      <div style={{ position: 'relative' }}>
+        {audioElement}
+        <button type="button" onClick={toggle} title={playing ? 'Pausar música' : 'Ouvir música'} aria-label={playing ? 'Pausar música' : 'Ouvir música'} style={{ width: 42, height: 42, borderRadius: '50%', background: 'rgba(30,20,55,.86)', border: '1px solid rgba(255,255,255,.55)', cursor: 'pointer', display: 'grid', placeItems: 'center', color: '#fff', boxShadow: '0 3px 12px rgba(0,0,0,.28)' }}>
+          {playing ? <Pause size={18} /> : <Music size={18} />}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div>
       {guestBar}
     <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(102,126,234,0.12)', border: '1px solid rgba(102,126,234,0.3)', borderRadius: 12, padding: '6px 10px', marginTop: 6 }}>
-      <audio
-        ref={audioRef}
-        src={src}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={handleEnded}
-        onPlay={handleOnPlay}
-        onPause={handleOnPause}
-        preload="metadata"
-      />
+      {audioElement}
       <button onClick={toggle} style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,#7a9e7e,#c4b89a)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0 }}>
         {playing ? <Pause size={16} /> : <Play size={16} />}
       </button>
@@ -439,7 +456,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       </div>
 
       {isVideo && (
-        <div style={{ background: '#000', position: 'relative' }}>
+        <div style={{ background: '#09090d', position: 'relative', height: 'min(76vh, 720px)', minHeight: 360, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <video
             ref={(node) => { videoRef.current = node; onVideoNode?.(post.id, node); }}
             data-post-id={post.id}
@@ -451,15 +468,17 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             preload="metadata"
             muted={isMuted}
             poster={videoPoster || undefined}
-            style={{ width: '100%', maxHeight: 400, objectFit: 'contain', display: 'block' }}
+            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
             onCanPlay={e => { e.currentTarget.muted = true; e.currentTarget.play().catch(() => {}); }}
             onPlay={handleInternalVideoPlay}
             onPause={handleInternalVideoPause}
           />
+          {musicUrl && <div style={{ position: 'absolute', right: 14, bottom: 14, zIndex: 2 }}><MiniAudioPlayer compact src={musicUrl} isPlaying={isMusicPlaying} onPlay={() => setIsMusicPlaying(true)} onPause={() => setIsMusicPlaying(false)} onEnded={() => setIsMusicPlaying(false)} /></div>}
         </div>
       )}      {isImage && (
-        <div style={{ width: '100%', height: 'clamp(220px, 48vw, 420px)', overflow: 'hidden', background: 'linear-gradient(135deg,#f3f6fb,#eef1f8)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ width: '100%', height: 'clamp(220px, 48vw, 420px)', overflow: 'hidden', background: 'linear-gradient(135deg,#f3f6fb,#eef1f8)', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           <img src={mediaUrl} alt="post" loading="lazy" onClick={() => setImageModal(mediaUrl)} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', cursor: 'zoom-in' }} />
+          {musicUrl && <div style={{ position: 'absolute', right: 14, bottom: 14, zIndex: 2 }}><MiniAudioPlayer compact src={musicUrl} isPlaying={isMusicPlaying} onPlay={() => setIsMusicPlaying(true)} onPause={() => setIsMusicPlaying(false)} onEnded={() => setIsMusicPlaying(false)} /></div>}
         </div>
       )}
 
