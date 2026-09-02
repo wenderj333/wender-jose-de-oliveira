@@ -476,7 +476,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       </div>
 
       {isVideo && (
-        <div style={{ background: '#09090d', position: 'relative', height: 'min(76vh, 720px)', minHeight: 360, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ background: '#09090d', position: 'relative', width: 'min(100%, 430px)', aspectRatio: '9 / 16', maxHeight: '76vh', margin: '0 auto', overflow: 'hidden' }}>
           <video
             ref={(node) => { videoRef.current = node; onVideoNode?.(post.id, node); }}
             data-post-id={post.id}
@@ -488,7 +488,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             preload="metadata"
             muted={isMuted}
             poster={videoPoster || undefined}
-            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             onCanPlay={e => { e.currentTarget.muted = true; e.currentTarget.play().catch(() => {}); }}
             onPlay={handleInternalVideoPlay}
             onPause={handleInternalVideoPause}
