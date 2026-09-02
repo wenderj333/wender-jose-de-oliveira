@@ -313,6 +313,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 
   const videoRef = useRef(null);
   const musicAudioRef = useRef(null);
+  const userStartedVideoRef = useRef(false);
   const recordRef = useRef(null);
   const [isMuted, setIsMuted] = useState(true);
   const [imageModal, setImageModal] = useState(null);
@@ -358,9 +359,6 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         if (!isMuted) { // Only set volume if not muted by user
           videoRef.current.volume = musicUrl ? 0.3 : 1.0; // Set video volume to 30% if music, else 100%
         }
-        if (musicUrl) {
-            setIsMusicPlaying(true);
-        }
       } else {
         videoRef.current.pause();
         if (musicUrl) {
@@ -403,7 +401,10 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
 
   const handleInternalVideoPlay = () => {
     syncMusicWithVideo(videoRef.current);
-    if (musicUrl) setIsMusicPlaying(true);
+    // O navegador só permite iniciar áudio depois de uma ação da pessoa.
+    // Assim o vídeo pode ficar em reprodução automática silenciosa, sem
+    // mostrar erro nem tentar tocar música até a pessoa apertar play.
+    if (musicUrl && userStartedVideoRef.current) setIsMusicPlaying(true);
     onVideoPlay(post.id); // Notify parent that this video is playing
   };
 
@@ -476,7 +477,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       </div>
 
       {isVideo && (
-        <div style={{ background: '#09090d', position: 'relative', width: 'min(100%, 430px)', aspectRatio: '9 / 16', maxHeight: '76vh', margin: '0 auto', overflow: 'hidden' }}>
+        <div style={{ background: '#09090d', position: 'relative', width: 'min(100%, 42.75vh, 405px)', aspectRatio: '9 / 16', margin: '0 auto', overflow: 'hidden' }}>
           <video
             ref={(node) => { videoRef.current = node; onVideoNode?.(post.id, node); }}
             data-post-id={post.id}
@@ -494,6 +495,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
             onPause={handleInternalVideoPause}
             onTimeUpdate={e => syncMusicWithVideo(e.currentTarget)}
             onSeeking={e => syncMusicWithVideo(e.currentTarget)}
+            onPointerDown={() => { userStartedVideoRef.current = true; }}
           />
           {musicUrl && <div style={{ position: 'absolute', right: 14, bottom: 14, zIndex: 2 }}><MiniAudioPlayer compact src={musicUrl} isPlaying={isMusicPlaying} onAudioNode={node => { musicAudioRef.current = node; }} onPlay={() => { syncMusicWithVideo(videoRef.current); videoRef.current?.play().catch(() => {}); setIsMusicPlaying(true); }} onPause={() => { videoRef.current?.pause(); setIsMusicPlaying(false); }} onEnded={() => setIsMusicPlaying(false)} /></div>}
         </div>

@@ -863,6 +863,7 @@ export default function App() {
           <Routes>
 
             <Route path="/" element={<MuralGrid />} />
+            <Route path="/mural" element={<Navigate to="/" replace />} />
 
             <Route path="/login" element={<Navigate to="/" replace />} />
             <Route path="/register" element={<Register />} />
