@@ -6,8 +6,19 @@ const { authenticate, JWT_SECRET } = require('../middleware/auth');
 const DEFAULT_VISIBILITY = { personal: 'friends', church: 'public', faith: 'public', bio: 'public' };
 const ALLOWED_VISIBILITY = new Set(['public', 'friends', 'private']);
 
-db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS profile_visibility JSONB NOT NULL DEFAULT '{"personal":"friends","church":"public","faith":"public","bio":"public"}'::jsonb`)
-  .catch(error => console.error('Profile visibility migration:', error.message));
+const profileColumnsReady = (async () => {
+  const columns = [
+    'cover_url TEXT', 'city TEXT', 'country TEXT', 'profession TEXT', 'work TEXT',
+    'birthdate TEXT', 'marital_status TEXT', 'favorite_verse TEXT', 'testimony TEXT',
+    'church_name TEXT', 'church_denomination TEXT', 'faith_years TEXT', 'ministry TEXT',
+    'email_updates_opt_in BOOLEAN NOT NULL DEFAULT false',
+"profile_visibility JSONB NOT NULL DEFAULT '{\"personal\":\"friends\",\"church\":\"public\",\"faith\":\"public\",\"bio\":\"public\"}'::jsonb"
+  ];
+  for (const column of columns) await db.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS ' + column);
+})().catch(error => {
+  console.error('Profile columns migration:', error.message);
+  throw error;
+});
 
 function viewerId(req) {
   const header = req.headers.authorization;
@@ -27,6 +38,7 @@ function canSee(audience, isOwner, isFriend) {
 
 router.get('/:userId', async (req, res) => {
   try {
+    await profileColumnsReady;
     const { userId } = req.params;
     const currentViewerId = viewerId(req);
     const result = await db.query(`SELECT id, full_name, email, role, avatar_url, cover_url, bio,
@@ -69,6 +81,7 @@ router.get('/:userId', async (req, res) => {
 
 router.patch('/photo', authenticate, async (req, res) => {
   try {
+    await profileColumnsReady;
     const { photoURL } = req.body;
     const userId = req.user.id;
     if (!photoURL) return res.status(400).json({ error: 'photoURL is required' });
@@ -80,6 +93,7 @@ router.patch('/photo', authenticate, async (req, res) => {
 
 router.patch('/', authenticate, async (req, res) => {
   try {
+    await profileColumnsReady;
     const userId = req.user.id;
     const { full_name, bio, city, country, profession, marital_status, church_name, denomination,
       christian_years, favorite_verse, testimony, avatar_url, cover_url, birth_date, ministry,

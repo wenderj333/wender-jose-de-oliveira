@@ -88,8 +88,16 @@ function ProfileContent() {
   useEffect(() => { setAvatarFailed(false); }, [targetId]);
   useEffect(() => {
     if (!targetId || !token) return;
+    setLoading(true);
+    setUser(null);
     fetch(API + "/profile/" + targetId, { headers: { Authorization: "Bearer " + token } })
-      .then(r => r.json()).then(d => { setUser(d?.user || d || null); setLoading(false); }).catch(() => setLoading(false));
+      .then(async response => {
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data?.user) throw new Error(data?.error || 'Perfil indisponível');
+        return data.user;
+      })
+      .then(profile => { setUser(profile); setLoading(false); })
+      .catch(() => { setUser(null); setLoading(false); });
     fetch(API + "/feed", { headers: { Authorization: "Bearer " + token } })
       .then(r => r.json()).then(d => setUserPosts((Array.isArray(d?.posts) ? d.posts : []).filter(p => p && (p.user_id === targetId || p.author_id === targetId)))).catch(() => {});
     fetch(API + "/photos/" + targetId, { headers: { Authorization: "Bearer " + token } })
