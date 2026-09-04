@@ -71,7 +71,7 @@ export default function PrayerPlaza() {
     <div className="prayer-plaza">
       <section className="prayer-plaza__hero">
         <span><Sparkles size={17}/> Sigo com Fé · unidos em oração</span>
-        <h1>Praça Mundial de Oração</h1>
+        <h1>Oração Mundial</h1>
         <p>Igrejas de diferentes lugares orando juntas pelas pessoas. Cada bolha é uma igreja numa sessão real de oração.</p>
         <div className="prayer-plaza__stats"><strong><Radio size={18}/> {totalChurchesPraying} igreja{totalChurchesPraying === 1 ? '' : 's'} em oração agora</strong><span><Users size={18}/> Toque numa bolha para participar</span></div>
       </section>
