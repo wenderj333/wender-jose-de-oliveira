@@ -46,6 +46,7 @@ function ProfileContent() {
   const [postLikeCounts, setPostLikeCounts] = useState({});
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [avatarFailed, setAvatarFailed] = useState(false);
   const [editingMedia, setEditingMedia] = useState(false);
   const [mediaCaption, setMediaCaption] = useState("");
   const [mediaVisibility, setMediaVisibility] = useState("public");
@@ -84,6 +85,7 @@ function ProfileContent() {
   };
   const targetId = userId || currentUser?.id;
   const isOwner = !userId || userId === currentUser?.id;
+  useEffect(() => { setAvatarFailed(false); }, [targetId]);
   useEffect(() => {
     if (!targetId || !token) return;
     fetch(API + "/profile/" + targetId, { headers: { Authorization: "Bearer " + token } })
@@ -163,6 +165,8 @@ function ProfileContent() {
   };
   if (loading) return <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}><Loader2 className="animate-spin" /></div>;
   if (!user) return <div style={{ textAlign: "center", padding: "20px" }}>{t("profile.notFound","Utilizador nao encontrado.")}</div>;
+  const avatarInitials = (user.full_name || user.username || '?').trim().split(/\s+/).slice(0, 2).map(part => part[0]).join('').toUpperCase();
+  const showAvatar = Boolean(user.avatar_url) && !avatarFailed;
   const tabs = [["all", t("profile.allPosts","Todas")], ["foto", t("profile.photos","Fotos")], ["video", t("profile.videos","Videos")]];
   const galleryItems = photos.filter(Boolean).map(ph => ({ ...ph, media_url: ph.url, _isGallery: true }));
   const isVideo = (post = {}) => post.media_type === "video" || post.media_url?.includes("/video/") || /\.(mp4|webm|mov)(\?|$)/i.test(post.media_url || "");
@@ -181,7 +185,7 @@ function ProfileContent() {
       <div style={{ padding: "20px" }}>
         <header style={{ display: "flex", alignItems: "center", marginBottom: "30px", gap: "30px", flexWrap: "wrap" }}>
           <div style={{ position: "relative", flexShrink: 0 }}>
-            <img src={user.avatar_url || "/pro.jpg"} onClick={() => user.avatar_url && setShowAvatarModal(true)} style={{ width: "120px", height: "120px", borderRadius: "50%", objectFit: "cover", border: "1px solid #dbdbdb", cursor: user.avatar_url ? "zoom-in" : "default" }} onError={e => e.target.src = "/pro.jpg"} />
+            {showAvatar ? <img src={user.avatar_url} alt={`Foto de ${user.full_name || 'perfil'}`} onClick={() => setShowAvatarModal(true)} style={{ width: "120px", height: "120px", borderRadius: "50%", objectFit: "cover", border: "1px solid #dbdbdb", cursor: "zoom-in" }} onError={() => setAvatarFailed(true)} /> : <div aria-label={`Perfil de ${user.full_name || 'membro'}`} style={{ width: "120px", height: "120px", borderRadius: "50%", background: "linear-gradient(135deg,#6C3FA0,#b878cf)", color: "white", border: "1px solid #dbdbdb", display: "grid", placeItems: "center", fontSize: 36, fontWeight: 800 }}>{avatarInitials}</div>}
             <button onClick={() => { if (!amenDado) { setAmens(a => a + 1); setAmenDado(true); } }} style={{ position: "absolute", bottom: 4, right: 4, background: amenDado ? "#6C3FA0" : "white", border: "2px solid #6C3FA0", borderRadius: "50%", width: 34, height: 34, cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center" }}>🙏</button>
             {amens > 0 && <span style={{ position: "absolute", bottom: 4, left: 0, background: "#6C3FA0", color: "white", borderRadius: 12, padding: "2px 6px", fontSize: 11, fontWeight: "bold" }}>{amens}</span>}
           </div>
@@ -318,7 +322,7 @@ function ProfileContent() {
           })}{displayPosts.length === 0 && <div style={{ gridColumn: "1/-1", textAlign: "center", padding: 40, color: "#999" }}>{t("profile.noPosts","Nenhuma publicacao ainda.")}</div>}</div>)}
         {isOwner && <button onClick={() => setShowUploader(true)} style={{ background: "#6C3FA0", color: "white", border: "none", borderRadius: 8, padding: "10px 16px", cursor: "pointer", fontSize: 14, marginBottom: 12, marginTop: 10, fontWeight:700 }}>+ Adicionar foto ou vídeo</button>}
         {currentIndex !== null && <PhotoModal url={photos[currentIndex].url} onClose={closePhoto} onNext={nextPhoto} onPrev={prevPhoto} />}
-        {showAvatarModal && (
+        {showAvatar && showAvatarModal && (
           <div onClick={() => setShowAvatarModal(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div onClick={e => e.stopPropagation()} style={{ position: "relative" }}>
               <img src={user.avatar_url} alt="" style={{ maxWidth: "90vw", maxHeight: "90vh", borderRadius: 16, objectFit: "contain" }} />
