@@ -628,7 +628,7 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
       style.textContent = `.sf-mural-chest{position:relative!important;overflow:visible!important;background:linear-gradient(155deg,#a96525,#512307 62%,#2c1205)!important;border:2px solid #f5ca5e!important;box-shadow:0 8px 0 #3a1806,0 15px 25px rgba(117,73,12,.28)!important;animation:sfChestFloat 2.8s ease-in-out infinite}.sf-mural-chest:before{content:'';position:absolute;left:7px;right:7px;top:-10px;height:25px;border:2px solid #f7d171;border-bottom:0;border-radius:11px 11px 4px 4px;background:linear-gradient(#d99a42,#754015);transform-origin:bottom;transition:transform .5s}.sf-mural-chest:after{content:'✦  ✧  ✦';position:absolute;top:-30px;left:0;right:0;color:#ffe99b;font-size:16px;opacity:.9;animation:sfChestSparkle 1.7s ease-in-out infinite}.sf-mural-chest.sf-opening:before{transform:rotateX(70deg) translateY(-8px)}.sf-mural-chest.sf-opening:after{animation:sfChestBurst .55s ease-out forwards}.sf-opened-chest{position:relative;overflow:hidden;margin:18px auto 10px;max-width:680px;padding:34px 24px 25px;border:2px solid #f7d171;border-radius:16px;background:linear-gradient(155deg,#b66f27,#552407 58%,#2e1205);box-shadow:0 10px 0 #3a1806,0 20px 28px rgba(117,73,12,.28);color:#fff8df}.sf-opened-chest:before{content:'';position:absolute;left:18px;right:18px;top:0;height:28px;border:2px solid #f7d171;border-top:0;border-radius:0 0 16px 16px;background:linear-gradient(#e0a047,#794116)}.sf-opened-chest:after{content:'✦   ✧   ✦';position:absolute;top:6px;left:0;right:0;text-align:center;color:#fff0a7;letter-spacing:18px;animation:sfChestSparkle 1.7s ease-in-out infinite}@keyframes sfChestFloat{50%{transform:translateY(-5px)}}@keyframes sfChestSparkle{50%{opacity:.25;transform:translateY(-5px)}}@keyframes sfChestBurst{to{opacity:0;transform:translateY(-30px) scale(1.8)}}@media (prefers-reduced-motion:reduce){.sf-mural-chest,.sf-mural-chest:after,.sf-opened-chest:after{animation:none!important}}`;
       document.head.appendChild(style);
     }
-    const titles = MULTILINGUAL_SURPRISES.flatMap(box => Object.values(box.title));
+    const titles = [];
     const buttons = [...document.querySelectorAll('button')].filter(button => titles.includes(button.querySelector('strong')?.textContent?.trim()));
     const handlers = buttons.map(button => {
       button.classList.add('sf-mural-chest');
@@ -644,22 +644,28 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
   const share = async () => { if (!message) return; const body = `${verseText}\n— ${verseRef}\nSigo com Fé`; try { if (navigator.share) await navigator.share({ title: 'Palavra do dia', text: body }); else await navigator.clipboard.writeText(body); } catch (_) {} };
   const publish = () => onPublish?.({ content: `“${verseText}”\n— ${verseRef}` });
   const showingMessage = message && !showBoxes;
+  const giftMotion = `.sf-daily-gift{position:relative;overflow:visible;isolation:isolate}.sf-daily-gift:before{content:'';position:absolute;z-index:0;left:12%;right:12%;top:9%;height:38%;border-radius:10px 10px 4px 4px;background:linear-gradient(135deg,#ffb0c0,#e83e6b);box-shadow:inset 0 -3px 0 rgba(140,18,56,.22);transform-origin:bottom;animation:sfGiftLid 2.8s ease-in-out infinite}.sf-daily-gift:after{content:'🎀';position:absolute;z-index:3;top:7%;left:50%;transform:translateX(-50%);font-size:17px;animation:sfGiftBow 2.8s ease-in-out infinite}.sf-daily-gift .gift-icon,.sf-daily-gift strong,.sf-daily-gift small{position:relative;z-index:2}.sf-daily-gift.is-opening:before{animation:sfGiftOpen .55s ease-out forwards}.sf-daily-gift.is-opening:after{animation:sfGiftPop .55s ease-out forwards}@keyframes sfGiftLid{0%,100%{transform:rotateX(0)}45%{transform:rotateX(14deg) translateY(-3px)}55%{transform:rotateX(0)}}@keyframes sfGiftBow{0%,100%{margin-top:0}45%{margin-top:-4px}55%{margin-top:0}}@keyframes sfGiftOpen{to{transform:rotateX(73deg) translateY(-12px)}}@keyframes sfGiftPop{to{opacity:0;transform:translateX(-50%) translateY(-23px) scale(1.35)}}@media (prefers-reduced-motion:reduce){.sf-daily-gift:before,.sf-daily-gift:after{animation:none!important}}`;
   if (!expanded && !message) return <section style={{ margin: 0, display: 'flex', justifyContent: 'center' }}>
-    <button type="button" onClick={() => setExpanded(true)} style={{ border: '1px solid #ead49d', borderRadius: 20, padding: '9px 16px', background: '#fffaf0', color: '#8a6818', cursor: 'pointer', fontSize: 13, fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: 7 }}>✨ {copy.open[lang] || copy.open.pt}</button>
+    <style>{giftMotion}</style>
+    <button type="button" onClick={() => setExpanded(true)} aria-label={copy.open[lang] || copy.open.pt} style={{ border: '1px solid #f2bfd0', borderRadius: 18, padding: '6px 12px', background: '#fff8fb', color: '#8c2850', cursor: 'pointer', fontSize: 12, fontWeight: 850, display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 5px 14px rgba(180,52,104,.12)' }}>
+      <span style={{ display: 'inline-flex', gap: 2 }}>{MULTILINGUAL_SURPRISES.map(box => <span key={box.id} className="sf-daily-gift" style={{ width: 25, height: 25, display: 'grid', placeItems: 'center', borderRadius: 7, background: 'linear-gradient(145deg,#ff7d9e,#d93465)', fontSize: 16, boxShadow: '0 3px 0 #ad1f4c' }}><span className="gift-icon">🎁</span></span>)}</span>
+      {copy.open[lang] || copy.open.pt}
+    </button>
   </section>;
   return (
     <section aria-label={copy.choose[lang] || copy.choose.pt} style={{ marginBottom: 20, padding: '18px 16px', borderRadius: 18, background: 'linear-gradient(135deg,#fffaf1,#f6f3ff)', border: '1px solid #eadff3', boxShadow: '0 8px 24px rgba(70,45,100,.08)' }}>
-      {!showingMessage && <div style={{ textAlign: 'center', marginBottom: 14 }}>
+            <style>{giftMotion}</style>
+{!showingMessage && <div style={{ textAlign: 'center', marginBottom: 14 }}>
         <div style={{ fontSize: 22 }}>✨</div>
         <h2 style={{ margin: '2px 0 3px', color: '#30204f', fontSize: 19 }}>{copy.choose[lang] || copy.choose.pt}</h2>
         <p style={{ margin: 0, color: '#756b80', fontSize: 12 }}>{copy.intro[lang] || copy.intro.pt}</p>
       </div>}
       {!showingMessage ? <div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10 }}>
-          {MULTILINGUAL_SURPRISES.map(box => <button key={box.id} type="button" onClick={() => choose(box)} disabled={Boolean(message)} style={{ border: 'none', borderRadius: 14, padding: '15px 8px', color: 'white', background: `linear-gradient(145deg,${box.color},${box.color}cc)`, cursor: message ? 'default' : 'pointer', minHeight: 105, opacity: message && message.id !== box.id ? .55 : 1, boxShadow: '0 6px 14px rgba(56,35,80,.16)', transition: 'transform .2s' }}>
-            <span style={{ display: 'block', fontSize: 28, marginBottom: 6 }}>{box.icon}</span>
-            <strong style={{ display: 'block', fontSize: 14 }}>{box.title[lang] || box.title.en || box.title.pt}</strong>
-            <small style={{ display: 'block', marginTop: 5, opacity: .9, lineHeight: 1.2 }}>{box.hint[lang] || box.hint.en || box.hint.pt}</small>
+          {MULTILINGUAL_SURPRISES.map(box => <button key={box.id} type="button" onClick={() => openChest(box)} disabled={Boolean(message) || Boolean(openingBox)} className={`sf-daily-gift ${openingBox === box.id ? 'is-opening' : ''}`} style={{ border: '1px solid #f4b5c9', borderRadius: 13, padding: '13px 5px 8px', color: '#70203f', background: 'linear-gradient(155deg,#fff8fb,#ffe1eb)', cursor: message || openingBox ? 'default' : 'pointer', minHeight: 88, opacity: message && message.id !== box.id ? .55 : 1, boxShadow: '0 5px 11px rgba(180,52,104,.12)', transition: 'transform .2s' }}>
+            <span className="gift-icon" style={{ display: 'block', fontSize: 24, margin: '3px 0 4px' }}>🎁</span>
+            <strong style={{ display: 'block', fontSize: 11, lineHeight: 1.05 }}>{box.title[lang] || box.title.en || box.title.pt}</strong>
+            <small style={{ display: 'block', marginTop: 4, color: '#9a5370', lineHeight: 1.15, fontSize: 10 }}>{box.hint[lang] || box.hint.en || box.hint.pt}</small>
           </button>)}
         </div>
         {message && <p style={{ margin: '12px 0 0', textAlign: 'center', color: '#756b80', fontSize: 12 }}>{copy.saved[lang] || copy.saved.pt}</p>}
