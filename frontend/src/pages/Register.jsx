@@ -148,6 +148,9 @@ export default function Register() {
         <p style={{ margin: '0 0 1rem', textAlign: 'center', fontSize: '0.78rem', color: '#6b6180', lineHeight: 1.4 }}>
           Se o Google não abrir, use o e-mail e a senha abaixo ou abra o link no Chrome/Safari.
         </p>
+        <Link to="/login" style={{ display: 'flex', width: '100%', boxSizing: 'border-box', alignItems: 'center', justifyContent: 'center', marginBottom: '1.1rem', padding: '12px 16px', borderRadius: 13, border: '1px solid #6b3faf', color: '#5a2d92', background: '#faf8fe', fontWeight: 800, textDecoration: 'none' }}>
+          Já tenho conta — Entrar
+        </Link>
 
         {/* Facebook login - desativado até configurar app no Meta
         <button className="btn" type="button" style={{ width: '100%', marginBottom: '0.5rem', background: '#1877F2', color: '#fff', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.75rem', borderRadius: '8px', fontSize: '1rem', fontWeight: 600, cursor: 'pointer' }} onClick={async () => {

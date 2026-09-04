@@ -256,7 +256,7 @@ export default function Offerings() {
             rows={3} style={{ width: '100%', padding: '10px', borderRadius: 10, border: '1px solid #ddd', fontSize: 14, marginBottom: 12, resize: 'none', boxSizing: 'border-box' }} />
           {payMsg && <p style={{ color: payMsg.includes('Erro') ? '#e74c3c' : '#27ae60', fontSize: 13, marginBottom: 8 }}>{payMsg}</p>}
           <button onClick={handleContribute} disabled={paying || !myChurch}
-            style={{ width: '100%', padding: '14px', borderRadius: 12, border: 'none', background: paying || !myChurch ? '#ccc' : 'linear-gradient(135deg,#667eea,#764ba2)', color: 'white', fontSize: 16, fontWeight: 700, cursor: paying || !myChurch ? 'not-allowed' : 'pointer' }}>
+            style={{ width: '100%', padding: '14px', borderRadius: 12, border: 'none', background: paying || !myChurch ? '#ccc' : 'linear-gradient(135deg,#667eea,#764ba2)', color: '#ffd54a', fontSize: 16, fontWeight: 800, cursor: paying || !myChurch ? 'not-allowed' : 'pointer' }}>
             {paying ? 'A processar...' : `💳 Pagar ${amount ? currency + ' ' + amount : ''}`}
           </button>
         </div>

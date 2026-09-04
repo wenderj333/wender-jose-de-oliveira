@@ -347,7 +347,7 @@ export default function Donation() {
             background: processing || (!selectedAmount && !customAmount) || !selectedPastor
               ? '#ccc' 
               : 'linear-gradient(135deg, #8e44ad, #9b59b6)',
-            color: '#fff',
+            color: '#ffd54a',
             fontSize: '1.1rem',
             fontWeight: 700,
             cursor: processing || (!selectedAmount && !customAmount) || !selectedPastor ? 'not-allowed' : 'pointer',
@@ -384,9 +384,9 @@ export default function Donation() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.5rem' }}>
             <Gift size={18} style={{ color: '#daa520' }} />
-            <span style={{ fontWeight: 600, color: '#1a0a3e' }}>Informações sobre a doação:</span>
+            <span style={{ fontWeight: 700, color: '#b8860b' }}>INFORMAÇÕES DE PAGAMENTO:</span>
           </div>
-          <ul style={{ margin: 0, paddingLeft: '1.2rem', fontSize: '0.9rem', color: '#666' }}>
+          <ul style={{ margin: 0, paddingLeft: '1.2rem', fontSize: '0.9rem', color: '#b8860b', fontWeight: 600 }}>
             <li>🔒 Pagamento 100% seguro via Stripe</li>
             <li>💳 Aceita cartões de crédito e débito</li>
             <li>📧 Você receberá um recibo por email</li>

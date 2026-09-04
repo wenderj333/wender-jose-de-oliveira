@@ -115,14 +115,14 @@ export default function BiblicalFinance() {
                 {price.display}
               </div>
               <button onClick={handleBuy} disabled={buying} style={{
-                background: 'linear-gradient(135deg, #d4af37, #b8941f)', color: '#1a472a', border: 'none',
+                background: 'linear-gradient(135deg, #1a472a, #2d5a27)', color: '#ffd54a', border: 'none',
                 padding: '16px 48px', borderRadius: 12, fontSize: '1.2rem', fontWeight: 800, cursor: 'pointer',
                 boxShadow: '0 4px 20px rgba(212,175,55,0.4)', transform: buying ? 'none' : 'scale(1)',
                 transition: 'all 0.3s',
               }}>
                 {buying ? 'Abrindo pagamento...' : `Comprar por ${price.display}`}
               </button>
-              <p style={{ marginTop: 10, fontSize: '0.85rem', opacity: 0.7 }}>Pagamento seguro via Stripe {'•'} Acesso imediato</p>
+              <p style={{ marginTop: 10, fontSize: '0.85rem', color: '#ffd54a', fontWeight: 700 }}>PAGAMENTO SEGURO via Stripe {'•'} Acesso imediato</p>
             </div>
           )}
           {paid && (
@@ -175,7 +175,7 @@ export default function BiblicalFinance() {
       {!paid && (
         <div style={{ textAlign: 'center', padding: '2rem 1rem 3rem' }}>
           <button onClick={handleBuy} disabled={buying} style={{
-            background: 'linear-gradient(135deg, #d4af37, #b8941f)', color: '#1a472a', border: 'none',
+            background: 'linear-gradient(135deg, #1a472a, #2d5a27)', color: '#ffd54a', border: 'none',
             padding: '16px 48px', borderRadius: 12, fontSize: '1.2rem', fontWeight: 800, cursor: 'pointer',
           }}>
             {buying ? 'Abrindo pagamento...' : `{'💰'} Comprar por ${price.display}`}
