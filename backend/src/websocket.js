@@ -62,6 +62,14 @@ function setupWebSocket(server) {
           case 'game_cancel_queue':
             handleGameQueue(ws, msg);
             break;
+          case 'game_lobby_join':
+          case 'game_lobby_leave':
+          case 'game_lobby_chat':
+          case 'game_invite':
+          case 'game_invite_accept':
+          case 'game_invite_decline':
+            handleDuelLobby(ws, msg);
+            break;
           case 'identify':
             try {
               const decoded = jwt.verify(msg.token, JWT_SECRET);
@@ -388,6 +396,7 @@ function setupWebSocket(server) {
     });
 
     ws.on('close', () => {
+      removeDuelLobbyPlayer(ws);
       // Cleanup live streams
       const info = clients.get(ws);
       if (info?.liveStreamId) {
@@ -468,6 +477,127 @@ function broadcastToStream(wss, streamId, data, excludeWs) {
   }
 }
 
+const duelLobbyPlayers = new Map();
+
+function lobbyPlayersPayload() {
+  return [...duelLobbyPlayers.values()].map(({ userId, userName, avatar, status }) => ({ userId, userName, avatar, status: status || 'available' }));
+}
+
+function broadcastDuelLobby() {
+  const message = JSON.stringify({ type: 'game_lobby_players', players: lobbyPlayersPayload() });
+  duelLobbyPlayers.forEach(player => {
+    if (player.ws?.readyState === 1) player.ws.send(message);
+  });
+}
+
+function setLobbyStatus(userId, status) {
+  const player = duelLobbyPlayers.get(userId);
+  if (player) player.status = status;
+}
+
+function removeDuelLobbyPlayer(ws) {
+  let changed = false;
+  for (const [userId, player] of duelLobbyPlayers.entries()) {
+    if (player.ws === ws) {
+      duelLobbyPlayers.delete(userId);
+      changed = true;
+    }
+  }
+  if (changed) broadcastDuelLobby();
+}
+
+function questionsForDuel(livro = 'Todos', nivel = 0) {
+  const all = require('./data/perguntas.json');
+  let pool = all.filter(question => livro === 'Todos' || question.livro === livro);
+  if (!pool.length) pool = all;
+  const shuffle = list => [...list].sort(() => Math.random() - 0.5);
+  let selected;
+  if (nivel <= 4) selected = shuffle(pool.filter(question => question.nivel === 'facil'));
+  else if (nivel <= 9) selected = shuffle(pool.filter(question => question.nivel === 'medio'));
+  else selected = shuffle(pool.filter(question => question.nivel === 'dificil'));
+  if (selected.length < 10) selected = [...selected, ...shuffle(pool)];
+  return selected.slice(0, 10);
+}
+
+function startDirectDuel(first, second) {
+  const roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
+  const perguntas = questionsForDuel();
+  const jogadores = [first, second].map(player => ({ ...player, pontos: 0, respondeu: false }));
+  gameRooms.set(roomId, { id: roomId, livro: 'Todos', perguntas, iniciado: true, perguntaIdx: 0, jogadores });
+  setLobbyStatus(first.userId, 'playing');
+  setLobbyStatus(second.userId, 'playing');
+  broadcastDuelLobby();
+  jogadores.forEach(player => {
+    const adversario = jogadores.find(other => other.userId !== player.userId);
+    if (player.ws?.readyState === 1) player.ws.send(JSON.stringify({
+      type: 'game_matched', roomId, perguntas,
+      adversario: { userId: adversario.userId, userName: adversario.userName, avatar: adversario.avatar },
+    }));
+  });
+  agendarPergunta(roomId);
+}
+
+function handleDuelLobby(ws, msg) {
+  const userId = String(msg.userId || '').trim();
+  if (!userId) return;
+
+  if (msg.type === 'game_lobby_join') {
+    duelLobbyPlayers.set(userId, {
+      userId,
+      userName: String(msg.userName || 'Jogador').trim().slice(0, 60),
+      avatar: String(msg.avatar || '').slice(0, 2000),
+      status: duelLobbyPlayers.get(userId)?.status || 'available',
+      ws,
+    });
+    broadcastDuelLobby();
+    return;
+  }
+
+  if (msg.type === 'game_lobby_leave') {
+    if (duelLobbyPlayers.get(userId)?.ws === ws) {
+      duelLobbyPlayers.delete(userId);
+      broadcastDuelLobby();
+    }
+    return;
+  }
+
+  const sender = duelLobbyPlayers.get(userId);
+  if (!sender || sender.ws !== ws) return;
+
+  if (msg.type === 'game_lobby_chat') {
+    const text = String(msg.text || '').trim().slice(0, 300);
+    if (!text) return;
+    const data = JSON.stringify({ type: 'game_lobby_chat', message: { id: `${Date.now()}-${userId}`, userId, userName: sender.userName, text } });
+    duelLobbyPlayers.forEach(player => { if (player.ws?.readyState === 1) player.ws.send(data); });
+    return;
+  }
+
+  if (msg.type === 'game_invite') {
+    const target = duelLobbyPlayers.get(String(msg.targetUserId || ''));
+    if (!target || target.userId === userId || target.status === 'playing' || sender.status === 'playing') {
+      ws.send(JSON.stringify({ type: 'game_error', message: 'Este jogador não está disponível agora.' }));
+      return;
+    }
+    if (target.ws?.readyState === 1) target.ws.send(JSON.stringify({ type: 'game_invite_received', from: { userId: sender.userId, userName: sender.userName, avatar: sender.avatar } }));
+    ws.send(JSON.stringify({ type: 'game_invite_sent', targetUserId: target.userId }));
+    return;
+  }
+
+  if (msg.type === 'game_invite_accept') {
+    const inviter = duelLobbyPlayers.get(String(msg.fromUserId || ''));
+    if (!inviter || inviter.status === 'playing' || sender.status === 'playing') {
+      ws.send(JSON.stringify({ type: 'game_error', message: 'O convite já não está disponível.' }));
+      return;
+    }
+    startDirectDuel(inviter, sender);
+    return;
+  }
+
+  if (msg.type === 'game_invite_decline') {
+    const inviter = duelLobbyPlayers.get(String(msg.fromUserId || ''));
+    if (inviter?.ws?.readyState === 1) inviter.ws.send(JSON.stringify({ type: 'game_invite_declined', userName: sender.userName }));
+  }
+}
 
 const gameRooms = new Map();
 
@@ -483,6 +613,8 @@ function terminarPartida(roomId) {
   const vencedor = jogadores.reduce((melhor, jogador) => jogador.pontos > melhor.pontos ? jogador : melhor, jogadores[0]);
   room.jogadores.forEach(j => { if (j.ws?.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores, vencedor })); });
   gameRooms.delete(roomId);
+  room.jogadores.forEach(j => setLobbyStatus(j.userId, 'available'));
+  broadcastDuelLobby();
 }
 
 function proximaPergunta(roomId) {
@@ -630,10 +762,7 @@ function handleGame(ws, msg) {
   else if (msg.type === 'game_end') {
     const room = gameRooms.get(msg.roomId);
     if (!room) return;
-    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos }));
-    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores: jogadoresPublico })); });
-    if (room.roundTimer) clearTimeout(room.roundTimer);
-    gameRooms.delete(msg.roomId);
+    terminarPartida(msg.roomId);
   }
 }
 
@@ -654,6 +783,8 @@ function handleGameQueue(ws, msg) {
   if (msg.type === 'game_queue') {
     console.log('🎮 GAME_QUEUE:', userId, livro, 'fila:', gameQueue.length);
     console.log('🎮 Jogadores na fila:', gameQueue.map(p => p.userId + ' ws:' + p.ws.readyState));
+    setLobbyStatus(userId, 'waiting');
+    broadcastDuelLobby();
     // Limpeza: remove jogadores mortos ou duplicados
     for (let i = gameQueue.length - 1; i >= 0; i--) {
       if (gameQueue[i].userId === userId || gameQueue[i].ws.readyState !== 1) {
@@ -685,6 +816,9 @@ function handleGameQueue(ws, msg) {
       if (outro.ws.readyState === 1) outro.ws.send(matchMsg1);
       if (ws.readyState === 1) ws.send(matchMsg2);
       gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, jogadores: [{ userId: outro.userId, userName: outro.userName, avatar: outro.avatar, pontos: 0, ws: outro.ws }, { userId, userName, avatar, pontos: 0, ws }] });
+      setLobbyStatus(outro.userId, 'playing');
+      setLobbyStatus(userId, 'playing');
+      broadcastDuelLobby();
       agendarPergunta(roomId);
     } else {
       const playerEntry = { userId, userName, avatar, livro, ws };
@@ -722,6 +856,8 @@ function handleGameQueue(ws, msg) {
           const botAdv = botPersonagens[Math.floor(Math.random() * botPersonagens.length)];
           ws.send(JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: botAdv, isBot: true }));
           gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, isBot: true, jogadores: [{ userId: 'bot-333', userName: 'Pastor Bot', avatar: '', pontos: 0, ws: null }, { userId, userName, avatar, pontos: 0, ws }] });
+          setLobbyStatus(userId, 'playing');
+          broadcastDuelLobby();
           agendarPergunta(roomId);
         }
       }, 30000);
@@ -731,6 +867,8 @@ function handleGameQueue(ws, msg) {
   if (msg.type === 'game_cancel_queue') {
     const idx = gameQueue.findIndex(p => p.userId === userId);
     if (idx !== -1) gameQueue.splice(idx, 1);
+    setLobbyStatus(userId, 'available');
+    broadcastDuelLobby();
   }
 }
 module.exports = { setupWebSocket, notifyUser };
