@@ -483,7 +483,7 @@ export default function App() {
         <Route path="/praca-oracao" element={<PrayerPlaza />} />
         <Route path="/praca-de-oracao" element={<PrayerPlaza />} />
         <Route path="/chat-cristao" element={<ChristianChatLanding />} />
-        <Route path="/duelo-biblico" element={<DuelLanding />} />
+        <Route path="/duelo-biblico" element={<Navigate to="/duelo-biblico/index.html" replace />} />
 
         <Route path="*" element={<Login />} />
 
@@ -539,6 +539,12 @@ export default function App() {
           <Link to="/membros" className={`nav-item ${location.pathname.startsWith('/membros')?'active':''}`} style={{color:'white',textDecoration:'none',padding:'6px 11px',borderRadius:8,fontSize:'0.84rem',display:'flex',alignItems:'center',gap:6}}>
 
             <Users size={15}/> {t('nav.members')}
+
+          </Link>
+
+          <Link to="/kids" className={`nav-item ${location.pathname==='/kids'?'active':''}`} style={{color:'white',textDecoration:'none',padding:'6px 11px',borderRadius:8,fontSize:'0.84rem',display:'flex',alignItems:'center',gap:6}}>
+
+            <PlayCircle size={15}/> Jogos crianças
 
           </Link>
 
@@ -891,7 +897,7 @@ export default function App() {
             <Route path="/desafio-biblico" element={<DesafioBiblico />} />
             <Route path="/desafio-diario" element={<DailyFaithChallenge />} />
             <Route path="/kids" element={<Kids />} />
-            <Route path="/duelo-biblico" element={<DueloBiblico />} />
+            <Route path="/duelo-biblico" element={<Navigate to="/duelo-biblico/index.html" replace />} />
             <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
 
             <Route path="/mensagens" element={<Chat />} />
