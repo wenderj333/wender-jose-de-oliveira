@@ -18,3 +18,7 @@
 .duel-top-ten li > b { color: #b67b13; }.duel-top-ten li > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.duel-top-ten li img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; vertical-align: middle; }.duel-top-ten li strong { color: var(--primary-dark); font-size: 11px; }.duel-top-ten .duel-ranking-empty { grid-column: 1 / -1; display: block; text-align: center; }
 @media (max-width: 900px) { .duel-top-ten { width: 100%; } }
 @media (max-width: 560px) { .duel-welcome { padding: 14px 16px; }.duel-languages { grid-template-columns: repeat(2, minmax(0,1fr)); }.duel-top-ten { grid-template-columns: 1fr; }.duel-question-head { flex-wrap: wrap; } }
+
+.duel-faith-boxes-link { display:flex; align-items:center; gap:12px; margin-top:2px; border:1px solid #ead28c; border-radius:15px; background:linear-gradient(110deg,#fffdf2,#f3f8ff); padding:11px 14px; color:#31506d; text-decoration:none; box-shadow:0 5px 14px rgba(76,104,136,.10); transition:transform .2s ease,box-shadow .2s ease; }
+.duel-faith-boxes-link:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(76,104,136,.18); }
+.duel-faith-boxes-link>span:first-child { font-size:27px; }.duel-faith-boxes-link>span:nth-child(2) { display:grid; gap:2px; flex:1; }.duel-faith-boxes-link b { font-size:14px; }.duel-faith-boxes-link small { color:#6c7d90; font-size:11px; }.duel-faith-boxes-link i { color:#b67b13; font-size:22px; font-style:normal; }

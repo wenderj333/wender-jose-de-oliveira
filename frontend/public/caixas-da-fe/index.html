@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Duelo Bíblico — Caixas de Surpresa da Fé</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!--
+      Rosebud defaults disable accidental selection, context menus, tap highlights,
+      and native dragging during gameplay while preserving text editing. Most games
+      need no customization.
+    -->
+    <link rel="stylesheet" href="./rosebud-game-defaults.css" />
+    <script src="./rosebud-game-defaults.js" defer></script>
+    <script type="importmap">
+      {
+        "imports": {}
+      }
+    </script>
+    <style>
+      :root { color-scheme: light; }
+      * { box-sizing: border-box; }
+      html, body { min-width: 0; min-height: 100%; margin: 0; }
+      body {
+        background: #f0f4f8;
+        color: #26364a;
+        font-family: 'Inter', sans-serif;
+        overflow: auto;
+        touch-action: auto;
+      }
+      #game-container {
+        min-height: 100dvh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(12px, 3vw, 32px);
+        overflow: auto;
+        background-image: url('assets/faith-background.webp');
+        background-size: cover;
+        background-position: center;
+      }
+
+      .surpresa-card {
+        width: min(100%, 760px);
+        margin: auto;
+        padding: clamp(18px, 3vw, 32px);
+        text-align: center;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px);
+        border: 2px solid rgba(255, 255, 255, 0.68);
+        border-radius: clamp(18px, 3vw, 24px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 0 20px rgba(255, 215, 0, 0.2);
+      }
+      .surpresa-header h1 {
+        margin: 0;
+        color: #3178c6;
+        font-family: 'Orbitron', sans-serif;
+        font-size: clamp(1.15rem, 3vw, 1.5rem);
+        letter-spacing: 2px;
+        text-transform: lowercase;
+      }
+      .surpresa-header p {
+        max-width: 42rem;
+        margin: 0.55rem auto clamp(1.15rem, 3vw, 2rem);
+        color: #526275;
+        font-size: clamp(0.85rem, 2vw, 1rem);
+        font-style: italic;
+        line-height: 1.45;
+      }
+      .collection-progress {
+        max-width: 620px;
+        margin: 0 auto clamp(1rem, 2.5vw, 1.5rem);
+        padding: clamp(10px, 2vw, 14px);
+        border: 1px solid rgba(49, 120, 198, 0.16);
+        border-radius: 16px;
+        background: rgba(247, 251, 255, 0.78);
+        text-align: left;
+      }
+      .collection-heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+      .collection-title {
+        color: #31506d;
+        font-size: clamp(0.75rem, 1.8vw, 0.86rem);
+        font-weight: 800;
+        letter-spacing: 0.03em;
+      }
+      .collection-count {
+        color: #245fa8;
+        font-size: clamp(0.74rem, 1.8vw, 0.84rem);
+        white-space: nowrap;
+      }
+      .collection-hint {
+        margin: 0.22rem 0 0.7rem !important;
+        color: #718096 !important;
+        font-size: clamp(0.7rem, 1.8vw, 0.78rem) !important;
+        font-style: normal !important;
+      }
+      .intention-indicators {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.45rem;
+      }
+      .intention-indicator {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 0.42rem;
+        padding: 0.42rem 0.5rem;
+        border: 1px solid #d8e1eb;
+        border-radius: 11px;
+        background: rgba(255,255,255,0.76);
+        color: #65758a;
+        transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+      }
+      .indicator-dot {
+        display: grid;
+        flex: 0 0 1.55rem;
+        width: 1.55rem;
+        height: 1.55rem;
+        place-items: center;
+        border-radius: 50%;
+        background: #edf1f5;
+        color: #a9b4c0;
+        font-size: 0.78rem;
+      }
+      .indicator-copy { min-width: 0; }
+      .indicator-copy strong, .indicator-copy small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .indicator-copy strong { color: #53657a; font-size: clamp(0.68rem, 1.7vw, 0.76rem); }
+      .indicator-copy small { margin-top: 0.08rem; font-size: 0.61rem; }
+      .intention-indicator.discovered {
+        border-color: #f0cc62;
+        background: #fffaf0;
+        color: #876900;
+        transform: translateY(-1px);
+      }
+      .intention-indicator.discovered .indicator-dot {
+        background: #f6d36a;
+        color: #fff;
+        box-shadow: 0 0 0 3px rgba(246, 211, 106, 0.2);
+      }
+      .intention-indicator.discovered .indicator-copy strong { color: #785900; }
+      .intention-indicator.discovered .indicator-state { color: #9a770d; font-weight: 700; }
+      .session-summary {
+        margin-top: 0.7rem;
+        padding: 0.65rem 0.72rem 0.6rem;
+        border-top: 1px solid rgba(49, 120, 198, 0.12);
+        color: #607187;
+      }
+      .summary-heading {
+        display: flex;
+        align-items: center;
+        gap: 0.38rem;
+        color: #49647e;
+        font-size: clamp(0.7rem, 1.8vw, 0.78rem);
+        letter-spacing: 0.02em;
+      }
+      .summary-icon {
+        display: inline-grid;
+        width: 1.25rem;
+        height: 1.25rem;
+        place-items: center;
+        border-radius: 50%;
+        background: #f4e7ff;
+        color: #8a61ad;
+        font-size: 0.9rem;
+      }
+      .summary-discovered, .summary-messages, .summary-next {
+        margin: 0.28rem 0 0;
+        font-size: clamp(0.66rem, 1.7vw, 0.74rem);
+        line-height: 1.35;
+      }
+      .summary-discovered { color: #4d6781; font-weight: 700; }
+      .summary-messages { color: #6c7d90; }
+      .summary-next {
+        color: #8a6b18;
+        font-style: italic;
+      }
+      .summary-next.summary-complete {
+        color: #587e67;
+        font-weight: 700;
+      }
+
+      .boxes-container {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(8px, 2.4vw, 24px);
+        align-items: start;
+        justify-items: center;
+        perspective: 1000px;
+      }
+      .box-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 164px;
+        min-width: 0;
+        aspect-ratio: 1;
+        padding: 0;
+        border: 0;
+        border-radius: 18px;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        isolation: isolate;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease;
+      }
+      .box-wrapper:hover {
+        transform: scale(1.06);
+        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+      }
+      .box-wrapper:focus { outline: none; }
+      .box-wrapper:focus-visible {
+        outline: 4px solid #245fa8;
+        outline-offset: 5px;
+        filter: drop-shadow(0 0 12px rgba(49, 120, 198, 0.7));
+      }
+      .box-wrapper.opened {
+        filter: drop-shadow(0 0 17px rgba(255, 205, 74, 0.85));
+      }
+      .box-img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+      }
+      @keyframes breathe {
+        0%, 100% { transform: scaleY(1); }
+        50% { transform: scaleY(0.97) translateY(2px); }
+      }
+      .box-wrapper.idle .box-img { animation: breathe 3s ease-in-out infinite; }
+      .box-wrapper.opened .box-img {
+        transform: translateY(-10px) scale(1.04);
+        filter: brightness(1.08) saturate(1.08);
+      }
+      .box-label {
+        display: block;
+        margin-top: -0.15rem;
+        color: #31465d;
+        font-size: clamp(0.68rem, 1.8vw, 0.8rem);
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .box-intention {
+        display: block;
+        margin-top: 0.3rem;
+        color: #956e00;
+        font-size: clamp(0.82rem, 2.1vw, 0.96rem);
+        font-weight: 800;
+        letter-spacing: 0.03em;
+      }
+      .box-wrapper[data-id="blue"] .box-intention { color: #3178c6; }
+      .box-wrapper[data-id="lilac"] .box-intention { color: #8056a8; }
+      .box-description {
+        display: block;
+        min-height: 2.35em;
+        margin: 0.25rem auto 0;
+        max-width: 13rem;
+        color: #66788e;
+        font-size: clamp(0.64rem, 1.65vw, 0.72rem);
+        line-height: 1.3;
+      }
+      .box-state { 
+        display: block;
+        margin-top: 0.18rem;
+        color: #66788e;
+        font-size: 0.68rem;
+        line-height: 1.2;
+      }
+      .box-wrapper.opened .box-state { color: #8b6500; font-weight: 700; }
+
+      .message-display {
+        position: absolute;
+        z-index: 20;
+        top: 50%;
+        left: 50%;
+        width: min(280px, calc(100vw - 48px));
+        padding: 1rem;
+        border: 2px solid #f2cf54;
+        border-radius: 15px;
+        background: #fff;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, -50%) scale(0.75);
+        transition: opacity 0.35s ease, transform 0.35s ease;
+      }
+      .box-wrapper.opened .message-display {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      .message-eyebrow {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: #9b7500;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .message-text {
+        color: #26364a;
+        font-size: clamp(0.82rem, 2vw, 1rem);
+        font-weight: 600;
+        line-height: 1.45;
+      }
+      .particles-container { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+      .particle {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        opacity: 0;
+      }
+
+      .reset-btn, #audio-controls {
+        min-height: 44px;
+        border: 0;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 800;
+      }
+      .reset-btn {
+        margin-top: clamp(1.25rem, 3vw, 2rem);
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        background: #3178c6;
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      }
+      .reset-btn:hover { background: #245fa8; transform: translateY(-1px); }
+      .reset-btn:focus-visible, #audio-controls:focus-visible {
+        outline: 3px solid #173f70;
+        outline-offset: 3px;
+      }
+      #audio-controls {
+        position: fixed;
+        right: clamp(10px, 3vw, 22px);
+        bottom: clamp(10px, 3vw, 22px);
+        z-index: 100;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.55rem 0.8rem;
+        border: 2px solid rgba(49, 120, 198, 0.18);
+        border-radius: 999px;
+        background: rgba(255,255,255,0.95);
+        color: #24517e;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+        transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+      }
+      #audio-controls.is-muted { border-color: #d6dde5; background: #f1f3f5; color: #657182; }
+      .audio-label { font-size: 0.76rem; }
+
+      @media (max-width: 620px) {
+        .collection-heading { align-items: flex-start; flex-direction: column; gap: 0.2rem; }
+        .intention-indicators { gap: 0.3rem; }
+        .session-summary { padding-inline: 0.25rem; }
+        .boxes-container {
+          grid-template-columns: repeat(2, minmax(104px, 1fr));
+          max-width: 390px;
+          margin: 0 auto;
+        }
+        .box-wrapper:last-child { grid-column: 1 / -1; }
+        .box-label { margin-top: 0; }
+      }
+      @media (max-width: 390px) {
+        #game-container { align-items: flex-start; }
+        .surpresa-card { margin-top: 0; }
+        .boxes-container { grid-template-columns: 1fr; max-width: 170px; }
+        .box-wrapper:last-child { grid-column: auto; }
+        .audio-label { display: none; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  
+<style>
+    #rosebud-exported-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        opacity: 1;
+        transition: opacity 500ms ease-in-out;
+    }
+
+    #rosebud-exported-splash.is-hiding {
+        opacity: 0;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        text-align: center;
+        color: #fff;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__logo {
+        width: 100px;
+        height: 100px;
+        animation: rosebud-exported-splash-breathe 2.4s ease-in-out infinite;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 16px;
+        line-height: 1.25;
+        letter-spacing: 0.06em;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text strong {
+        font-weight: 700;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text span:last-child {
+        opacity: 0.88;
+    }
+
+    @keyframes rosebud-exported-splash-breathe {
+        0%,
+        100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+</style></head>
+  <body>
+<div id="rosebud-exported-splash" aria-live="polite">
+    <div class="rosebud-exported-splash__content">
+        <img
+            class="rosebud-exported-splash__logo"
+            src="__rosebud/rosebud-icon.png"
+            alt="Rosebud Logo"
+            width="100"
+            height="100"
+        />
+        <div class="rosebud-exported-splash__text" aria-label="Rosebud.AI Make Games">
+            <strong>Rosebud.AI</strong>
+            <span>Make Games</span>
+        </div>
+    </div>
+</div>
+    <div id="game-container"></div>
+    <script type="module" src="main.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/ChatManager.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/ImageGenerator.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/ProgressLogger.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/OGP.js"></script>
+  
+<script>
+    (() => {
+        const splashRoot = document.getElementById('rosebud-exported-splash');
+        if (!splashRoot) return;
+
+        let isReady = false;
+        let isMinimumVisibleTimeElapsed = false;
+        let isHidden = false;
+
+        const maybeHideSplash = () => {
+            if (isHidden || !isReady || !isMinimumVisibleTimeElapsed) return;
+
+            isHidden = true;
+            splashRoot.classList.add('is-hiding');
+            window.setTimeout(() => splashRoot.remove(), 500);
+        };
+
+        const markReady = () => {
+            isReady = true;
+            maybeHideSplash();
+        };
+
+        window.setTimeout(() => {
+            isMinimumVisibleTimeElapsed = true;
+            maybeHideSplash();
+        }, 1000);
+
+        if (document.readyState === 'complete') {
+            markReady();
+        } else {
+            window.addEventListener('load', markReady, { once: true });
+        }
+
+        
+    })();
+</script></body>
+</html>

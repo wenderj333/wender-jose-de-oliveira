@@ -1,0 +1,16 @@
+{
+  "name": "Caixas da Fé",
+  "revisionLabel": "Próximos passos para uma jornada de fé mais envolvente",
+  "description": "Adicionar ao jogo Duelo Bíblico uma área especial chamada “Caixas de Surpresa da Fé”, exibida em um cartão claro e compacto com o título “palavra que” e a frase “Abra uma caixa e receba uma mensagem especial.”. Mostrar três caixas de presente infantis e elegantes, lado a lado, nas cores dourado, azul-céu e lilás, cada uma com laço, brilho suave, estrelas e diamantes. As caixas devem ter animação contínua delicada, abrindo e fechando levemente a tampa a cada poucos segundos; ao passar o mouse, aumentam um pouco e brilham; ao clicar, tocam um som alegre de recompensa, abrem completamente e liberam estrelas, brilhos e pequenos diamantes, revelando uma mensagem especial de fé.",
+  "mode": "Universal",
+  "exportDate": "2026-09-05T16:46:21.101Z",
+  "rosebudBuiltInSplash": {
+    "present": true,
+    "version": 1
+  },
+  "assetCount": 8,
+  "assetTypes": [
+    "image",
+    "audio"
+  ]
+}

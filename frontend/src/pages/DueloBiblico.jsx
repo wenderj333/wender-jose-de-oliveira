@@ -284,6 +284,9 @@ export default function DueloBiblico() {
           {status === 'finished' && <div className="duel-action-card duel-finish"><div className="duel-trophy">🏆</div><span className="duel-action-kicker">PARTIDA CONCLUÍDA</span><h2>{result?.userName ? `${result.userName} venceu!` : 'Parabéns por jogar!'}</h2><div className="duel-final-score">{players.map(player => <span key={player.userId}>{player.userName}<b>{player.pontos} pontos</b></span>)}</div><button className="duel-primary-button" onClick={() => { setStatus('ready'); setQuestions([]); setPlayers([]); setRoomId(null); }}>Jogar novamente</button></div>}
 
           <div className="duel-rewards"><div><span>🏅</span><b>Vitórias</b><strong>{players.find(player => player.userId === user?.id)?.pontos ? 'Em jogo' : '0'}</strong></div><div><span>💎</span><b>Diamantes</b><strong>{status === 'finished' && result?.userId === user?.id ? '3' : '0'}</strong></div><div><span>🌟</span><b>Sequência</b><strong>1 dia</strong></div></div>
+          <a className="duel-faith-boxes-link" href="/caixas-da-fe/" aria-label="Abrir Caixas da Fé">
+            <span aria-hidden="true">🎁</span><span><b>Caixas da Fé</b><small>Abra uma surpresa e receba a sua palavra de hoje.</small></span><i aria-hidden="true">→</i>
+          </a>
         </section>
 
         <aside className="duel-panel duel-chat-panel">

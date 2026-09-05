@@ -1,0 +1,12 @@
+- **Project**: Duelo Bíblico - Caixas de Surpresa da Fé
+- **Core Loop**: Users interact with three gift boxes (Gold, Blue, Lilac) to reveal faith-based messages with magical effects; each box has a distinct intention: Courage, Peace, or Gratitude. A collection counter, intention indicators, and session summary track discoveries immediately.
+- **Key Modules**: 
+  - `main.js`: Handles game logic, DOM manipulation, particle effects, and audio.
+  - `index.html`: Contains game structure and CSS animations for the "breathing" and hover effects.
+- **Assets**: 
+  - Sprites: `assets/gold-box-closed.webp`, `assets/blue-box-closed.webp`, `assets/lilac-box-closed.webp`.
+  - VFX: `assets/star-particle.webp`, `assets/diamond-particle.webp`.
+  - Audio: `assets/audio/calm-faith-ambience.mp3` (bgm), `assets/audio/magic-chime-reward.mp3` (sfx).
+- **Controls**: Mouse click or keyboard (Tab, Enter, Space, arrow keys, Home, End) to open and navigate boxes; accessible sound toggle and "Tentar novamente" button.
+- **Accessibility**: Portuguese labels, visible focus ring, expanded/open state, message status, and visual audio on/off state.
+- **Status**: Responsive narrow-window/zoom layout; validation passed, runtime check healthy.
