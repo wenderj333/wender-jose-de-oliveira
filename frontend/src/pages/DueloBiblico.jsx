@@ -179,6 +179,18 @@ export default function DueloBiblico() {
     if (!sent) setMessage('Não foi possível ligar ao Duelo. Tente novamente.');
   };
 
+  const startBotMatch = () => {
+    if (!user?.id) { setMessage('Entre na sua conta para jogar.'); return; }
+    if (!isConnected) { setMessage('A ligação está a preparar-se. Aguarde alguns segundos e tente novamente.'); return; }
+    setResult(null);
+    const sent = send({
+      type: 'game_bot_match',
+      userId: user.id,
+      userName: user.full_name || user.name || 'Jogador',
+      avatar: user.profile_photo || user.avatar_url || user.photo_url || '',
+    });
+    if (!sent) setMessage('Não foi possível iniciar o Bot Bíblico. Tente novamente.');
+  };
   const chooseAnswer = (choice) => {
     if (answer !== null || !currentQuestion || !roomId) return;
     const correct = choice === currentQuestion.r;
@@ -266,8 +278,11 @@ export default function DueloBiblico() {
 
           {status === 'ready' && <div className="duel-action-card">
             <div className="duel-trophy">🏆</div><span className="duel-action-kicker">PRONTO PARA UMA NOVA CONQUISTA?</span><h2>Mostra o que sabes da Bíblia</h2><p>Entra numa partida ao vivo e responde 10 perguntas para ganhar pontos, medalhas e diamantes.</p>
-            <button className="duel-primary-button" onClick={startMatch}><span>⚡</span>{isConnected ? 'Procura automática' : 'A ligar…'}</button>
-            <p className="duel-action-help">A partida começa quando encontrar um adversário real.</p>
+            <div className="duel-action-buttons">
+              <button className="duel-primary-button" onClick={startMatch}><span>⚡</span>{isConnected ? 'Procura automática' : 'A ligar…'}</button>
+              <button className="duel-bot-button" onClick={startBotMatch} disabled={!isConnected}><span>🤖</span> Jogar com o Bot Bíblico</button>
+            </div>
+            <p className="duel-action-help">Escolha uma pessoa real ou desafie o Bot Bíblico, um adversário experiente.</p>
           </div>}
 
           {status === 'waiting' && <div className="duel-action-card"><div className="duel-trophy">🔎</div><span className="duel-action-kicker">À PROCURA DE ADVERSÁRIO</span><h2>Estamos a encontrar alguém</h2><p>Podes ficar nesta sala. Assim que outro jogador entrar, a partida começa automaticamente.</p><button className="duel-secondary-button" onClick={leaveQueue}>Cancelar procura</button></div>}
@@ -284,9 +299,7 @@ export default function DueloBiblico() {
           {status === 'finished' && <div className="duel-action-card duel-finish"><div className="duel-trophy">🏆</div><span className="duel-action-kicker">PARTIDA CONCLUÍDA</span><h2>{result?.userName ? `${result.userName} venceu!` : 'Parabéns por jogar!'}</h2><div className="duel-final-score">{players.map(player => <span key={player.userId}>{player.userName}<b>{player.pontos} pontos</b></span>)}</div><button className="duel-primary-button" onClick={() => { setStatus('ready'); setQuestions([]); setPlayers([]); setRoomId(null); }}>Jogar novamente</button></div>}
 
           <div className="duel-rewards"><div><span>🏅</span><b>Vitórias</b><strong>{players.find(player => player.userId === user?.id)?.pontos ? 'Em jogo' : '0'}</strong></div><div><span>💎</span><b>Diamantes</b><strong>{status === 'finished' && result?.userId === user?.id ? '3' : '0'}</strong></div><div><span>🌟</span><b>Sequência</b><strong>1 dia</strong></div></div>
-          <a className="duel-faith-boxes-link" href="/caixas-da-fe/" aria-label="Abrir Caixas da Fé">
-            <span aria-hidden="true">🎁</span><span><b>Caixas da Fé</b><small>Abra uma surpresa e receba a sua palavra de hoje.</small></span><i aria-hidden="true">→</i>
-          </a>
+
         </section>
 
         <aside className="duel-panel duel-chat-panel">

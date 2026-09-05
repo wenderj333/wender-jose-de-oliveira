@@ -61,6 +61,7 @@ function setupWebSocket(server) {
             break;
           case 'game_queue':
           case 'game_cancel_queue':
+          case 'game_bot_match':
             handleGameQueue(ws, msg);
             break;
           case 'game_lobby_join':
@@ -611,6 +612,7 @@ function terminarPartida(roomId) {
   if (!room) return;
   if (room.roundTimer) clearTimeout(room.roundTimer);
   if (room.roundInterval) clearInterval(room.roundInterval);
+  if (room.botTurnTimer) clearTimeout(room.botTurnTimer);
   const jogadores = jogadoresPublicos(room);
   const vencedor = jogadores.reduce((melhor, jogador) => jogador.pontos > melhor.pontos ? jogador : melhor, jogadores[0]);
   room.jogadores.forEach(j => { if (j.ws?.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores, vencedor })); });
@@ -633,6 +635,7 @@ function proximaPergunta(roomId) {
   if (!room) return;
   if (room.roundTimer) clearTimeout(room.roundTimer);
   if (room.roundInterval) clearInterval(room.roundInterval);
+  if (room.botTurnTimer) clearTimeout(room.botTurnTimer);
   room.roundTimer = null;
   room.roundInterval = null;
   room.advancing = false;
@@ -660,6 +663,7 @@ function agendarPergunta(roomId) {
     atual.segundosRestantes = Math.max(0, atual.segundosRestantes - 1);
     enviarTempo();
   }, 1000);
+  if (room.isBot) agendarRespostaDoBot(roomId, room.perguntaIdx);
   room.roundTimer = setTimeout(() => {
     const atual = gameRooms.get(roomId);
     if (!atual) return;
@@ -807,12 +811,70 @@ function handleGame(ws, msg) {
 
 const gameQueue = [];
 
+const BIBLE_BOT_ACCURACY = 0.72;
+const BIBLE_BOT_OPPONENTS = [
+  { userId: 'bot-moises', userName: 'Pastor Bot', avatar: '' },
+  { userId: 'bot-davi', userName: 'Davi Bot', avatar: '' },
+  { userId: 'bot-salomao', userName: 'Salomão Bot', avatar: '' },
+];
+
+function enviarPlacar(room) {
+  const jogadores = jogadoresPublicos(room);
+  room.jogadores.forEach(player => {
+    if (player.ws?.readyState === 1) player.ws.send(JSON.stringify({ type: 'game_score', jogadores }));
+  });
+}
+
+function agendarRespostaDoBot(roomId, questionIndex) {
+  const room = gameRooms.get(roomId);
+  if (!room?.isBot) return;
+  const bot = room.jogadores.find(player => String(player.userId).startsWith('bot-'));
+  if (!bot) return;
+  const delay = 1900 + Math.floor(Math.random() * 2100);
+  room.botTurnTimer = setTimeout(() => {
+    const atual = gameRooms.get(roomId);
+    if (!atual || atual !== room || atual.advancing || atual.perguntaIdx !== questionIndex || bot.respondeu) return;
+    const question = atual.perguntas?.[atual.perguntaIdx];
+    if (!question) return;
+    const acertou = Math.random() < BIBLE_BOT_ACCURACY;
+    bot.respondeu = true;
+    if (acertou) bot.pontos += 3;
+    enviarPlacar(atual);
+    if (acertou && !atual.advancing) {
+      atual.advancing = true;
+      setTimeout(() => proximaPergunta(roomId), 700);
+    }
+  }, delay);
+}
+
+function iniciarDueloComBot(ws, msg) {
+  const userId = String(msg.userId || '').trim();
+  if (!userId || ws.readyState !== 1) return;
+  const userName = String(msg.userName || 'Jogador').trim().slice(0, 60);
+  const avatar = String(msg.avatar || '').slice(0, 2000);
+  const roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
+  const bot = BIBLE_BOT_OPPONENTS[Math.floor(Math.random() * BIBLE_BOT_OPPONENTS.length)];
+  const perguntas = questionsForDuel('Todos');
+  const jogadores = [
+    { ...bot, pontos: 0, respondeu: false, ws: null },
+    { userId, userName, avatar, pontos: 0, respondeu: false, ws },
+  ];
+  gameRooms.set(roomId, { id: roomId, livro: 'Todos', perguntas, iniciado: true, perguntaIdx: 0, jogadores, isBot: true });
+  setLobbyStatus(userId, 'playing');
+  broadcastDuelLobby();
+  ws.send(JSON.stringify({ type: 'game_matched', roomId, perguntas, adversario: bot, isBot: true }));
+  agendarPergunta(roomId);
+}
 function handleGameQueue(ws, msg) {
   const userId = msg.userId;
   const userName = msg.userName || 'Jogador';
   const avatar = msg.avatar || '';
   const livro = msg.livro || 'Todos';
 
+  if (msg.type === 'game_bot_match') {
+    iniciarDueloComBot(ws, msg);
+    return;
+  }
   if (msg.type === 'game_queue') {
     console.log('🎮 GAME_QUEUE:', userId, livro, 'fila:', gameQueue.length);
     console.log('🎮 Jogadores na fila:', gameQueue.map(p => p.userId + ' ws:' + p.ws.readyState));
