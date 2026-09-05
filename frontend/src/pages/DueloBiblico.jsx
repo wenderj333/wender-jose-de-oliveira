@@ -50,6 +50,7 @@ export default function DueloBiblico() {
   const [lobbyPlayers, setLobbyPlayers] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatText, setChatText] = useState('');
+  const [chatNotice, setChatNotice] = useState('');
   const [invite, setInvite] = useState(null);
   const [timeLeft, setTimeLeft] = useState(DUEL_TIMER_SECONDS);
   const [ranking, setRanking] = useState([]);
@@ -131,7 +132,21 @@ export default function DueloBiblico() {
 
   useEffect(() => {
     const updatePlayers = (data) => setLobbyPlayers(data.players || []);
-    const receiveChat = (data) => setChatMessages(current => [...current.slice(-49), data.message].filter(Boolean));
+    const receiveChat = (data) => {
+      const incoming = data.message;
+      if (!incoming) return;
+      setChatMessages(current => {
+        const pendingIndex = current.findIndex(item => item.pending && item.userId === incoming.userId && item.text === incoming.text);
+        if (pendingIndex >= 0) {
+          const next = [...current];
+          next[pendingIndex] = incoming;
+          return next;
+        }
+        if (current.some(item => item.id === incoming.id)) return current;
+        return [...current.slice(-49), incoming];
+      });
+      if (incoming.userId === user?.id) setChatNotice('Mensagem enviada.');
+    };
     const receiveInvite = (data) => setInvite(data.from || null);
     const inviteSent = () => setMessage('Convite enviado. Aguarde a resposta do jogador.');
     const inviteDeclined = (data) => setMessage(`${data.userName || 'O jogador'} não pôde aceitar agora.`);
@@ -147,7 +162,7 @@ export default function DueloBiblico() {
       off('game_invite_sent', inviteSent);
       off('game_invite_declined', inviteDeclined);
     };
-  }, [off, on]);
+  }, [off, on, user?.id]);
 
   const startMatch = () => {
     if (!user?.id) { setMessage('Entre na sua conta para jogar.'); return; }
@@ -195,8 +210,27 @@ export default function DueloBiblico() {
     event.preventDefault();
     const text = chatText.trim();
     if (!text || !user?.id) return;
-    send({ type: 'game_lobby_chat', userId: user.id, text });
+    if (!isConnected) {
+      setChatNotice('O chat está a ligar. Aguarde alguns segundos e tente novamente.');
+      return;
+    }
+    const sentAt = Date.now();
+    const pendingMessage = { id: `pending-${sentAt}`, userId: user.id, userName: user.full_name || user.name || 'Jogador', text, pending: true };
+    setChatMessages(current => [...current.slice(-49), pendingMessage]);
+    setChatNotice('A enviar mensagem…');
+    // Reconfirma a presença na sala antes de enviar, inclusive após uma reconexão.
+    send({ type: 'game_lobby_join', userId: user.id, userName: user.full_name || user.name || 'Jogador', avatar: user.profile_photo || user.avatar_url || user.photo_url || '' });
+    const didSend = send({ type: 'game_lobby_chat', userId: user.id, text });
+    if (!didSend) {
+      setChatMessages(current => current.filter(item => item.id !== pendingMessage.id));
+      setChatNotice('Não foi possível enviar. Tente novamente.');
+      return;
+    }
     setChatText('');
+    window.setTimeout(() => {
+      setChatMessages(current => current.map(item => item.id === pendingMessage.id && item.pending ? { ...item, failed: true, pending: false } : item));
+      setChatNotice(current => current === 'A enviar mensagem…' ? 'A mensagem não foi confirmada. Tente novamente.' : current);
+    }, 6000);
   };
 
   const playerName = user?.full_name || user?.name || 'Jogador';
@@ -254,8 +288,9 @@ export default function DueloBiblico() {
 
         <aside className="duel-panel duel-chat-panel">
           <div className="duel-panel-title"><span>💬</span><div><h2>Chat da sala</h2><p>Conversa com os jogadores</p></div></div>
-          <div className="duel-chat-messages">{chatMessages.length === 0 ? <div className="duel-empty"><span>✦</span><p>Escreve uma mensagem de boas-vindas para a sala.</p></div> : chatMessages.map(chat => <div key={chat.id} className={`duel-chat-message ${chat.userId === user?.id ? 'mine' : ''}`}><b>{chat.userName}</b><span>{chat.text}</span></div>)}</div>
-          <form onSubmit={sendLobbyMessage} className="duel-chat-form"><input value={chatText} onChange={event => setChatText(event.target.value)} maxLength={300} placeholder="Escreve uma mensagem…" /><button type="submit" aria-label="Enviar mensagem">➤</button></form>
+          <div className="duel-chat-messages">{chatMessages.length === 0 ? <div className="duel-empty"><span>✦</span><p>Escreve uma mensagem de boas-vindas para a sala.</p></div> : chatMessages.map(chat => <div key={chat.id} className={`duel-chat-message ${chat.userId === user?.id ? 'mine' : ''} ${chat.failed ? 'failed' : ''}`}><b>{chat.userName}{chat.pending ? ' · a enviar…' : chat.failed ? ' · não enviada' : ''}</b><span>{chat.text}</span></div>)}</div>
+          <form onSubmit={sendLobbyMessage} className="duel-chat-form"><input value={chatText} onChange={event => { setChatText(event.target.value); if (chatNotice) setChatNotice(''); }} maxLength={300} placeholder="Escreve uma mensagem…" /><button type="submit" aria-label="Enviar mensagem">➤</button></form>
+          {chatNotice && <p className="duel-chat-notice" role="status">{chatNotice}</p>}
         </aside>
       </div>
 
