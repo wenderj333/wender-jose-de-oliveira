@@ -213,7 +213,7 @@ export default function App() {
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
 
   const [hideSidebars, setHideSidebars] = useState(false);
-  const isDuelPage = location.pathname === '/duelo-biblico';
+  const isDuelPage = location.pathname === '/duelo-biblico' || location.pathname === '/duelo-biblico/index.html';
 
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [notificationToast, setNotificationToast] = useState(null);
@@ -483,7 +483,8 @@ export default function App() {
         <Route path="/praca-oracao" element={<PrayerPlaza />} />
         <Route path="/praca-de-oracao" element={<PrayerPlaza />} />
         <Route path="/chat-cristao" element={<ChristianChatLanding />} />
-        <Route path="/duelo-biblico" element={<Navigate to="/duelo-biblico/index.html" replace />} />
+        <Route path="/duelo-biblico" element={<DuelLanding />} />
+        <Route path="/duelo-biblico/index.html" element={<DuelLanding />} />
 
         <Route path="*" element={<Login />} />
 
@@ -897,7 +898,8 @@ export default function App() {
             <Route path="/desafio-biblico" element={<DesafioBiblico />} />
             <Route path="/desafio-diario" element={<DailyFaithChallenge />} />
             <Route path="/kids" element={<Kids />} />
-            <Route path="/duelo-biblico" element={<Navigate to="/duelo-biblico/index.html" replace />} />
+            <Route path="/duelo-biblico" element={<DueloBiblico />} />
+            <Route path="/duelo-biblico/index.html" element={<DueloBiblico />} />
             <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
 
             <Route path="/mensagens" element={<Chat />} />
