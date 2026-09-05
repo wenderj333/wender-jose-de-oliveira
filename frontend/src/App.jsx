@@ -665,6 +665,8 @@ export default function App() {
 
               ['/desafio-diario', <Sun size={20}/>, 'Desafio Diário'],
 
+              ['/kids', <PlayCircle size={20}/>, 'Jogos para crianças'],
+
               ['/reflexao', <Sun size={20}/>, t('nav.reflection')],
 
               ['/curso-biblico', <BookOpen size={20}/>, t('course.title')],
@@ -808,6 +810,8 @@ export default function App() {
             <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','Reflexão')}</span></Link>
 
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','Música')}</span></Link>
+
+            <Link to="/kids" className={isActive('/kids')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>Jogos para crianças</span></Link>
 
           </div>
 

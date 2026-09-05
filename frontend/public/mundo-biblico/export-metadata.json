@@ -1,0 +1,16 @@
+{
+  "name": "Mundo Bíblico",
+  "revisionLabel": "Próximo ciclo: retomada fiel e ações guiadas",
+  "description": "Mundo Bíblico: Pequenos Heróis é uma aventura bíblica infantil em 2D, integrada ao Sigo com Fé, para crianças de 3 a 10 anos. Em um mundo colorido de desertos dourados, oásis, rios, jardins, cidades antigas, animais amigáveis e arco-íris, a criança explora pequenas missões baseadas em histórias bíblicas, ouve narrativas e músicas, aprende valores como fé, amor, coragem, obediência, bondade e perdão, e recebe recompensas positivas em um passaporte bíblico. A experiência deve ser segura, não violenta, sem sustos ou monstros, com visual de livro infantil moderno e uma presença ocasional, acolhedora e respeitosa de Jesus.",
+  "mode": "Universal",
+  "exportDate": "2026-09-05T14:51:16.757Z",
+  "rosebudBuiltInSplash": {
+    "present": true,
+    "version": 1
+  },
+  "assetCount": 10,
+  "assetTypes": [
+    "image",
+    "audio"
+  ]
+}

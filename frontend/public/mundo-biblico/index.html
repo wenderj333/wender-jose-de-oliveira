@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mundo Bíblico: Pequenos Heróis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./rosebud-game-defaults.css" />
+    <script src="./rosebud-game-defaults.js" defer></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://esm.sh/three@0.184"
+        }
+      }
+    </script>
+    <style>
+      html, body, #game-container { width: 100%; height: 100%; margin: 0; padding: 0; background: #87CEEB; overflow: hidden; }
+      body { touch-action: none; font-family: 'Fredoka', sans-serif; }
+      canvas { display: block; }
+      
+      #ui-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .ui-button {
+        pointer-events: auto;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      .ui-button:active {
+        transform: scale(0.9);
+      }
+
+      #start-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(135, 206, 235, 0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 20;
+        pointer-events: auto;
+      }
+
+      #start-screen h1 {
+        color: #fff;
+        font-size: 3rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      .play-btn {
+        padding: 1.5rem 3rem;
+        font-size: 2rem;
+        background: #FFD700;
+        border: 4px solid #FFF;
+        border-radius: 50px;
+        color: #B8860B;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      }
+      #resume-card {
+        display: none;
+        width: min(520px, calc(100% - 28px));
+        box-sizing: border-box;
+        margin: -0.8rem 0 1rem;
+        padding: 17px 18px 18px;
+        border: 3px solid #fff;
+        border-radius: 24px;
+        background: linear-gradient(145deg, rgba(255, 253, 239, 0.98), rgba(239, 251, 255, 0.98));
+        box-shadow: 0 8px 22px rgba(57, 94, 130, 0.2);
+        color: #31516f;
+        text-align: left;
+      }
+      .resume-kicker {
+        display: block;
+        margin-bottom: 4px;
+        color: #bd7a31;
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+      #resume-title {
+        margin: 0;
+        color: #e88946;
+        font-size: 1.35rem;
+      }
+      #resume-stage {
+        margin: 5px 0 7px;
+        color: #56728a;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+      .resume-objective {
+        margin: 0 0 13px;
+        padding: 9px 11px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.76);
+        font-size: 0.92rem;
+        line-height: 1.25;
+      }
+      .resume-objective strong {
+        display: block;
+        margin-bottom: 2px;
+        color: #e88946;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+      }
+      #continue-adventure-btn {
+        width: 100%;
+        padding: 12px 16px;
+        border: 3px solid #fff;
+        border-radius: 20px;
+        background: #71c993;
+        color: #fff;
+        font: inherit;
+        font-size: 1.18rem;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(65, 142, 94, 0.25);
+      }
+      #start-btn {
+        font-size: 1.18rem;
+        padding: 0.95rem 1.65rem;
+        background: #fff;
+        color: #e88946;
+      }
+
+      #hud {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        gap: 20px;
+        pointer-events: none;
+      }
+
+      .hud-item {
+        width: 60px;
+        height: 60px;
+        box-sizing: border-box;
+        background: white;
+        border-radius: 15px;
+        border: 3px solid #FFD700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: auto;
+        padding: 5px;
+        font: inherit;
+        cursor: pointer;
+      }
+      .hud-item:focus-visible {
+        outline: 4px solid #70c9df;
+        outline-offset: 4px;
+      }
+      .hud-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      #passport-modal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: min(92%, 760px);
+        max-width: 760px;
+        max-height: calc(100vh - 28px);
+        max-height: calc(100dvh - 28px);
+        box-sizing: border-box;
+        overflow-y: auto;
+        background: #FFF;
+        border-radius: 30px;
+        border: 8px solid #FFD700;
+        padding: 20px;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        z-index: 30;
+        pointer-events: auto;
+      }
+
+      #passport-modal h2 {
+        color: #4A90E2;
+        margin-top: 0;
+      }
+
+      #passport-modal.passport-complete {
+        background: linear-gradient(150deg, #fff 0%, #fffdf1 52%, #fff4c7 100%);
+        border-color: #f5c84b;
+      }
+      #passport-modal.passport-complete h2 {
+        color: #e88946;
+      }
+
+      .passport-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin: 20px 0;
+      }
+
+      .stamp-slot {
+        width: 80px;
+        height: 80px;
+        background: #f0f0f0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: #ccc;
+        border: 2px dashed #ccc;
+      }
+      .stamp-slot.earned {
+        background: #fff;
+        border: 2px solid #FFD700;
+        color: #000;
+      }
+      .stamp-slot img {
+        width: 80%;
+        height: 80%;
+        display: none;
+      }
+      .stamp-slot.earned img {
+        display: block;
+      }
+
+      #passport-completion {
+        display: none;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 2px 0 14px;
+        padding: 11px 12px 12px;
+        border-radius: 18px;
+        background: rgba(255, 247, 190, 0.82);
+        color: #31516f;
+        text-align: center;
+      }
+      #passport-completion strong {
+        display: block;
+        color: #d9793d;
+        font-size: 1.12rem;
+      }
+      #passport-completion p {
+        margin: 4px 0 8px;
+        font-size: 0.9rem;
+      }
+      #passport-modal.passport-complete #passport-completion {
+        display: block;
+        animation: passport-glow 3.2s ease-in-out infinite;
+      }
+      .passport-values {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        color: #b9782f;
+        font-weight: 600;
+        font-size: 0.92rem;
+      }
+      .passport-values span {
+        padding: 4px 9px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.82);
+      }
+      .passport-values span:not(:last-child)::after {
+        content: ' ·';
+        margin-left: 6px;
+        color: #f0ad3d;
+      }
+      #passport-resume {
+        display: none;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 5px 0 16px;
+        padding: 13px 14px;
+        border: 2px solid #a9d9c0;
+        border-radius: 18px;
+        background: linear-gradient(145deg, #f0fff6, #f3fbff);
+        color: #31516f;
+        text-align: left;
+      }
+      .passport-resume-kicker {
+        display: block;
+        color: #5a9e76;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+      #passport-resume-scene {
+        display: block;
+        margin-top: 3px;
+        color: #e88946;
+        font-size: 1.06rem;
+        font-weight: 600;
+      }
+      #passport-resume-stage {
+        display: block;
+        margin-top: 4px;
+        color: #56728a;
+        font-size: 0.84rem;
+        font-weight: 600;
+      }
+      .passport-resume-objective {
+        margin: 6px 0 0;
+        color: #31516f;
+        font-size: 0.86rem;
+        line-height: 1.25;
+      }
+      .passport-resume-objective strong { color: #bd7a31; }
+      .passport-journey-heading {
+        width: 100%;
+        margin: 2px 0 8px;
+        padding-top: 15px;
+        border-top: 2px dashed rgba(91, 183, 217, 0.42);
+        color: #4a90e2;
+        font-size: 1.25rem;
+        text-align: left;
+      }
+      .passport-journey-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        width: 100%;
+        margin-bottom: 18px;
+      }
+      .passport-journey-card {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        padding: 11px 10px 10px;
+        border: 2px solid #a9d9c0;
+        border-radius: 17px;
+        background: #f0fff6;
+        color: #31516f;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        transition: transform 0.18s, box-shadow 0.18s, opacity 0.18s;
+      }
+      .passport-journey-card:hover:not(:disabled), .passport-journey-card:focus-visible:not(:disabled) {
+        transform: translateY(-2px);
+        outline: none;
+        box-shadow: 0 6px 14px rgba(57, 94, 130, 0.16);
+      }
+      .passport-journey-card.is-completed { border-color: #e9ad45; background: #fff9e8; }
+      .passport-journey-card.is-locked { opacity: 0.58; filter: saturate(0.65); cursor: not-allowed; }
+      .passport-journey-name { color: #e88946; font-size: 0.95rem; font-weight: 600; line-height: 1.1; }
+      .passport-journey-value { margin-top: 4px; color: #bd7a31; font-size: 0.72rem; font-weight: 600; }
+      .passport-journey-status { min-height: 3.2em; margin-top: 8px; color: #56728a; font-size: 0.74rem; line-height: 1.2; }
+      .passport-journey-action { margin-top: auto; padding-top: 7px; border-top: 1px solid rgba(49, 81, 111, 0.12); color: #5a9e76; font-size: 0.75rem; font-weight: 600; line-height: 1.15; }
+      #passport-reward {
+        display: none;
+        position: relative;
+        margin: 2px auto 16px;
+        padding: 8px 14px;
+        border: 2px solid #ffd45a;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.82);
+        color: #e88946;
+        font-size: 0.92rem;
+        font-weight: 600;
+        overflow: hidden;
+      }
+      #passport-reward::after {
+        content: '';
+        position: absolute;
+        top: -30%;
+        left: -45%;
+        width: 28%;
+        height: 160%;
+        background: rgba(255, 255, 255, 0.8);
+        transform: rotate(20deg);
+      }
+      #passport-modal.passport-complete #passport-reward {
+        display: inline-block;
+        animation: reward-breathe 3.2s ease-in-out infinite;
+      }
+      #passport-modal.passport-complete #passport-reward::after {
+        animation: reward-shine 3.8s ease-in-out infinite;
+      }
+      .passport-memory-heading {
+        width: 100%;
+        margin: 4px 0 0;
+        padding-top: 15px;
+        border-top: 2px dashed rgba(240, 173, 61, 0.42);
+        color: #e88946;
+        font-size: 1.25rem;
+        text-align: left;
+      }
+      #passport-memory-count {
+        width: 100%;
+        margin: 4px 0 12px;
+        color: #56728a;
+        font-size: 0.9rem;
+        text-align: left;
+      }
+      .memory-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        width: 100%;
+        margin-bottom: 18px;
+      }
+      .memory-card {
+        position: relative;
+        display: grid;
+        grid-template-columns: 104px 1fr;
+        min-width: 0;
+        overflow: hidden;
+        border: 2px solid #e9c25c;
+        border-radius: 18px;
+        background: #fffaf0;
+        color: #31516f;
+        text-align: left;
+      }
+      .memory-card.memory-garden { border-color: #f08aa8; background: #fff2f6; }
+      .memory-card.memory-oasis { border-color: #e9ad45; background: #fff9e8; }
+      .memory-card.memory-river { border-color: #5bb7d9; background: #eefbfe; }
+      .memory-card-art-wrap {
+        position: relative;
+        min-height: 146px;
+        overflow: hidden;
+      }
+      .memory-card-art {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+      .memory-card-icon {
+        position: absolute;
+        right: 7px;
+        bottom: 7px;
+        display: grid;
+        width: 32px;
+        height: 32px;
+        place-items: center;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        font-size: 1.15rem;
+      }
+      .memory-card-content {
+        display: flex;
+        flex-direction: column;
+        padding: 11px 10px 12px;
+      }
+      .memory-card-scene {
+        color: #bd7a31;
+        font-size: 0.73rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+      .memory-card-title {
+        margin-top: 3px;
+        color: #31516f;
+        font-size: 1rem;
+        line-height: 1.12;
+      }
+      .memory-card-value {
+        margin-top: 6px;
+        color: #e88946;
+        font-size: 0.8rem;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+      .memory-card-text {
+        margin-top: 7px;
+        color: #56728a;
+        font-size: 0.78rem;
+        line-height: 1.25;
+      }
+      .memory-card-status {
+        margin-top: auto;
+        padding-top: 8px;
+        color: #69a177;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .memory-card.is-locked {
+        border-style: dashed;
+        filter: saturate(0.55);
+      }
+      .memory-card.is-locked .memory-card-art {
+        filter: grayscale(0.6) brightness(1.08);
+      }
+      .memory-card.is-locked .memory-card-status {
+        color: #8a9ba6;
+      }
+      @keyframes passport-glow {
+        0%, 100% { box-shadow: 0 0 0 rgba(255, 211, 79, 0); }
+        50% { box-shadow: 0 0 22px rgba(255, 211, 79, 0.42); }
+      }
+      @keyframes reward-breathe {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.035); }
+      }
+      @keyframes reward-shine {
+        0%, 25% { left: -45%; }
+        65%, 100% { left: 125%; }
+      }
+
+      .close-btn {
+        padding: 10px 20px;
+        background: #FF6F61;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        font-weight: bold;
+      }
+      
+      #dialog-box {
+        position: absolute;
+        bottom: 3%;
+        left: 5%;
+        width: 90%;
+        box-sizing: border-box;
+        background: white;
+        border: 4px solid #FFD700;
+        border-radius: 20px;
+        padding: 15px;
+        display: none;
+        z-index: 25;
+        pointer-events: auto;
+        font-size: 1.2rem;
+        color: #333;
+      }
+
+      #mission-panel {
+        position: absolute;
+        left: 50%;
+        bottom: max(12px, env(safe-area-inset-bottom));
+        transform: translateX(-50%);
+        display: none;
+        width: min(430px, calc(100% - 24px));
+        box-sizing: border-box;
+        padding: 10px 16px 9px;
+        border: 3px solid #fff;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: 0 5px 16px rgba(51, 94, 120, 0.18);
+        color: #31516f;
+        text-align: center;
+        z-index: 18;
+        pointer-events: none;
+      }
+      #mission-panel.mission-pop {
+        animation: mission-pop 0.45s ease both;
+      }
+      .mission-kicker {
+        display: block;
+        margin-bottom: 2px;
+        color: #5a9e76;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      #mission-title {
+        margin: 0;
+        color: #e88946;
+        font-size: 1rem;
+        line-height: 1.1;
+      }
+      #mission-hint {
+        margin: 3px 0 5px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        line-height: 1.15;
+      }
+      #mission-target {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        max-width: 100%;
+        margin: 0 auto 3px;
+        padding: 4px 9px;
+        border: 2px solid #ffd45a;
+        border-radius: 15px;
+        background: #fff8d9;
+        color: #bd7a31;
+        font-size: 0.78rem;
+        font-weight: 600;
+        line-height: 1.1;
+      }
+      #mission-target-icon {
+        font-size: 1rem;
+        line-height: 1;
+      }
+      #mission-feedback {
+        max-width: 100%;
+        margin: 3px auto 0;
+        color: #5a9e76;
+        font-size: 0.76rem;
+        line-height: 1.15;
+      }
+      #mission-progress {
+        margin-top: 3px;
+        color: #f0ad3d;
+        letter-spacing: 1px;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      @keyframes mission-pop {
+        0% { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.96); }
+        100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+      }
+
+      #matching-activity {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 16px;
+        background: rgba(49, 81, 111, 0.5);
+        z-index: 45;
+        pointer-events: auto;
+        overflow: auto;
+      }
+      .matching-dialog {
+        position: relative;
+        width: min(780px, 100%);
+        max-height: calc(100vh - 32px);
+        max-height: calc(100dvh - 32px);
+        box-sizing: border-box;
+        overflow: auto;
+        padding: clamp(18px, 3vw, 28px);
+        border: 5px solid #fff;
+        border-radius: 30px;
+        background: linear-gradient(145deg, #fffdf4 0%, #f3fbff 100%);
+        box-shadow: 0 14px 38px rgba(35, 73, 104, 0.32);
+        color: #31516f;
+        text-align: center;
+      }
+      .matching-kicker {
+        display: inline-block;
+        margin: 0 0 6px;
+        padding: 5px 12px;
+        border-radius: 16px;
+        background: #fff1b9;
+        color: #bd7a31;
+        font-size: 0.82rem;
+        font-weight: 600;
+      }
+      #matching-title {
+        margin: 0;
+        color: #e88946;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+      }
+      #matching-instruction {
+        max-width: 600px;
+        margin: 7px auto 15px;
+        font-size: clamp(0.92rem, 2vw, 1.04rem);
+        line-height: 1.3;
+      }
+      .matching-progress {
+        display: flex;
+        justify-content: center;
+        gap: 7px;
+        margin: 0 0 15px;
+      }
+      .matching-progress-dot {
+        width: 13px;
+        height: 13px;
+        border: 2px solid #f0ad3d;
+        border-radius: 50%;
+        background: #fff;
+      }
+      .matching-progress-dot.is-done {
+        background: #71c993;
+        border-color: #71c993;
+      }
+      .matching-board {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 14px;
+        text-align: left;
+      }
+      .matching-column-title {
+        margin: 0 0 7px 4px;
+        color: #56728a;
+        font-size: 0.86rem;
+        font-weight: 600;
+      }
+      .matching-cards, .matching-targets {
+        display: grid;
+        gap: 9px;
+      }
+      .match-card, .match-target {
+        position: relative;
+        display: grid;
+        grid-template-columns: 62px 1fr;
+        align-items: center;
+        width: 100%;
+        min-height: 82px;
+        box-sizing: border-box;
+        padding: 8px 11px 8px 8px;
+        border: 3px solid #d9e7ef;
+        border-radius: 18px;
+        background: #fff;
+        color: #31516f;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(57, 94, 130, 0.1);
+        transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s, opacity 0.18s;
+      }
+      .match-card:hover:not(:disabled), .match-card:focus-visible:not(:disabled),
+      .match-target:hover:not(:disabled), .match-target:focus-visible:not(:disabled) {
+        transform: translateY(-2px);
+        border-color: #70c9df;
+        box-shadow: 0 7px 15px rgba(57, 94, 130, 0.18);
+        outline: none;
+      }
+      .match-card:disabled, .match-target:disabled { cursor: default; }
+      .match-card.is-selected {
+        border-color: #f0ad3d;
+        box-shadow: 0 0 0 4px rgba(240, 173, 61, 0.2), 0 7px 15px rgba(57, 94, 130, 0.16);
+        transform: translateY(-2px);
+      }
+      .match-card.is-next-command, .match-target.is-next-command,
+      #matching-finish.is-next-command {
+        border-color: #e88946;
+        box-shadow: 0 0 0 5px rgba(240, 173, 61, 0.22), 0 8px 18px rgba(57, 94, 130, 0.2);
+        animation: active-command-pulse 1.7s ease-in-out infinite;
+      }
+      #matching-finish.is-next-command {
+        outline: 4px solid rgba(113, 201, 147, 0.3);
+        outline-offset: 3px;
+      }
+      .match-card.is-matched, .match-target.is-matched {
+        border-color: #71c993;
+        background: #effbf2;
+        animation: match-correct 0.6s ease both;
+      }
+      .match-card.is-wrong, .match-target.is-wrong {
+        border-color: #ef9a72;
+        animation: match-wrong 0.42s ease both;
+      }
+      .match-card-art, .match-target-icon {
+        display: grid;
+        width: 53px;
+        height: 53px;
+        place-items: center;
+        border-radius: 15px;
+        background: #fff4c9;
+        font-size: 2rem;
+        overflow: hidden;
+      }
+      .match-card-art img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      .match-card:nth-child(2) .match-card-art { background: #e9f8fd; }
+      .match-card:nth-child(3) .match-card-art { background: #f8edff; }
+      .match-target[data-match-target="LOVE"] .match-target-icon { background: #fff0f5; }
+      .match-target[data-match-target="FAITH"] .match-target-icon { background: #eef9ff; }
+      .match-target[data-match-target="JOY"] .match-target-icon { background: #fff7d9; }
+      .match-card-name, .match-target-name {
+        display: block;
+        font-size: 0.94rem;
+        font-weight: 600;
+        line-height: 1.15;
+      }
+      .match-card-hint, .match-target-hint {
+        display: block;
+        margin-top: 4px;
+        color: #71889a;
+        font-size: 0.76rem;
+        line-height: 1.2;
+      }
+      .match-target-name { font-size: 1rem; }
+      .matching-feedback {
+        position: relative;
+        min-height: 83px;
+        margin-top: 15px;
+        padding: 10px 14px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.8);
+        text-align: center;
+      }
+      #matching-feedback {
+        margin: 0;
+        color: #e88946;
+        font-size: 0.94rem;
+        font-weight: 600;
+      }
+      #matching-verse {
+        margin: 5px 0 0;
+        color: #31516f;
+        font-size: 0.88rem;
+        line-height: 1.25;
+      }
+      #matching-finish {
+        display: none;
+        margin: 15px auto 0;
+        padding: 11px 20px;
+        border: 3px solid #fff;
+        border-radius: 22px;
+        background: #71c993;
+        color: #fff;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(65, 142, 94, 0.25);
+      }
+      #matching-activity.is-finished .matching-board,
+      #matching-activity.is-finished .matching-progress { display: none; }
+      #matching-activity.is-finished .matching-feedback {
+        min-height: 0;
+        margin-top: 16px;
+        background: #fff7c9;
+        animation: matching-finale 0.7s ease both;
+      }
+      #matching-activity.is-finished #matching-title { color: #d9793d; }
+      #matching-activity.is-finished #matching-instruction { color: #56728a; }
+      #matching-activity.is-finished #matching-finish { display: inline-block; }
+      .matching-burst {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--burst-color, #ffd34f);
+        pointer-events: none;
+        animation: matching-burst 0.8s ease-out both;
+      }
+      @keyframes active-command-pulse {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-2px) scale(1.015); }
+      }
+      @keyframes match-correct {
+        0% { transform: scale(1); }
+        45% { transform: scale(1.045) rotate(-1deg); }
+        100% { transform: scale(1); }
+      }
+      @keyframes match-wrong {
+        0%, 100% { transform: translateX(0); }
+        30% { transform: translateX(-6px); }
+        65% { transform: translateX(6px); }
+      }
+      @keyframes matching-burst {
+        0% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateY(0) scale(1); }
+        100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateY(-62px) scale(0.2); }
+      }
+      @keyframes matching-finale {
+        0% { opacity: 0; transform: scale(0.94); }
+        65% { transform: scale(1.03); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+
+      #journey-screen {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 18px;
+        background: linear-gradient(135deg, rgba(49, 81, 111, 0.52), rgba(111, 193, 170, 0.4));
+        z-index: 50;
+        pointer-events: auto;
+        overflow: auto;
+      }
+      .journey-dialog {
+        width: min(1040px, 100%);
+        max-height: calc(100vh - 36px);
+        box-sizing: border-box;
+        overflow: auto;
+        padding: clamp(18px, 3vw, 30px);
+        border: 5px solid #fff;
+        border-radius: 30px;
+        background: rgba(255, 253, 245, 0.98);
+        box-shadow: 0 14px 38px rgba(35, 73, 104, 0.3);
+        color: #31516f;
+        text-align: center;
+      }
+      .journey-kicker {
+        display: inline-block;
+        margin: 0 0 6px;
+        padding: 5px 12px;
+        border-radius: 16px;
+        background: #fff1b9;
+        color: #bd7a31;
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+      #journey-title {
+        margin: 0;
+        color: #e88946;
+        font-size: clamp(1.45rem, 3vw, 2.05rem);
+      }
+      #journey-message {
+        max-width: 670px;
+        margin: 7px auto 20px;
+        font-size: clamp(0.92rem, 2vw, 1.05rem);
+        line-height: 1.3;
+      }
+      .journey-cards {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        text-align: left;
+      }
+      .journey-card {
+        --journey-color: #f0ad3d;
+        --journey-soft: #fff8df;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        padding: 0;
+        overflow: hidden;
+        border: 3px solid var(--journey-color);
+        border-radius: 22px;
+        background: var(--journey-soft);
+        color: #31516f;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        box-shadow: 0 5px 12px rgba(57, 94, 130, 0.12);
+        transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      }
+      .journey-card:hover:not(:disabled), .journey-card:focus-visible:not(:disabled) {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 18px rgba(57, 94, 130, 0.2);
+        outline: none;
+      }
+      .journey-card:active:not(:disabled) { transform: scale(0.98); }
+      .journey-card:disabled { cursor: not-allowed; }
+      .journey-garden { --journey-color: #f08aa8; --journey-soft: #fff0f5; }
+      .journey-oasis { --journey-color: #e9ad45; --journey-soft: #fff8df; }
+      .journey-river { --journey-color: #5bb7d9; --journey-soft: #eaf9fc; }
+      .journey-card.is-locked { opacity: 0.58; filter: saturate(0.65); }
+      .journey-card.is-next { box-shadow: 0 0 0 4px rgba(255, 215, 93, 0.34), 0 9px 20px rgba(57, 94, 130, 0.2); }
+      .journey-card-image-wrap {
+        position: relative;
+        display: block;
+        height: 112px;
+        overflow: hidden;
+      }
+      .journey-card-art {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+      .journey-card-number {
+        position: absolute;
+        top: 9px;
+        left: 9px;
+        display: grid;
+        width: 30px;
+        height: 30px;
+        place-items: center;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        background: var(--journey-color);
+        color: #fff;
+        font-weight: 600;
+      }
+      .journey-card-content {
+        display: block;
+        padding: 12px 13px 14px;
+      }
+      .journey-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .journey-card-name {
+        display: block;
+        color: #31516f;
+        font-size: 1.08rem;
+        font-weight: 600;
+        line-height: 1.1;
+      }
+      .journey-card-seal {
+        flex: 0 0 auto;
+        width: 44px;
+        height: 44px;
+        margin-top: -24px;
+        padding: 4px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        background: #fffdf0;
+        object-fit: contain;
+        box-shadow: 0 2px 7px rgba(57, 94, 130, 0.16);
+      }
+      .journey-card-value {
+        display: block;
+        margin-top: 5px;
+        color: #bd7a31;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .journey-card-status {
+        display: block;
+        min-height: 2.2em;
+        margin-top: 10px;
+        color: #56728a;
+        font-size: 0.82rem;
+        line-height: 1.25;
+      }
+      .journey-card-action {
+        display: block;
+        margin-top: 9px;
+        padding-top: 8px;
+        border-top: 2px solid rgba(49, 81, 111, 0.1);
+        color: var(--journey-color);
+        font-size: 0.84rem;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+
+      .sigo-com-fe-badge { 
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        width: 80px;
+        pointer-events: none;
+      }
+
+      #story-card {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: min(390px, calc(100% - 190px));
+        min-height: 150px;
+        display: none;
+        grid-template-columns: 112px 1fr;
+        gap: 14px;
+        align-items: center;
+        padding: 12px 16px 12px 12px;
+        border: 4px solid #fff;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 24px rgba(57, 94, 130, 0.2);
+        z-index: 12;
+        pointer-events: auto;
+        color: #31516f;
+      }
+      #story-card.scene-change {
+        animation: story-arrives 0.65s ease both;
+      }
+      @keyframes story-arrives {
+        0% { opacity: 0; transform: translateY(-16px) scale(0.96); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      .story-art {
+        width: 112px;
+        height: 112px;
+        border-radius: 18px;
+        object-fit: cover;
+        border: 3px solid #ffd45a;
+      }
+      .story-copy h2 {
+        margin: 0 0 4px;
+        color: #e88946;
+        font-size: 1.25rem;
+      }
+      .story-copy p {
+        margin: 0 0 9px;
+        font-size: 0.98rem;
+        line-height: 1.25;
+      }
+      .story-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .listen-btn, .sound-btn {
+        border: 0;
+        border-radius: 18px;
+        padding: 8px 12px;
+        font: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #fff;
+      }
+      .listen-btn { background: #5bb7d9; }
+      .listen-btn.is-speaking { background: #ef9a52; }
+      .story-dots { color: #f2b84b; letter-spacing: 2px; font-size: 0.9rem; }
+
+      #journey-return-btn {
+        position: absolute;
+        top: 94px;
+        right: 20px;
+        display: none;
+        z-index: 22;
+        padding: 9px 13px;
+        border: 2px solid #fff;
+        border-radius: 18px;
+        background: rgba(49, 81, 111, 0.9);
+        color: #fff;
+        font: inherit;
+        font-size: 0.84rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 3px 9px rgba(0,0,0,0.15);
+      }
+      #sound-controls {
+        position: absolute;
+        top: 20px;
+        right: 95px;
+        display: flex;
+        gap: 8px;
+        z-index: 22;
+        pointer-events: auto;
+      }
+      .sound-btn {
+        min-width: 78px;
+        background: rgba(49, 81, 111, 0.88);
+        border: 2px solid #fff;
+        box-shadow: 0 3px 9px rgba(0,0,0,0.15);
+        cursor: pointer;
+      }
+      .sound-btn.off { background: rgba(125, 137, 148, 0.9); }
+
+      #saved-progress {
+        margin: -1rem 0 1.4rem;
+        padding: 8px 16px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.76);
+        color: #31516f;
+        font-size: 1rem;
+        text-align: center;
+      }
+
+      #passport-progress {
+        margin: -8px 0 8px;
+        color: #e88946;
+        font-size: 0.95rem;
+        text-align: center;
+      }
+
+      #stamp-celebration {
+        position: absolute;
+        top: 18%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: none;
+        grid-template-columns: 68px minmax(190px, 1fr);
+        align-items: center;
+        gap: 12px;
+        width: min(360px, calc(100% - 32px));
+        box-sizing: border-box;
+        padding: 12px 18px 12px 12px;
+        border: 3px solid #fff;
+        border-radius: 24px;
+        background: rgba(255, 252, 230, 0.97);
+        box-shadow: 0 8px 24px rgba(57, 94, 130, 0.2);
+        color: #31516f;
+        text-align: left;
+        z-index: 40;
+        pointer-events: none;
+      }
+      #stamp-celebration.visible {
+        display: grid;
+        animation: stamp-celebrate 0.65s ease both;
+      }
+      #celebration-seal {
+        width: 68px;
+        height: 68px;
+        object-fit: contain;
+      }
+      #celebration-title {
+        display: block;
+        color: #e88946;
+        font-size: 1.12rem;
+      }
+      #celebration-message {
+        margin: 3px 0 0;
+        font-size: 0.88rem;
+        line-height: 1.2;
+      }
+      .final-celebration-card { display: none; }
+      #stamp-celebration.final-celebration {
+        inset: 0;
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100%;
+        min-height: 100%;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(18px, 4vw, 42px);
+        border: 0;
+        border-radius: 0;
+        background: rgba(35, 73, 104, 0.5);
+        pointer-events: auto;
+        overflow: hidden;
+        text-align: center;
+        z-index: 60;
+      }
+      #stamp-celebration.final-celebration.visible {
+        display: flex;
+        animation: final-celebration-backdrop 0.55s ease both;
+      }
+      #stamp-celebration.final-celebration > #celebration-seal,
+      #stamp-celebration.final-celebration > div:not(.final-celebration-card):not(.final-confetti) {
+        display: none;
+      }
+      .final-celebration-card {
+        position: relative;
+        z-index: 2;
+        display: block;
+        width: min(650px, 100%);
+        max-height: calc(100vh - 36px);
+        box-sizing: border-box;
+        overflow: auto;
+        padding: clamp(24px, 5vw, 42px) clamp(18px, 5vw, 52px) clamp(22px, 4vw, 34px);
+        border: 5px solid #fff;
+        border-radius: 34px;
+        background: linear-gradient(145deg, #fffdf2 0%, #f5fbff 58%, #effff4 100%);
+        box-shadow: 0 18px 48px rgba(35, 73, 104, 0.32), 0 0 0 8px rgba(255, 211, 79, 0.2);
+        color: #31516f;
+      }
+      .final-celebration-kicker {
+        margin: 0 0 5px;
+        color: #bd7a31;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      #final-celebration-title {
+        margin: 0;
+        color: #e88946;
+        font-size: clamp(1.8rem, 5vw, 2.8rem);
+        line-height: 1.05;
+      }
+      #final-celebration-message {
+        max-width: 530px;
+        margin: 12px auto 16px;
+        font-size: clamp(1rem, 2.5vw, 1.18rem);
+        line-height: 1.35;
+      }
+      .final-celebration-values {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0 auto 18px;
+      }
+      .final-celebration-value {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 12px;
+        border: 2px solid var(--value-color);
+        border-radius: 18px;
+        background: var(--value-soft);
+        color: #31516f;
+        font-size: 0.92rem;
+        font-weight: 600;
+      }
+      .final-celebration-verse {
+        margin: 0 auto 20px;
+        padding: 12px 16px;
+        border-radius: 18px;
+        background: rgba(255, 245, 190, 0.72);
+        color: #56728a;
+        font-size: 0.98rem;
+        font-style: italic;
+        line-height: 1.35;
+      }
+      .final-celebration-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px;
+      }
+      .final-celebration-actions button {
+        min-height: 58px;
+        padding: 12px 14px;
+        border: 3px solid #fff;
+        border-radius: 21px;
+        color: #fff;
+        font: inherit;
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.15;
+        cursor: pointer;
+        box-shadow: 0 5px 13px rgba(57, 94, 130, 0.18);
+        transition: transform 0.18s, box-shadow 0.18s;
+      }
+      .final-celebration-actions button:hover,
+      .final-celebration-actions button:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 17px rgba(57, 94, 130, 0.24);
+        outline: none;
+      }
+      #final-open-passport { background: #e88946; }
+      #final-new-adventure { background: #71c993; }
+      .final-celebration-note {
+        margin: 15px 0 0;
+        color: #71889a;
+        font-size: 0.82rem;
+      }
+      .final-confetti {
+        display: none;
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      #stamp-celebration.final-celebration .final-confetti { display: block; }
+      .final-confetti-piece {
+        position: absolute;
+        top: -12vh;
+        left: var(--confetti-x);
+        width: 10px;
+        height: 17px;
+        border-radius: 5px;
+        background: var(--confetti-color);
+        opacity: 0;
+        transform: rotate(var(--confetti-rotate));
+        animation: gentle-confetti 5.5s ease-in var(--confetti-delay) infinite;
+      }
+      .final-confetti-piece:nth-child(3n) { width: 8px; height: 8px; border-radius: 50%; }
+      .final-confetti-piece:nth-child(4n) { border-radius: 2px 7px; }
+      @keyframes stamp-celebrate {
+        0% { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.9); }
+        65% { transform: translateX(-50%) translateY(3px) scale(1.03); }
+        100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+      }
+      @keyframes final-celebration-backdrop {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+      @keyframes gentle-confetti {
+        0% { opacity: 0; transform: translate3d(0, -12vh, 0) rotate(0deg) scale(0.75); }
+        12% { opacity: 0.85; }
+        55% { opacity: 0.72; }
+        100% { opacity: 0; transform: translate3d(var(--confetti-drift), 116vh, 0) rotate(280deg) scale(0.95); }
+      }
+
+      @media (max-width: 650px) {
+        #story-card {
+          top: 86px;
+          left: 10px;
+          width: calc(100% - 20px);
+          box-sizing: border-box;
+          grid-template-columns: 82px 1fr;
+          min-height: 104px;
+          padding: 8px 10px 8px 8px;
+          gap: 10px;
+        }
+        .story-art { width: 82px; height: 82px; }
+        .story-copy h2 { font-size: 1.08rem; }
+        .story-copy p { font-size: 0.85rem; margin-bottom: 5px; }
+        .listen-btn { padding: 6px 9px; font-size: 0.78rem; }
+        #sound-controls { top: 14px; left: 10px; right: auto; }
+        .sound-btn { min-width: 66px; padding: 7px 8px; font-size: 0.75rem; }
+        #hud { top: 14px; right: 10px; }
+        .hud-item { width: 48px; height: 48px; }
+        .sigo-com-fe-badge { width: 54px; bottom: 10px; right: 10px; }
+        #mission-panel {
+          bottom: max(10px, env(safe-area-inset-bottom));
+          width: min(420px, calc(100% - 20px));
+          padding: 8px 11px 7px;
+          border-radius: 18px;
+        }
+        .mission-kicker { font-size: 0.64rem; }
+        #mission-title { font-size: 0.88rem; }
+        #mission-hint { margin: 2px 0 4px; font-size: 0.8rem; }
+        #mission-target { padding: 3px 7px; font-size: 0.7rem; }
+        #mission-target-icon { font-size: 0.9rem; }
+        #mission-feedback { font-size: 0.68rem; }
+        #mission-progress { font-size: 0.7rem; }
+        #dialog-box { font-size: 0.98rem; padding: 10px; }
+        #matching-activity { align-items: flex-start; padding: 10px; }
+        .matching-dialog { max-height: calc(100vh - 20px); padding: 16px 12px 18px; border-radius: 24px; }
+        #matching-instruction { margin-bottom: 12px; }
+        .matching-board { grid-template-columns: 1fr; gap: 12px; }
+        .matching-column-title { margin-bottom: 5px; }
+        .match-card, .match-target { min-height: 74px; grid-template-columns: 58px 1fr; }
+        .match-card-art, .match-target-icon { width: 48px; height: 48px; font-size: 1.8rem; }
+        .match-card-name, .match-target-name { font-size: 0.9rem; }
+        .match-card-hint, .match-target-hint { font-size: 0.72rem; }
+        #passport-modal { width: calc(100% - 20px); max-height: calc(100vh - 20px); padding: 16px 12px; border-width: 6px; border-radius: 24px; }
+        .passport-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .stamp-slot { width: 70px; height: 70px; }
+        .passport-memory-heading { font-size: 1.1rem; }
+        .memory-grid { grid-template-columns: 1fr; gap: 10px; }
+        .memory-card { grid-template-columns: 92px 1fr; }
+        .passport-journey-grid { grid-template-columns: 1fr; gap: 8px; }
+        .passport-journey-card { min-height: 92px; }
+        .passport-journey-status { min-height: 0; }
+        #journey-return-btn { top: 86px; right: 10px; }
+        .memory-card-art-wrap { min-height: 128px; }
+        .memory-card-title { font-size: 0.94rem; }
+        .memory-card-text { font-size: 0.75rem; }
+        #saved-progress { max-width: 82%; margin-bottom: 1rem; font-size: 0.86rem; }
+        #stamp-celebration { top: 15%; }
+        #stamp-celebration.final-celebration { top: 0; padding: 12px; }
+        .final-celebration-card { border-width: 4px; border-radius: 27px; padding: 24px 15px 20px; }
+        #final-celebration-title { font-size: 1.9rem; }
+        #final-celebration-message { margin-top: 10px; font-size: 0.95rem; }
+        .final-celebration-values { gap: 6px; margin-bottom: 14px; }
+        .final-celebration-value { padding: 7px 9px; font-size: 0.82rem; }
+        .final-celebration-verse { margin-bottom: 15px; font-size: 0.88rem; }
+        .final-celebration-actions { grid-template-columns: 1fr; gap: 8px; }
+        .final-celebration-actions button { min-height: 54px; font-size: 0.96rem; }
+        .final-celebration-note { margin-top: 11px; font-size: 0.76rem; }
+        #journey-screen { align-items: flex-start; padding: 10px; }
+        .journey-dialog { max-height: calc(100vh - 20px); padding: 16px 12px 18px; border-radius: 24px; }
+        #journey-message { margin-bottom: 14px; }
+        .journey-cards { grid-template-columns: 1fr; gap: 10px; max-width: 430px; margin: 0 auto; }
+        .journey-card { display: grid; grid-template-columns: 96px 1fr; min-height: 112px; }
+        .journey-card-image-wrap { height: 100%; min-height: 112px; }
+        .journey-card-content { padding: 10px 11px 11px; }
+        .journey-card-name { font-size: 0.98rem; }
+        .journey-card-seal { width: 38px; height: 38px; margin-top: -18px; }
+        .journey-card-status { min-height: 0; margin-top: 7px; font-size: 0.76rem; }
+        .journey-card-action { margin-top: 6px; padding-top: 6px; font-size: 0.78rem; }
+      }
+    </style>
+  
+<style>
+    #rosebud-exported-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        opacity: 1;
+        transition: opacity 500ms ease-in-out;
+    }
+
+    #rosebud-exported-splash.is-hiding {
+        opacity: 0;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        text-align: center;
+        color: #fff;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__logo {
+        width: 100px;
+        height: 100px;
+        animation: rosebud-exported-splash-breathe 2.4s ease-in-out infinite;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 16px;
+        line-height: 1.25;
+        letter-spacing: 0.06em;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text strong {
+        font-weight: 700;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text span:last-child {
+        opacity: 0.88;
+    }
+
+    @keyframes rosebud-exported-splash-breathe {
+        0%,
+        100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+</style></head>
+  <body>
+<div id="rosebud-exported-splash" aria-live="polite">
+    <div class="rosebud-exported-splash__content">
+        <img
+            class="rosebud-exported-splash__logo"
+            src="__rosebud/rosebud-icon.png"
+            alt="Rosebud Logo"
+            width="100"
+            height="100"
+        />
+        <div class="rosebud-exported-splash__text" aria-label="Rosebud.AI Make Games">
+            <strong>Rosebud.AI</strong>
+            <span>Make Games</span>
+        </div>
+    </div>
+</div>
+    <div id="game-container"></div>
+
+    <div id="ui-overlay">
+      <div id="start-screen">
+        <h1>Mundo Bíblico:<br>Pequenos Heróis</h1>
+        <section id="resume-card" aria-live="polite" aria-label="Retomar a aventura">
+          <span class="resume-kicker">📖 Seu caminho está guardado</span>
+          <h2 id="resume-title">Continuar sua aventura</h2>
+          <p id="resume-stage">Cenário 1 de 3 · Etapa da aventura</p>
+          <p class="resume-objective"><strong>Próximo objetivo</strong><span id="resume-objective">Continuar a aventura.</span></p>
+          <button class="ui-button" id="continue-adventure-btn" type="button">▶ Continuar daqui</button>
+        </section>
+        <button class="play-btn ui-button" id="start-btn" type="button">✨ Começar nova aventura</button>
+        <p id="saved-progress" aria-live="polite">Seu Passaporte Bíblico está esperando por você.</p>
+        <img src="assets/sigo_com_fe_seal.webp" class="sigo-com-fe-badge" style="position: static; margin-top: 20px; width: 100px;">
+      </div>
+
+      <div id="sound-controls" aria-label="Controles de áudio">
+        <button class="sound-btn ui-button" id="music-toggle" aria-pressed="true">🎵 Música: sim</button>
+        <button class="sound-btn ui-button" id="effects-toggle" aria-pressed="true">✨ Efeitos: sim</button>
+      </div>
+
+      <div id="hud">
+        <button class="hud-item ui-button" id="passport-btn" type="button" aria-label="Abrir Passaporte Bíblico" aria-controls="passport-modal" aria-expanded="false">
+          <img src="assets/bible_passport_icon.webp" alt="Passaporte">
+        </button>
+      </div>
+
+      <button id="journey-return-btn" class="ui-button" type="button">🗺️ Voltar ao caminho</button>
+
+      <section id="story-card" aria-live="polite" aria-label="Contação da história">
+        <img id="story-art" class="story-art" src="assets/garden_background.webp" alt="Ilustração do cenário">
+        <div class="story-copy">
+          <h2 id="story-title">Uma história do jardim</h2>
+          <p id="story-text">Toque em começar para ouvir a aventura.</p>
+          <div class="story-actions">
+            <button class="listen-btn ui-button" id="listen-story">🔊 Ouvir novamente</button>
+            <span class="story-dots" id="story-dots" aria-label="Cenário 1 de 3">● ○ ○</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="mission-panel" aria-live="polite" aria-label="Próximo passo da missão">
+        <span class="mission-kicker">Próximo passo</span>
+        <h2 id="mission-title">Missão do Oásis</h2>
+        <p id="mission-hint">Siga a pegada brilhante.</p>
+        <div id="mission-target" aria-label="Alvo ativo">
+          <span id="mission-target-icon" aria-hidden="true">👣</span>
+          <span id="mission-target-label">Próxima pegada</span>
+        </div>
+        <p id="mission-feedback" aria-live="polite"></p>
+        <div id="mission-progress" aria-label="Progresso da missão">0/3</div>
+      </section>
+
+      <section id="matching-activity" role="dialog" aria-modal="true" aria-labelledby="matching-title" aria-describedby="matching-instruction">
+        <div class="matching-dialog">
+          <span class="matching-kicker">Atividade do Jardim · 3 combinações</span>
+          <h2 id="matching-title">Combine cada imagem com seu valor</h2>
+          <p id="matching-instruction">Escolha um cartão grande e depois toque no alvo que combina com ele.</p>
+          <div class="matching-progress" aria-label="Progresso das combinações">
+            <span class="matching-progress-dot"></span>
+            <span class="matching-progress-dot"></span>
+            <span class="matching-progress-dot"></span>
+          </div>
+          <div class="matching-board">
+            <div>
+              <h3 class="matching-column-title">Imagens amigáveis</h3>
+              <div class="matching-cards">
+                <button class="match-card" type="button" data-match-card="lamb">
+                  <span class="match-card-art"><img src="assets/lamb_sprite.webp" alt="Cordeirinho sorridente"></span>
+                  <span><span class="match-card-name">Cuidar do cordeirinho</span><span class="match-card-hint">Um amigo precisa de carinho.</span></span>
+                </button>
+                <button class="match-card" type="button" data-match-card="footsteps">
+                  <span class="match-card-art" aria-hidden="true">👣</span>
+                  <span><span class="match-card-name">Seguir as pegadas</span><span class="match-card-hint">Uma pista mostra o caminho.</span></span>
+                </button>
+                <button class="match-card" type="button" data-match-card="music">
+                  <span class="match-card-art" aria-hidden="true">🎵</span>
+                  <span><span class="match-card-name">Cantar uma canção</span><span class="match-card-hint">A alegria pode virar música.</span></span>
+                </button>
+              </div>
+            </div>
+            <div>
+              <h3 class="matching-column-title">Alvos de valores</h3>
+              <div class="matching-targets">
+                <button class="match-target" type="button" data-match-target="LOVE">
+                  <span class="match-target-icon" aria-hidden="true">💖</span>
+                  <span><span class="match-target-name">Amor</span><span class="match-target-hint">Cuidar e fazer o bem.</span></span>
+                </button>
+                <button class="match-target" type="button" data-match-target="FAITH">
+                  <span class="match-target-icon" aria-hidden="true">🌟</span>
+                  <span><span class="match-target-name">Fé</span><span class="match-target-hint">Confiar e seguir com coragem.</span></span>
+                </button>
+                <button class="match-target" type="button" data-match-target="JOY">
+                  <span class="match-target-icon" aria-hidden="true">😊</span>
+                  <span><span class="match-target-name">Alegria</span><span class="match-target-hint">Agradecer com um coração feliz.</span></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="matching-feedback" aria-live="polite" aria-atomic="true">
+            <p id="matching-feedback">Você consegue! Qual cartão vamos combinar primeiro?</p>
+            <p id="matching-verse">Cada valor ensina um jeito bonito de viver.</p>
+            <div id="matching-burst-layer" aria-hidden="true"></div>
+          </div>
+          <button id="matching-finish" type="button" class="ui-button">🌈 Continuar a aventura</button>
+        </div>
+      </section>
+
+      <section id="journey-screen" role="dialog" aria-modal="true" aria-labelledby="journey-title" aria-describedby="journey-message">
+        <div class="journey-dialog">
+          <p class="journey-kicker">Passaporte Bíblico · próximo caminho</p>
+          <h2 id="journey-title">Escolha uma aventura</h2>
+          <p id="journey-message">Toque em um cartão para continuar sua jornada.</p>
+          <div class="journey-cards">
+            <button class="journey-card journey-garden" type="button" data-journey-scene="GARDEN" aria-label="Jardim do Amor">
+              <span class="journey-card-image-wrap">
+                <img class="journey-card-art" src="assets/garden_background.webp" alt="Jardim verde com árvores, flores e água brilhante">
+                <span class="journey-card-number">1</span>
+              </span>
+              <span class="journey-card-content">
+                <span class="journey-card-top">
+                  <span class="journey-card-name">Jardim do Amor</span>
+                  <img class="journey-card-seal" src="assets/sigo_com_fe_seal.webp" alt="Selo do Amor">
+                </span>
+                <span class="journey-card-value">Selo do Amor</span>
+                <span class="journey-card-status">Etapa ainda não visitada</span>
+                <span class="journey-card-action">Escolher aventura</span>
+              </span>
+            </button>
+
+            <button class="journey-card journey-oasis" type="button" data-journey-scene="OASIS" aria-label="Oásis da Fé" disabled>
+              <span class="journey-card-image-wrap">
+                <img class="journey-card-art" src="assets/oasis_background.webp" alt="Oásis ensolarado com palmeiras, areia dourada e água azul">
+                <span class="journey-card-number">2</span>
+              </span>
+              <span class="journey-card-content">
+                <span class="journey-card-top">
+                  <span class="journey-card-name">Oásis da Fé</span>
+                  <img class="journey-card-seal" src="assets/sigo_com_fe_seal.webp" alt="Selos da Fé e da Alegria">
+                </span>
+                <span class="journey-card-value">Selos da Fé e da Alegria</span>
+                <span class="journey-card-status">Complete o Jardim primeiro</span>
+                <span class="journey-card-action">Caminho bloqueado</span>
+              </span>
+            </button>
+
+            <button class="journey-card journey-river" type="button" data-journey-scene="RIVER" aria-label="Rio da Bondade" disabled>
+              <span class="journey-card-image-wrap">
+                <img class="journey-card-art" src="assets/kindness_river_background.webp" alt="Rio azul ensolarado com flores coloridas e margens verdes">
+                <span class="journey-card-number">3</span>
+              </span>
+              <span class="journey-card-content">
+                <span class="journey-card-top">
+                  <span class="journey-card-name">Rio da Bondade</span>
+                  <img class="journey-card-seal" src="assets/sigo_com_fe_seal.webp" alt="Selo da Bondade">
+                </span>
+                <span class="journey-card-value">Selo da Bondade</span>
+                <span class="journey-card-status">Complete o Oásis primeiro</span>
+                <span class="journey-card-action">Caminho bloqueado</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div id="dialog-box">
+        <div id="dialog-text">Olá, pequeno herói!</div>
+      </div>
+
+      <div id="passport-modal" role="dialog" aria-modal="true" aria-labelledby="passport-title">
+        <h2 id="passport-title">Meu Passaporte Bíblico</h2>
+        <p id="passport-progress" aria-live="polite">0 de 4 selos conquistados</p>
+        <section id="passport-resume" aria-live="polite" aria-label="Última aventura visitada">
+          <span class="passport-resume-kicker">📍 Onde parei</span>
+          <strong id="passport-resume-scene">🌿 Jardim do Amor</strong>
+          <span id="passport-resume-stage">Cenário 1 de 3 · Colheita do amor</span>
+          <p class="passport-resume-objective"><strong>Próximo objetivo:</strong> <span id="passport-resume-objective">Colher as maçãs do amor.</span></p>
+        </section>
+        <section id="passport-completion" aria-live="polite">
+          <strong>Parabéns, Pequeno Herói!</strong>
+          <p>Você reuniu os quatro valores da jornada:</p>
+          <div class="passport-values" aria-label="Amor, Fé, Alegria e Bondade">
+            <span>Amor</span>
+            <span>Fé</span>
+            <span>Alegria</span>
+            <span>Bondade</span>
+          </div>
+        </section>
+        <div class="passport-grid" aria-label="Selos conquistados">
+          <div class="stamp-slot" id="stamp-love">
+            <span>Amor</span>
+            <img src="assets/sigo_com_fe_seal.webp" alt="Amor">
+          </div>
+          <div class="stamp-slot" id="stamp-faith">
+            <span>Fé</span>
+            <img src="assets/sigo_com_fe_seal.webp" alt="Fé">
+          </div>
+          <div class="stamp-slot" id="stamp-joy">
+            <span>Alegria</span>
+            <img src="assets/sigo_com_fe_seal.webp" alt="Alegria">
+          </div>
+          <div class="stamp-slot" id="stamp-kindness">
+            <span>Bondade</span>
+            <img src="assets/sigo_com_fe_seal.webp" alt="Bondade">
+          </div>
+        </div>
+        <h3 class="passport-journey-heading">🗺️ Meus cenários</h3>
+        <div class="passport-journey-grid" aria-label="Estado dos cenários da jornada">
+          <button class="passport-journey-card" type="button" data-passport-scene="GARDEN">
+            <span class="passport-journey-name">🌿 Jardim do Amor</span>
+            <span class="passport-journey-value">Selo do Amor</span>
+            <span class="passport-journey-status">🌱 Comece por aqui.</span>
+            <span class="passport-journey-action">▶ Continuar aventura</span>
+          </button>
+          <button class="passport-journey-card is-locked" type="button" data-passport-scene="OASIS" disabled>
+            <span class="passport-journey-name">💧 Oásis da Fé</span>
+            <span class="passport-journey-value">Fé e Alegria</span>
+            <span class="passport-journey-status">🔒 Complete o Jardim para abrir este caminho.</span>
+            <span class="passport-journey-action">Caminho fechado</span>
+          </button>
+          <button class="passport-journey-card is-locked" type="button" data-passport-scene="RIVER" disabled>
+            <span class="passport-journey-name">🌸 Rio da Bondade</span>
+            <span class="passport-journey-value">Selo da Bondade</span>
+            <span class="passport-journey-status">🔒 Complete o Oásis para abrir este caminho.</span>
+            <span class="passport-journey-action">Caminho fechado</span>
+          </button>
+        </div>
+        <h3 class="passport-memory-heading">📖 Minhas lembranças</h3>
+        <p id="passport-memory-count" aria-live="polite">0 de 4 lembranças guardadas</p>
+        <div class="memory-grid" aria-label="Memórias das aventuras">
+          <article class="memory-card memory-garden is-locked" data-memory="lambCare" aria-label="Lembrança bloqueada: cuidar do cordeirinho">
+            <div class="memory-card-art-wrap">
+              <img class="memory-card-art" src="assets/garden_background.webp" alt="Jardim do Amor">
+              <span class="memory-card-icon" aria-hidden="true">🐑</span>
+            </div>
+            <div class="memory-card-content">
+              <span class="memory-card-scene">Jardim do Amor</span>
+              <strong class="memory-card-title">Cuidar do cordeirinho</strong>
+              <span class="memory-card-value">Valor: Amor e cuidado</span>
+              <span class="memory-card-text">Você escolheu uma forma gentil de ajudar um amigo.</span>
+              <span class="memory-card-status">🔒 Lembrança a descobrir</span>
+            </div>
+          </article>
+          <article class="memory-card memory-oasis is-locked" data-memory="footsteps" aria-label="Lembrança bloqueada: seguir as pegadas">
+            <div class="memory-card-art-wrap">
+              <img class="memory-card-art" src="assets/oasis_background.webp" alt="Oásis da Fé">
+              <span class="memory-card-icon" aria-hidden="true">👣</span>
+            </div>
+            <div class="memory-card-content">
+              <span class="memory-card-scene">Oásis da Fé</span>
+              <strong class="memory-card-title">Seguir as pegadas</strong>
+              <span class="memory-card-value">Valor: Fé e atenção</span>
+              <span class="memory-card-text">Você seguiu cada pista brilhante até encontrar o caminho.</span>
+              <span class="memory-card-status">🔒 Lembrança a descobrir</span>
+            </div>
+          </article>
+          <article class="memory-card memory-oasis is-locked" data-memory="praiseJoy" aria-label="Lembrança bloqueada: louvar com alegria">
+            <div class="memory-card-art-wrap">
+              <img class="memory-card-art" src="assets/oasis_background.webp" alt="Oásis da Fé">
+              <span class="memory-card-icon" aria-hidden="true">🎵</span>
+            </div>
+            <div class="memory-card-content">
+              <span class="memory-card-scene">Oásis da Fé</span>
+              <strong class="memory-card-title">Louvar com alegria</strong>
+              <span class="memory-card-value">Valor: Alegria e gratidão</span>
+              <span class="memory-card-text">Você tocou as notas na ordem e louvou com o coração.</span>
+              <span class="memory-card-status">🔒 Lembrança a descobrir</span>
+            </div>
+          </article>
+          <article class="memory-card memory-river is-locked" data-memory="riverFlowers" aria-label="Lembrança bloqueada: compartilhar flores">
+            <div class="memory-card-art-wrap">
+              <img class="memory-card-art" src="assets/kindness_river_background.webp" alt="Rio da Bondade">
+              <span class="memory-card-icon" aria-hidden="true">🌸</span>
+            </div>
+            <div class="memory-card-content">
+              <span class="memory-card-scene">Rio da Bondade</span>
+              <strong class="memory-card-title">Compartilhar flores</strong>
+              <span class="memory-card-value">Valor: Bondade e partilha</span>
+              <span class="memory-card-text">Você levou cada flor ao amigo que estava esperando.</span>
+              <span class="memory-card-status">🔒 Lembrança a descobrir</span>
+            </div>
+          </article>
+        </div>
+        <div id="passport-reward" aria-label="Recompensa visual permanente">🌟 Coroa da Jornada 🌟</div>
+        <button class="close-btn ui-button" id="close-passport">Fechar</button>
+      </div>
+      
+      <section id="stamp-celebration" role="status" aria-live="polite" aria-atomic="true">
+        <img id="celebration-seal" src="assets/sigo_com_fe_seal.webp" alt="Novo selo conquistado">
+        <div>
+          <strong id="celebration-title">Novo selo!</strong>
+          <p id="celebration-message">Sua jornada está guardada neste dispositivo.</p>
+        </div>
+        <div class="final-confetti" aria-hidden="true">
+          <span class="final-confetti-piece" style="--confetti-x: 5%; --confetti-delay: 0s; --confetti-drift: 42px; --confetti-rotate: 12deg; --confetti-color: #ff9fba;"></span>
+          <span class="final-confetti-piece" style="--confetti-x: 12%; --confetti-delay: 1.2s; --confetti-drift: -30px; --confetti-rotate: 48deg; --confetti-color: #ffd34f;"></span>
+          <span class="final-confetti-piece" style="--confetti-x: 20%; --confetti-delay: 0.6s; --confetti-drift: 54px; --confetti-rotate: 78deg; --confetti-color: #71c993;"></span>
+          <span class="final-confetti-piece" style="--confetti-x: 29%; --confetti-delay: 2.1s; --confetti-drift: -42px; --confetti-rotate: 24deg; --confetti-color: #9d9af5;"></span>
+          <span class="final-confetti-piece" style="--confetti-x: 38%; --confetti-delay: 0.3s; --confetti-drift: 28px; --confetti-rotate: 64deg; --confetti-color: #70c9e8;"></span>
+          <span class="final-confetti-piece" style="--confetti-x: 47%; --confetti-delay: 1.7s; --confetti-drift: -48px; --confetti-rotate: 8deg; --confetti-color: #f3b84b;"></span>
+          <span class="final-confetti-piece" style="--confetti-x: 56%; --confetti-delay: 2.6s; --confetti-drift: 38px; --confetti-rotate: 42deg; --confetti-color: #ff8fb8;"></span>
+          <span class="final-confetti-piece" style="--confetti-x: 65%; --confetti-delay: 0.9s; --confetti-drift: -36px; --confetti-rotate: 88deg; --confetti-color: #7ed8c2;"></span>
+          <span class="final-confetti-piece" style="--confetti-x: 73%; --confetti-delay: 1.5s; --confetti-drift: 44px; --confetti-rotate: 31deg; --confetti-color: #ffcf55;"></span>
+          <span class="final-confetti-piece" style="--confetti-x: 82%; --confetti-delay: 2.4s; --confetti-drift: -52px; --confetti-rotate: 59deg; --confetti-color: #f08aa8;"></span>
+          <span class="final-confetti-piece" style="--confetti-x: 91%; --confetti-delay: 0.4s; --confetti-drift: 32px; --confetti-rotate: 15deg; --confetti-color: #71c993;"></span>
+          <span class="final-confetti-piece" style="--confetti-x: 97%; --confetti-delay: 1.9s; --confetti-drift: -40px; --confetti-rotate: 73deg; --confetti-color: #9d9af5;"></span>
+        </div>
+        <div class="final-celebration-card" role="dialog" aria-modal="true" aria-labelledby="final-celebration-title" aria-describedby="final-celebration-message">
+          <p class="final-celebration-kicker">🌟 Passaporte completo 🌟</p>
+          <h2 id="final-celebration-title">Você é um Pequeno Herói!</h2>
+          <p id="final-celebration-message">Que orgulho! Você reuniu Amor, Fé, Alegria e Bondade.</p>
+          <div class="final-celebration-values" aria-label="Valores conquistados">
+            <span class="final-celebration-value" style="--value-color: #f08aa8; --value-soft: #fff0f5;">💖 Amor</span>
+            <span class="final-celebration-value" style="--value-color: #70c9e8; --value-soft: #eef9ff;">🌟 Fé</span>
+            <span class="final-celebration-value" style="--value-color: #f3b84b; --value-soft: #fff7d9;">😊 Alegria</span>
+            <span class="final-celebration-value" style="--value-color: #71c993; --value-soft: #effbf2;">🤝 Bondade</span>
+          </div>
+          <blockquote class="final-celebration-verse">“Façam tudo com amor.” — 1 Coríntios 16:14</blockquote>
+          <div class="final-celebration-actions">
+            <button id="final-open-passport" type="button">📖 Abrir meu Passaporte completo</button>
+            <button id="final-new-adventure" type="button">✨ Começar uma nova jornada</button>
+          </div>
+          <p class="final-celebration-note">Seus selos, memórias e conquistas continuam guardados neste dispositivo.</p>
+        </div>
+      </section>
+
+      <img src="assets/sigo_com_fe_seal.webp" class="sigo-com-fe-badge" alt="Sigo com Fé">
+    </div>
+
+    <script type="module" src="main.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/ChatManager.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/ImageGenerator.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/ProgressLogger.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/OGP.js"></script>
+  
+<script>
+    (() => {
+        const splashRoot = document.getElementById('rosebud-exported-splash');
+        if (!splashRoot) return;
+
+        let isReady = false;
+        let isMinimumVisibleTimeElapsed = false;
+        let isHidden = false;
+
+        const maybeHideSplash = () => {
+            if (isHidden || !isReady || !isMinimumVisibleTimeElapsed) return;
+
+            isHidden = true;
+            splashRoot.classList.add('is-hiding');
+            window.setTimeout(() => splashRoot.remove(), 500);
+        };
+
+        const markReady = () => {
+            isReady = true;
+            maybeHideSplash();
+        };
+
+        window.setTimeout(() => {
+            isMinimumVisibleTimeElapsed = true;
+            maybeHideSplash();
+        }, 1000);
+
+        if (document.readyState === 'complete') {
+            markReady();
+        } else {
+            window.addEventListener('load', markReady, { once: true });
+        }
+
+        
+    })();
+</script></body>
+</html>

@@ -512,6 +512,19 @@ export default function Kids() {
         <p>{t('kids.subtitle')}</p>
       </div>
 
+      <section style={{ maxWidth: 940, margin: '0 auto 2rem', borderRadius: 24, overflow: 'hidden', background: 'linear-gradient(120deg,#51b7ec,#88d8ff 50%,#ffe39a)', boxShadow: '0 14px 34px rgba(42,112,170,.22)', color: '#173c65' }}>
+        <div style={{ padding: 'clamp(1.25rem,4vw,2.2rem)', display: 'flex', gap: '1.2rem', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+          <div style={{ maxWidth: 610 }}>
+            <div style={{ fontSize: '2.4rem', marginBottom: 4 }}>🌈 📖 🐑</div>
+            <h2 style={{ margin: 0, fontSize: 'clamp(1.45rem,3vw,2rem)' }}>Mundo Bíblico: Pequenos Heróis</h2>
+            <p style={{ margin: '.55rem 0 0', lineHeight: 1.55, fontSize: '1rem' }}>Uma aventura guiada para crianças de 3 a 10 anos, com histórias, missões, passaporte bíblico, música e recompensas.</p>
+          </div>
+          <a href="/mundo-biblico/index.html" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, borderRadius: 14, background: '#fff', boxShadow: '0 6px 16px rgba(27,85,132,.2)', padding: '14px 18px', color: '#176fb3', textDecoration: 'none', fontWeight: 900, whiteSpace: 'nowrap' }}>
+            <Sparkles size={18} /> Jogar Mundo Bíblico
+          </a>
+        </div>
+      </section>
+
       {/* Stories */}
       <section className="kids-section">
         <h2><BookOpen size={24} /> {t('kids.bibleStories')}</h2>
