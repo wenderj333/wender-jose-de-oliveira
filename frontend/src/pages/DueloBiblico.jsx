@@ -3,8 +3,10 @@ import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useTranslation } from 'react-i18next';
 import './DueloBiblico.css';
+import './DueloBiblicoOverrides.css';
 
 const TOTAL_QUESTIONS = 10;
+const DUEL_TIMER_SECONDS = 15;
 const LANGUAGES = [
   { code: 'pt', label: 'Português', flag: '🇧🇷' },
   { code: 'es', label: 'Español', flag: '🇪🇸' },
@@ -22,6 +24,12 @@ function questionForLanguage(question, lang) {
     q: question[`${lang}_q`] || question.q,
     opts: question[`${lang}_opts`] || question.opts || [],
   };
+}
+
+function playGameSound(file) {
+  const sound = new Audio(`/duelo-biblico/${file}`);
+  sound.volume = 0.45;
+  sound.play().catch(() => {});
 }
 
 export default function DueloBiblico() {
@@ -43,6 +51,8 @@ export default function DueloBiblico() {
   const [chatMessages, setChatMessages] = useState([]);
   const [chatText, setChatText] = useState('');
   const [invite, setInvite] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(DUEL_TIMER_SECONDS);
+  const [ranking, setRanking] = useState([]);
 
   const currentQuestion = useMemo(
     () => questionForLanguage(questions[questionIndex], gameLanguage),
@@ -60,13 +70,16 @@ export default function DueloBiblico() {
       setQuestionIndex(0);
       setAnswer(null);
       setPlayers([]);
+      setTimeLeft(DUEL_TIMER_SECONDS);
       setStatus('playing');
       setMessage('Partida iniciada. Cada pergunta vale 3 pontos.');
+      playGameSound('match-found-sound.mp3');
     };
     const score = (data) => setPlayers(data.jogadores || []);
     const next = (data) => {
       setQuestionIndex(data.idx || 0);
       setAnswer(null);
+      setTimeLeft(DUEL_TIMER_SECONDS);
       setMessage('Próxima pergunta');
     };
     const finished = (data) => {
@@ -76,6 +89,7 @@ export default function DueloBiblico() {
       setMessage('Partida terminada. Deus abençoe os dois jogadores!');
     };
     const error = (data) => { setStatus('ready'); setMessage(data.message || 'Não foi possível iniciar a partida. Tente novamente.'); };
+    const timer = (data) => setTimeLeft(Math.max(0, Number(data.seconds) || 0));
 
     on('game_queued', queued);
     on('game_matched', matched);
@@ -83,6 +97,7 @@ export default function DueloBiblico() {
     on('game_next_question', next);
     on('game_finished', finished);
     on('game_error', error);
+    on('game_timer', timer);
     return () => {
       off('game_queued', queued);
       off('game_matched', matched);
@@ -90,8 +105,17 @@ export default function DueloBiblico() {
       off('game_next_question', next);
       off('game_finished', finished);
       off('game_error', error);
+      off('game_timer', timer);
     };
   }, [off, on]);
+
+  useEffect(() => {
+    const api = import.meta.env.VITE_API_URL || '';
+    fetch(`${api}/api/duelo/ranking`)
+      .then(response => response.ok ? response.json() : { ranking: [] })
+      .then(data => setRanking(Array.isArray(data.ranking) ? data.ranking.slice(0, 10) : []))
+      .catch(() => setRanking([]));
+  }, [status]);
 
   useEffect(() => {
     if (!isConnected || !user?.id) return undefined;
@@ -144,6 +168,7 @@ export default function DueloBiblico() {
     if (answer !== null || !currentQuestion || !roomId) return;
     const correct = choice === currentQuestion.r;
     setAnswer(choice);
+    if (correct) playGameSound('correct-sound.mp3');
     setMessage(correct ? 'Resposta certa! A aguardar o outro jogador…' : 'Resposta registada. A aguardar o outro jogador…');
     send({ type: 'game_answer', roomId, choice, pontos: correct ? 3 : 0 });
   };
@@ -183,7 +208,7 @@ export default function DueloBiblico() {
       <div className="duel-spark duel-spark-one">✦</div><div className="duel-spark duel-spark-two">✧</div><div className="duel-spark duel-spark-three">◆</div>
       <section className="duel-welcome">
         <div className="duel-welcome-copy"><img src="/duelo-biblico/bible-logo.webp" alt="Bíblia aberta" /><div><span className="duel-kicker">✦ DESAFIO BÍBLICO · 2 JOGADORES</span><h1>Duelo Bíblico</h1><p>{message}</p></div></div>
-        <div className="duel-language-wrap"><span>Escolhe o teu idioma</span><div className="duel-languages">{LANGUAGES.map(language => <button key={language.code} onClick={() => setGameLanguage(language.code)} className={gameLanguage === language.code ? 'active' : ''} title={language.label}>{language.flag}<b>{language.code.toUpperCase()}</b></button>)}</div></div>
+        <div className="duel-language-wrap"><span>Escolhe o teu idioma</span><div className="duel-languages">{LANGUAGES.map(language => <button key={language.code} onClick={() => setGameLanguage(language.code)} className={gameLanguage === language.code ? 'active' : ''}>{language.flag}<b>{language.label}</b></button>)}</div></div>
       </section>
 
       <div className="duel-board">
@@ -216,7 +241,7 @@ export default function DueloBiblico() {
           {status === 'playing' && !currentQuestion && <div className="duel-action-card"><div className="duel-trophy">✨</div><h2>A preparar o desafio</h2><p>As perguntas estão a chegar. Aguarda um instante.</p></div>}
 
           {status === 'playing' && currentQuestion && <div className="duel-question-card">
-            <div className="duel-question-head"><span>Pergunta {questionIndex + 1} de {Math.max(questions.length, TOTAL_QUESTIONS)}</span><span>⚔️ {opponent?.userName || 'Adversário'}</span></div>
+            <div className="duel-question-head"><span>Pergunta {questionIndex + 1} de {Math.max(questions.length, TOTAL_QUESTIONS)}</span><span className={`duel-timer ${timeLeft <= 5 ? 'urgent' : ''}`}>⏱ {timeLeft}s</span><span>⚔️ {opponent?.userName || 'Adversário'}</span></div>
             <div className="duel-question-medal">✦</div><h2>{currentQuestion.q}</h2>
             <div className="duel-options">{currentQuestion.opts.map((option, index) => { const picked = answer === index; const correct = answer !== null && index === currentQuestion.r; return <button key={`${option}-${index}`} onClick={() => chooseAnswer(index)} disabled={answer !== null} className={`${picked ? 'picked' : ''} ${correct ? 'correct' : ''}`}><b>{String.fromCharCode(65 + index)}</b><span>{option}</span></button>; })}</div>
             {players.length > 0 && <div className="duel-scoreboard">{players.map(player => <span key={player.userId}>{player.userName}<b>{player.pontos} pts</b></span>)}</div>}
@@ -234,7 +259,7 @@ export default function DueloBiblico() {
         </aside>
       </div>
 
-      <section className="duel-ranking"><div><span>🏆</span><div><h2>Conquistas do Desafio</h2><p>Joga, aprende e coleciona recompensas.</p></div></div><div className="duel-badges"><span><img src="/duelo-biblico/medal-gold.webp" alt="" />Primeira vitória</span><span><img src="/duelo-biblico/medal-silver.webp" alt="" />5 respostas certas</span><span><img src="/duelo-biblico/medal-bronze.webp" alt="" />3 dias seguidos</span></div></section>
+      <section className="duel-ranking"><div><span>🏆</span><div><h2>Top 10 do ranking</h2><p>Os jogadores com mais pontos no Duelo Bíblico.</p></div></div><ol className="duel-top-ten">{ranking.length ? ranking.map((entry, index) => <li key={`${entry.nome}-${index}`}><b>{entry.posicao || index + 1}º</b><span>{entry.foto ? <img src={entry.foto} alt="" /> : '✦'} {entry.nome}</span><strong>{entry.pontos} pts</strong></li>) : <li className="duel-ranking-empty">Jogue uma partida para começar o ranking.</li>}</ol></section>
 
       {invite && <div className="duel-invite-overlay"><div className="duel-invite-modal"><div>⚔️</div><span>CONVITE PARA DUELO</span><h2>{invite.userName} quer desafiar-te</h2><p>Aceitas jogar uma partida de 10 perguntas bíblicas?</p><section><button onClick={() => answerInvite(false)}>Agora não</button><button onClick={() => answerInvite(true)}>Aceitar desafio</button></section></div></div>}
     </main>

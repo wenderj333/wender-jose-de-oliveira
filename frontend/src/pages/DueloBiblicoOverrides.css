@@ -1,0 +1,20 @@
+/* Ajustes compactos do visual original e elementos da partida real. */
+.duel-welcome { width: min(100%, 520px); margin-bottom: 14px; padding: 16px 22px; }
+.duel-welcome-copy > img { width: 62px; height: 62px; margin-bottom: 2px; }
+.duel-welcome h1 { margin-bottom: 3px; font-size: clamp(26px, 3vw, 34px); }
+.duel-welcome p { font-size: 14px; }
+.duel-language-wrap { margin-top: 10px; font-size: 13px; }
+.duel-languages { gap: 7px; margin-top: 8px; }
+.duel-languages button { min-height: 40px; padding: 8px 10px; font-size: 13px; }
+.duel-languages button b { font-size: 13px; }
+.duel-languages button b::after { content: none; }
+
+.duel-timer { min-width: 52px; border-radius: 999px; background: #e8f4ff; padding: 5px 9px; color: var(--primary-dark); text-align: center; }
+.duel-timer.urgent { background: #ffeded; color: var(--danger); animation: duelTimerPulse .75s infinite alternate; }
+@keyframes duelTimerPulse { to { transform: scale(1.08); } }
+
+.duel-top-ten { display: grid; grid-template-columns: repeat(2, minmax(160px, 1fr)); width: min(650px, 100%); gap: 6px; margin: 0; padding: 0; list-style: none; }
+.duel-top-ten li { display: grid; grid-template-columns: 27px minmax(0, 1fr) auto; align-items: center; gap: 7px; border-radius: 9px; background: rgba(255,255,255,.78); padding: 7px 9px; color: #555; font-size: 12px; }
+.duel-top-ten li > b { color: #b67b13; }.duel-top-ten li > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.duel-top-ten li img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; vertical-align: middle; }.duel-top-ten li strong { color: var(--primary-dark); font-size: 11px; }.duel-top-ten .duel-ranking-empty { grid-column: 1 / -1; display: block; text-align: center; }
+@media (max-width: 900px) { .duel-top-ten { width: 100%; } }
+@media (max-width: 560px) { .duel-welcome { padding: 14px 16px; }.duel-languages { grid-template-columns: repeat(2, minmax(0,1fr)); }.duel-top-ten { grid-template-columns: 1fr; }.duel-question-head { flex-wrap: wrap; } }

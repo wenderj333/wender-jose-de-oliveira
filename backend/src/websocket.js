@@ -2,6 +2,7 @@ const { WebSocketServer } = require('ws');
 const Anthropic = require('@anthropic-ai/sdk');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('./middleware/auth');
+const db = require('./db/connection');
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 async function translateWithClaude(text, sourceLang, targetLang) {
@@ -609,9 +610,19 @@ function terminarPartida(roomId) {
   const room = gameRooms.get(roomId);
   if (!room) return;
   if (room.roundTimer) clearTimeout(room.roundTimer);
+  if (room.roundInterval) clearInterval(room.roundInterval);
   const jogadores = jogadoresPublicos(room);
   const vencedor = jogadores.reduce((melhor, jogador) => jogador.pontos > melhor.pontos ? jogador : melhor, jogadores[0]);
   room.jogadores.forEach(j => { if (j.ws?.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores, vencedor })); });
+  // Só utilizadores reais aparecem entre os 10 primeiros do ranking.
+  room.jogadores.filter(j => !String(j.userId).startsWith('bot-')).forEach(async (jogador) => {
+    try {
+      await db.query(
+        'INSERT INTO duelo_ranking (nome,pontos,foto) VALUES ($1,$2,$3) ON CONFLICT (nome) DO UPDATE SET pontos=duelo_ranking.pontos+$2, foto=COALESCE($3,duelo_ranking.foto), updated_at=NOW()',
+        [jogador.userName, jogador.pontos, jogador.avatar || null],
+      );
+    } catch (_) {}
+  });
   gameRooms.delete(roomId);
   room.jogadores.forEach(j => setLobbyStatus(j.userId, 'available'));
   broadcastDuelLobby();
@@ -621,6 +632,10 @@ function proximaPergunta(roomId) {
   const room = gameRooms.get(roomId);
   if (!room) return;
   if (room.roundTimer) clearTimeout(room.roundTimer);
+  if (room.roundInterval) clearInterval(room.roundInterval);
+  room.roundTimer = null;
+  room.roundInterval = null;
+  room.advancing = false;
   room.jogadores.forEach(j => { j.respondeu = false; });
   room.perguntaIdx += 1;
   if (room.perguntaIdx >= (room.perguntas || []).length) {
@@ -634,12 +649,25 @@ function proximaPergunta(roomId) {
 function agendarPergunta(roomId) {
   const room = gameRooms.get(roomId);
   if (!room || room.roundTimer) return;
+  room.segundosRestantes = 15;
+  const enviarTempo = () => room.jogadores.forEach(j => {
+    if (j.ws?.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_timer', seconds: room.segundosRestantes }));
+  });
+  enviarTempo();
+  room.roundInterval = setInterval(() => {
+    const atual = gameRooms.get(roomId);
+    if (!atual || atual !== room || atual.advancing) return;
+    atual.segundosRestantes = Math.max(0, atual.segundosRestantes - 1);
+    enviarTempo();
+  }, 1000);
   room.roundTimer = setTimeout(() => {
     const atual = gameRooms.get(roomId);
     if (!atual) return;
     atual.roundTimer = null;
+    if (atual.roundInterval) clearInterval(atual.roundInterval);
+    atual.roundInterval = null;
     proximaPergunta(roomId);
-  }, 25000);
+  }, 15000);
 }
 
 function handleGame(ws, msg) {
@@ -745,12 +773,17 @@ function handleGame(ws, msg) {
     const pontosAntigos = Number(msg.pontos) || 0;
     // Clientes novos enviam a opção escolhida; o servidor valida a resposta.
     // Mantemos a compatibilidade com clientes antigos, limitando a pontuação.
-    j.pontos += Number.isInteger(choice) ? (choice === question?.r ? 3 : 0) : Math.max(0, Math.min(3, pontosAntigos));
+    const acertou = Number.isInteger(choice) ? choice === question?.r : pontosAntigos > 0;
+    j.pontos += acertou ? 3 : Math.max(0, Math.min(3, pontosAntigos));
     j.respondeu = true;
     const jogadores = jogadoresPublicos(room);
     room.jogadores.forEach(player => { if (player.ws?.readyState === 1) player.ws.send(JSON.stringify({ type: 'game_score', jogadores })); });
     const todosResponderam = room.jogadores.every(player => player.respondeu) || room.jogadores.length === 1;
-    if (todosResponderam) setTimeout(() => proximaPergunta(msg.roomId), 1000);
+    // Quem acerta primeiro ganha a ronda: a próxima pergunta chega para os dois.
+    if ((acertou || todosResponderam) && !room.advancing) {
+      room.advancing = true;
+      setTimeout(() => proximaPergunta(msg.roomId), 700);
+    }
   }
 
   else if (msg.type === 'game_chat') {
