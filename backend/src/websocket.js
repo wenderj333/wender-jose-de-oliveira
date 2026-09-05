@@ -1,4 +1,4 @@
-﻿const { WebSocketServer } = require('ws');
+const { WebSocketServer } = require('ws');
 const Anthropic = require('@anthropic-ai/sdk');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('./middleware/auth');
@@ -471,6 +471,45 @@ function broadcastToStream(wss, streamId, data, excludeWs) {
 
 const gameRooms = new Map();
 
+function jogadoresPublicos(room) {
+  return room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos }));
+}
+
+function terminarPartida(roomId) {
+  const room = gameRooms.get(roomId);
+  if (!room) return;
+  if (room.roundTimer) clearTimeout(room.roundTimer);
+  const jogadores = jogadoresPublicos(room);
+  const vencedor = jogadores.reduce((melhor, jogador) => jogador.pontos > melhor.pontos ? jogador : melhor, jogadores[0]);
+  room.jogadores.forEach(j => { if (j.ws?.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores, vencedor })); });
+  gameRooms.delete(roomId);
+}
+
+function proximaPergunta(roomId) {
+  const room = gameRooms.get(roomId);
+  if (!room) return;
+  if (room.roundTimer) clearTimeout(room.roundTimer);
+  room.jogadores.forEach(j => { j.respondeu = false; });
+  room.perguntaIdx += 1;
+  if (room.perguntaIdx >= (room.perguntas || []).length) {
+    terminarPartida(roomId);
+    return;
+  }
+  room.jogadores.forEach(j => { if (j.ws?.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_next_question', idx: room.perguntaIdx })); });
+  agendarPergunta(roomId);
+}
+
+function agendarPergunta(roomId) {
+  const room = gameRooms.get(roomId);
+  if (!room || room.roundTimer) return;
+  room.roundTimer = setTimeout(() => {
+    const atual = gameRooms.get(roomId);
+    if (!atual) return;
+    atual.roundTimer = null;
+    proximaPergunta(roomId);
+  }, 25000);
+}
+
 function handleGame(ws, msg) {
   const client = clients.get(ws);
   const userId = client?.userId || msg.userId;
@@ -500,7 +539,7 @@ function handleGame(ws, msg) {
     if (room.jogadores.length >= 2) {
       room.iniciado = true;
       room.perguntaIdx = 0;
-      const PALL = require('../frontend/src/data/perguntas.json');
+      const PALL = require('./data/perguntas.json');
       let p = PALL.filter(x => room.livro==='Todos' || x.livro===room.livro);
       if(!p.length) p = PALL;
       const f=p.filter(x=>x.nivel==='facil').sort(()=>Math.random()-0.5).slice(0,2);
@@ -525,7 +564,8 @@ function handleGame(ws, msg) {
     const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos, pronto: j.pronto }));
     room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_update', jogadores: jogadoresPublico })); });
     if (todosprontos) {
-      room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_started', livro: room.livro, perguntas: room.perguntas })); });
+      room.jogadores.forEach(j => { if (j.ws?.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_started', livro: room.livro, perguntas: room.perguntas })); });
+      agendarPergunta(room.id);
     }
   }
 
@@ -552,36 +592,33 @@ function handleGame(ws, msg) {
     if (!room) return;
     room.iniciado = true;
     room.perguntaIdx = 0;
-    const PALL = require('../frontend/src/data/perguntas.json');
+    const PALL = require('./data/perguntas.json');
     let p = PALL.filter(x => room.livro==='Todos' || x.livro===room.livro);
     if(!p.length) p = PALL;
     const f=p.filter(x=>x.nivel==='facil').sort(()=>Math.random()-0.5).slice(0,2);
     const m=p.filter(x=>x.nivel==='medio').sort(()=>Math.random()-0.5).slice(0,2);
     const d=p.filter(x=>x.nivel==='dificil').sort(()=>Math.random()-0.5).slice(0,1);
     room.perguntas = [...f,...m,...d];
-    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_started', livro: room.livro, perguntas: room.perguntas })); });
+    room.jogadores.forEach(j => { if (j.ws?.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_started', livro: room.livro, perguntas: room.perguntas })); });
+      agendarPergunta(room.id);
   }
 
   else if (msg.type === 'game_answer') {
     const room = gameRooms.get(msg.roomId);
     if (!room) return;
     const j = room.jogadores.find(j => j.userId === userId);
-    if (j) { j.pontos += msg.pontos || 0; j.respondeu = true; }
-    const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos }));
-    room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_score', jogadores: jogadoresPublico })); });
-    console.log('jogadores:', room.jogadores.length, 'responderam:', room.jogadores.filter(j=>j.respondeu).length);
-    const todosResponderem = room.jogadores.every(j => j.respondeu) || room.jogadores.length === 1;
-    if (todosResponderem) {
-      room.jogadores.forEach(j => j.respondeu = false);
-      room.perguntaIdx++;
-      if (room.perguntaIdx >= (room.perguntas||[]).length) {
-        const vencedor = jogadoresPublico.reduce((a,b)=>a.pontos>=b.pontos?a:b);
-        room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores: jogadoresPublico, vencedor })); });
-        gameRooms.delete(msg.roomId);
-      } else {
-        setTimeout(()=>{ room.jogadores.forEach(j => { if (j.ws && j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_next_question', idx: room.perguntaIdx })); }); }, 1500);
-      }
-    }
+    if (!j || j.respondeu) return;
+    const question = room.perguntas?.[room.perguntaIdx];
+    const choice = Number(msg.choice);
+    const pontosAntigos = Number(msg.pontos) || 0;
+    // Clientes novos enviam a opção escolhida; o servidor valida a resposta.
+    // Mantemos a compatibilidade com clientes antigos, limitando a pontuação.
+    j.pontos += Number.isInteger(choice) ? (choice === question?.r ? 3 : 0) : Math.max(0, Math.min(3, pontosAntigos));
+    j.respondeu = true;
+    const jogadores = jogadoresPublicos(room);
+    room.jogadores.forEach(player => { if (player.ws?.readyState === 1) player.ws.send(JSON.stringify({ type: 'game_score', jogadores })); });
+    const todosResponderam = room.jogadores.every(player => player.respondeu) || room.jogadores.length === 1;
+    if (todosResponderam) setTimeout(() => proximaPergunta(msg.roomId), 1000);
   }
 
   else if (msg.type === 'game_chat') {
@@ -595,6 +632,7 @@ function handleGame(ws, msg) {
     if (!room) return;
     const jogadoresPublico = room.jogadores.map(j => ({ userId: j.userId, userName: j.userName, avatar: j.avatar, pontos: j.pontos }));
     room.jogadores.forEach(j => { if (j.ws.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores: jogadoresPublico })); });
+    if (room.roundTimer) clearTimeout(room.roundTimer);
     gameRooms.delete(msg.roomId);
   }
 }
@@ -630,7 +668,7 @@ function handleGameQueue(ws, msg) {
       const nivelJogo = msg.nivel || 0;
       let perguntas = [];
       try { perguntas = (() => {
-        const pj = require('../data/perguntas.json');
+        const pj = require('./data/perguntas.json');
         let p = pj.filter(x => livro === 'Todos' || x.livro === livro);
         if (!p.length) p = pj;
         const sh = a => [...a].sort(() => Math.random() - 0.5);
@@ -647,6 +685,7 @@ function handleGameQueue(ws, msg) {
       if (outro.ws.readyState === 1) outro.ws.send(matchMsg1);
       if (ws.readyState === 1) ws.send(matchMsg2);
       gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, jogadores: [{ userId: outro.userId, userName: outro.userName, avatar: outro.avatar, pontos: 0, ws: outro.ws }, { userId, userName, avatar, pontos: 0, ws }] });
+      agendarPergunta(roomId);
     } else {
       const playerEntry = { userId, userName, avatar, livro, ws };
       gameQueue.push(playerEntry);
@@ -662,7 +701,7 @@ function handleGameQueue(ws, msg) {
           const roomId = Math.random().toString(36).substring(2,8).toUpperCase();
           let perguntas = [];
           try { perguntas = (() => {
-            const pj = require('../data/perguntas.json');
+            const pj = require('./data/perguntas.json');
             let p = pj.filter(x => livro === 'Todos' || x.livro === livro);
             if (!p.length) p = pj;
             const sh = a => a.sort(() => Math.random() - 0.5);
@@ -683,6 +722,7 @@ function handleGameQueue(ws, msg) {
           const botAdv = botPersonagens[Math.floor(Math.random() * botPersonagens.length)];
           ws.send(JSON.stringify({ type: 'game_matched', roomId, livro, perguntas, adversario: botAdv, isBot: true }));
           gameRooms.set(roomId, { id: roomId, livro, perguntas, iniciado: true, perguntaIdx: 0, isBot: true, jogadores: [{ userId: 'bot-333', userName: 'Pastor Bot', avatar: '', pontos: 0, ws: null }, { userId, userName, avatar, pontos: 0, ws }] });
+          agendarPergunta(roomId);
         }
       }, 30000);
     }
