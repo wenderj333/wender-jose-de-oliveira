@@ -565,15 +565,10 @@ const MULTILINGUAL_SURPRISES = [
   }
 ];
 
-const SURPRISE_BOX_ART = {
-  courage: '/caixas-da-fe/assets/gold-box-closed.webp',
-  hope: '/caixas-da-fe/assets/blue-box-closed.webp',
-  guidance: '/caixas-da-fe/assets/lilac-box-closed.webp',
-};
 function DailySurpriseBoxes({ onPublish, publishing }) {
   const { i18n } = useTranslation();
   const [message, setMessage] = useState(null);
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const [showBoxes, setShowBoxes] = useState(false);
   const [openingBox, setOpeningBox] = useState('');
   const today = new Date().toISOString().slice(0, 10);
@@ -606,7 +601,7 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
       const saved = JSON.parse(localStorage.getItem(storageKey));
       // Só aceita o novo formato completo. Assim, quem já tinha uma palavra
       // guardada antes da tradução recebe automaticamente a versão correta.
-      if (saved?.verseId && supportedLocales.every(locale => typeof saved?.text?.[locale] === 'string')) { setMessage(saved); setShowBoxes(false); }
+      if (saved?.verseId && supportedLocales.every(locale => typeof saved?.text?.[locale] === 'string')) setMessage(saved);
     } catch (_) {}
   }, [storageKey]);
   const choose = box => {
@@ -618,7 +613,6 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
     const verse = list[day % list.length];
     const value = messageFromVerse(box, verse);
     setMessage(value);
-    setShowBoxes(false);
     localStorage.setItem(storageKey, JSON.stringify(value));
   };
   const openChest = box => {
@@ -651,9 +645,8 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
   const publish = () => onPublish?.({ content: `“${verseText}”\n— ${verseRef}` });
   const showingMessage = message && !showBoxes;
   const giftMotion = `.sf-daily-gift{position:relative;overflow:hidden;isolation:isolate;min-height:94px!important;padding:7px 4px 8px!important;background:linear-gradient(155deg,#fffafb,#ffe7ef)!important;border:1px solid #f2b8ca!important;box-shadow:0 6px 13px rgba(180,52,104,.13)!important;animation:sfGiftFloat 3s ease-in-out infinite}.sf-daily-gift:before{content:'';position:absolute;z-index:0;left:50%;top:9px;width:44px;height:33px;border:1px solid #d62f63;border-radius:5px 5px 8px 8px;background:linear-gradient(135deg,#ff7097,#dc2459);box-shadow:inset 0 -4px 0 rgba(120,12,43,.18),0 4px 7px rgba(171,29,75,.2);transform:translateX(-50%);transition:transform .5s}.sf-daily-gift:after{content:'';position:absolute;z-index:1;left:50%;top:9px;width:7px;height:33px;border-radius:2px;background:#ffd3df;box-shadow:0 0 0 1px rgba(255,255,255,.3);transform:translateX(-50%);transition:transform .5s}.sf-daily-gift .gift-icon{position:relative;z-index:2;display:block!important;height:45px;margin:0!important;font-size:0!important}.sf-daily-gift .gift-icon:before{content:'';position:absolute;left:50%;top:3px;width:50px;height:10px;border:1px solid #d62f63;border-radius:5px;background:linear-gradient(135deg,#ff8aa9,#e33468);box-shadow:0 2px 4px rgba(171,29,75,.17);transform:translateX(-50%);transform-origin:left bottom;transition:transform .5s}.sf-daily-gift .gift-icon:after{content:'';position:absolute;left:50%;top:0;width:9px;height:9px;border:2px solid #ffdce5;border-radius:4px;transform:translateX(-50%);box-shadow:9px 0 0 -2px #ffdce5,-9px 0 0 -2px #ffdce5}.sf-daily-gift strong,.sf-daily-gift small{position:relative;z-index:2}.sf-daily-gift strong{font-size:10px!important;line-height:1.05!important}.sf-daily-gift small{margin-top:3px!important;font-size:9px!important;line-height:1.1!important}.sf-daily-gift:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 10px 17px rgba(180,52,104,.2)!important}.sf-daily-gift.is-opening .gift-icon:before{transform:translateX(-50%) translateY(-8px) rotate(-13deg)}.sf-daily-gift.is-opening:before,.sf-daily-gift.is-opening:after{transform:translateX(-50%) translateY(3px)}@keyframes sfGiftFloat{50%{transform:translateY(-3px)}}@media (prefers-reduced-motion:reduce){.sf-daily-gift{animation:none!important}.sf-daily-gift:before,.sf-daily-gift:after,.sf-daily-gift .gift-icon:before{transition:none!important}}`;
-  const boxArtStyle = `.sf-daily-gift{display:flex!important;flex-direction:column;align-items:center;justify-content:flex-start;min-height:194px!important;padding:9px 5px 10px!important;background:linear-gradient(155deg,#fffdf6,#f6fbff)!important;border:1px solid #d8e4f0!important;box-shadow:0 7px 16px rgba(87,120,155,.14)!important;animation:sfGiftFloat 3s ease-in-out infinite}.sf-daily-gift:before,.sf-daily-gift:after{display:none!important}.sf-daily-gift .gift-icon{display:block!important;height:108px!important;width:100%!important;margin:0 0 4px!important;font-size:0!important}.sf-daily-gift .gift-icon:before,.sf-daily-gift .gift-icon:after{display:none!important}.sf-daily-gift .gift-icon img{width:104px;height:104px;object-fit:contain;filter:drop-shadow(0 8px 7px rgba(74,90,126,.18));transition:transform .45s ease}.sf-daily-gift:hover:not(:disabled) .gift-icon img{transform:translateY(-5px) scale(1.06)}.sf-daily-gift.is-opening .gift-icon img{transform:translateY(-10px) scale(1.08);filter:drop-shadow(0 0 13px rgba(255,209,79,.85))}.sf-daily-gift strong{color:#40536c!important;font-size:11px!important}.sf-daily-gift small{color:#6b7e97!important;font-size:10px!important}@media(max-width:560px){.sf-daily-gift{min-height:164px!important}.sf-daily-gift .gift-icon{height:82px!important}.sf-daily-gift .gift-icon img{width:82px;height:82px}.sf-daily-gift strong{font-size:9px!important}.sf-daily-gift small{font-size:8px!important}}`;
   if (!expanded && !message) return <section style={{ margin: 0, display: 'flex', justifyContent: 'center' }}>
-    <style>{giftMotion + boxArtStyle}</style>
+    <style>{giftMotion}</style>
     <button type="button" onClick={() => setExpanded(true)} aria-label={copy.open[lang] || copy.open.pt} style={{ border: '1px solid #f2bfd0', borderRadius: 18, padding: '6px 12px', background: '#fff8fb', color: '#8c2850', cursor: 'pointer', fontSize: 12, fontWeight: 850, display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 5px 14px rgba(180,52,104,.12)' }}>
       <span style={{ display: 'inline-flex', gap: 2 }}>{MULTILINGUAL_SURPRISES.map(box => <span key={box.id} className="sf-daily-gift" style={{ width: 25, height: 25, display: 'grid', placeItems: 'center', borderRadius: 7, background: 'linear-gradient(145deg,#ff7d9e,#d93465)', fontSize: 16, boxShadow: '0 3px 0 #ad1f4c' }}><span className="gift-icon">🎁</span></span>)}</span>
       {copy.open[lang] || copy.open.pt}
@@ -661,7 +654,7 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
   </section>;
   return (
     <section aria-label={copy.choose[lang] || copy.choose.pt} style={{ marginBottom: 20, padding: '18px 16px', borderRadius: 18, background: 'linear-gradient(135deg,#fffaf1,#f6f3ff)', border: '1px solid #eadff3', boxShadow: '0 8px 24px rgba(70,45,100,.08)' }}>
-            <style>{giftMotion + boxArtStyle}</style>
+            <style>{giftMotion}</style>
 {!showingMessage && <div style={{ textAlign: 'center', marginBottom: 14 }}>
         <div style={{ fontSize: 22 }}>✨</div>
         <h2 style={{ margin: '2px 0 3px', color: '#30204f', fontSize: 19 }}>{copy.choose[lang] || copy.choose.pt}</h2>
@@ -670,7 +663,7 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
       {!showingMessage ? <div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10 }}>
           {MULTILINGUAL_SURPRISES.map(box => <button key={box.id} type="button" onClick={() => openChest(box)} disabled={Boolean(message) || Boolean(openingBox)} className={`sf-daily-gift ${openingBox === box.id ? 'is-opening' : ''}`} style={{ border: '1px solid #f4b5c9', borderRadius: 13, padding: '13px 5px 8px', color: '#70203f', background: 'linear-gradient(155deg,#fff8fb,#ffe1eb)', cursor: message || openingBox ? 'default' : 'pointer', minHeight: 88, opacity: message && message.id !== box.id ? .55 : 1, boxShadow: '0 5px 11px rgba(180,52,104,.12)', transition: 'transform .2s' }}>
-            <span className="gift-icon"><img src={SURPRISE_BOX_ART[box.id]} alt="" /></span>
+            <span className="gift-icon" style={{ display: 'block', fontSize: 24, margin: '3px 0 4px' }}>🎁</span>
             <strong style={{ display: 'block', fontSize: 11, lineHeight: 1.05 }}>{box.title[lang] || box.title.en || box.title.pt}</strong>
             <small style={{ display: 'block', marginTop: 4, color: '#9a5370', lineHeight: 1.15, fontSize: 10 }}>{box.hint[lang] || box.hint.en || box.hint.pt}</small>
           </button>)}
@@ -1274,7 +1267,6 @@ export default function MuralGrid() {
     </div>
   );
 }
-
 
 
 
