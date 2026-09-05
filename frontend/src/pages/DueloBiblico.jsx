@@ -2,8 +2,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useTranslation } from 'react-i18next';
+import './DueloBiblico.css';
 
 const TOTAL_QUESTIONS = 10;
+const LANGUAGES = [
+  { code: 'pt', label: 'Português', flag: '🇧🇷' },
+  { code: 'es', label: 'Español', flag: '🇪🇸' },
+  { code: 'en', label: 'English', flag: '🇺🇸' },
+  { code: 'fr', label: 'Français', flag: '🇫🇷' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
+  { code: 'ro', label: 'Română', flag: '🇷🇴' },
+];
 
 function questionForLanguage(question, lang) {
   if (!question) return null;
@@ -19,6 +29,7 @@ export default function DueloBiblico() {
   const { send, on, off, isConnected } = useWebSocket();
   const { i18n } = useTranslation();
   const lang = (i18n.language || 'pt').slice(0, 2);
+  const [gameLanguage, setGameLanguage] = useState(lang);
   const [status, setStatus] = useState('ready');
   const [message, setMessage] = useState('Encontre um irmão e comece uma partida justa.');
   const [roomId, setRoomId] = useState(null);
@@ -34,9 +45,11 @@ export default function DueloBiblico() {
   const [invite, setInvite] = useState(null);
 
   const currentQuestion = useMemo(
-    () => questionForLanguage(questions[questionIndex], lang),
-    [questions, questionIndex, lang],
+    () => questionForLanguage(questions[questionIndex], gameLanguage),
+    [questions, questionIndex, gameLanguage],
   );
+
+  useEffect(() => setGameLanguage(lang), [lang]);
 
   useEffect(() => {
     const queued = () => { setStatus('waiting'); setMessage('À espera de outro jogador…'); };
@@ -162,80 +175,68 @@ export default function DueloBiblico() {
   };
 
   const playerName = user?.full_name || user?.name || 'Jogador';
+  const playerAvatar = user?.profile_photo || user?.avatar_url || user?.photo_url || '';
   const visiblePlayers = lobbyPlayers.filter(player => player.userId !== user?.id);
 
   return (
-    <main className="duel-lobby-layout" style={{ maxWidth: 1240, margin: '0 auto', padding: '24px 16px 48px', display: 'grid', gridTemplateColumns: '250px minmax(0,1fr) 280px', gap: 18, alignItems: 'start' }}>
-      <aside className="duel-side" style={{ background: '#171025', borderRadius: 20, padding: 18, color: 'white', boxShadow: '0 8px 28px rgba(32,25,70,.16)' }}>
-        <p style={{ margin: 0, color: '#f4c53d', fontSize: 12, fontWeight: 900, letterSpacing: '.09em' }}>JOGADORES ONLINE</p>
-        <p style={{ margin: '8px 0 16px', color: '#c9c0de', fontSize: 13 }}>{lobbyPlayers.length} {lobbyPlayers.length === 1 ? 'pessoa na sala' : 'pessoas na sala'}</p>
-        {visiblePlayers.length === 0 ? <p style={{ margin: 0, color: '#aaa0bd', lineHeight: 1.5, fontSize: 14 }}>Ainda não há outro jogador nesta sala. Podes usar a procura automática.</p> : <div style={{ display: 'grid', gap: 10 }}>
-          {visiblePlayers.map(player => <div key={player.userId} style={{ display: 'flex', gap: 9, alignItems: 'center', padding: 9, borderRadius: 12, background: '#2a1c43' }}>
-            {player.avatar ? <img src={player.avatar} alt="" style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} /> : <span style={{ width: 34, height: 34, borderRadius: '50%', display: 'grid', placeItems: 'center', background: '#8055c6', fontWeight: 800 }}>{player.userName?.charAt(0)?.toUpperCase()}</span>}
-            <div style={{ minWidth: 0, flex: 1 }}><strong style={{ display: 'block', fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{player.userName}</strong><span style={{ fontSize: 11, color: player.status === 'playing' ? '#d5af6b' : '#6fe09b' }}>{player.status === 'playing' ? 'Em partida' : player.status === 'waiting' ? 'A procurar' : 'Disponível'}</span></div>
-            <button onClick={() => invitePlayer(player)} disabled={player.status === 'playing'} style={{ border: 0, borderRadius: 8, padding: '7px 8px', background: player.status === 'playing' ? '#54466a' : '#f4bd25', color: '#261337', fontSize: 11, fontWeight: 900, cursor: player.status === 'playing' ? 'default' : 'pointer' }}>{player.status === 'playing' ? 'Joga' : 'Convidar'}</button>
-          </div>)}
-        </div>}
-      </aside>
-
-      <div>
-      <section style={{ borderRadius: 24, padding: '30px 24px', color: 'white', background: 'linear-gradient(135deg,#43217d,#7850bd)', boxShadow: '0 18px 38px rgba(67,33,125,.22)' }}>
-        <p style={{ margin: 0, opacity: .82, fontWeight: 700, letterSpacing: '.08em', fontSize: 12 }}>DESAFIO BÍBLICO · 2 JOGADORES</p>
-        <h1 style={{ margin: '8px 0', fontSize: 'clamp(28px,5vw,42px)' }}>Duelo Bíblico</h1>
-        <p style={{ margin: 0, lineHeight: 1.6 }}>{message}</p>
+    <main className="duel-page">
+      <div className="duel-spark duel-spark-one">✦</div><div className="duel-spark duel-spark-two">✧</div><div className="duel-spark duel-spark-three">◆</div>
+      <section className="duel-welcome">
+        <div><span className="duel-kicker">✦ DESAFIO BÍBLICO · 2 JOGADORES</span><h1>Duelo Bíblico</h1><p>{message}</p></div>
+        <div className="duel-language-wrap"><span>Escolhe o teu idioma</span><div className="duel-languages">{LANGUAGES.map(language => <button key={language.code} onClick={() => setGameLanguage(language.code)} className={gameLanguage === language.code ? 'active' : ''} title={language.label}>{language.flag}<b>{language.code.toUpperCase()}</b></button>)}</div></div>
       </section>
 
-      <section style={{ background: 'white', marginTop: 18, borderRadius: 20, padding: 22, boxShadow: '0 8px 28px rgba(32,25,70,.08)' }}>
-        {status === 'ready' && <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 50 }}>⚔️</div>
-          <h2 style={{ color: '#33205f' }}>Jogar com outra pessoa</h2>
-          <p style={{ color: '#687087', lineHeight: 1.6 }}>Quando os dois jogadores clicarem para jogar, a partida começa automaticamente.</p>
-          <button onClick={startMatch} style={{ border: 0, borderRadius: 14, padding: '14px 22px', background: '#f4bd25', color: '#27134a', fontWeight: 800, fontSize: 16, cursor: 'pointer' }}>{isConnected ? 'Encontrar jogador' : 'A ligar…'}</button>
-        </div>}
-
-        {status === 'waiting' && <div style={{ textAlign: 'center', padding: 22 }}>
-          <div style={{ fontSize: 44 }}>🙏</div>
-          <h2 style={{ color: '#33205f' }}>À espera de adversário</h2>
-          <p style={{ color: '#687087' }}>A partida começará automaticamente assim que outra pessoa entrar.</p>
-          <button onClick={leaveQueue} style={{ border: '1px solid #7850bd', borderRadius: 12, padding: '10px 16px', background: 'white', color: '#59369a', fontWeight: 700, cursor: 'pointer' }}>Cancelar procura</button>
-        </div>}
-
-        {status === 'playing' && !currentQuestion && <div style={{ textAlign: 'center', padding: 24, color: '#59369a' }}>A preparar as perguntas para a partida…</div>}
-        {status === 'playing' && currentQuestion && <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', marginBottom: 20, color: '#5d3a9f', fontWeight: 800 }}>
-            <span>Pergunta {questionIndex + 1} de {Math.max(questions.length, TOTAL_QUESTIONS)}</span>
-            <span>{opponent?.userName || 'Adversário'}</span>
+      <div className="duel-board">
+        <aside className="duel-panel duel-players-panel">
+          <div className="duel-panel-title"><span>✦</span><div><h2>Jogadores online</h2><p><i /> {lobbyPlayers.length} na sala agora</p></div></div>
+          <div className="duel-online-list">
+            {visiblePlayers.length === 0 ? <div className="duel-empty"><span>👋</span><p>Ainda não há outro jogador. Usa a procura automática para começar.</p></div> : visiblePlayers.map(player => <div className="duel-player-card" key={player.userId}>
+              {player.avatar ? <img src={player.avatar} alt="" /> : <span className="duel-initial">{player.userName?.charAt(0)?.toUpperCase()}</span>}
+              <div><strong>{player.userName}</strong><small className={player.status}>{player.status === 'playing' ? 'Em partida' : player.status === 'waiting' ? 'A procurar' : 'Disponível'}</small></div>
+              <button onClick={() => invitePlayer(player)} disabled={player.status === 'playing'}>{player.status === 'playing' ? 'Em jogo' : 'Desafiar'}</button>
+            </div>)}
           </div>
-          <h2 style={{ color: '#27213e', lineHeight: 1.35, fontSize: 22 }}>{currentQuestion.q}</h2>
-          <div style={{ display: 'grid', gap: 10, marginTop: 20 }}>
-            {currentQuestion.opts.map((option, index) => {
-              const picked = answer === index;
-              const correct = answer !== null && index === currentQuestion.r;
-              return <button key={`${option}-${index}`} onClick={() => chooseAnswer(index)} disabled={answer !== null} style={{ textAlign: 'left', padding: '14px 16px', borderRadius: 13, cursor: answer === null ? 'pointer' : 'default', border: `2px solid ${correct ? '#3d9565' : picked ? '#d86a59' : '#e5e3ed'}`, background: correct ? '#ecf8f0' : picked ? '#fff0ed' : 'white', color: '#2d2940', fontSize: 16 }}>{String.fromCharCode(65 + index)}. {option}</button>;
-            })}
-          </div>
-          {players.length > 0 && <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid #eceaf3', display: 'flex', gap: 12, flexWrap: 'wrap' }}>{players.map(player => <span key={player.userId} style={{ background: '#f4f0fb', padding: '8px 11px', borderRadius: 999, color: '#43217d', fontWeight: 700 }}>{player.userName}: {player.pontos} pts</span>)}</div>}
-        </div>}
+          <div className="duel-golden-note">💎 Convide alguém ou entre na procura automática.</div>
+        </aside>
 
-        {status === 'finished' && <div style={{ textAlign: 'center', padding: 20 }}>
-          <div style={{ fontSize: 54 }}>🏆</div>
-          <h2 style={{ color: '#33205f' }}>{result?.userName ? `${result.userName} venceu!` : 'Partida concluída!'}</h2>
-          {players.map(player => <p key={player.userId} style={{ margin: '7px 0', color: '#555' }}>{player.userName}: <strong>{player.pontos} pontos</strong></p>)}
-          <button onClick={() => { setStatus('ready'); setQuestions([]); setPlayers([]); setRoomId(null); }} style={{ marginTop: 16, border: 0, borderRadius: 12, padding: '12px 18px', background: '#7850bd', color: 'white', fontWeight: 800, cursor: 'pointer' }}>Jogar novamente</button>
-        </div>}
-      </section>
+        <section className="duel-stage">
+          <div className="duel-profile-card">
+            {playerAvatar ? <img src={playerAvatar} alt="" /> : <span className="duel-profile-initial">{playerName.charAt(0).toUpperCase()}</span>}
+            <div><span>Bem-vindo ao Desafio</span><h2>{playerName}</h2></div><div className="duel-diamond">💎</div>
+          </div>
+
+          {status === 'ready' && <div className="duel-action-card">
+            <div className="duel-trophy">🏆</div><span className="duel-action-kicker">PRONTO PARA UMA NOVA CONQUISTA?</span><h2>Mostra o que sabes da Bíblia</h2><p>Entra numa partida ao vivo e responde 10 perguntas para ganhar pontos, medalhas e diamantes.</p>
+            <button className="duel-primary-button" onClick={startMatch}><span>⚡</span>{isConnected ? 'Procura automática' : 'A ligar…'}</button>
+            <p className="duel-action-help">A partida começa quando encontrar um adversário real.</p>
+          </div>}
+
+          {status === 'waiting' && <div className="duel-action-card"><div className="duel-trophy">🔎</div><span className="duel-action-kicker">À PROCURA DE ADVERSÁRIO</span><h2>Estamos a encontrar alguém</h2><p>Podes ficar nesta sala. Assim que outro jogador entrar, a partida começa automaticamente.</p><button className="duel-secondary-button" onClick={leaveQueue}>Cancelar procura</button></div>}
+
+          {status === 'playing' && !currentQuestion && <div className="duel-action-card"><div className="duel-trophy">✨</div><h2>A preparar o desafio</h2><p>As perguntas estão a chegar. Aguarda um instante.</p></div>}
+
+          {status === 'playing' && currentQuestion && <div className="duel-question-card">
+            <div className="duel-question-head"><span>Pergunta {questionIndex + 1} de {Math.max(questions.length, TOTAL_QUESTIONS)}</span><span>⚔️ {opponent?.userName || 'Adversário'}</span></div>
+            <div className="duel-question-medal">✦</div><h2>{currentQuestion.q}</h2>
+            <div className="duel-options">{currentQuestion.opts.map((option, index) => { const picked = answer === index; const correct = answer !== null && index === currentQuestion.r; return <button key={`${option}-${index}`} onClick={() => chooseAnswer(index)} disabled={answer !== null} className={`${picked ? 'picked' : ''} ${correct ? 'correct' : ''}`}><b>{String.fromCharCode(65 + index)}</b><span>{option}</span></button>; })}</div>
+            {players.length > 0 && <div className="duel-scoreboard">{players.map(player => <span key={player.userId}>{player.userName}<b>{player.pontos} pts</b></span>)}</div>}
+          </div>}
+
+          {status === 'finished' && <div className="duel-action-card duel-finish"><div className="duel-trophy">🏆</div><span className="duel-action-kicker">PARTIDA CONCLUÍDA</span><h2>{result?.userName ? `${result.userName} venceu!` : 'Parabéns por jogar!'}</h2><div className="duel-final-score">{players.map(player => <span key={player.userId}>{player.userName}<b>{player.pontos} pontos</b></span>)}</div><button className="duel-primary-button" onClick={() => { setStatus('ready'); setQuestions([]); setPlayers([]); setRoomId(null); }}>Jogar novamente</button></div>}
+
+          <div className="duel-rewards"><div><span>🏅</span><b>Vitórias</b><strong>{players.find(player => player.userId === user?.id)?.pontos ? 'Em jogo' : '0'}</strong></div><div><span>💎</span><b>Diamantes</b><strong>{status === 'finished' && result?.userId === user?.id ? '3' : '0'}</strong></div><div><span>🌟</span><b>Sequência</b><strong>1 dia</strong></div></div>
+        </section>
+
+        <aside className="duel-panel duel-chat-panel">
+          <div className="duel-panel-title"><span>💬</span><div><h2>Chat da sala</h2><p>Conversa com os jogadores</p></div></div>
+          <div className="duel-chat-messages">{chatMessages.length === 0 ? <div className="duel-empty"><span>✦</span><p>Escreve uma mensagem de boas-vindas para a sala.</p></div> : chatMessages.map(chat => <div key={chat.id} className={`duel-chat-message ${chat.userId === user?.id ? 'mine' : ''}`}><b>{chat.userName}</b><span>{chat.text}</span></div>)}</div>
+          <form onSubmit={sendLobbyMessage} className="duel-chat-form"><input value={chatText} onChange={event => setChatText(event.target.value)} maxLength={300} placeholder="Escreve uma mensagem…" /><button type="submit" aria-label="Enviar mensagem">➤</button></form>
+        </aside>
       </div>
 
-      <aside className="duel-side" style={{ background: 'white', borderRadius: 20, overflow: 'hidden', boxShadow: '0 8px 28px rgba(32,25,70,.10)' }}>
-        <div style={{ padding: '16px 16px 12px', background: '#f4f0fb', color: '#43217d' }}><strong>💬 Chat da sala</strong><p style={{ margin: '5px 0 0', fontSize: 12, color: '#786b91' }}>Conversa com quem está no Desafio.</p></div>
-        <div style={{ height: 310, overflowY: 'auto', padding: 12, display: 'grid', alignContent: 'start', gap: 9 }}>
-          {chatMessages.length === 0 ? <p style={{ color: '#8b829c', fontSize: 13, lineHeight: 1.5, margin: 0 }}>Diz olá, {playerName}. As mensagens aparecem para todos os jogadores desta sala.</p> : chatMessages.map(message => <div key={message.id} style={{ padding: '8px 10px', background: message.userId === user?.id ? '#eee7fb' : '#f6f6f8', borderRadius: 11 }}><strong style={{ display: 'block', fontSize: 12, color: '#53378e' }}>{message.userName}</strong><span style={{ color: '#403b4e', fontSize: 13, wordBreak: 'break-word' }}>{message.text}</span></div>)}
-        </div>
-        <form onSubmit={sendLobbyMessage} style={{ display: 'flex', gap: 7, padding: 12, borderTop: '1px solid #eeeaf5' }}><input value={chatText} onChange={event => setChatText(event.target.value)} maxLength={300} placeholder="Escreve uma mensagem…" style={{ minWidth: 0, flex: 1, padding: '10px 9px', border: '1px solid #ded7eb', borderRadius: 10, outlineColor: '#7850bd' }} /><button type="submit" style={{ border: 0, borderRadius: 10, background: '#7850bd', color: 'white', fontWeight: 800, padding: '0 12px', cursor: 'pointer' }}>Enviar</button></form>
-      </aside>
+      <section className="duel-ranking"><div><span>🏆</span><div><h2>Conquistas do Desafio</h2><p>Joga, aprende e coleciona recompensas.</p></div></div><div className="duel-badges"><span>🥇 Primeira vitória</span><span>💎 5 respostas certas</span><span>🌟 3 dias seguidos</span></div></section>
 
-      {invite && <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'grid', placeItems: 'center', padding: 20, background: 'rgba(20,12,38,.55)' }}><div style={{ width: 'min(390px,100%)', borderRadius: 20, background: 'white', padding: 24, textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,.28)' }}><div style={{ fontSize: 42 }}>⚔️</div><h2 style={{ color: '#33205f', margin: '10px 0' }}>{invite.userName} quer desafiar-te</h2><p style={{ color: '#6d647d', lineHeight: 1.5 }}>Aceitas jogar uma partida de 10 perguntas bíblicas?</p><div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}><button onClick={() => answerInvite(false)} style={{ border: '1px solid #c8bfd7', background: 'white', color: '#594b71', borderRadius: 11, padding: '11px 16px', fontWeight: 800, cursor: 'pointer' }}>Agora não</button><button onClick={() => answerInvite(true)} style={{ border: 0, background: '#f4bd25', color: '#321855', borderRadius: 11, padding: '11px 16px', fontWeight: 900, cursor: 'pointer' }}>Aceitar desafio</button></div></div></div>}
-      <style>{'@media (max-width: 940px) { .duel-lobby-layout { grid-template-columns: 1fr !important; } .duel-side { min-height: auto; } }'}</style>
+      {invite && <div className="duel-invite-overlay"><div className="duel-invite-modal"><div>⚔️</div><span>CONVITE PARA DUELO</span><h2>{invite.userName} quer desafiar-te</h2><p>Aceitas jogar uma partida de 10 perguntas bíblicas?</p><section><button onClick={() => answerInvite(false)}>Agora não</button><button onClick={() => answerInvite(true)}>Aceitar desafio</button></section></div></div>}
     </main>
   );
 }
