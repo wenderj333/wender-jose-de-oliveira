@@ -182,7 +182,7 @@ export default function DueloBiblico() {
     <main className="duel-page">
       <div className="duel-spark duel-spark-one">✦</div><div className="duel-spark duel-spark-two">✧</div><div className="duel-spark duel-spark-three">◆</div>
       <section className="duel-welcome">
-        <div><span className="duel-kicker">✦ DESAFIO BÍBLICO · 2 JOGADORES</span><h1>Duelo Bíblico</h1><p>{message}</p></div>
+        <div className="duel-welcome-copy"><img src="/duelo-biblico/bible-logo.webp" alt="Bíblia aberta" /><div><span className="duel-kicker">✦ DESAFIO BÍBLICO · 2 JOGADORES</span><h1>Duelo Bíblico</h1><p>{message}</p></div></div>
         <div className="duel-language-wrap"><span>Escolhe o teu idioma</span><div className="duel-languages">{LANGUAGES.map(language => <button key={language.code} onClick={() => setGameLanguage(language.code)} className={gameLanguage === language.code ? 'active' : ''} title={language.label}>{language.flag}<b>{language.code.toUpperCase()}</b></button>)}</div></div>
       </section>
 
@@ -234,7 +234,7 @@ export default function DueloBiblico() {
         </aside>
       </div>
 
-      <section className="duel-ranking"><div><span>🏆</span><div><h2>Conquistas do Desafio</h2><p>Joga, aprende e coleciona recompensas.</p></div></div><div className="duel-badges"><span>🥇 Primeira vitória</span><span>💎 5 respostas certas</span><span>🌟 3 dias seguidos</span></div></section>
+      <section className="duel-ranking"><div><span>🏆</span><div><h2>Conquistas do Desafio</h2><p>Joga, aprende e coleciona recompensas.</p></div></div><div className="duel-badges"><span><img src="/duelo-biblico/medal-gold.webp" alt="" />Primeira vitória</span><span><img src="/duelo-biblico/medal-silver.webp" alt="" />5 respostas certas</span><span><img src="/duelo-biblico/medal-bronze.webp" alt="" />3 dias seguidos</span></div></section>
 
       {invite && <div className="duel-invite-overlay"><div className="duel-invite-modal"><div>⚔️</div><span>CONVITE PARA DUELO</span><h2>{invite.userName} quer desafiar-te</h2><p>Aceitas jogar uma partida de 10 perguntas bíblicas?</p><section><button onClick={() => answerInvite(false)}>Agora não</button><button onClick={() => answerInvite(true)}>Aceitar desafio</button></section></div></div>}
     </main>
