@@ -78,6 +78,7 @@ import DailyFaithChallenge from "./pages/DailyFaithChallenge";
 import DueloBiblico from "./pages/DueloBiblico";
 import DuelLanding from "./pages/DuelLanding";
 import GamesHub from "./pages/GamesHub";
+import GameComingSoon from "./pages/GameComingSoon";
 
 import AjudaUmaVida from "./pages/AjudaUmaVida";
 
@@ -487,6 +488,8 @@ export default function App() {
         <Route path="/duelo-biblico" element={<DuelLanding />} />
         <Route path="/duelo-biblico/index.html" element={<DuelLanding />} />
         <Route path="/jogos" element={<GamesHub />} />
+        <Route path="/guardiao-da-palavra" element={<GameComingSoon />} />
+        <Route path="/guardiao-da-palavra/" element={<GameComingSoon />} />
 
         <Route path="*" element={<Login />} />
 
@@ -917,6 +920,8 @@ export default function App() {
             <Route path="/duelo-biblico" element={<DueloBiblico />} />
             <Route path="/duelo-biblico/index.html" element={<DueloBiblico />} />
             <Route path="/jogos" element={<GamesHub />} />
+            <Route path="/guardiao-da-palavra" element={<GameComingSoon />} />
+            <Route path="/guardiao-da-palavra/" element={<GameComingSoon />} />
             <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
 
             <Route path="/mensagens" element={<Chat />} />

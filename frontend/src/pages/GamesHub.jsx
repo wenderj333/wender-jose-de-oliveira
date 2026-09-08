@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const GAMES = [
   { title: 'Duelo Bíblico', cover: '/game-covers/duelo-biblico.png', path: '/duelo-biblico', description: 'Responda perguntas da Bíblia, desafie outro jogador e acompanhe o ranking.' },
   { title: 'Guardião da Palavra', cover: '/game-covers/guardiao-da-palavra.png', path: '/guardiao-da-palavra/', description: 'Proteja a Palavra, aprenda histórias bíblicas e avance por desafios de fé.' },
-  { title: 'Mundo Bíblico', cover: '/game-covers/mundo-biblico.png', path: '/mundo-biblico/', description: 'Explore um mundo bíblico educativo com personagens, histórias e atividades.' },
+  { title: 'Mundo Bíblico', cover: '/game-covers/mundo-biblico.png', path: '/mundo-biblico/index.html', description: 'Explore um mundo bíblico educativo com personagens, histórias e atividades.' },
 ];
 
 export default function GamesHub() {
@@ -16,7 +16,7 @@ export default function GamesHub() {
         {GAMES.map((game, index) => <article key={game.title} style={{ background: '#fff', border: '1px solid #e1dcef', borderRadius: 14, padding: 10, boxShadow: '0 8px 20px rgba(54,36,91,.08)', display:'grid', gridTemplateColumns:'38px 1fr', columnGap:10, alignItems:'center' }}>
           <img src={game.cover} alt={`Capa de ${game.title}`} style={{ display: 'block', width: 38, height: 38, objectFit: 'cover', borderRadius: 8, gridRow:'span 2' }} />
           <h2 style={{ fontSize: 15, margin: 0 }}>{game.title}</h2>
-          <div style={{ display: 'flex', gap: 6 }}><Link to={game.path} style={{ flex: 1, textAlign: 'center', padding: '7px 6px', borderRadius: 8, background: '#633da0', color: '#fff', textDecoration: 'none', fontWeight: 800, fontSize: 12 }}>Abrir</Link><button type="button" onClick={() => setOpenInfo(openInfo === index ? null : index)} aria-expanded={openInfo === index} style={{ padding: '7px 9px', borderRadius: 8, border: '1px solid #d8ccea', background: '#fff', color: '#633da0', fontWeight: 800, cursor: 'pointer' }}>ⓘ</button></div>
+          <div style={{ display: 'flex', gap: 6 }}><a href={game.path} style={{ flex: 1, textAlign: 'center', padding: '7px 6px', borderRadius: 8, background: '#633da0', color: '#fff', textDecoration: 'none', fontWeight: 800, fontSize: 12 }}>Abrir</a><button type="button" onClick={() => setOpenInfo(openInfo === index ? null : index)} aria-expanded={openInfo === index} style={{ padding: '7px 9px', borderRadius: 8, border: '1px solid #d8ccea', background: '#fff', color: '#633da0', fontWeight: 800, cursor: 'pointer' }}>ⓘ</button></div>
           {openInfo === index && <p style={{ gridColumn:'1 / -1', margin: '8px 0 0', padding: '9px', borderRadius: 9, background: '#f5f1fc', color: '#59627d', fontSize: 12, lineHeight: 1.45 }}>{game.description}</p>}
         </article>)}
       </div>
