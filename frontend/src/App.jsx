@@ -79,6 +79,7 @@ import DueloBiblico from "./pages/DueloBiblico";
 import DuelLanding from "./pages/DuelLanding";
 import GamesHub from "./pages/GamesHub";
 import GameComingSoon from "./pages/GameComingSoon";
+import MundoBiblicoEmbed from "./pages/MundoBiblicoEmbed";
 
 import AjudaUmaVida from "./pages/AjudaUmaVida";
 
@@ -490,6 +491,9 @@ export default function App() {
         <Route path="/jogos" element={<GamesHub />} />
         <Route path="/guardiao-da-palavra" element={<GameComingSoon />} />
         <Route path="/guardiao-da-palavra/" element={<GameComingSoon />} />
+        <Route path="/mundo-biblico" element={<MundoBiblicoEmbed />} />
+        <Route path="/mundo-biblico/" element={<MundoBiblicoEmbed />} />
+        <Route path="/mundo-biblico/index.html" element={<MundoBiblicoEmbed />} />
 
         <Route path="*" element={<Login />} />
 
@@ -922,6 +926,9 @@ export default function App() {
             <Route path="/jogos" element={<GamesHub />} />
             <Route path="/guardiao-da-palavra" element={<GameComingSoon />} />
             <Route path="/guardiao-da-palavra/" element={<GameComingSoon />} />
+            <Route path="/mundo-biblico" element={<MundoBiblicoEmbed />} />
+            <Route path="/mundo-biblico/" element={<MundoBiblicoEmbed />} />
+            <Route path="/mundo-biblico/index.html" element={<MundoBiblicoEmbed />} />
             <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
 
             <Route path="/mensagens" element={<Chat />} />
