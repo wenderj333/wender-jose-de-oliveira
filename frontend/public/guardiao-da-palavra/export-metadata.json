@@ -1,0 +1,16 @@
+{
+  "name": "Guardião da Palavra",
+  "revisionLabel": "Implement session rhythm selection and serene visit recommendations",
+  "description": "Guardião da Palavra: O Desafio dos Pergaminhos é um jogo bíblico educativo para navegador, voltado a adultos cristãos. O jogador assume o papel de escriba e guardião de manuscritos, avançando por cinco fases temáticas para preservar textos sagrados ao resolver enigmas, decodificar versículos e responder perguntas sobre o contexto histórico e teológico da Bíblia. A experiência deve favorecer sessões recorrentes, aprendizado e entretenimento saudável, com progressão pelo caminho dos manuscritos.",
+  "mode": "Universal",
+  "exportDate": "2026-09-07T10:59:02.961Z",
+  "rosebudBuiltInSplash": {
+    "present": true,
+    "version": 1
+  },
+  "assetCount": 14,
+  "assetTypes": [
+    "image",
+    "audio"
+  ]
+}
