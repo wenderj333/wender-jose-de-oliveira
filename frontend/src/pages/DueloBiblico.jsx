@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +8,7 @@ import './DueloBiblicoOverrides.css';
 
 const TOTAL_QUESTIONS = 10;
 const DUEL_TIMER_SECONDS = 15;
+const GUEST_TRIAL_SECONDS = 3 * 60;
 const LANGUAGES = [
   { code: 'pt', label: 'Português', flag: '🇧🇷' },
   { code: 'es', label: 'Español', flag: '🇪🇸' },
@@ -43,6 +45,7 @@ function playGameSound(file) {
 
 export default function DueloBiblico() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { send, on, off, isConnected } = useWebSocket();
   const { i18n } = useTranslation();
   const lang = (i18n.language || 'pt').slice(0, 2);
@@ -63,7 +66,33 @@ export default function DueloBiblico() {
   const [invite, setInvite] = useState(null);
   const [timeLeft, setTimeLeft] = useState(DUEL_TIMER_SECONDS);
   const [ranking, setRanking] = useState([]);
+  const [trialSeconds, setTrialSeconds] = useState(() => {
+    if (user?.id) return null;
+    const started = Number(localStorage.getItem('duelo_guest_trial_started') || Date.now());
+    if (!localStorage.getItem('duelo_guest_trial_started')) localStorage.setItem('duelo_guest_trial_started', String(started));
+    return Math.max(0, GUEST_TRIAL_SECONDS - Math.floor((Date.now() - started) / 1000));
+  });
   const copy = DUEL_COPY[gameLanguage] || DUEL_COPY.pt;
+
+  useEffect(() => {
+    if (user?.id) { setTrialSeconds(null); return undefined; }
+    const started = Number(localStorage.getItem('duelo_guest_trial_started') || Date.now());
+    localStorage.setItem('duelo_guest_trial_started', String(started));
+    const tick = () => setTrialSeconds(Math.max(0, GUEST_TRIAL_SECONDS - Math.floor((Date.now() - started) / 1000)));
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, [user?.id]);
+
+  const trialExpired = !user?.id && trialSeconds === 0;
+  const guestId = useMemo(() => {
+    if (user?.id) return user.id;
+    let id = localStorage.getItem('duelo_guest_id');
+    if (!id) { id = `guest-${Math.random().toString(36).slice(2, 10)}`; localStorage.setItem('duelo_guest_id', id); }
+    return id;
+  }, [user?.id]);
+  const playerId = user?.id || guestId;
+  const displayName = user?.full_name || user?.name || (trialExpired ? 'Visitante' : 'Visitante');
 
   const currentQuestion = useMemo(
     () => questionForLanguage(questions[questionIndex], gameLanguage),
@@ -129,16 +158,16 @@ export default function DueloBiblico() {
   }, [status]);
 
   useEffect(() => {
-    if (!isConnected || !user?.id) return undefined;
+    if (!isConnected || !playerId || trialExpired) return undefined;
     const player = {
       type: 'game_lobby_join',
-      userId: user.id,
-      userName: user.full_name || user.name || 'Jogador',
-      avatar: user.profile_photo || user.avatar_url || user.photo_url || '',
+      userId: playerId,
+      userName: displayName,
+      avatar: user?.profile_photo || user?.avatar_url || user?.photo_url || '',
     };
     send(player);
-    return () => send({ type: 'game_lobby_leave', userId: user.id });
-  }, [isConnected, send, user]);
+    return () => send({ type: 'game_lobby_leave', userId: playerId });
+  }, [isConnected, send, playerId, displayName, trialExpired, user]);
 
   useEffect(() => {
     const updatePlayers = (data) => setLobbyPlayers(data.players || []);
@@ -175,13 +204,13 @@ export default function DueloBiblico() {
   }, [off, on, user?.id]);
 
   const startMatch = () => {
-    if (!user?.id) { setMessage('Entre na sua conta para jogar.'); return; }
+    if (trialExpired) { setMessage(copy.login); return; }
     if (!isConnected) { setMessage('A ligação está a preparar-se. Aguarde alguns segundos e tente novamente.'); return; }
     setResult(null);
     const sent = send({
       type: 'game_queue',
-      userId: user.id,
-      userName: user.full_name || user.name || 'Jogador',
+      userId: playerId,
+      userName: displayName,
       avatar: user.profile_photo || user.avatar_url || user.photo_url || '',
       livro: 'Todos',
       nivel: 0,
@@ -190,13 +219,13 @@ export default function DueloBiblico() {
   };
 
   const startBotMatch = () => {
-    if (!user?.id) { setMessage('Entre na sua conta para jogar.'); return; }
+    if (trialExpired) { setMessage(copy.login); return; }
     if (!isConnected) { setMessage('A ligação está a preparar-se. Aguarde alguns segundos e tente novamente.'); return; }
     setResult(null);
     const sent = send({
       type: 'game_bot_match',
-      userId: user.id,
-      userName: user.full_name || user.name || 'Jogador',
+      userId: playerId,
+      userName: displayName,
       avatar: user.profile_photo || user.avatar_url || user.photo_url || '',
     });
     if (!sent) setMessage('Não foi possível iniciar o Bot Bíblico. Tente novamente.');
@@ -231,18 +260,18 @@ export default function DueloBiblico() {
   const sendLobbyMessage = (event) => {
     event.preventDefault();
     const text = chatText.trim();
-    if (!text || !user?.id) return;
+    if (!text || !playerId || trialExpired) return;
     if (!isConnected) {
       setChatNotice('O chat está a ligar. Aguarde alguns segundos e tente novamente.');
       return;
     }
     const sentAt = Date.now();
-    const pendingMessage = { id: `pending-${sentAt}`, userId: user.id, userName: user.full_name || user.name || 'Jogador', text, pending: true };
+    const pendingMessage = { id: `pending-${sentAt}`, userId: playerId, userName: displayName, text, pending: true };
     setChatMessages(current => [...current.slice(-49), pendingMessage]);
     setChatNotice('A enviar mensagem…');
     // Reconfirma a presença na sala antes de enviar, inclusive após uma reconexão.
-    send({ type: 'game_lobby_join', userId: user.id, userName: user.full_name || user.name || 'Jogador', avatar: user.profile_photo || user.avatar_url || user.photo_url || '' });
-    const didSend = send({ type: 'game_lobby_chat', userId: user.id, text });
+    send({ type: 'game_lobby_join', userId: playerId, userName: displayName, avatar: user?.profile_photo || user?.avatar_url || user?.photo_url || '' });
+    const didSend = send({ type: 'game_lobby_chat', userId: playerId, text });
     if (!didSend) {
       setChatMessages(current => current.filter(item => item.id !== pendingMessage.id));
       setChatNotice('Não foi possível enviar. Tente novamente.');
@@ -288,9 +317,9 @@ export default function DueloBiblico() {
 
           {status === 'ready' && <div className="duel-action-card">
             <div className="duel-trophy">🏆</div><span className="duel-action-kicker">{copy.ready}</span><h2>{copy.title}</h2><p>{copy.intro}</p>
+            {!user?.id && <div role="status" style={{margin:'10px auto 14px',padding:'8px 12px',borderRadius:10,background:'rgba(240,192,64,.14)',border:'1px solid rgba(240,192,64,.35)',color:'#f6d860',fontSize:12,fontWeight:700}}>{trialExpired ? copy.login : `Teste gratuito: ${Math.floor((trialSeconds || 0) / 60)}:${String((trialSeconds || 0) % 60).padStart(2, '0')} restantes`}</div>}
             <div className="duel-action-buttons">
-              <button className="duel-primary-button" onClick={startMatch}><span>⚡</span>{isConnected ? copy.search : '…'}</button>
-              <button className="duel-bot-button" onClick={startBotMatch} disabled={!isConnected}><span>🤖</span> {copy.bot}</button>
+              {trialExpired ? <button className="duel-primary-button" onClick={() => navigate('/register')}><span>🔒</span>{copy.login}</button> : <><button className="duel-primary-button" onClick={startMatch}><span>⚡</span>{isConnected ? copy.search : '…'}</button><button className="duel-bot-button" onClick={startBotMatch} disabled={!isConnected}><span>🤖</span> {copy.bot}</button></>}
             </div>
             <p className="duel-action-help">{copy.botHelp}</p>
           </div>}
