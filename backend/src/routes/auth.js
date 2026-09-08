@@ -19,16 +19,25 @@ function createWelcomeNotification(user) {
 
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, full_name, role, avatar_url, email_updates_opt_in } = req.body;
-    if (!email || !password || !full_name) {
+    const emailNormalized = String(req.body?.email || '').trim().toLowerCase();
+    const password = String(req.body?.password || '');
+    const fullNameNormalized = String(req.body?.full_name || '').trim();
+    const { role, avatar_url, email_updates_opt_in } = req.body || {};
+    if (!emailNormalized || !password || !fullNameNormalized) {
       return res.status(400).json({ error: 'Email, senha e nome completo são obrigatórios' });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalized)) {
+      return res.status(400).json({ error: 'Informe um endereço de e-mail válido' });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'A senha deve ter pelo menos 6 caracteres' });
     }
 
 
-    const existing = await User.findByEmail(email);
+    const existing = await User.findByEmail(emailNormalized);
     if (existing) return res.status(409).json({ error: 'Email já cadastrado' });
 
-    const user = await User.create({ email, password, full_name, role, email_updates_opt_in: email_updates_opt_in === true });
+    const user = await User.create({ email: emailNormalized, password, full_name: fullNameNormalized, role, email_updates_opt_in: email_updates_opt_in === true });
 
     // Salvar avatar se fornecido
     if (avatar_url) {
@@ -38,7 +47,7 @@ router.post('/register', async (req, res) => {
     }
 
     const token = generateToken(user);
-    sendWelcomeEmail(email, full_name).catch(()=>{});
+    sendWelcomeEmail(emailNormalized, fullNameNormalized).catch(()=>{});
     createWelcomeNotification(user).catch(()=>{});
     res.status(201).json({ user, token });
   } catch (err) {
