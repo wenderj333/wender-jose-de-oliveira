@@ -636,6 +636,8 @@ export default function App() {
 
               ['/comunidade-ao-vivo', <MessageCircle size={20}/>, t('nav.live_community', 'Chat cristão')],
 
+              ['/jogos', <PlayCircle size={20}/>, 'Jogos'],
+
               ['/amigos', <Users size={20}/>, t('nav.friends', 'Amigos'), pendingRequests],
 
               ['/grupos', <Users size={20}/>, t('nav.groups', 'Grupos')],
@@ -643,8 +645,6 @@ export default function App() {
               ['/praca-oracao', <Heart size={20}/>, t('nav.prayerPlaza', 'Praça Mundial de Oração')],
 
               ['/consagracao', <PlayCircle size={20}/>, t('nav.consecration', 'Consagração e Jejum')],
-
-              ['/jogos', <PlayCircle size={20}/>, 'Jogos'],
 
               ['/notificacoes', <Bell size={20}/>, t('nav.notifications', 'Notificações')],
 
