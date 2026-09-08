@@ -484,8 +484,10 @@
         flex-direction: column;
         align-items: center;
         max-width: 720px;
-        margin: auto;
-        padding: 24px;
+        width: min(100%, 720px);
+        box-sizing: border-box;
+        margin: 0 auto;
+        padding: clamp(24px, 5vh, 52px) 24px 42px;
         text-align: center;
       }
       .start-content h1 {
