@@ -637,7 +637,7 @@ export default function App() {
 
               ['/consagracao', <PlayCircle size={20}/>, t('nav.consecration', 'Consagração e Jejum')],
 
-              ['/jogos', <PlayCircle size={20}/>, 'Jogos · Duelo Bíblico'],
+              ['/jogos', <PlayCircle size={20}/>, 'Jogos'],
 
               ['/notificacoes', <Bell size={20}/>, t('nav.notifications', 'Notificações')],
 
