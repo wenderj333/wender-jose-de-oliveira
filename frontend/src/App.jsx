@@ -673,12 +673,6 @@ export default function App() {
 
               ['/diario-com-deus', <BookOpen size={20}/>, t('nav.diary')],
 
-              ['/desafio-diario', <Sun size={20}/>, 'Desafio Diário'],
-
-              ['/jogos', <PlayCircle size={20}/>, 'Jogos · Duelo Bíblico'],
-
-              ['/kids', <PlayCircle size={20}/>, 'Jogos para crianças'],
-
               ['/reflexao', <Sun size={20}/>, t('nav.reflection')],
 
               ['/curso-biblico', <BookOpen size={20}/>, t('course.title')],
@@ -706,6 +700,11 @@ export default function App() {
               </Link>
 
             ))}
+
+            <p style={{color:'#69837b',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',margin:'16px 0 10px',paddingLeft:'16px'}}>Jogos</p>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,padding:'0 12px 12px'}}>
+              {[['/duelo-biblico','Duelo Bíblico','/duelo-biblico/game-background.webp'],['/desafio-diario','Desafio Diário','/fundo-desafio.jpg'],['/kids','Jogos Kids','/duelo-biblico/bible-logo.webp']].map(([to,label,image])=><Link key={to} to={to} onClick={()=>setMobileMenuOpen(false)} style={{display:'flex',flexDirection:'column',gap:5,color:'#304a52',textDecoration:'none',fontSize:11,fontWeight:700}}><img src={image} alt="" style={{width:'100%',height:42,objectFit:'cover',borderRadius:8}}/><span>{label}</span></Link>)}
+            </div>
 
             {user?.role === 'pastor' && (
 
@@ -823,9 +822,9 @@ export default function App() {
 
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','Música')}</span></Link>
 
-            <Link to="/kids" className={isActive('/kids')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>Jogos para crianças</span></Link>
-
-            <Link to="/jogos" className={isActive('/jogos') || isActive('/duelo-biblico')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>Jogos · Duelo Bíblico</span></Link>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginTop:10}}>
+              {[['/duelo-biblico','Duelo Bíblico','/duelo-biblico/game-background.webp'],['/desafio-diario','Desafio Diário','/fundo-desafio.jpg'],['/kids','Jogos Kids','/duelo-biblico/bible-logo.webp']].map(([to,label,image])=><Link key={to} to={to} className={isActive(to)} style={{display:'flex',flexDirection:'column',gap:4,padding:'6px',fontSize:10,textAlign:'center'}}><img src={image} alt="" style={{width:'100%',height:42,objectFit:'cover',borderRadius:7}}/><span className="nav-text">{label}</span></Link>)}
+            </div>
 
           </div>
 
