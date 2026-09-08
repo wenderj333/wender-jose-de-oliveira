@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const GAMES = [
   { title: 'Duelo Bíblico', cover: '/game-covers/duelo-biblico.png', path: '/duelo-biblico', description: 'Responda perguntas da Bíblia, desafie outro jogador e acompanhe o ranking.' },
-  { title: 'Guardião da Palavra', cover: '/game-covers/guardiao-da-palavra.png', path: '/guardiao-da-palavra/', description: 'Proteja a Palavra, aprenda histórias bíblicas e avance por desafios de fé.' },
+  { title: 'Guardião da Palavra', cover: '/game-covers/guardiao-da-palavra.png', path: 'https://playground-gateway-v2-snduoq54tq-uc.a.run.app/api/server/05d6ed6e-2d8f-4a0d-abdf-941ad29c4540/index.html', description: 'Proteja a Palavra, aprenda histórias bíblicas e avance por desafios de fé.' },
   { title: 'Mundo Bíblico', cover: '/game-covers/mundo-biblico.png', path: '/mundo-biblico/index.html', description: 'Explore um mundo bíblico educativo com personagens, histórias e atividades.' },
 ];
 
