@@ -485,6 +485,7 @@ export default function App() {
         <Route path="/chat-cristao" element={<ChristianChatLanding />} />
         <Route path="/duelo-biblico" element={<DuelLanding />} />
         <Route path="/duelo-biblico/index.html" element={<DuelLanding />} />
+        <Route path="/jogos" element={<DuelLanding />} />
 
         <Route path="*" element={<Login />} />
 
@@ -636,6 +637,8 @@ export default function App() {
 
               ['/consagracao', <PlayCircle size={20}/>, t('nav.consecration', 'Consagração e Jejum')],
 
+              ['/jogos', <PlayCircle size={20}/>, 'Jogos · Duelo Bíblico'],
+
               ['/notificacoes', <Bell size={20}/>, t('nav.notifications', 'Notificações')],
 
               ['/configuracoes', <SettingsIcon size={20}/>, 'Configurações'],
@@ -671,6 +674,8 @@ export default function App() {
               ['/diario-com-deus', <BookOpen size={20}/>, t('nav.diary')],
 
               ['/desafio-diario', <Sun size={20}/>, 'Desafio Diário'],
+
+              ['/jogos', <PlayCircle size={20}/>, 'Jogos · Duelo Bíblico'],
 
               ['/kids', <PlayCircle size={20}/>, 'Jogos para crianças'],
 
@@ -819,6 +824,8 @@ export default function App() {
             <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','Música')}</span></Link>
 
             <Link to="/kids" className={isActive('/kids')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>Jogos para crianças</span></Link>
+
+            <Link to="/jogos" className={isActive('/jogos') || isActive('/duelo-biblico')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>Jogos · Duelo Bíblico</span></Link>
 
           </div>
 
