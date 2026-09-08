@@ -213,7 +213,7 @@ export default function App() {
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
 
   const [hideSidebars, setHideSidebars] = useState(false);
-  const isDuelPage = location.pathname === '/duelo-biblico' || location.pathname === '/duelo-biblico/index.html';
+  const isDuelPage = location.pathname === '/duelo-biblico' || location.pathname === '/duelo-biblico/index.html' || location.pathname === '/jogos';
 
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [notificationToast, setNotificationToast] = useState(null);
@@ -907,6 +907,7 @@ export default function App() {
             <Route path="/kids" element={<Kids />} />
             <Route path="/duelo-biblico" element={<DueloBiblico />} />
             <Route path="/duelo-biblico/index.html" element={<DueloBiblico />} />
+            <Route path="/jogos" element={<DueloBiblico />} />
             <Route path="/ajuda-uma-vida" element={<AjudaUmaVida />} />
 
             <Route path="/mensagens" element={<Chat />} />
