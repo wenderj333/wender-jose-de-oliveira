@@ -3819,12 +3819,58 @@ function preserveWhitespace(source, replacement) {
     return `${leading}${replacement}${trailing}`;
 }
 
+const START_STATE_TRANSLATIONS = {
+    es: {
+        'moldura histórica da Fase 1': 'marco histórico de la Fase 1',
+        'moldura histórica da Fase 2': 'marco histórico de la Fase 2',
+        'moldura histórica da Fase 3': 'marco histórico de la Fase 3',
+        'moldura histórica da Fase 4': 'marco histórico de la Fase 4',
+        'Fase atual:': 'Fase actual:', 'Página guardada:': 'Página guardada:'
+    },
+    en: {
+        'moldura histórica da Fase 1': 'historical frame of Phase 1',
+        'moldura histórica da Fase 2': 'historical frame of Phase 2',
+        'moldura histórica da Fase 3': 'historical frame of Phase 3',
+        'moldura histórica da Fase 4': 'historical frame of Phase 4',
+        'Fase atual:': 'Current phase:', 'Página guardada:': 'Saved page:'
+    },
+    de: {
+        'moldura histórica da Fase 1': 'historischer Rahmen der Phase 1',
+        'moldura histórica da Fase 2': 'historischer Rahmen der Phase 2',
+        'moldura histórica da Fase 3': 'historischer Rahmen der Phase 3',
+        'moldura histórica da Fase 4': 'historischer Rahmen der Phase 4',
+        'Fase atual:': 'Aktuelle Phase:', 'Página guardada:': 'Gespeicherte Seite:'
+    },
+    fr: {
+        'moldura histórica da Fase 1': 'cadre historique de la phase 1',
+        'moldura histórica da Fase 2': 'cadre historique de la phase 2',
+        'moldura histórica da Fase 3': 'cadre historique de la phase 3',
+        'moldura histórica da Fase 4': 'cadre historique de la phase 4',
+        'Fase atual:': 'Phase actuelle :', 'Página guardada:': 'Page enregistrée :'
+    },
+    ro: {
+        'moldura histórica da Fase 1': 'cadru istoric al etapei 1',
+        'moldura histórica da Fase 2': 'cadru istoric al etapei 2',
+        'moldura histórica da Fase 3': 'cadru istoric al etapei 3',
+        'moldura histórica da Fase 4': 'cadru istoric al etapei 4',
+        'Fase atual:': 'Etapa actuală:', 'Página guardada:': 'Pagina salvată:'
+    },
+    ru: {
+        'moldura histórica da Fase 1': 'историческая рамка этапа 1',
+        'moldura histórica da Fase 2': 'историческая рамка этапа 2',
+        'moldura histórica da Fase 3': 'историческая рамка этапа 3',
+        'moldura histórica da Fase 4': 'историческая рамка этапа 4',
+        'Fase atual:': 'Текущий этап:', 'Página guardada:': 'Сохранённая страница:'
+    }
+};
+
 function translateTextValue(value, language) {
     const source = String(value ?? '');
     const trimmed = source.trim();
     if (!trimmed) return source;
     const dictionary = {
         ...(TRANSLATIONS[language] || {}),
+        ...(START_STATE_TRANSLATIONS[language] || {}),
         ...(SHARED_CHALLENGE_TRANSLATIONS[language] || {}),
         ...(CHALLENGE_CONTENT_TRANSLATIONS[language] || {}),
         ...(MANUSCRIPT_GALLERY_TRANSLATIONS[language] || {}),

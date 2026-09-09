@@ -5717,6 +5717,7 @@ class GameController {
         const t = value => i18n.t(value);
         this.hud.innerText = t(this.getPhaseLabel(this.progress.currentPhase));
         this.startScreen.style.display = 'flex';
+        this.startScreen.scrollTop = 0;
         this.parchment.classList.remove('active');
         if (!this.hasSavedProgress()) {
             this.startContent.innerHTML = `
