@@ -1,0 +1,48 @@
+/* Keep reading surfaces in document flow, including at browser zoom. */
+html, body { height: auto; min-height: 100%; overflow: visible; }
+body { overflow-x: clip; }
+#game-container {
+  height: auto; min-height: 100dvh; overflow: clip;
+  display: flex; flex-direction: column; justify-content: flex-start;
+  perspective: none; background-attachment: fixed;
+}
+#scene3d { position: fixed; transform: none; }
+#hud {
+  position: relative; inset: auto; align-self: stretch; margin: 16px 20px 8px;
+  transform: none; font-size: clamp(1rem, 2.2vw, 1.5rem); overflow-wrap: anywhere;
+}
+.topbar-tools {
+  position: relative; inset: auto; align-self: stretch; justify-content: flex-end;
+  flex-wrap: wrap; margin: 0 20px 14px; transform: none;
+}
+.topbar-tools > * { transform: none; max-width: 100%; }
+.ui-layer {
+  position: relative; inset: auto; height: auto; min-height: 0;
+  flex: 1; justify-content: flex-start; perspective: none; transform-style: flat;
+}
+#start-screen {
+  flex: none; height: auto; min-height: calc(100dvh - 120px);
+  overflow: visible; padding: 20px clamp(12px, 3vw, 36px) 36px;
+  transform-style: flat;
+}
+.start-content { width: min(100%, 1040px); max-width: 1040px; flex: none; }
+.start-content, .start-content * { transform: none !important; }
+#parchment { display: none; }
+#parchment.active {
+  display: flex; flex: none; width: min(96%, 1280px); height: auto;
+  max-height: none; min-height: calc(100dvh - 140px); margin: 0 auto 24px;
+  padding: clamp(24px, 4vw, 52px); transform: none; transform-style: flat;
+  background-size: 136% 100%;
+}
+#content-area {
+  flex: none; width: 100%; min-height: 0; max-height: none; height: auto;
+  overflow: visible; transform: none; transform-style: flat;
+}
+#content-area > *, #content-area section, #content-area article { transform: none; }
+#feedback-overlay { position: fixed; transform: none; max-height: 85dvh; overflow-y: auto; }
+@media (max-width: 680px) {
+  #hud { margin: 12px 12px 8px; }
+  .topbar-tools { margin: 0 12px 12px; justify-content: flex-start; gap: 6px; }
+  #parchment.active { width: 100%; padding: 24px 14px; }
+  .path-destination-grid, .historical-details { grid-template-columns: minmax(0, 1fr); }
+}

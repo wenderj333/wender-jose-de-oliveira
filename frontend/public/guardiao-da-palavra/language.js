@@ -1,3 +1,5 @@
+import { chapterTranslations } from './chapter-translations.js';
+import { coreTranslationsDe } from './core-translations-de.js';
 const LANGUAGE_STORAGE_KEY = 'i18nextLng';
 const SUPPORTED_LANGUAGES = ['pt', 'es', 'en', 'de', 'fr', 'ro', 'ru'];
 const LANGUAGE_TAGS = {
@@ -3864,11 +3866,13 @@ const START_STATE_TRANSLATIONS = {
     }
 };
 
+const dictionaryCache = new Map();
 function translateTextValue(value, language) {
     const source = String(value ?? '');
-    const trimmed = source.trim();
+    const trimmed = source.trim().replace(/\s+/g, ' ');
     if (!trimmed) return source;
-    const dictionary = {
+    const dictionary = dictionaryCache.get(language) || {
+        ...(PHASE_TITLE_TRANSLATIONS[language] || {}),
         ...(TRANSLATIONS[language] || {}),
         ...(START_STATE_TRANSLATIONS[language] || {}),
         ...(SHARED_CHALLENGE_TRANSLATIONS[language] || {}),
@@ -3886,8 +3890,11 @@ function translateTextValue(value, language) {
         ...(FEEDBACK_TRANSLATIONS[language] || {}),
         ...(EDUCATIONAL_FEEDBACK_TRANSLATIONS[language] || {}),
         ...(LATER_UI_TRANSLATIONS[language] || {}),
-        ...(INTERPRETATION_EVIDENCE_TRANSLATIONS[language] || {})
+        ...(INTERPRETATION_EVIDENCE_TRANSLATIONS[language] || {}),
+        ...(chapterTranslations[language] || {}),
+        ...(language === 'de' ? coreTranslationsDe : {})
     };
+    dictionaryCache.set(language, dictionary);
     const exact = dictionary[trimmed];
     if (exact) return preserveWhitespace(source, exact);
 
@@ -3943,6 +3950,10 @@ function translateTextValue(value, language) {
     }
 
     const dynamicPatterns = [
+        [/^Fase ([IVX1-4]+) · tema$/, (match) => `${phaseWord} ${match[1]} · ${{pt:'tema',es:'tema',en:'theme',de:'Thema',fr:'thème',ro:'temă',ru:'тема'}[language]}`],
+        [/^Abrir o manuscrito da Fase ([1-4])$/, (match) => `${{pt:'Abrir o manuscrito da Fase',es:'Abrir el manuscrito de la fase',en:'Open the manuscript for Phase',de:'Manuskript öffnen · Phase',fr:'Ouvrir le manuscrit de la phase',ro:'Deschide manuscrisul etapei',ru:'Открыть рукопись этапа'}[language]} ${match[1]}`],
+        [/^Contemplar o registro da Fase ([1-4])$/, (match) => `${{pt:'Contemplar o registro da Fase',es:'Contemplar el registro de la fase',en:'Read the record for Phase',de:'Eintrag betrachten · Phase',fr:'Contempler le registre de la phase',ro:'Contemplă însemnarea etapei',ru:'Посмотреть запись этапа'}[language]} ${match[1]}`],
+        [/^Gênesis ([\d:–—,; .-]+)$/, (match) => `${{pt:'Gênesis',es:'Génesis',en:'Genesis',de:'Genesis',fr:'Genèse',ro:'Geneza',ru:'Бытие'}[language]} ${match[1]}`],
         [/^Fase atual: (.+)$/, (match) => `${dictionary['Fase atual:'] || dynamicFallbacks.currentPhase} ${translateTextValue(match[1], language)}`],
         [/^Página guardada: (.+)$/, (match) => `${dictionary['Página guardada:'] || dynamicFallbacks.savedPage} ${dictionary[match[1]] || translateTextValue(match[1], language)}`],
         [/^Abrir sessão de recuperação · (\d+) (passagem|passagens) para retomar$/, (match) => `${dynamicLabels?.recovery || 'Abrir sessão de recuperação'} · ${match[1]} ${match[1] === '1' ? dynamicLabels?.recoveryPassage : dynamicLabels?.recoveryPassages} ${dynamicLabels?.resume || 'para retomar'}`],
@@ -4006,15 +4017,20 @@ function translateAttributes(element, language) {
     });
 }
 
+const translatedTextSources = new WeakMap();
 function translateRoot(root, language) {
     if (!(root instanceof Node)) return;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const textNodes = [];
+    const textNodes = root.nodeType === Node.TEXT_NODE ? [root] : [];
     let node;
     while ((node = walker.nextNode())) textNodes.push(node);
     textNodes.forEach(textNode => {
         if (isProtectedTextNode(textNode)) return;
-        const translated = translateTextValue(textNode.nodeValue, language);
+        if (textNode.parentElement?.closest('script, style, textarea, [contenteditable="true"]')) return;
+        const previous = translatedTextSources.get(textNode);
+        const source = previous?.translated === textNode.nodeValue ? previous.source : textNode.nodeValue;
+        const translated = translateTextValue(source, language);
+        translatedTextSources.set(textNode, { source, translated });
         if (translated !== textNode.nodeValue) textNode.nodeValue = translated;
     });
     if (root instanceof Element) {
