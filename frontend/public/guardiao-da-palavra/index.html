@@ -207,6 +207,28 @@
         cursor: wait;
         opacity: 0.72;
       }
+      .sigo-nav-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 31px;
+        box-sizing: border-box;
+        padding: 5px 10px;
+        border: 1px solid rgba(212, 175, 55, 0.82);
+        border-radius: 18px;
+        background: rgba(13, 8, 4, 0.76);
+        color: #fff3cf;
+        cursor: pointer;
+        font-family: 'Cinzel', serif;
+        font-size: 0.66rem;
+        font-weight: 700;
+        line-height: 1;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .sigo-nav-action:hover {
+        background: rgba(73, 43, 16, 0.92);
+      }
       .language-control {
         display: inline-flex;
         align-items: center;
@@ -484,10 +506,8 @@
         flex-direction: column;
         align-items: center;
         max-width: 720px;
-        width: min(100%, 720px);
-        box-sizing: border-box;
-        margin: 0 auto;
-        padding: clamp(24px, 5vh, 52px) 24px 42px;
+        margin: auto;
+        padding: 24px;
         text-align: center;
       }
       .start-content h1 {
@@ -15082,7 +15102,7 @@
             transform: scale(1.05);
         }
     }
-</style><link rel="stylesheet" href="./layout.css" /></head>
+</style></head>
   <body>
 <div id="rosebud-exported-splash" aria-live="polite">
     <div class="rosebud-exported-splash__content">
@@ -15111,6 +15131,8 @@
           <span class="profile-sync-dot" aria-hidden="true"></span>
           <span id="profile-sync-label">Perfil local</span>
         </div>
+        <button class="sigo-nav-action" id="sigo-back-button" type="button" aria-label="Voltar ao Sigo com Fé">← Voltar</button>
+        <a class="sigo-nav-action" id="sigo-profile-link" href="/login" aria-label="Abrir o meu perfil no Sigo com Fé">⌂ Perfil</a>
         <button class="profile-sync-action" id="profile-sync-action" type="button" aria-label="Ligar progresso ao perfil social">Ligar perfil</button>
         <label class="language-control">
           <span class="sr-only">Idioma</span>
@@ -15151,6 +15173,27 @@
         </div>
       </div>
     </div>
+    <script>
+      (() => {
+        const backButton = document.getElementById('sigo-back-button');
+        const profileLink = document.getElementById('sigo-profile-link');
+        if (backButton) {
+          backButton.addEventListener('click', () => {
+            if (window.history.length > 1) window.history.back();
+            else window.location.assign('/mural');
+          });
+        }
+        if (profileLink) {
+          try {
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const id = user?.id || user?._id;
+            profileLink.href = id ? `/perfil/${encodeURIComponent(id)}` : '/login';
+          } catch (_) {
+            profileLink.href = '/login';
+          }
+        }
+      })();
+    </script>
     <script type="module" src="scene3d.js"></script>
     <script type="module" src="main.js"></script>
     <script src="https://storage.googleapis.com/rosebud_staticfiles/ChatManager.js"></script>

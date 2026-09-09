@@ -1372,7 +1372,6 @@ class GameController {
         const localized = {
             ...challenge,
             recordTitle: translate(challenge.recordTitle),
-            reference: translate(challenge.reference),
             question: translate(challenge.question),
             scenario: translate(challenge.scenario),
             verse: translate(challenge.verse),
@@ -5718,7 +5717,6 @@ class GameController {
         const t = value => i18n.t(value);
         this.hud.innerText = t(this.getPhaseLabel(this.progress.currentPhase));
         this.startScreen.style.display = 'flex';
-        this.startScreen.scrollTop = 0;
         this.parchment.classList.remove('active');
         if (!this.hasSavedProgress()) {
             this.startContent.innerHTML = `
@@ -6441,10 +6439,8 @@ class GameController {
 
     checkVerse(val, source) {
         const c = this.challenges[this.currentChallengeIndex];
-        const normalize = value => String(value ?? '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        const localizedCorrect = this.getLocalizedChallenge(c).correct;
-        const isCorrect = normalize(val) === normalize(c.correct)
-            || normalize(val) === normalize(localizedCorrect);
+        const normalize = value => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const isCorrect = normalize(val) === normalize(c.correct);
         this.showFeedback(isCorrect, c.explanation, source, c.reference, null, null, val);
     }
 
@@ -17439,7 +17435,7 @@ class GameController {
 
                 <div class="chapter-scroll-note phase4-scroll-note">
                     <span>Quarto capítulo</span>
-                    <h2>Da cidade ferida à esperança que permanece</h2>
+                    <h2>Da cidade ferida à esperança que permanece</h2
                     <p>Cinco desafios inéditos revelarão como sabedoria, história, paz, reconstrução e leitura contextual renovam os ensinamentos a preservar depois da Terra Prometida.</p>
                 </div>
 
