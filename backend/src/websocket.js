@@ -70,7 +70,7 @@ function setupWebSocket(server) {
           case 'game_invite':
           case 'game_invite_accept':
           case 'game_invite_decline':
-            handleDuelLobby(ws, msg);
+            await handleDuelLobby(ws, msg);
             break;
           case 'identify':
             try {
@@ -539,11 +539,12 @@ function startDirectDuel(first, second) {
   agendarPergunta(roomId);
 }
 
-function handleDuelLobby(ws, msg) {
+async function handleDuelLobby(ws, msg) {
   const userId = String(msg.userId || '').trim();
   if (!userId) return;
 
   if (msg.type === 'game_lobby_join') {
+    const isNewConnection = duelLobbyPlayers.get(userId)?.ws !== ws;
     duelLobbyPlayers.set(userId, {
       userId,
       userName: String(msg.userName || 'Jogador').trim().slice(0, 60),
@@ -552,6 +553,30 @@ function handleDuelLobby(ws, msg) {
       ws,
     });
     broadcastDuelLobby();
+    // Envia o histórico somente quando a pessoa entra (ou reconecta), não a
+    // cada confirmação de presença enviada pelo navegador.
+    if (isNewConnection) {
+      try {
+        await db.query("DELETE FROM duel_lobby_messages WHERE created_at < NOW() - INTERVAL '48 hours'");
+        const history = await db.query(
+          "SELECT id, user_id, user_name, message, created_at FROM duel_lobby_messages WHERE created_at >= NOW() - INTERVAL '48 hours' ORDER BY created_at ASC LIMIT 100"
+        );
+        if (ws.readyState === 1) {
+          ws.send(JSON.stringify({
+            type: 'game_lobby_chat_history',
+            messages: history.rows.map(item => ({
+              id: String(item.id),
+              userId: item.user_id,
+              userName: item.user_name,
+              text: item.message,
+              createdAt: item.created_at,
+            })),
+          }));
+        }
+      } catch (error) {
+        console.error('Não foi possível carregar o histórico do chat do Duelo:', error.message);
+      }
+    }
     return;
   }
 
@@ -569,8 +594,21 @@ function handleDuelLobby(ws, msg) {
   if (msg.type === 'game_lobby_chat') {
     const text = String(msg.text || '').trim().slice(0, 300);
     if (!text) return;
-    const data = JSON.stringify({ type: 'game_lobby_chat', message: { id: `${Date.now()}-${userId}`, userId, userName: sender.userName, text } });
-    duelLobbyPlayers.forEach(player => { if (player.ws?.readyState === 1) player.ws.send(data); });
+    try {
+      await db.query("DELETE FROM duel_lobby_messages WHERE created_at < NOW() - INTERVAL '48 hours'");
+      const saved = await db.query(
+        'INSERT INTO duel_lobby_messages (user_id, user_name, message) VALUES ($1, $2, $3) RETURNING id, created_at',
+        [userId, sender.userName, text]
+      );
+      const message = saved.rows[0];
+      const data = JSON.stringify({ type: 'game_lobby_chat', message: {
+        id: String(message.id), userId, userName: sender.userName, text, createdAt: message.created_at,
+      } });
+      duelLobbyPlayers.forEach(player => { if (player.ws?.readyState === 1) player.ws.send(data); });
+    } catch (error) {
+      console.error('Não foi possível guardar a mensagem do chat do Duelo:', error.message);
+      ws.send(JSON.stringify({ type: 'game_lobby_chat_error', message: 'Não foi possível guardar a mensagem. Tente novamente.' }));
+    }
     return;
   }
 

@@ -304,6 +304,18 @@ async function migrate() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
     CREATE INDEX IF NOT EXISTS idx_chat_messages_room ON chat_messages(room_id, created_at);
+
+    -- ============ CHAT PÚBLICO DO DUELO BÍBLICO ============
+    -- As mensagens ficam disponíveis na sala durante 48 horas.
+    CREATE TABLE IF NOT EXISTS duel_lobby_messages (
+      id BIGSERIAL PRIMARY KEY,
+      user_id VARCHAR(100) NOT NULL,
+      user_name VARCHAR(60) NOT NULL,
+      message TEXT NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_duel_lobby_messages_created_at
+      ON duel_lobby_messages(created_at DESC);
   `);
  
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_private BOOLEAN DEFAULT false`);
