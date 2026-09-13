@@ -482,7 +482,14 @@ function broadcastToStream(wss, streamId, data, excludeWs) {
 const duelLobbyPlayers = new Map();
 
 function lobbyPlayersPayload() {
-  return [...duelLobbyPlayers.values()].map(({ userId, userName, avatar, status }) => ({ userId, userName, avatar, status: status || 'available' }));
+  return [...duelLobbyPlayers.values()].map(({ userId, userName, avatar, status, isGuest }) => ({
+    userId,
+    // Não expomos dados pessoais dos visitantes antes do registo.
+    userName: isGuest ? 'Visitante' : userName,
+    avatar: isGuest ? '' : avatar,
+    status: status || 'available',
+    isGuest: Boolean(isGuest),
+  }));
 }
 
 function broadcastDuelLobby() {
@@ -544,12 +551,14 @@ async function handleDuelLobby(ws, msg) {
   if (!userId) return;
 
   if (msg.type === 'game_lobby_join') {
+    const isGuest = userId.startsWith('guest-');
     const isNewConnection = duelLobbyPlayers.get(userId)?.ws !== ws;
     duelLobbyPlayers.set(userId, {
       userId,
-      userName: String(msg.userName || 'Jogador').trim().slice(0, 60),
-      avatar: String(msg.avatar || '').slice(0, 2000),
+      userName: isGuest ? 'Visitante' : String(msg.userName || 'Jogador').trim().slice(0, 60),
+      avatar: isGuest ? '' : String(msg.avatar || '').slice(0, 2000),
       status: duelLobbyPlayers.get(userId)?.status || 'available',
+      isGuest,
       ws,
     });
     broadcastDuelLobby();
@@ -655,7 +664,7 @@ function terminarPartida(roomId) {
   const vencedor = jogadores.reduce((melhor, jogador) => jogador.pontos > melhor.pontos ? jogador : melhor, jogadores[0]);
   room.jogadores.forEach(j => { if (j.ws?.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores, vencedor })); });
   // Só utilizadores reais aparecem entre os 10 primeiros do ranking.
-  room.jogadores.filter(j => !String(j.userId).startsWith('bot-')).forEach(async (jogador) => {
+  room.jogadores.filter(j => !String(j.userId).startsWith('bot-') && !String(j.userId).startsWith('guest-')).forEach(async (jogador) => {
     try {
       await db.query(
         'INSERT INTO duelo_ranking (nome,pontos,foto) VALUES ($1,$2,$3) ON CONFLICT (nome) DO UPDATE SET pontos=duelo_ranking.pontos+$2, foto=COALESCE($3,duelo_ranking.foto), updated_at=NOW()',
