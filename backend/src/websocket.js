@@ -562,9 +562,9 @@ async function handleDuelLobby(ws, msg) {
       ws,
     });
     broadcastDuelLobby();
-    // Envia o histórico somente quando a pessoa entra (ou reconecta), não a
-    // cada confirmação de presença enviada pelo navegador.
-    if (isNewConnection) {
+    // Também responde quando a página do Duelo é aberta de novo na mesma
+    // ligação WebSocket; os outros sinais de presença não recarregam o chat.
+    if (isNewConnection || msg.loadHistory === true) {
       try {
         await db.query("DELETE FROM duel_lobby_messages WHERE created_at < NOW() - INTERVAL '48 hours'");
         const history = await db.query(
