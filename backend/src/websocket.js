@@ -480,6 +480,23 @@ function broadcastToStream(wss, streamId, data, excludeWs) {
 }
 
 const duelLobbyPlayers = new Map();
+let duelLobbySchemaReady = false;
+
+async function ensureDuelLobbySchema() {
+  if (duelLobbySchemaReady) return;
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS duel_lobby_messages (
+      id BIGSERIAL PRIMARY KEY,
+      user_id VARCHAR(100) NOT NULL,
+      user_name VARCHAR(60) NOT NULL,
+      message TEXT NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_duel_lobby_messages_created_at
+      ON duel_lobby_messages(created_at DESC);
+  `);
+  duelLobbySchemaReady = true;
+}
 
 function lobbyPlayersPayload() {
   return [...duelLobbyPlayers.values()].map(({ userId, userName, avatar, status, isGuest }) => ({
@@ -566,6 +583,7 @@ async function handleDuelLobby(ws, msg) {
     // ligação WebSocket; os outros sinais de presença não recarregam o chat.
     if (isNewConnection || msg.loadHistory === true) {
       try {
+        await ensureDuelLobbySchema();
         await db.query("DELETE FROM duel_lobby_messages WHERE created_at < NOW() - INTERVAL '48 hours'");
         const history = await db.query(
           "SELECT id, user_id, user_name, message, created_at FROM duel_lobby_messages WHERE created_at >= NOW() - INTERVAL '48 hours' ORDER BY created_at ASC LIMIT 100"
@@ -604,6 +622,7 @@ async function handleDuelLobby(ws, msg) {
     const text = String(msg.text || '').trim().slice(0, 300);
     if (!text) return;
     try {
+      await ensureDuelLobbySchema();
       await db.query("DELETE FROM duel_lobby_messages WHERE created_at < NOW() - INTERVAL '48 hours'");
       const saved = await db.query(
         'INSERT INTO duel_lobby_messages (user_id, user_name, message) VALUES ($1, $2, $3) RETURNING id, created_at',
