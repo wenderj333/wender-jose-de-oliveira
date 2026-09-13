@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const db = require('../db/connection');
 const User = require('../models/User');
 const { generateToken, authenticate } = require('../middleware/auth');
 
 // POST /api/auth/register
-const { sendWelcomeEmail } = require('../services/email');
+const { sendWelcomeEmail, sendPasswordResetEmail } = require('../services/email');
 const { createNotification } = require('./notifications');
 
 function createWelcomeNotification(user) {
@@ -79,6 +82,71 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     console.error('Erro no login:', err);
     res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+async function ensurePasswordResetSchema() {
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS password_reset_tokens (
+      id BIGSERIAL PRIMARY KEY,
+      user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      token_hash CHAR(64) UNIQUE NOT NULL,
+      expires_at TIMESTAMPTZ NOT NULL,
+      used_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_lookup
+      ON password_reset_tokens(token_hash, expires_at);
+  `);
+}
+
+// POST /api/auth/forgot-password
+router.post('/forgot-password', async (req, res) => {
+  const message = 'Se este e-mail estiver registado, receberá um link para criar uma nova senha.';
+  try {
+    const email = String(req.body?.email || '').trim().toLowerCase();
+    if (!email) return res.status(400).json({ error: 'Informe o seu e-mail.' });
+    const user = await User.findByEmail(email);
+    if (!user) return res.json({ message });
+
+    await ensurePasswordResetSchema();
+    const token = crypto.randomBytes(32).toString('hex');
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+    await db.query('DELETE FROM password_reset_tokens WHERE user_id = $1 OR expires_at < NOW()', [user.id]);
+    await db.query(
+      "INSERT INTO password_reset_tokens (user_id, token_hash, expires_at) VALUES ($1, $2, NOW() + INTERVAL '1 hour')",
+      [user.id, tokenHash],
+    );
+    const siteUrl = String(process.env.FRONTEND_URL || 'https://www.sigocomfe.com').replace(/\/$/, '');
+    await sendPasswordResetEmail(user.email, user.full_name, `${siteUrl}/reset-password?token=${token}`);
+    return res.json({ message });
+  } catch (error) {
+    console.error('Erro ao pedir recuperação de senha:', error.message);
+    return res.status(500).json({ error: 'Não foi possível enviar o link agora. Tente novamente mais tarde.' });
+  }
+});
+
+// POST /api/auth/reset-password
+router.post('/reset-password', async (req, res) => {
+  try {
+    const token = String(req.body?.token || '');
+    const password = String(req.body?.password || '');
+    if (!token || password.length < 6) return res.status(400).json({ error: 'A nova senha deve ter pelo menos 6 caracteres.' });
+    await ensurePasswordResetSchema();
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+    const result = await db.query(
+      'SELECT user_id FROM password_reset_tokens WHERE token_hash = $1 AND used_at IS NULL AND expires_at > NOW() LIMIT 1',
+      [tokenHash],
+    );
+    const reset = result.rows[0];
+    if (!reset) return res.status(400).json({ error: 'Este link expirou ou já foi usado. Peça um novo link.' });
+    const passwordHash = await bcrypt.hash(password, 12);
+    await db.query('UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2', [passwordHash, reset.user_id]);
+    await db.query('UPDATE password_reset_tokens SET used_at = NOW() WHERE token_hash = $1', [tokenHash]);
+    return res.json({ message: 'Senha alterada com sucesso. Agora pode entrar.' });
+  } catch (error) {
+    console.error('Erro ao redefinir senha:', error.message);
+    return res.status(500).json({ error: 'Não foi possível alterar a senha agora. Tente novamente.' });
   }
 });
 
@@ -212,7 +280,6 @@ router.post('/admin/reset-password', async (req, res) => {
   try {
     const { email, newPassword, adminKey } = req.body;
     if (!process.env.ADMIN_SECRET || adminKey !== process.env.ADMIN_SECRET) return res.status(403).json({ error: 'Nao autorizado' });
-    const bcrypt = require('bcryptjs');
     const hash = await bcrypt.hash(newPassword, 10);
     const result = await db.query('UPDATE users SET password_hash = $1 WHERE email = $2 RETURNING id, email, full_name', [hash, email]);
     if (result.rows.length === 0) return res.status(404).json({ error: 'Utilizador nao encontrado' });

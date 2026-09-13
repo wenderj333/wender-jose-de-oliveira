@@ -79,4 +79,29 @@ async function sendEventoEmail(email, nome, premio, dataFim) {
   } catch(e) { console.error('Erro email:', e); }
 }
 
-module.exports = { sendWelcomeEmail, sendChallengeEmail, sendEventoEmail };
+async function sendPasswordResetEmail(email, nome, resetUrl) {
+  try {
+    if (!resend) {
+      console.warn('RESEND_API_KEY não definida: o e-mail de recuperação não foi enviado.');
+      return false;
+    }
+    await resend.emails.send({
+      from: 'Sigo com Fé <onboarding@resend.dev>',
+      to: email,
+      subject: 'Redefina a sua senha — Sigo com Fé',
+      html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px;border-radius:16px;background:#1a0a3e;color:#fff">
+        <h1 style="color:#f0c040;text-align:center">Sigo com Fé</h1>
+        <h2>Olá, ${nome || 'irmão(ã)'}.</h2>
+        <p style="line-height:1.6;color:#eee">Recebemos um pedido para redefinir a sua senha.</p>
+        <p style="text-align:center;margin:28px 0"><a href="${resetUrl}" style="display:inline-block;background:#6c47d4;color:#fff;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:bold">Criar nova senha</a></p>
+        <p style="line-height:1.6;color:#eee">Este link é válido por 1 hora e só pode ser usado uma vez. Se não pediu esta alteração, pode ignorar este e-mail.</p>
+      </div>`,
+    });
+    return true;
+  } catch (error) {
+    console.error('Erro ao enviar e-mail de recuperação:', error.message);
+    return false;
+  }
+}
+
+module.exports = { sendWelcomeEmail, sendChallengeEmail, sendEventoEmail, sendPasswordResetEmail };
