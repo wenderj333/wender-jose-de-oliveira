@@ -482,6 +482,13 @@ function broadcastToStream(wss, streamId, data, excludeWs) {
 const duelLobbyPlayers = new Map();
 let duelLobbySchemaReady = false;
 
+// Cada visitante recebe um apelido numérico, sem revelar nenhum dado pessoal.
+function visitorDisplayName(userId) {
+  let hash = 0;
+  for (const character of String(userId)) hash = ((hash * 31) + character.charCodeAt(0)) >>> 0;
+  return `Visitante #${String((hash % 9000) + 1000)}`;
+}
+
 async function ensureDuelLobbySchema() {
   if (duelLobbySchemaReady) return;
   await db.query(`
@@ -502,7 +509,7 @@ function lobbyPlayersPayload() {
   return [...duelLobbyPlayers.values()].map(({ userId, userName, avatar, status, isGuest }) => ({
     userId,
     // Não expomos dados pessoais dos visitantes antes do registo.
-    userName: isGuest ? 'Visitante' : userName,
+    userName: isGuest ? visitorDisplayName(userId) : userName,
     avatar: isGuest ? '' : avatar,
     status: status || 'available',
     isGuest: Boolean(isGuest),
@@ -572,7 +579,7 @@ async function handleDuelLobby(ws, msg) {
     const isNewConnection = duelLobbyPlayers.get(userId)?.ws !== ws;
     duelLobbyPlayers.set(userId, {
       userId,
-      userName: isGuest ? 'Visitante' : String(msg.userName || 'Jogador').trim().slice(0, 60),
+      userName: isGuest ? visitorDisplayName(userId) : String(msg.userName || 'Jogador').trim().slice(0, 60),
       avatar: isGuest ? '' : String(msg.avatar || '').slice(0, 2000),
       status: duelLobbyPlayers.get(userId)?.status || 'available',
       isGuest,
