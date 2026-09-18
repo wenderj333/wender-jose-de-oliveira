@@ -5,6 +5,23 @@ import { Search, Loader2 } from "lucide-react";
 
 const API = (import.meta.env.VITE_API_URL || "") + "/api";
 
+function MemberAvatar({ member }) {
+  const [failed, setFailed] = useState(false);
+  const name = member.full_name || member.username || "Membro";
+  const initials = name.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase() || "M";
+  const imageUrl = member.avatar_url;
+
+  if (!imageUrl || failed) {
+    return (
+      <div aria-label={`Foto de ${name}`} style={{ width:'100%', height:'100%', display:'grid', placeItems:'center', background:'linear-gradient(135deg,#6c63ff,#a78bfa)', color:'#fff', fontWeight:800, fontSize:24 }}>
+        {initials}
+      </div>
+    );
+  }
+
+  return <img src={imageUrl} alt={`Foto de ${name}`} style={{ width:'100%', height:'100%', objectFit:'cover' }} onError={() => setFailed(true)} />;
+}
+
 export default function Members() {
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -118,11 +135,7 @@ export default function Members() {
                 border:'3px solid transparent', background:'linear-gradient(white,white) padding-box, linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888) border-box',
                 boxShadow:'0 0 0 3px #e8e6ff'
               }}>
-                <img
-                  src={member.avatar_url || "/pro.jpg"}
-                  style={{ width:'100%', height:'100%', objectFit:'cover' }}
-                  onError={e => { e.target.src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"; }}
-                />
+                <MemberAvatar member={member} />
               </div>
 
               </div>

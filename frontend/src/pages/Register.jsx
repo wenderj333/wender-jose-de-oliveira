@@ -59,6 +59,33 @@ export default function Register() {
   const story = REGISTER_STORY[language] || REGISTER_STORY.pt;
   const proof = REGISTER_PROOF[language] || REGISTER_PROOF.pt;
   const emailUpdates = REGISTER_EMAIL_UPDATES[language] || REGISTER_EMAIL_UPDATES.pt;
+  const guideButton = {
+    pt: '📖 O que você precisa saber antes de entrar',
+    es: '📖 Lo que debes saber antes de entrar',
+    en: '📖 What you should know before joining',
+    de: '📖 Was du vor dem Beitritt wissen solltest',
+    fr: '📖 Ce qu’il faut savoir avant de rejoindre',
+    ro: '📖 Ce trebuie să știi înainte de a intra',
+    ru: '📖 Что нужно знать перед входом',
+  }[language] || '📖 O que você precisa saber antes de entrar';
+  const duelButton = {
+    pt: '⚔️ Teste seu conhecimento com pessoas reais',
+    es: '⚔️ Pon a prueba tus conocimientos con personas reales',
+    en: '⚔️ Test your knowledge with real people',
+    de: '⚔️ Teste dein Wissen mit echten Menschen',
+    fr: '⚔️ Testez vos connaissances avec de vraies personnes',
+    ro: '⚔️ Testează-ți cunoștințele cu persoane reale',
+    ru: '⚔️ Проверьте знания с реальными людьми',
+  }[language] || '⚔️ Teste seu conhecimento com pessoas reais';
+  const guardianButton = {
+    pt: '🛡️ Guardião da Palavra — jogue no seu ritmo',
+    es: '🛡️ Guardián de la Palabra — juega a tu ritmo',
+    en: '🛡️ Guardian of the Word — play at your pace',
+    de: '🛡️ Hüter des Wortes — spiele in deinem Tempo',
+    fr: '🛡️ Gardien de la Parole — jouez à votre rythme',
+    ro: '🛡️ Gardianul Cuvântului — joacă în ritmul tău',
+    ru: '🛡️ Хранитель Слова — играйте в своём темпе',
+  }[language] || '🛡️ Guardião da Palavra — jogue no seu ritmo';
   const cameFromDuel = nextPage === '/duelo-biblico';
   const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'member', email_updates_opt_in: false });
   const [error, setError] = useState('');
@@ -101,17 +128,28 @@ export default function Register() {
   if (loading) return <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', color: '#633da0', fontWeight: 700 }}>A preparar a sua conta...</div>;
 
   return (
-    <div className="register-page" style={{ minHeight: '100vh', padding: 'clamp(16px,4vw,48px)', background: 'radial-gradient(circle at 8% 12%,#f5ebd2 0,transparent 23%), linear-gradient(145deg,#fbfaf8 0%,#f1f3fa 58%,#fff 100%)' }}>
+    <div className="register-page" style={{ position:'relative', minHeight: '100vh', padding: 'clamp(16px,4vw,48px)', background: 'radial-gradient(circle at 8% 12%,#f5ebd2 0,transparent 23%), linear-gradient(145deg,#fbfaf8 0%,#f1f3fa 58%,#fff 100%)' }}>
+      <div className="register-guide-link" style={{ position:'absolute', top:'clamp(22px,5vw,64px)', left:'clamp(22px,11vw,205px)', zIndex:2, display:'flex', flexWrap:'wrap', gap:9 }}><Link to="/guia" style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', gap:7, padding:'12px 17px', border:'1px solid #356649', borderRadius:12, color:'#fff', background:'#356649', boxShadow:'0 9px 20px rgba(52,90,67,.22)', fontWeight:900, textDecoration:'none', fontSize:13 }}>{guideButton}</Link><Link to="/duelo-biblico" style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', gap:7, padding:'12px 17px', border:'1px solid #d69e2e', borderRadius:12, color:'#704c08', background:'#fff5cf', boxShadow:'0 9px 20px rgba(153,110,28,.16)', fontWeight:900, textDecoration:'none', fontSize:13 }}>{duelButton}</Link><a href="/guardiao-da-palavra/index.html" style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', gap:7, padding:'12px 17px', border:'1px solid #9bc6a8', borderRadius:12, color:'#276343', background:'#eff8ef', fontWeight:900, textDecoration:'none', fontSize:13 }}>{guardianButton}</a></div>
       <div className="register-layout" style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(300px,1.1fr) minmax(360px,.9fr)', gap: 'clamp(30px,6vw,86px)', alignItems: 'center' }}>
       <aside className="register-story" style={{ color: '#231b3a' }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#eee6fb', color: '#633da0', padding: '8px 13px', borderRadius: 99, fontWeight: 800, fontSize: 13 }}><Sparkles size={16}/> {c.brand}</span>
         <h2 style={{ fontSize: 'clamp(2.45rem,5vw,4.65rem)', lineHeight: .98, margin: '20px 0 16px', letterSpacing: '-.055em', maxWidth: 590 }}>{story.title}</h2>
         <p style={{ color: '#626b80', fontSize: '1.04rem', lineHeight: 1.65, margin: '0 0 27px', maxWidth: 540 }}>{c.signupDesc}</p>
-        <div className="faith-collage" style={{ position: 'relative', minHeight: 392, maxWidth: 570, margin: '0 auto 18px' }}>
-          <div style={{ position: 'absolute', left: 36, top: 26, width: '52%', height: 278, overflow: 'hidden', borderRadius: '28px 28px 65px 28px', background: 'linear-gradient(145deg,#271044,#6e3fa4)', boxShadow: '0 22px 45px rgba(53,30,87,.24)' }}><img src="/biblia-register.png" alt={story.bible} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: .92 }}/><div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(39,16,68,.62),transparent 65%)' }}/><span style={{ position: 'absolute', left: 16, bottom: 15, color: '#fff', display: 'inline-flex', alignItems: 'center', gap: 7, fontWeight: 800, fontSize: 13 }}><Heart size={16} fill="currentColor"/> {story.prayer}</span></div>
-          <div style={{ position: 'absolute', right: 24, top: 95, width: '42%', height: 210, padding: 13, borderRadius: 24, background: '#fff', boxShadow: '0 18px 36px rgba(35,27,58,.18)', transform: 'rotate(2deg)' }}><img src="/registro-verena.png" alt={story.community} style={{ width: '100%', height: 137, objectFit: 'cover', borderRadius: 15 }}/><div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingTop: 11, color: '#55358a', fontWeight: 800, fontSize: 13 }}><Music size={17}/> {story.worship}</div></div>
-          <div style={{ position: 'absolute', left: 0, bottom: 5, width: 154, height: 154, display: 'grid', placeItems: 'center', borderRadius: '50%', border: '7px solid #fff', background: 'linear-gradient(145deg,#e6bd50,#7242a7)', boxShadow: '0 13px 27px rgba(70,40,110,.22)', overflow: 'hidden' }}><img src="/registro-wender.png" alt="Membro da comunidade Sigo com Fé" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/></div>
-          <div style={{ position: 'absolute', right: 0, bottom: 8, display: 'flex', alignItems: 'center', gap: 9, padding: '12px 15px', borderRadius: 18, background: '#fff', boxShadow: '0 10px 25px rgba(35,27,58,.13)', color: '#5e3d95', fontWeight: 800, fontSize: 13 }}><BookOpen size={19} color="#b5801c"/> {story.bible}</div>
+        <div className="faith-collage" style={{ position: 'relative', minHeight: 414, maxWidth: 570, margin: '0 auto 18px', padding: 10, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gridTemplateRows: 'repeat(2, 190px)', gap: 16 }}>
+          <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '28px 12px 12px 12px', background: '#271044', boxShadow: '0 16px 32px rgba(53,30,87,.22)' }}>
+            <img src="/biblia-register.png" alt={story.bible} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', opacity: .94 }}/>
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(39,16,68,.65),transparent 62%)' }}/>
+            <span style={{ position: 'absolute', left: 14, bottom: 12, color: '#fff', display: 'inline-flex', alignItems: 'center', gap: 6, fontWeight: 800, fontSize: 12 }}><BookOpen size={15}/> {story.bible}</span>
+          </div>
+          <div style={{ overflow: 'hidden', borderRadius: '12px 28px 12px 12px', background: '#fff', border: '5px solid #fff', boxShadow: '0 16px 32px rgba(35,27,58,.18)' }}>
+            <img src="/registro-verena.png" alt={story.community} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 24%' }}/>
+          </div>
+          <div style={{ overflow: 'hidden', borderRadius: '12px 12px 12px 28px', background: '#fff', border: '5px solid #fff', boxShadow: '0 16px 32px rgba(35,27,58,.18)' }}>
+            <img src="/registro-membro-ana.png" alt="Membro da comunidade Sigo com Fé" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 16%' }}/>
+          </div>
+          <div style={{ overflow: 'hidden', borderRadius: '12px 12px 28px 12px', background: '#fff', border: '5px solid #fff', boxShadow: '0 16px 32px rgba(35,27,58,.18)' }}>
+            <img src="/registro-membro-luzia.png" alt="Membro da comunidade Sigo com Fé" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 24%' }}/>
+          </div>
         </div>
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', color: '#6b7486', fontSize: 13, fontWeight: 700 }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><ShieldCheck size={16} color="#5d987a"/> {story.free}</span><span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><Users size={16} color="#5d987a"/> {story.community}</span><span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#5e3d95' }}><Users size={16} color="#5d987a"/> {story.growing}</span></div>
       </aside>

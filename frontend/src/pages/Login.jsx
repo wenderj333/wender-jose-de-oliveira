@@ -37,6 +37,7 @@ export default function Login() {
           <input type="password" placeholder="Senha" value={password} onChange={e=>setPassword(e.target.value)} required style={{ width:"100%", padding:"12px", borderRadius:10, border:"1.5px solid #e0d0f0", marginBottom:20, boxSizing:"border-box", fontSize:15 }} />
           <button type="submit" style={{ width:"100%", padding:"13px", borderRadius:10, border:"none", background:"#6C3FA0", color:"white", fontWeight:700, fontSize:16 }}>{loading ? "Entrando..." : "Entrar"}</button>
         </form>
+        <div style={{ textAlign:"center", marginTop:14 }}><Link to="/forgot-password" style={{ color:"#6C3FA0", fontSize:14, fontWeight:600 }}>Esqueci a minha senha</Link></div>
         <div style={{ textAlign:"center", marginTop:20, fontSize:14 }}>Nao tens conta? <Link to="/register" style={{ color:"#6C3FA0" }}>Criar conta</Link></div>
         <div style={{ textAlign:"center", marginTop:8 }}><Link to="/" style={{ color:"#aaa", fontSize:13 }}>Voltar</Link></div>
       </div>

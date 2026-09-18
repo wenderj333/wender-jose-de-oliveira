@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
@@ -8,7 +8,6 @@ import './DueloBiblicoOverrides.css';
 
 const TOTAL_QUESTIONS = 10;
 const DUEL_TIMER_SECONDS = 15;
-const GUEST_TRIAL_SECONDS = 3 * 60;
 const LANGUAGES = [
   { code: 'pt', label: 'Português', flag: '🇧🇷' },
   { code: 'es', label: 'Español', flag: '🇪🇸' },
@@ -27,6 +26,65 @@ const DUEL_COPY = {
   de: { subtitle:'Finde einen Glaubensbruder und beginne ein faires Spiel.', language:'Wähle deine Sprache', online:'Spieler online', inRoom:'jetzt im Raum', empty:'Noch ist kein anderer Spieler da. Nutze die automatische Suche.', invite:'Lade jemanden ein oder nutze die automatische Suche.', welcome:'Willkommen zur Herausforderung', ready:'BEREIT FÜR EINEN NEUEN ERFOLG?', title:'Zeige dein Bibelwissen', intro:'Nimm an einem Live-Spiel teil und beantworte 10 Fragen.', search:'Automatische Suche', bot:'Mit dem Bibel-Bot spielen', botHelp:'Wähle eine echte Person oder fordere den Bibel-Bot heraus.', chat:'Raum-Chat', chatInfo:'Sprich mit den Spielern', chatEmpty:'Schreibe eine Willkommensnachricht.', write:'Nachricht schreiben…', ranking:'Top 10 Rangliste', rankingInfo:'Spieler mit den meisten Punkten.', rankingEmpty:'Spiele eine Partie, um die Rangliste zu starten.', victories:'Siege', diamonds:'Diamanten', streak:'Serie', day:'Tag', question:'Frage', points:'Punkte', available:'Verfügbar', playing:'Im Spiel', searching:'Suche läuft', challenge:'Fordern', cancel:'Suche abbrechen', waiting:'GEGNER WIRD GESUCHT', waitingTitle:'Wir suchen jemanden', waitingText:'Das Spiel beginnt, sobald jemand den Raum betritt.', preparing:'Herausforderung wird vorbereitet', preparingText:'Die Fragen kommen gleich.', next:'Nächste Frage', finished:'PARTIE BEENDET', again:'Noch einmal spielen', login:'Melde dich zum Spielen an.', connecting:'Die Verbindung wird vorbereitet. Bitte erneut versuchen.', botError:'Der Bibel-Bot konnte nicht gestartet werden.' },
   it: { subtitle:'Trova un fratello e inizia una partita corretta.', language:'Scegli la tua lingua', online:'Giocatori online', inRoom:'nella sala ora', empty:'Non c’è ancora un altro giocatore. Usa la ricerca automatica.', invite:'Invita qualcuno o usa la ricerca automatica.', welcome:'Benvenuto alla Sfida', ready:'PRONTO PER UNA NUOVA CONQUISTA?', title:'Mostra ciò che sai della Bibbia', intro:'Entra in una partita dal vivo e rispondi a 10 domande.', search:'Ricerca automatica', bot:'Gioca con il Bot Biblico', botHelp:'Scegli una persona reale o sfida il Bot Biblico.', chat:'Chat della sala', chatInfo:'Parla con i giocatori', chatEmpty:'Scrivi un messaggio di benvenuto.', write:'Scrivi un messaggio…', ranking:'Top 10 classifica', rankingInfo:'I giocatori con più punti.', rankingEmpty:'Gioca una partita per iniziare.', victories:'Vittorie', diamonds:'Diamanti', streak:'Serie', day:'giorno', question:'Domanda', points:'punti', available:'Disponibile', playing:'In partita', searching:'Ricerca', challenge:'Sfida', cancel:'Annulla ricerca', waiting:'CERCA AVVERSARIO', waitingTitle:'Stiamo cercando qualcuno', waitingText:'La partita inizia quando entra un’altra persona.', preparing:'Preparazione della sfida', preparingText:'Le domande stanno arrivando.', next:'Prossima domanda', finished:'PARTITA FINITA', again:'Gioca di nuovo', login:'Accedi per giocare.', connecting:'La connessione si sta preparando.', botError:'Impossibile avviare il Bot Biblico.' },
   ro: { subtitle:'Găsește un frate și începe o partidă corectă.', language:'Alege limba', online:'Jucători online', inRoom:'în sală acum', empty:'Încă nu este alt jucător. Folosește căutarea automată.', invite:'Invită pe cineva sau folosește căutarea automată.', welcome:'Bun venit la Provocare', ready:'GATA PENTRU O NOUĂ REUȘITĂ?', title:'Arată ce știi din Biblie', intro:'Intră într-o partidă live și răspunde la 10 întrebări.', search:'Căutare automată', bot:'Joacă cu Botul Biblic', botHelp:'Alege o persoană reală sau provoacă Botul Biblic.', chat:'Chatul sălii', chatInfo:'Vorbește cu jucătorii', chatEmpty:'Scrie un mesaj de bun venit.', write:'Scrie un mesaj…', ranking:'Top 10 clasament', rankingInfo:'Jucătorii cu cele mai multe puncte.', rankingEmpty:'Joacă o partidă pentru a începe clasamentul.', victories:'Victorii', diamonds:'Diamante', streak:'Serie', day:'zi', question:'Întrebare', points:'puncte', available:'Disponibil', playing:'În joc', searching:'Caută', challenge:'Provoacă', cancel:'Anulează căutarea', waiting:'CAUTARE ADVERSAR', waitingTitle:'Căutăm pe cineva', waitingText:'Partida începe când intră o altă persoană.', preparing:'Pregătirea provocării', preparingText:'Întrebările sosesc.', next:'Următoarea întrebare', finished:'PARTIDĂ ÎNCHEIATĂ', again:'Joacă din nou', login:'Autentifică-te pentru a juca.', connecting:'Conexiunea se pregătește.', botError:'Botul Biblic nu a putut porni.' }
+};
+const DUEL_INVITATION_COPY = {
+  pt: 'Escolha alguém para jogar ou desafie o Bot Bíblico.',
+  es: 'Elige a alguien para jugar o desafía al Bot Bíblico.',
+  en: 'Choose someone to play with or challenge the Bible Bot.',
+  fr: 'Choisis quelqu’un pour jouer ou défie le Bot Biblique.',
+  de: 'Wähle jemanden zum Spielen oder fordere den Bibel-Bot heraus.',
+  it: 'Scegli qualcuno con cui giocare o sfida il Bot Biblico.',
+  ro: 'Alege pe cineva cu care să joci sau provoacă Botul Biblic.'
+};
+const DUEL_LEARN_COPY = {
+  pt: 'Aprenda mais sobre a Bíblia enquanto se diverte.',
+  es: 'Aprende más sobre la Biblia mientras te diviertes.',
+  en: 'Learn more about the Bible while having fun.',
+  fr: 'Apprends-en davantage sur la Bible tout en t’amusant.',
+  de: 'Lerne mehr über die Bibel und hab dabei Spaß.',
+  it: 'Impara di più sulla Bibbia divertendoti.',
+  ro: 'Învață mai multe despre Biblie în timp ce te distrezi.'
+};
+const DUEL_PLAY_PERSON_COPY = {
+  pt: 'Jogue com uma pessoa', es: 'Juega con una persona', en: 'Play with a person',
+  fr: 'Jouer avec une personne', de: 'Mit einer Person spielen', it: 'Gioca con una persona',
+  ro: 'Joacă cu o persoană'
+};
+const DUEL_FRIEND_COPY = {
+  pt: { add:'Adicionar amigo', sent:'Pedido enviado', login:'Crie uma conta para adicionar amigos' },
+  es: { add:'Añadir amigo', sent:'Solicitud enviada', login:'Crea una cuenta para añadir amigos' },
+  en: { add:'Add friend', sent:'Request sent', login:'Create an account to add friends' },
+  fr: { add:'Ajouter un ami', sent:'Demande envoyée', login:'Créez un compte pour ajouter des amis' },
+  de: { add:'Freund hinzufügen', sent:'Anfrage gesendet', login:'Erstelle ein Konto, um Freunde hinzuzufügen' },
+  it: { add:'Aggiungi amico', sent:'Richiesta inviata', login:'Crea un account per aggiungere amici' },
+  ro: { add:'Adaugă prieten', sent:'Cerere trimisă', login:'Creează un cont pentru a adăuga prieteni' }
+};
+const CHAT_SOUND_COPY = {
+  pt: { on: 'Som ligado', off: 'Som desligado', enable: 'Ativar som do chat', disable: 'Desativar som do chat' },
+  es: { on: 'Sonido activado', off: 'Sonido desactivado', enable: 'Activar sonido del chat', disable: 'Desactivar sonido del chat' },
+  en: { on: 'Sound on', off: 'Sound off', enable: 'Turn on chat sound', disable: 'Turn off chat sound' },
+  fr: { on: 'Son activé', off: 'Son désactivé', enable: 'Activer le son du chat', disable: 'Désactiver le son du chat' },
+  de: { on: 'Ton an', off: 'Ton aus', enable: 'Chatton aktivieren', disable: 'Chatton deaktivieren' },
+  it: { on: 'Suono attivo', off: 'Suono disattivato', enable: 'Attiva il suono della chat', disable: 'Disattiva il suono della chat' },
+  ro: { on: 'Sunet activat', off: 'Sunet dezactivat', enable: 'Activează sunetul chatului', disable: 'Dezactivează sunetul chatului' }
+};
+const JOIN_SOCIAL_COPY = {
+  pt: { button: 'Entre na Rede Social Sigo com Fé', note: 'Crie a sua conta grátis para fazer amigos e guardar o seu progresso.' },
+  es: { button: 'Únete a la Red Social Sigo con Fé', note: 'Crea tu cuenta gratis para hacer amigos y guardar tu progreso.' },
+  en: { button: 'Join the Sigo com Fé social network', note: 'Create your free account to make friends and save your progress.' },
+  fr: { button: 'Rejoins le réseau social Sigo com Fé', note: 'Crée ton compte gratuit pour te faire des amis et sauvegarder tes progrès.' },
+  de: { button: 'Tritt dem sozialen Netzwerk Sigo com Fé bei', note: 'Erstelle kostenlos ein Konto, um Freunde zu finden und deinen Fortschritt zu speichern.' },
+  it: { button: 'Unisciti al social network Sigo com Fé', note: 'Crea gratuitamente il tuo account per fare amicizia e salvare i tuoi progressi.' },
+  ro: { button: 'Intră în rețeaua socială Sigo com Fé', note: 'Creează gratuit un cont pentru a-ți face prieteni și a salva progresul.' }
+};
+const GUARDIAN_COPY = {
+  pt: { button: 'Guardião da Palavra', note: 'Jogue no seu ritmo, sem tempo limite.' },
+  es: { button: 'Guardián de la Palabra', note: 'Juega a tu ritmo, sin límite de tiempo.' },
+  en: { button: 'Guardian of the Word', note: 'Play at your own pace, with no time limit.' },
+  fr: { button: 'Gardien de la Parole', note: 'Jouez à votre rythme, sans limite de temps.' },
+  de: { button: 'Hüter des Wortes', note: 'Spiele in deinem Tempo, ohne Zeitlimit.' },
+  it: { button: 'Guardiano della Parola', note: 'Gioca al tuo ritmo, senza limite di tempo.' },
+  ro: { button: 'Gardianul Cuvântului', note: 'Joacă în ritmul tău, fără limită de timp.' }
 };
 function questionForLanguage(question, lang) {
   if (!question) return null;
@@ -50,6 +108,7 @@ export default function DueloBiblico() {
   const { i18n } = useTranslation();
   const lang = (i18n.language || 'pt').slice(0, 2);
   const [gameLanguage, setGameLanguage] = useState(lang);
+  const [showLanguages, setShowLanguages] = useState(false);
   const [status, setStatus] = useState('ready');
   const [message, setMessage] = useState(DUEL_COPY[lang]?.subtitle || DUEL_COPY.pt.subtitle);
   const [roomId, setRoomId] = useState(null);
@@ -63,28 +122,58 @@ export default function DueloBiblico() {
   const [chatMessages, setChatMessages] = useState([]);
   const [chatText, setChatText] = useState('');
   const [chatNotice, setChatNotice] = useState('');
+  const [chatSoundEnabled, setChatSoundEnabled] = useState(() => localStorage.getItem('duelo_chat_sound') !== 'off');
+  const audioContextRef = useRef(null);
+  const chatMessagesRef = useRef(null);
   const [invite, setInvite] = useState(null);
   const [timeLeft, setTimeLeft] = useState(DUEL_TIMER_SECONDS);
   const [ranking, setRanking] = useState([]);
-  const [trialSeconds, setTrialSeconds] = useState(() => {
-    if (user?.id) return null;
-    const started = Number(localStorage.getItem('duelo_guest_trial_started') || Date.now());
-    if (!localStorage.getItem('duelo_guest_trial_started')) localStorage.setItem('duelo_guest_trial_started', String(started));
-    return Math.max(0, GUEST_TRIAL_SECONDS - Math.floor((Date.now() - started) / 1000));
-  });
+  const [friendRequests, setFriendRequests] = useState({});
   const copy = DUEL_COPY[gameLanguage] || DUEL_COPY.pt;
+  const friendText = DUEL_FRIEND_COPY[gameLanguage] || DUEL_FRIEND_COPY.pt;
+  const soundText = CHAT_SOUND_COPY[gameLanguage] || CHAT_SOUND_COPY.pt;
+  const joinSocialText = JOIN_SOCIAL_COPY[gameLanguage] || JOIN_SOCIAL_COPY.pt;
+  const guardianText = GUARDIAN_COPY[gameLanguage] || GUARDIAN_COPY.pt;
+  const trialExpired = false;
 
+  const playChatSound = (force = false) => {
+    if (!force && !chatSoundEnabled) return;
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const context = audioContextRef.current || new AudioContext();
+      audioContextRef.current = context;
+      if (context.state === 'suspended') context.resume();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(740, context.currentTime);
+      gain.gain.setValueAtTime(0.001, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.07, context.currentTime + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.18);
+      oscillator.connect(gain).connect(context.destination);
+      oscillator.start();
+      oscillator.stop(context.currentTime + 0.19);
+    } catch { /* O chat continua normal se o navegador bloquear o som. */ }
+  };
+
+  const toggleChatSound = () => {
+    const next = !chatSoundEnabled;
+    setChatSoundEnabled(next);
+    localStorage.setItem('duelo_chat_sound', next ? 'on' : 'off');
+    if (next) playChatSound(true);
+  };
+
+  // Mantém a mensagem mais recente visível sem a pessoa ter de arrastar a barra.
   useEffect(() => {
-    if (user?.id) { setTrialSeconds(null); return undefined; }
-    const started = Number(localStorage.getItem('duelo_guest_trial_started') || Date.now());
-    localStorage.setItem('duelo_guest_trial_started', String(started));
-    const tick = () => setTrialSeconds(Math.max(0, GUEST_TRIAL_SECONDS - Math.floor((Date.now() - started) / 1000)));
-    tick();
-    const id = window.setInterval(tick, 1000);
-    return () => window.clearInterval(id);
-  }, [user?.id]);
+    const chat = chatMessagesRef.current;
+    if (!chat) return undefined;
+    const frame = window.requestAnimationFrame(() => {
+      chat.scrollTop = chat.scrollHeight;
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [chatMessages.at(-1)?.id]);
 
-  const trialExpired = !user?.id && trialSeconds === 0;
   const guestId = useMemo(() => {
     if (user?.id) return user.id;
     let id = localStorage.getItem('duelo_guest_id');
@@ -92,7 +181,7 @@ export default function DueloBiblico() {
     return id;
   }, [user?.id]);
   const playerId = user?.id || guestId;
-  const displayName = user?.full_name || user?.name || (trialExpired ? 'Visitante' : 'Visitante');
+  const displayName = user?.full_name || user?.name || 'Visitante';
 
   const currentQuestion = useMemo(
     () => questionForLanguage(questions[questionIndex], gameLanguage),
@@ -100,6 +189,16 @@ export default function DueloBiblico() {
   );
 
   useEffect(() => { setGameLanguage(lang); if (status === 'ready') setMessage((DUEL_COPY[lang] || DUEL_COPY.pt).subtitle); }, [lang]);
+
+  // Se o convite chegou enquanto a pessoa estava noutra página, abre-o ao
+  // entrar no Duelo. Convites antigos expiram para não mostrar algo vencido.
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem('sigo_pending_duel_invite') || 'null');
+      if (saved?.from && Date.now() - Number(saved.receivedAt || 0) < 5 * 60 * 1000) setInvite(saved.from);
+      else sessionStorage.removeItem('sigo_pending_duel_invite');
+    } catch (_) {}
+  }, []);
 
   useEffect(() => {
     const queued = () => { setStatus('waiting'); setMessage(copy.waitingTitle); };
@@ -127,6 +226,15 @@ export default function DueloBiblico() {
       setResult(data.vencedor || null);
       setStatus('finished');
       setMessage('Partida terminada. Deus abençoe os dois jogadores!');
+      // A pontuação é gravada no servidor logo após o resultado. Esperamos um
+      // instante para buscar o ranking já atualizado, sem a pessoa ter de recarregar.
+      window.setTimeout(() => {
+        const api = import.meta.env.VITE_API_URL || '';
+        fetch(`${api}/api/duelo/ranking`)
+          .then(response => response.ok ? response.json() : { ranking: [] })
+          .then(rankingData => setRanking(Array.isArray(rankingData.ranking) ? rankingData.ranking.slice(0, 10) : []))
+          .catch(() => {});
+      }, 900);
     };
     const error = (data) => { setStatus('ready'); setMessage(data.message || 'Não foi possível iniciar a partida. Tente novamente.'); };
     const timer = (data) => setTimeLeft(Math.max(0, Number(data.seconds) || 0));
@@ -163,14 +271,42 @@ export default function DueloBiblico() {
       type: 'game_lobby_join',
       userId: playerId,
       userName: displayName,
+      // Visitantes nunca enviam nome ou fotografia pessoal para a sala.
       avatar: user?.profile_photo || user?.avatar_url || user?.photo_url || '',
     };
-    send(player);
-    return () => send({ type: 'game_lobby_leave', userId: playerId });
+
+    const confirmPresence = (loadHistory = false) => {
+      send(loadHistory ? { ...player, loadHistory: true } : player);
+      // A própria pessoa aparece na contagem no mesmo instante, mesmo se a
+      // resposta do servidor chegar alguns segundos depois.
+      setLobbyPlayers(current => current.some(item => item.userId === playerId)
+        ? current
+        : [...current, { userId: playerId, userName: displayName, avatar: player.avatar, status: 'available' }]);
+    };
+
+    // Ao abrir (ou voltar) para o Duelo, pede o histórico de 48 horas do chat.
+    confirmPresence(true);
+    // Reconfirma a presença periodicamente. Isso recupera a lista após uma
+    // reconexão do telemóvel ou uma pequena falha de rede, sem recarregar.
+    const heartbeat = window.setInterval(confirmPresence, 8000);
+    return () => {
+      window.clearInterval(heartbeat);
+      send({ type: 'game_lobby_leave', userId: playerId });
+    };
   }, [isConnected, send, playerId, displayName, trialExpired, user]);
 
   useEffect(() => {
     const updatePlayers = (data) => setLobbyPlayers(data.players || []);
+    const receiveChatHistory = (data) => {
+      const history = Array.isArray(data.messages) ? data.messages : [];
+      setChatMessages(current => {
+        const messagesById = new Map();
+        [...history, ...current].forEach(item => messagesById.set(String(item.id), item));
+        return [...messagesById.values()]
+          .sort((first, second) => new Date(first.createdAt || 0) - new Date(second.createdAt || 0))
+          .slice(-100);
+      });
+    };
     const receiveChat = (data) => {
       const incoming = data.message;
       if (!incoming) return;
@@ -182,26 +318,34 @@ export default function DueloBiblico() {
           return next;
         }
         if (current.some(item => item.id === incoming.id)) return current;
-        return [...current.slice(-49), incoming];
+        // Mantém a conversa recente disponível para rolar, sem deixar o chat
+        // crescer continuamente na tela.
+        return [...current.slice(-99), incoming];
       });
+      if (incoming.userId !== playerId) playChatSound();
       if (incoming.userId === user?.id) setChatNotice('Mensagem enviada.');
     };
     const receiveInvite = (data) => setInvite(data.from || null);
     const inviteSent = () => setMessage('Convite enviado. Aguarde a resposta do jogador.');
     const inviteDeclined = (data) => setMessage(`${data.userName || 'O jogador'} não pôde aceitar agora.`);
+    const receiveGameError = (data) => setMessage(data?.message || 'Não foi possível iniciar o desafio. Tente novamente.');
     on('game_lobby_players', updatePlayers);
+    on('game_lobby_chat_history', receiveChatHistory);
     on('game_lobby_chat', receiveChat);
     on('game_invite_received', receiveInvite);
     on('game_invite_sent', inviteSent);
     on('game_invite_declined', inviteDeclined);
+    on('game_error', receiveGameError);
     return () => {
       off('game_lobby_players', updatePlayers);
+      off('game_lobby_chat_history', receiveChatHistory);
       off('game_lobby_chat', receiveChat);
       off('game_invite_received', receiveInvite);
       off('game_invite_sent', inviteSent);
       off('game_invite_declined', inviteDeclined);
+      off('game_error', receiveGameError);
     };
-  }, [off, on, user?.id]);
+  }, [off, on, playerId, user?.id, chatSoundEnabled]);
 
   const startMatch = () => {
     if (trialExpired) { setMessage(copy.login); return; }
@@ -211,7 +355,7 @@ export default function DueloBiblico() {
       type: 'game_queue',
       userId: playerId,
       userName: displayName,
-      avatar: user.profile_photo || user.avatar_url || user.photo_url || '',
+      avatar: user?.profile_photo || user?.avatar_url || user?.photo_url || '',
       livro: 'Todos',
       nivel: 0,
     });
@@ -226,7 +370,7 @@ export default function DueloBiblico() {
       type: 'game_bot_match',
       userId: playerId,
       userName: displayName,
-      avatar: user.profile_photo || user.avatar_url || user.photo_url || '',
+      avatar: user?.profile_photo || user?.avatar_url || user?.photo_url || '',
     });
     if (!sent) setMessage('Não foi possível iniciar o Bot Bíblico. Tente novamente.');
   };
@@ -240,19 +384,43 @@ export default function DueloBiblico() {
   };
 
   const leaveQueue = () => {
-    if (user?.id) send({ type: 'game_cancel_queue', userId: user.id });
+    if (playerId) send({ type: 'game_cancel_queue', userId: playerId });
     setStatus('ready');
     setMessage('Pode procurar uma nova partida quando quiser.');
   };
 
   const invitePlayer = (player) => {
-    if (!user?.id || player.status === 'playing') return;
-    send({ type: 'game_invite', userId: user.id, targetUserId: player.userId });
+    if (trialExpired) { setMessage(copy.login); return; }
+    if (!isConnected) { setMessage(copy.connecting); return; }
+    if (player.status === 'playing') { setMessage('Este jogador está numa partida agora.'); return; }
+    const sent = send({ type: 'game_invite', userId: playerId, targetUserId: player.userId });
+    if (!sent) { setMessage('Não foi possível enviar o convite. Tente novamente.'); return; }
+    setMessage(`Convite enviado para ${player.userName || 'o jogador'}. Aguarde a resposta.`);
+  };
+
+  const addFriend = async (player) => {
+    const friendText = DUEL_FRIEND_COPY[gameLanguage] || DUEL_FRIEND_COPY.pt;
+    if (!user?.id) { navigate('/register?next=/duelo-biblico'); return; }
+    if (player.isGuest || !player.userId || friendRequests[player.userId]) return;
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/friends/request`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
+        body: JSON.stringify({ addressee_id: player.userId }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.error) throw new Error(data.error);
+      setFriendRequests(current => ({ ...current, [player.userId]: true }));
+      setMessage(friendText.sent);
+    } catch (error) {
+      setMessage(error.message || 'Não foi possível enviar o pedido de amizade.');
+    }
   };
 
   const answerInvite = (accepted) => {
-    if (!invite || !user?.id) return;
-    send({ type: accepted ? 'game_invite_accept' : 'game_invite_decline', userId: user.id, fromUserId: invite.userId });
+    if (!invite || !playerId || trialExpired) return;
+    send({ type: accepted ? 'game_invite_accept' : 'game_invite_decline', userId: playerId, fromUserId: invite.userId });
+    try { sessionStorage.removeItem('sigo_pending_duel_invite'); } catch (_) {}
     setInvite(null);
     if (accepted) setMessage('A preparar a partida…');
   };
@@ -266,7 +434,7 @@ export default function DueloBiblico() {
       return;
     }
     const sentAt = Date.now();
-    const pendingMessage = { id: `pending-${sentAt}`, userId: playerId, userName: displayName, text, pending: true };
+    const pendingMessage = { id: `pending-${sentAt}`, userId: playerId, userName: displayName, text, pending: true, createdAt: new Date(sentAt).toISOString() };
     setChatMessages(current => [...current.slice(-49), pendingMessage]);
     setChatNotice('A enviar mensagem…');
     // Reconfirma a presença na sala antes de enviar, inclusive após uma reconexão.
@@ -286,14 +454,23 @@ export default function DueloBiblico() {
 
   const playerName = user?.full_name || user?.name || 'Jogador';
   const playerAvatar = user?.profile_photo || user?.avatar_url || user?.photo_url || '';
-  const visiblePlayers = lobbyPlayers.filter(player => player.userId !== user?.id);
+  const visiblePlayers = lobbyPlayers.filter(player => player.userId !== playerId);
 
   return (
     <main className="duel-page">
       <div className="duel-spark duel-spark-one">✦</div><div className="duel-spark duel-spark-two">✧</div><div className="duel-spark duel-spark-three">◆</div>
       <section className="duel-welcome">
         <div className="duel-welcome-copy"><img src="/duelo-biblico/bible-logo.webp" alt="Bíblia aberta" /><div><span className="duel-kicker">✦ DESAFIO BÍBLICO · 2 JOGADORES</span><h1>Duelo Bíblico</h1><p>{message}</p></div></div>
-        <div className="duel-language-wrap"><span>{copy.language}</span><div className="duel-languages">{LANGUAGES.map(language => <button key={language.code} onClick={() => { setGameLanguage(language.code); if (status === 'ready') setMessage((DUEL_COPY[language.code] || DUEL_COPY.pt).subtitle); }} className={gameLanguage === language.code ? 'active' : ''}>{language.flag}<b>{language.label}</b></button>)}</div></div>
+        <div className="duel-language-wrap">
+          <button type="button" className="duel-language-toggle" onClick={() => setShowLanguages(current => !current)} aria-expanded={showLanguages}>
+            <span>🌐</span> {LANGUAGES.find(language => language.code === gameLanguage)?.label || 'Idioma'} <small>{showLanguages ? 'Fechar' : 'Alterar idioma'}</small>
+          </button>
+          {showLanguages && <div className="duel-languages">{LANGUAGES.map(language => <button key={language.code} onClick={() => { setGameLanguage(language.code); setShowLanguages(false); if (status === 'ready') setMessage((DUEL_COPY[language.code] || DUEL_COPY.pt).subtitle); }} className={gameLanguage === language.code ? 'active' : ''}>{language.flag}<b>{language.label}</b></button>)}</div>}
+        </div>
+        <nav className="duel-game-shortcuts" aria-label="Outros jogos do Sigo com Fé">
+          <button type="button" onClick={() => { window.location.href = '/guardiao-da-palavra/index.html'; }}><span>🛡️</span><div><b>Guardião da Palavra</b><small>Jogue no seu ritmo</small></div></button>
+          <button type="button" onClick={() => { window.location.href = '/quiz-sigo-com-fe/'; }}><span>🧠</span><div><b>Quiz Sigo com Fé</b><small>Perguntas bíblicas</small></div></button>
+        </nav>
       </section>
 
       <div className="duel-board">
@@ -303,7 +480,7 @@ export default function DueloBiblico() {
             {visiblePlayers.length === 0 ? <div className="duel-empty"><span>👋</span><p>{copy.empty}</p></div> : visiblePlayers.map(player => <div className="duel-player-card" key={player.userId}>
               {player.avatar ? <img src={player.avatar} alt="" /> : <span className="duel-initial">{player.userName?.charAt(0)?.toUpperCase()}</span>}
               <div><strong>{player.userName}</strong><small className={player.status}>{player.status === 'playing' ? 'Em partida' : player.status === 'waiting' ? 'A procurar' : 'Disponível'}</small></div>
-              <button onClick={() => invitePlayer(player)} disabled={player.status === 'playing'}>{player.status === 'playing' ? 'Em jogo' : 'Desafiar'}</button>
+              <div className="duel-player-actions"><button onClick={() => invitePlayer(player)} disabled={player.status === 'playing' || !isConnected}>{player.status === 'playing' ? 'Em jogo' : !isConnected ? 'A ligar…' : 'Desafiar'}</button>{!player.isGuest && <button type="button" className="duel-add-friend" onClick={() => addFriend(player)} disabled={friendRequests[player.userId]}>{friendRequests[player.userId] ? '✓' : '＋'} <span>{friendRequests[player.userId] ? friendText.sent : friendText.add}</span></button>}</div>
             </div>)}
           </div>
           <div className="duel-golden-note">💎 {copy.invite}</div>
@@ -316,12 +493,13 @@ export default function DueloBiblico() {
           </div>
 
           {status === 'ready' && <div className="duel-action-card">
-            <div className="duel-trophy">🏆</div><span className="duel-action-kicker">{copy.ready}</span><h2>{copy.title}</h2><p>{copy.intro}</p>
-            {!user?.id && <div role="status" style={{margin:'10px auto 14px',padding:'8px 12px',borderRadius:10,background:'rgba(240,192,64,.14)',border:'1px solid rgba(240,192,64,.35)',color:'#f6d860',fontSize:12,fontWeight:700}}>{trialExpired ? copy.login : `Teste gratuito: ${Math.floor((trialSeconds || 0) / 60)}:${String((trialSeconds || 0) % 60).padStart(2, '0')} restantes`}</div>}
+            <div className="duel-trophy">🏆</div><span className="duel-action-kicker">{copy.ready}</span><h2>{copy.title}</h2><p>{DUEL_INVITATION_COPY[gameLanguage] || DUEL_INVITATION_COPY.pt}</p>
             <div className="duel-action-buttons">
-              {trialExpired ? <button className="duel-primary-button" onClick={() => navigate('/register')}><span>🔒</span>{copy.login}</button> : <><button className="duel-primary-button" onClick={startMatch}><span>⚡</span>{isConnected ? copy.search : '…'}</button><button className="duel-bot-button" onClick={startBotMatch} disabled={!isConnected}><span>🤖</span> {copy.bot}</button></>}
+              <><button className="duel-primary-button" onClick={startMatch}><span>⚡</span>{isConnected ? (DUEL_PLAY_PERSON_COPY[gameLanguage] || DUEL_PLAY_PERSON_COPY.pt) : '…'}</button><button className="duel-bot-button" onClick={startBotMatch} disabled={!isConnected}><span>🤖</span> {copy.bot}</button></>
             </div>
-            <p className="duel-action-help">{copy.botHelp}</p>
+            <p className="duel-action-help">{DUEL_LEARN_COPY[gameLanguage] || DUEL_LEARN_COPY.pt}</p>
+            <a className="duel-guardian-link" href="/guardiao-da-palavra/index.html">🛡️ {guardianText.button}<small>{guardianText.note}</small></a>
+            {!user?.id && <div className="duel-join-social"><button type="button" onClick={() => navigate('/register?next=/duelo-biblico')}>✨ {joinSocialText.button}</button><small>{joinSocialText.note}</small></div>}
           </div>}
 
           {status === 'waiting' && <div className="duel-action-card"><div className="duel-trophy">🔎</div><span className="duel-action-kicker">À PROCURA DE ADVERSÁRIO</span><h2>Estamos a encontrar alguém</h2><p>Podes ficar nesta sala. Assim que outro jogador entrar, a partida começa automaticamente.</p><button className="duel-secondary-button" onClick={leaveQueue}>Cancelar procura</button></div>}
@@ -337,16 +515,17 @@ export default function DueloBiblico() {
 
           {status === 'finished' && <div className="duel-action-card duel-finish"><div className="duel-trophy">🏆</div><span className="duel-action-kicker">PARTIDA CONCLUÍDA</span><h2>{result?.userName ? `${result.userName} venceu!` : 'Parabéns por jogar!'}</h2><div className="duel-final-score">{players.map(player => <span key={player.userId}>{player.userName}<b>{player.pontos} pontos</b></span>)}</div><button className="duel-primary-button" onClick={() => { setStatus('ready'); setQuestions([]); setPlayers([]); setRoomId(null); }}>Jogar novamente</button></div>}
 
-          <div className="duel-rewards"><div><span>🏅</span><b>Vitórias</b><strong>{players.find(player => player.userId === user?.id)?.pontos ? 'Em jogo' : '0'}</strong></div><div><span>💎</span><b>Diamantes</b><strong>{status === 'finished' && result?.userId === user?.id ? '3' : '0'}</strong></div><div><span>🌟</span><b>Sequência</b><strong>1 dia</strong></div></div>
-
         </section>
 
         <aside className="duel-panel duel-chat-panel">
-          <div className="duel-panel-title"><span>💬</span><div><h2>{copy.chat}</h2><p>{copy.chatInfo}</p></div></div>
-          <div className="duel-chat-messages">{chatMessages.length === 0 ? <div className="duel-empty"><span>✦</span><p>{copy.chatEmpty}</p></div> : chatMessages.map(chat => <div key={chat.id} className={`duel-chat-message ${chat.userId === user?.id ? 'mine' : ''} ${chat.failed ? 'failed' : ''}`}><b>{chat.userName}{chat.pending ? ' · a enviar…' : chat.failed ? ' · não enviada' : ''}</b><span>{chat.text}</span></div>)}</div>
+          <div className="duel-panel-title"><span>💬</span><div><h2>{copy.chat}</h2><p>{copy.chatInfo}</p></div><button type="button" className={`duel-chat-sound ${chatSoundEnabled ? 'enabled' : ''}`} onClick={toggleChatSound} aria-pressed={chatSoundEnabled} title={chatSoundEnabled ? soundText.disable : soundText.enable}>{chatSoundEnabled ? '🔔' : '🔕'} <span>{chatSoundEnabled ? soundText.on : soundText.off}</span></button></div>
+          <div className="duel-chat-messages" ref={chatMessagesRef}>{chatMessages.length === 0 ? <div className="duel-empty"><span>✦</span><p>{copy.chatEmpty}</p></div> : chatMessages.map(chat => <div key={chat.id} className={`duel-chat-message ${chat.userId === playerId ? 'mine' : ''} ${chat.failed ? 'failed' : ''}`}><b>{chat.userName}{chat.pending ? ' · a enviar…' : chat.failed ? ' · não enviada' : ''}</b><span>{chat.text}</span></div>)}</div>
+          <div className="duel-chat-emojis" aria-label="Adicionar emoji">{['🙏', '❤️', '👏', '😊', '✝️', '🔥'].map(emoji => <button type="button" key={emoji} onClick={() => setChatText(current => `${current}${current ? ' ' : ''}${emoji}`)} aria-label={`Adicionar ${emoji}`}>{emoji}</button>)}</div>
           <form onSubmit={sendLobbyMessage} className="duel-chat-form"><input value={chatText} onChange={event => { setChatText(event.target.value); if (chatNotice) setChatNotice(''); }} maxLength={300} placeholder={copy.write} /><button type="submit" aria-label="Enviar mensagem">➤</button></form>
           {chatNotice && <p className="duel-chat-notice" role="status">{chatNotice}</p>}
         </aside>
+
+        <div className="duel-rewards"><div><span>🏅</span><b>Vitórias</b><strong>{players.find(player => player.userId === user?.id)?.pontos ? 'Em jogo' : '0'}</strong></div><div><span>💎</span><b>Diamantes</b><strong>{status === 'finished' && result?.userId === user?.id ? '3' : '0'}</strong></div><div><span>🌟</span><b>Sequência</b><strong>1 dia</strong></div></div>
       </div>
 
       <section className="duel-ranking"><div><span>🏆</span><div><h2>{copy.ranking}</h2><p>{copy.rankingInfo}</p></div></div><ol className="duel-top-ten">{ranking.length ? ranking.map((entry, index) => <li key={`${entry.nome}-${index}`}><b>{entry.posicao || index + 1}º</b><span>{entry.foto ? <img src={entry.foto} alt="" /> : '✦'} {entry.nome}</span><strong>{entry.pontos} pts</strong></li>) : <li className="duel-ranking-empty">{copy.rankingEmpty}</li>}</ol></section>

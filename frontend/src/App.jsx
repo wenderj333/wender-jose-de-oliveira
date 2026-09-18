@@ -31,8 +31,11 @@ import {
 import MuralGrid from "./pages/MuralGrid";
 
 import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 import Register from "./pages/Register";
+import GuiaSigoComFe from "./pages/GuiaSigoComFe";
 
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
@@ -70,6 +73,7 @@ import LivePrayerLanding from './pages/LivePrayerLanding';
 import PrayerPlaza from './pages/PrayerPlaza';
 
 import FaithJourneys from "./pages/FaithJourneys";
+import WisdomTrails from "./pages/WisdomTrails";
 
 import Reflection from "./pages/Reflection";
 
@@ -361,6 +365,11 @@ export default function App() {
 
     }
 
+    if (lastEvent?.type === 'game_invite_received' && lastEvent.from?.userId) {
+      setNotificationToast({ text: `⚔️ ${lastEvent.from.userName || 'Um jogador'} desafiou você — toque para responder`, to: '/duelo-biblico' });
+      setTimeout(() => setNotificationToast(null), 10000);
+    }
+
     if (lastEvent?.type === 'live_chat_broadcast' && !location.pathname.startsWith('/comunidade-ao-vivo')) {
       setNotificationToast({ text: '💬 Nova mensagem no chat comunitário', to: '/comunidade-ao-vivo' });
       setTimeout(() => setNotificationToast(null), 6000);
@@ -459,9 +468,12 @@ export default function App() {
         <Route path="/inicio" element={<Register />} />
 
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route path="/register" element={<Register />} />
         <Route path="/cadastro" element={<Register />} />
+        <Route path="/guia" element={<GuiaSigoComFe />} />
 
         <Route path="/mural" element={<MuralGrid />} />
         <Route path="/grupos-oracao" element={<PrayerGroupsLanding />} />
@@ -478,6 +490,7 @@ export default function App() {
         <Route path="/ia-biblica" element={<BiblicalAI />} />
 
         <Route path="/journeys" element={<FaithJourneys />} />
+        <Route path="/trilhas-de-sabedoria" element={<WisdomTrails />} />
 
         <Route path="/musica" element={<MusicLibrary />} />
 
@@ -486,8 +499,9 @@ export default function App() {
         <Route path="/praca-oracao" element={<PrayerPlaza />} />
         <Route path="/praca-de-oracao" element={<PrayerPlaza />} />
         <Route path="/chat-cristao" element={<ChristianChatLanding />} />
-        <Route path="/duelo-biblico" element={<DuelLanding />} />
-        <Route path="/duelo-biblico/index.html" element={<DuelLanding />} />
+        {/* Visitors can play the Duelo for three minutes before creating an account. */}
+        <Route path="/duelo-biblico" element={<DueloBiblico />} />
+        <Route path="/duelo-biblico/index.html" element={<DueloBiblico />} />
         <Route path="/jogos" element={<GamesHub />} />
         <Route path="/guardiao-da-palavra" element={<GameComingSoon />} />
         <Route path="/guardiao-da-palavra/" element={<GameComingSoon />} />
@@ -688,6 +702,7 @@ export default function App() {
               ['/diario-com-deus', <BookOpen size={20}/>, t('nav.diary')],
 
               ['/reflexao', <Sun size={20}/>, t('nav.reflection')],
+              ['/trilhas-de-sabedoria', <BookOpen size={20}/>, 'Trilhas de Sabedoria'],
 
               ['/curso-biblico', <BookOpen size={20}/>, t('course.title')],
 
@@ -714,11 +729,6 @@ export default function App() {
               </Link>
 
             ))}
-
-            <p style={{color:'#69837b',fontSize:'0.78rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',margin:'16px 0 10px',paddingLeft:'16px'}}>Jogos</p>
-            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,padding:'0 12px 12px'}}>
-              {[['/duelo-biblico','Duelo Bíblico','/duelo-biblico/game-background.webp'],['/desafio-diario','Desafio Diário','/fundo-desafio.jpg'],['/kids','Jogos Kids','/duelo-biblico/bible-logo.webp']].map(([to,label,image])=><Link key={to} to={to} onClick={()=>setMobileMenuOpen(false)} style={{display:'flex',flexDirection:'column',gap:5,color:'#304a52',textDecoration:'none',fontSize:11,fontWeight:700}}><img src={image} alt="" style={{width:'100%',height:42,objectFit:'cover',borderRadius:8}}/><span>{label}</span></Link>)}
-            </div>
 
             {user?.role === 'pastor' && (
 
@@ -836,11 +846,9 @@ export default function App() {
 
             <Link to="/reflexao" className={isActive('/reflexao')}><Sun size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.reflection','Reflexão')}</span></Link>
 
-            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','Música')}</span></Link>
+            <Link to="/trilhas-de-sabedoria" className={isActive('/trilhas-de-sabedoria')}><BookOpen size={17}/><span className="nav-text" style={{marginLeft:10}}>Trilhas de Sabedoria</span></Link>
 
-            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginTop:10}}>
-              {[['/duelo-biblico','Duelo Bíblico','/duelo-biblico/game-background.webp'],['/desafio-diario','Desafio Diário','/fundo-desafio.jpg'],['/kids','Jogos Kids','/duelo-biblico/bible-logo.webp']].map(([to,label,image])=><Link key={to} to={to} className={isActive(to)} style={{display:'flex',flexDirection:'column',gap:4,padding:'6px',fontSize:10,textAlign:'center'}}><img src={image} alt="" style={{width:'100%',height:42,objectFit:'cover',borderRadius:7}}/><span className="nav-text">{label}</span></Link>)}
-            </div>
+            <Link to="/musica" className={isActive('/musica')}><Music size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.music','Música')}</span></Link>
 
           </div>
 
@@ -888,8 +896,11 @@ export default function App() {
             <Route path="/mural" element={<Navigate to="/" replace />} />
 
             <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/register" element={<Register />} />
             <Route path="/cadastro" element={<Register />} />
+            <Route path="/guia" element={<GuiaSigoComFe />} />
 
             <Route path="/perfil/:userId" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
@@ -906,6 +917,7 @@ export default function App() {
             <Route path="/curso-financas" element={<BiblicalFinance />} />
 
             <Route path="/journeys" element={<FaithJourneys />} />
+            <Route path="/trilhas-de-sabedoria" element={<WisdomTrails />} />
 
             <Route path="/grupos" element={<Groups />} />
             <Route path="/grupos/:id" element={<GroupDetail />} />

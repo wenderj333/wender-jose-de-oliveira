@@ -46,7 +46,30 @@ async function uploadToCloudinary(file) {
   const res = await fetch(url, { method: "POST", body: formData });
   if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error?.message || "Erro no upload"); }
   const data = await res.json();
+  // Cloudinary can accept an upload but still fail to deliver the file later
+  // (for example, when a file is rejected during processing). Verify images
+  // before saving their URL in the mural, so a broken card is never created.
+  if (uploadFile.type.startsWith('image/') && data.secure_url) {
+    await verifyUploadedImage(data.secure_url);
+  }
   return data.secure_url;
+}
+
+function verifyUploadedImage(url) {
+  return new Promise((resolve, reject) => {
+    let attempts = 0;
+    const tryLoad = () => {
+      const image = new window.Image();
+      image.onload = () => resolve();
+      image.onerror = () => {
+        attempts += 1;
+        if (attempts < 3) window.setTimeout(tryLoad, 1200);
+        else reject(new Error('A foto foi enviada, mas não ficou disponível. Tente selecionar a foto novamente.'));
+      };
+      image.src = `${url}${url.includes('?') ? '&' : '?'}check=${Date.now()}-${attempts}`;
+    };
+    tryLoad();
+  });
 }
 
 const CATEGORIES_CONFIG = [
@@ -275,7 +298,7 @@ function MusicPickerModal({ onClose, onSelect }) {
   );
 }
 
-function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause, onVideoNode, soundEnabled, onCommentAdded }) {
+function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause, onVideoNode, soundEnabled, onCommentAdded, likePending }) {
   const { t } = useTranslation(); // Add useTranslation
   const color = getCatColor(post.category || post.type);
   const [showComments, setShowComments] = useState(false);
@@ -318,11 +341,16 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const [isMuted, setIsMuted] = useState(true);
   const [imageModal, setImageModal] = useState(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [mediaUnavailable, setMediaUnavailable] = useState(false);
+  const [avatarUnavailable, setAvatarUnavailable] = useState(false);
   const postCardRef = useRef(null);
 
   const isVideo = post.media_type === 'video' || Boolean(mediaUrl && mediaUrl.match(/\.(mp4|webm|mov|ogg)(\?|$)/i));
   const isAudio = post.media_type === 'audio' || Boolean(mediaUrl && mediaUrl.match(/\.(mp3|wav|aac|m4a|ogg)(\?|$)/i));
   const isImage = Boolean(mediaUrl) && !isVideo && !isAudio;
+  useEffect(() => {
+    setMediaUnavailable(false);
+  }, [mediaUrl]);
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !isVideo) return;
@@ -459,7 +487,14 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
     <div ref={postCardRef} style={{ background: 'white', borderRadius: 16, border: `1px solid ${color}33`, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', marginBottom: 16 }}>
       <div style={{ padding: '14px 16px 10px', display: 'flex', alignItems: 'center', gap: 12 }}>
         <div onClick={()=>window.location.href='/perfil/'+(post.author_id||post.user_id)} style={{ width: 42, height: 42, borderRadius: '50%', background: `linear-gradient(135deg,${color},${color}88)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: 14, flexShrink: 0, cursor:'pointer', overflow:'hidden' }}>
-          {post.author_avatar||post.avatar_url ? <img src={post.author_avatar||post.avatar_url} style={{width:'100%',height:'100%',objectFit:'cover'}}/> : authorInitials}
+          {(post.author_avatar || post.avatar_url) && !avatarUnavailable ? (
+            <img
+              src={post.author_avatar || post.avatar_url}
+              alt=""
+              onError={() => setAvatarUnavailable(true)}
+              style={{ width:'100%', height:'100%', objectFit:'cover' }}
+            />
+          ) : authorInitials}
         </div>
         <div style={{ flex: 1 }}>
           <div onClick={()=>window.location.href='/perfil/'+(post.author_id||post.user_id)} style={{ fontWeight: 600, fontSize: 14, color: '#1a1a2e', cursor:'pointer' }}>{authorName}</div>
@@ -501,7 +536,22 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
         </div>
       )}      {isImage && (
         <div style={{ width: '100%', height: 'clamp(220px, 48vw, 420px)', overflow: 'hidden', background: 'linear-gradient(135deg,#f3f6fb,#eef1f8)', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
-          <img src={mediaUrl} alt="post" loading="lazy" onClick={() => setImageModal(mediaUrl)} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', cursor: 'zoom-in' }} />
+          {mediaUnavailable ? (
+            <div role="status" style={{ textAlign:'center', padding:24, color:'#65737d', maxWidth:300 }}>
+              <Image size={34} style={{ marginBottom:10, opacity:.65 }} />
+              <div style={{ fontWeight:700, fontSize:14 }}>Esta foto já não está disponível.</div>
+              <div style={{ fontSize:12, marginTop:6, lineHeight:1.45 }}>Peça à pessoa que publicou para enviar novamente.</div>
+            </div>
+          ) : (
+            <img
+              src={mediaUrl}
+              alt="post"
+              loading="lazy"
+              onError={() => setMediaUnavailable(true)}
+              onClick={() => setImageModal(mediaUrl)}
+              style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', cursor: 'zoom-in' }}
+            />
+          )}
           {musicUrl && <div style={{ position: 'absolute', right: 14, bottom: 14, zIndex: 2 }}><MiniAudioPlayer compact src={musicUrl} isPlaying={isMusicPlaying} onPlay={() => setIsMusicPlaying(true)} onPause={() => setIsMusicPlaying(false)} onEnded={() => setIsMusicPlaying(false)} /></div>}
         </div>
       )}
@@ -519,7 +569,7 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
       </div>
 
       <div style={{ padding: '8px 16px 12px', borderTop: '1px solid #f0f0f0', display: 'flex', gap: 8, alignItems: 'center', justifyContent: 'space-around' }}>
-        <button onClick={() => onLike(post.id)} style={{ display: 'flex', alignItems: 'center', gap: 6, background: post.liked ? '#fff0f3' : 'none', border: post.liked ? '1px solid #fecdd3' : 'none', cursor: 'pointer', color: post.liked ? '#e11d48' : '#888', fontSize: 13, fontWeight: 700, padding: '6px 12px', borderRadius: 20, transition: 'all 0.2s' }}>
+        <button onClick={() => onLike(post.id)} disabled={likePending} aria-busy={likePending} style={{ display: 'flex', alignItems: 'center', gap: 6, background: post.liked ? '#fff0f3' : 'none', border: post.liked ? '1px solid #fecdd3' : 'none', cursor: likePending ? 'wait' : 'pointer', opacity: likePending ? .72 : 1, color: post.liked ? '#e11d48' : '#888', fontSize: 13, fontWeight: 700, padding: '6px 12px', borderRadius: 20, transition: 'all 0.2s' }}>
           <Heart size={18} fill={post.liked ? '#e11d48' : 'none'} />
           {post.like_count || post.amemCount || 0} {t('mural.amen')}
         </button>
@@ -716,20 +766,26 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
   }, [lang, message, openingBox, showBoxes]);
   const verseText = message ? (message.text[lang] || message.text.en || message.text.pt) : '';
   const verseRef = message ? (message.ref[lang] || message.ref.en || message.ref.pt) : '';
+  const giftArtwork = {
+    courage: '/caixas-da-fe/assets/gold-box-closed.webp',
+    hope: '/caixas-da-fe/assets/blue-box-closed.webp',
+    guidance: '/caixas-da-fe/assets/lilac-box-closed.webp'
+  };
   const share = async () => { if (!message) return; const body = `${verseText}\n— ${verseRef}\nSigo com Fé`; try { if (navigator.share) await navigator.share({ title: 'Palavra do dia', text: body }); else await navigator.clipboard.writeText(body); } catch (_) {} };
   const publish = () => onPublish?.({ content: `“${verseText}”\n— ${verseRef}` });
   const showingMessage = message && !showBoxes;
+  const faithMotion = `.sf-faith-gift{position:relative;display:flex;flex-direction:column;align-items:center;overflow:visible;min-height:128px!important;padding:11px 8px 9px!important;background:linear-gradient(155deg,#fffefb,#f7fbff)!important;border:1px solid #d8e5da!important;box-shadow:0 7px 18px rgba(49,91,72,.11)!important;transition:transform .2s,box-shadow .2s}.sf-faith-gift:hover:not(:disabled){transform:translateY(-4px);box-shadow:0 12px 23px rgba(49,91,72,.18)!important}.sf-faith-gift img{width:72px;height:72px;object-fit:contain;margin:-5px 0 1px;filter:drop-shadow(0 7px 6px rgba(60,75,96,.18));transition:transform .35s}.sf-faith-gift.is-opening img{transform:translateY(-8px) rotate(-3deg) scale(1.06)}.sf-faith-gift strong{color:#244f43!important;font-size:11px!important}.sf-faith-gift small{color:#668178!important;font-size:10px!important}@media(max-width:600px){.sf-faith-gift{min-height:111px!important;padding:7px 3px!important}.sf-faith-gift img{width:58px;height:58px}.sf-faith-gift strong{font-size:9px!important}.sf-faith-gift small{display:none!important}}@media(prefers-reduced-motion:reduce){.sf-faith-gift,.sf-faith-gift img{transition:none!important}}`;
   const giftMotion = `.sf-daily-gift{position:relative;overflow:hidden;isolation:isolate;min-height:94px!important;padding:7px 4px 8px!important;background:linear-gradient(155deg,#fffafb,#ffe7ef)!important;border:1px solid #f2b8ca!important;box-shadow:0 6px 13px rgba(180,52,104,.13)!important;animation:sfGiftFloat 3s ease-in-out infinite}.sf-daily-gift:before{content:'';position:absolute;z-index:0;left:50%;top:9px;width:44px;height:33px;border:1px solid #d62f63;border-radius:5px 5px 8px 8px;background:linear-gradient(135deg,#ff7097,#dc2459);box-shadow:inset 0 -4px 0 rgba(120,12,43,.18),0 4px 7px rgba(171,29,75,.2);transform:translateX(-50%);transition:transform .5s}.sf-daily-gift:after{content:'';position:absolute;z-index:1;left:50%;top:9px;width:7px;height:33px;border-radius:2px;background:#ffd3df;box-shadow:0 0 0 1px rgba(255,255,255,.3);transform:translateX(-50%);transition:transform .5s}.sf-daily-gift .gift-icon{position:relative;z-index:2;display:block!important;height:45px;margin:0!important;font-size:0!important}.sf-daily-gift .gift-icon:before{content:'';position:absolute;left:50%;top:3px;width:50px;height:10px;border:1px solid #d62f63;border-radius:5px;background:linear-gradient(135deg,#ff8aa9,#e33468);box-shadow:0 2px 4px rgba(171,29,75,.17);transform:translateX(-50%);transform-origin:left bottom;transition:transform .5s}.sf-daily-gift .gift-icon:after{content:'';position:absolute;left:50%;top:0;width:9px;height:9px;border:2px solid #ffdce5;border-radius:4px;transform:translateX(-50%);box-shadow:9px 0 0 -2px #ffdce5,-9px 0 0 -2px #ffdce5}.sf-daily-gift strong,.sf-daily-gift small{position:relative;z-index:2}.sf-daily-gift strong{font-size:10px!important;line-height:1.05!important}.sf-daily-gift small{margin-top:3px!important;font-size:9px!important;line-height:1.1!important}.sf-daily-gift:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 10px 17px rgba(180,52,104,.2)!important}.sf-daily-gift.is-opening .gift-icon:before{transform:translateX(-50%) translateY(-8px) rotate(-13deg)}.sf-daily-gift.is-opening:before,.sf-daily-gift.is-opening:after{transform:translateX(-50%) translateY(3px)}@keyframes sfGiftFloat{50%{transform:translateY(-3px)}}@media (prefers-reduced-motion:reduce){.sf-daily-gift{animation:none!important}.sf-daily-gift:before,.sf-daily-gift:after,.sf-daily-gift .gift-icon:before{transition:none!important}}`;
   if (!expanded && !message) return <section style={{ margin: 0, display: 'flex', justifyContent: 'center' }}>
-    <style>{giftMotion}</style>
-    <button type="button" onClick={() => setExpanded(true)} aria-label={copy.open[lang] || copy.open.pt} style={{ border: '1px solid #f2bfd0', borderRadius: 18, padding: '6px 12px', background: '#fff8fb', color: '#8c2850', cursor: 'pointer', fontSize: 12, fontWeight: 850, display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 5px 14px rgba(180,52,104,.12)' }}>
-      <span style={{ display: 'inline-flex', gap: 2 }}>{MULTILINGUAL_SURPRISES.map(box => <span key={box.id} className="sf-daily-gift" style={{ width: 25, height: 25, display: 'grid', placeItems: 'center', borderRadius: 7, background: 'linear-gradient(145deg,#ff7d9e,#d93465)', fontSize: 16, boxShadow: '0 3px 0 #ad1f4c' }}><span className="gift-icon">🎁</span></span>)}</span>
+    <style>{faithMotion}</style>
+    <button type="button" onClick={() => setExpanded(true)} aria-label={copy.open[lang] || copy.open.pt} style={{ border: '1px solid #d7dfc5', borderRadius: 18, padding: '6px 14px 6px 9px', background: 'linear-gradient(135deg,#fffdf6,#f3fbf7)', color: '#315b45', cursor: 'pointer', fontSize: 12, fontWeight: 850, display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 5px 14px rgba(49,91,72,.12)' }}>
+      <span style={{ display: 'inline-flex', alignItems: 'center', marginRight: 1 }}>{MULTILINGUAL_SURPRISES.map((box, index) => <img key={box.id} src={giftArtwork[box.id]} alt="" aria-hidden="true" style={{ width: 31, height: 31, objectFit: 'contain', marginLeft: index ? -9 : 0, filter: 'drop-shadow(0 3px 3px rgba(60,75,96,.18))' }} />)}</span>
       {copy.open[lang] || copy.open.pt}
     </button>
   </section>;
   return (
     <section aria-label={copy.choose[lang] || copy.choose.pt} style={{ marginBottom: 20, padding: '18px 16px', borderRadius: 18, background: 'linear-gradient(135deg,#fffaf1,#f6f3ff)', border: '1px solid #eadff3', boxShadow: '0 8px 24px rgba(70,45,100,.08)' }}>
-            <style>{giftMotion}</style>
+            <style>{faithMotion}</style>
 {!showingMessage && <div style={{ textAlign: 'center', marginBottom: 14 }}>
         <div style={{ fontSize: 22 }}>✨</div>
         <h2 style={{ margin: '2px 0 3px', color: '#30204f', fontSize: 19 }}>{copy.choose[lang] || copy.choose.pt}</h2>
@@ -737,8 +793,8 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
       </div>}
       {!showingMessage ? <div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10 }}>
-          {MULTILINGUAL_SURPRISES.map(box => <button key={box.id} type="button" onClick={() => openChest(box)} disabled={Boolean(message) || Boolean(openingBox)} className={`sf-daily-gift ${openingBox === box.id ? 'is-opening' : ''}`} style={{ border: '1px solid #f4b5c9', borderRadius: 13, padding: '13px 5px 8px', color: '#70203f', background: 'linear-gradient(155deg,#fff8fb,#ffe1eb)', cursor: message || openingBox ? 'default' : 'pointer', minHeight: 88, opacity: message && message.id !== box.id ? .55 : 1, boxShadow: '0 5px 11px rgba(180,52,104,.12)', transition: 'transform .2s' }}>
-            <span className="gift-icon" style={{ display: 'block', fontSize: 24, margin: '3px 0 4px' }}>🎁</span>
+          {MULTILINGUAL_SURPRISES.map(box => <button key={box.id} type="button" onClick={() => openChest(box)} disabled={Boolean(message) || Boolean(openingBox)} className={`sf-faith-gift ${openingBox === box.id ? 'is-opening' : ''}`} style={{ borderRadius: 15, cursor: message || openingBox ? 'default' : 'pointer', opacity: message && message.id !== box.id ? .55 : 1 }}>
+            <img src={giftArtwork[box.id]} alt="" aria-hidden="true" />
             <strong style={{ display: 'block', fontSize: 11, lineHeight: 1.05 }}>{box.title[lang] || box.title.en || box.title.pt}</strong>
             <small style={{ display: 'block', marginTop: 4, color: '#9a5370', lineHeight: 1.15, fontSize: 10 }}>{box.hint[lang] || box.hint.en || box.hint.pt}</small>
           </button>)}
@@ -762,6 +818,63 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
   );
 }
 
+const GRATITUDE_DAYS = [
+  ['Agradeça em oração', 'Comece o dia agradecendo a Deus por três coisas simples.', '“Em tudo, dai graças.” — 1 Tessalonicenses 5:18'],
+  ['Abençoe uma pessoa', 'Envie uma mensagem de gratidão ou encorajamento para alguém.', '“Animai-vos uns aos outros.” — 1 Tessalonicenses 5:11'],
+  ['Veja o cuidado de Deus', 'Anote uma pequena bênção que recebeu hoje.', '“Bendize, ó minha alma, ao Senhor.” — Salmos 103:2'],
+  ['Agradeça pela família', 'Ore por uma pessoa da sua família e agradeça por ela.', '“O amor jamais acaba.” — 1 Coríntios 13:8'],
+  ['Partilhe esperança', 'Partilhe uma palavra de esperança no Mural.', '“Alegrai-vos na esperança.” — Romanos 12:12'],
+  ['Pratique a bondade', 'Faça hoje um gesto de bondade sem esperar nada em troca.', '“Não deixemos de fazer o bem.” — Gálatas 6:9'],
+  ['Celebre a caminhada', 'Agradeça a Deus pelo que aprendeu nestes sete dias.', '“Rendei graças ao Senhor, porque ele é bom.” — Salmos 107:1'],
+];
+
+function GratitudeChallenge({ user, onShare }) {
+  const storageKey = `sigo_gratitude_7_days_${user?.id || 'visitor'}`;
+  const collapseKey = `sigo_gratitude_7_days_collapsed_${user?.id || 'visitor'}`;
+  const [state, setState] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(storageKey)) || { completed: [], shared: [] }; }
+    catch (_) { return { completed: [], shared: [] }; }
+  });
+  const [collapsed, setCollapsed] = useState(() => localStorage.getItem(collapseKey) === 'true');
+  const today = new Date().toISOString().slice(0, 10);
+  const completedToday = state.completed.includes(today);
+  const dayIndex = completedToday ? Math.max(0, state.completed.length - 1) : Math.min(state.completed.length, 6);
+  const mission = GRATITUDE_DAYS[dayIndex];
+  const completeToday = () => {
+    if (completedToday || !user) return;
+    const next = { ...state, completed: [...state.completed, today] };
+    setState(next); localStorage.setItem(storageKey, JSON.stringify(next));
+  };
+  const share = async () => {
+    if (!user || !completedToday) return;
+    await onShare(dayIndex, mission);
+    const next = { ...state, shared: [...new Set([...state.shared, dayIndex])] };
+    setState(next); localStorage.setItem(storageKey, JSON.stringify(next));
+  };
+  const finished = state.completed.length >= 7;
+  const toggleCollapsed = () => {
+    setCollapsed(current => {
+      const next = !current;
+      localStorage.setItem(collapseKey, String(next));
+      return next;
+    });
+  };
+  return <section style={{ marginBottom: 16, padding: '18px 20px', borderRadius: 18, color: '#fff', background: 'linear-gradient(125deg,#70522a,#a57c31 52%,#d6ab4f)', boxShadow: '0 10px 24px rgba(122,87,27,.18)' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+      <div><span style={{ fontSize: 12, fontWeight: 900, letterSpacing: '.08em' }}>✨ DESAFIO 7 DIAS DE GRATIDÃO</span>{!collapsed && <div><h2 style={{ margin: '7px 0 5px', fontSize: 22 }}>{finished ? 'Caminhada concluída! 🎉' : `Dia ${dayIndex + 1}: ${mission[0]}`}</h2><p style={{ margin: 0, maxWidth: 560, lineHeight: 1.45, color: 'rgba(255,255,255,.92)' }}>{finished ? 'Você completou os sete dias. Que a gratidão continue no seu dia a dia.' : mission[1]}</p></div>}</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><strong style={{ borderRadius: 99, padding: '7px 11px', background: 'rgba(53,35,14,.25)', fontSize: 13 }}>{Math.min(state.completed.length, 7)}/7 dias</strong><button type="button" onClick={toggleCollapsed} aria-expanded={!collapsed} style={{ border: '1px solid rgba(255,255,255,.55)', borderRadius: 9, padding: '7px 10px', background: 'rgba(55,35,10,.18)', color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 900 }}>{collapsed ? '⌄ Abrir' : '⌃ Minimizar'}</button></div>
+    </div>
+    {!collapsed && <div><p style={{ margin: '13px 0 12px', padding: '9px 11px', borderLeft: '3px solid #ffe38a', background: 'rgba(55,35,10,.16)', borderRadius: 7, fontStyle: 'italic', lineHeight: 1.4 }}>{finished ? '“Dai graças em todas as circunstâncias.” — 1 Tessalonicenses 5:18' : mission[2]}</p>
+      <div style={{ display: 'flex', gap: 7, marginBottom: 13 }}>{GRATITUDE_DAYS.map((_, index) => <span key={index} title={`Dia ${index + 1}`} style={{ width: 28, height: 8, borderRadius: 99, background: index < state.completed.length ? '#fff0ab' : 'rgba(255,255,255,.3)' }} />)}</div>
+      <div style={{ display: 'flex', gap: 9, flexWrap: 'wrap' }}>
+        {!finished && <button type="button" disabled={completedToday || !user} onClick={completeToday} style={{ border: 0, borderRadius: 10, padding: '10px 14px', cursor: completedToday ? 'default' : 'pointer', background: completedToday ? 'rgba(255,255,255,.22)' : '#fff7d8', color: '#76501b', fontWeight: 900 }}>{completedToday ? '✓ Missão de hoje concluída' : user ? 'Concluir missão de hoje' : 'Entre para participar'}</button>}
+        {completedToday && !state.shared.includes(dayIndex) && <button type="button" onClick={share} style={{ border: '1px solid rgba(255,255,255,.65)', borderRadius: 10, padding: '10px 14px', cursor: 'pointer', background: 'transparent', color: '#fff', fontWeight: 900 }}>↗ Partilhar no Mural</button>}
+        {completedToday && state.shared.includes(dayIndex) && <span style={{ padding: '10px 3px', fontSize: 13, fontWeight: 800 }}>✓ Partilhado com a comunidade</span>}
+      </div>
+      {!finished && completedToday && <p style={{ margin: '11px 0 0', fontSize: 12, color: 'rgba(255,255,255,.9)' }}>Volte amanhã para continuar o próximo dia.</p>}</div>}
+  </section>;
+}
+
 export default function MuralGrid() {
   const { t, i18n } = useTranslation();
   const soundCopy = {
@@ -776,6 +889,7 @@ export default function MuralGrid() {
   const currentLanguage = (i18n?.language || 'pt').slice(0, 2);
   const { user, token } = useAuth();
   const [posts, setPosts] = useState([]);
+  const [likePendingIds, setLikePendingIds] = useState(() => new Set());
   const [actionError, setActionError] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('todas');
@@ -788,6 +902,7 @@ export default function MuralGrid() {
     }
   };
   const [showForm, setShowForm] = useState(false);
+  const [showMuralMenu, setShowMuralMenu] = useState(false);
   const [postText, setPostText] = useState('');
   const [postVisibility, setPostVisibility] = useState('public');
   const [postCategory, setPostCategory] = useState('testemunho');
@@ -971,13 +1086,28 @@ export default function MuralGrid() {
       setActionError('Inicia sessão para dizer Amém.');
       return;
     }
+    if (likePendingIds.has(postId)) return;
+
+    const previousPost = posts.find(post => post.id === postId);
+    if (!previousPost) return;
+    const previousLiked = Boolean(previousPost.liked);
+    const previousCount = Number(previousPost.like_count ?? previousPost.amemCount ?? 0);
+    const nextLiked = !previousLiked;
+
+    // O cartão responde no momento do toque. O pedido ao servidor continua em segundo plano.
+    setLikePendingIds(prev => new Set(prev).add(postId));
+    setPosts(prev => prev.map(post => post.id === postId ? {
+      ...post,
+      liked: nextLiked,
+      like_count: Math.max(0, previousCount + (nextLiked ? 1 : -1)),
+    } : post));
+
     try {
       const res = await fetch(`${API}/feed/${postId}/like`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || typeof data.liked !== 'boolean') {
         throw new Error(data.error || 'Não foi possível atualizar o Amém.');
       }
-      // Atualiza imediatamente o cartão, sem recarregar o mural inteiro.
       setPosts(prev => prev.map(post => {
         if (post.id !== postId) return post;
         const current = Number(post.like_count ?? post.amemCount ?? 0);
@@ -986,7 +1116,19 @@ export default function MuralGrid() {
       setActionError('');
     } catch (error) {
       console.error(error);
+      // Se o servidor falhar, desfazemos apenas a alteração que apareceu na hora.
+      setPosts(prev => prev.map(post => post.id === postId ? {
+        ...post,
+        liked: previousLiked,
+        like_count: previousCount,
+      } : post));
       setActionError(error.message || 'Não foi possível atualizar o Amém. Tenta novamente.');
+    } finally {
+      setLikePendingIds(prev => {
+        const next = new Set(prev);
+        next.delete(postId);
+        return next;
+      });
     }
   };
 
@@ -1088,6 +1230,12 @@ export default function MuralGrid() {
     }
   };
 
+  const publishGratitude = async (dayIndex, mission) => {
+    const content = `✨ Concluí o Dia ${dayIndex + 1} do Desafio 7 Dias de Gratidão: ${mission[0]}.\n\n${mission[2]}\n\nHoje agradeço a Deus e escolho partilhar esta esperança com a comunidade. 🙏`;
+    await publishSurprise({ content });
+    trackMuralAction('share_gratitude_challenge');
+  };
+
   const filteredPosts = activeFilter === 'todas' ? posts : posts.filter(p => (p.category || p.type) === activeFilter);
   const toggleComposer = () => {
     if (!user || !token) {
@@ -1119,24 +1267,16 @@ export default function MuralGrid() {
           <span style={{ color:'white', fontSize:13, fontWeight:600 }}>Entrar →</span>
         </div>
       )}
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: '18px 16px 34px' }}>
+    <div className="mural-page" style={{ maxWidth: 900, margin: '0 auto', padding: '18px 16px 34px' }}>
       {/* Header */}
-      <div style={{ background: '#fff', borderRadius: 18, padding: '20px 24px', marginBottom: 12, color: '#264839', border: '1px solid #e0e9e1', boxShadow: '0 8px 22px rgba(45,74,56,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap:12 }}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: 25, fontWeight: 800, letterSpacing:'-.02em' }}>{t('mural.title')}</h1>
+      <div className="mural-page-header" style={{ background: '#fff', borderRadius: 18, padding: '20px 24px', marginBottom: 12, color: '#264839', border: '1px solid #e0e9e1', boxShadow: '0 8px 22px rgba(45,74,56,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap:12, flexWrap:'wrap' }}>
+        <div className="mural-page-heading" style={{ flex:'1 1 320px', minWidth:0 }}>
+          <h1 style={{ margin: 0, fontSize: 25, fontWeight: 800, letterSpacing:'-.02em', overflowWrap:'anywhere' }}>{t('mural.title')}</h1>
           <p style={{ margin: '5px 0 0', fontSize: 13, color:'#6b8473' }}>{t('mural.subtitle')}</p>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button title={viewMode === 'feed' ? 'Ver em grade' : 'Ver publicações'} onClick={() => setViewMode(viewMode === 'feed' ? 'grid' : 'feed')} style={{ background: '#f6faf6', border: '1px solid #d6e4d7', borderRadius: 10, padding: '8px 12px', color: '#426853', cursor: 'pointer' }}>
-            {viewMode === 'feed' ? <Grid size={16} /> : <List size={16} />}
-          </button>
-          {user && (
-            <button onClick={toggleComposer} style={{ background: '#6a42a0', border: '1px solid #6a42a0', borderRadius: 11, padding: '10px 16px', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 800, whiteSpace:'nowrap' }}>
-              {showForm ? <X size={16} /> : <Plus size={16} />}
-              {showForm ? t('mural.cancel') : t('mural.newPost', 'Criar publicação')}
-            </button>
-          )}
-        </div>
+        <button type="button" onClick={() => setShowMuralMenu(current => !current)} aria-expanded={showMuralMenu} style={{ background: showMuralMenu ? '#6a42a0' : '#f6faf6', border: `1px solid ${showMuralMenu ? '#6a42a0' : '#d6e4d7'}`, borderRadius: 11, padding: '10px 14px', color: showMuralMenu ? '#fff' : '#426853', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 7, fontSize: 14, fontWeight: 800, whiteSpace:'nowrap' }}>
+          <span style={{ fontSize: 20, lineHeight: .8 }}>{showMuralMenu ? '×' : '☰'}</span>{showMuralMenu ? 'Fechar menu' : 'Menu do Mural'}
+        </button>
       </div>
 
       {user && showWelcome && <section style={{ marginBottom:16, padding:'11px 14px', borderRadius:14, background:'#fff', border:'1px solid #e4dfed', display:'flex', gap:10, alignItems:'center', justifyContent:'space-between', flexWrap:'wrap' }}>
@@ -1149,12 +1289,18 @@ export default function MuralGrid() {
         </div>
       </section>}
 
-      <div style={{ marginBottom:16, padding:'8px', borderRadius:15, background:'#fff', border:'1px solid #e0e9e1', boxShadow:'0 5px 16px rgba(45,74,56,.05)', display:'flex', alignItems:'center', justifyContent:'center', gap:8, flexWrap:'wrap' }}>
-        {user && <button type="button" onClick={() => setShowForm(true)} style={{ border:0, borderRadius:10, padding:'9px 14px', background:'#6a42a0', color:'#fff', fontWeight:800, cursor:'pointer', fontSize:13, display:'flex', alignItems:'center', gap:6 }}><Send size={15}/>{t('mural.newPost', 'Publicar')}</button>}
-        <DailySurpriseBoxes onPublish={publishSurprise} publishing={publishingSurprise} />
-        <button type="button" onClick={() => { trackMuralAction('duelo_biblico'); window.location.href='/duelo-biblico'; }} style={{ border:'1px solid #ead49d', borderRadius:10, padding:'9px 14px', background:'#fffaf0', color:'#8a6818', fontWeight:800, cursor:'pointer', fontSize:13, display:'flex', alignItems:'center', gap:6 }}><Play size={15}/>Duelo Bíblico</button>
-        <button title={soundLabel} aria-pressed={soundEnabled} onClick={() => { const next = !soundEnabled; trackMuralAction(next ? 'enable_sound' : 'disable_sound'); setSoundEnabled(next); localStorage.setItem('sigo_mural_sound', next ? 'on' : 'off'); }} style={{ width:36, height:36, border:'1px solid #d6e4d7', borderRadius:10, background:'#f6faf6', color:'#426853', cursor:'pointer', display:'grid', placeItems:'center' }}>{soundEnabled ? <Volume2 size={17}/> : <VolumeX size={17}/>}</button>
-      </div>
+      {showMuralMenu && <section aria-label="Menu do Mural" style={{ marginBottom:16, padding:14, borderRadius:16, background:'#fff', border:'1px solid #e0e9e1', boxShadow:'0 8px 22px rgba(45,74,56,.08)' }}>
+        <strong style={{ display:'block', margin:'0 0 11px', color:'#315b44', fontSize:14 }}>Organize a sua experiência no Mural</strong>
+        <GratitudeChallenge user={user} onShare={publishGratitude} />
+        <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap', padding:'9px 0 12px', borderBottom:'1px solid #edf1ed' }}>
+          {user && <button type="button" onClick={() => { setShowForm(true); setShowMuralMenu(false); }} style={{ border:0, borderRadius:10, padding:'9px 14px', background:'#6a42a0', color:'#fff', fontWeight:800, cursor:'pointer', fontSize:13, display:'flex', alignItems:'center', gap:6 }}><Send size={15}/>{t('mural.newPost', 'Publicar')}</button>}
+          <DailySurpriseBoxes onPublish={publishSurprise} publishing={publishingSurprise} />
+          <button type="button" onClick={() => { trackMuralAction('duelo_biblico'); window.location.href='/duelo-biblico'; }} style={{ border:'1px solid #ead49d', borderRadius:10, padding:'9px 14px', background:'#fffaf0', color:'#8a6818', fontWeight:800, cursor:'pointer', fontSize:13, display:'flex', alignItems:'center', gap:6 }}><Play size={15}/>Duelo Bíblico</button>
+          <button type="button" title={viewMode === 'feed' ? 'Ver em grade' : 'Ver publicações'} onClick={() => setViewMode(viewMode === 'feed' ? 'grid' : 'feed')} style={{ border:'1px solid #d6e4d7', borderRadius:10, padding:'9px 12px', background:'#f6faf6', color:'#426853', cursor:'pointer', display:'flex', alignItems:'center', gap:6, fontWeight:800, fontSize:13 }}>{viewMode === 'feed' ? <Grid size={16} /> : <List size={16} />}{viewMode === 'feed' ? 'Ver em grade' : 'Ver publicações'}</button>
+          <button title={soundLabel} aria-pressed={soundEnabled} onClick={() => { const next = !soundEnabled; trackMuralAction(next ? 'enable_sound' : 'disable_sound'); setSoundEnabled(next); localStorage.setItem('sigo_mural_sound', next ? 'on' : 'off'); }} style={{ width:38, height:38, border:'1px solid #d6e4d7', borderRadius:10, background:'#f6faf6', color:'#426853', cursor:'pointer', display:'grid', placeItems:'center' }}>{soundEnabled ? <Volume2 size={17}/> : <VolumeX size={17}/>}</button>
+        </div>
+        <div style={{ marginTop:12 }}><small style={{ display:'block', marginBottom:7, color:'#62786b', fontWeight:800 }}>Mostrar publicações de:</small><div style={{ display:'flex', gap:6, overflowX:'auto', paddingBottom:2, scrollbarWidth:'none' }}>{FILTERS_CONFIG.map(f => <button key={f.key} onClick={() => { setActiveFilter(f.key); setShowMuralMenu(false); }} style={{ padding:'8px 13px', borderRadius:10, whiteSpace:'nowrap', border:'none', background:activeFilter === f.key ? '#edf5ee' : '#f7f9f7', color:activeFilter === f.key ? '#326247' : '#65746b', cursor:'pointer', fontSize:13, fontWeight:activeFilter === f.key ? 800 : 600, boxShadow:activeFilter === f.key ? 'inset 0 -2px #4f8a62' : 'none' }}>{t(f.labelKey)}</button>)}</div></div>
+      </section>}
 
       {/* Form */}
       {showForm && (
@@ -1226,12 +1372,6 @@ export default function MuralGrid() {
         </div>
       )}
 
-      {/* Filtros */}
-      <div style={{ display: 'flex', gap: 6, overflowX: 'auto', padding: '7px', marginBottom: 18, scrollbarWidth: 'none', background:'#fff', border:'1px solid #e0e9e1', borderRadius:14 }}>
-        {FILTERS_CONFIG.map(f => (
-          <button key={f.key} onClick={() => setActiveFilter(f.key)} style={{ padding: '8px 14px', borderRadius: 10, whiteSpace: 'nowrap', border: 'none', background: activeFilter === f.key ? '#edf5ee' : 'transparent', color: activeFilter === f.key ? '#326247' : '#65746b', cursor: 'pointer', fontSize: 13, fontWeight: activeFilter === f.key ? 800 : 600, boxShadow: activeFilter === f.key ? 'inset 0 -2px #4f8a62' : 'none' }}>{t(f.labelKey)}</button>
-        ))}
-      </div>
       {/* Loading */}
       {loading && (
         <div style={{ textAlign: 'center', padding: 60 }}>
@@ -1284,6 +1424,7 @@ export default function MuralGrid() {
           key={post.id}
           post={post} bgMusicStart={post.bg_music_start} bgMusicDuration={post.bg_music_duration}
           onLike={handleLike}
+          likePending={likePendingIds.has(post.id)}
           onDelete={handleDelete}
           onCommentAdded={(postId) => setPosts(prev => prev.map(item => item.id === postId ? { ...item, comment_count: Number(item.comment_count || 0) + 1 } : item))}
           token={token}

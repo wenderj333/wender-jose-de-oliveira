@@ -281,6 +281,15 @@
   }
 }
 
+/* Evita que o título e os botões do mural fiquem comprimidos em janelas menores. */
+@media (max-width: 820px) {
+  .mural-page { padding-left: 8px !important; padding-right: 8px !important; }
+  .mural-page-header { padding: 16px !important; align-items: flex-start !important; }
+  .mural-page-heading { flex-basis: 100% !important; }
+  .mural-page-heading h1 { font-size: 22px !important; }
+  .mural-page-actions { width: 100%; }
+}
+
 /* Duelo Bíblico: experiência sem os painéis laterais da rede. */
 .modern-layout.duel-layout {
   grid-template-columns: minmax(0, 1fr) !important;

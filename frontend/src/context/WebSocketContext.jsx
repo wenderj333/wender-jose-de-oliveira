@@ -133,6 +133,23 @@ export function WebSocketProvider({ children }) {
                 try { new Notification(`📞 Chamada de ${data.callerName || 'um contacto'}`, { body: data.mode === 'video' ? 'Videochamada recebida' : 'Chamada de voz recebida', icon: data.callerAvatar || '/logo.jpg' }); } catch (_) {}
               }
               break;
+            case 'game_invite_received': {
+              // O convite pode chegar enquanto a pessoa está noutra página.
+              // Guardamo-lo brevemente para que o modal apareça ao abrir o Duelo.
+              const pendingInvite = { from: data.from || null, receivedAt: Date.now() };
+              try { sessionStorage.setItem('sigo_pending_duel_invite', JSON.stringify(pendingInvite)); } catch (_) {}
+              setLastEvent(data);
+              playSoundThrottled();
+              if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+                try {
+                  new Notification('⚔️ Convite para Duelo Bíblico', {
+                    body: `${data.from?.userName || 'Um jogador'} quer jogar com você.`,
+                    icon: data.from?.avatar || '/logo.jpg',
+                  });
+                } catch (_) {}
+              }
+              break;
+            }
             case 'chat_new_message':
             case 'new_help_request':
             case 'new_prayer_response':
