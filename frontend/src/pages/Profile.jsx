@@ -18,6 +18,18 @@ class ProfileErrorBoundary extends React.Component {
   }
 }
 
+function ProfileMediaTile({ post, isVideo }) {
+  const { t } = useTranslation();
+  const [unavailable, setUnavailable] = useState(false);
+
+  if (unavailable) {
+    return <div role="status" style={{ width:"100%", height:"100%", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:6, padding:12, boxSizing:"border-box", textAlign:"center", color:"#64748b", background:"linear-gradient(135deg,#f3f6fb,#eef1f8)", fontSize:12 }}><span style={{ fontSize:25 }}>🖼️</span><strong>{t("profile.photoUnavailable", "Esta foto já não está disponível.")}</strong><span>{t("profile.photoUploadAgain", "Peça para enviar novamente.")}</span></div>;
+  }
+
+  if (isVideo) return <><video src={post.media_url} onError={() => setUnavailable(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} muted playsInline preload="metadata" /><span style={{ position:"absolute", top:8, right:8, background:"rgba(0,0,0,.65)", color:"white", borderRadius:20, padding:"4px 7px", fontSize:11 }}>▶ {t("profile.video", "Vídeo")}</span></>;
+  return <img src={post.media_url} onError={() => setUnavailable(true)} alt={post.caption || ""} style={{ width: "100%", height: "100%", objectFit: "cover", cursor: post._isGallery ? "zoom-in" : "default" }} />;
+}
+
 export default function Profile() {
   return <ProfileErrorBoundary><ProfileContent /></ProfileErrorBoundary>;
 }
@@ -283,10 +295,8 @@ function ProfileContent() {
             const coverImg = p.cover_url || (isMusic ? null : null);
             return (
             <div key={p.id} onClick={() => p._isGallery ? selectMedia(p) : isMusic ? setPlayingPost(p) : null} style={{ aspectRatio: "1", overflow: "hidden", background: "#f0f0f0", position: "relative", cursor: "pointer" }}>
-              {p.media_url && isVideo(p) ? (
-                <><video src={p.media_url} style={{ width: "100%", height: "100%", objectFit: "cover" }} muted playsInline preload="metadata" /><span style={{ position:"absolute", top:8, right:8, background:"rgba(0,0,0,.65)", color:"white", borderRadius:20, padding:"4px 7px", fontSize:11 }}>▶ Vídeo</span></>
-              ) : p.media_url ? (
-                <img src={p.media_url} alt={p.caption || ""} style={{ width: "100%", height: "100%", objectFit: "cover", cursor: p._isGallery ? "zoom-in" : "default" }} />
+              {p.media_url ? (
+                <ProfileMediaTile post={p} isVideo={isVideo(p)} />
               ) : isMusic ? (
                 <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#4a80d4,#764ba2)", position: "relative" }}>
                   {(p.cover_url || musicCovers[p.audio_url]) ? <img src={p.cover_url || musicCovers[p.audio_url]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }} /> : null}

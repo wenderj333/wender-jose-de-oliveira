@@ -299,7 +299,7 @@ function MusicPickerModal({ onClose, onSelect }) {
 }
 
 function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay, onVideoPause, onVideoNode, soundEnabled, onCommentAdded, likePending }) {
-  const { t } = useTranslation(); // Add useTranslation
+  const { t, i18n } = useTranslation(); // Add useTranslation
   const color = getCatColor(post.category || post.type);
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState('');
@@ -344,6 +344,15 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
   const [mediaUnavailable, setMediaUnavailable] = useState(false);
   const [avatarUnavailable, setAvatarUnavailable] = useState(false);
   const postCardRef = useRef(null);
+  const imageUnavailableCopy = {
+    pt: { title: 'Esta foto já não está disponível.', help: 'Peça à pessoa que publicou para enviar novamente.' },
+    es: { title: 'Esta foto ya no está disponible.', help: 'Pide a la persona que la publicó que la envíe otra vez.' },
+    en: { title: 'This photo is no longer available.', help: 'Ask the person who posted it to upload it again.' },
+    de: { title: 'Dieses Foto ist nicht mehr verfügbar.', help: 'Bitte die Person, die es veröffentlicht hat, es erneut hochzuladen.' },
+    fr: { title: 'Cette photo n’est plus disponible.', help: 'Demandez à la personne qui l’a publiée de la remettre en ligne.' },
+    ro: { title: 'Această fotografie nu mai este disponibilă.', help: 'Roagă persoana care a publicat-o să o încarce din nou.' },
+    ru: { title: 'Эта фотография больше недоступна.', help: 'Попросите автора загрузить её снова.' },
+  }[i18n.language?.split('-')[0]] || { title: 'Esta foto já não está disponível.', help: 'Peça à pessoa que publicou para enviar novamente.' };
 
   const isVideo = post.media_type === 'video' || Boolean(mediaUrl && mediaUrl.match(/\.(mp4|webm|mov|ogg)(\?|$)/i));
   const isAudio = post.media_type === 'audio' || Boolean(mediaUrl && mediaUrl.match(/\.(mp3|wav|aac|m4a|ogg)(\?|$)/i));
@@ -539,8 +548,8 @@ function PostCard({ post, onLike, onDelete, token, user, isPlaying, onVideoPlay,
           {mediaUnavailable ? (
             <div role="status" style={{ textAlign:'center', padding:24, color:'#65737d', maxWidth:300 }}>
               <Image size={34} style={{ marginBottom:10, opacity:.65 }} />
-              <div style={{ fontWeight:700, fontSize:14 }}>Esta foto já não está disponível.</div>
-              <div style={{ fontSize:12, marginTop:6, lineHeight:1.45 }}>Peça à pessoa que publicou para enviar novamente.</div>
+              <div style={{ fontWeight:700, fontSize:14 }}>{imageUnavailableCopy.title}</div>
+              <div style={{ fontSize:12, marginTop:6, lineHeight:1.45 }}>{imageUnavailableCopy.help}</div>
             </div>
           ) : (
             <img
