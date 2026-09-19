@@ -16,6 +16,8 @@ app.use(cors({
       ...allowed,
       'https://sigocomfe.com',
       'https://www.sigocomfe.com',
+      'https://localhost',
+      'capacitor://localhost',
     ]);
     // Allow requests with no origin (mobile apps, curl, etc)
     if (!origin) return callback(null, true);

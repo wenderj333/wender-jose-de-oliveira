@@ -1,10 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth, googleProvider, facebookProvider } from '../firebase';
 import { signInWithPopup, onAuthStateChanged, signOut, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { isNativeGoogleSignInAvailable, signInWithNativeGoogle } from '../nativeGoogleAuth';
 
 const AuthContext = createContext(null);
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+// The installed Android app is served from https://localhost.  A relative
+// request would therefore point to the phone itself instead of our API.
+// Keep the public API as a reliable fallback when no build-time URL exists.
+const API_BASE = import.meta.env.VITE_API_URL || 'https://sigo-com-fe-api.onrender.com';
 const API = `${API_BASE}/api`;
 
 const GOOGLE_LOGIN_HELP = {
@@ -115,6 +119,12 @@ export function AuthProvider({ children }) {
 
   const loginWithGoogle = async () => {
     try {
+      // Installed Android builds use the account selector provided by Android.
+      // It does not rely on browser storage or a firebaseapp.com redirect.
+      if (isNativeGoogleSignInAvailable()) {
+        const nativeUser = await signInWithNativeGoogle();
+        return await syncFirebaseUser(nativeUser);
+      }
       const result = await signInWithPopup(auth, googleProvider);
       return await syncFirebaseUser(result.user);
     } catch (err) {
