@@ -15118,7 +15118,10 @@
             transform: scale(1.05);
         }
     }
-</style><script src="/game-trial.js" defer></script></head>
+</style>
+    <!-- Esta regra é carregada por último para impedir que o jogo corte a tela em qualquer zoom. -->
+    <link rel="stylesheet" href="./layout.css" />
+    <script src="/game-trial.js" defer></script></head>
   <body>
 <div id="rosebud-exported-splash" aria-live="polite">
     <div class="rosebud-exported-splash__content">

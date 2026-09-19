@@ -1,8 +1,8 @@
 /* Keep reading surfaces in document flow, including at browser zoom. */
-html, body { height: auto; min-height: 100%; overflow: visible; }
+html, body { height: auto !important; min-height: 100%; overflow: visible !important; }
 body { overflow-x: clip; }
 #game-container {
-  height: auto; min-height: 100dvh; overflow: clip;
+  height: auto !important; min-height: 100dvh; overflow: visible !important;
   display: flex; flex-direction: column; justify-content: flex-start;
   perspective: none; background-attachment: fixed;
 }
@@ -17,12 +17,12 @@ body { overflow-x: clip; }
 }
 .topbar-tools > * { transform: none; max-width: 100%; }
 .ui-layer {
-  position: relative; inset: auto; height: auto; min-height: 0;
+  position: relative; inset: auto; height: auto !important; min-height: 0;
   flex: 1; justify-content: flex-start; perspective: none; transform-style: flat;
 }
 #start-screen {
-  flex: none; height: auto; min-height: calc(100dvh - 120px);
-  overflow: visible; padding: 20px clamp(12px, 3vw, 36px) 36px;
+  flex: none; height: auto !important; min-height: calc(100dvh - 120px);
+  overflow: visible !important; padding: 20px clamp(12px, 3vw, 36px) 36px;
   transform-style: flat;
 }
 .start-content { width: min(100%, 1040px); max-width: 1040px; flex: none; }
