@@ -1477,13 +1477,31 @@ let lobbyQueueEntries = [];
 let lobbyInviteEntries = [];
 
 let bgMusic = null;
+let musicEnabled = localStorage.getItem('duelo_biblico_music') !== 'off';
+
 function playBackgroundMusic() {
-    if (bgMusic) return;
-    bgMusic = new Audio('assets/audio/peaceful-background-music.mp3');
-    bgMusic.loop = true;
-    bgMusic.volume = 0.4;
-    bgMusic.play().catch(e => console.log("Music play blocked", e));
+    if (!musicEnabled) return;
+    if (!bgMusic) {
+        bgMusic = new Audio('assets/audio/peaceful-background-music.mp3');
+        bgMusic.loop = true;
+        bgMusic.volume = 0.32;
+    }
+    // Alguns navegadores só autorizam música depois do primeiro toque. Em vez
+    // de desistir, tentamos novamente quando a pessoa toca na tela.
+    bgMusic.play().catch(() => {});
 }
+
+function toggleBackgroundMusic() {
+    musicEnabled = !musicEnabled;
+    localStorage.setItem('duelo_biblico_music', musicEnabled ? 'on' : 'off');
+    if (!musicEnabled && bgMusic) bgMusic.pause();
+    if (musicEnabled) playBackgroundMusic();
+    render();
+}
+
+document.addEventListener('pointerdown', () => {
+    if (musicEnabled) playBackgroundMusic();
+}, { passive: true });
 
 function playSound(name) {
     const audio = new Audio(`assets/audio/${name}.mp3`);
@@ -1881,6 +1899,15 @@ function render() {
     container.style.backgroundImage = `url('assets/game-background.webp')`;
     container.style.backgroundSize = 'cover';
     container.style.backgroundPosition = 'center';
+
+    const musicButton = document.createElement('button');
+    musicButton.className = `music-toggle ${musicEnabled ? 'enabled' : 'muted'}`;
+    musicButton.type = 'button';
+    musicButton.title = musicEnabled ? 'Desligar música' : 'Ligar música';
+    musicButton.setAttribute('aria-label', musicButton.title);
+    musicButton.textContent = musicEnabled ? '♫ Música ligada' : '🔇 Música desligada';
+    musicButton.onclick = toggleBackgroundMusic;
+    container.appendChild(musicButton);
 
     const overlay = document.createElement('div');
     overlay.className = 'ui-overlay';
@@ -3227,14 +3254,14 @@ function renderGameOver(el) {
 const style = document.createElement('style');
 style.textContent = `
     :root {
-        --primary: #2196F3;
-        --primary-dark: #1976D2;
-        --secondary: #90CAF9;
-        --success: #66BB6A;
-        --danger: #EF5350;
-        --gold: #FFD700;
-        --text: #333;
-        --bg-glass: rgba(255, 255, 255, 0.85);
+        --primary: #147fe1;
+        --primary-dark: #075fb5;
+        --secondary: #58acef;
+        --success: #269c57;
+        --danger: #df3e3e;
+        --gold: #f2b400;
+        --text: #1f2d38;
+        --bg-glass: rgba(255, 255, 255, 0.96);
     }
 
     body {
@@ -3260,11 +3287,11 @@ style.textContent = `
 
     .glass-card {
         background: var(--bg-glass);
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(12px) saturate(1.25);
         border-radius: 20px;
         padding: 30px;
         box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        border: 1px solid rgba(255,255,255,0.3);
+        border: 1px solid rgba(255,255,255,0.88);
     }
 
     .centered-card {
@@ -3329,6 +3356,7 @@ style.textContent = `
     }
 
     .primary-btn:active { transform: scale(0.98); }
+    .primary-btn:hover { background: var(--primary-dark); box-shadow: 0 8px 18px rgba(7,95,181,.28); }
     .primary-btn.large-btn { padding: 16px 24px; font-size: clamp(1rem, 2vw, 1.2rem); width: 100%; margin-top: 20px; }
 
     .secondary-btn {
@@ -3781,6 +3809,23 @@ style.textContent = `
 
     .mt-20 { margin-top: 20px; }
 
+    .music-toggle {
+        position: fixed;
+        z-index: 20;
+        top: 16px;
+        right: 16px;
+        border: 1px solid rgba(255,255,255,.9);
+        border-radius: 12px;
+        padding: 10px 13px;
+        color: #fff;
+        background: #075fb5;
+        box-shadow: 0 8px 18px rgba(9,52,88,.28);
+        font: 800 0.8rem 'Inter', sans-serif;
+        cursor: pointer;
+    }
+    .music-toggle.muted { background: #4e5961; }
+    .music-toggle:hover { filter: brightness(1.1); }
+
     /* Responsive lobby hierarchy */
     @media (max-width: 1080px) {
         .lobby-layout {
@@ -3800,6 +3845,7 @@ style.textContent = `
 
     @media (max-width: 680px) {
         .ui-overlay { justify-content: flex-start; padding: 12px; }
+        .music-toggle { top: 10px; right: 10px; padding: 8px 10px; font-size: .72rem; }
         .lobby-layout {
             grid-template-areas:
                 "main"
