@@ -3,6 +3,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('./middleware/auth');
 const db = require('./db/connection');
+const { sendPushNotification } = require('./services/notifications');
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 async function translateWithClaude(text, sourceLang, targetLang) {
@@ -20,6 +21,23 @@ const PastorSession = require('./models/PastorSession');
 const clients = new Map(); // ws -> { userId, churchId }
 const liveStreams = new Map(); // streamId -> { id, broadcasterId, broadcasterName, broadcasterWs, viewers: Map<viewerId, ws> }
 const privateCalls = new Map();
+
+async function notifyIncomingCall(call) {
+  const destination = `/mensagens/${call.callerId}?incoming=${call.mode}&callId=${call.id}&callerName=${encodeURIComponent(call.callerName || 'Alguém')}`;
+  const title = call.mode === 'video' ? 'Videochamada recebida' : 'Chamada recebida';
+  const body = `${call.callerName || 'Alguém'} está a ligar-lhe. Toque para atender.`;
+  try {
+    await db.query(
+      `INSERT INTO notifications (user_id, type, title, body, data) VALUES ($1, $2, $3, $4, $5)`,
+      [call.receiverId, 'incoming_call', title, body, JSON.stringify({ destination, call_id: call.id, caller_id: call.callerId, mode: call.mode })]
+    );
+    const result = await db.query('SELECT fcm_token FROM users WHERE id = $1', [call.receiverId]);
+    if (result.rows[0]?.fcm_token) await sendPushNotification(result.rows[0].fcm_token, title, body, { destination, call_id: call.id, caller_id: call.callerId, mode: call.mode });
+  } catch (error) {
+    // A chamada em tempo real continua a funcionar mesmo que o aviso não possa ser enviado.
+    console.error('Erro ao enviar aviso de chamada:', error.message);
+  }
+}
 
 // Used by HTTP routes (such as direct messages) to notify a logged-in user
 // immediately, without waiting for the next polling request.
@@ -89,15 +107,26 @@ function setupWebSocket(server) {
               sessions: liveSessions,
               totalChurchesPraying: liveCount,
             }));
+            // Se a pessoa abriu o app logo após tocar no aviso, entregue a
+            // chamada que ainda está a tocar para ela poder aceitar.
+            for (const call of privateCalls.values()) {
+              if (call.receiverId === decoded.id) {
+                ws.send(JSON.stringify({ type: 'call_incoming', callId: call.id, callerId: call.callerId, callerName: call.callerName, callerAvatar: call.callerAvatar || null, mode: call.mode }));
+              }
+            }
             break;
 
           case 'call_request': {
             const caller = clients.get(ws);
             if (!caller?.userId || !msg.targetUserId || !['audio', 'video'].includes(msg.mode)) break;
             const target = [...clients.entries()].find(([, info]) => info?.userId === msg.targetUserId)?.[0];
-            if (!target || target.readyState !== 1) { ws.send(JSON.stringify({ type: 'call_unavailable', callId: msg.callId })); break; }
-            privateCalls.set(msg.callId, { callerId: caller.userId, receiverId: msg.targetUserId, mode: msg.mode });
-            target.send(JSON.stringify({ type: 'call_incoming', callId: msg.callId, callerId: caller.userId, callerName: msg.callerName, callerAvatar: msg.callerAvatar || null, mode: msg.mode }));
+            const call = { id: msg.callId, callerId: caller.userId, receiverId: msg.targetUserId, mode: msg.mode, callerName: msg.callerName, callerAvatar: msg.callerAvatar || null };
+            privateCalls.set(msg.callId, call);
+            if (target?.readyState === 1) {
+              target.send(JSON.stringify({ type: 'call_incoming', callId: call.id, callerId: call.callerId, callerName: call.callerName, callerAvatar: call.callerAvatar, mode: call.mode }));
+            } else {
+              await notifyIncomingCall(call);
+            }
             break;
           }
           case 'call_response': {

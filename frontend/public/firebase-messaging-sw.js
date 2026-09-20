@@ -13,12 +13,19 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function(payload) {
-  const { title, body } = payload.notification;
+  const { title, body } = payload.notification || {};
   self.registration.showNotification(title, {
     body,
     icon: '/logo.jpg',
     silent: false,
     renotify: true,
-    tag: 'sigo-com-fe-notification'
+    tag: payload.data?.call_id ? `sigo-call-${payload.data.call_id}` : 'sigo-com-fe-notification',
+    data: payload.data || {}
   });
+});
+
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  const destination = event.notification.data?.destination || '/notificacoes';
+  event.waitUntil(clients.openWindow(new URL(destination, self.location.origin).href));
 });
