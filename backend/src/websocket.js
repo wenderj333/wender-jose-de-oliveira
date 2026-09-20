@@ -135,7 +135,9 @@ function setupWebSocket(server) {
               msg.campaignName || '',
               Number.isInteger(Number(msg.campaignDay)) ? Number(msg.campaignDay) : null,
               Number.isInteger(Number(msg.campaignTotal)) ? Number(msg.campaignTotal) : null,
-              liveUrl
+              liveUrl,
+              msg.chatEnabled !== false,
+              msg.vowEnabled === true
             );
             // Broadcast to all clients
             broadcast(wss, {
@@ -152,6 +154,8 @@ function setupWebSocket(server) {
                 campaignDay: Number.isInteger(Number(msg.campaignDay)) ? Number(msg.campaignDay) : null,
                 campaignTotal: Number.isInteger(Number(msg.campaignTotal)) ? Number(msg.campaignTotal) : null,
                 liveUrl,
+                chatEnabled: msg.chatEnabled !== false,
+                vowEnabled: msg.vowEnabled === true,
                 startedAt: session.started_at,
               },
               totalChurchesPraying: await PastorSession.getLiveCount(),

@@ -45,11 +45,14 @@ export default function PrayerPlaza() {
   const mapRef = useRef(null);
   const [selected, setSelected] = useState(null);
   const [mySessionId, setMySessionId] = useState(null);
+  const [showLeaderForm, setShowLeaderForm] = useState(false);
   const [focus, setFocus] = useState('');
   const [campaignName, setCampaignName] = useState('');
   const [campaignDay, setCampaignDay] = useState('1');
   const [campaignTotal, setCampaignTotal] = useState('7');
   const [liveUrl, setLiveUrl] = useState('');
+  const [chatEnabled, setChatEnabled] = useState(true);
+  const [vowEnabled, setVowEnabled] = useState(false);
   const [churchDetails, setChurchDetails] = useState(null);
   const [churchDetailsLoading, setChurchDetailsLoading] = useState(false);
   const [showRequest, setShowRequest] = useState(false);
@@ -100,7 +103,8 @@ export default function PrayerPlaza() {
 
   const start = () => {
     if (!user?.churchId && !user?.church_id) return window.alert('Primeiro cria ou associa a tua igreja na Sala do Pastor.');
-    send({ type: 'pastor_start_praying', pastorId: user.id, churchId: user.churchId || user.church_id, churchName: user.church_name || 'Minha igreja', pastorName: user.full_name, prayerFocus: focus, campaignName, campaignDay: campaignName ? campaignDay : null, campaignTotal: campaignName ? campaignTotal : null, liveUrl });
+    send({ type: 'pastor_start_praying', pastorId: user.id, churchId: user.churchId || user.church_id, churchName: user.church_name || 'Minha igreja', pastorName: user.full_name, prayerFocus: focus, campaignName, campaignDay: campaignName ? campaignDay : null, campaignTotal: campaignName ? campaignTotal : null, liveUrl, chatEnabled, vowEnabled });
+    setShowLeaderForm(false);
   };
 
   useEffect(() => {
@@ -253,13 +257,14 @@ export default function PrayerPlaza() {
 
       <section className="prayer-plaza__actions">
         <button onClick={() => active.length ? openRequest(active.map(session => session.church_id || session.churchId)) : window.alert('Quando uma igreja real iniciar uma oração, poderá enviar o seu pedido diretamente para ela.')}><HeartHandshake size={22}/><span><b>{copy.request}</b><small>{active.length ? details.requestInfo : details.requestWaiting}</small></span></button>
-        <button onClick={() => setShowPrayerChat(true)}><MessageCircle size={22}/><span><b>{copy.chat}</b><small>{details.chatInfo}</small></span></button>
+        {active.some((session) => session.chat_enabled !== false && session.chatEnabled !== false) && <button onClick={() => setShowPrayerChat(true)}><MessageCircle size={22}/><span><b>{copy.chat}</b><small>{details.chatInfo}</small></span></button>}
+        {active.some((session) => session.vow_enabled === true || session.vowEnabled === true) && <button onClick={() => { window.location.href = '/votos-de-fe'; }}><HeartHandshake size={22}/><span><b>Voto de Fé</b><small>Participa no voto ativado pela igreja.</small></span></button>}
         <button onClick={() => sharePrayer()}><Share2 size={22}/><span><b>Partilhar Oração Mundial</b><small>Convida alguém para orar contigo.</small></span></button>
-        {isLeader && <button onClick={mySessionId ? () => send({ type: 'pastor_stop_praying', sessionId: mySessionId }) : start}><Radio size={22}/><span><b>{mySessionId ? copy.stop : copy.start}</b><small>{details.leaderInfo}</small></span></button>}
+        {isLeader && <button onClick={mySessionId ? () => send({ type: 'pastor_stop_praying', sessionId: mySessionId }) : () => setShowLeaderForm(true)}><Radio size={22}/><span><b>{mySessionId ? copy.stop : copy.start}</b><small>{mySessionId ? details.leaderInfo : 'Configura o tema, a campanha e a transmissão antes de começar.'}</small></span></button>}
         {isLeader && mySessionId && <button onClick={() => sharePrayer(active.find((session) => session.id === mySessionId))}><Share2 size={22}/><span><b>Partilhar a minha oração</b><small>Envia o convite da tua igreja.</small></span></button>}
       </section>
 
-      {isLeader && !mySessionId && <div className="prayer-plaza__leader"><label>O que a igreja está a orar agora?</label><input value={focus} onChange={(e) => setFocus(e.target.value)} placeholder="Ex.: famílias, saúde, cidade..."/><label>Nome da campanha (opcional)</label><input value={campaignName} onChange={(e) => setCampaignName(e.target.value)} placeholder="Ex.: 7 dias de gratidão"/><div style={{ display: 'flex', gap: 10 }}><label style={{ flex: 1 }}>Dia<input type="number" min="1" value={campaignDay} onChange={(e) => setCampaignDay(e.target.value)}/></label><label style={{ flex: 1 }}>Total de dias<input type="number" min="1" value={campaignTotal} onChange={(e) => setCampaignTotal(e.target.value)}/></label></div><label>Link da transmissão ao vivo (opcional)</label><input type="url" value={liveUrl} onChange={(e) => setLiveUrl(e.target.value)} placeholder="https://youtube.com/..."/><small>Usa apenas um link público de vídeo ou áudio. Sem link, a igreja aparece apenas como sala de oração.</small></div>}
+      {isLeader && !mySessionId && showLeaderForm && <div className="prayer-plaza__leader"><button type="button" onClick={() => setShowLeaderForm(false)} style={{ border: 0, background: 'transparent', color: '#35684f', fontWeight: 800, cursor: 'pointer', padding: 0, marginBottom: 12 }}>← Voltar</button><label>O que a igreja está a orar agora?</label><input value={focus} onChange={(e) => setFocus(e.target.value)} placeholder="Ex.: famílias, saúde, cidade..."/><label>Nome da campanha (opcional)</label><input value={campaignName} onChange={(e) => setCampaignName(e.target.value)} placeholder="Ex.: 7 dias de gratidão"/><div style={{ display: 'flex', gap: 10 }}><label style={{ flex: 1 }}>Dia<input type="number" min="1" value={campaignDay} onChange={(e) => setCampaignDay(e.target.value)}/></label><label style={{ flex: 1 }}>Total de dias<input type="number" min="1" value={campaignTotal} onChange={(e) => setCampaignTotal(e.target.value)}/></label></div><label>Link da transmissão ao vivo (opcional)</label><input type="url" value={liveUrl} onChange={(e) => setLiveUrl(e.target.value)} placeholder="https://youtube.com/..."/><div style={{ display: 'grid', gap: 8, margin: '10px 0' }}><label><input type="checkbox" checked={chatEnabled} onChange={(e) => setChatEnabled(e.target.checked)}/> Mostrar chat para os membros</label><label><input type="checkbox" checked={vowEnabled} onChange={(e) => setVowEnabled(e.target.checked)}/> Mostrar Voto de Fé para os membros</label></div><small>O pastor controla estes botões. Só ficam visíveis depois de iniciar a oração.</small><div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}><button className="join" onClick={start}><Radio size={18}/> Iniciar oração</button><button type="button" onClick={() => setShowLeaderForm(false)} style={{ border: '1px solid #bfcfc2', background: '#fff', color: '#35684f', borderRadius: 10, padding: '10px 16px', fontWeight: 800, cursor: 'pointer' }}>Voltar</button></div></div>}
 
       {showPrayerChat && <div className="prayer-plaza__modal" role="dialog" aria-modal="true"><div className="prayer-plaza__chat"><button className="close" onClick={() => setShowPrayerChat(false)} aria-label="Fechar"><X/></button><span className="live"><MessageCircle size={16}/> {copy.chat}</span><h2>{copy.title}</h2><p>Partilha um pedido, um versículo ou uma palavra de esperança. Esta conversa continua dentro da Oração Mundial.</p><div className="prayer-plaza__chat-messages">{prayerMessages.length ? prayerMessages.map((message, index) => <article key={message.id || index}><b>{message.userName || 'Membro'}</b><span>{message.text || message.message}</span></article>) : <p>Ainda não há mensagens. Começa com uma oração ou uma palavra de esperança.</p>}</div><div className="prayer-plaza__chat-compose"><input value={prayerMessage} onChange={(event) => setPrayerMessage(event.target.value)} onKeyDown={(event) => event.key === 'Enter' && sendPrayerMessage()} placeholder="Escreve uma mensagem de oração..."/><button className="join" onClick={sendPrayerMessage}><Send size={18}/> Enviar</button></div></div></div>}
 

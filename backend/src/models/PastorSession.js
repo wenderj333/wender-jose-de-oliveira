@@ -2,12 +2,12 @@ const db = require('../db/connection');
 const { v4: uuidv4 } = require('uuid');
 
 const PastorSession = {
-  async startSession(pastor_id, church_id, prayer_focus, campaign_name = '', campaign_day = null, campaign_total = null, live_url = '') {
+  async startSession(pastor_id, church_id, prayer_focus, campaign_name = '', campaign_day = null, campaign_total = null, live_url = '', chat_enabled = true, vow_enabled = false) {
     const id = uuidv4();
     await db.prepare(
-      `INSERT INTO pastor_prayer_sessions (id, pastor_id, church_id, prayer_focus, campaign_name, campaign_day, campaign_total, live_url)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-    ).run(id, pastor_id, church_id, prayer_focus, campaign_name || null, campaign_day || null, campaign_total || null, live_url || null);
+      `INSERT INTO pastor_prayer_sessions (id, pastor_id, church_id, prayer_focus, campaign_name, campaign_day, campaign_total, live_url, chat_enabled, vow_enabled)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run(id, pastor_id, church_id, prayer_focus, campaign_name || null, campaign_day || null, campaign_total || null, live_url || null, chat_enabled, vow_enabled);
     return await db.prepare('SELECT * FROM pastor_prayer_sessions WHERE id = ?').get(id);
   },
 

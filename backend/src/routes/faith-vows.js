@@ -3,6 +3,14 @@ const router = express.Router();
 const db = require('../db/connection');
 const { authenticate } = require('../middleware/auth');
 
+// Campos de controlo usados pela Oração Mundial. A migração é idempotente.
+(async () => {
+  try {
+    await db.query('ALTER TABLE pastor_prayer_sessions ADD COLUMN IF NOT EXISTS chat_enabled BOOLEAN DEFAULT true');
+    await db.query('ALTER TABLE pastor_prayer_sessions ADD COLUMN IF NOT EXISTS vow_enabled BOOLEAN DEFAULT false');
+  } catch (error) { console.error('Prayer controls migration:', error.message); }
+})();
+
 async function pastorChurch(userId) {
   return db.prepare('SELECT id, name FROM churches WHERE pastor_id = ?').get(userId);
 }
