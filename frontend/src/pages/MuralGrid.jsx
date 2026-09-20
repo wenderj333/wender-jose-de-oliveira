@@ -780,7 +780,16 @@ function DailySurpriseBoxes({ onPublish, publishing }) {
     hope: '/caixas-da-fe/assets/blue-box-closed.webp',
     guidance: '/caixas-da-fe/assets/lilac-box-closed.webp'
   };
-  const share = async () => { if (!message) return; const body = `${verseText}\n— ${verseRef}\nSigo com Fé`; try { if (navigator.share) await navigator.share({ title: 'Palavra do dia', text: body }); else await navigator.clipboard.writeText(body); } catch (_) {} };
+  const share = async () => {
+    if (!message) return;
+    const inviteUrl = 'https://www.sigocomfe.com/register?utm_source=daily_word&utm_medium=share&utm_campaign=word_of_the_day';
+    const body = `${verseText}\n— ${verseRef}\n\nRecebi esta Palavra no Sigo com Fé. Entre gratuitamente: ${inviteUrl}`;
+    try {
+      if (navigator.share) await navigator.share({ title: 'Palavra do dia — Sigo com Fé', text: body, url: inviteUrl });
+      else await navigator.clipboard.writeText(body);
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') window.gtag('event', 'share', { method: navigator.share ? 'native_share' : 'copy_link', content_type: 'daily_word' });
+    } catch (_) {}
+  };
   const publish = () => onPublish?.({ content: `“${verseText}”\n— ${verseRef}` });
   const showingMessage = message && !showBoxes;
   const faithMotion = `.sf-faith-gift{position:relative;display:flex;flex-direction:column;align-items:center;overflow:visible;min-height:128px!important;padding:11px 8px 9px!important;background:linear-gradient(155deg,#fffefb,#f7fbff)!important;border:1px solid #d8e5da!important;box-shadow:0 7px 18px rgba(49,91,72,.11)!important;transition:transform .2s,box-shadow .2s}.sf-faith-gift:hover:not(:disabled){transform:translateY(-4px);box-shadow:0 12px 23px rgba(49,91,72,.18)!important}.sf-faith-gift img{width:72px;height:72px;object-fit:contain;margin:-5px 0 1px;filter:drop-shadow(0 7px 6px rgba(60,75,96,.18));transition:transform .35s}.sf-faith-gift.is-opening img{transform:translateY(-8px) rotate(-3deg) scale(1.06)}.sf-faith-gift strong{color:#244f43!important;font-size:11px!important}.sf-faith-gift small{color:#668178!important;font-size:10px!important}@media(max-width:600px){.sf-faith-gift{min-height:111px!important;padding:7px 3px!important}.sf-faith-gift img{width:58px;height:58px}.sf-faith-gift strong{font-size:9px!important}.sf-faith-gift small{display:none!important}}@media(prefers-reduced-motion:reduce){.sf-faith-gift,.sf-faith-gift img{transition:none!important}}`;
