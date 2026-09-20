@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { HeartHandshake, Radio, Users, MessageCircle, HandHeart, X, Sparkles, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useWebSocket } from '../context/WebSocketContext';
 
@@ -18,9 +19,21 @@ const DEMO_CHURCHES = [
   { id: 'demo-fonte', church_name: 'Igreja Fonte de Vida', pastor_name: 'Equipe de oração', prayer_focus: 'Jovens e cidades', viewer_count: 24, activity: 79, is_demo: true },
 ];
 
+const PLAZA_COPY = {
+  pt: { title: 'Oração Mundial', intro: 'Igrejas de diferentes lugares orando juntas pelas pessoas. Toque numa igreja para conhecer o seu momento de oração.', praying: 'em oração agora', touch: 'Toque numa bolha para participar', demo: '3 igrejas de demonstração para conhecer a praça', request: 'Pedir oração', chat: 'Chat de oração', start: 'Minha igreja vai orar', stop: 'Terminar minha oração', example: 'Exemplo de igreja na praça', live: 'AO VIVO', demoLabel: 'DEMONSTRAÇÃO' },
+  es: { title: 'Oración Mundial', intro: 'Iglesias de distintos lugares orando juntas por las personas. Toca una iglesia para conocer su momento de oración.', praying: 'iglesias orando ahora', touch: 'Toca una esfera para participar', demo: '3 iglesias de demostración para conocer la plaza', request: 'Pedir oración', chat: 'Chat de oración', start: 'Mi iglesia va a orar', stop: 'Terminar mi oración', example: 'Ejemplo de iglesia en la plaza', live: 'EN VIVO', demoLabel: 'DEMOSTRACIÓN' },
+  en: { title: 'World Prayer', intro: 'Churches from different places praying together for people. Tap a church to learn about its prayer moment.', praying: 'churches praying now', touch: 'Tap a bubble to join', demo: '3 demo churches to explore the plaza', request: 'Request prayer', chat: 'Prayer chat', start: 'My church will pray', stop: 'End my prayer', example: 'Example church in the plaza', live: 'LIVE', demoLabel: 'DEMONSTRATION' },
+  de: { title: 'Weltgebet', intro: 'Gemeinden aus verschiedenen Orten beten gemeinsam für Menschen. Tippe auf eine Gemeinde, um ihren Gebetsmoment kennenzulernen.', praying: 'Gemeinden beten jetzt', touch: 'Tippe auf eine Kugel, um teilzunehmen', demo: '3 Beispielgemeinden zum Kennenlernen', request: 'Gebet erbitten', chat: 'Gebetschat', start: 'Meine Gemeinde betet', stop: 'Mein Gebet beenden', example: 'Beispielgemeinde auf dem Platz', live: 'LIVE', demoLabel: 'DEMONSTRATION' },
+  fr: { title: 'Prière Mondiale', intro: 'Des églises de différents lieux prient ensemble pour les personnes. Touchez une église pour découvrir son temps de prière.', praying: 'églises en prière maintenant', touch: 'Touchez une bulle pour participer', demo: '3 églises de démonstration à découvrir', request: 'Demander la prière', chat: 'Chat de prière', start: 'Mon église va prier', stop: 'Terminer ma prière', example: 'Exemple d’église sur la place', live: 'EN DIRECT', demoLabel: 'DÉMONSTRATION' },
+  ro: { title: 'Rugăciune Mondială', intro: 'Biserici din locuri diferite se roagă împreună pentru oameni. Atinge o biserică pentru a-i cunoaște momentul de rugăciune.', praying: 'biserici se roagă acum', touch: 'Atinge o bulă pentru a participa', demo: '3 biserici demonstrative pentru a cunoaște piața', request: 'Cere rugăciune', chat: 'Chat de rugăciune', start: 'Biserica mea se va ruga', stop: 'Încheie rugăciunea mea', example: 'Exemplu de biserică în piață', live: 'LIVE', demoLabel: 'DEMONSTRAȚIE' },
+  ru: { title: 'Мировая молитва', intro: 'Церкви из разных мест молятся вместе за людей. Нажмите на церковь, чтобы узнать о её молитве.', praying: 'церквей молятся сейчас', touch: 'Нажмите на сферу, чтобы участвовать', demo: '3 демонстрационные церкви для знакомства', request: 'Попросить молитву', chat: 'Молитвенный чат', start: 'Моя церковь будет молиться', stop: 'Завершить мою молитву', example: 'Пример церкви на площади', live: 'В ЭФИРЕ', demoLabel: 'ДЕМОНСТРАЦИЯ' },
+};
+
 export default function PrayerPlaza() {
   const { user, token } = useAuth();
+  const { i18n } = useTranslation();
   const { liveSessions = [], totalChurchesPraying = 0, send, on, off } = useWebSocket();
+  const mapRef = useRef(null);
   const [selected, setSelected] = useState(null);
   const [mySessionId, setMySessionId] = useState(null);
   const [focus, setFocus] = useState('');
@@ -32,6 +45,10 @@ export default function PrayerPlaza() {
   const [requestStatus, setRequestStatus] = useState('');
   const isLeader = ['pastor', 'admin'].includes(user?.role);
   const active = useMemo(() => liveSessions.map((session, index) => ({ ...session, activity: activityFor(session, index) })), [liveSessions]);
+  const visibleSessions = active.length ? active : DEMO_CHURCHES;
+  const [bubblePositions, setBubblePositions] = useState([]);
+  const language = (i18n.resolvedLanguage || i18n.language || 'pt').split('-')[0];
+  const copy = PLAZA_COPY[language] || PLAZA_COPY.pt;
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -58,7 +75,65 @@ export default function PrayerPlaza() {
     if (!user?.churchId && !user?.church_id) return window.alert('Primeiro cria ou associa a tua igreja na Sala do Pastor.');
     send({ type: 'pastor_start_praying', pastorId: user.id, churchId: user.churchId || user.church_id, churchName: user.church_name || 'Minha igreja', pastorName: user.full_name, prayerFocus: focus });
   };
-  const visibleSessions = active.length ? active : DEMO_CHURCHES;
+  useEffect(() => {
+    const arena = mapRef.current;
+    if (!arena || !visibleSessions.length) return undefined;
+
+    const rect = arena.getBoundingClientRect();
+    const width = Math.max(320, rect.width);
+    const height = Math.max(420, rect.height);
+    const bubbles = visibleSessions.map((session, index) => {
+      const naturalRadius = (128 + Math.min(62, session.activity || 50)) / 2;
+      const radius = Math.min(naturalRadius, width < 700 ? 61 : 95);
+      return {
+        radius,
+        x: radius + ((index * 173 + 75) % Math.max(1, width - radius * 2)),
+        y: radius + ((index * 137 + 68) % Math.max(1, height - radius * 2 - 76)),
+        vx: (index % 2 ? -1 : 1) * (36 + index * 7),
+        vy: (index % 3 ? 1 : -1) * (28 + index * 9),
+      };
+    });
+    let frame;
+    let previous = performance.now();
+    const tick = (now) => {
+      const dt = Math.min(0.035, (now - previous) / 1000);
+      previous = now;
+      bubbles.forEach((bubble) => {
+        bubble.x += bubble.vx * dt;
+        bubble.y += bubble.vy * dt;
+        if (bubble.x - bubble.radius < 0 || bubble.x + bubble.radius > width) {
+          bubble.vx *= -1;
+          bubble.x = Math.max(bubble.radius, Math.min(width - bubble.radius, bubble.x));
+        }
+        if (bubble.y - bubble.radius < 0 || bubble.y + bubble.radius > height - 76) {
+          bubble.vy *= -1;
+          bubble.y = Math.max(bubble.radius, Math.min(height - 76 - bubble.radius, bubble.y));
+        }
+      });
+      for (let a = 0; a < bubbles.length; a += 1) {
+        for (let b = a + 1; b < bubbles.length; b += 1) {
+          const first = bubbles[a]; const second = bubbles[b];
+          const dx = second.x - first.x; const dy = second.y - first.y;
+          const distance = Math.hypot(dx, dy) || 1;
+          const minimum = first.radius + second.radius;
+          if (distance >= minimum) continue;
+          const nx = dx / distance; const ny = dy / distance;
+          const closingSpeed = (first.vx - second.vx) * nx + (first.vy - second.vy) * ny;
+          if (closingSpeed > 0) {
+            first.vx -= closingSpeed * nx; first.vy -= closingSpeed * ny;
+            second.vx += closingSpeed * nx; second.vy += closingSpeed * ny;
+          }
+          const separation = (minimum - distance) / 2 + 0.5;
+          first.x -= nx * separation; first.y -= ny * separation;
+          second.x += nx * separation; second.y += ny * separation;
+        }
+      }
+      setBubblePositions(bubbles.map(({ x, y, radius }) => ({ x, y, radius })));
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [visibleSessions]);
   const openRequest = (churchIds) => {
     if (!user) return window.alert('Entra na tua conta para enviar um pedido de oração.');
     setRequestTargets(churchIds.filter(Boolean)); setRequestStatus(''); setShowRequest(true);
@@ -80,27 +155,28 @@ export default function PrayerPlaza() {
     <div className="prayer-plaza">
       <section className="prayer-plaza__hero">
         <span><Sparkles size={17}/> Sigo com Fé · unidos em oração</span>
-        <h1>Oração Mundial</h1>
-        <p>Igrejas de diferentes lugares orando juntas pelas pessoas. Toque numa igreja para conhecer o seu momento de oração.</p>
-        <div className="prayer-plaza__stats"><strong><Radio size={18}/> {totalChurchesPraying} igreja{totalChurchesPraying === 1 ? '' : 's'} em oração agora</strong><span><Users size={18}/> {active.length ? 'Toque numa bolha para participar' : '3 igrejas de demonstração para conhecer a praça'}</span></div>
+        <h1>{copy.title}</h1>
+        <p>{copy.intro}</p>
+        <div className="prayer-plaza__stats"><strong><Radio size={18}/> {totalChurchesPraying} {copy.praying}</strong><span><Users size={18}/> {active.length ? copy.touch : copy.demo}</span></div>
       </section>
 
-      <section className="prayer-plaza__map" aria-label="Igrejas orando agora">
-        <div className="prayer-plaza__legend"><span className="low"/> oração iniciada <span className="mid"/> participação a crescer <span className="high"/> muita atividade</div>
+      <section className="prayer-plaza__map" ref={mapRef} aria-label={copy.praying}>
+        <div className="prayer-plaza__legend"><span className="low"/> {language === 'ro' ? 'rugăciune începută' : 'oração iniciada'} <span className="mid"/> {language === 'ro' ? 'participare în creștere' : 'participação a crescer'} <span className="high"/> {language === 'ro' ? 'activitate intensă' : 'muita atividade'}</div>
         {visibleSessions.map((session, index) => {
-          const size = 128 + Math.min(62, session.activity);
-          const position = [{ left: '8%', top: '15%' }, { left: '58%', top: '12%' }, { left: '31%', top: '43%' }, { left: '70%', top: '52%' }, { left: '12%', top: '67%' }][index % 5];
+          const position = bubblePositions[index];
+          const size = position ? position.radius * 2 : 128 + Math.min(62, session.activity);
           const color = session.activity > 78 ? 'high' : session.activity > 58 ? 'mid' : 'low';
-          return <button key={session.id} className={`prayer-plaza__bubble ${color}`} onClick={() => setSelected(session)} style={{ ...position, width: size, height: size }}>
-            <span className="prayer-plaza__pulse"/><Radio size={20}/><b>{session.church_name || session.churchName || 'Igreja em oração'}</b><small>{session.is_demo ? 'Exemplo de igreja na praça' : `${session.viewer_count || 0} a orar junto`}</small><em>{session.is_demo ? 'DEMONSTRAÇÃO' : 'AO VIVO'}</em>
+          const style = position ? { left: 0, top: 0, width: size, height: size, transform: `translate3d(${position.x - position.radius}px, ${position.y - position.radius}px, 0)` } : { left: `${12 + index * 22}%`, top: `${15 + index * 15}%`, width: size, height: size };
+          return <button key={session.id} className={`prayer-plaza__bubble ${color}`} onClick={() => setSelected(session)} style={style}>
+            <span className="prayer-plaza__pulse"/><Radio size={20}/><b>{session.church_name || session.churchName || 'Igreja em oração'}</b><small>{session.is_demo ? copy.example : `${session.viewer_count || 0} a orar junto`}</small><em>{session.is_demo ? copy.demoLabel : copy.live}</em>
           </button>;
         })}
       </section>
 
       <section className="prayer-plaza__actions">
-        <button onClick={() => active.length ? openRequest(active.map(session => session.church_id || session.churchId)) : window.alert('Quando uma igreja real iniciar uma oração, poderá enviar o seu pedido diretamente para ela.')}><HeartHandshake size={22}/><span><b>Pedir oração</b><small>{active.length ? 'Envia a todas as igrejas que estão a orar agora.' : 'Disponível assim que uma igreja real estiver em oração.'}</small></span></button>
-        <Link to="/comunidade-ao-vivo"><MessageCircle size={22}/><span><b>Chat de oração</b><small>Conversa, agradece e apoia a comunidade.</small></span></Link>
-        {isLeader && <button onClick={mySessionId ? () => send({ type: 'pastor_stop_praying', sessionId: mySessionId }) : start}><Radio size={22}/><span><b>{mySessionId ? 'Terminar minha oração' : 'Minha igreja vai orar'}</b><small>Faz a tua igreja aparecer na praça.</small></span></button>}
+        <button onClick={() => active.length ? openRequest(active.map(session => session.church_id || session.churchId)) : window.alert('Quando uma igreja real iniciar uma oração, poderá enviar o seu pedido diretamente para ela.')}><HeartHandshake size={22}/><span><b>{copy.request}</b><small>{active.length ? 'Envia a todas as igrejas que estão a orar agora.' : 'Disponível assim que uma igreja real estiver em oração.'}</small></span></button>
+        <Link to="/comunidade-ao-vivo"><MessageCircle size={22}/><span><b>{copy.chat}</b><small>Conversa, agradece e apoia a comunidade.</small></span></Link>
+        {isLeader && <button onClick={mySessionId ? () => send({ type: 'pastor_stop_praying', sessionId: mySessionId }) : start}><Radio size={22}/><span><b>{mySessionId ? copy.stop : copy.start}</b><small>Faz a tua igreja aparecer na praça.</small></span></button>}
       </section>
 
       {isLeader && !mySessionId && <div className="prayer-plaza__leader"><label>Foco da oração (opcional)</label><input value={focus} onChange={(e) => setFocus(e.target.value)} placeholder="Ex.: famílias, saúde, cidade..."/></div>}
