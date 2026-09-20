@@ -945,6 +945,24 @@ export default function MuralGrid() {
   };
   const welcome = welcomeCopy[currentLanguage] || welcomeCopy.pt;
   const dismissWelcome = () => { localStorage.setItem('sigo_welcome_seen', '1'); setShowWelcome(false); };
+  const inviteFriends = async () => {
+    const url = 'https://www.sigocomfe.com/register';
+    const text = 'Encontrei uma comunidade cristã gratuita para oração, Bíblia, amizade e jogos bíblicos. Vem comigo no Sigo com Fé.';
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Sigo com Fé', text, url });
+      } else {
+        await navigator.clipboard.writeText(`${text}\n${url}`);
+        setActionError('Convite copiado. Agora envie para os seus amigos.');
+        window.setTimeout(() => setActionError(''), 3500);
+      }
+      trackMuralAction('invite_friend');
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') window.gtag('event', 'share', { method: navigator.share ? 'native_share' : 'copy_link', content_type: 'community_invite' });
+    } catch (error) {
+      // Cancelar a janela de partilha não é um erro para a pessoa.
+      if (error?.name !== 'AbortError') setActionError('Não foi possível preparar o convite. Tente novamente.');
+    }
+  };
 
   // Informação clara para o Google e para quem partilha esta página.
   useEffect(() => {
@@ -1296,6 +1314,14 @@ export default function MuralGrid() {
           <button type="button" onClick={() => { window.location.href='/duelo-biblico'; }} style={{ border:'1px solid #efd49a', borderRadius:10, padding:'8px 10px', background:'#fffaf0', color:'#92600d', fontWeight:800, cursor:'pointer', fontSize:12 }}><Play size={14} style={{ verticalAlign:'middle', marginRight:5 }}/>{welcome.duel}</button>
           <button type="button" aria-label={welcome.close} onClick={dismissWelcome} style={{ border:0, background:'transparent', color:'#78698a', cursor:'pointer', padding:3 }}><X size={17}/></button>
         </div>
+      </section>}
+
+      {user && <section style={{ marginBottom:16, padding:'14px 16px', borderRadius:16, background:'linear-gradient(135deg,#f5fbf6,#f7f2ff)', border:'1px solid #dce9dc', display:'flex', gap:14, alignItems:'center', justifyContent:'space-between', flexWrap:'wrap' }}>
+        <div style={{ minWidth:220, flex:'1 1 300px' }}>
+          <strong style={{ display:'block', color:'#315b44', fontSize:15 }}>Convide alguém para caminhar com você</strong>
+          <span style={{ display:'block', marginTop:4, color:'#68756f', fontSize:13, lineHeight:1.45 }}>Partilhe a comunidade com um amigo, grupo de oração ou igreja. A conta é gratuita.</span>
+        </div>
+        <button type="button" onClick={inviteFriends} style={{ border:0, borderRadius:11, padding:'10px 14px', background:'#356649', color:'#fff', fontWeight:800, cursor:'pointer', fontSize:13, display:'inline-flex', alignItems:'center', gap:7 }}><Share2 size={16}/>Convidar amigos</button>
       </section>}
 
       {showMuralMenu && <section aria-label="Menu do Mural" style={{ marginBottom:16, padding:14, borderRadius:16, background:'#fff', border:'1px solid #e0e9e1', boxShadow:'0 8px 22px rgba(45,74,56,.08)' }}>

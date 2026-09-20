@@ -11,6 +11,8 @@ Allow: /mural
 Allow: /grupos-oracao
 Allow: /chat-cristao
 Allow: /duelo-biblico
+Allow: /guardiao-da-palavra
+Allow: /quiz-sigo-com-fe
 Allow: /praca-oracao
 Allow: /consagracao
 Allow: /jejum-mundial
