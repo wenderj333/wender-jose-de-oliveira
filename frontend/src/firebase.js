@@ -19,6 +19,9 @@ export const auth = getAuth(app);
 // If local storage is unavailable, Firebase will still use its default mode.
 setPersistence(auth, browserLocalPersistence).catch(() => {});
 export const googleProvider = new GoogleAuthProvider();
+// Mesmo quando o navegador já tem uma conta Google ativa, deixe a pessoa
+// escolher a conta certa para não entrar por engano na conta anterior.
+googleProvider.setCustomParameters({ prompt: 'select_account' });
 export const facebookProvider = new FacebookAuthProvider();
 export let messaging = null;
 let messagingServiceWorker = null;
