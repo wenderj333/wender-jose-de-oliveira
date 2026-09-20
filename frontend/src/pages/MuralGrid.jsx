@@ -853,7 +853,8 @@ function GratitudeChallenge({ user, onShare }) {
     try { return JSON.parse(localStorage.getItem(storageKey)) || { completed: [], shared: [] }; }
     catch (_) { return { completed: [], shared: [] }; }
   });
-  const [collapsed, setCollapsed] = useState(() => localStorage.getItem(collapseKey) === 'true');
+  // O desafio começa pequeno para não ocupar o Mural. A pessoa abre apenas se quiser.
+  const [collapsed, setCollapsed] = useState(() => localStorage.getItem(collapseKey) !== 'false');
   const today = new Date().toISOString().slice(0, 10);
   const completedToday = state.completed.includes(today);
   const dayIndex = completedToday ? Math.max(0, state.completed.length - 1) : Math.min(state.completed.length, 6);
@@ -921,6 +922,14 @@ export default function MuralGrid() {
   };
   const [showForm, setShowForm] = useState(false);
   const [showMuralMenu, setShowMuralMenu] = useState(false);
+  useEffect(() => {
+    // Ao voltar ao Mural pelo botão do navegador ou ao reabrir o app,
+    // a página pode ser restaurada da memória com o menu antigo visível.
+    // Fechamos-o para a entrada ficar sempre limpa.
+    const closeRestoredMenu = () => setShowMuralMenu(false);
+    window.addEventListener('pageshow', closeRestoredMenu);
+    return () => window.removeEventListener('pageshow', closeRestoredMenu);
+  }, []);
   const [postText, setPostText] = useState('');
   const [postVisibility, setPostVisibility] = useState('public');
   const [postCategory, setPostCategory] = useState('testemunho');
