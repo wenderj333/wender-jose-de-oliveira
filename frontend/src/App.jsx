@@ -98,6 +98,7 @@ import Kids from "./pages/Kids";
 import BiblicalFinance from "./pages/BiblicalFinance";
 
 import Offerings from "./pages/Offerings";
+import FaithVows from "./pages/FaithVows";
 
 import Friends from "./pages/Friends";
 
@@ -971,6 +972,7 @@ export default function App() {
             <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
 
         <Route path="/dizimos" element={<Offerings />} />
+        <Route path="/votos-de-fe" element={<ProtectedRoute><FaithVows /></ProtectedRoute>} />
 
                     <Route path='/diario-com-deus' element={<DiarioComDeus />} />
 

@@ -194,6 +194,30 @@ CREATE TABLE tithes (
 
 CREATE INDEX idx_tithes_church ON tithes(church_id, created_at DESC);
 
+-- ============ VOTOS DE FÉ ============
+CREATE TABLE faith_vows (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  church_id UUID NOT NULL REFERENCES churches(id) ON DELETE CASCADE,
+  created_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(160) NOT NULL,
+  message TEXT NOT NULL,
+  bible_verse TEXT,
+  closes_at TIMESTAMPTZ,
+  status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'closed')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE TABLE faith_vow_responses (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  vow_id UUID NOT NULL REFERENCES faith_vows(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  status VARCHAR(20) NOT NULL CHECK (status IN ('accepted', 'declined')),
+  pledge_amount DECIMAL(12,2),
+  currency CHAR(3) DEFAULT 'BRL',
+  responded_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(vow_id, user_id)
+);
+
 -- ============ NOVOS CONVERTIDOS ============
 CREATE TABLE new_converts (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

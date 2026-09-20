@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Bell, CheckCircle, XCircle, Info, Trash, MessageCircle } from 'lucide-react';
+import { Bell, CheckCircle, XCircle, Info, Trash, MessageCircle, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const API = (import.meta.env.VITE_API_URL || '') + '/api';
@@ -27,6 +27,7 @@ const NotificationIcon = ({ type }) => {
     case 'new_help_request': return <Info size={20} color="#3498db" />;
     case 'new_direct_message': return <MessageCircle size={20} color="#4caf50" />;
     case 'message': return <MessageCircle size={20} color="#4caf50" />;
+    case 'faith_vow': return <Mail size={20} color="#bd8a12" />;
     // Add more types here
     default: return <Bell size={20} color="#daa520" />;
   }
@@ -97,6 +98,8 @@ export default function NotificationsPage() {
       case 'prayer':
       case 'new_help_request':
         return '/pedidos-ajuda';
+      case 'faith_vow':
+        return '/votos-de-fe';
       default: 
         return '#';
     }

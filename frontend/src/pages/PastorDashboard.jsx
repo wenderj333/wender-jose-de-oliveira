@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import { ShieldCheck, Users, Heart, BookOpen, MessageCircle, DollarSign, Calendar, ArrowLeft, Megaphone, HandHeart, BarChart3, Settings, Plus, Send, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
+import { ShieldCheck, Users, Heart, BookOpen, MessageCircle, DollarSign, Calendar, ArrowLeft, Megaphone, HandHeart, BarChart3, Settings, Plus, Send, ChevronDown, ChevronUp, Trash2, Mail } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'degxiuf43';
@@ -120,7 +120,8 @@ function PastorDashboard() {
     { id: 'comunicados', label: 'Comunicados', Ico: Megaphone },
     { id: 'agenda', label: 'Agenda', Ico: Calendar },
     { id: 'estudos', label: 'Estudos', Ico: BookOpen },
-    { id: 'dizimos', label: 'Registos', Ico: DollarSign },
+    { id: 'dizimos', label: 'Dízimos e Ofertas', Ico: DollarSign },
+    { id: 'votos-fe', label: 'Votos de Fé', Ico: Mail },
     { id: 'despesas', label: 'Despesas', Ico: Settings },
     { id: 'relatorios', label: 'Relatórios', Ico: BarChart3 },
   ];
@@ -128,6 +129,7 @@ function PastorDashboard() {
   const handleSection = (id) => {
     if (id === 'oracoes') return setSection('oracoes');
     if (id === 'chat') return navigate('/chat-pastoral');
+    if (id === 'votos-fe') return navigate('/votos-de-fe');
     setSection(id);
   };
 

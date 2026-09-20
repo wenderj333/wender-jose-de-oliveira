@@ -273,6 +273,33 @@ const { Pool: MigratePool } = require('pg');
         created_at TIMESTAMPTZ DEFAULT NOW()
       )
     `);
+    // Votos de Fé: compromissos voluntários, sem cobrança automática
+    await mp.query(`
+      CREATE TABLE IF NOT EXISTS faith_vows (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        church_id UUID NOT NULL REFERENCES churches(id) ON DELETE CASCADE,
+        created_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        title VARCHAR(160) NOT NULL,
+        message TEXT NOT NULL,
+        bible_verse TEXT,
+        closes_at TIMESTAMPTZ,
+        status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'closed')),
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+      CREATE TABLE IF NOT EXISTS faith_vow_responses (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        vow_id UUID NOT NULL REFERENCES faith_vows(id) ON DELETE CASCADE,
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        status VARCHAR(20) NOT NULL CHECK (status IN ('accepted', 'declined')),
+        pledge_amount DECIMAL(12,2),
+        currency CHAR(3) DEFAULT 'BRL',
+        responded_at TIMESTAMPTZ DEFAULT NOW(),
+        updated_at TIMESTAMPTZ DEFAULT NOW(),
+        UNIQUE(vow_id, user_id)
+      );
+      CREATE INDEX IF NOT EXISTS idx_faith_vows_church ON faith_vows(church_id, created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_faith_vow_responses_vow ON faith_vow_responses(vow_id);
+    `);
     // Groups
     await mp.query(`
       CREATE TABLE IF NOT EXISTS groups (
@@ -535,6 +562,7 @@ app.use('/api/groups', require('./routes/groups'));
 app.use('/api/consecration', require('./routes/consecration'));
 app.use('/api/notifications', require('./routes/notifications').router);
 app.use('/api/offerings', require('./routes/offerings'));
+app.use('/api/faith-vows', require('./routes/faith-vows'));
 app.use('/api/pastor', require('./routes/pastor-dashboard'));
 app.use('/api/journeys', require('./routes/journeys'));
 app.use('/api/course', require('./routes/course'));
