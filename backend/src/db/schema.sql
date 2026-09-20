@@ -168,6 +168,10 @@ CREATE TABLE pastor_prayer_sessions (
   is_live BOOLEAN DEFAULT true,
   viewer_count INT DEFAULT 0,
   prayer_focus TEXT,
+  campaign_name TEXT,
+  campaign_day INT,
+  campaign_total INT,
+  live_url TEXT,
   duration_minutes INT
 );
 

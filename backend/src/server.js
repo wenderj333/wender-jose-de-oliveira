@@ -222,11 +222,19 @@ const { Pool: MigratePool } = require('pg');
         is_live BOOLEAN DEFAULT true,
         viewer_count INT DEFAULT 0,
         prayer_focus TEXT,
+        campaign_name TEXT,
+        campaign_day INT,
+        campaign_total INT,
+        live_url TEXT,
         duration_minutes INT
       );
     `);
     // Add is_private column to users
     await mp.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_private BOOLEAN DEFAULT false`);
+    await mp.query(`ALTER TABLE pastor_prayer_sessions ADD COLUMN IF NOT EXISTS campaign_name TEXT`);
+    await mp.query(`ALTER TABLE pastor_prayer_sessions ADD COLUMN IF NOT EXISTS campaign_day INT`);
+    await mp.query(`ALTER TABLE pastor_prayer_sessions ADD COLUMN IF NOT EXISTS campaign_total INT`);
+    await mp.query(`ALTER TABLE pastor_prayer_sessions ADD COLUMN IF NOT EXISTS live_url TEXT`);
     // Direct messages table
     await mp.query(`
       CREATE TABLE IF NOT EXISTS direct_messages (

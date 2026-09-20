@@ -127,10 +127,15 @@ function setupWebSocket(server) {
           }
 
           case 'pastor_start_praying':
+            const liveUrl = typeof msg.liveUrl === 'string' && /^https?:\/\//i.test(msg.liveUrl.trim()) ? msg.liveUrl.trim() : '';
             const session = await PastorSession.startSession(
               msg.pastorId,
               msg.churchId,
-              msg.prayerFocus || ''
+              msg.prayerFocus || '',
+              msg.campaignName || '',
+              Number.isInteger(Number(msg.campaignDay)) ? Number(msg.campaignDay) : null,
+              Number.isInteger(Number(msg.campaignTotal)) ? Number(msg.campaignTotal) : null,
+              liveUrl
             );
             // Broadcast to all clients
             broadcast(wss, {
@@ -143,6 +148,10 @@ function setupWebSocket(server) {
                 churchName: msg.churchName,
                 pastorName: msg.pastorName,
                 prayerFocus: msg.prayerFocus,
+                campaignName: msg.campaignName || '',
+                campaignDay: Number.isInteger(Number(msg.campaignDay)) ? Number(msg.campaignDay) : null,
+                campaignTotal: Number.isInteger(Number(msg.campaignTotal)) ? Number(msg.campaignTotal) : null,
+                liveUrl,
                 startedAt: session.started_at,
               },
               totalChurchesPraying: await PastorSession.getLiveCount(),
