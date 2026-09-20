@@ -525,6 +525,13 @@ export default function App() {
 
     <div className="app-container">
       <RegistrationPromptPopup isOpen={Boolean(user && !user.avatar_url && !user.photoURL)} required />
+      {iosInstall && showInstall && (
+        <section role="dialog" aria-label="Instalar Sigo com Fé no iPhone" style={{ position:'fixed', left:14, right:14, bottom:82, zIndex:450, maxWidth:520, margin:'0 auto', padding:'15px 16px', borderRadius:17, background:'linear-gradient(135deg,#356649,#5f8a68)', color:'#fff', boxShadow:'0 16px 38px rgba(32,66,43,.28)', border:'1px solid rgba(255,255,255,.25)' }}>
+          <strong style={{ display:'block', fontSize:15, marginBottom:5 }}>📲 Instalar no iPhone</strong>
+          <p style={{ margin:'0 0 11px', fontSize:13, lineHeight:1.45, color:'rgba(255,255,255,.92)' }}>No Safari, toque em <b>Partilhar ⤴</b> e depois em <b>Adicionar ao ecrã principal</b>. Não precisa descarregar APK.</p>
+          <button type="button" onClick={() => setShowInstall(false)} style={{ border:0, borderRadius:9, padding:'8px 12px', background:'#fff', color:'#315b44', fontWeight:800, cursor:'pointer', fontSize:13 }}>Entendi</button>
+        </section>
+      )}
       {notificationToast && <button type="button" role="alert" onClick={() => { navigate(notificationToast.to); setNotificationToast(null); }} style={{position:'fixed',top:76,right:18,zIndex:500,maxWidth:'min(360px,calc(100vw - 36px))',padding:'12px 16px',borderRadius:14,border:'1px solid #d7c6ef',background:'#fff',color:'#2f2141',boxShadow:'0 12px 30px rgba(45,24,72,.2)',fontWeight:700,fontSize:13,cursor:'pointer',textAlign:'left'}}>{notificationToast.text}</button>}
 
 
