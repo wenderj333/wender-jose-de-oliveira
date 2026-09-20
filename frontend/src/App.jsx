@@ -668,7 +668,7 @@ export default function App() {
 
               ['/grupos', <Users size={20}/>, t('nav.groups', 'Grupos')],
 
-              ['/praca-oracao', <Heart size={20}/>, t('nav.prayerPlaza', 'Praça Mundial de Oração')],
+              ['/praca-oracao', <Heart size={20}/>, t('nav.prayerPlaza', 'Oração Mundial')],
 
               ['/consagracao', <PlayCircle size={20}/>, t('nav.consecration', 'Consagração e Jejum')],
 
@@ -793,7 +793,7 @@ export default function App() {
 
             <Link to="/" className={isActive('/')}><Home size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.mural','Mural')}</span></Link>
 
-            <Link to="/praca-oracao" className={isActive('/praca-oracao') || isActive('/praca-de-oracao')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayerPlaza','Praça Mundial de Oração')}</span></Link>
+            <Link to="/praca-oracao" className={isActive('/praca-oracao') || isActive('/praca-de-oracao')}><Heart size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.prayerPlaza','Oração Mundial')}</span></Link>
 
             <Link to="/consagracao" className={isActive('/consagracao')}><PlayCircle size={17}/><span className="nav-text" style={{marginLeft:10}}>{t('nav.consecration','Consagração')}</span></Link>
 

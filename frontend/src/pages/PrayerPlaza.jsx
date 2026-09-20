@@ -10,6 +10,14 @@ const activityFor = (session, index) => {
   return Math.min(100, 40 + viewers * 9 + Math.min(25, minutes));
 };
 
+// Exemplos visuais: não são igrejas reais, não recebem pedidos e desaparecem
+// assim que houver uma sessão real de oração em andamento.
+const DEMO_CHURCHES = [
+  { id: 'demo-esperanca', church_name: 'Igreja Esperança Viva', pastor_name: 'Equipe de oração', prayer_focus: 'Famílias e esperança', viewer_count: 18, activity: 62, is_demo: true },
+  { id: 'demo-caminho', church_name: 'Comunidade Caminho de Luz', pastor_name: 'Equipe de oração', prayer_focus: 'Paz e saúde', viewer_count: 11, activity: 54, is_demo: true },
+  { id: 'demo-fonte', church_name: 'Igreja Fonte de Vida', pastor_name: 'Equipe de oração', prayer_focus: 'Jovens e cidades', viewer_count: 24, activity: 79, is_demo: true },
+];
+
 export default function PrayerPlaza() {
   const { user, token } = useAuth();
   const { liveSessions = [], totalChurchesPraying = 0, send, on, off } = useWebSocket();
@@ -29,8 +37,8 @@ export default function PrayerPlaza() {
     const previousTitle = document.title;
     const description = document.querySelector('meta[name="description"]');
     const previousDescription = description?.getAttribute('content');
-    document.title = 'Praça de Oração | Sigo com Fé';
-    if (description) description.setAttribute('content', 'Entre na Praça de Oração do Sigo com Fé: faça pedidos, ore com a comunidade e acompanhe momentos de oração ao vivo.');
+    document.title = 'Oração Mundial | Sigo com Fé';
+    if (description) description.setAttribute('content', 'Entre na Oração Mundial do Sigo com Fé: faça pedidos, ore com a comunidade e acompanhe momentos de oração ao vivo.');
     return () => {
       document.title = previousTitle;
       if (description && previousDescription) description.setAttribute('content', previousDescription);
@@ -50,6 +58,7 @@ export default function PrayerPlaza() {
     if (!user?.churchId && !user?.church_id) return window.alert('Primeiro cria ou associa a tua igreja na Sala do Pastor.');
     send({ type: 'pastor_start_praying', pastorId: user.id, churchId: user.churchId || user.church_id, churchName: user.church_name || 'Minha igreja', pastorName: user.full_name, prayerFocus: focus });
   };
+  const visibleSessions = active.length ? active : DEMO_CHURCHES;
   const openRequest = (churchIds) => {
     if (!user) return window.alert('Entra na tua conta para enviar um pedido de oração.');
     setRequestTargets(churchIds.filter(Boolean)); setRequestStatus(''); setShowRequest(true);
@@ -72,33 +81,31 @@ export default function PrayerPlaza() {
       <section className="prayer-plaza__hero">
         <span><Sparkles size={17}/> Sigo com Fé · unidos em oração</span>
         <h1>Oração Mundial</h1>
-        <p>Igrejas de diferentes lugares orando juntas pelas pessoas. Cada bolha é uma igreja numa sessão real de oração.</p>
-        <div className="prayer-plaza__stats"><strong><Radio size={18}/> {totalChurchesPraying} igreja{totalChurchesPraying === 1 ? '' : 's'} em oração agora</strong><span><Users size={18}/> Toque numa bolha para participar</span></div>
+        <p>Igrejas de diferentes lugares orando juntas pelas pessoas. Toque numa igreja para conhecer o seu momento de oração.</p>
+        <div className="prayer-plaza__stats"><strong><Radio size={18}/> {totalChurchesPraying} igreja{totalChurchesPraying === 1 ? '' : 's'} em oração agora</strong><span><Users size={18}/> {active.length ? 'Toque numa bolha para participar' : '3 igrejas de demonstração para conhecer a praça'}</span></div>
       </section>
 
       <section className="prayer-plaza__map" aria-label="Igrejas orando agora">
         <div className="prayer-plaza__legend"><span className="low"/> oração iniciada <span className="mid"/> participação a crescer <span className="high"/> muita atividade</div>
-        {active.length === 0 ? (
-          <div className="prayer-plaza__empty"><HandHeart size={48}/><h2>A praça está a aguardar a primeira igreja</h2><p>Quando um pastor iniciar uma oração, a igreja aparecerá aqui em verde.</p>{isLeader && <button onClick={start}><Radio size={18}/> Iniciar oração da minha igreja</button>}</div>
-        ) : active.map((session, index) => {
+        {visibleSessions.map((session, index) => {
           const size = 128 + Math.min(62, session.activity);
           const position = [{ left: '8%', top: '15%' }, { left: '58%', top: '12%' }, { left: '31%', top: '43%' }, { left: '70%', top: '52%' }, { left: '12%', top: '67%' }][index % 5];
           const color = session.activity > 78 ? 'high' : session.activity > 58 ? 'mid' : 'low';
           return <button key={session.id} className={`prayer-plaza__bubble ${color}`} onClick={() => setSelected(session)} style={{ ...position, width: size, height: size }}>
-            <span className="prayer-plaza__pulse"/><Radio size={20}/><b>{session.church_name || session.churchName || 'Igreja em oração'}</b><small>{session.viewer_count || 0} a orar junto</small><em>AO VIVO</em>
+            <span className="prayer-plaza__pulse"/><Radio size={20}/><b>{session.church_name || session.churchName || 'Igreja em oração'}</b><small>{session.is_demo ? 'Exemplo de igreja na praça' : `${session.viewer_count || 0} a orar junto`}</small><em>{session.is_demo ? 'DEMONSTRAÇÃO' : 'AO VIVO'}</em>
           </button>;
         })}
       </section>
 
       <section className="prayer-plaza__actions">
-        <button onClick={() => openRequest(active.map(session => session.church_id || session.churchId))}><HeartHandshake size={22}/><span><b>Pedir oração</b><small>Envia a todas as igrejas que estão a orar agora.</small></span></button>
+        <button onClick={() => active.length ? openRequest(active.map(session => session.church_id || session.churchId)) : window.alert('Quando uma igreja real iniciar uma oração, poderá enviar o seu pedido diretamente para ela.')}><HeartHandshake size={22}/><span><b>Pedir oração</b><small>{active.length ? 'Envia a todas as igrejas que estão a orar agora.' : 'Disponível assim que uma igreja real estiver em oração.'}</small></span></button>
         <Link to="/comunidade-ao-vivo"><MessageCircle size={22}/><span><b>Chat de oração</b><small>Conversa, agradece e apoia a comunidade.</small></span></Link>
         {isLeader && <button onClick={mySessionId ? () => send({ type: 'pastor_stop_praying', sessionId: mySessionId }) : start}><Radio size={22}/><span><b>{mySessionId ? 'Terminar minha oração' : 'Minha igreja vai orar'}</b><small>Faz a tua igreja aparecer na praça.</small></span></button>}
       </section>
 
       {isLeader && !mySessionId && <div className="prayer-plaza__leader"><label>Foco da oração (opcional)</label><input value={focus} onChange={(e) => setFocus(e.target.value)} placeholder="Ex.: famílias, saúde, cidade..."/></div>}
 
-      {selected && <div className="prayer-plaza__modal" role="dialog" aria-modal="true"><div><button className="close" onClick={() => setSelected(null)} aria-label="Fechar"><X/></button><span className="live"><Radio size={16}/> oração ao vivo</span><h2>{selected.church_name || selected.churchName}</h2><p>Conduzida por {selected.pastor_name || selected.pastorName || 'um pastor'}.</p>{(selected.prayer_focus || selected.prayerFocus) && <blockquote>“{selected.prayer_focus || selected.prayerFocus}”</blockquote>}<button className="join" onClick={() => { const churchId = selected.church_id || selected.churchId; setSelected(null); openRequest([churchId]); }}><HandHeart size={19}/> Pedir oração a esta igreja</button><small>O áudio/vídeo aparece aqui apenas quando a igreja iniciar uma transmissão. Nunca mostramos uma transmissão sem autorização.</small></div></div>}
+      {selected && <div className="prayer-plaza__modal" role="dialog" aria-modal="true"><div><button className="close" onClick={() => setSelected(null)} aria-label="Fechar"><X/></button><span className="live"><Radio size={16}/> {selected.is_demo ? 'demonstração' : 'oração ao vivo'}</span><h2>{selected.church_name || selected.churchName}</h2><p>{selected.is_demo ? 'Este é um exemplo de como uma igreja aparece na Oração Mundial.' : `Conduzida por ${selected.pastor_name || selected.pastorName || 'um pastor'}.`}</p>{(selected.prayer_focus || selected.prayerFocus) && <blockquote>“{selected.prayer_focus || selected.prayerFocus}”</blockquote>}{selected.is_demo ? <button className="join" onClick={() => setSelected(null)}>Entendi</button> : <button className="join" onClick={() => { const churchId = selected.church_id || selected.churchId; setSelected(null); openRequest([churchId]); }}><HandHeart size={19}/> Pedir oração a esta igreja</button>}<small>{selected.is_demo ? 'As igrejas reais aparecem como “AO VIVO” quando um pastor inicia uma sessão de oração.' : 'O áudio/vídeo aparece aqui apenas quando a igreja iniciar uma transmissão. Nunca mostramos uma transmissão sem autorização.'}</small></div></div>}
       {showRequest && <div className="prayer-plaza__modal" role="dialog" aria-modal="true"><div><button className="close" onClick={() => setShowRequest(false)} aria-label="Fechar"><X/></button><span className="live"><HeartHandshake size={16}/> pedido protegido</span><h2>Como podemos orar por ti?</h2><p>O pedido será visto apenas pelos pastores das {requestTargets.length} igreja(s) que escolheste.</p><textarea value={requestContent} onChange={(e) => setRequestContent(e.target.value)} placeholder="Escreve o teu pedido de oração..." style={{ width: '100%', minHeight: 105, boxSizing: 'border-box', border: '1px solid #cfe0d5', borderRadius: 12, padding: 12, font: 'inherit', margin: '8px 0' }}/><label style={{ display: 'block', marginTop: 8 }}><input type="checkbox" checked={requestAnonymous} onChange={(e) => setRequestAnonymous(e.target.checked)}/> Enviar como anónimo</label><label style={{ display: 'block', margin: '9px 0 14px' }}><input type="checkbox" checked={requestUrgent} onChange={(e) => setRequestUrgent(e.target.checked)}/> É urgente</label><button className="join" onClick={sendRequest}><Send size={18}/> Enviar pedido</button>{requestStatus && <p style={{ marginTop: 13, color: requestStatus.includes('enviado') ? '#167244' : '#a04c16', fontWeight: 700, lineHeight: 1.45 }}>{requestStatus}</p>}<small>Não publiques dados bancários, documentos ou informação médica detalhada.</small></div></div>}
     </div>
   );
