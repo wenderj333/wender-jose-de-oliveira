@@ -20,6 +20,12 @@ function createWelcomeNotification(user) {
   );
 }
 
+// Some existing production databases were created before this preference was
+// added. Ensure the registration flow never fails while the database catches up.
+async function ensureRegistrationColumns() {
+  await db.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS email_updates_opt_in BOOLEAN NOT NULL DEFAULT false');
+}
+
 router.post('/register', async (req, res) => {
   try {
     const emailNormalized = String(req.body?.email || '').trim().toLowerCase();
@@ -36,6 +42,7 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'A senha deve ter pelo menos 6 caracteres' });
     }
 
+    await ensureRegistrationColumns();
 
     const existing = await User.findByEmail(emailNormalized);
     if (existing) return res.status(409).json({ error: 'Email já cadastrado' });
