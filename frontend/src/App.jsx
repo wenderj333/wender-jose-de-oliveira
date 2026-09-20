@@ -94,6 +94,8 @@ import Churches from "./pages/Churches";
 import ChurchProfile from "./pages/ChurchProfile";
 
 import PastorDashboard from "./pages/PastorDashboard";
+import PastorApplication from "./pages/PastorApplication";
+import PastorApplicationsAdmin from "./pages/PastorApplicationsAdmin";
 import Kids from "./pages/Kids";
 import BiblicalFinance from "./pages/BiblicalFinance";
 
@@ -872,6 +874,16 @@ export default function App() {
 
             )}
 
+            {user.role === 'member' && (
+
+              <Link to="/registo-pastor" className={isActive('/registo-pastor')}><Shield size={17}/><span className="nav-text" style={{marginLeft:10}}>Registar a minha igreja</span></Link>
+
+            )}
+
+            {user.role === 'admin' && (
+              <Link to="/pedidos-de-pastor" className={isActive('/pedidos-de-pastor')}><Shield size={17}/><span className="nav-text" style={{marginLeft:10}}>Pedidos de pastor</span></Link>
+            )}
+
             {user.role === 'admin' && (
               <Link to="/seguranca" className={isActive('/seguranca')}><Shield size={17}/><span className="nav-text" style={{marginLeft:10}}>Segurança e moderação</span></Link>
             )}
@@ -970,6 +982,8 @@ export default function App() {
             <Route path="/igrejas/:id" element={<ChurchProfile />} />
 
             <Route path="/sala-pastor" element={<ProtectedRoute role="pastor"><PastorDashboard /></ProtectedRoute>} />
+            <Route path="/registo-pastor" element={<PastorApplication />} />
+            <Route path="/pedidos-de-pastor" element={<ProtectedRoute role="admin"><PastorApplicationsAdmin /></ProtectedRoute>} />
 
         <Route path="/dizimos" element={<Offerings />} />
         <Route path="/votos-de-fe" element={<ProtectedRoute><FaithVows /></ProtectedRoute>} />

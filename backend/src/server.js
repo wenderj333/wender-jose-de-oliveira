@@ -543,6 +543,7 @@ app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 const quizRoutes = require('./routes/quiz');
 app.use('/api/quiz', quizRoutes);
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/pastor-applications', require('./routes/pastor-applications'));
 app.use('/api/prayers', require('./routes/prayer'));
 app.use('/api/churches', require('./routes/churches'));
 app.use('/api/dashboard', require('./routes/dashboard'));
