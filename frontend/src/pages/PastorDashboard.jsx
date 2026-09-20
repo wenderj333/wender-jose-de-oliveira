@@ -495,7 +495,7 @@ function OracoesSection({ apiFetch }) {
     <div>
       <div style={styles.sectionTitle}>🙏 {t('pastorDashboard.prayerRequests', 'Pedidos de Oração')}</div>
       <SectionHelp title="❓ Pedidos enviados à tua igreja" steps={[
-        'Aqui aparecem apenas pedidos que escolheram a tua igreja na Praça Mundial de Oração.',
+        'Aqui aparecem apenas pedidos que escolheram a tua igreja na Oração Mundial.',
         'Ao confirmar, a pessoa recebe uma notificação de que a tua igreja está a orar.',
         'Nunca partilhes o pedido fora da equipa autorizada da tua igreja.',
       ]} />
