@@ -184,10 +184,11 @@ export default function Settings() {
     setForm({ ...form, [field]: list.includes(value) ? list.filter(i => i !== value) : [...list, value] });
   };
 
-  const sectionStyle = { marginBottom: "25px", padding: "15px", border: "1px solid #eee", borderRadius: "10px", background: "#fbfbfe" };
-  const labelStyle = { display: "block", fontWeight: "bold", marginBottom: "5px", color: "#333", fontSize: "14px" };
-  const inputStyle = { width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ccc", boxSizing: "border-box", marginBottom: "12px" };
-  const radioGroupStyle = { display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "12px" };
+  const sectionStyle = { marginBottom: "18px", padding: "22px", border: "1px solid #e4e6eb", borderRadius: "16px", background: "#fff", boxShadow: "0 2px 10px rgba(15,23,42,.045)" };
+  const labelStyle = { display: "block", fontWeight: 750, marginBottom: "7px", color: "#1c1e21", fontSize: "13px" };
+  const inputStyle = { width: "100%", padding: "12px 13px", borderRadius: "10px", border: "1px solid #dfe3e8", background: "#f7f8fa", boxSizing: "border-box", marginBottom: "14px", color: "#1c1e21" };
+  const radioGroupStyle = { display: "flex", flexWrap: "wrap", gap: "9px", marginBottom: "14px" };
+  const choiceStyle = { cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", padding: "10px 11px", border: "1px solid #e2e6eb", borderRadius: "10px", background: "#f7f8fa", color: "#30343a", fontSize: "13px", fontWeight: 650 };
   const privacyOptions = [
     ["public", "Todos"],
     ["friends", "Apenas amigos"],
@@ -195,8 +196,11 @@ export default function Settings() {
   ];
 
   return (
-    <div style={{ padding: "25px", background: "#ffffff", borderRadius: "14px", border: "1px solid #e0e0e0", margin: "20px auto", maxWidth: "700px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", fontFamily: "sans-serif" }}>
-      <h2 style={{ color: "#6C3FA0", marginBottom: "20px", borderBottom: "2px solid #f0c040", paddingBottom: "10px", textAlign: "center" }}>{t('profile.title','SOBRE MIM / MEU PERFIL')}</h2>
+    <div className="profile-settings" style={{ padding: "clamp(14px,3vw,28px)", background: "#f0f2f5", borderRadius: "18px", margin: "20px auto", maxWidth: "780px", fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
+      <header style={{ padding: "6px 6px 20px", textAlign: "left" }}>
+        <h2 style={{ color: "#1c1e21", margin: "0 0 6px", fontSize: "clamp(23px,4vw,30px)", letterSpacing: "-.03em" }}>{t('profile.editProfile','Editar perfil')}</h2>
+        <p style={{ margin: 0, color: "#65676b", fontSize: "14px" }}>Atualize o que deseja partilhar com a comunidade.</p>
+      </header>
 
       {msg && <p style={{ color: msg.includes("Erro") ? "#e11d48" : "#16a34a", fontWeight: "bold", marginBottom: "15px", textAlign: "center", fontSize: "16px" }}>{msg}</p>}
 
@@ -254,7 +258,7 @@ export default function Settings() {
         <label style={labelStyle}>{t("profile.gender","Sexo")}:</label>
         <div style={radioGroupStyle}>
           {[t("profile.male","Masculino"), t("profile.female","Feminino")].map(s => (
-            <label key={s} style={{ cursor: "pointer", marginRight: "10px" }}><input type="radio" name="gender" checked={form.gender === s} onChange={() => setForm({...form, gender: s})} /> {s}</label>
+            <label key={s} style={choiceStyle}><input type="radio" name="gender" checked={form.gender === s} onChange={() => setForm({...form, gender: s})} /> {s}</label>
           ))}
         </div>
         <label style={labelStyle}>{t("profile.city","Cidade")}:</label>
@@ -266,7 +270,7 @@ export default function Settings() {
         <label style={labelStyle}>{t("profile.maritalStatus","Estado Civil")}:</label>
         <div style={radioGroupStyle}>
           {[t("profile.single","Solteiro(a)"), t("profile.dating","Namorando"), t("profile.engaged","Noivo(a)"), t("profile.married","Casado(a)"), t("profile.divorced","Divorciado(a)"), t("profile.widowed","Viuvo(a)")].map(ec => (
-            <label key={ec} style={{ cursor: "pointer", marginRight: "10px" }}><input type="radio" name="marital_status" checked={form.marital_status === ec} onChange={() => setForm({...form, marital_status: ec})} /> {ec}</label>
+            <label key={ec} style={choiceStyle}><input type="radio" name="marital_status" checked={form.marital_status === ec} onChange={() => setForm({...form, marital_status: ec})} /> {ec}</label>
           ))}
         </div>
       </div>
@@ -287,7 +291,7 @@ export default function Settings() {
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionRole','FUNCAO NA IGREJA')}</h3>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "12px" }}>
           {[t("role.member","Membro"), t("role.newConvert","Novo Convertido"), t("role.worker","Obreiro"), t("role.deacon","Diacono"), t("role.elder","Presbitero"), t("role.evangelist","Evangelista"), t("role.missionary","Missionario"), t("role.pastor","Pastor"), t("role.bishop","Bispo"), t("role.youthLeader","Lider Jovens"), t("role.worshipLeader","Lider Louvor"), t("role.teacher","Professor"), t("role.other","Outro")].map(f => (
-            <label key={f} style={{ cursor: "pointer" }}><input type="radio" name="church_role" checked={form.church_role === f} onChange={() => setForm({...form, church_role: f})} /> {f}</label>
+            <label key={f} style={choiceStyle}><input type="radio" name="church_role" checked={form.church_role === f} onChange={() => setForm({...form, church_role: f})} /> {f}</label>
           ))}
         </div>
         <label style={labelStyle}>{t("profile.roleYears","Anos nessa funcao")}:</label>
@@ -298,7 +302,7 @@ export default function Settings() {
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionMinistry','MINISTERIO')}</h3>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "12px" }}>
           {[t("ministry.evangelism","Evangelismo"), t("ministry.worship","Louvor"), t("ministry.prayer","Intercessao"), t("ministry.teaching","Ensino"), t("ministry.missions","Missoes"), t("ministry.children","Criancas"), t("ministry.youth","Jovens"), t("ministry.couples","Casais"), t("ministry.social","Acao Social"), t("ministry.other","Outro")].map(m => (
-            <label key={m} style={{ cursor: "pointer" }}><input type="radio" name="ministry" checked={form.ministry === m} onChange={() => setForm({...form, ministry: m})} /> {m}</label>
+            <label key={m} style={choiceStyle}><input type="radio" name="ministry" checked={form.ministry === m} onChange={() => setForm({...form, ministry: m})} /> {m}</label>
           ))}
         </div>
       </div>
@@ -321,7 +325,7 @@ export default function Settings() {
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionInterests','INTERESSES')}</h3>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "12px" }}>
           {[t("interests.biblicalStudies","Estudos Biblicos"), t("interests.prayer","Oracao"), t("interests.evangelism","Evangelismo"), t("interests.missions","Missoes"), t("interests.gospelMusic","Musica Gospel"), t("interests.reading","Leitura"), t("interests.family","Familia"), t("interests.christianFriends","Amizades Cristas"), t("interests.christianEvents","Eventos Cristaos"), t("interests.other","Outro")].map(i => (
-            <label key={i} style={{ cursor: "pointer" }}><input type="checkbox" checked={form.interests.includes(i)} onChange={() => handleCheckbox("interests", i)} /> {i}</label>
+            <label key={i} style={choiceStyle}><input type="checkbox" checked={form.interests.includes(i)} onChange={() => handleCheckbox("interests", i)} /> {i}</label>
           ))}
         </div>
       </div>
@@ -330,7 +334,7 @@ export default function Settings() {
         <h3 style={{ color: "#4A2270", marginTop: 0, marginBottom: "15px", fontSize: "16px", borderBottom: "1px solid #ddd" }}>{t('profile.sectionObjectives','OBJETIVOS')}</h3>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
           {[t("interests.makeFriends","Fazer amizades cristas"), t("interests.shareWord","Compartilhar a Palavra"), t("interests.prayerGroup","Grupo de oracao"), t("interests.biblicalStudiesGoal","Estudos biblicos"), t("interests.meetBrothers","Conhecer irmaos em Cristo"), t("interests.christianNetworking","Networking cristao"), t("interests.seriousRelationship","Relacionamento serio"), t("interests.spiritualSupport","Apoio espiritual")].map(o => (
-            <label key={o} style={{ cursor: "pointer" }}><input type="checkbox" checked={form.objectives.includes(o)} onChange={() => handleCheckbox("objectives", o)} /> {o}</label>
+            <label key={o} style={choiceStyle}><input type="checkbox" checked={form.objectives.includes(o)} onChange={() => handleCheckbox("objectives", o)} /> {o}</label>
           ))}
         </div>
       </div>
@@ -345,9 +349,10 @@ export default function Settings() {
 
       {msg && <p style={{ color: msg.includes("Erro") ? "#e11d48" : "#16a34a", fontWeight: "bold", marginBottom: "15px", textAlign: "center" }}>{msg}</p>}
 
-      <button onClick={handleSave} disabled={loading} style={{ background: "linear-gradient(135deg, #6C3FA0, #4A2270)", color: "#fff", border: "none", padding: "14px 20px", borderRadius: "8px", fontWeight: "bold", cursor: "pointer", width: "100%", fontSize: "16px" }}>
+      <button onClick={handleSave} disabled={loading} style={{ position: "sticky", bottom: 14, zIndex: 2, background: "linear-gradient(135deg, #6C3FA0, #4A2270)", color: "#fff", border: "none", padding: "15px 20px", borderRadius: "12px", fontWeight: 800, cursor: "pointer", width: "100%", fontSize: "15px", boxShadow: "0 10px 24px rgba(74,34,112,.28)" }}>
         {loading ? t('profile.saving','Salvando...') : t("profile.saveProfile","SALVAR PERFIL")}
       </button>
+      <style>{`.profile-settings input:focus,.profile-settings textarea:focus,.profile-settings select:focus{outline:3px solid rgba(108,63,160,.16)!important;border-color:#6c3fa0!important;background:#fff!important}.profile-settings input[type="radio"],.profile-settings input[type="checkbox"]{accent-color:#6c3fa0;flex:0 0 auto}.profile-settings h3{letter-spacing:-.01em}.profile-settings textarea{line-height:1.5}@media(max-width:560px){.profile-settings>div[style]{padding:16px!important}.profile-settings div[style*="grid-template-columns: 1fr 1fr"]{grid-template-columns:1fr!important}.profile-settings label[style*="grid-template-columns"]{grid-template-columns:1fr!important}.profile-settings label[style*="grid-template-columns"] select{width:100%!important}.profile-settings button[style*="sticky"]{bottom:8px!important}}`}</style>
     </div>
   );
 }
