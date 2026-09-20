@@ -6,9 +6,9 @@ import { BookOpen, UserPlus, Mail, Lock, User, Heart, ShieldCheck, Music, Sparkl
 import { getChristianChatCopy } from '../i18n/christianChatCopy';
 
 // Google Analytics conversion events
-function trackSignUpEvent() {
+function trackSignUpEvent(source = 'direct') {
   if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'sign_up', { method: 'email' });
+    window.gtag('event', 'sign_up', { method: 'email', acquisition_source: source });
     console.log('Google Analytics: sign_up event tracked');
   }
 }
@@ -64,6 +64,7 @@ export default function Register() {
   const navigate = useNavigate();
   const location = useLocation();
   const requestedNext = new URLSearchParams(location.search).get('next');
+  const invitationSource = new URLSearchParams(location.search).get('utm_source') || 'direct';
   const nextPage = requestedNext?.startsWith('/') ? requestedNext : '/';
   const { t, i18n } = useTranslation();
   const c = getChristianChatCopy(i18n.language);
@@ -158,7 +159,7 @@ export default function Register() {
       setSubmitting(true);
       const avatarUrl = await uploadProfilePhoto();
       await register(form.email, form.password, form.full_name, form.role, avatarUrl, form.email_updates_opt_in);
-      trackSignUpEvent();
+      trackSignUpEvent(invitationSource);
       navigate(nextPage); // Navegar para a página inicial após o registo
     } catch (err) {
       setError(err.message);

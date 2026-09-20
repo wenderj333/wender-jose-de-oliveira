@@ -946,7 +946,7 @@ export default function MuralGrid() {
   const welcome = welcomeCopy[currentLanguage] || welcomeCopy.pt;
   const dismissWelcome = () => { localStorage.setItem('sigo_welcome_seen', '1'); setShowWelcome(false); };
   const inviteFriends = async () => {
-    const url = 'https://www.sigocomfe.com/register';
+    const url = 'https://www.sigocomfe.com/register?utm_source=community&utm_medium=share&utm_campaign=member_invite';
     const text = 'Encontrei uma comunidade cristã gratuita para oração, Bíblia, amizade e jogos bíblicos. Vem comigo no Sigo com Fé.';
     try {
       if (navigator.share) {
