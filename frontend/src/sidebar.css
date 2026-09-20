@@ -242,6 +242,20 @@
   .sidebar-right::before { display: none; }
 }
 
+/* Janelas médias não têm largura suficiente para três colunas. Sem esta
+   transição, o mural era empurrado para fora da vista. */
+@media (min-width: 1101px) and (max-width: 1480px) {
+  .modern-layout {
+    grid-template-columns: 220px minmax(0, 1fr) !important;
+    max-width: 1120px !important;
+    margin: 0 auto !important;
+    padding: 0 12px !important;
+  }
+
+  .sidebar-left { width: 220px; min-width: 220px; max-width: 220px; }
+  .sidebar-right { display: none !important; }
+}
+
 /* Telemóvel: leitura confortável e navegação sempre acessível. */
 @media (max-width: 640px) {
   html, body, .app-container { overflow-x: hidden; }
