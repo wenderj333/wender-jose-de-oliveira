@@ -39,6 +39,14 @@ router.post('/', authenticate, async (req, res) => {
        address=EXCLUDED.address, phone=EXCLUDED.phone, message=EXCLUDED.message, status='pending', reviewed_by=NULL, reviewed_at=NULL, updated_at=NOW()
        RETURNING *`, [id, req.user.id, churchName, city, country, address || null, phone || null, message || null]
     );
+    const admins = await db.query("SELECT id FROM users WHERE role = 'admin'");
+    await Promise.all(admins.rows.map(admin => createNotification(
+      admin.id,
+      'pastor_application_pending',
+      'Novo pedido de pastor',
+      `${req.user.full_name} pediu acesso de pastor para ${churchName}.`,
+      { destination: '/pedidos-de-pastor', application_id: result.rows[0].id }
+    )));
     res.status(201).json({ application: result.rows[0], message: 'Pedido enviado. A sua conta será analisada antes de abrir a Sala do Pastor.' });
   } catch (error) { console.error('Erro no pedido de pastor:', error.message); res.status(500).json({ error: 'Não foi possível enviar o pedido agora.' }); }
 });
