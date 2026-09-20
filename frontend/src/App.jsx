@@ -169,7 +169,18 @@ export default function App() {
   const [installPrompt, setInstallPrompt] = useState(null);
 
   const [showInstall, setShowInstall] = useState(false);
+  const [iosInstall, setIosInstall] = useState(false);
   useEffect(() => {
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+      || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
+
+    if (isIOS && !isStandalone) {
+      setIosInstall(true);
+      setShowInstall(true);
+    }
 
     const handler = (e) => {
 
@@ -1180,9 +1191,18 @@ export default function App() {
 
             <p style={{color:'#fff',fontWeight:700,fontSize:'0.85rem',margin:'0 0 8px'}}>📲 Instalar App</p>
 
-            <p style={{color:'rgba(255,255,255,0.8)',fontSize:'0.75rem',margin:'0 0 10px'}}>Acede mais rapido no teu telemovel</p>
+            {iosInstall ? (
+              <>
+                <p style={{color:'rgba(255,255,255,0.9)',fontSize:'0.75rem',lineHeight:1.45,margin:'0 0 10px'}}>No Safari, toque em <b>Partilhar</b> e depois em <b>Adicionar ao ecrã principal</b>.</p>
+                <button onClick={() => setShowInstall(false)} style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',border:'none',cursor:'pointer'}}>Entendi</button>
+              </>
+            ) : (
+              <>
+                <p style={{color:'rgba(255,255,255,0.8)',fontSize:'0.75rem',margin:'0 0 10px'}}>Acede mais rapido no teu telemovel</p>
 
-            <button onClick={handleInstallClick} style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',border:'none',cursor:'pointer'}}>📲 Instalar</button>
+                <button onClick={handleInstallClick} style={{display:'inline-block',background:'#fff',color:'#667eea',borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:'0.8rem',border:'none',cursor:'pointer'}}>📲 Instalar</button>
+              </>
+            )}
 
           </div>
 
