@@ -1349,6 +1349,10 @@ export default function MuralGrid() {
       {/* Form */}
       {showForm && (
         <div style={{ background: 'white', borderRadius: 16, padding: 20, border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', marginBottom: 20 }}>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, marginBottom:14 }}>
+            <strong style={{ color:'#315b44', fontSize:16 }}>Criar publicação</strong>
+            <button type="button" onClick={() => setShowForm(false)} aria-label="Fechar publicação" style={{ border:'1px solid #dbe5de', borderRadius:9, padding:'7px 10px', background:'#f7faf8', color:'#426853', fontWeight:800, cursor:'pointer', display:'inline-flex', alignItems:'center', gap:5 }}><X size={16}/>Fechar</button>
+          </div>
           <select value={postCategory} onChange={e => setPostCategory(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 14, marginBottom: 14, outline: 'none' }}>
             {CATEGORIES_CONFIG.map(c => <option key={c.value} value={c.value}>{t(c.labelKey)}</option>)}
           </select>
@@ -1410,9 +1414,12 @@ export default function MuralGrid() {
               </button>
             ))}
           </div>
-          <button onClick={handleSubmit} disabled={uploading || (!postText.trim() && !mediaFile)} style={{ width: '100%', padding: 12, background: uploading ? '#ccc' : 'linear-gradient(135deg,#7a9e7e,#c4b89a)', border: 'none', borderRadius: 12, color: 'white', fontSize: 15, fontWeight: 600, cursor: uploading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-            {uploading ? t('mural.publishing') : <><Send size={16} /> {t('mural.publish')}</>}
-          </button>
+          <div style={{ display:'flex', gap:10, alignItems:'center' }}>
+            <button type="button" onClick={() => setShowForm(false)} disabled={uploading} style={{ padding:'12px 15px', background:'#fff', border:'1px solid #d6e4d7', borderRadius:12, color:'#426853', fontSize:14, fontWeight:700, cursor:uploading ? 'not-allowed' : 'pointer' }}>Cancelar</button>
+            <button onClick={handleSubmit} disabled={uploading || (!postText.trim() && !mediaFile)} style={{ flex:1, padding:12, background: uploading ? '#ccc' : 'linear-gradient(135deg,#7a9e7e,#c4b89a)', border: 'none', borderRadius: 12, color: 'white', fontSize: 15, fontWeight: 600, cursor: uploading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+              {uploading ? t('mural.publishing') : <><Send size={16} /> {t('mural.publish')}</>}
+            </button>
+          </div>
         </div>
       )}
 
