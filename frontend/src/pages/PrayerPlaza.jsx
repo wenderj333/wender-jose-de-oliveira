@@ -29,6 +29,16 @@ const PLAZA_COPY = {
   ru: { title: 'Мировая молитва', intro: 'Церкви из разных мест молятся вместе за людей. Нажмите на церковь, чтобы узнать о её молитве.', praying: 'церквей молятся сейчас', touch: 'Нажмите на сферу, чтобы участвовать', demo: '3 демонстрационные церкви для знакомства', request: 'Попросить молитву', chat: 'Молитвенный чат', start: 'Моя церковь будет молиться', stop: 'Завершить мою молитву', example: 'Пример церкви на площади', live: 'В ЭФИРЕ', demoLabel: 'ДЕМОНСТРАЦИЯ' },
 };
 
+const PLAZA_DETAILS = {
+  pt: { eyebrow: 'Sigo com Fé · unidos em oração', low: 'oração iniciada', mid: 'participação a crescer', high: 'muita atividade', requestInfo: 'Envia a todas as igrejas que estão a orar agora.', requestWaiting: 'Disponível assim que uma igreja real estiver em oração.', chatInfo: 'Conversa, agradece e apoia a comunidade.', leaderInfo: 'Faz a tua igreja aparecer na praça.' },
+  es: { eyebrow: 'Sigo com Fé · unidos en oración', low: 'oración iniciada', mid: 'participación creciendo', high: 'mucha actividad', requestInfo: 'Envía a todas las iglesias que están orando ahora.', requestWaiting: 'Disponible cuando una iglesia real comience a orar.', chatInfo: 'Habla, agradece y apoya a la comunidad.', leaderInfo: 'Haz que tu iglesia aparezca en la plaza.' },
+  en: { eyebrow: 'Sigo com Fé · united in prayer', low: 'prayer started', mid: 'participation growing', high: 'high activity', requestInfo: 'Send to every church praying now.', requestWaiting: 'Available when a real church starts praying.', chatInfo: 'Talk, give thanks and support the community.', leaderInfo: 'Make your church appear in the plaza.' },
+  de: { eyebrow: 'Sigo com Fé · vereint im Gebet', low: 'Gebet begonnen', mid: 'wachsende Teilnahme', high: 'viel Aktivität', requestInfo: 'An alle Gemeinden senden, die jetzt beten.', requestWaiting: 'Verfügbar, sobald eine echte Gemeinde betet.', chatInfo: 'Sprich, danke und unterstütze die Gemeinschaft.', leaderInfo: 'Lass deine Gemeinde auf dem Platz erscheinen.' },
+  fr: { eyebrow: 'Sigo com Fé · unis dans la prière', low: 'prière commencée', mid: 'participation en hausse', high: 'forte activité', requestInfo: 'Envoyer à toutes les églises qui prient maintenant.', requestWaiting: 'Disponible lorsqu’une vraie église commence à prier.', chatInfo: 'Échangez, remerciez et soutenez la communauté.', leaderInfo: 'Faites apparaître votre église sur la place.' },
+  ro: { eyebrow: 'Sigo com Fé · uniți în rugăciune', low: 'rugăciune începută', mid: 'participare în creștere', high: 'activitate intensă', requestInfo: 'Trimite tuturor bisericilor care se roagă acum.', requestWaiting: 'Disponibil când o biserică reală începe rugăciunea.', chatInfo: 'Vorbește, mulțumește și susține comunitatea.', leaderInfo: 'Fă ca biserica ta să apară în piață.' },
+  ru: { eyebrow: 'Sigo com Fé · вместе в молитве', low: 'молитва началась', mid: 'участие растёт', high: 'высокая активность', requestInfo: 'Отправить всем церквям, которые молятся сейчас.', requestWaiting: 'Доступно, когда настоящая церковь начнёт молитву.', chatInfo: 'Общайтесь, благодарите и поддерживайте сообщество.', leaderInfo: 'Покажите свою церковь на площади.' },
+};
+
 export default function PrayerPlaza() {
   const { user, token } = useAuth();
   const { i18n } = useTranslation();
@@ -49,6 +59,7 @@ export default function PrayerPlaza() {
   const [bubblePositions, setBubblePositions] = useState([]);
   const language = (i18n.resolvedLanguage || i18n.language || 'pt').split('-')[0];
   const copy = PLAZA_COPY[language] || PLAZA_COPY.pt;
+  const details = PLAZA_DETAILS[language] || PLAZA_DETAILS.pt;
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -154,14 +165,14 @@ export default function PrayerPlaza() {
   return (
     <div className="prayer-plaza">
       <section className="prayer-plaza__hero">
-        <span><Sparkles size={17}/> Sigo com Fé · unidos em oração</span>
+        <span><Sparkles size={17}/> {details.eyebrow}</span>
         <h1>{copy.title}</h1>
         <p>{copy.intro}</p>
         <div className="prayer-plaza__stats"><strong><Radio size={18}/> {totalChurchesPraying} {copy.praying}</strong><span><Users size={18}/> {active.length ? copy.touch : copy.demo}</span></div>
       </section>
 
       <section className="prayer-plaza__map" ref={mapRef} aria-label={copy.praying}>
-        <div className="prayer-plaza__legend"><span className="low"/> {language === 'ro' ? 'rugăciune începută' : 'oração iniciada'} <span className="mid"/> {language === 'ro' ? 'participare în creștere' : 'participação a crescer'} <span className="high"/> {language === 'ro' ? 'activitate intensă' : 'muita atividade'}</div>
+        <div className="prayer-plaza__legend"><span className="low"/> {details.low} <span className="mid"/> {details.mid} <span className="high"/> {details.high}</div>
         {visibleSessions.map((session, index) => {
           const position = bubblePositions[index];
           const size = position ? position.radius * 2 : 128 + Math.min(62, session.activity);
@@ -174,9 +185,9 @@ export default function PrayerPlaza() {
       </section>
 
       <section className="prayer-plaza__actions">
-        <button onClick={() => active.length ? openRequest(active.map(session => session.church_id || session.churchId)) : window.alert('Quando uma igreja real iniciar uma oração, poderá enviar o seu pedido diretamente para ela.')}><HeartHandshake size={22}/><span><b>{copy.request}</b><small>{active.length ? 'Envia a todas as igrejas que estão a orar agora.' : 'Disponível assim que uma igreja real estiver em oração.'}</small></span></button>
-        <Link to="/comunidade-ao-vivo"><MessageCircle size={22}/><span><b>{copy.chat}</b><small>Conversa, agradece e apoia a comunidade.</small></span></Link>
-        {isLeader && <button onClick={mySessionId ? () => send({ type: 'pastor_stop_praying', sessionId: mySessionId }) : start}><Radio size={22}/><span><b>{mySessionId ? copy.stop : copy.start}</b><small>Faz a tua igreja aparecer na praça.</small></span></button>}
+        <button onClick={() => active.length ? openRequest(active.map(session => session.church_id || session.churchId)) : window.alert('Quando uma igreja real iniciar uma oração, poderá enviar o seu pedido diretamente para ela.')}><HeartHandshake size={22}/><span><b>{copy.request}</b><small>{active.length ? details.requestInfo : details.requestWaiting}</small></span></button>
+        <Link to="/comunidade-ao-vivo"><MessageCircle size={22}/><span><b>{copy.chat}</b><small>{details.chatInfo}</small></span></Link>
+        {isLeader && <button onClick={mySessionId ? () => send({ type: 'pastor_stop_praying', sessionId: mySessionId }) : start}><Radio size={22}/><span><b>{mySessionId ? copy.stop : copy.start}</b><small>{details.leaderInfo}</small></span></button>}
       </section>
 
       {isLeader && !mySessionId && <div className="prayer-plaza__leader"><label>Foco da oração (opcional)</label><input value={focus} onChange={(e) => setFocus(e.target.value)} placeholder="Ex.: famílias, saúde, cidade..."/></div>}
