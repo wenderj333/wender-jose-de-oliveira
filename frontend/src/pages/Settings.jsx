@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { requestNotificationPermission } from "../firebase";
 import { enableNotificationSound } from "../utils/notification-sound";
@@ -202,6 +203,10 @@ export default function Settings() {
         <p style={{ margin: 0, color: "#65676b", fontSize: "14px" }}>Atualize o que deseja partilhar com a comunidade.</p>
       </header>
 
+      <section style={sectionStyle}>
+        <h3>{t('authUi.support')}</h3><p>{t('authUi.supportHelp')}</p>
+        <Link to="/privacidade">{t('legal.privacy')}</Link> · <Link to="/termos">{t('legal.terms')}</Link>
+      </section>
       {msg && <p style={{ color: msg.includes("Erro") ? "#e11d48" : "#16a34a", fontWeight: "bold", marginBottom: "15px", textAlign: "center", fontSize: "16px" }}>{msg}</p>}
 
       <div style={{ ...sectionStyle, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
@@ -347,6 +352,10 @@ export default function Settings() {
         <textarea style={{ ...inputStyle, minHeight: "60px", resize: "vertical" }} value={form.final_message} onChange={e => setForm({...form, final_message: e.target.value})} />
       </div>
 
+      <section style={sectionStyle}>
+        <h3>{t('authUi.support')}</h3><p>{t('authUi.supportHelp')}</p>
+        <Link to="/privacidade">{t('legal.privacy')}</Link> · <Link to="/termos">{t('legal.terms')}</Link>
+      </section>
       {msg && <p style={{ color: msg.includes("Erro") ? "#e11d48" : "#16a34a", fontWeight: "bold", marginBottom: "15px", textAlign: "center" }}>{msg}</p>}
 
       <button onClick={handleSave} disabled={loading} style={{ position: "sticky", bottom: 14, zIndex: 2, background: "linear-gradient(135deg, #6C3FA0, #4A2270)", color: "#fff", border: "none", padding: "15px 20px", borderRadius: "12px", fontWeight: 800, cursor: "pointer", width: "100%", fontSize: "15px", boxShadow: "0 10px 24px rgba(74,34,112,.28)" }}>

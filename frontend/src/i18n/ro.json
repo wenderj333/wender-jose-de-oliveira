@@ -1930,5 +1930,21 @@
     "verse": "Verset",
     "addFavorite": "Adauga la favorite",
     "removeFavorite": "Sterge din favorite"
-  }
+  },
+  "authUi": {
+    "back": "Înapoi",
+  "googleHelp": "Dacă Google nu se deschide, folosește e-mailul și parola sau deschide site-ul în Chrome/Safari.",
+  "forgot": "Am uitat parola",
+  "busy": "Așteaptă…",
+  "loginError": "Autentificarea nu a reușit. Verifică e-mailul și parola și încearcă din nou.",
+  "googleError": "Autentificarea Google nu a reușit. Încearcă din nou.",
+  "agreement": "Prin crearea unui cont, accepți",
+  "and": "și",
+  "emailInfo": "După înregistrare poți intra în comunitate. Nu trebuie să aștepți un e-mail de confirmare.",
+  "support": "Ajutor și confidențialitate",
+  "supportHelp": "Pentru întrebări sau ștergerea contului și a datelor, consultă contactul din Politica de confidențialitate.",
+  "preview": "Previzualizarea fotografiei de profil",
+  "remove": "Elimină fotografia",
+  "newMessages": "Mesaje noi ↓"
+}
 }

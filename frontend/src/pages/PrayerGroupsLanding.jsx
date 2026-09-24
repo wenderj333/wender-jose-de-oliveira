@@ -43,7 +43,7 @@ export default function PrayerGroupsLanding() {
         <p style={{ maxWidth: 620, margin: '0 auto', fontSize: 18, lineHeight: 1.65, color: '#61766a' }}>No Sigo com Fé pode encontrar irmãos, criar um grupo de oração e partilhar pedidos, reflexões e a Palavra de Deus com segurança.</p>
         <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 12, marginTop: 28 }}>
           <Link to="/register" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '13px 20px', borderRadius: 12, background: '#4f7b62', color: '#fff', textDecoration: 'none', fontWeight: 800 }}>Criar a minha conta <ArrowRight size={17} /></Link>
-          <Link to="/login" style={{ display: 'inline-flex', alignItems: 'center', padding: '13px 20px', borderRadius: 12, border: '1px solid #bcd0bf', color: '#38604b', textDecoration: 'none', fontWeight: 800 }}>Conhecer a comunidade</Link>
+          <Link to="/mural" style={{ display: 'inline-flex', alignItems: 'center', padding: '13px 20px', borderRadius: 12, border: '1px solid #bcd0bf', color: '#38604b', textDecoration: 'none', fontWeight: 800 }}>Conhecer a comunidade</Link>
         </div>
       </section>
 

@@ -1929,5 +1929,21 @@
     "verse": "Verse",
     "addFavorite": "Add to favorites",
     "removeFavorite": "Remove from favorites"
-  }
+  },
+  "authUi": {
+    "back": "Back",
+  "googleHelp": "If Google does not open, use email and password or open this site in Chrome/Safari.",
+  "forgot": "Forgot password",
+  "busy": "Please wait…",
+  "loginError": "Unable to sign in. Check your email and password and try again.",
+  "googleError": "Unable to sign in with Google. Please try again.",
+  "agreement": "By creating an account, you agree to our",
+  "and": "and",
+  "emailInfo": "After registration you can enter the community. You do not need to wait for a confirmation email.",
+  "support": "Help and privacy",
+  "supportHelp": "For questions or to request deletion of your account and data, see the contact in the Privacy Policy.",
+  "preview": "Profile photo preview",
+  "remove": "Remove photo",
+  "newMessages": "New messages ↓"
+}
 }

@@ -168,7 +168,7 @@ export default function Register() {
     }
   };
 
-  if (loading) return <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', color: '#633da0', fontWeight: 700 }}>A preparar a sua conta...</div>;
+  if (loading) return <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', color: '#633da0', fontWeight: 700 }}>{t('authUi.busy')}</div>;
 
   return (
     <div className="register-page" style={{ position:'relative', minHeight: '100vh', padding: 'clamp(16px,4vw,48px)', background: 'radial-gradient(circle at 8% 12%,#f5ebd2 0,transparent 23%), linear-gradient(145deg,#fbfaf8 0%,#f1f3fa 58%,#fff 100%)' }}>
@@ -210,7 +210,7 @@ export default function Register() {
             <span><BookOpen size={15} /> {proof.together}</span>
           </div>
         </div>
-        {error && <p className="form-error" style={{ textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
+
 
         <button className="btn btn-google" type="button" style={{ width: '100%', marginBottom: '0.5rem' }} onClick={async () => {
           setError('');
@@ -227,10 +227,10 @@ export default function Register() {
           {t('register.google')}
         </button>
         <p style={{ margin: '0 0 1rem', textAlign: 'center', fontSize: '0.78rem', color: '#6b6180', lineHeight: 1.4 }}>
-          Se o Google não abrir, use o e-mail e a senha abaixo ou abra o link no Chrome/Safari.
+          {t('authUi.googleHelp')}
         </p>
         <Link to="/login" style={{ display: 'flex', width: '100%', boxSizing: 'border-box', alignItems: 'center', justifyContent: 'center', marginBottom: '1.1rem', padding: '12px 16px', borderRadius: 13, border: '1px solid #6b3faf', color: '#5a2d92', background: '#faf8fe', fontWeight: 800, textDecoration: 'none' }}>
-          Já tenho conta — Entrar
+          {t('register.hasAccount')} — {t('register.signIn')}
         </Link>
 
         {/* Facebook login - desativado até configurar app no Meta
@@ -254,21 +254,21 @@ export default function Register() {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label><User size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.fullName')}</label>
-            <input autoComplete="name" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} placeholder={t('register.fullNamePlaceholder')} required />
+            <label htmlFor="register-fullName"><User size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.fullName')}</label>
+            <input id="register-fullName" autoComplete="name" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} placeholder={t('register.fullNamePlaceholder')} required />
           </div>
           <div className="form-group">
-            <label><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.email')}</label>
-            <input type="email" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder={t('register.emailPlaceholder')} required />
+            <label htmlFor="register-email"><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.email')}</label>
+            <input id="register-email" type="email" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder={t('register.emailPlaceholder')} required />
           </div>
           <div className="form-group">
-            <label><Lock size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.password')}</label>
-            <input type="password" autoComplete="new-password" minLength="6" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder={t('register.passwordPlaceholder')} required />
+            <label htmlFor="register-password"><Lock size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('register.password')}</label>
+            <input id="register-password" aria-describedby="password-help" type="password" autoComplete="new-password" minLength="6" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder={t('register.passwordPlaceholder')} required /><small id="password-help">{t('register.passwordError')}</small>
           </div>
           <div className="required-profile-photo">
             <div className="required-profile-photo-copy"><Camera size={18}/><div><strong>{profilePhotoCopy.title} <span aria-hidden="true">*</span></strong><small>{profilePhotoCopy.help}</small></div></div>
             <div className="required-profile-photo-action">
-              {profilePhotoPreview ? <div className="required-profile-preview"><img src={profilePhotoPreview} alt="Pré-visualização da foto de perfil"/><button type="button" onClick={() => { URL.revokeObjectURL(profilePhotoPreview); setProfilePhoto(null); setProfilePhotoPreview(''); }} aria-label="Remover foto"><X size={15}/></button></div> : <div className="required-profile-placeholder"><User size={28}/></div>}
+              {profilePhotoPreview ? <div className="required-profile-preview"><img src={profilePhotoPreview} alt={t('authUi.preview')}/><button type="button" onClick={() => { URL.revokeObjectURL(profilePhotoPreview); setProfilePhoto(null); setProfilePhotoPreview(''); }} aria-label={t('authUi.remove')}><X size={15}/></button></div> : <div className="required-profile-placeholder"><User size={28}/></div>}
               <label className="required-profile-photo-button"><Camera size={15}/>{profilePhotoPreview ? profilePhotoCopy.change : profilePhotoCopy.choose}<input type="file" accept="image/*" onChange={handleProfilePhoto}/></label>
             </div>
           </div>
@@ -276,6 +276,9 @@ export default function Register() {
             <input type="checkbox" checked={form.email_updates_opt_in} onChange={(e) => setForm({ ...form, email_updates_opt_in: e.target.checked })} />
             <span><strong>{emailUpdates.label}</strong><small>{emailUpdates.description}</small></span>
           </label>
+          {error && <div role="alert" className="form-error" style={{ margin: '12px 0', padding: 12, background: '#fff0f0', color: '#a31515', borderRadius: 8 }}>
+            {error}<div><Link to="/login">{t('register.signIn')}</Link> · <Link to="/forgot-password">{t('authUi.forgot')}</Link></div>
+          </div>}
           <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={submitting}>
             <UserPlus size={18} /> {submitting ? profilePhotoCopy.uploading : t('register.submit')}
           </button>
@@ -283,14 +286,14 @@ export default function Register() {
 
         <div style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--gray-500)' }}>
           <div style={{background:'#f0f9ff',border:'1px solid #bae6fd',borderRadius:8,padding:'12px 16px',marginTop:16,marginBottom:8,fontSize:13,color:'#0369a1',display:'flex',alignItems:'center',gap:8}}>
-          ✉ {t('register.emailVerify', 'Depois do registo, recebe um email de boas-vindas. Verifica a tua caixa de entrada.')}
+          {t('authUi.emailInfo')}
         </div>
         {t('register.hasAccount')} <Link to="/login" style={{ color: 'var(--green)', fontWeight: 600 }}>{t('register.signIn')}</Link>
-        <p style={{ margin: '14px 0 0', fontSize: 12, lineHeight: 1.5, color: '#6b7280' }}>Ao criar uma conta, concordas com os nossos <Link to="/termos" style={{ color: '#3568b8' }}>Termos de Uso</Link> e a <Link to="/privacidade" style={{ color: '#3568b8' }}>Política de Privacidade</Link>.</p>
+        <p style={{ margin: '14px 0 0', fontSize: 12, lineHeight: 1.5, color: '#6b7280' }}>{t('authUi.agreement')} <Link to="/termos" style={{ color: '#3568b8' }}>{t('legal.terms')}</Link> {t('authUi.and')} <Link to="/privacidade" style={{ color: '#3568b8' }}>{t('legal.privacy')}</Link>.</p>
         </div>
       </div>
       </div>
-      <style>{`.register-card .auth-brand h1{color:#2b1b47}.register-card .auth-brand p{color:#687184}.register-proof{margin:0 0 18px;padding:12px;border:1px solid #e5ddf4;border-radius:14px;background:#faf8fe}.register-proof-items{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.register-proof-items span{display:inline-flex;align-items:center;gap:5px;color:#5a477a;font-size:12px;font-weight:750}.register-proof-items svg{color:#6b3faf}.register-duel-note{display:flex;align-items:center;justify-content:center;gap:7px;margin:0 0 10px;color:#563194;font-size:13px;font-weight:800;text-align:center}.register-duel-note svg{color:#bf8616}.register-card .form-group input{border-radius:12px;border-color:#dcd9e6;padding:13px 14px}.required-profile-photo{margin:-1px 0 18px;padding:13px;border:1px solid #d7c7eb;border-radius:13px;background:#faf8fe}.required-profile-photo-copy{display:flex;align-items:flex-start;gap:9px;color:#4f2d78}.required-profile-photo-copy>svg{margin-top:2px}.required-profile-photo-copy strong{display:block;font-size:13px}.required-profile-photo-copy strong span{color:#c74343}.required-profile-photo-copy small{display:block;margin-top:3px;color:#70657d;font-size:11px;line-height:1.35}.required-profile-photo-action{display:flex;align-items:center;gap:11px;margin-top:11px}.required-profile-placeholder,.required-profile-preview{position:relative;width:52px;height:52px;border-radius:50%;overflow:hidden}.required-profile-placeholder{display:grid;place-items:center;background:#e7dcf5;color:#7545ab}.required-profile-preview{border:2px solid #6b3faf}.required-profile-preview img{width:100%;height:100%;object-fit:cover}.required-profile-preview button{position:absolute;top:1px;right:1px;display:grid;place-items:center;width:21px;height:21px;border:0;border-radius:50%;background:#3d234f;color:#fff;cursor:pointer}.required-profile-photo-button{display:inline-flex;align-items:center;gap:6px;border:1px solid #6b3faf;border-radius:10px;background:#fff;color:#5a2d92;padding:9px 11px;font-size:12px;font-weight:800;cursor:pointer}.required-profile-photo-button input{display:none}.email-updates-opt-in{display:flex;align-items:flex-start;gap:10px;margin:-2px 0 18px;padding:11px 12px;border:1px solid #e2dbef;border-radius:12px;background:#faf8fe;cursor:pointer;color:#4f3a70}.email-updates-opt-in input{width:17px;height:17px;margin:2px 0 0;accent-color:#6b3faf;flex:0 0 auto}.email-updates-opt-in strong{display:block;font-size:13px;line-height:1.35}.email-updates-opt-in small{display:block;margin-top:3px;color:#736b83;font-size:11px;line-height:1.35}.register-card .btn-primary{background:linear-gradient(135deg,#633da0,#8255b7);border-radius:13px;box-shadow:0 10px 20px rgba(99,61,160,.23)}.register-card .btn-primary:disabled{opacity:.7;cursor:wait}.register-card .btn-google{border-radius:13px}.register-card .auth-divider{margin:20px 0}@media(max-width:820px){.register-layout{grid-template-columns:1fr !important}.register-story{max-width:620px;margin:0 auto}.faith-collage{min-height:340px !important}}@media(max-width:520px){.register-page{padding:16px 12px !important}.register-guide-link{position:static !important;margin:0 0 18px !important;display:grid !important;grid-template-columns:1fr !important;gap:8px !important}.register-guide-link a{width:100%;box-sizing:border-box;font-size:12px !important;padding:10px 12px !important}.register-story h2{font-size:2.5rem !important}.faith-collage{transform:scale(.9);transform-origin:top center;margin-bottom:-15px !important}.register-card{padding:24px 18px !important}.register-proof-items{justify-content:flex-start}.register-proof-items span{font-size:11px}}`}</style>
+      <style>{`.register-card .auth-brand h1{color:#2b1b47}.register-card .auth-brand p{color:#687184}.register-proof{margin:0 0 18px;padding:12px;border:1px solid #e5ddf4;border-radius:14px;background:#faf8fe}.register-proof-items{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.register-proof-items span{display:inline-flex;align-items:center;gap:5px;color:#5a477a;font-size:12px;font-weight:750}.register-proof-items svg{color:#6b3faf}.register-duel-note{display:flex;align-items:center;justify-content:center;gap:7px;margin:0 0 10px;color:#563194;font-size:13px;font-weight:800;text-align:center}.register-duel-note svg{color:#bf8616}.register-card .form-group input{border-radius:12px;border-color:#dcd9e6;padding:13px 14px}.required-profile-photo{margin:-1px 0 18px;padding:13px;border:1px solid #d7c7eb;border-radius:13px;background:#faf8fe}.required-profile-photo-copy{display:flex;align-items:flex-start;gap:9px;color:#4f2d78}.required-profile-photo-copy>svg{margin-top:2px}.required-profile-photo-copy strong{display:block;font-size:13px}.required-profile-photo-copy strong span{color:#c74343}.required-profile-photo-copy small{display:block;margin-top:3px;color:#70657d;font-size:11px;line-height:1.35}.required-profile-photo-action{display:flex;align-items:center;gap:11px;margin-top:11px}.required-profile-placeholder,.required-profile-preview{position:relative;width:52px;height:52px;border-radius:50%;overflow:hidden}.required-profile-placeholder{display:grid;place-items:center;background:#e7dcf5;color:#7545ab}.required-profile-preview{border:2px solid #6b3faf}.required-profile-preview img{width:100%;height:100%;object-fit:cover}.required-profile-preview button{position:absolute;top:1px;right:1px;display:grid;place-items:center;width:21px;height:21px;border:0;border-radius:50%;background:#3d234f;color:#fff;cursor:pointer}.required-profile-photo-button{display:inline-flex;align-items:center;gap:6px;border:1px solid #6b3faf;border-radius:10px;background:#fff;color:#5a2d92;padding:9px 11px;font-size:12px;font-weight:800;cursor:pointer}.required-profile-photo-button input{display:none}.email-updates-opt-in{display:flex;align-items:flex-start;gap:10px;margin:-2px 0 18px;padding:11px 12px;border:1px solid #e2dbef;border-radius:12px;background:#faf8fe;cursor:pointer;color:#4f3a70}.email-updates-opt-in input{width:17px;height:17px;margin:2px 0 0;accent-color:#6b3faf;flex:0 0 auto}.email-updates-opt-in strong{display:block;font-size:13px;line-height:1.35}.email-updates-opt-in small{display:block;margin-top:3px;color:#736b83;font-size:11px;line-height:1.35}.register-card .btn-primary{color:#fff;fill:none;background:linear-gradient(135deg,#633da0,#8255b7);border-radius:13px;box-shadow:0 10px 20px rgba(99,61,160,.23)}.register-card .btn-primary:disabled{background:#786b8d;color:#fff;box-shadow:none;cursor:wait}.register-card button:focus-visible,.register-card a:focus-visible{outline:3px solid #b5801c;outline-offset:3px}.register-guide-link{position:static!important;max-width:1180px;margin:0 auto 24px}.register-card{min-width:0}.register-story{min-width:0}@media(max-width:820px){.register-card{grid-row:1}.faith-collage{min-height:0!important;grid-template-rows:repeat(2,150px)!important;transform:none!important;margin-bottom:18px!important}}.register-card .btn-google{border-radius:13px}.register-card .auth-divider{margin:20px 0}@media(max-width:820px){.register-layout{grid-template-columns:1fr !important}.register-story{max-width:620px;margin:0 auto}.faith-collage{min-height:340px !important}}@media(max-width:520px){.register-page{padding:16px 12px !important}.register-guide-link{position:static !important;margin:0 0 18px !important;display:grid !important;grid-template-columns:1fr !important;gap:8px !important}.register-guide-link a{width:100%;box-sizing:border-box;font-size:12px !important;padding:10px 12px !important}.register-story h2{font-size:2.5rem !important}.faith-collage{transform:scale(.9);transform-origin:top center;margin-bottom:-15px !important}.register-card{padding:24px 18px !important}.register-proof-items{justify-content:flex-start}.register-proof-items span{font-size:11px}}`}</style>
     </div>
   );
 }

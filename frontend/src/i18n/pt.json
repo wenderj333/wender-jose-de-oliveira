@@ -1906,5 +1906,21 @@
     "verse": "Versiculo",
     "addFavorite": "Adicionar aos favoritos",
     "removeFavorite": "Remover dos favoritos"
-  }
+  },
+  "authUi": {
+    "back": "Voltar",
+  "googleHelp": "Se o Google não abrir, use e-mail e senha ou abra este site no Chrome/Safari.",
+  "forgot": "Esqueci minha senha",
+  "busy": "Aguarde…",
+  "loginError": "Não foi possível entrar. Confira seu e-mail e senha e tente novamente.",
+  "googleError": "Não foi possível entrar com Google. Tente novamente.",
+  "agreement": "Ao criar uma conta, você concorda com os nossos",
+  "and": "e a",
+  "emailInfo": "Após o cadastro, você já pode entrar na comunidade. Não é necessário esperar um e-mail de confirmação.",
+  "support": "Ajuda e privacidade",
+  "supportHelp": "Para dúvidas ou para solicitar a exclusão da conta e dos dados, consulte o contato na Política de Privacidade.",
+  "preview": "Prévia da foto de perfil",
+  "remove": "Remover foto",
+  "newMessages": "Novas mensagens ↓"
+}
 }

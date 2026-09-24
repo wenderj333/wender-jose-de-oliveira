@@ -25,7 +25,7 @@ const getRoomUi = language => ROOM_UI[language?.split('-')[0]] || ROOM_UI.pt;
 
 export default function LiveCommunity() {
   const { user, isGuest } = useAuth();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const c = getChristianChatCopy(i18n.language);
   const roomUi = getRoomUi(i18n.language);
   const { send, on, off, isConnected } = useWebSocket();
@@ -44,6 +44,9 @@ export default function LiveCommunity() {
   const [chatSoundEnabled, setChatSoundEnabled] = useState(() => localStorage.getItem('live_chat_sound') !== 'false');
   const audioRef = useRef(null);
   const chatEndRef = useRef(null);
+  const chatScrollRef = useRef(null);
+  const followChatRef = useRef(true);
+  const [hasNewMessages, setHasNewMessages] = useState(false);
 
   const playChatNotification = () => {
     if (!chatSoundEnabled || typeof window === 'undefined') return;
@@ -130,7 +133,18 @@ export default function LiveCommunity() {
     };
   }, [user, isGuest, roomId]);
 
-  useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [chatMessages]);
+  useEffect(() => { followChatRef.current = true; setHasNewMessages(false); }, [roomId]);
+  useEffect(() => {
+    const pane = chatScrollRef.current;
+    if (!pane) return;
+    if (followChatRef.current) pane.scrollTop = pane.scrollHeight;
+    else setHasNewMessages(true);
+  }, [chatMessages]);
+  const handleChatScroll = event => {
+    const pane = event.currentTarget;
+    followChatRef.current = pane.scrollHeight - pane.scrollTop - pane.clientHeight < 80;
+    if (followChatRef.current) setHasNewMessages(false);
+  };
   useEffect(() => { if (songs.length && audioRef.current) audioRef.current.src = songs[currentSongIndex]?.file_url || ''; }, [songs, currentSongIndex]);
 
   const sendMessage = () => {
@@ -183,11 +197,12 @@ export default function LiveCommunity() {
           <div><h2 style={{ margin: 0, fontSize: '1.15rem' }}>{roomUi.rooms.find(room => room.id === roomId)?.title || c.conversation}</h2><p style={{ margin: '4px 0 0', color: '#7b83a6', fontSize: 13 }}>{c.share}</p></div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><button type="button" onClick={() => { const next = !chatSoundEnabled; setChatSoundEnabled(next); localStorage.setItem('live_chat_sound', String(next)); if (next) playChatNotification(); }} aria-pressed={chatSoundEnabled} aria-label={chatSoundEnabled ? (roomUi.soundOn || 'Som ativado') : (roomUi.soundOff || 'Som desativado')} title={chatSoundEnabled ? (roomUi.soundOn || 'Som ativado') : (roomUi.soundOff || 'Som desativado')} style={{ width: 38, height: 34, border: '1px solid #d7dfef', borderRadius: 10, background: chatSoundEnabled ? '#eaf7ef' : '#f4f6fa', color: chatSoundEnabled ? '#287a4b' : '#667085', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>{chatSoundEnabled ? <Volume2 size={17}/> : <VolumeX size={17}/>}</button><span style={{ background: onlineCount ? '#eaf7ef' : '#f4f6fa', color: onlineCount ? '#287a4b' : '#667085', borderRadius: 999, padding: '8px 10px', fontSize: 12, fontWeight: 700 }}><Users size={14} style={{ verticalAlign: 'middle', marginRight: 5 }}/>{onlineLabel}</span></div>
         </header>
-        <div style={{ flex: 1, overflowY: 'auto', padding: 20, background: '#fbfcff' }}>
+        <div ref={chatScrollRef} onScroll={handleChatScroll} style={{ flex: 1, minHeight: 0, maxHeight: '60vh', overflowY: 'auto', overflowAnchor: 'none', padding: 20, background: '#fbfcff' }}>
           {!chatMessages.length && <div style={{ maxWidth: 390, margin: '80px auto 0', textAlign: 'center', color: '#667085' }}><MessageCircle size={35} style={{ color: '#4a80d4', marginBottom: 10 }}/><h3 style={{ margin: '0 0 8px', color: '#1e2240' }}>{c.ready}</h3><p style={{ margin: 0, lineHeight: 1.6 }}>{c.empty}</p></div>}
           {chatMessages.filter(message => !hiddenUserIds.has(message.userId)).map((message, index) => <article key={message.id || `${message.userName}-${index}`} style={{ marginBottom: 12, padding: '11px 13px', background: '#fff', border: '1px solid #e6ebf6', borderRadius: '4px 14px 14px 14px', maxWidth: '85%' }}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><strong style={{ color: '#3568b8', fontSize: 13, flex: 1 }}>{repairMojibake(message.userName) || 'Membro'}</strong>{message.userId && message.userId !== user?.id && <><button type="button" onClick={() => setReportMessage(message)} title={roomUi.report} style={{ border: 0, background: 'transparent', color: '#c73c3c', cursor: 'pointer', padding: 3 }}><Flag size={15}/></button><button type="button" onClick={() => hideUser(message.userId)} title={roomUi.hide} style={{ border: 0, background: 'transparent', color: '#77829a', cursor: 'pointer', padding: 3 }}><EyeOff size={15}/></button></>}</div><p style={{ margin: '4px 0 0', lineHeight: 1.45 }}>{repairMojibake(message.text || message.message)}</p></article>)}
           <div ref={chatEndRef} />
         </div>
+        {hasNewMessages && <button type="button" onClick={() => { const pane = chatScrollRef.current; followChatRef.current = true; if (pane) pane.scrollTop = pane.scrollHeight; setHasNewMessages(false); }} style={{ padding: 10, color: '#fff', background: '#3568b8', border: 0 }}>{t('authUi.newMessages')}</button>}
         <footer style={{ padding: 14, borderTop: '1px solid #e0e6f5', display: 'flex', gap: 9, position: 'relative' }}>
           {showEmojis && <div style={{ position: 'absolute', left: 14, bottom: 66, zIndex: 4, display: 'flex', gap: 4, flexWrap: 'wrap', width: 238, padding: 9, borderRadius: 12, border: '1px solid #d7dfef', background: '#fff', boxShadow: '0 10px 25px rgba(30,34,64,.18)' }}>
             {['🙏', '❤️', '😊', '🙌', '📖', '✨', '🕊️', '🔥', '👏', '🤍', '🌿', '💬'].map(emoji => <button key={emoji} type="button" onClick={() => addEmoji(emoji)} aria-label={`Adicionar ${emoji}`} style={{ width: 32, height: 32, border: 0, borderRadius: 8, background: '#f5f8ff', cursor: 'pointer', fontSize: 18 }}>{emoji}</button>)}

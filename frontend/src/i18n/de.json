@@ -1948,5 +1948,21 @@
     "verse": "Vers",
     "addFavorite": "Zu Favoriten hinzufugen",
     "removeFavorite": "Aus Favoriten entfernen"
-  }
+  },
+  "authUi": {
+    "back": "Zurück",
+  "googleHelp": "Falls Google nicht öffnet, nutze E-Mail und Passwort oder öffne diese Seite in Chrome/Safari.",
+  "forgot": "Passwort vergessen",
+  "busy": "Bitte warten…",
+  "loginError": "Anmeldung fehlgeschlagen. Prüfe E-Mail und Passwort und versuche es erneut.",
+  "googleError": "Google-Anmeldung fehlgeschlagen. Bitte erneut versuchen.",
+  "agreement": "Mit der Erstellung eines Kontos akzeptierst du unsere",
+  "and": "und",
+  "emailInfo": "Nach der Registrierung kannst du die Gemeinschaft betreten. Du musst nicht auf eine Bestätigungs-E-Mail warten.",
+  "support": "Hilfe und Datenschutz",
+  "supportHelp": "Bei Fragen oder zur Löschung deines Kontos und deiner Daten nutze den Kontakt in der Datenschutzerklärung.",
+  "preview": "Vorschau des Profilfotos",
+  "remove": "Foto entfernen",
+  "newMessages": "Neue Nachrichten ↓"
+}
 }

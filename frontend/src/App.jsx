@@ -469,6 +469,8 @@ export default function App() {
         <Route path="/inicio" element={<Register />} />
 
         <Route path="/login" element={<Login />} />
+        <Route path="/termos" element={<TermsOfUse />} />
+        <Route path="/privacidade" element={<PrivacyPolicy />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 
