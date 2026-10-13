@@ -121,4 +121,58 @@ router.patch('/', authenticate, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// ---- Amém na foto de perfil (persistente + notificação) ----
+const profileAmensReady = db.query(`CREATE TABLE IF NOT EXISTS profile_amens (
+  profile_user_id UUID NOT NULL,
+  user_id UUID NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (profile_user_id, user_id)
+)`).catch(error => console.error('Profile amens migration:', error.message));
+
+async function profileAmenState(profileUserId, viewer) {
+  const count = await db.query('SELECT COUNT(*)::int AS total FROM profile_amens WHERE profile_user_id = $1', [profileUserId]);
+  let amened = false;
+  if (viewer) {
+    const mine = await db.query('SELECT 1 FROM profile_amens WHERE profile_user_id = $1 AND user_id = $2', [profileUserId, viewer]);
+    amened = mine.rows.length > 0;
+  }
+  return { count: Number(count.rows[0]?.total || 0), amened };
+}
+
+// GET /api/profile/:userId/amens
+router.get('/:userId/amens', async (req, res) => {
+  try {
+    await profileAmensReady;
+    res.json(await profileAmenState(req.params.userId, viewerId(req)));
+  } catch (err) {
+    console.error('Profile amens error:', err.message);
+    res.json({ count: 0, amened: false });
+  }
+});
+
+// POST /api/profile/:userId/amen — alterna o Amém
+router.post('/:userId/amen', authenticate, async (req, res) => {
+  try {
+    await profileAmensReady;
+    const profileUserId = req.params.userId;
+    const target = await db.query('SELECT id FROM users WHERE id = $1', [profileUserId]);
+    if (!target.rows[0]) return res.status(404).json({ error: 'Utilizador não encontrado' });
+    const removed = await db.query('DELETE FROM profile_amens WHERE profile_user_id = $1 AND user_id = $2 RETURNING 1', [profileUserId, req.user.id]);
+    if (removed.rows.length === 0) {
+      const inserted = await db.query('INSERT INTO profile_amens (profile_user_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING RETURNING 1', [profileUserId, req.user.id]);
+      if (inserted.rows.length && profileUserId !== req.user.id) {
+        try {
+          const { createNotification } = require('./notifications');
+          const who = req.user.full_name || 'Alguém';
+          await createNotification(profileUserId, 'like', who + ' deu Amém 🙏 na sua foto de perfil', '', { from: req.user.id, url: '/perfil/' + req.user.id, kind: 'profile_amen' });
+        } catch (e) { console.error('Profile amen notification:', e.message); }
+      }
+    }
+    res.json(await profileAmenState(profileUserId, req.user.id));
+  } catch (err) {
+    console.error('Profile amen toggle error:', err.message);
+    res.status(500).json({ error: 'Não foi possível dar Amém agora. Tenta novamente.' });
+  }
+});
+
 module.exports = router;
