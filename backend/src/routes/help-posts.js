@@ -48,6 +48,8 @@ const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
     await db.query('ALTER TABLE help_post_comments ADD COLUMN IF NOT EXISTS is_pastoral BOOLEAN DEFAULT false');
     await db.query('ALTER TABLE help_post_comments ADD COLUMN IF NOT EXISTS church_id UUID REFERENCES churches(id) ON DELETE SET NULL');
     await db.query("ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS help_status VARCHAR(20) NOT NULL DEFAULT 'open'");
+    await db.query('ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS answer_testimony TEXT');
+    await db.query('ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS answered_at TIMESTAMPTZ');
     await db.query(`CREATE TABLE IF NOT EXISTS help_post_supporters (
       post_id UUID REFERENCES help_posts(id) ON DELETE CASCADE,
       user_id UUID REFERENCES users(id) ON DELETE CASCADE,
@@ -90,6 +92,8 @@ function optionalAuth(req, res, next) {
 router.get('/', optionalAuth, async (req, res) => {
   try {
     const userId = req.user ? req.user.id : null;
+    const typeFilter = typeof req.query.type === 'string' && /^[a-z_]{2,30}$/.test(req.query.type) ? req.query.type : null;
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 30));
 
     let sql;
     let params;
@@ -109,11 +113,12 @@ router.get('/', optionalAuth, async (req, res) => {
           ) AS user_prayed
         FROM help_posts hp
         LEFT JOIN users u ON u.id = hp.user_id
-        WHERE NOT EXISTS (SELECT 1 FROM help_post_churches hpt WHERE hpt.post_id = hp.id) OR hp.user_id = $1
+        WHERE (NOT EXISTS (SELECT 1 FROM help_post_churches hpt WHERE hpt.post_id = hp.id) OR hp.user_id = $1)
+          AND ($2::text IS NULL OR hp.post_type = $2)
         ORDER BY hp.created_at DESC
-        LIMIT 30
+        LIMIT $3
       `;
-      params = [userId];
+      params = [userId, typeFilter, limit];
     } else {
       sql = `
         SELECT
@@ -127,14 +132,19 @@ router.get('/', optionalAuth, async (req, res) => {
         FROM help_posts hp
         LEFT JOIN users u ON u.id = hp.user_id
         WHERE NOT EXISTS (SELECT 1 FROM help_post_churches hpt WHERE hpt.post_id = hp.id)
+          AND ($1::text IS NULL OR hp.post_type = $1)
         ORDER BY hp.created_at DESC
-        LIMIT 30
+        LIMIT $2
       `;
-      params = [];
+      params = [typeFilter, limit];
     }
 
     const result = await db.query(sql, params);
-    res.json({ posts: result.rows });
+    const posts = result.rows.map(post => {
+      const isMine = Boolean(userId && post.user_id === userId);
+      return { ...post, is_mine: isMine, user_id: post.is_anonymous && !isMine ? null : post.user_id };
+    });
+    res.json({ posts });
   } catch (err) {
     console.error('Erro ao buscar help-posts:', err);
     res.status(500).json({ error: 'Erro interno' });
@@ -255,10 +265,25 @@ router.get('/:id/supporters', authenticate, async (req, res) => {
 router.post('/:id/help-status', authenticate, async (req, res) => {
   try {
     const status = String(req.body.status || 'open');
-    if (!['open', 'in_progress', 'completed'].includes(status)) return res.status(400).json({ error: 'Estado inválido.' });
-    const result = await db.query('UPDATE help_posts SET help_status=$1 WHERE id=$2 AND user_id=$3 RETURNING help_status', [status, req.params.id, req.user.id]);
+    if (!['open', 'in_progress', 'completed', 'answered'].includes(status)) return res.status(400).json({ error: 'Estado inválido.' });
+    const testimony = typeof req.body.testimony === 'string' ? req.body.testimony.trim().slice(0, 1000) : null;
+    const result = await db.query(
+      `UPDATE help_posts SET help_status=$1,
+         answer_testimony = CASE WHEN $1='answered' THEN $4 ELSE answer_testimony END,
+         answered_at = CASE WHEN $1='answered' THEN NOW() ELSE answered_at END
+       WHERE id=$2 AND user_id=$3 RETURNING help_status, answer_testimony, answered_at, content`,
+      [status, req.params.id, req.user.id, testimony || null]);
     if (!result.rows.length) return res.status(403).json({ error: 'Apenas quem publicou pode atualizar este pedido.' });
-    res.json({ help_status: result.rows[0].help_status });
+    if (status === 'answered') {
+      try {
+        const prayers = await db.query('SELECT user_id FROM help_post_prayers WHERE post_id=$1 AND user_id <> $2 LIMIT 500', [req.params.id, req.user.id]);
+        const preview = (result.rows[0].content || '').substring(0, 50);
+        for (const row of prayers.rows) {
+          await createNotification(row.user_id, 'prayer', 'Deus respondeu! 🙌', `O pedido pelo qual oraste foi respondido: ${preview}...`, { postId: req.params.id, url: '/praca-oracao?pedido=' + req.params.id });
+        }
+      } catch (ne) { console.error('Answered notify error:', ne.message); }
+    }
+    res.json({ help_status: result.rows[0].help_status, answer_testimony: result.rows[0].answer_testimony, answered_at: result.rows[0].answered_at });
   } catch (err) { console.error('Erro ao atualizar ajuda:', err); res.status(500).json({ error: 'Não foi possível atualizar o pedido.' }); }
 });
 
@@ -302,7 +327,8 @@ router.post('/:id/pray', authenticate, async (req, res) => {
         const postOwner = await db.query(`SELECT user_id, content FROM help_posts WHERE id = $1`, [id]);
         if (postOwner.rows.length > 0 && postOwner.rows[0].user_id !== userId) {
           const preview = postOwner.rows[0].content?.substring(0,50);
-          await createNotification(postOwner.rows[0].user_id, 'prayer', 'Alguem orou pelo teu pedido 🙏', `Mais uma pessoa esta contigo nesta oracao: ${preview}...`, { postId: id });
+          const who = req.user.full_name || 'Alguém';
+          await createNotification(postOwner.rows[0].user_id, 'prayer', `${who} orou pelo teu pedido 🙏`, `Mais uma pessoa está contigo nesta oração: ${preview}...`, { postId: id, url: '/praca-oracao?pedido=' + id });
         }
       } catch(ne) {}
     }
@@ -320,6 +346,15 @@ router.post('/:id/pray', authenticate, async (req, res) => {
     console.error('Erro ao toggle oração:', err);
     res.status(500).json({ error: 'Erro interno' });
   }
+});
+
+// DELETE /api/help-posts/:id — apagar o próprio pedido (ou admin)
+router.delete('/:id', authenticate, async (req, res) => {
+  try {
+    const result = await db.query('DELETE FROM help_posts WHERE id=$1 AND (user_id=$2 OR $3=\'admin\') RETURNING id', [req.params.id, req.user.id, req.user.role]);
+    if (!result.rows.length) return res.status(403).json({ error: 'Só quem publicou pode apagar este pedido.' });
+    res.json({ deleted: true });
+  } catch (err) { console.error('Erro ao apagar pedido:', err); res.status(500).json({ error: 'Não foi possível apagar o pedido.' }); }
 });
 
 // GET /api/help-posts/:id/comments — listar comentários
