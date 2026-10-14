@@ -89,18 +89,25 @@ function optionalAuth(req, res, next) {
 }
 
 // ---- Presença na Oração Mundial: quem está orando agora (em memória) ----
-const prayerPresence = new Map(); // userId -> { name, avatar_url, since, lastSeen }
+const prayerPresence = new Map(); // userId -> { name, avatar_url, since, lastSeen, room }
+const PRAYER_ROOMS = new Set(['geral', 'saude', 'familia', 'financas', 'emprego', 'casamento', 'filhos', 'libertacao', 'paz', 'gratidao']);
 const PRESENCE_TTL = 75 * 1000;
 function activePresence() {
   const now = Date.now();
   for (const [id, p] of prayerPresence) if (now - p.lastSeen > PRESENCE_TTL) prayerPresence.delete(id);
-  return [...prayerPresence.entries()].sort((a, b) => a[1].since - b[1].since).map(([user_id, p]) => ({ user_id, name: p.name, avatar_url: p.avatar_url, since: new Date(p.since).toISOString() }));
+  return [...prayerPresence.entries()].sort((a, b) => a[1].since - b[1].since).map(([user_id, p]) => ({ user_id, name: p.name, avatar_url: p.avatar_url, room: p.room || 'geral', since: new Date(p.since).toISOString() }));
+}
+function presencePayload(room) {
+  const everyone = activePresence();
+  const rooms = {};
+  for (const person of everyone) rooms[person.room] = (rooms[person.room] || 0) + 1;
+  const people = room && room !== 'geral' ? everyone.filter(person => person.room === room) : everyone;
+  return { count: people.length, total: everyone.length, rooms, people: people.slice(0, 80) };
 }
 
 // GET /api/help-posts/presence — pessoas a orar agora
 router.get('/presence', (req, res) => {
-  const people = activePresence();
-  res.json({ count: people.length, people: people.slice(0, 80) });
+  res.json(presencePayload(String(req.query.room || 'geral')));
 });
 
 // POST /api/help-posts/presence — { active: true|false }
@@ -109,10 +116,11 @@ router.post('/presence', authenticate, (req, res) => {
   if (req.body && req.body.active === false) prayerPresence.delete(id);
   else {
     const current = prayerPresence.get(id);
-    prayerPresence.set(id, { name: req.user.full_name || '', avatar_url: req.user.avatar_url || null, since: current ? current.since : Date.now(), lastSeen: Date.now() });
+    const room = PRAYER_ROOMS.has(String(req.body?.room)) ? String(req.body.room) : 'geral';
+    const sameRoom = current && current.room === room;
+    prayerPresence.set(id, { name: req.user.full_name || '', avatar_url: req.user.avatar_url || null, room, since: sameRoom ? current.since : Date.now(), lastSeen: Date.now() });
   }
-  const people = activePresence();
-  res.json({ count: people.length, people: people.slice(0, 80) });
+  res.json(presencePayload(String(req.body?.room || 'geral')));
 });
 
 // GET /api/help-posts — lista de posts (auth opcional)
