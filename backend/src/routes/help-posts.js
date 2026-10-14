@@ -314,7 +314,7 @@ router.post('/:id/help-status', authenticate, async (req, res) => {
         const prayers = await db.query('SELECT user_id FROM help_post_prayers WHERE post_id=$1 AND user_id <> $2 LIMIT 500', [req.params.id, req.user.id]);
         const preview = (result.rows[0].content || '').substring(0, 50);
         for (const row of prayers.rows) {
-          await createNotification(row.user_id, 'prayer', 'Deus respondeu! 🙌', `O pedido pelo qual oraste foi respondido: ${preview}...`, { postId: req.params.id, url: '/praca-oracao?pedido=' + req.params.id });
+          await createNotification(row.user_id, 'prayer', 'Deus respondeu! 🙌', `O pedido pelo qual oraste foi respondido: ${preview}...`, { postId: req.params.id, url: '/praca-oracao?pedido=' + req.params.id, kind: 'answered', preview });
         }
       } catch (ne) { console.error('Answered notify error:', ne.message); }
     }
@@ -363,7 +363,7 @@ router.post('/:id/pray', authenticate, async (req, res) => {
         if (postOwner.rows.length > 0 && postOwner.rows[0].user_id !== userId) {
           const preview = postOwner.rows[0].content?.substring(0,50);
           const who = req.user.full_name || 'Alguém';
-          await createNotification(postOwner.rows[0].user_id, 'prayer', `${who} orou pelo teu pedido 🙏`, `Mais uma pessoa está contigo nesta oração: ${preview}...`, { postId: id, url: '/praca-oracao?pedido=' + id });
+          await createNotification(postOwner.rows[0].user_id, 'prayer', `${who} orou pelo teu pedido 🙏`, `Mais uma pessoa está contigo nesta oração: ${preview}...`, { postId: id, url: '/praca-oracao?pedido=' + id, kind: 'prayed', who, preview });
         }
       } catch(ne) {}
     }

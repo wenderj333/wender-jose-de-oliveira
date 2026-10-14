@@ -164,7 +164,7 @@ router.post('/:userId/amen', authenticate, async (req, res) => {
         try {
           const { createNotification } = require('./notifications');
           const who = req.user.full_name || 'Alguém';
-          await createNotification(profileUserId, 'like', who + ' deu Amém 🙏 na sua foto de perfil', '', { from: req.user.id, url: '/perfil/' + req.user.id, kind: 'profile_amen' });
+          await createNotification(profileUserId, 'like', who + ' deu Amém 🙏 na sua foto de perfil', '', { from: req.user.id, url: '/perfil/' + req.user.id, kind: 'profile_amen', who });
         } catch (e) { console.error('Profile amen notification:', e.message); }
       }
     }
