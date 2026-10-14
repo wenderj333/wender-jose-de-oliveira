@@ -302,6 +302,24 @@ router.post('/:id/comments', authenticate, async (req, res) => {
   }
 });
 
+// PUT /api/music/:id/genre — mudar a categoria (dono, pastor ou admin)
+const MUSIC_GENRES = new Set(['louvor', 'adoracao', 'hinos', 'instrumental', 'kids', 'oracao']);
+router.put('/:id/genre', authenticate, async (req, res) => {
+  try {
+    const genre = String(req.body?.genre || '');
+    if (!MUSIC_GENRES.has(genre)) return res.status(400).json({ error: 'Categoria inválida' });
+    const found = await db.query('SELECT user_id FROM music WHERE id = $1', [req.params.id]);
+    const song = found.rows[0];
+    if (!song) return res.status(404).json({ error: 'Música não encontrada' });
+    if (song.user_id !== req.user.id && req.user.role !== 'pastor' && req.user.role !== 'admin') return res.status(403).json({ error: 'Sem permissão' });
+    await db.query('UPDATE music SET genre = $1 WHERE id = $2', [genre, req.params.id]);
+    res.json({ success: true, genre });
+  } catch (err) {
+    console.error('Error updating genre:', err);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
 // PUT /api/music/:id/cover
 router.put('/:id/cover', authenticate, async (req, res) => {
   try {
