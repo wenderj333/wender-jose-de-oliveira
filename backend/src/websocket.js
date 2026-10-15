@@ -29,6 +29,16 @@ const prayerVoiceVotes = new Map(); // targetUserId -> Set<voterId>
 const prayerVoiceBlocked = new Map(); // userId -> blockedUntil (ms)
 const PV_MAX_SPEAKERS = 4;
 const PV_BLOCK_VOTES = 5;
+const PV_MUTE_VOTES = 5;
+const PV_MUTE_MINUTES = 15;
+const prayerVoiceMuteVotes = new Map(); // room:target -> Set<voterId>
+const prayerVoiceSilenced = new Map(); // userId -> silencedUntil (ms)
+function pvIsSilenced(userId) {
+  const until = prayerVoiceSilenced.get(userId);
+  if (!until) return false;
+  if (Date.now() > until) { prayerVoiceSilenced.delete(userId); return false; }
+  return true;
+}
 const PV_ROOMS = new Set(['geral', 'saude', 'familia', 'financas', 'emprego', 'casamento', 'filhos', 'libertacao', 'paz', 'gratidao']);
 function pvIsBlocked(userId) {
   const until = prayerVoiceBlocked.get(userId);
@@ -39,7 +49,7 @@ function pvIsBlocked(userId) {
 function pvState(room) {
   const members = prayerVoiceRooms.get(room);
   if (!members) return [];
-  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking }));
+  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking, silenced: pvIsSilenced(userId) }));
 }
 function pvBroadcast(room) {
   const members = prayerVoiceRooms.get(room);
@@ -216,6 +226,7 @@ function setupWebSocket(server) {
             if (!me) break;
             if (msg.on) {
               if (pvIsBlocked(info.userId)) { ws.send(JSON.stringify({ type: 'pv_error', code: 'blocked' })); break; }
+              if (pvIsSilenced(info.userId)) { ws.send(JSON.stringify({ type: 'pv_error', code: 'silenced', until: prayerVoiceSilenced.get(info.userId) })); break; }
               const speakers = [...members.values()].filter(m => m.speaking).length;
               if (!me.speaking && speakers >= PV_MAX_SPEAKERS) { ws.send(JSON.stringify({ type: 'pv_error', code: 'full' })); break; }
               me.speaking = true;
@@ -229,6 +240,30 @@ function setupWebSocket(server) {
             const target = members?.get(String(msg.to));
             if (!members?.has(info.userId) || !target || target.ws.readyState !== 1) break;
             target.ws.send(JSON.stringify({ type: 'pv_signal', from: info.userId, signal: msg.signal, key: msg.key }));
+            break;
+          }
+          case 'pv_mute': {
+            // Silenciar alguém que faz barulho: 5 pessoas (ou um líder) => microfone desligado por 15 minutos
+            const info = clients.get(ws);
+            const members = info?.pvRoom && prayerVoiceRooms.get(info.pvRoom);
+            const targetId = String(msg.target || '');
+            if (!members?.has(info.userId) || !targetId || targetId === info.userId || !members.has(targetId)) break;
+            const voterRole = members.get(info.userId)?.role;
+            const leader = voterRole === 'admin' || voterRole === 'pastor';
+            const key = info.pvRoom + ':' + targetId;
+            const voters = prayerVoiceMuteVotes.get(key) || new Set();
+            voters.add(info.userId);
+            prayerVoiceMuteVotes.set(key, voters);
+            const needed = Math.min(PV_MUTE_VOTES, Math.max(2, members.size - 1));
+            if (leader || voters.size >= needed) {
+              const until = Date.now() + PV_MUTE_MINUTES * 60 * 1000;
+              prayerVoiceSilenced.set(targetId, until);
+              prayerVoiceMuteVotes.delete(key);
+              const t = members.get(targetId);
+              if (t) { t.speaking = false; try { t.ws.send(JSON.stringify({ type: 'pv_silenced', until, minutes: PV_MUTE_MINUTES })); } catch (_) {} }
+              pvBroadcast(info.pvRoom);
+            }
+            ws.send(JSON.stringify({ type: 'pv_mute_ok', target: targetId, votes: leader ? needed : voters.size, needed, done: leader || voters.size >= needed }));
             break;
           }
           case 'pv_block': {
