@@ -118,6 +118,105 @@ function presencePayload(room) {
   return { count: people.length, total: publicPeople.length, rooms, people: people.slice(0, 80) };
 }
 
+// ---- Inauguração da Oração Mundial + avisos "há pessoas orando" ----
+const LAUNCH_AT = new Date(process.env.PRAYER_LAUNCH_AT || '2026-11-01T19:00:00Z'); // domingo 1/11, 20h Espanha
+db.query(`CREATE TABLE IF NOT EXISTS prayer_launch_signups (user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, lang VARCHAR(5), tz VARCHAR(64), created_at TIMESTAMP DEFAULT NOW())`).catch(e => console.error('prayer_launch_signups', e.message));
+db.query(`CREATE TABLE IF NOT EXISTS prayer_launch_sent (stage VARCHAR(30) PRIMARY KEY, sent_at TIMESTAMP DEFAULT NOW())`).catch(e => console.error('prayer_launch_sent', e.message));
+db.query(`CREATE TABLE IF NOT EXISTS prayer_alert_subs (user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, lang VARCHAR(5), tz VARCHAR(64), last_sent TIMESTAMP, created_at TIMESTAMP DEFAULT NOW())`).catch(e => console.error('prayer_alert_subs', e.message));
+
+const LAUNCH_TEXT = {
+  pt: { day: ['🙏 Amanhã: inauguração da Oração Mundial', 'Amanhã vamos orar juntos com irmãos de vários países. Não falte!'], soon: ['⏰ Em 15 minutos começa a Oração Mundial', 'Prepare o seu coração e entre na sala de voz.'], now: ['🎉 Começou a Oração Mundial!', 'Entre agora e ore junto com irmãos do mundo inteiro.'], praying: ['🟢 Há pessoas orando agora', '{n} pessoas estão na Oração Mundial. Venha orar junto!'] },
+  es: { day: ['🙏 Mañana: inauguración de la Oración Mundial', 'Mañana oraremos juntos con hermanos de varios países. ¡No faltes!'], soon: ['⏰ En 15 minutos empieza la Oración Mundial', 'Prepara tu corazón y entra en la sala de voz.'], now: ['🎉 ¡Empezó la Oración Mundial!', 'Entra ahora y ora junto con hermanos de todo el mundo.'], praying: ['🟢 Hay personas orando ahora', '{n} personas están en la Oración Mundial. ¡Ven a orar!'] },
+  en: { day: ['🙏 Tomorrow: World Prayer launch', 'Tomorrow we will pray together with believers from many countries. Don’t miss it!'], soon: ['⏰ World Prayer starts in 15 minutes', 'Prepare your heart and join the voice room.'], now: ['🎉 World Prayer has started!', 'Join now and pray with believers from all over the world.'], praying: ['🟢 People are praying now', '{n} people are in World Prayer. Come and pray with them!'] },
+  de: { day: ['🙏 Morgen: Start des Weltgebets', 'Morgen beten wir gemeinsam mit Gläubigen aus vielen Ländern. Sei dabei!'], soon: ['⏰ In 15 Minuten beginnt das Weltgebet', 'Bereite dein Herz vor und komm in den Sprachraum.'], now: ['🎉 Das Weltgebet hat begonnen!', 'Komm jetzt und bete mit Gläubigen aus aller Welt.'], praying: ['🟢 Gerade wird gebetet', '{n} Menschen sind im Weltgebet. Bete mit!'] },
+  fr: { day: ['🙏 Demain : lancement de la Prière Mondiale', 'Demain, nous prierons ensemble avec des croyants de nombreux pays. Ne manquez pas ça !'], soon: ['⏰ La Prière Mondiale commence dans 15 minutes', 'Préparez votre cœur et entrez dans la salle vocale.'], now: ['🎉 La Prière Mondiale a commencé !', 'Entrez maintenant et priez avec des croyants du monde entier.'], praying: ['🟢 Des personnes prient en ce moment', '{n} personnes sont dans la Prière Mondiale. Venez prier !'] },
+  ro: { day: ['🙏 Mâine: lansarea Rugăciunii Mondiale', 'Mâine ne rugăm împreună cu frați din multe țări. Nu lipsi!'], soon: ['⏰ În 15 minute începe Rugăciunea Mondială', 'Pregătește-ți inima și intră în camera vocală.'], now: ['🎉 A început Rugăciunea Mondială!', 'Intră acum și roagă-te cu frați din toată lumea.'], praying: ['🟢 Sunt oameni care se roagă acum', '{n} persoane sunt în Rugăciunea Mondială. Vino să te rogi!'] },
+  ru: { day: ['🙏 Завтра: открытие Мировой молитвы', 'Завтра мы будем молиться вместе с верующими из многих стран. Не пропустите!'], soon: ['⏰ Через 15 минут начнётся Мировая молитва', 'Приготовьте сердце и войдите в голосовую комнату.'], now: ['🎉 Мировая молитва началась!', 'Присоединяйтесь сейчас и молитесь с верующими со всего мира.'], praying: ['🟢 Сейчас люди молятся', '{n} человек в Мировой молитве. Присоединяйтесь!'] }
+};
+const lt = (lang) => LAUNCH_TEXT[String(lang || 'pt').slice(0, 2)] || LAUNCH_TEXT.pt;
+const cleanLang = (v) => (LAUNCH_TEXT[String(v || '').slice(0, 2)] ? String(v).slice(0, 2) : 'pt');
+const cleanTz = (v) => { const tz = String(v || '').slice(0, 64); try { Intl.DateTimeFormat('en', { timeZone: tz }); return tz; } catch { return null; } };
+const localHour = (tz) => { try { return Number(new Intl.DateTimeFormat('en-GB', { hour: '2-digit', hour12: false, timeZone: tz || 'Europe/Madrid' }).format(new Date())) % 24; } catch { return 12; } };
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+// GET /api/help-posts/launch — data da inauguração, inscritos, e o que eu ativei
+router.get('/launch', optionalAuth, async (req, res) => {
+  try {
+    const c = await db.query('SELECT COUNT(*)::int AS n FROM prayer_launch_signups');
+    let joined = false; let alerts = false;
+    if (req.user?.id) {
+      const a = await db.query('SELECT 1 FROM prayer_launch_signups WHERE user_id = $1', [req.user.id]);
+      const b = await db.query('SELECT 1 FROM prayer_alert_subs WHERE user_id = $1', [req.user.id]);
+      joined = !!a.rows[0]; alerts = !!b.rows[0];
+    }
+    res.set('Cache-Control', 'no-store');
+    res.json({ startsAt: LAUNCH_AT.toISOString(), count: c.rows[0].n, joined, alerts });
+  } catch (e) { res.json({ startsAt: LAUNCH_AT.toISOString(), count: 0, joined: false, alerts: false }); }
+});
+// POST /api/help-posts/launch/signup { on, lang, tz } — quero participar
+router.post('/launch/signup', authenticate, async (req, res) => {
+  try {
+    if (req.body?.on === false) await db.query('DELETE FROM prayer_launch_signups WHERE user_id = $1', [req.user.id]);
+    else {
+      await db.query('INSERT INTO prayer_launch_signups (user_id, lang, tz) VALUES ($1, $2, $3) ON CONFLICT (user_id) DO UPDATE SET lang = EXCLUDED.lang, tz = EXCLUDED.tz', [req.user.id, cleanLang(req.body?.lang), cleanTz(req.body?.tz)]);
+      // quem se inscreve também recebe o aviso "há pessoas orando"
+      await db.query('INSERT INTO prayer_alert_subs (user_id, lang, tz) VALUES ($1, $2, $3) ON CONFLICT (user_id) DO NOTHING', [req.user.id, cleanLang(req.body?.lang), cleanTz(req.body?.tz)]);
+    }
+    const c = await db.query('SELECT COUNT(*)::int AS n FROM prayer_launch_signups');
+    res.json({ ok: true, joined: req.body?.on !== false, count: c.rows[0].n });
+  } catch (e) { console.error('launch signup', e.message); res.status(500).json({ error: 'server' }); }
+});
+// POST /api/help-posts/alerts { on, lang, tz } — avisar-me quando houver pessoas orando
+router.post('/alerts', authenticate, async (req, res) => {
+  try {
+    if (req.body?.on) await db.query('INSERT INTO prayer_alert_subs (user_id, lang, tz) VALUES ($1, $2, $3) ON CONFLICT (user_id) DO UPDATE SET lang = EXCLUDED.lang, tz = EXCLUDED.tz', [req.user.id, cleanLang(req.body?.lang), cleanTz(req.body?.tz)]);
+    else await db.query('DELETE FROM prayer_alert_subs WHERE user_id = $1', [req.user.id]);
+    res.json({ ok: true, alerts: !!req.body?.on });
+  } catch (e) { res.status(500).json({ error: 'server' }); }
+});
+
+// Lembretes da inauguração (1 dia antes, 15 min antes, no início) — cada um só uma vez
+async function sendLaunchStage(stage) {
+  const claim = await db.query('INSERT INTO prayer_launch_sent (stage) VALUES ($1) ON CONFLICT DO NOTHING RETURNING stage', [stage]);
+  if (!claim.rows[0]) return;
+  const r = await db.query('SELECT user_id, lang FROM prayer_launch_signups');
+  console.log(`Oração Mundial: lembrete "${stage}" para ${r.rows.length} pessoas`);
+  for (const row of r.rows) {
+    const [title, body] = lt(row.lang)[stage];
+    await createNotification(row.user_id, 'prayer', title, body, { url: '/praca-oracao', kind: 'prayer_launch' });
+    await sleep(40);
+  }
+}
+async function launchTick() {
+  try {
+    const now = Date.now(); const at = LAUNCH_AT.getTime();
+    if (now >= at - 24 * 3600e3 && now < at - 20 * 3600e3) await sendLaunchStage('day');
+    if (now >= at - 15 * 60e3 && now < at) await sendLaunchStage('soon');
+    if (now >= at && now < at + 60 * 60e3) await sendLaunchStage('now');
+  } catch (e) { console.error('launchTick', e.message); }
+}
+setInterval(launchTick, 60 * 1000);
+setTimeout(launchTick, 15 * 1000);
+
+// Aviso "há pessoas orando": só com 3+ pessoas, no máximo 1 por dia, nunca de madrugada
+let lastAlertRun = 0;
+async function maybeSendPrayingAlerts(count, prayingIds) {
+  if (count < 3 || Date.now() - lastAlertRun < 10 * 60e3) return;
+  lastAlertRun = Date.now();
+  try {
+    const r = await db.query(`SELECT user_id, lang, tz FROM prayer_alert_subs WHERE last_sent IS NULL OR last_sent < NOW() - INTERVAL '20 hours' LIMIT 500`);
+    for (const row of r.rows) {
+      if (prayingIds.has(String(row.user_id))) continue;
+      const h = localHour(row.tz);
+      if (h < 8 || h >= 22) continue;
+      const [title, body] = lt(row.lang).praying;
+      await db.query('UPDATE prayer_alert_subs SET last_sent = NOW() WHERE user_id = $1', [row.user_id]);
+      await createNotification(row.user_id, 'prayer', title, body.replace('{n}', count), { url: '/praca-oracao', kind: 'praying_now' });
+      await sleep(40);
+    }
+  } catch (e) { console.error('praying alerts', e.message); }
+}
+
 // ---- Salas privadas ----
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const newCode = () => Array.from({ length: 6 }, () => CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]).join('');
@@ -164,8 +263,15 @@ router.delete('/private-rooms/:code', authenticate, async (req, res) => {
 });
 
 // GET /api/help-posts/presence — pessoas a orar agora
+const presenceCache = new Map(); // room -> { at, data } (alivia o servidor quando há muita gente)
 router.get('/presence', (req, res) => {
-  res.json(presencePayload(String(req.query.room || 'geral')));
+  const room = String(req.query.room || 'geral').slice(0, 20);
+  const hit = presenceCache.get(room);
+  if (hit && Date.now() - hit.at < 3000) return res.json(hit.data);
+  const data = presencePayload(room);
+  if (presenceCache.size > 500) presenceCache.clear();
+  presenceCache.set(room, { at: Date.now(), data });
+  res.json(data);
 });
 
 // POST /api/help-posts/presence — { active: true|false }
@@ -178,7 +284,12 @@ router.post('/presence', authenticate, (req, res) => {
     const sameRoom = current && current.room === room;
     prayerPresence.set(id, { name: req.user.full_name || '', avatar_url: req.user.avatar_url || null, room, since: sameRoom ? current.since : Date.now(), lastSeen: Date.now() });
   }
-  res.json(presencePayload(String(req.body?.room || 'geral')));
+  const payload = presencePayload(String(req.body?.room || 'geral'));
+  res.json(payload);
+  if (req.body?.active !== false && payload.total >= 3) {
+    const ids = new Set(activePresence().map(p => String(p.user_id)));
+    maybeSendPrayingAlerts(payload.total, ids).catch(() => {});
+  }
 });
 
 // GET /api/help-posts — lista de posts (auth opcional)

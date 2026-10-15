@@ -46,15 +46,44 @@ function pvIsBlocked(userId) {
   if (Date.now() > until) { prayerVoiceBlocked.delete(userId); return false; }
   return true;
 }
+const PV_ROOM_CAP = 15; // pessoas por sala de voz; quando enche abre a Sala 2, 3, ...
+const pvBase = (key) => String(key).split('#')[0];
+const pvPart = (key) => { const n = parseInt(String(key).split('#')[1], 10); return n > 1 ? n : 1; };
+const pvKey = (room, part) => (part > 1 ? room + '#' + part : room);
+function pvFindUser(room, userId) {
+  for (const [key, members] of prayerVoiceRooms) if (pvBase(key) === room && members.has(userId)) return key;
+  return null;
+}
+function pvPickPart(room) {
+  for (let part = 1; part <= 200; part++) {
+    const key = pvKey(room, part);
+    const members = prayerVoiceRooms.get(key);
+    if (!members || members.size < PV_ROOM_CAP) return key;
+  }
+  return pvKey(room, 201);
+}
+function pvPromote(key) {
+  // Abriu um lugar para falar: avisa o primeiro da fila (mão levantada)
+  const members = prayerVoiceRooms.get(key);
+  if (!members) return;
+  const speakers = [...members.values()].filter(m => m.speaking).length;
+  if (speakers >= PV_MAX_SPEAKERS) return;
+  const next = [...members.entries()].filter(([, m]) => m.hand && !m.speaking).sort((a, b) => a[1].hand - b[1].hand)[0];
+  if (next && next[1].ws.readyState === 1 && !next[1].notified) {
+    next[1].notified = true;
+    try { next[1].ws.send(JSON.stringify({ type: 'pv_your_turn' })); } catch (_) {}
+  }
+}
 function pvState(room) {
   const members = prayerVoiceRooms.get(room);
   if (!members) return [];
-  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking, silenced: pvIsSilenced(userId) }));
+  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking, silenced: pvIsSilenced(userId), hand: m.hand || 0 }));
 }
 function pvBroadcast(room) {
   const members = prayerVoiceRooms.get(room);
   if (!members) return;
-  const payload = JSON.stringify({ type: 'pv_state', room, members: pvState(room), maxSpeakers: PV_MAX_SPEAKERS });
+  let parts = 0; for (const k of prayerVoiceRooms.keys()) if (pvBase(k) === pvBase(room)) parts++;
+  const payload = JSON.stringify({ type: 'pv_state', room: pvBase(room), part: pvPart(room), parts, members: pvState(room), maxSpeakers: PV_MAX_SPEAKERS, cap: PV_ROOM_CAP });
   for (const m of members.values()) if (m.ws.readyState === 1) { try { m.ws.send(payload); } catch (_) {} }
 }
 function pvLeave(ws) {
@@ -63,7 +92,7 @@ function pvLeave(ws) {
   const members = prayerVoiceRooms.get(info.pvRoom);
   if (members && members.get(info.userId)?.ws === ws) {
     members.delete(info.userId);
-    if (!members.size) prayerVoiceRooms.delete(info.pvRoom); else pvBroadcast(info.pvRoom);
+    if (!members.size) prayerVoiceRooms.delete(info.pvRoom); else { pvPromote(info.pvRoom); pvBroadcast(info.pvRoom); }
   }
   info.pvRoom = null;
 }
@@ -206,16 +235,19 @@ function setupWebSocket(server) {
             if (!info?.userId) { ws.send(JSON.stringify({ type: 'pv_error', code: 'login' })); break; }
             const room = (PV_ROOMS.has(String(msg.room)) || /^p-[A-Z0-9]{6}$/.test(String(msg.room))) ? String(msg.room) : 'geral';
             if (pvIsBlocked(info.userId)) { ws.send(JSON.stringify({ type: 'pv_error', code: 'blocked' })); break; }
-            if (info.pvRoom && info.pvRoom !== room) pvLeave(ws);
+            if (info.pvRoom && pvBase(info.pvRoom) !== room) pvLeave(ws);
             if (!info.pvRole) {
               try { const r = await db.query('SELECT role, full_name, avatar_url FROM users WHERE id = $1', [info.userId]); info.pvRole = r.rows[0]?.role || 'member'; info.pvName = r.rows[0]?.full_name; info.pvAvatar = r.rows[0]?.avatar_url; } catch (_) { info.pvRole = 'member'; }
             }
-            if (!prayerVoiceRooms.has(room)) prayerVoiceRooms.set(room, new Map());
-            const previous = prayerVoiceRooms.get(room).get(info.userId);
-            if (previous && previous.ws !== ws && previous.ws.readyState === 1) { try { previous.ws.send(JSON.stringify({ type: 'pv_kicked', reason: 'other_device' })); } catch (_) {} }
-            prayerVoiceRooms.get(room).set(info.userId, { ws, name: info.pvName || String(msg.name || '').slice(0, 80), avatar: info.pvAvatar || null, speaking: false, role: info.pvRole });
-            info.pvRoom = room;
-            pvBroadcast(room);
+            // Já estava nesta sala (outro aparelho ou reconexão)? Fica na mesma parte.
+            const existingKey = pvFindUser(room, info.userId);
+            const key = existingKey || pvPickPart(room);
+            if (!prayerVoiceRooms.has(key)) prayerVoiceRooms.set(key, new Map());
+            const previous = prayerVoiceRooms.get(key).get(info.userId);
+            if (previous && previous.ws !== ws && previous.ws.readyState === 1) { try { previous.ws.send(JSON.stringify({ type: 'pv_kicked', reason: 'other_device' })); } catch (_) {} const pi = clients.get(previous.ws); if (pi) pi.pvRoom = null; }
+            prayerVoiceRooms.get(key).set(info.userId, { ws, name: info.pvName || String(msg.name || '').slice(0, 80), avatar: info.pvAvatar || null, speaking: false, role: info.pvRole, hand: 0 });
+            info.pvRoom = key;
+            pvBroadcast(key);
             break;
           }
           case 'pv_leave': { pvLeave(ws); break; }
@@ -228,9 +260,24 @@ function setupWebSocket(server) {
               if (pvIsBlocked(info.userId)) { ws.send(JSON.stringify({ type: 'pv_error', code: 'blocked' })); break; }
               if (pvIsSilenced(info.userId)) { ws.send(JSON.stringify({ type: 'pv_error', code: 'silenced', until: prayerVoiceSilenced.get(info.userId) })); break; }
               const speakers = [...members.values()].filter(m => m.speaking).length;
-              if (!me.speaking && speakers >= PV_MAX_SPEAKERS) { ws.send(JSON.stringify({ type: 'pv_error', code: 'full' })); break; }
-              me.speaking = true;
-            } else me.speaking = false;
+              if (!me.speaking && speakers >= PV_MAX_SPEAKERS) {
+                // Lugar cheio: entra na fila (mão levantada) e é avisado quando abrir lugar
+                if (!me.hand) { me.hand = Date.now(); me.notified = false; }
+                const position = [...members.values()].filter(m => m.hand && !m.speaking && m.hand <= me.hand).length;
+                ws.send(JSON.stringify({ type: 'pv_error', code: 'full', queued: true, position }));
+                pvBroadcast(info.pvRoom);
+                break;
+              }
+              me.speaking = true; me.hand = 0; me.notified = false;
+            } else { me.speaking = false; pvPromote(info.pvRoom); }
+            pvBroadcast(info.pvRoom);
+            break;
+          }
+          case 'pv_hand': {
+            const info = clients.get(ws);
+            const me = info?.pvRoom && prayerVoiceRooms.get(info.pvRoom)?.get(info.userId);
+            if (!me) break;
+            me.hand = msg.on ? (me.hand || Date.now()) : 0; me.notified = false;
             pvBroadcast(info.pvRoom);
             break;
           }
@@ -260,7 +307,8 @@ function setupWebSocket(server) {
               prayerVoiceSilenced.set(targetId, until);
               prayerVoiceMuteVotes.delete(key);
               const t = members.get(targetId);
-              if (t) { t.speaking = false; try { t.ws.send(JSON.stringify({ type: 'pv_silenced', until, minutes: PV_MUTE_MINUTES })); } catch (_) {} }
+              if (t) { t.speaking = false; t.hand = 0; try { t.ws.send(JSON.stringify({ type: 'pv_silenced', until, minutes: PV_MUTE_MINUTES })); } catch (_) {} }
+              pvPromote(info.pvRoom);
               pvBroadcast(info.pvRoom);
             }
             ws.send(JSON.stringify({ type: 'pv_mute_ok', target: targetId, votes: leader ? needed : voters.size, needed, done: leader || voters.size >= needed }));
