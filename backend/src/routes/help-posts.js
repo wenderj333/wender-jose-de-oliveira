@@ -92,6 +92,17 @@ function optionalAuth(req, res, next) {
 const prayerPresence = new Map(); // userId -> { name, avatar_url, since, lastSeen, room }
 const PRAYER_ROOMS = new Set(['geral', 'saude', 'familia', 'financas', 'emprego', 'casamento', 'filhos', 'libertacao', 'paz', 'gratidao']);
 const PRESENCE_TTL = 75 * 1000;
+// Salas privadas: código de 6 letras/números, ex.: p-K7M2QX
+const PRIVATE_ROOM_RE = /^p-[A-Z0-9]{6}$/;
+const isPrivateRoom = (room) => PRIVATE_ROOM_RE.test(String(room || ''));
+const validRoom = (room) => PRAYER_ROOMS.has(String(room)) || isPrivateRoom(room);
+db.query(`CREATE TABLE IF NOT EXISTS prayer_private_rooms (
+  code VARCHAR(6) PRIMARY KEY,
+  name VARCHAR(80) NOT NULL,
+  owner_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  last_used_at TIMESTAMP DEFAULT NOW()
+)`).catch(e => console.error('prayer_private_rooms', e.message));
 function activePresence() {
   const now = Date.now();
   for (const [id, p] of prayerPresence) if (now - p.lastSeen > PRESENCE_TTL) prayerPresence.delete(id);
@@ -100,10 +111,57 @@ function activePresence() {
 function presencePayload(room) {
   const everyone = activePresence();
   const rooms = {};
-  for (const person of everyone) rooms[person.room] = (rooms[person.room] || 0) + 1;
-  const people = room && room !== 'geral' ? everyone.filter(person => person.room === room) : everyone;
-  return { count: people.length, total: everyone.length, rooms, people: people.slice(0, 80) };
+  // Quem está numa sala privada não aparece na sala geral nem nas contagens públicas
+  const publicPeople = everyone.filter(person => !isPrivateRoom(person.room));
+  for (const person of publicPeople) rooms[person.room] = (rooms[person.room] || 0) + 1;
+  const people = room && room !== 'geral' ? everyone.filter(person => person.room === room) : publicPeople;
+  return { count: people.length, total: publicPeople.length, rooms, people: people.slice(0, 80) };
 }
+
+// ---- Salas privadas ----
+const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const newCode = () => Array.from({ length: 6 }, () => CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]).join('');
+// POST /api/help-posts/private-rooms { name } — cria uma sala privada
+router.post('/private-rooms', authenticate, async (req, res) => {
+  try {
+    const name = String(req.body?.name || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+    if (name.length < 2) return res.status(400).json({ error: 'name' });
+    const mine = await db.query('SELECT COUNT(*)::int AS n FROM prayer_private_rooms WHERE owner_id = $1', [req.user.id]);
+    if (mine.rows[0].n >= 20) return res.status(429).json({ error: 'limit' });
+    for (let i = 0; i < 6; i++) {
+      const code = newCode();
+      try {
+        const r = await db.query('INSERT INTO prayer_private_rooms (code, name, owner_id) VALUES ($1, $2, $3) RETURNING code, name', [code, name, req.user.id]);
+        return res.json({ room: { ...r.rows[0], owner_id: req.user.id } });
+      } catch (e) { if (e.code !== '23505') throw e; }
+    }
+    res.status(500).json({ error: 'code' });
+  } catch (e) { console.error('private-rooms create', e.message); res.status(500).json({ error: 'server' }); }
+});
+// GET /api/help-posts/private-rooms/mine — salas que criei
+router.get('/private-rooms/mine', authenticate, async (req, res) => {
+  try {
+    const r = await db.query('SELECT code, name, owner_id FROM prayer_private_rooms WHERE owner_id = $1 ORDER BY created_at DESC', [req.user.id]);
+    res.json({ rooms: r.rows });
+  } catch (e) { res.status(500).json({ error: 'server' }); }
+});
+// GET /api/help-posts/private-rooms/:code — dados públicos da sala (para entrar com o código)
+router.get('/private-rooms/:code', async (req, res) => {
+  try {
+    const code = String(req.params.code || '').toUpperCase().replace(/^P-/, '').replace(/[^A-Z0-9]/g, '').slice(0, 6);
+    const r = await db.query('SELECT p.code, p.name, p.owner_id, u.full_name AS owner_name FROM prayer_private_rooms p LEFT JOIN users u ON u.id = p.owner_id WHERE p.code = $1', [code]);
+    if (!r.rows[0]) return res.status(404).json({ error: 'not_found' });
+    db.query('UPDATE prayer_private_rooms SET last_used_at = NOW() WHERE code = $1', [code]).catch(() => {});
+    res.json({ room: r.rows[0] });
+  } catch (e) { res.status(500).json({ error: 'server' }); }
+});
+// DELETE /api/help-posts/private-rooms/:code — o dono apaga a sala
+router.delete('/private-rooms/:code', authenticate, async (req, res) => {
+  try {
+    const r = await db.query('DELETE FROM prayer_private_rooms WHERE code = $1 AND owner_id = $2 RETURNING code', [String(req.params.code || '').toUpperCase(), req.user.id]);
+    res.json({ ok: !!r.rows[0] });
+  } catch (e) { res.status(500).json({ error: 'server' }); }
+});
 
 // GET /api/help-posts/presence — pessoas a orar agora
 router.get('/presence', (req, res) => {
@@ -116,7 +174,7 @@ router.post('/presence', authenticate, (req, res) => {
   if (req.body && req.body.active === false) prayerPresence.delete(id);
   else {
     const current = prayerPresence.get(id);
-    const room = PRAYER_ROOMS.has(String(req.body?.room)) ? String(req.body.room) : 'geral';
+    const room = validRoom(req.body?.room) ? String(req.body.room) : 'geral';
     const sameRoom = current && current.room === room;
     prayerPresence.set(id, { name: req.user.full_name || '', avatar_url: req.user.avatar_url || null, room, since: sameRoom ? current.since : Date.now(), lastSeen: Date.now() });
   }

@@ -27,7 +27,7 @@ const privateCalls = new Map();
 const prayerVoiceRooms = new Map();
 const prayerVoiceVotes = new Map(); // targetUserId -> Set<voterId>
 const prayerVoiceBlocked = new Map(); // userId -> blockedUntil (ms)
-const PV_MAX_SPEAKERS = 4;
+const PV_MAX_SPEAKERS = 8;
 const PV_BLOCK_VOTES = 5;
 const PV_MUTE_VOTES = 5;
 const PV_MUTE_MINUTES = 15;
@@ -204,7 +204,7 @@ function setupWebSocket(server) {
           case 'pv_join': {
             const info = clients.get(ws);
             if (!info?.userId) { ws.send(JSON.stringify({ type: 'pv_error', code: 'login' })); break; }
-            const room = PV_ROOMS.has(String(msg.room)) ? String(msg.room) : 'geral';
+            const room = (PV_ROOMS.has(String(msg.room)) || /^p-[A-Z0-9]{6}$/.test(String(msg.room))) ? String(msg.room) : 'geral';
             if (pvIsBlocked(info.userId)) { ws.send(JSON.stringify({ type: 'pv_error', code: 'blocked' })); break; }
             if (info.pvRoom && info.pvRoom !== room) pvLeave(ws);
             if (!info.pvRole) {
