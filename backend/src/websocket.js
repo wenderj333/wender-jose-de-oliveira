@@ -63,7 +63,16 @@ function pvPickPart(room) {
   return pvKey(room, 201);
 }
 // Tempo de cada vez conforme a fila: ninguém à espera = sem limite
-const pvTurnMs = (waiting) => (waiting <= 0 ? 0 : waiting === 1 ? 5 * 60e3 : waiting <= 3 ? 3 * 60e3 : 2 * 60e3);
+// Tempo de cada pessoa (configurável por sala: 30 s a 20 min; padrão 3 min). Sem fila = sem limite.
+const PV_TURN_DEFAULT = 180;
+const pvTurnSettings = new Map(); // sala -> segundos
+const pvRoomOwners = new Map(); // sala privada -> owner_id
+db.query(`CREATE TABLE IF NOT EXISTS prayer_room_settings (room VARCHAR(20) PRIMARY KEY, turn_seconds INT NOT NULL, updated_by UUID, updated_at TIMESTAMP DEFAULT NOW())`)
+  .then(() => db.query('SELECT room, turn_seconds FROM prayer_room_settings'))
+  .then(r => { for (const row of r.rows || []) pvTurnSettings.set(row.room, row.turn_seconds); })
+  .catch(e => console.error('prayer_room_settings', e.message));
+const pvTurnSeconds = (room) => pvTurnSettings.get(pvBase(room)) || PV_TURN_DEFAULT;
+const pvTurnMs = (waiting, room) => (waiting <= 0 ? 0 : pvTurnSeconds(room) * 1000);
 const pvWaiting = (members) => [...members.values()].filter(m => m.hand && !m.speaking).length;
 function pvStartLimitIfQueue(members) {
   // Alguém entrou na fila: o tempo de quem está a orar começa a contar a partir de agora
@@ -85,13 +94,13 @@ function pvPromote(key) {
 function pvState(room) {
   const members = prayerVoiceRooms.get(room);
   if (!members) return [];
-  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking, silenced: pvIsSilenced(userId), hand: m.hand || 0, turnLeft: (m.speaking && m.limitFrom) ? Math.max(0, m.limitFrom + pvTurnMs(pvWaiting(members)) - Date.now()) : null }));
+  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking, silenced: pvIsSilenced(userId), hand: m.hand || 0, turnLeft: (m.speaking && m.limitFrom) ? Math.max(0, m.limitFrom + pvTurnMs(pvWaiting(members), room) - Date.now()) : null }));
 }
 function pvBroadcast(room) {
   const members = prayerVoiceRooms.get(room);
   if (!members) return;
   let parts = 0; for (const k of prayerVoiceRooms.keys()) if (pvBase(k) === pvBase(room)) parts++;
-  const payload = JSON.stringify({ type: 'pv_state', room: pvBase(room), part: pvPart(room), parts, members: pvState(room), maxSpeakers: PV_MAX_SPEAKERS, cap: PV_ROOM_CAP });
+  const payload = JSON.stringify({ type: 'pv_state', room: pvBase(room), part: pvPart(room), parts, members: pvState(room), maxSpeakers: PV_MAX_SPEAKERS, cap: PV_ROOM_CAP, turnSeconds: pvTurnSeconds(room), ownerId: pvRoomOwners.get(pvBase(room)) || null });
   for (const m of members.values()) if (m.ws.readyState === 1) { try { m.ws.send(payload); } catch (_) {} }
 }
 function pvLeave(ws) {
@@ -143,7 +152,7 @@ function setupWebSocket(server) {
       let changed = false;
       const waiting = pvWaiting(members);
       for (const m of members.values()) {
-        if (m.speaking && m.limitFrom && waiting && now >= m.limitFrom + pvTurnMs(waiting)) {
+        if (m.speaking && m.limitFrom && waiting && now >= m.limitFrom + pvTurnMs(waiting, key)) {
           m.speaking = false; m.limitFrom = 0; changed = true;
           try { m.ws.send(JSON.stringify({ type: 'pv_turn_over' })); } catch (_) {}
         }
@@ -263,6 +272,9 @@ function setupWebSocket(server) {
             if (!info.pvRole) {
               try { const r = await db.query('SELECT role, full_name, avatar_url FROM users WHERE id = $1', [info.userId]); info.pvRole = r.rows[0]?.role || 'member'; info.pvName = r.rows[0]?.full_name; info.pvAvatar = r.rows[0]?.avatar_url; } catch (_) { info.pvRole = 'member'; }
             }
+            if (/^p-[A-Z0-9]{6}$/.test(room) && !pvRoomOwners.has(room)) {
+              try { const o = await db.query('SELECT owner_id FROM prayer_private_rooms WHERE code = $1', [room.slice(2)]); pvRoomOwners.set(room, o.rows[0]?.owner_id ? String(o.rows[0].owner_id) : ''); } catch (_) {}
+            }
             // Já estava nesta sala (outro aparelho ou reconexão)? Fica na mesma parte.
             const existingKey = pvFindUser(room, info.userId);
             const key = existingKey || pvPickPart(room);
@@ -300,6 +312,24 @@ function setupWebSocket(server) {
               me.limitFrom = pvWaiting(members) ? Date.now() : 0;
             } else { me.speaking = false; me.limitFrom = 0; pvPromote(info.pvRoom); }
             pvBroadcast(info.pvRoom);
+            break;
+          }
+          case 'pv_settings': {
+            // Líderes (admin/pastor) e o dono da sala privada mudam o tempo de cada pessoa
+            const info = clients.get(ws);
+            const members = info?.pvRoom && prayerVoiceRooms.get(info.pvRoom);
+            const me = members?.get(info.userId);
+            if (!me) break;
+            const base = pvBase(info.pvRoom);
+            const leader = me.role === 'admin' || me.role === 'pastor';
+            const owner = pvRoomOwners.get(base) && pvRoomOwners.get(base) === String(info.userId);
+            if (!leader && !owner) { ws.send(JSON.stringify({ type: 'pv_error', code: 'not_allowed' })); break; }
+            const secs = Math.round(Number(msg.turnSeconds));
+            if (!Number.isFinite(secs) || secs < 30 || secs > 1200) break;
+            pvTurnSettings.set(base, secs);
+            try { await db.query('INSERT INTO prayer_room_settings (room, turn_seconds, updated_by, updated_at) VALUES ($1, $2, $3, NOW()) ON CONFLICT (room) DO UPDATE SET turn_seconds = EXCLUDED.turn_seconds, updated_by = EXCLUDED.updated_by, updated_at = NOW()', [base, secs, info.userId]); } catch (_) {}
+            for (const [k] of prayerVoiceRooms) if (pvBase(k) === base) pvBroadcast(k);
+            ws.send(JSON.stringify({ type: 'pv_settings_ok', turnSeconds: secs }));
             break;
           }
           case 'pv_react': {
