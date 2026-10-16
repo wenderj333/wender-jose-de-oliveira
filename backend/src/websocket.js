@@ -27,7 +27,7 @@ const privateCalls = new Map();
 const prayerVoiceRooms = new Map();
 const prayerVoiceVotes = new Map(); // targetUserId -> Set<voterId>
 const prayerVoiceBlocked = new Map(); // userId -> blockedUntil (ms)
-const PV_MAX_SPEAKERS = 8;
+const PV_MAX_SPEAKERS = 1; // um de cada vez (evita eco), com fila e tempo
 const PV_BLOCK_VOTES = 5;
 const PV_MUTE_VOTES = 5;
 const PV_MUTE_MINUTES = 15;
@@ -62,6 +62,14 @@ function pvPickPart(room) {
   }
   return pvKey(room, 201);
 }
+// Tempo de cada vez conforme a fila: ninguém à espera = sem limite
+const pvTurnMs = (waiting) => (waiting <= 0 ? 0 : waiting === 1 ? 5 * 60e3 : waiting <= 3 ? 3 * 60e3 : 2 * 60e3);
+const pvWaiting = (members) => [...members.values()].filter(m => m.hand && !m.speaking).length;
+function pvStartLimitIfQueue(members) {
+  // Alguém entrou na fila: o tempo de quem está a orar começa a contar a partir de agora
+  if (!pvWaiting(members)) return;
+  for (const m of members.values()) if (m.speaking && !m.limitFrom) m.limitFrom = Date.now();
+}
 function pvPromote(key) {
   // Abriu um lugar para falar: avisa o primeiro da fila (mão levantada)
   const members = prayerVoiceRooms.get(key);
@@ -70,14 +78,14 @@ function pvPromote(key) {
   if (speakers >= PV_MAX_SPEAKERS) return;
   const next = [...members.entries()].filter(([, m]) => m.hand && !m.speaking).sort((a, b) => a[1].hand - b[1].hand)[0];
   if (next && next[1].ws.readyState === 1 && !next[1].notified) {
-    next[1].notified = true;
+    next[1].notified = Date.now();
     try { next[1].ws.send(JSON.stringify({ type: 'pv_your_turn' })); } catch (_) {}
   }
 }
 function pvState(room) {
   const members = prayerVoiceRooms.get(room);
   if (!members) return [];
-  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking, silenced: pvIsSilenced(userId), hand: m.hand || 0 }));
+  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking, silenced: pvIsSilenced(userId), hand: m.hand || 0, turnLeft: (m.speaking && m.limitFrom) ? Math.max(0, m.limitFrom + pvTurnMs(pvWaiting(members)) - Date.now()) : null }));
 }
 function pvBroadcast(room) {
   const members = prayerVoiceRooms.get(room);
@@ -128,6 +136,22 @@ function notifyUser(userId, payload) {
 
 function setupWebSocket(server) {
   const wss = new WebSocketServer({ server, path: '/ws' });
+  // Sala de voz: acaba o tempo de quem está a orar e passa a vez; quem foi chamado e não começou sai da fila
+  setInterval(() => {
+    const now = Date.now();
+    for (const [key, members] of prayerVoiceRooms) {
+      let changed = false;
+      const waiting = pvWaiting(members);
+      for (const m of members.values()) {
+        if (m.speaking && m.limitFrom && waiting && now >= m.limitFrom + pvTurnMs(waiting)) {
+          m.speaking = false; m.limitFrom = 0; changed = true;
+          try { m.ws.send(JSON.stringify({ type: 'pv_turn_over' })); } catch (_) {}
+        }
+        if (m.hand && m.notified && !m.speaking && now - m.notified > 45000) { m.hand = 0; m.notified = false; changed = true; }
+      }
+      if (changed) { pvPromote(key); pvBroadcast(key); }
+    }
+  }, 3000);
   // Ping para manter conexoes activas
   setInterval(() => {
     wss.clients.forEach(ws => {
@@ -260,17 +284,35 @@ function setupWebSocket(server) {
               if (pvIsBlocked(info.userId)) { ws.send(JSON.stringify({ type: 'pv_error', code: 'blocked' })); break; }
               if (pvIsSilenced(info.userId)) { ws.send(JSON.stringify({ type: 'pv_error', code: 'silenced', until: prayerVoiceSilenced.get(info.userId) })); break; }
               const speakers = [...members.values()].filter(m => m.speaking).length;
-              if (!me.speaking && speakers >= PV_MAX_SPEAKERS) {
+              // Há fila? Só o primeiro da fila pode começar; os outros entram na fila
+              const firstInLine = [...members.entries()].filter(([, m]) => m.hand && !m.speaking).sort((a, b) => a[1].hand - b[1].hand)[0];
+              const jumpsQueue = firstInLine && firstInLine[0] !== info.userId;
+              if (!me.speaking && (speakers >= PV_MAX_SPEAKERS || jumpsQueue)) {
                 // Lugar cheio: entra na fila (mão levantada) e é avisado quando abrir lugar
                 if (!me.hand) { me.hand = Date.now(); me.notified = false; }
                 const position = [...members.values()].filter(m => m.hand && !m.speaking && m.hand <= me.hand).length;
                 ws.send(JSON.stringify({ type: 'pv_error', code: 'full', queued: true, position }));
+                pvStartLimitIfQueue(members);
                 pvBroadcast(info.pvRoom);
                 break;
               }
               me.speaking = true; me.hand = 0; me.notified = false;
-            } else { me.speaking = false; pvPromote(info.pvRoom); }
+              me.limitFrom = pvWaiting(members) ? Date.now() : 0;
+            } else { me.speaking = false; me.limitFrom = 0; pvPromote(info.pvRoom); }
             pvBroadcast(info.pvRoom);
+            break;
+          }
+          case 'pv_react': {
+            // 🙏 Amém de quem está a ouvir (sem abrir o microfone)
+            const info = clients.get(ws);
+            const members = info?.pvRoom && prayerVoiceRooms.get(info.pvRoom);
+            const me = members?.get(info.userId);
+            if (!me) break;
+            const now = Date.now();
+            if (me.lastReact && now - me.lastReact < 1500) break;
+            me.lastReact = now;
+            const payload = JSON.stringify({ type: 'pv_react', from: info.userId, name: me.name, emoji: '🙏' });
+            for (const m of members.values()) if (m.ws.readyState === 1) { try { m.ws.send(payload); } catch (_) {} }
             break;
           }
           case 'pv_hand': {
@@ -278,6 +320,8 @@ function setupWebSocket(server) {
             const me = info?.pvRoom && prayerVoiceRooms.get(info.pvRoom)?.get(info.userId);
             if (!me) break;
             me.hand = msg.on ? (me.hand || Date.now()) : 0; me.notified = false;
+            const hm = prayerVoiceRooms.get(info.pvRoom);
+            if (msg.on) pvStartLimitIfQueue(hm); else pvPromote(info.pvRoom);
             pvBroadcast(info.pvRoom);
             break;
           }
