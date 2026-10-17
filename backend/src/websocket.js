@@ -163,6 +163,12 @@ function setupWebSocket(server) {
       if (changed) { pvPromote(key); pvBroadcast(key); }
     }
   }, 3000);
+  // "Online" (bolinha verde em Membros): quem tem o site/app aberto e identificado conta como visto agora
+  const touchOnline = () => {
+    const ids = [...new Set([...clients.values()].map(c => c && c.userId).filter(Boolean).map(String))].filter(id => /^[0-9a-f-]{36}$/i.test(id));
+    if (ids.length) db.query('UPDATE users SET last_seen_at = NOW() WHERE id = ANY($1::uuid[])', [ids]).catch(e => console.error('last_seen', e.message));
+  };
+  setInterval(touchOnline, 120000);
   // Ping para manter conexoes activas
   setInterval(() => {
     wss.clients.forEach(ws => {
@@ -208,6 +214,7 @@ function setupWebSocket(server) {
               // this merge, an early `live_join` could be erased and the user
               // would appear as offline to everyone else in the room.
               clients.set(ws, { ...(clients.get(ws) || {}), userId: decoded.id, churchId: msg.churchId });
+              db.query('UPDATE users SET last_seen_at = NOW() WHERE id = $1', [decoded.id]).catch(() => {});
             } catch (_) { ws.close(1008, 'authentication required'); break; }
             // Send current live sessions
             const liveSessions = await PastorSession.getLiveSessions();
@@ -1340,7 +1347,16 @@ function handleGameQueue(ws, msg) {
     broadcastDuelLobby();
   }
 }
-module.exports = { setupWebSocket, notifyUser };
+// Quem está numa sala de voz também conta como "orando agora" (bolinhas da Oração Mundial)
+function voicePresence() {
+  const out = [];
+  for (const [key, members] of prayerVoiceRooms) {
+    const room = pvBase(key);
+    for (const [userId, m] of members) out.push({ user_id: String(userId), name: m.name || '', avatar_url: m.avatar || null, room });
+  }
+  return out;
+}
+module.exports = { setupWebSocket, notifyUser, voicePresence };
 
 // clean
 

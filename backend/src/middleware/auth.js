@@ -11,6 +11,16 @@ function generateToken(user) {
   );
 }
 
+// Atualiza "visto por último" no máximo 1 vez por minuto por pessoa (bolinha verde de online)
+const lastTouch = new Map();
+function touchLastSeen(id) {
+  const now = Date.now(); const k = String(id);
+  if (now - (lastTouch.get(k) || 0) < 60000) return;
+  lastTouch.set(k, now);
+  if (lastTouch.size > 20000) lastTouch.clear();
+  db.query('UPDATE users SET last_seen_at = NOW() WHERE id = $1', [id]).catch(() => {});
+}
+
 async function authenticate(req, res, next) {
   const header = req.headers.authorization;
   if (!header || !header.startsWith('Bearer ')) {
@@ -25,6 +35,7 @@ async function authenticate(req, res, next) {
     if (!user) return res.status(401).json({ error: 'Usuário não encontrado' });
     if (user.is_suspended) return res.status(403).json({ error: 'Esta conta foi suspensa pela moderação.' });
     req.user = user;
+    touchLastSeen(user.id);
     next();
   } catch (err) {
     return res.status(401).json({ error: 'Token inválido' });

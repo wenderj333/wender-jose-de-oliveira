@@ -110,6 +110,15 @@ function activePresence() {
 }
 function presencePayload(room) {
   const everyone = activePresence();
+  // Junta quem está na sala de voz (mesmo que o aparelho não tenha avisado a presença)
+  try {
+    const seen = new Set(everyone.map(p => String(p.user_id)));
+    for (const v of require('../websocket').voicePresence()) {
+      if (seen.has(v.user_id)) continue;
+      seen.add(v.user_id);
+      everyone.push({ ...v, since: new Date().toISOString() });
+    }
+  } catch (_) { /* sem sala de voz */ }
   const rooms = {};
   // Quem está numa sala privada não aparece na sala geral nem nas contagens públicas
   const publicPeople = everyone.filter(person => !isPrivateRoom(person.room));
