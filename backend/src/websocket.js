@@ -91,10 +91,12 @@ function pvPromote(key) {
     try { next[1].ws.send(JSON.stringify({ type: 'pv_your_turn' })); } catch (_) {}
   }
 }
+// Contas da equipe Sigo com Fé: são tratadas como líderes na sala de voz (env SIGO_ADMIN_EMAILS, separado por vírgula)
+const PV_ADMIN_EMAILS = new Set(['wenderj333@gmail.com', ...String(process.env.SIGO_ADMIN_EMAILS || '').split(',')].map(e => e.trim().toLowerCase()).filter(Boolean));
 function pvState(room) {
   const members = prayerVoiceRooms.get(room);
   if (!members) return [];
-  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking, silenced: pvIsSilenced(userId), hand: m.hand || 0, turnLeft: (m.speaking && m.limitFrom) ? Math.max(0, m.limitFrom + pvTurnMs(pvWaiting(members), room) - Date.now()) : null }));
+  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking, leader: m.role === 'admin' || m.role === 'pastor', silenced: pvIsSilenced(userId), hand: m.hand || 0, turnLeft: (m.speaking && m.limitFrom) ? Math.max(0, m.limitFrom + pvTurnMs(pvWaiting(members), room) - Date.now()) : null }));
 }
 function pvBroadcast(room) {
   const members = prayerVoiceRooms.get(room);
@@ -270,7 +272,7 @@ function setupWebSocket(server) {
             if (pvIsBlocked(info.userId)) { ws.send(JSON.stringify({ type: 'pv_error', code: 'blocked' })); break; }
             if (info.pvRoom && pvBase(info.pvRoom) !== room) pvLeave(ws);
             if (!info.pvRole) {
-              try { const r = await db.query('SELECT role, full_name, avatar_url FROM users WHERE id = $1', [info.userId]); info.pvRole = r.rows[0]?.role || 'member'; info.pvName = r.rows[0]?.full_name; info.pvAvatar = r.rows[0]?.avatar_url; } catch (_) { info.pvRole = 'member'; }
+              try { const r = await db.query('SELECT role, email, full_name, avatar_url FROM users WHERE id = $1', [info.userId]); info.pvRole = r.rows[0]?.role || 'member'; if (PV_ADMIN_EMAILS.has(String(r.rows[0]?.email || '').toLowerCase())) info.pvRole = 'admin'; info.pvName = r.rows[0]?.full_name; info.pvAvatar = r.rows[0]?.avatar_url; } catch (_) { info.pvRole = 'member'; }
             }
             if (/^p-[A-Z0-9]{6}$/.test(room) && !pvRoomOwners.has(room)) {
               try { const o = await db.query('SELECT owner_id FROM prayer_private_rooms WHERE code = $1', [room.slice(2)]); pvRoomOwners.set(room, o.rows[0]?.owner_id ? String(o.rows[0].owner_id) : ''); } catch (_) {}
