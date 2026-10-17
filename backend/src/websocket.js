@@ -92,7 +92,7 @@ function pvPromote(key) {
   }
 }
 // Contas da equipe Sigo com Fé: são tratadas como líderes na sala de voz (env SIGO_ADMIN_EMAILS, separado por vírgula)
-const PV_ADMIN_EMAILS = new Set(['wenderj333@gmail.com', ...String(process.env.SIGO_ADMIN_EMAILS || '').split(',')].map(e => e.trim().toLowerCase()).filter(Boolean));
+const PV_ADMIN_EMAILS = new Set(['wenderj333@gmail.com', 'wenderj32@gmail.com', ...String(process.env.SIGO_ADMIN_EMAILS || '').split(',')].map(e => e.trim().toLowerCase()).filter(Boolean));
 function pvState(room) {
   const members = prayerVoiceRooms.get(room);
   if (!members) return [];
