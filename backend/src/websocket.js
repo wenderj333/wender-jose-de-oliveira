@@ -86,9 +86,18 @@ function pvPromote(key) {
   const speakers = [...members.values()].filter(m => m.speaking).length;
   if (speakers >= PV_MAX_SPEAKERS) return;
   const next = [...members.entries()].filter(([, m]) => m.hand && !m.speaking).sort((a, b) => a[1].hand - b[1].hand)[0];
-  if (next && next[1].ws.readyState === 1 && !next[1].notified) {
-    next[1].notified = Date.now();
-    try { next[1].ws.send(JSON.stringify({ type: 'pv_your_turn' })); } catch (_) {}
+  if (!next || next[1].ws.readyState !== 1) return;
+  const [nextId, nm] = next;
+  if (nm.ready && !pvIsSilenced(nextId) && !pvIsBlocked(nextId)) {
+    // Já deixou o microfone pronto ao entrar na fila: entra no ar sozinho
+    nm.speaking = true; nm.hand = 0; nm.notified = false; nm.ready = false;
+    nm.limitFrom = pvWaiting(members) ? Date.now() : 0;
+    try { nm.ws.send(JSON.stringify({ type: 'pv_go_live' })); } catch (_) {}
+    return;
+  }
+  if (!nm.notified) {
+    nm.notified = Date.now();
+    try { nm.ws.send(JSON.stringify({ type: 'pv_your_turn' })); } catch (_) {}
   }
 }
 // Contas da equipe Sigo com Fé: são tratadas como líderes na sala de voz (env SIGO_ADMIN_EMAILS, separado por vírgula)
@@ -96,7 +105,7 @@ const PV_ADMIN_EMAILS = new Set(['wenderj333@gmail.com', 'wenderj32@gmail.com', 
 function pvState(room) {
   const members = prayerVoiceRooms.get(room);
   if (!members) return [];
-  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking, leader: m.role === 'admin' || m.role === 'pastor', silenced: pvIsSilenced(userId), hand: m.hand || 0, turnLeft: (m.speaking && m.limitFrom) ? Math.max(0, m.limitFrom + pvTurnMs(pvWaiting(members), room) - Date.now()) : null }));
+  return [...members.entries()].map(([userId, m]) => ({ userId, name: m.name, avatar: m.avatar, speaking: m.speaking, leader: m.role === 'admin' || m.role === 'pastor', silenced: pvIsSilenced(userId), hand: m.hand || 0, ready: Boolean(m.hand && m.ready), video: Boolean(m.video), turnLeft: (m.speaking && m.limitFrom) ? Math.max(0, m.limitFrom + pvTurnMs(pvWaiting(members), room) - Date.now()) : null }));
 }
 function pvBroadcast(room) {
   const members = prayerVoiceRooms.get(room);
@@ -155,7 +164,7 @@ function setupWebSocket(server) {
       const waiting = pvWaiting(members);
       for (const m of members.values()) {
         if (m.speaking && m.limitFrom && waiting && now >= m.limitFrom + pvTurnMs(waiting, key)) {
-          m.speaking = false; m.limitFrom = 0; changed = true;
+          m.speaking = false; m.limitFrom = 0; m.video = false; changed = true;
           try { m.ws.send(JSON.stringify({ type: 'pv_turn_over' })); } catch (_) {}
         }
         if (m.hand && m.notified && !m.speaking && now - m.notified > 45000) { m.hand = 0; m.notified = false; changed = true; }
@@ -311,15 +320,16 @@ function setupWebSocket(server) {
               if (!me.speaking && (speakers >= PV_MAX_SPEAKERS || jumpsQueue)) {
                 // Lugar cheio: entra na fila (mão levantada) e é avisado quando abrir lugar
                 if (!me.hand) { me.hand = Date.now(); me.notified = false; }
+                me.ready = Boolean(msg.ready); me.video = Boolean(msg.video);
                 const position = [...members.values()].filter(m => m.hand && !m.speaking && m.hand <= me.hand).length;
                 ws.send(JSON.stringify({ type: 'pv_error', code: 'full', queued: true, position }));
                 pvStartLimitIfQueue(members);
                 pvBroadcast(info.pvRoom);
                 break;
               }
-              me.speaking = true; me.hand = 0; me.notified = false;
+              me.speaking = true; me.hand = 0; me.notified = false; me.ready = false; me.video = Boolean(msg.video);
               me.limitFrom = pvWaiting(members) ? Date.now() : 0;
-            } else { me.speaking = false; me.limitFrom = 0; pvPromote(info.pvRoom); }
+            } else { me.speaking = false; me.limitFrom = 0; me.video = false; pvPromote(info.pvRoom); }
             pvBroadcast(info.pvRoom);
             break;
           }
@@ -359,6 +369,7 @@ function setupWebSocket(server) {
             const me = info?.pvRoom && prayerVoiceRooms.get(info.pvRoom)?.get(info.userId);
             if (!me) break;
             me.hand = msg.on ? (me.hand || Date.now()) : 0; me.notified = false;
+            if (!msg.on) me.ready = false;
             const hm = prayerVoiceRooms.get(info.pvRoom);
             if (msg.on) pvStartLimitIfQueue(hm); else pvPromote(info.pvRoom);
             pvBroadcast(info.pvRoom);
