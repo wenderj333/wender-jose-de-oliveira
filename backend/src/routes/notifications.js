@@ -28,8 +28,13 @@ async function createNotification(userId, type, title, body, data = {}) {
 // GET /api/notifications — listar notificações do usuário logado
 router.get('/', authenticate, async (req, res) => {
   try {
+    // Junta a foto e o nome de quem gerou o aviso (amizade, Amém, mensagem…), como no Facebook
     const result = await db.query(
-      `SELECT * FROM notifications WHERE user_id = $1 ORDER BY created_at DESC LIMIT 50`,
+      `SELECT n.*, a.avatar_url AS actor_avatar, a.full_name AS actor_name
+         FROM notifications n
+         LEFT JOIN users a ON a.id::text = COALESCE(n.data->>'from', n.data->>'senderId', n.data->>'userId')
+        WHERE n.user_id = $1
+        ORDER BY n.created_at DESC LIMIT 60`,
       [req.user.id]
     );
     res.json({ notifications: result.rows });
@@ -50,9 +55,9 @@ router.get('/unread-count', authenticate, async (req, res) => {
       `SELECT COUNT(*) AS count FROM direct_messages WHERE receiver_id = $1 AND is_read = false`,
       [req.user.id]
     );
-    res.json({
-      count: parseInt(r.rows[0]?.count || 0) + parseInt(dm.rows[0]?.count || 0)
-    });
+    const notifications = parseInt(r.rows[0]?.count || 0);
+    const messages = parseInt(dm.rows[0]?.count || 0);
+    res.json({ count: notifications + messages, notifications, messages });
   } catch (err) {
     console.error('Error fetching unread count:', err);
     res.status(500).json({ error: err.message });
@@ -99,6 +104,28 @@ router.post('/:id/read', authenticate, async (req, res) => {
   } catch (err) {
     console.error('Error marking notification as read:', err);
     res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/notifications/:id/unread — marcar como não lida (menu "…" do sino)
+router.post('/:id/unread', authenticate, async (req, res) => {
+  try {
+    await db.query(`UPDATE notifications SET is_read = false WHERE id = $1 AND user_id = $2`, [req.params.id, req.user.id]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error marking notification as unread:', err.message);
+    res.status(500).json({ error: 'Não foi possível atualizar' });
+  }
+});
+
+// DELETE /api/notifications/:id — remover esta notificação
+router.delete('/:id', authenticate, async (req, res) => {
+  try {
+    await db.query(`DELETE FROM notifications WHERE id = $1 AND user_id = $2`, [req.params.id, req.user.id]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error deleting notification:', err.message);
+    res.status(500).json({ error: 'Não foi possível remover' });
   }
 });
 
