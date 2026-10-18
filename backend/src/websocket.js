@@ -39,6 +39,7 @@ function pvIsSilenced(userId) {
   if (Date.now() > until) { prayerVoiceSilenced.delete(userId); return false; }
   return true;
 }
+const PV_LANG_ROOM_RE = /^geral-(pt|es|en|de|fr|ro|ru)$/;
 const PV_ROOMS = new Set(['geral', 'saude', 'familia', 'financas', 'emprego', 'casamento', 'filhos', 'libertacao', 'paz', 'gratidao']);
 function pvIsBlocked(userId) {
   const until = prayerVoiceBlocked.get(userId);
@@ -71,7 +72,7 @@ db.query(`CREATE TABLE IF NOT EXISTS prayer_room_settings (room VARCHAR(20) PRIM
   .then(() => db.query('SELECT room, turn_seconds FROM prayer_room_settings'))
   .then(r => { for (const row of r.rows || []) pvTurnSettings.set(row.room, row.turn_seconds); })
   .catch(e => console.error('prayer_room_settings', e.message));
-const pvTurnSeconds = (room) => pvTurnSettings.get(pvBase(room)) || PV_TURN_DEFAULT;
+const pvTurnSeconds = (room) => pvTurnSettings.get(pvBase(room)) || (pvBase(room).startsWith('geral-') && pvTurnSettings.get('geral')) || PV_TURN_DEFAULT;
 const pvTurnMs = (waiting, room) => (waiting <= 0 ? 0 : pvTurnSeconds(room) * 1000);
 const pvWaiting = (members) => [...members.values()].filter(m => m.hand && !m.speaking).length;
 function pvStartLimitIfQueue(members) {
@@ -284,7 +285,8 @@ function setupWebSocket(server) {
           case 'pv_join': {
             const info = clients.get(ws);
             if (!info?.userId) { ws.send(JSON.stringify({ type: 'pv_error', code: 'login' })); break; }
-            const room = (PV_ROOMS.has(String(msg.room)) || /^p-[A-Z0-9]{6}$/.test(String(msg.room))) ? String(msg.room) : 'geral';
+            // 'geral' = sala internacional; 'geral-pt', 'geral-en'… = sala de cada língua
+            const room = (PV_ROOMS.has(String(msg.room)) || /^p-[A-Z0-9]{6}$/.test(String(msg.room)) || PV_LANG_ROOM_RE.test(String(msg.room))) ? String(msg.room) : 'geral';
             if (pvIsBlocked(info.userId)) { ws.send(JSON.stringify({ type: 'pv_error', code: 'blocked' })); break; }
             if (info.pvRoom && pvBase(info.pvRoom) !== room) pvLeave(ws);
             if (!info.pvRole) {
