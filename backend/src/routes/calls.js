@@ -33,7 +33,10 @@ router.get('/ice-servers', authenticate, async (_req, res) => {
   } catch (error) {
     console.error('[calls] Cloudflare TURN error:', error.message);
   }
-  const apiKey = process.env.METERED_API_KEY;
+  // Aceita a chave mesmo que tenha sido colada com espaços, aspas ou o endereço completo (…?apiKey=XXXX")
+  const rawKey = String(process.env.METERED_API_KEY || '');
+  const fromUrl = rawKey.match(/apiKey=([A-Za-z0-9]+)/);
+  const apiKey = fromUrl ? fromUrl[1] : ((rawKey.match(/[A-Za-z0-9]{24,}/) || [''])[0]);
   const appName = process.env.METERED_TURN_APP || 'sigo-com-fe';
   const fallback = [{ urls: 'stun:stun.l.google.com:19302' }];
 
