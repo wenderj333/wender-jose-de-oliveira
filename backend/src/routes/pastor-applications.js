@@ -69,6 +69,17 @@ router.patch('/:id/review', authenticate, requireRole('admin'), async (req, res)
     const application = result.rows[0]; if (!application) return res.status(404).json({ error: 'Pedido não encontrado.' });
     if (status === 'approved') {
       await db.query("UPDATE users SET role='pastor', updated_at=NOW() WHERE id=$1", [application.user_id]);
+      // Cria já a igreja com os dados do pedido, para o pastor entrar e só completar (fotos, cultos, mapa…)
+      try {
+        const has = await db.query('SELECT id FROM churches WHERE pastor_id = $1', [application.user_id]);
+        if (!has.rows.length) {
+          const u = await db.query('SELECT full_name FROM users WHERE id = $1', [application.user_id]);
+          const ch = await db.query(
+            `INSERT INTO churches (pastor_id, name, pastor_name, city, country, address, phone, status) VALUES ($1,$2,$3,$4,$5,$6,$7,'active') RETURNING id`,
+            [application.user_id, application.church_name, u.rows[0]?.full_name || null, application.city, application.country, application.address, application.phone]);
+          await db.query(`INSERT INTO church_members (church_id, user_id, status, member_tag, joined_at) VALUES ($1,$2,'active','pastor',NOW()) ON CONFLICT DO NOTHING`, [ch.rows[0].id, application.user_id]).catch(() => {});
+        }
+      } catch (e) { console.error('Criar igreja na aprovação:', e.message); }
       await createNotification(application.user_id, 'pastor_application', 'Sala do Pastor aprovada', 'O seu registo de pastor foi aprovado. Já pode abrir a Sala do Pastor.', { destination: '/sala-pastor' });
     } else await createNotification(application.user_id, 'pastor_application', 'Pedido de pastor analisado', 'O seu pedido não foi aprovado agora. Pode atualizar os dados e enviar novamente.', { destination: '/registo-pastor' });
     res.json({ application });

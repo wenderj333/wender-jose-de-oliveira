@@ -44,6 +44,11 @@ router.use(requireRole('pastor', 'admin'));
         created_at TIMESTAMPTZ DEFAULT NOW()
       );
     `);
+    try {
+      await db.query("UPDATE tithes SET type = 'tithe' WHERE type IN ('dízimo','dizimo')");
+      await db.query("UPDATE tithes SET type = 'offering' WHERE type = 'oferta'");
+      await db.query("UPDATE tithes SET type = 'special' WHERE type = 'especial'");
+    } catch (_) {}
     console.log('Pastor dashboard tables ready');
   } catch (e) {
     console.error('Pastor dashboard table creation:', e.message);
@@ -67,7 +72,10 @@ router.get('/overview', async (req, res) => {
     const ms = monthStart.toISOString();
 
     const members = await db.prepare("SELECT COUNT(*) as count FROM church_members WHERE church_id = ? AND status = 'active'").get(church.id);
-    const prayers = await db.prepare('SELECT COUNT(*) as count FROM prayers WHERE church_id = ? AND created_at >= ?').get(church.id, ms);
+    let prayers = { count: 0 };
+    try {
+      prayers = await db.prepare(`SELECT (SELECT COUNT(*) FROM church_prayer_requests WHERE church_id = ? AND created_at >= ?) + (SELECT COUNT(*) FROM help_post_churches WHERE church_id = ? AND created_at >= ?) AS count`).get(church.id, ms, church.id, ms);
+    } catch (_) {}
     const tithes = await db.prepare("SELECT COALESCE(SUM(amount),0) as total FROM tithes WHERE church_id = ? AND type = 'tithe' AND created_at >= ?").get(church.id, ms);
     const offerings = await db.prepare("SELECT COALESCE(SUM(amount),0) as total FROM tithes WHERE church_id = ? AND type = 'offering' AND created_at >= ?").get(church.id, ms);
 
@@ -77,6 +85,7 @@ router.get('/overview', async (req, res) => {
         members: parseInt(members?.count || 0),
         prayers: parseInt(prayers?.count || 0),
         tithesTotal: parseFloat(tithes?.total || 0),
+        followers: await db.prepare('SELECT COUNT(*) AS count FROM church_followers WHERE church_id = ?').get(church.id).then(r => parseInt(r?.count || 0)).catch(() => 0),
         offeringsTotal: parseFloat(offerings?.total || 0),
       }
     });
@@ -113,8 +122,10 @@ router.post('/tithes', async (req, res) => {
     const church = await getPastorChurch(req.user.id);
     if (!church) return res.status(404).json({ error: 'Igreja não encontrada' });
 
-    const { amount, type, description } = req.body;
-    if (!amount || !type) return res.status(400).json({ error: 'Valor e tipo são obrigatórios' });
+    const { amount, description } = req.body;
+    const TYPE_MAP = { 'dízimo': 'tithe', dizimo: 'tithe', tithe: 'tithe', oferta: 'offering', offering: 'offering', especial: 'special', special: 'special' };
+    const type = TYPE_MAP[String(req.body.type || '').toLowerCase()] || 'special';
+    if (!amount || !(parseFloat(amount) > 0)) return res.status(400).json({ error: 'Valor e tipo são obrigatórios' });
 
     await db.prepare(`
       INSERT INTO tithes (id, church_id, user_id, amount, currency, type, description, created_at)
@@ -360,8 +371,12 @@ router.get('/reports', async (req, res) => {
     if (!church) return res.json({ error: 'Igreja não encontrada' });
 
     const members = await db.prepare("SELECT COUNT(*) as count FROM church_members WHERE church_id = ? AND status = 'active'").get(church.id);
-    const prayers = await db.prepare('SELECT COUNT(*) as total, SUM(CASE WHEN is_answered = true THEN 1 ELSE 0 END) as answered FROM prayers WHERE church_id = ?').get(church.id);
-    const tithesSum = await db.prepare("SELECT COALESCE(SUM(amount),0) as total FROM tithes WHERE church_id = ? AND (type = 'tithe' OR type = 'offering')").get(church.id);
+    let prayers = { total: 0, answered: 0 };
+    try {
+      prayers = await db.prepare(`SELECT COUNT(*) AS total, SUM(CASE WHEN status = 'answered' THEN 1 ELSE 0 END) AS answered FROM church_prayer_requests WHERE church_id = ?`).get(church.id);
+    } catch (_) {}
+    const tithesSum = await db.prepare("SELECT COALESCE(SUM(amount),0) as total FROM tithes WHERE church_id = ?").get(church.id);
+    const titheOnly = await db.prepare("SELECT COALESCE(SUM(amount),0) as total FROM tithes WHERE church_id = ? AND type = 'tithe'").get(church.id);
     const expensesSum = await db.prepare('SELECT COALESCE(SUM(amount),0) as total FROM church_expenses WHERE church_id = ?').get(church.id);
     const events = await db.prepare('SELECT * FROM church_events WHERE church_id = ? AND event_date >= CURRENT_DATE ORDER BY event_date ASC LIMIT 5').all(church.id);
 
@@ -373,7 +388,8 @@ router.get('/reports', async (req, res) => {
       prayers_total: parseInt(prayers?.total || 0),
       prayers_answered: parseInt(prayers?.answered || 0),
       financial: {
-        tithes: tithesTotal,
+        tithes: parseFloat(titheOnly?.total || 0),
+        offerings: tithesTotal - parseFloat(titheOnly?.total || 0),
         expenses: expensesTotal,
         balance: tithesTotal - expensesTotal,
       },
