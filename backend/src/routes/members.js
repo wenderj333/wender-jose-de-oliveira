@@ -5,6 +5,18 @@ const { authenticate } = require('../middleware/auth');
 
 const ADMIN_SECRET = process.env.ADMIN_SECRET;
 
+// GET /api/members/online-count — pessoas ativas nos últimos 5 minutos (número real, com cache curto)
+let onlineCache = { at: 0, count: 0 };
+router.get('/online-count', async (req, res) => {
+  try {
+    if (Date.now() - onlineCache.at > 30000) {
+      const r = await db.query(`SELECT COUNT(*)::int AS n FROM users WHERE last_seen_at > NOW() - INTERVAL '5 minutes'`);
+      onlineCache = { at: Date.now(), count: r.rows[0].n || 0 };
+    }
+    res.json({ count: onlineCache.count });
+  } catch (e) { res.json({ count: 0 }); }
+});
+
 router.get('/admin', async (req, res) => {
   if (!ADMIN_SECRET || req.headers['x-admin-secret'] !== ADMIN_SECRET) {
     return res.status(401).json({ error: 'Nao autorizado' });
