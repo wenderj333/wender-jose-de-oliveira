@@ -4,7 +4,35 @@ const { authenticate } = require('../middleware/auth');
 const { AccessToken } = require('livekit-server-sdk');
 const router = express.Router();
 
+// TURN da Cloudflare (1000 GB/mês grátis). As credenciais duram 24 h; guardamos 1 h em memória.
+let cfCache = { at: 0, servers: null };
+async function cloudflareIceServers() {
+  const keyId = process.env.CLOUDFLARE_TURN_KEY_ID;
+  const token = process.env.CLOUDFLARE_TURN_API_TOKEN;
+  if (!keyId || !token) return null;
+  if (cfCache.servers && Date.now() - cfCache.at < 60 * 60 * 1000) return cfCache.servers;
+  const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
+  const body = JSON.stringify({ ttl: 86400 });
+  const base = `https://rtc.live.cloudflare.com/v1/turn/keys/${encodeURIComponent(keyId)}/credentials`;
+  let r = await fetch(`${base}/generate-ice-servers`, { method: 'POST', headers, body, signal: AbortSignal.timeout(8000) });
+  if (r.status === 404) r = await fetch(`${base}/generate`, { method: 'POST', headers, body, signal: AbortSignal.timeout(8000) });
+  if (!r.ok) throw new Error(`Cloudflare returned ${r.status}`);
+  const d = await r.json();
+  let list = Array.isArray(d.iceServers) ? d.iceServers : (d.iceServers ? [d.iceServers] : []);
+  // A porta 53 é bloqueada por alguns navegadores: tiramos esses endereços
+  list = list.map(s => ({ ...s, urls: (Array.isArray(s.urls) ? s.urls : [s.urls]).filter(u => !/:53(\?|$)/.test(u)) })).filter(s => s.urls.length);
+  if (!list.length) throw new Error('Cloudflare returned no ICE servers');
+  cfCache = { at: Date.now(), servers: list };
+  return list;
+}
+
 router.get('/ice-servers', authenticate, async (_req, res) => {
+  try {
+    const cf = await cloudflareIceServers();
+    if (cf) return res.json({ iceServers: [{ urls: 'stun:stun.cloudflare.com:3478' }, ...cf], turnEnabled: true, provider: 'cloudflare' });
+  } catch (error) {
+    console.error('[calls] Cloudflare TURN error:', error.message);
+  }
   const apiKey = process.env.METERED_API_KEY;
   const appName = process.env.METERED_TURN_APP || 'sigo-com-fe';
   const fallback = [{ urls: 'stun:stun.l.google.com:19302' }];
