@@ -162,6 +162,18 @@ router.get('/launch', optionalAuth, async (req, res) => {
     res.json({ startsAt: LAUNCH_AT.toISOString(), count: c.rows[0].n, joined, alerts });
   } catch (e) { res.json({ startsAt: LAUNCH_AT.toISOString(), count: 0, joined: false, alerts: false }); }
 });
+// GET /api/help-posts/launch/people — quem já confirmou presença na inauguração (só para membros com sessão)
+router.get('/launch/people', authenticate, async (req, res) => {
+  try {
+    const r = await db.query(
+      `SELECT u.id, COALESCE(NULLIF(u.display_name, ''), u.full_name) AS name, u.avatar_url
+         FROM prayer_launch_signups s JOIN users u ON u.id = s.user_id
+        WHERE COALESCE(u.is_active, true) = true
+        ORDER BY s.created_at ASC LIMIT 200`);
+    res.set('Cache-Control', 'no-store');
+    res.json({ people: r.rows });
+  } catch (e) { console.error('launch people', e.message); res.json({ people: [] }); }
+});
 // POST /api/help-posts/launch/signup { on, lang, tz } — quero participar
 router.post('/launch/signup', authenticate, async (req, res) => {
   try {
