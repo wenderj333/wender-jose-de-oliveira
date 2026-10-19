@@ -124,7 +124,11 @@ function presencePayload(room) {
   const publicPeople = everyone.filter(person => !isPrivateRoom(person.room));
   for (const person of publicPeople) rooms[person.room] = (rooms[person.room] || 0) + 1;
   const people = room && room !== 'geral' ? everyone.filter(person => person.room === room) : publicPeople;
-  return { count: people.length, total: publicPeople.length, rooms, people: people.slice(0, 80) };
+  // Só quem está mesmo dentro de cada sala de voz (para mostrar "X pessoas nesta sala")
+  const voiceRooms = {};
+  try { for (const v of require('../websocket').voicePresence()) if (!isPrivateRoom(v.room)) voiceRooms[v.room] = (voiceRooms[v.room] || 0) + 1; } catch (_) { /* sem sala de voz */ }
+  const voiceTotal = Object.values(voiceRooms).reduce((a, b) => a + b, 0);
+  return { count: people.length, total: publicPeople.length, rooms, voiceRooms, voiceTotal, people: people.slice(0, 80) };
 }
 
 // ---- Inauguração da Oração Mundial + avisos "há pessoas orando" ----
