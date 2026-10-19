@@ -106,7 +106,7 @@ db.query(`CREATE TABLE IF NOT EXISTS prayer_private_rooms (
 function activePresence() {
   const now = Date.now();
   for (const [id, p] of prayerPresence) if (now - p.lastSeen > PRESENCE_TTL) prayerPresence.delete(id);
-  return [...prayerPresence.entries()].sort((a, b) => a[1].since - b[1].since).map(([user_id, p]) => ({ user_id, name: p.name, avatar_url: p.avatar_url, room: p.room || 'geral', since: new Date(p.since).toISOString() }));
+  return [...prayerPresence.entries()].sort((a, b) => a[1].since - b[1].since).map(([user_id, p]) => ({ user_id, name: p.name, avatar_url: p.avatar_url, room: p.room || 'geral', tz: p.tz || null, since: new Date(p.since).toISOString() }));
 }
 function presencePayload(room) {
   const everyone = activePresence();
@@ -287,6 +287,28 @@ router.delete('/private-rooms/:code', authenticate, async (req, res) => {
   } catch (e) { res.status(500).json({ error: 'server' }); }
 });
 
+// GET /api/help-posts/world — quantas pessoas oram agora em cada país (para o mapa).
+// O país vem do fuso horário do navegador (ex.: Europe/Madrid -> ES); ninguém é identificado.
+let TZ_COUNTRY = {};
+try { TZ_COUNTRY = require('../data/tzCountry.json'); } catch (_) {}
+const countryOf = (tz) => (tz && TZ_COUNTRY[tz]) || null;
+let worldCache = { at: 0, data: null };
+router.get('/world', async (req, res) => {
+  if (worldCache.data && Date.now() - worldCache.at < 20000) return res.json(worldCache.data);
+  const praying = {};
+  for (const p of activePresence()) {
+    if (isPrivateRoom(p.room)) continue;
+    const cc = countryOf(p.tz); if (cc) praying[cc] = (praying[cc] || 0) + 1;
+  }
+  const signups = {};
+  try {
+    const r = await db.query('SELECT tz, COUNT(*)::int AS n FROM prayer_launch_signups GROUP BY tz');
+    for (const row of r.rows) { const cc = countryOf(row.tz); if (cc) signups[cc] = (signups[cc] || 0) + row.n; }
+  } catch (_) {}
+  worldCache = { at: Date.now(), data: { praying, signups } };
+  res.json(worldCache.data);
+});
+
 // GET /api/help-posts/presence — pessoas a orar agora
 const presenceCache = new Map(); // room -> { at, data } (alivia o servidor quando há muita gente)
 router.get('/presence', (req, res) => {
@@ -307,7 +329,8 @@ router.post('/presence', authenticate, (req, res) => {
     const current = prayerPresence.get(id);
     const room = validRoom(req.body?.room) ? String(req.body.room) : 'geral';
     const sameRoom = current && current.room === room;
-    prayerPresence.set(id, { name: req.user.full_name || '', avatar_url: req.user.avatar_url || null, room, since: sameRoom ? current.since : Date.now(), lastSeen: Date.now() });
+    const tz = /^[A-Za-z0-9_\/+-]{3,40}$/.test(String(req.body?.tz || '')) ? String(req.body.tz) : (current?.tz || null);
+    prayerPresence.set(id, { name: req.user.full_name || '', avatar_url: req.user.avatar_url || null, room, tz, since: sameRoom ? current.since : Date.now(), lastSeen: Date.now() });
   }
   const payload = presencePayload(String(req.body?.room || 'geral'));
   res.json(payload);
