@@ -381,9 +381,14 @@ function setupWebSocket(server) {
             const me = members?.get(info.userId);
             if (!me) break;
             const now = Date.now();
-            if (me.lastReact && now - me.lastReact < 1500) break;
+            // Reações de louvor: amém, glória a Deus, aleluia, Deus seja louvado (cada um vê na sua língua)
+            if (me.lastReact && now - me.lastReact < 700) break;
+            me.reactWin = (me.reactWin || []).filter(t => now - t < 10000);
+            if (me.reactWin.length >= 10) break;
+            me.reactWin.push(now);
             me.lastReact = now;
-            const payload = JSON.stringify({ type: 'pv_react', from: info.userId, name: me.name, emoji: '🙏' });
+            const kind = ['amen', 'gloria', 'aleluia', 'louvado'].includes(String(msg.kind)) ? String(msg.kind) : 'amen';
+            const payload = JSON.stringify({ type: 'pv_react', from: info.userId, name: me.name, emoji: '🙏', kind });
             for (const m of members.values()) if (m.ws.readyState === 1) { try { m.ws.send(payload); } catch (_) {} }
             break;
           }
