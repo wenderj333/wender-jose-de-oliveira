@@ -334,6 +334,7 @@ router.get('/', optionalAuth, async (req, res) => {
           CASE WHEN hp.is_anonymous THEN 'Anónimo' ELSE u.full_name END AS author_name,
           CASE WHEN hp.is_anonymous THEN NULL ELSE u.avatar_url END AS author_avatar,
           (SELECT COUNT(*) FROM help_post_comments hpc WHERE hpc.post_id = hp.id) AS comment_count,
+          (SELECT COALESCE(json_agg(json_build_object('name', split_part(pu.full_name, ' ', 1), 'avatar', pu.avatar_url) ORDER BY x.created_at DESC), '[]'::json) FROM (SELECT user_id, created_at FROM help_post_prayers WHERE post_id = hp.id ORDER BY created_at DESC LIMIT 5) x JOIN users pu ON pu.id = x.user_id) AS prayer_faces,
           (SELECT hpc.content FROM help_post_comments hpc WHERE hpc.post_id = hp.id AND hpc.is_pastoral = true ORDER BY hpc.created_at DESC LIMIT 1) AS pastoral_reply,
           (SELECT c.name FROM help_post_comments hpc LEFT JOIN churches c ON c.id = hpc.church_id WHERE hpc.post_id = hp.id AND hpc.is_pastoral = true ORDER BY hpc.created_at DESC LIMIT 1) AS pastoral_reply_church,
           EXISTS(
@@ -355,6 +356,7 @@ router.get('/', optionalAuth, async (req, res) => {
           CASE WHEN hp.is_anonymous THEN 'Anónimo' ELSE u.full_name END AS author_name,
           CASE WHEN hp.is_anonymous THEN NULL ELSE u.avatar_url END AS author_avatar,
           (SELECT COUNT(*) FROM help_post_comments hpc WHERE hpc.post_id = hp.id) AS comment_count,
+          (SELECT COALESCE(json_agg(json_build_object('name', split_part(pu.full_name, ' ', 1), 'avatar', pu.avatar_url) ORDER BY x.created_at DESC), '[]'::json) FROM (SELECT user_id, created_at FROM help_post_prayers WHERE post_id = hp.id ORDER BY created_at DESC LIMIT 5) x JOIN users pu ON pu.id = x.user_id) AS prayer_faces,
           NULL::TEXT AS pastoral_reply,
           NULL::TEXT AS pastoral_reply_church,
           false AS user_prayed
@@ -516,6 +518,36 @@ router.post('/:id/help-status', authenticate, async (req, res) => {
   } catch (err) { console.error('Erro ao atualizar ajuda:', err); res.status(500).json({ error: 'Não foi possível atualizar o pedido.' }); }
 });
 
+db.query(`CREATE TABLE IF NOT EXISTS prayer_push_log (user_id UUID NOT NULL, day DATE NOT NULL, PRIMARY KEY (user_id, day))`).catch(e => console.error('prayer_push_log', e.message));
+const PRAYED_PUSH = {
+  pt: [(w) => `${w} orou pelo seu pedido 🙏`, (w, n) => `${w} e mais ${n} irmãos oraram pelo seu pedido 🙏`, 'Você não está sozinho(a). Toque para ver.'],
+  es: [(w) => `${w} oró por tu petición 🙏`, (w, n) => `${w} y ${n} hermanos más oraron por tu petición 🙏`, 'No estás solo(a). Toca para ver.'],
+  en: [(w) => `${w} prayed for your request 🙏`, (w, n) => `${w} and ${n} others prayed for your request 🙏`, 'You are not alone. Tap to see.'],
+  de: [(w) => `${w} hat für dein Anliegen gebetet 🙏`, (w, n) => `${w} und ${n} weitere haben für dein Anliegen gebetet 🙏`, 'Du bist nicht allein. Tippe, um es zu sehen.'],
+  fr: [(w) => `${w} a prié pour votre demande 🙏`, (w, n) => `${w} et ${n} autres ont prié pour votre demande 🙏`, 'Vous n’êtes pas seul(e). Touchez pour voir.'],
+  ro: [(w) => `${w} s-a rugat pentru cererea ta 🙏`, (w, n) => `${w} și încă ${n} s-au rugat pentru cererea ta 🙏`, 'Nu ești singur(ă). Atinge ca să vezi.'],
+  ru: [(w) => `${w} помолился(ась) о вашей просьбе 🙏`, (w, n) => `${w} и ещё ${n} помолились о вашей просьбе 🙏`, 'Вы не одни. Нажмите, чтобы посмотреть.'],
+};
+async function notifyPrayed(ownerId, postId, actor, preview) {
+  const who = String(actor.full_name || 'Alguém').trim().split(/\s+/)[0];
+  const cnt = await db.query(`SELECT COUNT(*)::int AS n FROM help_post_prayers WHERE post_id = $1 AND created_at > NOW() - INTERVAL '24 hours'`, [postId]);
+  const count = Math.max(1, cnt.rows[0]?.n || 1);
+  const data = { postId, url: '/praca-oracao?pedido=' + postId, kind: 'prayed', who, preview, count, from: String(actor.id) };
+  const owner = await db.query('SELECT language, fcm_token FROM users WHERE id = $1', [ownerId]);
+  const lang = String(owner.rows[0]?.language || 'pt').slice(0, 2).toLowerCase();
+  const L = PRAYED_PUSH[lang] || PRAYED_PUSH.pt;
+  const title = count > 1 ? L[1](who, count - 1) : L[0](who);
+  // Na lista de avisos: um só aviso por pedido (atualizado), em vez de um aviso por pessoa
+  const ex = await db.query(`SELECT id FROM notifications WHERE user_id = $1 AND type = 'prayer' AND data->>'postId' = $2 AND created_at > NOW() - INTERVAL '24 hours' ORDER BY created_at DESC LIMIT 1`, [ownerId, String(postId)]);
+  if (ex.rows[0]) await db.query(`UPDATE notifications SET title = $2, body = $3, data = $4, is_read = false, created_at = NOW() WHERE id = $1`, [ex.rows[0].id, title, L[2], JSON.stringify(data)]);
+  else await db.query(`INSERT INTO notifications (user_id, type, title, body, data) VALUES ($1, 'prayer', $2, $3, $4)`, [ownerId, title, L[2], JSON.stringify(data)]);
+  // No celular: no máximo uma notificação de oração por dia
+  const first = await db.query(`INSERT INTO prayer_push_log (user_id, day) VALUES ($1, CURRENT_DATE) ON CONFLICT DO NOTHING RETURNING user_id`, [ownerId]);
+  if (first.rows[0] && owner.rows[0]?.fcm_token) {
+    try { await require('../services/notifications').sendPushNotification(owner.rows[0].fcm_token, title, L[2], { url: data.url, kind: 'prayed', postId: String(postId) }); } catch (_) {}
+  }
+}
+
 // POST /api/help-posts/:id/pray — toggle oração (requer autenticação)
 router.post('/:id/pray', authenticate, async (req, res) => {
   try {
@@ -551,13 +583,11 @@ router.post('/:id/pray', authenticate, async (req, res) => {
         [id]
       );
       prayed = true;
-      // Notificar dono do pedido
+      // Avisar o dono do pedido: um só aviso agrupado por pedido e no máximo 1 notificação no celular por dia
       try {
         const postOwner = await db.query(`SELECT user_id, content FROM help_posts WHERE id = $1`, [id]);
-        if (postOwner.rows.length > 0 && postOwner.rows[0].user_id !== userId) {
-          const preview = postOwner.rows[0].content?.substring(0,50);
-          const who = req.user.full_name || 'Alguém';
-          await createNotification(postOwner.rows[0].user_id, 'prayer', `${who} orou pelo teu pedido 🙏`, `Mais uma pessoa está contigo nesta oração: ${preview}...`, { postId: id, url: '/praca-oracao?pedido=' + id, kind: 'prayed', who, preview });
+        if (postOwner.rows.length > 0 && postOwner.rows[0].user_id && postOwner.rows[0].user_id !== userId) {
+          notifyPrayed(postOwner.rows[0].user_id, id, req.user, postOwner.rows[0].content?.substring(0, 50) || '').catch(() => {});
         }
       } catch(ne) {}
     }
@@ -630,4 +660,5 @@ router.post('/:id/comments', authenticate, async (req, res) => {
   }
 });
 
+router.notifyPrayed = notifyPrayed;
 module.exports = router;
