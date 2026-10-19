@@ -202,6 +202,7 @@ async function socialLoginHandler(req, res) {
     res.json({
       user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, avatar_url: user.avatar_url },
       token,
+      isNewUser,
     });
   } catch (err) {
     console.error('Erro no login social:', err);
