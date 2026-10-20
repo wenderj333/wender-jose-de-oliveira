@@ -103,6 +103,13 @@ router.post('/', authenticate, async (req, res) => {
     const text = String(req.body?.text || '').replace(/\s+\n/g, '\n').trim().slice(0, 500);
     if (!text) return res.status(400).json({ error: 'empty' });
     if (tooFast(String(req.user.id))) return res.status(429).json({ error: 'slow_down' });
+    // Guardião do chat: sem campanha política (orar pelo país e pelas autoridades continua permitido)
+    try {
+      if (await require('../services/politicsGuard').isPoliticalCampaign(text)) {
+        console.log('[prayer-chat] mensagem política bloqueada de', req.user.id);
+        return res.status(422).json({ error: 'political' });
+      }
+    } catch (_) { /* se o guardião falhar, a mensagem segue */ }
     let reply = null;
     if (/^\d+$/.test(String(req.body?.replyTo || ''))) {
       const r = await db.query('SELECT id, user_name, text FROM prayer_chat_messages WHERE id = $1 AND deleted = false', [String(req.body.replyTo)]);

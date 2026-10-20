@@ -39,6 +39,16 @@ function parseArray(text, n) {
   return arr.map(x => String(x ?? ''));
 }
 
+// Pergunta curta a um modelo (usa o mesmo modelo que já funcionou)
+async function ask(prompt) {
+  const order = working ? [working, ...CANDIDATES.filter(c => c !== working)] : CANDIDATES;
+  let lastErr = new Error('no provider configured');
+  for (const c of order) {
+    try { const out = await call(c, prompt); if (out) { working = c; return out; } } catch (e) { lastErr = e; }
+  }
+  throw lastErr;
+}
+
 // texts: string[] -> string[] traduzidos para `lang`
 async function translateBatch(texts, lang) {
   if (!texts.length) return [];
@@ -61,4 +71,4 @@ ${JSON.stringify(texts)}`;
   throw lastErr;
 }
 
-module.exports = { translateBatch, LANG_NAMES };
+module.exports = { translateBatch, ask, LANG_NAMES };
