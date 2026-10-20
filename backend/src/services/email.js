@@ -7,7 +7,7 @@ async function sendWelcomeEmail(email, nome, lang='pt') {
   const txt = T[lang] || T['pt'];
   try {
     if(!resend) return;
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: 'Sigo com Fe <onboarding@resend.dev>',
       to: email,
       subject: txt.s,
@@ -31,6 +31,7 @@ async function sendWelcomeEmail(email, nome, lang='pt') {
         </div>
       `
     });
+    if (error) { console.error('[welcome-email] falhou:', error.message || error); return; }
     console.log('Email de boas-vindas enviado para:', email);
   } catch(e) { console.error('Erro email:', e); }
 }
@@ -105,7 +106,7 @@ async function sendPasswordResetEmail(email, nome, resetUrl) {
 }
 
 
-const ADMIN_NOTIFY_EMAIL = process.env.ADMIN_NOTIFY_EMAIL || 'sigocomfe333@gmail.com';
+const ADMIN_NOTIFY_EMAIL = process.env.ADMIN_NOTIFY_EMAIL || 'wenderj333@gmail.com';
 const escHtml = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // Aviso para o dono do site a cada novo cadastro
