@@ -7,7 +7,17 @@ const User = require('../models/User');
 const { generateToken, authenticate } = require('../middleware/auth');
 
 // POST /api/auth/register
-const { sendWelcomeEmail, sendPasswordResetEmail } = require('../services/email');
+const { sendWelcomeEmail, sendPasswordResetEmail, sendAdminSignupEmail } = require('../services/email');
+
+async function notifyAdminSignup(req, user, method) {
+  try {
+    let total = null;
+    try { const r = await require('../db/connection').query('SELECT COUNT(*)::int AS n FROM users'); total = r.rows[0].n; } catch { /* ignore */ }
+    const country = req.headers['cf-ipcountry'] || req.headers['x-vercel-ip-country'] || null;
+    const language = req.body?.language || String(req.headers['accept-language'] || '').split(',')[0] || null;
+    await sendAdminSignupEmail({ name: user.full_name, email: user.email, method, language, country, total });
+  } catch { /* nunca bloquear o cadastro */ }
+}
 const { createNotification } = require('./notifications');
 
 function createWelcomeNotification(user) {
@@ -59,6 +69,7 @@ router.post('/register', async (req, res) => {
     const token = generateToken(user);
     sendWelcomeEmail(emailNormalized, fullNameNormalized).catch(()=>{});
     createWelcomeNotification(user).catch(()=>{});
+    notifyAdminSignup(req, user, 'email');
     res.status(201).json({ user, token });
   } catch (err) {
     console.error('Erro no registro:', err);
@@ -185,8 +196,7 @@ async function socialLoginHandler(req, res) {
       isNewUser = true;
       // Update avatar if provided
       if (photo) {
-        const { pool } = require('../config/connection');
-        await pool.query('UPDATE users SET avatar_url = $1 WHERE id = $2', [photo, user.id]);
+        await require('../db/connection').query('UPDATE users SET avatar_url = $1 WHERE id = $2', [photo, user.id]);
         user.avatar_url = photo;
       }
     }
@@ -197,6 +207,7 @@ async function socialLoginHandler(req, res) {
     if (isNewUser) {
       sendWelcomeEmail(email, full_name || user.full_name).catch(()=>{});
       createWelcomeNotification(user).catch(()=>{});
+      notifyAdminSignup(req, user, 'google');
     }
 
     res.json({
@@ -218,7 +229,7 @@ router.post('/phone', async (req, res) => {
       return res.status(400).json({ error: 'uid e telefone são obrigatórios' });
     }
 
-    const { pool } = require('../config/connection');
+    const pool = require('../db/connection');
 
     // Try to find user by uid (stored in email field as phone:uid pattern) or phone
     const userRes = await pool.query('SELECT * FROM users WHERE email = $1', [`phone:${uid}`]);
@@ -233,6 +244,7 @@ router.post('/phone', async (req, res) => {
         full_name: full_name || phone,
         role: 'member'
       });
+      notifyAdminSignup(req, user, 'phone');
       // Store phone number (column added via migration, safe to ignore if missing)
       try {
         await pool.query('UPDATE users SET phone = $1 WHERE id = $2', [phone, user.id]);

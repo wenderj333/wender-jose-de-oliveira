@@ -104,4 +104,32 @@ async function sendPasswordResetEmail(email, nome, resetUrl) {
   }
 }
 
-module.exports = { sendWelcomeEmail, sendChallengeEmail, sendEventoEmail, sendPasswordResetEmail };
+
+const ADMIN_NOTIFY_EMAIL = process.env.ADMIN_NOTIFY_EMAIL || 'sigocomfe333@gmail.com';
+const escHtml = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+// Aviso para o dono do site a cada novo cadastro
+async function sendAdminSignupEmail({ name, email, method = 'email', language, country, total }) {
+  try {
+    if (!resend || !ADMIN_NOTIFY_EMAIL) return;
+    const when = new Date().toLocaleString('pt-BR', { timeZone: 'Europe/Madrid' });
+    const rows = [
+      ['Nome', name], ['Email', email], ['Cadastro por', method === 'google' ? 'Google' : method === 'phone' ? 'Telefone' : 'Email e senha'],
+      ['Idioma', language || '—'], ['País', country || '—'], ['Data', when + ' (Madrid)'],
+      ['Total de membros', total != null ? total : '—'],
+    ].map(([k, v]) => `<tr><td style="padding:6px 12px;color:#6b7560">${k}</td><td style="padding:6px 12px;font-weight:600;color:#232b1b">${escHtml(v)}</td></tr>`).join('');
+    const { error } = await resend.emails.send({
+      from: 'Sigo com Fe <onboarding@resend.dev>',
+      to: ADMIN_NOTIFY_EMAIL,
+      subject: `🎉 Novo membro: ${String(name || email).slice(0, 60)}`,
+      html: `<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;background:#f7f3e8;padding:24px;border-radius:14px;border:1px solid #c9a75e">
+        <h2 style="margin:0 0 12px;color:#2a3320">🎉 Novo cadastro no Sigo com Fé</h2>
+        <table style="border-collapse:collapse;width:100%;background:#fff;border-radius:10px">${rows}</table>
+        <p style="margin-top:16px;font-size:12px;color:#8a8f7a">Aviso automático de www.sigocomfe.com</p></div>`,
+    });
+    if (error) console.error('[admin-signup-email] falhou:', error.message || error);
+    else console.log('[admin-signup-email] enviado:', email);
+  } catch (e) { console.error('[admin-signup-email] erro:', e.message || e); }
+}
+
+module.exports = { sendAdminSignupEmail, sendWelcomeEmail, sendChallengeEmail, sendEventoEmail, sendPasswordResetEmail };
