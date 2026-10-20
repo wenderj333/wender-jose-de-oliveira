@@ -30,6 +30,12 @@ function ensureTable() {
         created_at TIMESTAMPTZ DEFAULT NOW(),
         PRIMARY KEY (message_id, user_id, emoji)
       )`);
+      await db.query(`CREATE TABLE IF NOT EXISTS prayer_chat_translations (
+        message_id BIGINT NOT NULL,
+        lang VARCHAR(5) NOT NULL,
+        text TEXT NOT NULL,
+        PRIMARY KEY (message_id, lang)
+      )`);
     })().catch((e) => { ready = null; throw e; });
   }
   return ready;
@@ -140,6 +146,41 @@ router.post('/:id/react', authenticate, async (req, res) => {
   } catch (err) {
     console.error('prayer-chat REACT:', err.message);
     res.status(500).json({ error: 'server' });
+  }
+});
+
+// Traduzir mensagens para o idioma de quem lê (com cache; cada mensagem é traduzida 1 vez por idioma)
+const { translateBatch, LANG_NAMES } = require('../services/translate');
+const trRecent = new Map();
+router.post('/translate', async (req, res) => {
+  try {
+    const lang = String(req.body?.lang || '').slice(0, 2);
+    const ids = [...new Set((Array.isArray(req.body?.ids) ? req.body.ids : []).map(String).filter(x => /^\d+$/.test(x)))].slice(0, 30);
+    if (!LANG_NAMES[lang] || !ids.length) return res.status(400).json({ error: 'bad_request' });
+    const key = viewerId(req) || req.ip || 'anon', now = Date.now();
+    const hits = (trRecent.get(key) || []).filter(t => now - t < 60000);
+    if (hits.length >= 20) return res.status(429).json({ error: 'slow_down' });
+    hits.push(now); trRecent.set(key, hits); if (trRecent.size > 5000) trRecent.clear();
+
+    const cached = await db.query('SELECT message_id::text AS id, text FROM prayer_chat_translations WHERE lang = $1 AND message_id = ANY($2::bigint[])', [lang, ids]);
+    const out = {};
+    cached.rows.forEach(r => { out[r.id] = r.text; });
+    const missing = ids.filter(id => out[id] === undefined);
+    if (missing.length) {
+      const src = await db.query('SELECT id::text AS id, text FROM prayer_chat_messages WHERE deleted = false AND id = ANY($1::bigint[]) ORDER BY id', [missing]);
+      if (src.rows.length) {
+        const translated = await translateBatch(src.rows.map(r => r.text), lang);
+        for (let i = 0; i < src.rows.length; i++) {
+          const t = String(translated[i] || '').trim().slice(0, 1200) || src.rows[i].text;
+          out[src.rows[i].id] = t;
+          db.query('INSERT INTO prayer_chat_translations (message_id, lang, text) VALUES ($1, $2, $3) ON CONFLICT (message_id, lang) DO UPDATE SET text = EXCLUDED.text', [src.rows[i].id, lang, t]).catch(() => {});
+        }
+      }
+    }
+    res.json({ lang, translations: out });
+  } catch (err) {
+    console.error('prayer-chat TRANSLATE:', err.message);
+    res.status(503).json({ error: 'translate_unavailable' });
   }
 });
 
