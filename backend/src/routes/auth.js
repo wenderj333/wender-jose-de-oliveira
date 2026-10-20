@@ -268,6 +268,27 @@ router.post('/phone', async (req, res) => {
 });
 
 // POST /api/auth/promote — promote user to pastor/admin with secret key
+// POST /api/auth/delete-account — o próprio usuário exclui a conta (anonimiza e desativa)
+router.post('/delete-account', authenticate, async (req, res) => {
+  try {
+    if (req.body?.confirm !== true) return res.status(400).json({ error: 'Confirmação necessária' });
+    const id = req.user.id;
+    const crypto = require('crypto');
+    const hash = await bcrypt.hash(crypto.randomBytes(32).toString('hex'), 10);
+    const cols = (await db.query("SELECT column_name FROM information_schema.columns WHERE table_name = 'users'")).rows.map(r => r.column_name);
+    const sets = ["email = $2", "password_hash = $3", "full_name = 'Conta excluída'", 'is_active = false'];
+    for (const c of ['display_name', 'avatar_url', 'bio', 'phone', 'fcm_token', 'cover_url', 'church', 'city']) if (cols.includes(c)) sets.push(`${c} = NULL`);
+    if (cols.includes('is_suspended')) sets.push('is_suspended = true');
+    if (cols.includes('email_updates_opt_in')) sets.push('email_updates_opt_in = false');
+    await db.query(`UPDATE users SET ${sets.join(', ')} WHERE id = $1`, [id, `deleted+${id}@deleted.sigocomfe.com`, hash]);
+    console.log('[delete-account] conta excluída:', id);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[delete-account] erro:', err.message);
+    res.status(500).json({ error: 'Erro ao excluir conta' });
+  }
+});
+
 router.post('/promote', authenticate, async (req, res) => {
   try {
     const { role, secretKey } = req.body;

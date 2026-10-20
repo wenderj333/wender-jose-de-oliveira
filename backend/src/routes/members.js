@@ -34,7 +34,7 @@ router.get('/', authenticate, async (req, res) => {
     const query = String(req.query.q || '').trim();
     const result = await db.query(`SELECT u.id, u.full_name, u.display_name, u.avatar_url, u.role, u.is_active, u.last_seen_at, u.created_at
       FROM users u
-      WHERE ($1 = '' OR u.full_name ILIKE '%' || $1 || '%' OR u.display_name ILIKE '%' || $1 || '%')
+      WHERE COALESCE(u.is_active, true) AND ($1 = '' OR u.full_name ILIKE '%' || $1 || '%' OR u.display_name ILIKE '%' || $1 || '%')
       ORDER BY CASE WHEN LOWER(u.full_name) = LOWER($1) THEN 0 ELSE 1 END, u.created_at DESC
       LIMIT 100`, [query]);
     res.json({ members: result.rows });
