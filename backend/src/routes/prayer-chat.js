@@ -23,6 +23,13 @@ function ensureTable() {
         created_at TIMESTAMPTZ DEFAULT NOW()
       )`);
       await db.query('CREATE INDEX IF NOT EXISTS prayer_chat_messages_created_idx ON prayer_chat_messages (created_at DESC)');
+      await db.query(`CREATE TABLE IF NOT EXISTS prayer_chat_reactions (
+        message_id BIGINT NOT NULL,
+        user_id UUID NOT NULL,
+        emoji VARCHAR(16) NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        PRIMARY KEY (message_id, user_id, emoji)
+      )`);
     })().catch((e) => { ready = null; throw e; });
   }
   return ready;
@@ -32,6 +39,28 @@ router.use(async (req, res, next) => { try { await ensureTable(); } catch (_) {}
 
 const FIELDS = `id, user_id AS "userId", user_name AS "userName", user_avatar AS "userAvatar", text, reply_to AS "replyTo", reply_name AS "replyName", reply_text AS "replyText", created_at AS "time"`;
 const shape = (r) => ({ ...r, id: String(r.id), replyTo: r.replyTo ? String(r.replyTo) : null, userId: String(r.userId) });
+// Reações permitidas (cristãs) nas mensagens
+const REACTIONS = ['🙏', '❤️', '🙌', '✝️', '🔥', '🕊️'];
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
+function viewerId(req) {
+  const h = req.headers.authorization;
+  if (!h || !h.startsWith('Bearer ')) return null;
+  try { return String(jwt.verify(h.split(' ')[1], JWT_SECRET).id); } catch { return null; }
+}
+async function reactionsFor(ids, me) {
+  if (!ids.length) return {};
+  const r = await db.query(
+    `SELECT message_id::text AS id, emoji, COUNT(*)::int AS n, BOOL_OR(user_id::text = $2) AS mine
+       FROM prayer_chat_reactions WHERE message_id = ANY($1::bigint[]) GROUP BY message_id, emoji`,
+    [ids, me || '']
+  );
+  const out = {};
+  for (const row of r.rows) {
+    (out[row.id] = out[row.id] || []).push({ emoji: row.emoji, n: row.n, mine: !!row.mine });
+  }
+  return out;
+}
 const broadcast = (payload) => { try { require('../websocket').broadcastAll(payload); } catch (_) {} };
 
 // Últimas mensagens (ou só as novas depois de ?after=id)
@@ -41,7 +70,10 @@ router.get('/', async (req, res) => {
     const rows = after
       ? (await db.query(`SELECT ${FIELDS} FROM prayer_chat_messages WHERE deleted = false AND id > $1 ORDER BY id ASC LIMIT 100`, [after])).rows
       : (await db.query(`SELECT * FROM (SELECT ${FIELDS} FROM prayer_chat_messages WHERE deleted = false ORDER BY id DESC LIMIT 80) t ORDER BY id ASC`)).rows;
-    res.json({ messages: rows.map(shape) });
+    const list = rows.map(shape);
+    let reacts = {};
+    try { reacts = await reactionsFor(list.map(m => m.id), viewerId(req)); } catch (_) { /* tabela nova */ }
+    res.json({ messages: list.map(m => ({ ...m, reactions: reacts[m.id] || [] })) });
   } catch (err) {
     console.error('prayer-chat GET:', err.message);
     res.json({ messages: [] });
@@ -81,6 +113,32 @@ router.post('/', authenticate, async (req, res) => {
     res.json({ message });
   } catch (err) {
     console.error('prayer-chat POST:', err.message);
+    res.status(500).json({ error: 'server' });
+  }
+});
+
+// Reagir a uma mensagem (liga/desliga a mesma reação)
+const reactRecent = new Map();
+router.post('/:id/react', authenticate, async (req, res) => {
+  try {
+    const id = String(req.params.id);
+    const emoji = String(req.body?.emoji || '');
+    if (!/^\d+$/.test(id) || !REACTIONS.includes(emoji)) return res.status(400).json({ error: 'bad_request' });
+    const uid = String(req.user.id), now = Date.now();
+    const list = (reactRecent.get(uid) || []).filter(t => now - t < 10000);
+    if (list.length >= 12) return res.status(429).json({ error: 'slow_down' });
+    list.push(now); reactRecent.set(uid, list); if (reactRecent.size > 5000) reactRecent.clear();
+    const exists = await db.query('SELECT 1 FROM prayer_chat_messages WHERE id = $1 AND deleted = false', [id]);
+    if (!exists.rows[0]) return res.status(404).json({ error: 'not_found' });
+    const del = await db.query('DELETE FROM prayer_chat_reactions WHERE message_id = $1 AND user_id = $2 AND emoji = $3', [id, uid, emoji]);
+    if (!del.rowCount) await db.query('INSERT INTO prayer_chat_reactions (message_id, user_id, emoji) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING', [id, uid, emoji]);
+    const all = (await reactionsFor([id], null))[id] || [];
+    const counts = all.map(({ emoji: e, n }) => ({ emoji: e, n }));
+    broadcast({ type: 'prayer_chat_react', id, reactions: counts });
+    const mineNow = (await reactionsFor([id], uid))[id] || [];
+    res.json({ id, reactions: mineNow });
+  } catch (err) {
+    console.error('prayer-chat REACT:', err.message);
     res.status(500).json({ error: 'server' });
   }
 });
