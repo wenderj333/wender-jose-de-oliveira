@@ -44,6 +44,10 @@ const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
         created_at TIMESTAMPTZ DEFAULT NOW()
       )
     `);
+    // A tabela em produção é mais antiga: garantir todas as colunas que o POST usa
+    for (const col of ["category VARCHAR(50) DEFAULT 'general'", "post_type VARCHAR(30) DEFAULT 'request'", 'pix_key TEXT', 'is_anonymous BOOLEAN DEFAULT false', 'media_url TEXT', 'prayer_count INT DEFAULT 0']) {
+      await db.query(`ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS ${col}`).catch(e => console.error('help_posts column', col, e.message));
+    }
     await db.query('ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS is_urgent BOOLEAN DEFAULT false');
     await db.query('ALTER TABLE help_post_comments ADD COLUMN IF NOT EXISTS is_pastoral BOOLEAN DEFAULT false');
     await db.query('ALTER TABLE help_post_comments ADD COLUMN IF NOT EXISTS church_id UUID REFERENCES churches(id) ON DELETE SET NULL');
