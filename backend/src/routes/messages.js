@@ -39,6 +39,19 @@ router.get('/conversations', authenticate, async (req, res) => {
 
     // Re-sort by last_at after DISTINCT
     const sorted = result.rows.sort((a, b) => new Date(b.last_at) - new Date(a.last_at));
+    // Pedidos de mensagem: quem não é amigo, a quem nunca respondeu e que não aceitou → vai para Pedidos
+    try {
+      const friends = new Set((await db.query(`SELECT CASE WHEN requester_id = $1 THEN addressee_id ELSE requester_id END AS id
+        FROM friendships WHERE status = 'accepted' AND (requester_id = $1 OR addressee_id = $1)`, [uid])).rows.map(r => String(r.id)));
+      const sent = new Set((await db.query('SELECT DISTINCT receiver_id AS id FROM direct_messages WHERE sender_id = $1', [uid])).rows.map(r => String(r.id)));
+      const accepted = new Set((await db.query('SELECT other_id AS id FROM dm_accepted WHERE user_id = $1', [uid])).rows.map(r => String(r.id)));
+      const restricted = new Set((await db.query('SELECT restricted_id AS id FROM dm_restricted WHERE user_id = $1', [uid])).rows.map(r => String(r.id)));
+      sorted.forEach(c => {
+        const id = String(c.other_id);
+        c.restricted = restricted.has(id);
+        c.is_request = c.restricted || (!friends.has(id) && !sent.has(id) && !accepted.has(id));
+      });
+    } catch (_) { /* tabelas novas ainda não existem */ }
     res.json({ conversations: sorted });
   } catch (err) {
     console.error('Error fetching conversations:', err);
@@ -54,13 +67,21 @@ router.get('/:userId', authenticate, async (req, res) => {
     if (!/^[0-9a-f-]{36}$/i.test(String(other))) return res.status(400).json({ error: 'bad_id' });
 
     // Bloqueios (tabela criada em messages-extra.js)
-    let blockedByMe = false, blockedMe = false, otherShowsOnline = true;
+    let blockedByMe = false, blockedMe = false, otherShowsOnline = true, restrictedMe = false, restrictedByMe = false, isRequest = false;
     try {
       const b = await db.query('SELECT user_id::text AS u FROM dm_blocks WHERE (user_id = $1 AND blocked_id = $2) OR (user_id = $2 AND blocked_id = $1)', [me, other]);
       blockedByMe = b.rows.some(r => r.u === String(me));
       blockedMe = b.rows.some(r => r.u === String(other));
       const s = await db.query('SELECT show_online FROM dm_settings WHERE user_id = $1', [other]);
       otherShowsOnline = s.rows[0] ? s.rows[0].show_online !== false : true;
+      const rr = await db.query('SELECT user_id::text AS u FROM dm_restricted WHERE (user_id = $1 AND restricted_id = $2) OR (user_id = $2 AND restricted_id = $1)', [me, other]);
+      restrictedByMe = rr.rows.some(r => r.u === String(me));
+      restrictedMe = rr.rows.some(r => r.u === String(other));
+      const fr = await db.query(`SELECT 1 FROM friendships WHERE status = 'accepted' AND ((requester_id = $1 AND addressee_id = $2) OR (requester_id = $2 AND addressee_id = $1))`, [me, other]);
+      const sent = await db.query('SELECT 1 FROM direct_messages WHERE sender_id = $1 AND receiver_id = $2 LIMIT 1', [me, other]);
+      const acc = await db.query('SELECT 1 FROM dm_accepted WHERE user_id = $1 AND other_id = $2', [me, other]);
+      const received = await db.query('SELECT 1 FROM direct_messages WHERE sender_id = $2 AND receiver_id = $1 LIMIT 1', [me, other]);
+      isRequest = received.rows.length > 0 && (restrictedByMe || (!fr.rows.length && !sent.rows.length && !acc.rows.length));
     } catch (_) {}
 
     // Check friendship
@@ -104,9 +125,13 @@ router.get('/:userId', authenticate, async (req, res) => {
     );
 
     const ou = userInfo.rows[0] || null;
-    if (ou && (!otherShowsOnline || blockedMe)) ou.last_seen_at = null;
+    if (ou && (!otherShowsOnline || blockedMe || restrictedMe)) ou.last_seen_at = null;
+    // quem foi restringido não vê se as mensagens foram lidas
+    const rows = restrictedMe ? msgs.rows.map(m => String(m.sender_id) === String(me) ? { ...m, is_read: false } : m) : msgs.rows;
     res.json({
-      messages: msgs.rows,
+      messages: rows,
+      restrictedByMe,
+      isRequest,
       friendshipStatus: status,
       otherUser: ou,
       blockedByMe,
@@ -140,6 +165,19 @@ router.post('/', authenticate, async (req, res) => {
       const b = await db.query('SELECT 1 FROM dm_blocks WHERE (user_id = $1 AND blocked_id = $2) OR (user_id = $2 AND blocked_id = $1) LIMIT 1', [me, targetId]);
       if (b.rows.length) return res.status(403).json({ error: 'blocked' });
     } catch (_) {}
+    // Quem pode enviar mensagens: "só amigos" (a não ser que a pessoa já lhe tenha escrito antes)
+    let silent = false;
+    try {
+      const st = await db.query('SELECT who_can_message FROM dm_settings WHERE user_id = $1', [targetId]);
+      if (st.rows[0]?.who_can_message === 'friends') {
+        const fr = await db.query(`SELECT 1 FROM friendships WHERE status = 'accepted' AND ((requester_id = $1 AND addressee_id = $2) OR (requester_id = $2 AND addressee_id = $1))`, [me, targetId]);
+        const wrote = await db.query('SELECT 1 FROM direct_messages WHERE sender_id = $1 AND receiver_id = $2 LIMIT 1', [targetId, me]);
+        const acc = await db.query('SELECT 1 FROM dm_accepted WHERE user_id = $1 AND other_id = $2', [targetId, me]);
+        if (!fr.rows.length && !wrote.rows.length && !acc.rows.length) return res.status(403).json({ error: 'not_allowed' });
+      }
+      const rs = await db.query('SELECT 1 FROM dm_restricted WHERE user_id = $1 AND restricted_id = $2', [targetId, me]);
+      silent = rs.rows.length > 0;
+    } catch (_) {}
 
     const status = friendship.rows[0]?.status;
     if (false) {
@@ -157,8 +195,8 @@ router.post('/', authenticate, async (req, res) => {
 
     const msg = result.rows[0];
 
-    // Notificacao + push FCM
-    try {
+    // Notificacao + push FCM (não avisa quem restringiu o remetente)
+    if (!silent) try {
       const sender = await db.query('SELECT full_name FROM users WHERE id = $1', [me]);
       const name = sender.rows[0]?.full_name || 'Alguem';
       const preview = content.trim().length > 50 ? content.trim().substring(0, 50) + '...' : content.trim();

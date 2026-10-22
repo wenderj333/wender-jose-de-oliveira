@@ -16,6 +16,19 @@ function ensureTables() {
         show_online BOOLEAN DEFAULT true,
         updated_at TIMESTAMPTZ DEFAULT NOW()
       )`);
+      await db.query(`ALTER TABLE dm_settings ADD COLUMN IF NOT EXISTS who_can_message VARCHAR(10) DEFAULT 'everyone'`);
+      await db.query(`CREATE TABLE IF NOT EXISTS dm_restricted (
+        user_id UUID NOT NULL,
+        restricted_id UUID NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        PRIMARY KEY (user_id, restricted_id)
+      )`);
+      await db.query(`CREATE TABLE IF NOT EXISTS dm_accepted (
+        user_id UUID NOT NULL,
+        other_id UUID NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        PRIMARY KEY (user_id, other_id)
+      )`);
       await db.query(`CREATE TABLE IF NOT EXISTS dm_archived (
         user_id UUID NOT NULL,
         conv_key VARCHAR(80) NOT NULL,
@@ -74,14 +87,19 @@ const isUuid = (x) => /^[0-9a-f-]{36}$/i.test(String(x || ''));
 router.get('/settings', authenticate, async (req, res) => {
   try {
     const me = req.user.id;
-    const s = await db.query('SELECT show_online FROM dm_settings WHERE user_id = $1', [me]);
+    const s = await db.query('SELECT show_online, who_can_message FROM dm_settings WHERE user_id = $1', [me]);
+    const restricted = await db.query(
+      `SELECT u.id, u.full_name, u.avatar_url FROM dm_restricted r JOIN users u ON u.id = r.restricted_id
+        WHERE r.user_id = $1 ORDER BY r.created_at DESC`, [me]);
     const blocked = await db.query(
       `SELECT u.id, u.full_name, u.avatar_url FROM dm_blocks b JOIN users u ON u.id = b.blocked_id
         WHERE b.user_id = $1 ORDER BY b.created_at DESC`, [me]);
     const archived = await db.query('SELECT conv_key FROM dm_archived WHERE user_id = $1', [me]);
     res.json({
       showOnline: s.rows[0] ? s.rows[0].show_online !== false : true,
+      whoCanMessage: s.rows[0]?.who_can_message === 'friends' ? 'friends' : 'everyone',
       blocked: blocked.rows,
+      restricted: restricted.rows,
       archived: archived.rows.map(r => r.conv_key),
     });
   } catch (err) { console.error('dm settings GET:', err.message); res.status(500).json({ error: 'server' }); }
@@ -89,10 +107,10 @@ router.get('/settings', authenticate, async (req, res) => {
 
 router.put('/settings', authenticate, async (req, res) => {
   try {
-    const show = req.body?.showOnline !== false;
-    await db.query(`INSERT INTO dm_settings (user_id, show_online, updated_at) VALUES ($1, $2, NOW())
-      ON CONFLICT (user_id) DO UPDATE SET show_online = EXCLUDED.show_online, updated_at = NOW()`, [req.user.id, show]);
-    res.json({ ok: true, showOnline: show });
+    await db.query(`INSERT INTO dm_settings (user_id) VALUES ($1) ON CONFLICT (user_id) DO NOTHING`, [req.user.id]);
+    if (typeof req.body?.showOnline === 'boolean') await db.query('UPDATE dm_settings SET show_online = $2, updated_at = NOW() WHERE user_id = $1', [req.user.id, req.body.showOnline]);
+    if (['everyone', 'friends'].includes(req.body?.whoCanMessage)) await db.query('UPDATE dm_settings SET who_can_message = $2, updated_at = NOW() WHERE user_id = $1', [req.user.id, req.body.whoCanMessage]);
+    res.json({ ok: true });
   } catch (err) { res.status(500).json({ error: 'server' }); }
 });
 
@@ -114,6 +132,35 @@ router.post('/block', authenticate, async (req, res) => {
     if (!isUuid(other) || other === String(req.user.id)) return res.status(400).json({ error: 'bad_user' });
     if (req.body?.blocked === false) await db.query('DELETE FROM dm_blocks WHERE user_id = $1 AND blocked_id = $2', [req.user.id, other]);
     else await db.query('INSERT INTO dm_blocks (user_id, blocked_id) VALUES ($1, $2) ON CONFLICT DO NOTHING', [req.user.id, other]);
+    res.json({ ok: true });
+  } catch (err) { res.status(500).json({ error: 'server' }); }
+});
+
+// Restringir / deixar de restringir: as mensagens da pessoa vão para Pedidos, sem aviso nem som,
+// e ela não vê se você está online nem se leu
+router.post('/restrict', authenticate, async (req, res) => {
+  try {
+    const other = String(req.body?.userId || '');
+    if (!isUuid(other) || other === String(req.user.id)) return res.status(400).json({ error: 'bad_user' });
+    if (req.body?.restricted === false) await db.query('DELETE FROM dm_restricted WHERE user_id = $1 AND restricted_id = $2', [req.user.id, other]);
+    else await db.query('INSERT INTO dm_restricted (user_id, restricted_id) VALUES ($1, $2) ON CONFLICT DO NOTHING', [req.user.id, other]);
+    res.json({ ok: true });
+  } catch (err) { res.status(500).json({ error: 'server' }); }
+});
+
+// Pedidos de mensagem: aceitar (passa para as conversas) ou recusar (vai para o arquivo)
+router.post('/requests/:action', authenticate, async (req, res) => {
+  try {
+    const other = String(req.body?.userId || '');
+    if (!isUuid(other)) return res.status(400).json({ error: 'bad_user' });
+    if (req.params.action === 'accept') {
+      await db.query('INSERT INTO dm_accepted (user_id, other_id) VALUES ($1, $2) ON CONFLICT DO NOTHING', [req.user.id, other]);
+      await db.query('DELETE FROM dm_restricted WHERE user_id = $1 AND restricted_id = $2', [req.user.id, other]);
+      await db.query('DELETE FROM dm_archived WHERE user_id = $1 AND conv_key = $2', [req.user.id, other]);
+    } else if (req.params.action === 'decline') {
+      await db.query('INSERT INTO dm_archived (user_id, conv_key) VALUES ($1, $2) ON CONFLICT DO NOTHING', [req.user.id, other]);
+      await db.query('UPDATE direct_messages SET is_read = true WHERE sender_id = $1 AND receiver_id = $2', [other, req.user.id]);
+    } else return res.status(400).json({ error: 'bad_action' });
     res.json({ ok: true });
   } catch (err) { res.status(500).json({ error: 'server' }); }
 });

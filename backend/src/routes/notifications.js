@@ -51,10 +51,19 @@ router.get('/unread-count', authenticate, async (req, res) => {
       `SELECT COUNT(*) AS count FROM notifications WHERE user_id = $1 AND is_read = false`,
       [req.user.id]
     );
-    const dm = await db.query(
-      `SELECT COUNT(*) AS count FROM direct_messages WHERE receiver_id = $1 AND is_read = false`,
-      [req.user.id]
-    );
+    let dm;
+    try {
+      dm = await db.query(
+        `SELECT COUNT(*) AS count FROM direct_messages WHERE receiver_id = $1 AND is_read = false
+           AND sender_id NOT IN (SELECT restricted_id FROM dm_restricted WHERE user_id = $1)`,
+        [req.user.id]
+      );
+    } catch (_) {
+      dm = await db.query(
+        `SELECT COUNT(*) AS count FROM direct_messages WHERE receiver_id = $1 AND is_read = false`,
+        [req.user.id]
+      );
+    }
     let groupUnread = 0;
     try {
       const g = await db.query(`SELECT COUNT(*) AS count FROM dm_group_messages gm JOIN dm_group_members m ON m.group_id = gm.group_id AND m.user_id = $1
