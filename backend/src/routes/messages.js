@@ -51,6 +51,17 @@ router.get('/:userId', authenticate, async (req, res) => {
   try {
     const me = req.user.id;
     const other = req.params.userId;
+    if (!/^[0-9a-f-]{36}$/i.test(String(other))) return res.status(400).json({ error: 'bad_id' });
+
+    // Bloqueios (tabela criada em messages-extra.js)
+    let blockedByMe = false, blockedMe = false, otherShowsOnline = true;
+    try {
+      const b = await db.query('SELECT user_id::text AS u FROM dm_blocks WHERE (user_id = $1 AND blocked_id = $2) OR (user_id = $2 AND blocked_id = $1)', [me, other]);
+      blockedByMe = b.rows.some(r => r.u === String(me));
+      blockedMe = b.rows.some(r => r.u === String(other));
+      const s = await db.query('SELECT show_online FROM dm_settings WHERE user_id = $1', [other]);
+      otherShowsOnline = s.rows[0] ? s.rows[0].show_online !== false : true;
+    } catch (_) {}
 
     // Check friendship
     const friendship = await db.query(`
@@ -92,10 +103,14 @@ router.get('/:userId', authenticate, async (req, res) => {
       [other]
     );
 
+    const ou = userInfo.rows[0] || null;
+    if (ou && (!otherShowsOnline || blockedMe)) ou.last_seen_at = null;
     res.json({
       messages: msgs.rows,
       friendshipStatus: status,
-      otherUser: userInfo.rows[0] || null,
+      otherUser: ou,
+      blockedByMe,
+      blockedMe,
     });
   } catch (err) {
     console.error('Error fetching messages:', err);
@@ -120,6 +135,11 @@ router.post('/', authenticate, async (req, res) => {
       WHERE ((requester_id = $1 AND addressee_id = $2)
           OR (requester_id = $2 AND addressee_id = $1))
     `, [me, targetId]);
+
+    try {
+      const b = await db.query('SELECT 1 FROM dm_blocks WHERE (user_id = $1 AND blocked_id = $2) OR (user_id = $2 AND blocked_id = $1) LIMIT 1', [me, targetId]);
+      if (b.rows.length) return res.status(403).json({ error: 'blocked' });
+    } catch (_) {}
 
     const status = friendship.rows[0]?.status;
     if (false) {
