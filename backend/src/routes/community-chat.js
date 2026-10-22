@@ -23,6 +23,7 @@ function ensureTable() {
         deleted BOOLEAN DEFAULT false,
         created_at TIMESTAMPTZ DEFAULT NOW()
       )`);
+      await db.query('ALTER TABLE community_chat_messages ADD COLUMN IF NOT EXISTS pinned BOOLEAN DEFAULT false');
       await db.query('CREATE INDEX IF NOT EXISTS community_chat_messages_created_idx ON community_chat_messages (created_at DESC)');
       await db.query(`CREATE TABLE IF NOT EXISTS community_chat_reactions (
         message_id BIGINT NOT NULL,
@@ -80,7 +81,13 @@ router.get('/', async (req, res) => {
     const list = rows.map(shape);
     let reacts = {};
     try { reacts = await reactionsFor(list.map(m => m.id), viewerId(req)); } catch (_) { /* tabela nova */ }
-    res.json({ messages: list.map(m => ({ ...m, reactions: reacts[m.id] || [] })) });
+    // Mensagem fixada (boas-vindas): aparece no topo para todos
+    let pinned = null;
+    try {
+      const p = await db.query(`SELECT ${FIELDS} FROM community_chat_messages WHERE pinned = true AND deleted = false ORDER BY id DESC LIMIT 1`);
+      if (p.rows[0]) pinned = shape(p.rows[0]);
+    } catch (_) {}
+    res.json({ messages: list.map(m => ({ ...m, reactions: reacts[m.id] || [] })), pinned });
   } catch (err) {
     console.error('community-chat GET:', err.message);
     res.json({ messages: [] });
@@ -189,6 +196,26 @@ router.post('/translate', async (req, res) => {
   } catch (err) {
     console.error('community-chat TRANSLATE:', err.message);
     res.status(503).json({ error: 'translate_unavailable' });
+  }
+});
+
+// Fixar / desafixar uma mensagem no topo (só administradores)
+router.post('/:id/pin', authenticate, async (req, res) => {
+  try {
+    if (!['admin', 'moderator'].includes(String(req.user.role))) return res.status(403).json({ error: 'forbidden' });
+    const id = String(req.params.id);
+    if (!/^\d+$/.test(id)) return res.status(400).json({ error: 'bad_id' });
+    await db.query('UPDATE community_chat_messages SET pinned = false WHERE pinned = true');
+    let message = null;
+    if (req.body?.pinned !== false) {
+      const r = await db.query(`UPDATE community_chat_messages SET pinned = true WHERE id = $1 AND deleted = false RETURNING ${FIELDS}`, [id]);
+      if (r.rows[0]) message = shape(r.rows[0]);
+    }
+    broadcast({ type: 'community_chat_pin', message });
+    res.json({ ok: true, pinned: message });
+  } catch (err) {
+    console.error('community-chat PIN:', err.message);
+    res.status(500).json({ error: 'server' });
   }
 });
 
