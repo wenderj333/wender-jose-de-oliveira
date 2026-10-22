@@ -158,6 +158,7 @@ function notifyUser(userId, payload) {
 // Chat da Oração Mundial: as rotas HTTP gravam a mensagem e avisam todos aqui
 let wssRef = null;
 const prayerChatWatchers = new Set();
+const communityChatWatchers = new Set();
 function broadcastAll(payload) {
   if (!wssRef) return;
   const message = JSON.stringify(payload);
@@ -168,6 +169,13 @@ function prayerChatPresence() {
   for (const w of prayerChatWatchers) { if (w.readyState === 1) online += 1; else prayerChatWatchers.delete(w); }
   const message = JSON.stringify({ type: 'prayer_chat_presence', online });
   for (const w of prayerChatWatchers) { try { w.send(message); } catch (_) {} }
+}
+
+function communityChatPresence() {
+  let online = 0;
+  for (const w of communityChatWatchers) { if (w.readyState === 1) online += 1; else communityChatWatchers.delete(w); }
+  const message = JSON.stringify({ type: 'community_chat_presence', online });
+  for (const w of communityChatWatchers) { try { w.send(message); } catch (_) {} }
 }
 
 function setupWebSocket(server) {
@@ -210,6 +218,11 @@ function setupWebSocket(server) {
         const msg = JSON.parse(data);
 
         console.log("MSG_TIPO:", msg.type, "USER:", msg.userId); switch (msg.type) {
+          case 'community_chat_watch': {
+            if (msg.open) communityChatWatchers.add(ws); else communityChatWatchers.delete(ws);
+            communityChatPresence();
+            break;
+          }
           case 'prayer_chat_watch': {
             if (msg.open) prayerChatWatchers.add(ws); else prayerChatWatchers.delete(ws);
             prayerChatPresence();
@@ -746,6 +759,7 @@ function setupWebSocket(server) {
     ws.on('close', () => {
       removeDuelLobbyPlayer(ws);
       if (prayerChatWatchers.delete(ws)) prayerChatPresence();
+      if (communityChatWatchers.delete(ws)) communityChatPresence();
       try { pvLeave(ws); } catch (_) {}
       // Cleanup live streams
       const info = clients.get(ws);
