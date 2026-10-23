@@ -12,6 +12,8 @@ const profileColumnsReady = (async () => {
     'birthdate TEXT', 'marital_status TEXT', 'favorite_verse TEXT', 'testimony TEXT',
     'church_name TEXT', 'church_denomination TEXT', 'faith_years TEXT', 'ministry TEXT',
     'email_updates_opt_in BOOLEAN NOT NULL DEFAULT false',
+    'gender TEXT', 'pastor_name TEXT', 'church_role TEXT', 'role_years TEXT', 'favorite_worship TEXT', 'favorite_book TEXT',
+    "interests JSONB NOT NULL DEFAULT '[]'::jsonb", "objectives JSONB NOT NULL DEFAULT '[]'::jsonb",
 "profile_visibility JSONB NOT NULL DEFAULT '{\"personal\":\"friends\",\"church\":\"public\",\"faith\":\"public\",\"bio\":\"public\"}'::jsonb"
   ];
   for (const column of columns) await db.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS ' + column);
@@ -43,7 +45,8 @@ router.get('/:userId', async (req, res) => {
     const currentViewerId = viewerId(req);
     const result = await db.query(`SELECT id, full_name, email, role, avatar_url, cover_url, bio,
       church_name, city, country, profession, work, birthdate, marital_status, favorite_verse,
-      testimony, church_denomination, faith_years, ministry, profile_visibility, email_updates_opt_in
+      testimony, church_denomination, faith_years, ministry, profile_visibility, email_updates_opt_in,
+      gender, pastor_name, church_role, role_years, favorite_worship, favorite_book, interests, objectives
       FROM users WHERE id = $1`, [userId]);
     const user = result.rows[0];
     if (!user) return res.status(404).json({ error: 'Utilizador não encontrado' });
@@ -63,15 +66,17 @@ router.get('/:userId', async (req, res) => {
       delete user.email_updates_opt_in;
     }
     if (!canSee(visibility.personal, isOwner, isFriend)) {
-      ['city', 'country', 'profession', 'work', 'birthdate', 'marital_status'].forEach(field => delete user[field]);
+      ['city', 'country', 'profession', 'work', 'birthdate', 'marital_status', 'gender'].forEach(field => delete user[field]);
     }
     if (!canSee(visibility.church, isOwner, isFriend)) {
-      ['church_name', 'church_denomination', 'faith_years', 'ministry'].forEach(field => delete user[field]);
+      ['church_name', 'church_denomination', 'faith_years', 'ministry', 'pastor_name', 'church_role', 'role_years'].forEach(field => delete user[field]);
     }
     if (!canSee(visibility.faith, isOwner, isFriend)) {
-      ['favorite_verse', 'testimony'].forEach(field => delete user[field]);
+      ['favorite_verse', 'testimony', 'favorite_worship', 'favorite_book'].forEach(field => delete user[field]);
     }
-    if (!canSee(visibility.bio, isOwner, isFriend)) delete user.bio;
+    if (!canSee(visibility.bio, isOwner, isFriend)) { delete user.bio; delete user.interests; delete user.objectives; }
+    // a data de nascimento só a própria pessoa vê
+    if (!isOwner) delete user.birthdate;
     if (!isOwner) delete user.profile_visibility;
 
     user.stats = { posts: 0, friends: 0, prayers: 0 };
@@ -98,6 +103,10 @@ router.patch('/', authenticate, async (req, res) => {
     const { full_name, bio, city, country, profession, marital_status, church_name, denomination,
       christian_years, favorite_verse, testimony, avatar_url, cover_url, birth_date, ministry,
       profile_visibility, email_updates_opt_in } = req.body;
+    const txt = (v, max = 200) => (v === undefined || v === null ? null : String(v).slice(0, max));
+    const list = (v) => (Array.isArray(v) ? JSON.stringify(v.map(x => String(x).slice(0, 60)).slice(0, 30)) : null);
+    const extra = [txt(req.body.gender, 30), txt(req.body.pastor_name, 120), txt(req.body.church_role, 60), txt(req.body.role_years, 10),
+      txt(req.body.favorite_worship, 160), txt(req.body.favorite_book, 160), list(req.body.interests), list(req.body.objectives)];
     const visibility = normalizedVisibility(profile_visibility);
     const emailUpdatesOptIn = typeof email_updates_opt_in === 'boolean' ? email_updates_opt_in : null;
     await db.query(`UPDATE users SET
@@ -109,13 +118,17 @@ router.patch('/', authenticate, async (req, res) => {
       avatar_url=COALESCE(NULLIF($12,''), avatar_url), cover_url=COALESCE(NULLIF($13,''), cover_url),
       birthdate=COALESCE($14, birthdate), ministry=COALESCE($15, ministry),
       profile_visibility=$16::jsonb, email_updates_opt_in=COALESCE($17, email_updates_opt_in),
+      gender=COALESCE($19, gender), pastor_name=COALESCE($20, pastor_name), church_role=COALESCE($21, church_role),
+      role_years=COALESCE($22, role_years), favorite_worship=COALESCE($23, favorite_worship), favorite_book=COALESCE($24, favorite_book),
+      interests=COALESCE($25::jsonb, interests), objectives=COALESCE($26::jsonb, objectives),
       updated_at=NOW() WHERE id=$18`,
       [full_name, bio, city, country, profession, marital_status, church_name, denomination,
         christian_years, favorite_verse, testimony, avatar_url, cover_url, birth_date, ministry,
-        JSON.stringify(visibility), emailUpdatesOptIn, userId]);
+        JSON.stringify(visibility), emailUpdatesOptIn, userId, ...extra]);
     const result = await db.query(`SELECT id, full_name, email, role, avatar_url, cover_url, bio,
       church_name, city, country, profession, marital_status, favorite_verse, testimony,
-      church_denomination, faith_years, birthdate, ministry, profile_visibility, email_updates_opt_in
+      church_denomination, faith_years, birthdate, ministry, profile_visibility, email_updates_opt_in,
+      gender, pastor_name, church_role, role_years, favorite_worship, favorite_book, interests, objectives
       FROM users WHERE id = $1`, [userId]);
     res.json({ success: true, user: result.rows[0] });
   } catch (err) { res.status(500).json({ error: err.message }); }
