@@ -175,4 +175,77 @@ router.post('/:userId/amen', authenticate, async (req, res) => {
   }
 });
 
+// ---- Resumo do perfil: irmãos, irmãos em comum, igreja, jornada de fé e medalhas ----
+const FOUNDER_UNTIL = new Date(process.env.FOUNDER_UNTIL || '2026-11-02T00:00:00Z');
+const safeCount = async (sql, params) => { try { const r = await db.query(sql, params); return Number(r.rows[0]?.n || 0); } catch (_) { return 0; } };
+router.get('/:userId/overview', async (req, res) => {
+  try {
+    await profileColumnsReady;
+    const { userId } = req.params;
+    if (!/^[0-9a-f-]{36}$/i.test(String(userId))) return res.status(404).json({ error: 'not_found' });
+    const u = await db.query('SELECT id, full_name, role, created_at FROM users WHERE id = $1', [userId]);
+    const target = u.rows[0];
+    if (!target) return res.status(404).json({ error: 'not_found' });
+    const vid = viewerId(req);
+    const isOwner = !!vid && String(vid) === String(userId);
+    let isFriend = false;
+    if (vid && !isOwner) {
+      isFriend = (await safeCount(`SELECT COUNT(*)::int AS n FROM friendships WHERE status = 'accepted'
+        AND ((requester_id = $1 AND addressee_id = $2) OR (requester_id = $2 AND addressee_id = $1))`, [vid, userId])) > 0;
+    }
+    const friendsOf = `SELECT CASE WHEN requester_id = $1 THEN addressee_id ELSE requester_id END AS fid
+      FROM friendships WHERE status = 'accepted' AND (requester_id = $1 OR addressee_id = $1)`;
+    const friends = await safeCount(`SELECT COUNT(*)::int AS n FROM (${friendsOf}) f`, [userId]);
+    let mutual = 0; let preview = [];
+    try {
+      if (vid && !isOwner) {
+        mutual = await safeCount(`SELECT COUNT(*)::int AS n FROM (${friendsOf}) a
+          WHERE a.fid IN (SELECT CASE WHEN requester_id = $2 THEN addressee_id ELSE requester_id END FROM friendships
+                          WHERE status = 'accepted' AND (requester_id = $2 OR addressee_id = $2))`, [userId, vid]);
+        const r = await db.query(`SELECT u.id, COALESCE(NULLIF(u.display_name, ''), u.full_name) AS name, u.avatar_url,
+            (u.id IN (SELECT CASE WHEN requester_id = $2 THEN addressee_id ELSE requester_id END FROM friendships
+                      WHERE status = 'accepted' AND (requester_id = $2 OR addressee_id = $2))) AS mutual
+          FROM (${friendsOf}) f JOIN users u ON u.id = f.fid
+          WHERE COALESCE(u.is_active, true) = true
+          ORDER BY 4 DESC, u.last_seen_at DESC NULLS LAST LIMIT 6`, [userId, vid]);
+        preview = r.rows;
+      } else {
+        const r = await db.query(`SELECT u.id, COALESCE(NULLIF(u.display_name, ''), u.full_name) AS name, u.avatar_url, false AS mutual
+          FROM (${friendsOf}) f JOIN users u ON u.id = f.fid WHERE COALESCE(u.is_active, true) = true
+          ORDER BY u.last_seen_at DESC NULLS LAST LIMIT 6`, [userId]);
+        preview = r.rows;
+      }
+    } catch (_) { preview = []; }
+    const visSql = isOwner ? '' : isFriend ? `AND COALESCE(visibility, 'public') IN ('public', 'friends')` : `AND COALESCE(visibility, 'public') = 'public'`;
+    const posts = await safeCount(`SELECT COUNT(*)::int AS n FROM feed_posts WHERE author_id = $1 ${visSql}`, [userId]);
+    const prayersMade = await safeCount('SELECT COUNT(*)::int AS n FROM help_post_prayers WHERE user_id = $1', [userId]);
+    const requests = await safeCount(`SELECT COUNT(*)::int AS n FROM help_posts WHERE user_id = $1 AND post_type = 'prayer' ${isOwner ? '' : 'AND is_anonymous IS NOT TRUE'}`, [userId]);
+    const answered = await safeCount(`SELECT COUNT(*)::int AS n FROM help_posts WHERE user_id = $1 AND post_type = 'prayer' AND help_status = 'answered' ${isOwner ? '' : 'AND is_anonymous IS NOT TRUE'}`, [userId]);
+    const encouragements = await safeCount('SELECT COUNT(*)::int AS n FROM help_post_comments WHERE user_id = $1 AND is_pastoral IS NOT TRUE', [userId]);
+    const amens = await safeCount('SELECT COUNT(*)::int AS n FROM profile_amens WHERE profile_user_id = $1', [userId]);
+    const duelPoints = await safeCount('SELECT COALESCE(MAX(pontos), 0)::int AS n FROM duelo_ranking WHERE LOWER(nome) = LOWER($1)', [target.full_name || '']);
+    let church = null;
+    try {
+      const c = await db.query(`SELECT c.id, c.name, c.logo_url, COALESCE(c.is_verified, false) AS verified FROM churches c
+        WHERE c.pastor_id = $1 OR c.id IN (SELECT church_id FROM church_roles WHERE user_id = $1)
+        ORDER BY (c.pastor_id = $1) DESC LIMIT 1`, [userId]);
+      church = c.rows[0] || null;
+    } catch (_) { church = null; }
+    const joined = target.created_at ? new Date(target.created_at) : null;
+    const badges = [];
+    if (joined && joined < FOUNDER_UNTIL) badges.push('founder');
+    if (prayersMade >= 10) badges.push('intercessor');
+    if (encouragements >= 5) badges.push('encourager');
+    if (answered >= 1) badges.push('answered');
+    if (duelPoints >= 100) badges.push('champion');
+    if (amens >= 20) badges.push('inspiring');
+    res.set('Cache-Control', 'no-store');
+    res.json({
+      role: target.role || 'member', joined_at: joined ? joined.toISOString() : null, is_friend: isFriend,
+      stats: { posts, friends, mutual, prayers_made: prayersMade, requests, answered, encouragements, amens, duel_points: duelPoints },
+      friends_preview: preview, church, badges,
+    });
+  } catch (err) { console.error('profile overview', err.message); res.status(500).json({ error: 'server' }); }
+});
+
 module.exports = router;

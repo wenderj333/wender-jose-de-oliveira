@@ -662,9 +662,9 @@ router.post('/:id/help-status', authenticate, async (req, res) => {
     if (!['open', 'in_progress', 'completed', 'answered'].includes(status)) return res.status(400).json({ error: 'Estado inválido.' });
     const testimony = typeof req.body.testimony === 'string' ? req.body.testimony.trim().slice(0, 1000) : null;
     const result = await db.query(
-      `UPDATE help_posts SET help_status=$1,
-         answer_testimony = CASE WHEN $1='answered' THEN $4 ELSE answer_testimony END,
-         answered_at = CASE WHEN $1='answered' THEN NOW() ELSE answered_at END
+      `UPDATE help_posts SET help_status=$1::text,
+         answer_testimony = CASE WHEN $1::text='answered' THEN $4::text ELSE answer_testimony END,
+         answered_at = CASE WHEN $1::text='answered' THEN NOW() ELSE answered_at END
        WHERE id=$2 AND user_id=$3 RETURNING help_status, answer_testimony, answered_at, content`,
       [status, req.params.id, req.user.id, testimony || null]);
     if (!result.rows.length) return res.status(403).json({ error: 'Apenas quem publicou pode atualizar este pedido.' });

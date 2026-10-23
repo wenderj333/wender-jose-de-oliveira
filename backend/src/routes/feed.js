@@ -84,6 +84,17 @@ router.get('/', async (req, res) => {
 // GET /api/feed/user/:userId — posts by a specific user
 router.get('/user/:userId', async (req, res) => {
   try {
+    // Quem vê: o dono vê tudo; amigos veem público + amigos; os outros só o público
+    let vid = null;
+    const h = req.headers.authorization;
+    if (h && h.startsWith('Bearer ')) { try { vid = require('jsonwebtoken').verify(h.slice(7), require('../middleware/auth').JWT_SECRET).id; } catch (_) { vid = null; } }
+    const isOwner = !!vid && String(vid) === String(req.params.userId);
+    let isFriend = false;
+    if (vid && !isOwner) {
+      const fr = await db.query(`SELECT 1 FROM friendships WHERE status = 'accepted' AND ((requester_id = $1 AND addressee_id = $2) OR (requester_id = $2 AND addressee_id = $1)) LIMIT 1`, [vid, req.params.userId]);
+      isFriend = fr.rows.length > 0;
+    }
+    const visSql = isOwner ? '' : isFriend ? `AND COALESCE(fp.visibility, 'public') IN ('public', 'friends')` : `AND COALESCE(fp.visibility, 'public') = 'public'`;
     const page = parseInt(req.query.page) || 1;
     const limit = Math.min(parseInt(req.query.limit) || 20, 50);
     const offset = (page - 1) * limit;
@@ -92,13 +103,13 @@ router.get('/user/:userId', async (req, res) => {
       `SELECT fp.*, u.full_name AS author_name, u.display_name AS author_display_name, u.avatar_url AS author_avatar
        FROM feed_posts fp
        JOIN users u ON u.id = fp.author_id
-       WHERE fp.author_id = $1
+       WHERE fp.author_id = $1 ${visSql}
        ORDER BY fp.created_at DESC
        LIMIT $2 OFFSET $3`,
       [req.params.userId, limit, offset]);
 
     const posts = result.rows;
-    const countResult = await db.query('SELECT COUNT(*) AS total FROM feed_posts WHERE author_id = $1', [req.params.userId]);
+    const countResult = await db.query(`SELECT COUNT(*) AS total FROM feed_posts fp WHERE fp.author_id = $1 ${visSql}`, [req.params.userId]);
 
 
     res.json({ posts, total: parseInt(countResult.rows[0]?.total || 0), page, limit });
