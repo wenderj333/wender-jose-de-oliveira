@@ -80,6 +80,12 @@ const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
       created_at TIMESTAMPTZ DEFAULT NOW(),
       PRIMARY KEY (post_id, church_id)
     )`);
+    await db.query('ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS tz VARCHAR(64)').catch(() => {});
+    await db.query(`CREATE TABLE IF NOT EXISTS help_post_presented (
+      post_id UUID PRIMARY KEY REFERENCES help_posts(id) ON DELETE CASCADE,
+      presented_by UUID,
+      presented_at TIMESTAMPTZ DEFAULT NOW()
+    )`).catch(e => console.error('help_post_presented', e.message));
     console.log('✅ help_posts tables ready');
   } catch (err) {
     console.error('❌ help_posts migration error:', err.message);
@@ -156,6 +162,33 @@ const LAUNCH_TEXT = {
   ro: { day: ['🙏 Mâine: lansarea Rugăciunii Mondiale', 'Mâine ne rugăm împreună cu frați din multe țări. Nu lipsi!'], soon: ['⏰ În 15 minute începe Rugăciunea Mondială', 'Pregătește-ți inima și intră în camera vocală.'], now: ['🎉 A început Rugăciunea Mondială!', 'Intră acum și roagă-te cu frați din toată lumea.'], praying: ['🟢 Sunt oameni care se roagă acum', '{n} persoane sunt în Rugăciunea Mondială. Vino să te rogi!'] },
   ru: { day: ['🙏 Завтра: открытие Мировой молитвы', 'Завтра мы будем молиться вместе с верующими из многих стран. Не пропустите!'], soon: ['⏰ Через 15 минут начнётся Мировая молитва', 'Приготовьте сердце и войдите в голосовую комнату.'], now: ['🎉 Мировая молитва началась!', 'Присоединяйтесь сейчас и молитесь с верующими со всего мира.'], praying: ['🟢 Сейчас люди молятся', '{n} человек в Мировой молитве. Присоединяйтесь!'] }
 };
+// Quem fez um pedido de oração desde o início da campanha também recebe os lembretes (com texto próprio)
+const ASK_SINCE = process.env.PRAYER_ASK_SINCE || '2026-10-15T00:00:00Z';
+const ASK_TEXT = {
+  pt: { day: ['🕊️ Amanhã o seu pedido será apresentado', 'Na inauguração da Oração Mundial, irmãos de vários países vão orar pelo seu pedido. Venha acompanhar!'], soon: ['⏰ Em 15 minutos apresentamos os pedidos', 'O seu pedido será apresentado na Oração Mundial. Entre e ore conosco.'], now: ['🎉 Começou! Os pedidos estão sendo apresentados', 'Entre agora na Oração Mundial e ore junto com irmãos do mundo inteiro.'] },
+  es: { day: ['🕊️ Mañana presentaremos tu petición', 'En la inauguración de la Oración Mundial, hermanos de varios países orarán por tu petición. ¡Ven a acompañarnos!'], soon: ['⏰ En 15 minutos presentamos las peticiones', 'Tu petición será presentada en la Oración Mundial. Entra y ora con nosotros.'], now: ['🎉 ¡Empezó! Estamos presentando las peticiones', 'Entra ahora en la Oración Mundial y ora con hermanos de todo el mundo.'] },
+  en: { day: ['🕊️ Tomorrow your request will be presented', 'At the World Prayer launch, believers from many countries will pray for your request. Come and join us!'], soon: ['⏰ In 15 minutes we present the requests', 'Your request will be presented at World Prayer. Come and pray with us.'], now: ['🎉 It has started! Requests are being presented', 'Join World Prayer now and pray with believers from all over the world.'] },
+  de: { day: ['🕊️ Morgen wird dein Anliegen vorgestellt', 'Beim Start des Weltgebets beten Gläubige aus vielen Ländern für dein Anliegen. Sei dabei!'], soon: ['⏰ In 15 Minuten stellen wir die Anliegen vor', 'Dein Anliegen wird im Weltgebet vorgestellt. Komm und bete mit uns.'], now: ['🎉 Es hat begonnen! Die Anliegen werden vorgestellt', 'Komm jetzt ins Weltgebet und bete mit Gläubigen aus aller Welt.'] },
+  fr: { day: ['🕊️ Demain, votre demande sera présentée', 'Au lancement de la Prière Mondiale, des croyants de nombreux pays prieront pour votre demande. Venez nous rejoindre !'], soon: ['⏰ Dans 15 minutes, nous présentons les demandes', 'Votre demande sera présentée à la Prière Mondiale. Venez prier avec nous.'], now: ['🎉 C’est parti ! Les demandes sont présentées', 'Entrez maintenant dans la Prière Mondiale et priez avec des croyants du monde entier.'] },
+  ro: { day: ['🕊️ Mâine cererea ta va fi prezentată', 'La lansarea Rugăciunii Mondiale, frați din multe țări se vor ruga pentru cererea ta. Vino alături de noi!'], soon: ['⏰ În 15 minute prezentăm cererile', 'Cererea ta va fi prezentată în Rugăciunea Mondială. Intră și roagă-te cu noi.'], now: ['🎉 A început! Cererile sunt prezentate', 'Intră acum în Rugăciunea Mondială și roagă-te cu frați din toată lumea.'] },
+  ru: { day: ['🕊️ Завтра вашу просьбу представят', 'На открытии Мировой молитвы верующие из многих стран помолятся о вашей просьбе. Присоединяйтесь!'], soon: ['⏰ Через 15 минут мы представим просьбы', 'Вашу просьбу представят в Мировой молитве. Приходите молиться с нами.'], now: ['🎉 Началось! Просьбы представляются', 'Присоединяйтесь к Мировой молитве и молитесь с верующими со всего мира.'] },
+};
+const PRESENTED_TEXT = {
+  pt: ['🕊️ O seu pedido foi apresentado na Oração Mundial', 'Irmãos de vários países oraram pelo seu pedido. Deus está com você!'],
+  es: ['🕊️ Tu petición fue presentada en la Oración Mundial', 'Hermanos de varios países oraron por tu petición. ¡Dios está contigo!'],
+  en: ['🕊️ Your request was presented at World Prayer', 'Believers from many countries prayed for your request. God is with you!'],
+  de: ['🕊️ Dein Anliegen wurde im Weltgebet vorgestellt', 'Gläubige aus vielen Ländern haben für dein Anliegen gebetet. Gott ist mit dir!'],
+  fr: ['🕊️ Votre demande a été présentée à la Prière Mondiale', 'Des croyants de nombreux pays ont prié pour votre demande. Dieu est avec vous !'],
+  ro: ['🕊️ Cererea ta a fost prezentată în Rugăciunea Mondială', 'Frați din multe țări s-au rugat pentru cererea ta. Dumnezeu este cu tine!'],
+  ru: ['🕊️ Ваша просьба была представлена в Мировой молитве', 'Верующие из многих стран помолились о вашей просьбе. Бог с вами!'],
+};
+const ENCOURAGE_TEXT = {
+  pt: (w) => `${w} deixou uma palavra para você 💛`, es: (w) => `${w} te dejó una palabra 💛`, en: (w) => `${w} left you a word of encouragement 💛`,
+  de: (w) => `${w} hat dir ein ermutigendes Wort hinterlassen 💛`, fr: (w) => `${w} vous a laissé un mot d’encouragement 💛`,
+  ro: (w) => `${w} ți-a lăsat un cuvânt de încurajare 💛`, ru: (w) => `${w} оставил(а) вам слово поддержки 💛`,
+};
+const pickLang = (v) => { const k = String(v || 'pt').slice(0, 2).toLowerCase(); return ['pt', 'es', 'en', 'de', 'fr', 'ro', 'ru'].includes(k) ? k : 'pt'; };
+const isLeaderRole = (u) => ['admin', 'pastor', 'moderator'].includes(String(u?.role || ''));
 const lt = (lang) => LAUNCH_TEXT[String(lang || 'pt').slice(0, 2)] || LAUNCH_TEXT.pt;
 const cleanLang = (v) => (LAUNCH_TEXT[String(v || '').slice(0, 2)] ? String(v).slice(0, 2) : 'pt');
 const cleanTz = (v) => { const tz = String(v || '').slice(0, 64); try { Intl.DateTimeFormat('en', { timeZone: tz }); return tz; } catch { return null; } };
@@ -214,10 +247,21 @@ router.post('/alerts', authenticate, async (req, res) => {
 async function sendLaunchStage(stage) {
   const claim = await db.query('INSERT INTO prayer_launch_sent (stage) VALUES ($1) ON CONFLICT DO NOTHING RETURNING stage', [stage]);
   if (!claim.rows[0]) return;
-  const r = await db.query('SELECT user_id, lang FROM prayer_launch_signups');
-  console.log(`Oração Mundial: lembrete "${stage}" para ${r.rows.length} pessoas`);
-  for (const row of r.rows) {
-    const [title, body] = lt(row.lang)[stage];
+  const r = await db.query('SELECT user_id, lang, false AS asker FROM prayer_launch_signups');
+  let askers = [];
+  try {
+    const a = await db.query(
+      `SELECT DISTINCT ON (hp.user_id) hp.user_id, u.language AS lang, true AS asker
+         FROM help_posts hp JOIN users u ON u.id = hp.user_id
+        WHERE hp.post_type = 'prayer' AND hp.created_at >= $1
+          AND NOT EXISTS (SELECT 1 FROM help_post_churches t WHERE t.post_id = hp.id)
+          AND NOT EXISTS (SELECT 1 FROM prayer_launch_signups s WHERE s.user_id = hp.user_id)`, [ASK_SINCE]);
+    askers = a.rows;
+  } catch (e) { console.error('launch askers', e.message); }
+  const all = [...r.rows, ...askers];
+  console.log(`Oração Mundial: lembrete "${stage}" para ${all.length} pessoas (${askers.length} com pedido)`);
+  for (const row of all) {
+    const [title, body] = row.asker ? (ASK_TEXT[pickLang(row.lang)] || ASK_TEXT.pt)[stage] : lt(row.lang)[stage];
     await createNotification(row.user_id, 'prayer', title, body, { url: '/praca-oracao', kind: 'prayer_launch' });
     await sleep(40);
   }
@@ -319,6 +363,71 @@ router.get('/world', async (req, res) => {
   res.json(worldCache.data);
 });
 
+// GET /api/help-posts/stats — números da Oração Mundial (pedidos, orações, respondidos, países)
+let statsCache = { at: 0, data: null };
+router.get('/stats', async (req, res) => {
+  if (statsCache.data && Date.now() - statsCache.at < 60000) return res.json(statsCache.data);
+  try {
+    const r = await db.query(
+      `SELECT COUNT(*)::int AS requests, COALESCE(SUM(prayer_count), 0)::int AS prayers,
+              COUNT(*) FILTER (WHERE help_status = 'answered')::int AS answered
+         FROM help_posts hp
+        WHERE hp.post_type = 'prayer' AND NOT EXISTS (SELECT 1 FROM help_post_churches t WHERE t.post_id = hp.id)`);
+    const tz = await db.query(
+      `SELECT DISTINCT tz FROM (
+         SELECT tz FROM prayer_launch_signups UNION SELECT tz FROM prayer_alert_subs
+         UNION SELECT tz FROM help_posts WHERE post_type = 'prayer') x WHERE tz IS NOT NULL`);
+    const countries = new Set(tz.rows.map(row => countryOf(row.tz)).filter(Boolean));
+    for (const p of activePresence()) { const cc = countryOf(p.tz); if (cc) countries.add(cc); }
+    statsCache = { at: Date.now(), data: { ...r.rows[0], countries: countries.size } };
+    res.json(statsCache.data);
+  } catch (e) { console.error('help-posts stats', e.message); res.json({ requests: 0, prayers: 0, answered: 0, countries: 0 }); }
+});
+
+// GET /api/help-posts/present/list — pedidos para apresentar ao vivo (admin / pastor / moderador)
+router.get('/present/list', authenticate, async (req, res) => {
+  if (!isLeaderRole(req.user)) return res.status(403).json({ error: 'forbidden' });
+  try {
+    const since = /^\d{4}-\d{2}-\d{2}/.test(String(req.query.since || '')) ? new Date(String(req.query.since)) : new Date(ASK_SINCE);
+    const r = await db.query(
+      `SELECT hp.id, hp.content, hp.category, hp.is_urgent, hp.is_anonymous, hp.media_url, hp.prayer_count, hp.created_at, hp.help_status,
+              CASE WHEN hp.is_anonymous THEN NULL ELSE split_part(COALESCE(NULLIF(u.display_name, ''), u.full_name), ' ', 1) END AS author_name,
+              CASE WHEN hp.is_anonymous THEN NULL ELSE u.avatar_url END AS author_avatar,
+              (pp.post_id IS NOT NULL) AS presented
+         FROM help_posts hp
+         LEFT JOIN users u ON u.id = hp.user_id
+         LEFT JOIN help_post_presented pp ON pp.post_id = hp.id
+        WHERE hp.post_type = 'prayer' AND hp.created_at >= $1
+          AND NOT EXISTS (SELECT 1 FROM help_post_churches t WHERE t.post_id = hp.id)
+        ORDER BY hp.created_at ASC
+        LIMIT 1000`, [isNaN(since.getTime()) ? new Date(ASK_SINCE) : since]);
+    res.set('Cache-Control', 'no-store');
+    res.json({ posts: r.rows });
+  } catch (e) { console.error('present list', e.message); res.status(500).json({ error: 'server' }); }
+});
+
+// POST /api/help-posts/:id/presented — marca como apresentado e avisa quem pediu (uma só vez)
+router.post('/:id/presented', authenticate, async (req, res) => {
+  if (!isLeaderRole(req.user)) return res.status(403).json({ error: 'forbidden' });
+  try {
+    if (!/^[0-9a-f-]{36}$/i.test(String(req.params.id))) return res.status(400).json({ error: 'bad_id' });
+    if (req.body?.presented === false) {
+      await db.query('DELETE FROM help_post_presented WHERE post_id = $1', [req.params.id]);
+      return res.json({ presented: false });
+    }
+    const ins = await db.query('INSERT INTO help_post_presented (post_id, presented_by) VALUES ($1, $2) ON CONFLICT DO NOTHING RETURNING post_id', [req.params.id, req.user.id]);
+    if (ins.rows[0]) {
+      const p = await db.query('SELECT hp.user_id, u.language FROM help_posts hp LEFT JOIN users u ON u.id = hp.user_id WHERE hp.id = $1', [req.params.id]);
+      const owner = p.rows[0];
+      if (owner?.user_id && String(owner.user_id) !== String(req.user.id)) {
+        const [title, body] = PRESENTED_TEXT[pickLang(owner.language)];
+        createNotification(owner.user_id, 'prayer', title, body, { postId: req.params.id, url: '/praca-oracao?pedido=' + req.params.id, kind: 'presented' }).catch(() => {});
+      }
+    }
+    res.json({ presented: true, notified: !!ins.rows[0] });
+  } catch (e) { console.error('presented', e.message); res.status(500).json({ error: 'server' }); }
+});
+
 // GET /api/help-posts/presence — pessoas a orar agora
 const presenceCache = new Map(); // room -> { at, data } (alivia o servidor quando há muita gente)
 router.get('/presence', (req, res) => {
@@ -366,7 +475,7 @@ router.get('/', optionalAuth, async (req, res) => {
           hp.*,
           CASE WHEN hp.is_anonymous THEN 'Anónimo' ELSE u.full_name END AS author_name,
           CASE WHEN hp.is_anonymous THEN NULL ELSE u.avatar_url END AS author_avatar,
-          (SELECT COUNT(*) FROM help_post_comments hpc WHERE hpc.post_id = hp.id) AS comment_count,
+          (SELECT COUNT(*)::int FROM help_post_comments hpc WHERE hpc.post_id = hp.id AND hpc.is_pastoral IS NOT TRUE) AS comment_count,
           (SELECT COALESCE(json_agg(json_build_object('name', split_part(pu.full_name, ' ', 1), 'avatar', pu.avatar_url) ORDER BY x.created_at DESC), '[]'::json) FROM (SELECT user_id, created_at FROM help_post_prayers WHERE post_id = hp.id ORDER BY created_at DESC LIMIT 5) x JOIN users pu ON pu.id = x.user_id) AS prayer_faces,
           (SELECT hpc.content FROM help_post_comments hpc WHERE hpc.post_id = hp.id AND hpc.is_pastoral = true ORDER BY hpc.created_at DESC LIMIT 1) AS pastoral_reply,
           (SELECT c.name FROM help_post_comments hpc LEFT JOIN churches c ON c.id = hpc.church_id WHERE hpc.post_id = hp.id AND hpc.is_pastoral = true ORDER BY hpc.created_at DESC LIMIT 1) AS pastoral_reply_church,
@@ -378,17 +487,20 @@ router.get('/', optionalAuth, async (req, res) => {
         LEFT JOIN users u ON u.id = hp.user_id
         WHERE (NOT EXISTS (SELECT 1 FROM help_post_churches hpt WHERE hpt.post_id = hp.id) OR hp.user_id = $1)
           AND ($2::text IS NULL OR hp.post_type = $2)
+          AND ($4::text IS NULL
+               OR ($4::text = 'mine' AND hp.user_id = $1)
+               OR ($4::text = 'prayed' AND EXISTS (SELECT 1 FROM help_post_prayers z WHERE z.post_id = hp.id AND z.user_id = $1)))
         ORDER BY hp.created_at DESC
         LIMIT $3
       `;
-      params = [userId, typeFilter, limit];
+      params = [userId, typeFilter, limit, ['mine', 'prayed'].includes(req.query.scope) ? req.query.scope : null];
     } else {
       sql = `
         SELECT
           hp.*,
           CASE WHEN hp.is_anonymous THEN 'Anónimo' ELSE u.full_name END AS author_name,
           CASE WHEN hp.is_anonymous THEN NULL ELSE u.avatar_url END AS author_avatar,
-          (SELECT COUNT(*) FROM help_post_comments hpc WHERE hpc.post_id = hp.id) AS comment_count,
+          (SELECT COUNT(*)::int FROM help_post_comments hpc WHERE hpc.post_id = hp.id AND hpc.is_pastoral IS NOT TRUE) AS comment_count,
           (SELECT COALESCE(json_agg(json_build_object('name', split_part(pu.full_name, ' ', 1), 'avatar', pu.avatar_url) ORDER BY x.created_at DESC), '[]'::json) FROM (SELECT user_id, created_at FROM help_post_prayers WHERE post_id = hp.id ORDER BY created_at DESC LIMIT 5) x JOIN users pu ON pu.id = x.user_id) AS prayer_faces,
           NULL::TEXT AS pastoral_reply,
           NULL::TEXT AS pastoral_reply_church,
@@ -419,16 +531,17 @@ router.get('/', optionalAuth, async (req, res) => {
 router.post('/', authenticate, async (req, res) => {
   try {
     const { content, category = 'general', post_type, is_anonymous = false, is_urgent = false, media_url, pix_key, type, target_church_ids = [] } = req.body;
+    const postTz = cleanTz(req.body?.tz);
 
     if (!content || !content.trim()) {
       return res.status(400).json({ error: 'Conteúdo é obrigatório' });
     }
 
     const result = await db.query(
-      `INSERT INTO help_posts (user_id, category, post_type, content, is_anonymous, is_urgent, media_url, pix_key)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      `INSERT INTO help_posts (user_id, category, post_type, content, is_anonymous, is_urgent, media_url, pix_key, tz)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        RETURNING *`,
-      [req.user.id, category, post_type || type || 'request', content.trim(), is_anonymous, is_urgent, media_url || null, pix_key || null]
+      [req.user.id, category, post_type || type || 'request', content.trim(), is_anonymous, is_urgent, media_url || null, pix_key || null, postTz]
     );
 
     const churchIds = [...new Set((Array.isArray(target_church_ids) ? target_church_ids : []).filter(Boolean))];
@@ -649,48 +762,81 @@ router.delete('/:id', authenticate, async (req, res) => {
   } catch (err) { console.error('Erro ao apagar pedido:', err); res.status(500).json({ error: 'Não foi possível apagar o pedido.' }); }
 });
 
-// GET /api/help-posts/:id/comments — listar comentários
+// GET /api/help-posts/:id/comments — palavras de encorajamento (as respostas pastorais são privadas e não aparecem aqui)
 router.get('/:id/comments', optionalAuth, async (req, res) => {
   try {
+    if (!/^[0-9a-f-]{36}$/i.test(String(req.params.id))) return res.json({ comments: [] });
+    const me = req.user ? String(req.user.id) : null;
+    const post = await db.query('SELECT user_id FROM help_posts WHERE id = $1', [req.params.id]);
+    const owner = post.rows[0] ? String(post.rows[0].user_id) : null;
     const result = await db.query(
-      `SELECT
-        hpc.*,
-        CASE WHEN hpc.is_anonymous THEN 'Anónimo' ELSE u.full_name END AS author_name,
+      `SELECT hpc.id, hpc.content, hpc.created_at, hpc.is_anonymous, hpc.user_id,
+        CASE WHEN hpc.is_anonymous THEN 'Anónimo' ELSE COALESCE(NULLIF(u.display_name, ''), u.full_name) END AS author_name,
         CASE WHEN hpc.is_anonymous THEN NULL ELSE u.avatar_url END AS author_avatar
        FROM help_post_comments hpc
        LEFT JOIN users u ON u.id = hpc.user_id
-       WHERE hpc.post_id = $1
-       ORDER BY hpc.created_at ASC`,
+       WHERE hpc.post_id = $1 AND hpc.is_pastoral IS NOT TRUE
+       ORDER BY hpc.created_at ASC
+       LIMIT 200`,
       [req.params.id]
     );
-    res.json({ comments: result.rows });
+    const admin = req.user && ['admin', 'moderator'].includes(String(req.user.role || ''));
+    res.json({ comments: result.rows.map(c => ({
+      id: c.id, content: c.content, created_at: c.created_at, author_name: c.author_name, author_avatar: c.author_avatar,
+      user_id: c.is_anonymous && String(c.user_id) !== me ? null : c.user_id,
+      is_mine: !!me && String(c.user_id) === me,
+      can_delete: !!me && (String(c.user_id) === me || owner === me || !!admin),
+    })) });
   } catch (err) {
     console.error('Erro ao buscar comentários:', err);
     res.status(500).json({ error: 'Erro interno' });
   }
 });
 
-// POST /api/help-posts/:id/comments — adicionar comentário (requer autenticação)
+// POST /api/help-posts/:id/comments — deixar uma palavra de encorajamento (requer autenticação)
+const commentHits = new Map();
 router.post('/:id/comments', authenticate, async (req, res) => {
   try {
-    const { content, is_anonymous = false } = req.body;
-
-    if (!content || !content.trim()) {
-      return res.status(400).json({ error: 'Comentário não pode ser vazio' });
-    }
-
+    const content = String(req.body?.content || '').replace(/\s+/g, ' ').trim().slice(0, 500);
+    if (!content) return res.status(400).json({ error: 'Comentário não pode ser vazio' });
+    if (!/^[0-9a-f-]{36}$/i.test(String(req.params.id))) return res.status(404).json({ error: 'not_found' });
+    const key = String(req.user.id), now = Date.now();
+    const hits = (commentHits.get(key) || []).filter(t => now - t < 60000);
+    if (hits.length >= 8) return res.status(429).json({ error: 'slow_down' });
+    hits.push(now); commentHits.set(key, hits); if (commentHits.size > 5000) commentHits.clear();
+    const post = await db.query('SELECT hp.user_id, u.language FROM help_posts hp LEFT JOIN users u ON u.id = hp.user_id WHERE hp.id = $1', [req.params.id]);
+    if (!post.rows[0]) return res.status(404).json({ error: 'not_found' });
     const result = await db.query(
       `INSERT INTO help_post_comments (post_id, user_id, content, is_anonymous)
-       VALUES ($1, $2, $3, $4)
-       RETURNING *`,
-      [req.params.id, req.user.id, content.trim(), is_anonymous]
+       VALUES ($1, $2, $3, false)
+       RETURNING id, content, created_at`,
+      [req.params.id, req.user.id, content]
     );
-
-    res.status(201).json({ comment: result.rows[0] });
+    const owner = post.rows[0];
+    if (owner.user_id && String(owner.user_id) !== String(req.user.id)) {
+      const who = String(req.user.full_name || 'Alguém').trim().split(/\s+/)[0];
+      createNotification(owner.user_id, 'prayer', ENCOURAGE_TEXT[pickLang(owner.language)](who), content.slice(0, 120), { postId: req.params.id, url: '/praca-oracao?pedido=' + req.params.id, kind: 'encourage', from: String(req.user.id) }).catch(() => {});
+    }
+    res.status(201).json({ comment: { ...result.rows[0], user_id: req.user.id, author_name: req.user.full_name || '', author_avatar: req.user.avatar_url || null, is_mine: true, can_delete: true } });
   } catch (err) {
     console.error('Erro ao criar comentário:', err);
     res.status(500).json({ error: 'Erro interno' });
   }
+});
+
+// DELETE /api/help-posts/:id/comments/:cid — apaga: quem escreveu, quem fez o pedido, ou admin
+router.delete('/:id/comments/:cid', authenticate, async (req, res) => {
+  try {
+    if (!/^[0-9a-f-]{36}$/i.test(String(req.params.cid))) return res.status(404).json({ error: 'not_found' });
+    const admin = ['admin', 'moderator'].includes(String(req.user.role || ''));
+    const r = await db.query(
+      `DELETE FROM help_post_comments hpc
+        WHERE hpc.id = $1 AND hpc.post_id = $2 AND hpc.is_pastoral IS NOT TRUE
+          AND (hpc.user_id = $3 OR $4::boolean OR EXISTS (SELECT 1 FROM help_posts hp WHERE hp.id = hpc.post_id AND hp.user_id = $3))
+        RETURNING hpc.id`, [req.params.cid, req.params.id, req.user.id, admin]);
+    if (!r.rows[0]) return res.status(403).json({ error: 'forbidden' });
+    res.json({ deleted: true });
+  } catch (err) { console.error('delete comment', err.message); res.status(500).json({ error: 'server' }); }
 });
 
 router.notifyPrayed = notifyPrayed;
