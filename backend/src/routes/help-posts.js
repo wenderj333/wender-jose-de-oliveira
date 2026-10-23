@@ -359,7 +359,19 @@ router.get('/world', async (req, res) => {
     const r = await db.query('SELECT tz, COUNT(*)::int AS n FROM prayer_launch_signups GROUP BY tz');
     for (const row of r.rows) { const cc = countryOf(row.tz); if (cc) signups[cc] = (signups[cc] || 0) + row.n; }
   } catch (_) {}
-  worldCache = { at: Date.now(), data: { praying, signups } };
+  // Países de onde vieram os pedidos (fuso do pedido; nos pedidos antigos, o fuso de quem pediu)
+  const requests = {};
+  try {
+    const r = await db.query(
+      `SELECT COALESCE(hp.tz, s.tz, a.tz) AS tz, COUNT(*)::int AS n
+         FROM help_posts hp
+         LEFT JOIN prayer_launch_signups s ON s.user_id = hp.user_id
+         LEFT JOIN prayer_alert_subs a ON a.user_id = hp.user_id
+        WHERE hp.post_type = 'prayer' AND NOT EXISTS (SELECT 1 FROM help_post_churches t WHERE t.post_id = hp.id)
+        GROUP BY 1`);
+    for (const row of r.rows) { const cc = countryOf(row.tz); if (cc) requests[cc] = (requests[cc] || 0) + row.n; }
+  } catch (_) {}
+  worldCache = { at: Date.now(), data: { praying, signups, requests } };
   res.json(worldCache.data);
 });
 
@@ -532,6 +544,11 @@ router.post('/', authenticate, async (req, res) => {
   try {
     const { content, category = 'general', post_type, is_anonymous = false, is_urgent = false, media_url, pix_key, type, target_church_ids = [] } = req.body;
     const postTz = cleanTz(req.body?.tz);
+    // Oração Mundial: o pedido passa pelo guardião antes de aparecer
+    if ((post_type || type) === 'prayer') {
+      const reason = await require('../services/requestGuard').checkRequest(content, 'request');
+      if (reason) return res.status(422).json({ error: 'moderated', reason });
+    }
 
     if (!content || !content.trim()) {
       return res.status(400).json({ error: 'Conteúdo é obrigatório' });
@@ -804,6 +821,8 @@ router.post('/:id/comments', authenticate, async (req, res) => {
     const hits = (commentHits.get(key) || []).filter(t => now - t < 60000);
     if (hits.length >= 8) return res.status(429).json({ error: 'slow_down' });
     hits.push(now); commentHits.set(key, hits); if (commentHits.size > 5000) commentHits.clear();
+    const reason = await require('../services/requestGuard').checkRequest(content, 'comment');
+    if (reason) return res.status(422).json({ error: 'moderated', reason });
     const post = await db.query('SELECT hp.user_id, u.language FROM help_posts hp LEFT JOIN users u ON u.id = hp.user_id WHERE hp.id = $1', [req.params.id]);
     if (!post.rows[0]) return res.status(404).json({ error: 'not_found' });
     const result = await db.query(
