@@ -54,6 +54,12 @@ const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
     await db.query("ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS help_status VARCHAR(20) NOT NULL DEFAULT 'open'");
     await db.query('ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS answer_testimony TEXT');
     await db.query('ALTER TABLE help_posts ADD COLUMN IF NOT EXISTS answered_at TIMESTAMPTZ');
+    await db.query(`CREATE TABLE IF NOT EXISTS help_post_translations (
+      post_id UUID NOT NULL,
+      lang VARCHAR(5) NOT NULL,
+      text TEXT NOT NULL,
+      PRIMARY KEY (post_id, lang)
+    )`).catch(e => console.error('help_post_translations', e.message));
     await db.query(`CREATE TABLE IF NOT EXISTS help_post_supporters (
       post_id UUID REFERENCES help_posts(id) ON DELETE CASCADE,
       user_id UUID REFERENCES users(id) ON DELETE CASCADE,
@@ -688,4 +694,38 @@ router.post('/:id/comments', authenticate, async (req, res) => {
 });
 
 router.notifyPrayed = notifyPrayed;
+// Traduzir pedidos de oração para o idioma de quem lê (cada pedido é traduzido 1 vez por idioma)
+const trHits = new Map();
+router.post('/translate', optionalAuth, async (req, res) => {
+  try {
+    const { translateBatch, LANG_NAMES } = require('../services/translate');
+    const lang = String(req.body?.lang || '').slice(0, 2);
+    const ids = [...new Set((Array.isArray(req.body?.ids) ? req.body.ids : []).map(String).filter(x => /^[0-9a-f-]{36}$/i.test(x)))].slice(0, 30);
+    if (!LANG_NAMES[lang] || !ids.length) return res.status(400).json({ error: 'bad_request' });
+    const key = (req.user && req.user.id) || req.ip || 'anon', now = Date.now();
+    const hits = (trHits.get(key) || []).filter(t => now - t < 60000);
+    if (hits.length >= 20) return res.status(429).json({ error: 'slow_down' });
+    hits.push(now); trHits.set(key, hits); if (trHits.size > 5000) trHits.clear();
+    const out = {};
+    const cached = await db.query('SELECT post_id::text AS id, text FROM help_post_translations WHERE lang = $1 AND post_id = ANY($2::uuid[])', [lang, ids]);
+    cached.rows.forEach(r => { out[r.id] = r.text; });
+    const missing = ids.filter(id => out[id] === undefined);
+    if (missing.length) {
+      const src = await db.query('SELECT id::text AS id, content FROM help_posts WHERE id = ANY($1::uuid[]) ORDER BY id', [missing]);
+      if (src.rows.length) {
+        const translated = await translateBatch(src.rows.map(r => String(r.content || '').slice(0, 1500)), lang);
+        for (let i = 0; i < src.rows.length; i++) {
+          const t = String(translated[i] || '').trim().slice(0, 2000) || src.rows[i].content;
+          out[src.rows[i].id] = t;
+          db.query('INSERT INTO help_post_translations (post_id, lang, text) VALUES ($1, $2, $3) ON CONFLICT (post_id, lang) DO UPDATE SET text = EXCLUDED.text', [src.rows[i].id, lang, t]).catch(() => {});
+        }
+      }
+    }
+    res.json({ lang, translations: out });
+  } catch (err) {
+    console.error('help-posts TRANSLATE:', err.message);
+    res.status(503).json({ error: 'translate_unavailable' });
+  }
+});
+
 module.exports = router;
