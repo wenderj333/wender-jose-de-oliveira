@@ -9,13 +9,35 @@ const { generateToken, authenticate } = require('../middleware/auth');
 // POST /api/auth/register
 const { sendWelcomeEmail, sendPasswordResetEmail, sendAdminSignupEmail } = require('../services/email');
 
+// De onde veio a pessoa (anúncio, outro site, app) — guardado na conta e mostrado no aviso ao admin
+function signupSourceLabel(src = {}) {
+  const camp = src.utm_campaign ? ` — ${src.utm_campaign}` : '';
+  if (src.app) return 'App Android' + (src.utm_campaign ? camp : '');
+  if (src.gclid || /^(google|googleads|adwords)$/i.test(src.utm_source || '') && /cpc|paid|ads/i.test(src.utm_medium || 'cpc')) return 'Anúncio Google' + (camp || ' (campanha sem nome no link)');
+  if (src.utm_source) return `Link ${src.utm_source}${camp}`;
+  if (src.ref) return `Site ${src.ref}`;
+  return 'Direto / desconhecido';
+}
+function cleanSignupSource(raw) {
+  const s = raw && typeof raw === 'object' ? raw : {};
+  const t = (v) => String(v || '').replace(/[<>]/g, '').slice(0, 80);
+  return { utm_source: t(s.utm_source), utm_medium: t(s.utm_medium), utm_campaign: t(s.utm_campaign), gclid: s.gclid ? 1 : 0, ref: t(s.ref), landing: t(s.landing), app: s.app ? 1 : 0 };
+}
+
 async function notifyAdminSignup(req, user, method) {
+  const source = cleanSignupSource(req.body?.signup_source);
+  const sourceLabel = signupSourceLabel(source) + (source.landing ? ` · entrou por ${source.landing}` : '');
+  try {
+    const db = require('../db/connection');
+    await db.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS signup_source TEXT');
+    await db.query('UPDATE users SET signup_source = $1 WHERE id = $2', [JSON.stringify({ ...source, label: signupSourceLabel(source) }), user.id]);
+  } catch (e) { console.warn('[signup-source]', e.message); }
   try {
     let total = null;
     try { const r = await require('../db/connection').query('SELECT COUNT(*)::int AS n FROM users'); total = r.rows[0].n; } catch { /* ignore */ }
     const country = req.headers['cf-ipcountry'] || req.headers['x-vercel-ip-country'] || null;
     const language = req.body?.language || String(req.headers['accept-language'] || '').split(',')[0] || null;
-    await sendAdminSignupEmail({ name: user.full_name, email: user.email, method, language, country, total });
+    await sendAdminSignupEmail({ name: user.full_name, email: user.email, method, language, country, total, source: sourceLabel });
   } catch { /* nunca bloquear o cadastro */ }
 }
 const { createNotification } = require('./notifications');

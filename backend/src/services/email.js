@@ -110,13 +110,13 @@ const ADMIN_NOTIFY_EMAIL = process.env.ADMIN_NOTIFY_EMAIL || 'wenderj333@gmail.c
 const escHtml = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // Aviso para o dono do site a cada novo cadastro
-async function sendAdminSignupEmail({ name, email, method = 'email', language, country, total }) {
+async function sendAdminSignupEmail({ name, email, method = 'email', language, country, total, source }) {
   try {
     if (!resend || !ADMIN_NOTIFY_EMAIL) return;
     const when = new Date().toLocaleString('pt-BR', { timeZone: 'Europe/Madrid' });
     const rows = [
       ['Nome', name], ['Email', email], ['Cadastro por', method === 'google' ? 'Google' : method === 'phone' ? 'Telefone' : 'Email e senha'],
-      ['Idioma', language || '—'], ['País', country || '—'], ['Data', when + ' (Madrid)'],
+      ['Veio de', source || '—'], ['Idioma', language || '—'], ['País', country || '—'], ['Data', when + ' (Madrid)'],
       ['Total de membros', total != null ? total : '—'],
     ].map(([k, v]) => `<tr><td style="padding:6px 12px;color:#6b7560">${k}</td><td style="padding:6px 12px;font-weight:600;color:#232b1b">${escHtml(v)}</td></tr>`).join('');
     const { error } = await resend.emails.send({
