@@ -1,77 +1,65 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
-const jwt = require('jsonwebtoken');
+const { authenticate, requireRole } = require('../middleware/auth');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
-
+// Mantido por compatibilidade (o server.js chama setWss); os avisos agora vão só para pastores/admins
 let wss = null;
 router.setWss = (w) => { wss = w; };
 
-// Optional auth middleware
-function optionalAuth(req, res, next) {
-  const auth = req.headers.authorization;
-  if (auth && auth.startsWith('Bearer ')) {
-    try {
-      const decoded = jwt.verify(auth.split(' ')[1], JWT_SECRET);
-      req.user = decoded;
-    } catch (e) { /* ignore */ }
-  }
-  next();
-}
-
-// Auto-migrate: add destination column if missing
 (async () => {
   try {
-    await db.query(
-      `ALTER TABLE help_requests ADD COLUMN IF NOT EXISTS destination VARCHAR(20) DEFAULT 'pastor'`
-    );
-    console.log('✅ help_requests.destination column ready');
+    await db.query(`ALTER TABLE help_requests ADD COLUMN IF NOT EXISTS destination VARCHAR(20) DEFAULT 'pastor'`);
+    await db.query('ALTER TABLE help_requests ADD COLUMN IF NOT EXISTS user_id UUID');
+    await db.query('ALTER TABLE help_requests ADD COLUMN IF NOT EXISTS is_anonymous BOOLEAN DEFAULT false');
   } catch (err) {
-    // Column may already exist or table doesn't exist yet — fine
-    if (!err.message?.includes('already exists')) {
-      console.warn('⚠️  help_requests migration:', err.message);
-    }
+    if (!err.message?.includes('already exists')) console.warn('⚠️  help_requests migration:', err.message);
   }
 })();
 
-// POST /api/help-requests
-router.post('/', optionalAuth, async (req, res) => {
+// Avisa em tempo real só quem pode ver os pedidos (pastores e admins)
+async function notifyLeaders(payload) {
   try {
-    const { type, name, contact, message, destination = 'pastor', anonymous = false } = req.body;
-    if (!type || !contact) {
-      return res.status(400).json({ error: 'Tipo e contato são obrigatórios' });
-    }
+    const { notifyUser } = require('../websocket');
+    const r = await db.query(`SELECT id FROM users WHERE role IN ('pastor', 'admin') AND COALESCE(is_active, true) = true`);
+    for (const row of r.rows) notifyUser(String(row.id), payload);
+  } catch (_) { /* sem websocket */ }
+}
 
-    const validDestinations = ['public', 'group', 'pastor'];
-    const dest = validDestinations.includes(destination) ? destination : 'pastor';
+// POST /api/help-requests — pedir oração / ajuda (precisa de sessão)
+router.post('/', authenticate, async (req, res) => {
+  try {
+    const { type, message, destination = 'pastor' } = req.body || {};
+    const anonymous = req.body?.anonymous === true;
+    if (!type || !String(message || '').trim()) return res.status(400).json({ error: 'Escreva o seu pedido.', code: 'empty' });
+    const text = String(message).trim().slice(0, 2000);
+    const dest = ['public', 'group', 'pastor'].includes(destination) ? destination : 'pastor';
 
-    const newRequest = await db.prepare(
-      `INSERT INTO help_requests (type, name, contact, message, destination)
-       VALUES (?, ?, ?, ?, ?) RETURNING *`
-    ).get(type, name || null, contact, message || null, dest);
-
-    // If destination === 'public' and user is authenticated, also create a feed post
-    if (dest === 'public' && req.user) {
+    // Público: vai para a Oração Mundial (que respeita o anonimato e passa pelo guardião)
+    if (dest === 'public') {
       try {
-        const authorName = anonymous ? 'Anónimo' : (name || req.user.full_name || 'Utilizador');
-        const feedContent = `🙏 Pedido de Oração\n\n${message || contact}\n\n— ${authorName}`;
-        await db.prepare(
-          `INSERT INTO feed_posts (author_id, content, category, visibility)
-           VALUES (?, ?, ?, ?) RETURNING id`
-        ).get(req.user.id, feedContent, 'prayer', 'public');
-      } catch (feedErr) {
-        console.warn('⚠️  Could not create feed post:', feedErr.message);
-      }
+        const reason = await require('../services/requestGuard').checkRequest(text, 'request');
+        if (reason) return res.status(422).json({ error: 'moderated', reason });
+      } catch (_) { /* sem guardião */ }
     }
 
-    if (wss) {
-      const payload = JSON.stringify({ type: 'new_help_request', request: newRequest });
-      wss.clients.forEach((client) => {
-        if (client.readyState === 1) client.send(payload);
-      });
+    // O contacto e o nome vêm da conta, e nunca são guardados quando o pedido é anónimo
+    const name = anonymous ? null : (req.user.full_name || null);
+    const contact = anonymous ? 'anónimo' : (req.user.email || 'via-app');
+    const newRequest = await db.prepare(
+      `INSERT INTO help_requests (type, name, contact, message, destination, user_id, is_anonymous)
+       VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *`
+    ).get(String(type).slice(0, 50), name, contact, text, dest, req.user.id, anonymous);
+
+    if (dest === 'public') {
+      try {
+        await db.query(
+          `INSERT INTO help_posts (user_id, category, post_type, content, is_anonymous) VALUES ($1, 'outro', 'prayer', $2, $3)`,
+          [req.user.id, text, anonymous]);
+      } catch (e) { console.warn('⚠️  help_requests → Oração Mundial:', e.message); }
     }
 
+    notifyLeaders({ type: 'new_help_request', request: newRequest });
     res.status(201).json({ id: newRequest.id, message: 'Pedido de oração recebido!' });
   } catch (err) {
     console.error('Erro ao salvar pedido de oração:', err);
@@ -79,34 +67,25 @@ router.post('/', optionalAuth, async (req, res) => {
   }
 });
 
-// GET /api/help-requests
-router.get('/', async (req, res) => {
+// GET /api/help-requests — só pastores e admins (antes estava aberto a qualquer pessoa, com e-mails)
+router.get('/', authenticate, requireRole('pastor', 'admin'), async (req, res) => {
   try {
-    const requests = await db.prepare(
-      'SELECT * FROM help_requests ORDER BY created_at DESC LIMIT 100'
-    ).all();
+    const requests = await db.prepare('SELECT * FROM help_requests ORDER BY created_at DESC LIMIT 100').all();
     res.json(requests);
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' });
   }
 });
 
-// PATCH /api/help-requests/:id
-router.patch('/:id', async (req, res) => {
+// PATCH /api/help-requests/:id — só pastores e admins
+router.patch('/:id', authenticate, requireRole('pastor', 'admin'), async (req, res) => {
   try {
-    const { status } = req.body;
-    if (!['pending', 'in_progress', 'resolved'].includes(status)) {
-      return res.status(400).json({ error: 'Status inválido' });
-    }
-    await db.prepare('UPDATE help_requests SET status = ? WHERE id = ?').run(status, req.params.id);
-
-    if (wss) {
-      const payload = JSON.stringify({ type: 'help_request_update', id: Number(req.params.id), status });
-      wss.clients.forEach((client) => {
-        if (client.readyState === 1) client.send(payload);
-      });
-    }
-
+    const { status } = req.body || {};
+    if (!['pending', 'in_progress', 'resolved'].includes(status)) return res.status(400).json({ error: 'Status inválido' });
+    const id = parseInt(req.params.id, 10);
+    if (!(id > 0)) return res.status(404).json({ error: 'not_found' });
+    await db.prepare('UPDATE help_requests SET status = ? WHERE id = ?').run(status, id);
+    notifyLeaders({ type: 'help_request_update', id, status });
     res.json({ message: 'Status atualizado' });
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' });

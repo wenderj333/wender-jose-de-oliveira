@@ -671,22 +671,44 @@ function setupWebSocket(server) {
           }
 
           case 'chat_join_room': {
+            // Segurança: quem pediu ajuda entra com a chave secreta da conversa; o pastor tem de estar
+            // identificado, ser pastor/admin e ser quem aceitou a conversa
             const clientInfo = clients.get(ws) || {};
-            clientInfo.chatRoomId = msg.roomId;
-            clientInfo.chatRole = msg.role;
-            clientInfo.chatName = msg.name;
-            clientInfo.chatLang = msg.language;
+            let allowedRole = null; let displayName = String(msg.name || '').slice(0, 80);
+            try {
+              const cdb = require('./db/connection');
+              const rr = await cdb.query('SELECT id, access_key, pastor_id FROM chat_rooms WHERE id = $1', [msg.roomId]);
+              const room = rr.rows[0];
+              if (room && msg.role === 'pastor' && clientInfo.userId) {
+                const ur = await cdb.query('SELECT role, full_name FROM users WHERE id = $1', [clientInfo.userId]);
+                const u = ur.rows[0];
+                if (u && (u.role === 'admin' || (u.role === 'pastor' && (!room.pastor_id || String(room.pastor_id) === String(clientInfo.userId))))) { allowedRole = 'pastor'; displayName = displayName || u.full_name || 'Pastor'; }
+              } else if (room && msg.role !== 'pastor' && room.access_key && msg.key && String(msg.key) === String(room.access_key)) {
+                allowedRole = 'requester';
+              }
+            } catch (_) { allowedRole = null; }
+            if (!allowedRole) { try { ws.send(JSON.stringify({ type: 'chat_error', roomId: msg.roomId, code: 'forbidden' })); } catch (_) {} break; }
+            clientInfo.chatRoomId = String(msg.roomId);
+            clientInfo.chatRole = allowedRole;
+            clientInfo.chatName = displayName || 'Anônimo';
+            clientInfo.chatLang = String(msg.language || 'pt').slice(0, 10);
             clients.set(ws, clientInfo);
             broadcastToRoom(wss, clients, msg.roomId, {
               type: 'chat_user_joined',
               roomId: msg.roomId,
-              role: msg.role,
-              name: msg.name,
+              role: allowedRole,
+              name: clientInfo.chatName,
+              language: clientInfo.chatLang,
             }, ws);
             break;
           }
 
           case 'chat_message': {
+            const sender = clients.get(ws) || {};
+            if (!sender.chatRoomId || sender.chatRoomId !== String(msg.roomId)) break; // só quem entrou (com permissão) nesta conversa
+            msg.role = sender.chatRole; msg.name = sender.chatName;
+            msg.text = String(msg.text || '').slice(0, 4000);
+            if (!msg.text.trim()) break;
             let translated = msg.text;
             if (msg.targetLang && msg.sourceLang && msg.targetLang !== msg.sourceLang) {
               try {
@@ -694,9 +716,10 @@ function setupWebSocket(server) {
               } catch (e) { console.error('Translation error:', e); }
             }
             const chatDb = require('./db/connection');
+            // Guardar não pode impedir a entrega da mensagem
             await chatDb.query(
               'INSERT INTO chat_messages (room_id, sender_role, sender_name, original_text, translated_text, original_lang, target_lang) VALUES ($1,$2,$3,$4,$5,$6,$7)',
-              [msg.roomId, msg.role, msg.name, msg.text, translated, msg.sourceLang, msg.targetLang]);
+              [msg.roomId, msg.role, msg.name, msg.text, translated, msg.sourceLang, msg.targetLang]).catch(e => console.warn('chat save:', e.message));
             broadcastToRoom(wss, clients, msg.roomId, {
               type: 'chat_new_message',
               roomId: msg.roomId,
@@ -706,11 +729,12 @@ function setupWebSocket(server) {
               translatedText: translated,
               sourceLang: msg.sourceLang,
               timestamp: new Date().toISOString(),
-            });
+            }, ws);
             break;
           }
 
           case 'chat_typing':
+            if (!(clients.get(ws) || {}).chatRoomId || (clients.get(ws) || {}).chatRoomId !== String(msg.roomId)) break;
             broadcastToRoom(wss, clients, msg.roomId, {
               type: 'chat_typing',
               roomId: msg.roomId,
@@ -721,6 +745,7 @@ function setupWebSocket(server) {
 
           case 'chat_leave_room': {
             const ci = clients.get(ws) || {};
+            if (!ci.chatRoomId || ci.chatRoomId !== String(msg.roomId)) break;
             broadcastToRoom(wss, clients, msg.roomId, {
               type: 'chat_user_left',
               roomId: msg.roomId,
@@ -818,7 +843,7 @@ function broadcastToRoom(wss, clients, roomId, data, excludeWs) {
   wss.clients.forEach((client) => {
     if (client.readyState === 1 && client !== excludeWs) {
       const info = clients.get(client);
-      if (info && info.chatRoomId === roomId) {
+      if (info && info.chatRoomId != null && String(info.chatRoomId) === String(roomId)) {
         client.send(message);
       }
     }
