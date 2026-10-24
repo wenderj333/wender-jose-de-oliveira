@@ -86,8 +86,10 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    const user = await User.findByEmail(email);
+    // O registo guarda o e-mail em minúsculas; o teclado do celular costuma pôr a 1.ª letra em maiúscula
+    const user = (await User.findByEmail(String(email).trim().toLowerCase())) || (await User.findByEmail(String(email).trim()));
     if (!user) return res.status(401).json({ error: 'Credenciais inválidas' });
+    if (user.is_suspended) return res.status(403).json({ error: 'Esta conta foi suspensa pela moderação.', code: 'suspended' });
 
     const valid = await User.verifyPassword(password, user.password_hash);
     if (!valid) return res.status(401).json({ error: 'Credenciais inválidas' });
@@ -176,13 +178,24 @@ router.post('/google', socialLoginHandler);
 
 async function socialLoginHandler(req, res) {
   try {
-    const { uid, email, full_name, photo } = req.body;
-    if (!uid || !email) {
-      return res.status(400).json({ error: 'uid e email são obrigatórios' });
-    }
+    // Segurança: o e-mail vem do token assinado pelo Google/Firebase, nunca do corpo do pedido
+    const idToken = req.body?.idToken;
+    if (!idToken) return res.status(401).json({ error: 'Atualize a página (ou a app) e entre de novo.', code: 'token_required' });
+    let verified;
+    try { verified = await require('../services/firebaseToken').verifyIdToken(idToken); }
+    catch (e) { console.warn('[auth/social] token inválido:', e.message); return res.status(401).json({ error: 'Não foi possível confirmar o seu login. Tente de novo.', code: 'invalid_token' }); }
+    const email = verified.email;
+    if (!email) return res.status(400).json({ error: 'A sua conta não tem e-mail. Entre com e-mail e senha.', code: 'no_email' });
+    const full_name = verified.name || req.body?.full_name || null;
+    const photo = verified.picture || req.body?.photo || null;
 
     // Check if user already exists (by email)
     let user = await User.findByEmail(email);
+    // Só liga a uma conta existente se o e-mail estiver confirmado pelo fornecedor (o Facebook confirma os e-mails)
+    if (user && !verified.emailVerified && verified.provider !== 'facebook.com') {
+      return res.status(403).json({ error: 'Confirme o seu e-mail na conta Google/Facebook ou entre com e-mail e senha.', code: 'email_not_verified' });
+    }
+    if (user && user.is_suspended) return res.status(403).json({ error: 'Esta conta foi suspensa pela moderação.', code: 'suspended' });
     let isNewUser = false;
     if (!user) {
       // Create local user with a random password (won't be used for Google users)
@@ -225,10 +238,16 @@ async function socialLoginHandler(req, res) {
 // POST /api/auth/phone — sync Firebase phone user to local DB
 router.post('/phone', async (req, res) => {
   try {
-    const { uid, phone, full_name } = req.body;
-    if (!uid || !phone) {
-      return res.status(400).json({ error: 'uid e telefone são obrigatórios' });
-    }
+    // Segurança: o número e o uid vêm do token assinado pelo Firebase
+    const idToken = req.body?.idToken;
+    if (!idToken) return res.status(401).json({ error: 'Atualize a página (ou a app) e entre de novo.', code: 'token_required' });
+    let verified;
+    try { verified = await require('../services/firebaseToken').verifyIdToken(idToken); }
+    catch (e) { return res.status(401).json({ error: 'Não foi possível confirmar o seu login. Tente de novo.', code: 'invalid_token' }); }
+    if (!verified.phone) return res.status(400).json({ error: 'Número de telefone não confirmado.', code: 'no_phone' });
+    const uid = verified.uid;
+    const phone = verified.phone;
+    const full_name = req.body?.full_name || null;
 
     const pool = require('../db/connection');
 
