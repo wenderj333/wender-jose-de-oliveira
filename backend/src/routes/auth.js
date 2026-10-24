@@ -57,7 +57,8 @@ router.post('/register', async (req, res) => {
     const existing = await User.findByEmail(emailNormalized);
     if (existing) return res.status(409).json({ error: 'Email já cadastrado' });
 
-    const user = await User.create({ email: emailNormalized, password, full_name: fullNameNormalized, role, email_updates_opt_in: email_updates_opt_in === true });
+    // O papel nunca vem do formulário: toda a conta nova é 'member' (pastor = pedido aprovado; admin = só por um admin)
+    const user = await User.create({ email: emailNormalized, password, full_name: fullNameNormalized, role: 'member', email_updates_opt_in: email_updates_opt_in === true });
 
     // Salvar avatar se fornecido
     if (avatar_url) {

@@ -591,7 +591,8 @@ app.get('/', (req, res) => {
 
 // Temporary admin route - set user role
 const db = require('./db/connection');
-app.get('/api/admin/users', async (req, res) => {
+// Só administradores (antes estava aberta a qualquer pessoa)
+app.get('/api/admin/users', require('./middleware/auth').authenticate, require('./middleware/auth').requireRole('admin'), async (req, res) => {
   try {
     const users = await db.prepare('SELECT id, email, full_name, role, created_at FROM users ORDER BY created_at DESC LIMIT 50').all();
     res.json({ users });
@@ -599,7 +600,7 @@ app.get('/api/admin/users', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-app.post('/api/admin/set-role', async (req, res) => {
+app.post('/api/admin/set-role', require('./middleware/auth').authenticate, require('./middleware/auth').requireRole('admin'), async (req, res) => {
   try {
     const { email, role } = req.body;
     if (!['member', 'leader', 'pastor', 'admin'].includes(role)) return res.status(400).json({ error: 'Role inválido' });
