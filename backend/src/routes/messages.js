@@ -195,6 +195,9 @@ router.post('/', authenticate, async (req, res) => {
 
     const msg = result.rows[0];
 
+    // Responde já; o aviso e o push vão em segundo plano (antes a mensagem esperava pelo Firebase)
+    res.status(201).json({ message: msg });
+
     // Notificacao + push FCM (não avisa quem restringiu o remetente)
     if (!silent) try {
       const sender = await db.query('SELECT full_name FROM users WHERE id = $1', [me]);
@@ -208,11 +211,9 @@ router.post('/', authenticate, async (req, res) => {
         preview,
       });
     } catch (_) {}
-
-    res.status(201).json({ message: msg });
   } catch (err) {
     console.error('Error sending message:', err);
-    res.status(500).json({ error: err.message });
+    if (!res.headersSent) res.status(500).json({ error: err.message });
   }
 });
 
