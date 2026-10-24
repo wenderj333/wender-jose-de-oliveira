@@ -252,6 +252,8 @@ router.get('/:userId/overview', async (req, res) => {
     if (answered >= 1) badges.push('answered');
     if (duelPoints >= 100) badges.push('champion');
     if (amens >= 20) badges.push('inspiring');
+    const gratitudeDays = await safeCount(`SELECT COUNT(*)::int AS n FROM journey_progress WHERE user_id = $1 AND journey_id = 'gratidao-e-oracao'`, [String(userId)]);
+    if (gratitudeDays >= 7) badges.push('gratitude');
     res.set('Cache-Control', 'no-store');
     res.json({
       role: target.role || 'member', joined_at: joined ? joined.toISOString() : null, is_friend: isFriend,
