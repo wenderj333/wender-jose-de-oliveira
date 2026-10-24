@@ -280,6 +280,15 @@ function setupWebSocket(server) {
           case 'call_request': {
             const caller = clients.get(ws);
             if (!caller?.userId || !msg.targetUserId || !['audio', 'video'].includes(msg.mode)) break;
+            if (!msg.callId || String(msg.targetUserId) === String(caller.userId)) break;
+            const prevCall = privateCalls.get(msg.callId);
+            if (prevCall && prevCall.callerId !== caller.userId) break; // não pode sequestrar a chamada de outra pessoa
+            // Quem bloqueou (ou foi bloqueado) não recebe chamadas dessa pessoa
+            try {
+              const blk = await db.query('SELECT 1 FROM dm_blocks WHERE (user_id::text = $1 AND blocked_id::text = $2) OR (user_id::text = $2 AND blocked_id::text = $1) LIMIT 1', [String(caller.userId), String(msg.targetUserId)]);
+              if (blk.rows.length) { ws.send(JSON.stringify({ type: 'call_declined', callId: msg.callId, mode: msg.mode, reason: 'blocked' })); break; }
+            } catch (_) { /* tabela ainda não existe: ninguém bloqueou */ }
+            msg.callerName = String(msg.callerName || '').slice(0, 80);
             const target = [...clients.entries()].find(([, info]) => info?.userId === msg.targetUserId)?.[0];
             const call = { id: msg.callId, callerId: caller.userId, receiverId: msg.targetUserId, mode: msg.mode, callerName: msg.callerName, callerAvatar: msg.callerAvatar || null };
             privateCalls.set(msg.callId, call);
@@ -547,6 +556,12 @@ function setupWebSocket(server) {
           }
 
           case 'live_start': {
+            const starter = clients.get(ws) || {};
+            if (!starter.userId || !msg.streamId) break;
+            const existing = liveStreams.get(msg.streamId);
+            if (existing && existing.broadcasterWs !== ws) break; // não pode tomar a transmissão de outra pessoa
+            msg.broadcasterId = starter.userId;
+            msg.broadcasterName = String(msg.broadcasterName || '').slice(0, 80);
             const stream = {
               id: msg.streamId,
               broadcasterId: msg.broadcasterId,
@@ -573,6 +588,7 @@ function setupWebSocket(server) {
 
           case 'live_stop': {
             const stream = liveStreams.get(msg.streamId);
+            if (!stream || stream.broadcasterWs !== ws) break; // só quem transmite pode terminar
             if (stream) {
               // Notify all viewers
               for (const [vid, vws] of stream.viewers) {
@@ -585,6 +601,13 @@ function setupWebSocket(server) {
           }
 
           case 'live_join': {
+            if (!msg.streamId) { // Comunidade ao vivo (salas por língua)
+              const clientInfo = clients.get(ws) || {};
+              clientInfo.liveCommunityRoom = String(msg.roomId || 'pt').slice(0, 10);
+              clients.set(ws, clientInfo);
+              broadcastCommunityPresence(clients, clientInfo.liveCommunityRoom);
+              break;
+            }
             const stream = liveStreams.get(msg.streamId);
             if (!stream) { ws.send(JSON.stringify({ type: 'live_stopped', streamId: msg.streamId })); break; }
             if (stream.viewers.size >= 10) { ws.send(JSON.stringify({ type: 'live_error', error: 'Transmissão cheia (máx. 10 espectadores)' })); break; }
@@ -600,6 +623,14 @@ function setupWebSocket(server) {
           }
 
           case 'live_leave': {
+            if (!msg.streamId) {
+              const clientInfo = clients.get(ws) || {};
+              const roomId = clientInfo.liveCommunityRoom || String(msg.roomId || 'pt').slice(0, 10);
+              clientInfo.liveCommunityRoom = null;
+              clients.set(ws, clientInfo);
+              broadcastCommunityPresence(clients, roomId);
+              break;
+            }
             const stream = liveStreams.get(msg.streamId);
             if (stream) {
               stream.viewers.delete(msg.viewerId);
@@ -654,18 +685,33 @@ function setupWebSocket(server) {
           case 'live_chat_message': {
             // Community chat messages are only delivered inside the chosen room.
             const clientInfo = clients.get(ws) || {};
-            const roomId = String(msg.roomId || clientInfo.liveCommunityRoom || 'pt');
-            const communityChat = { type: 'live_chat_broadcast', roomId, userId: msg.userId, userName: msg.userName, userAvatar: msg.userAvatar, text: msg.text, id: Date.now().toString(), time: new Date().toISOString() };
+            if (!clientInfo.userId || !clientInfo.liveCommunityRoom) break; // só quem tem sessão e entrou na sala
+            const roomId = clientInfo.liveCommunityRoom;
+            const text = String(msg.text || '').trim().slice(0, 1000);
+            if (!text) break;
+            if (!clientInfo.liveProfile) {
+              try {
+                const pr = await db.query('SELECT full_name, display_name, avatar_url FROM users WHERE id = $1', [clientInfo.userId]);
+                const u = pr.rows[0] || {};
+                clientInfo.liveProfile = { name: u.full_name || u.display_name || 'Membro', avatar: u.avatar_url || null };
+                clients.set(ws, clientInfo);
+              } catch (_) { break; }
+            }
+            const communityChat = { type: 'live_chat_broadcast', roomId, userId: clientInfo.userId, userName: clientInfo.liveProfile.name, userAvatar: clientInfo.liveProfile.avatar, text, id: Date.now().toString(), time: new Date().toISOString() };
             broadcastToCommunityRoom(clients, roomId, communityChat);
             break;
           }
           case 'live_chat': {
+            if ((clients.get(ws) || {}).liveStreamId !== msg.streamId) break;
+            msg.name = String(msg.name || '').slice(0, 80); msg.text = String(msg.text || '').slice(0, 1000);
             const chatData = { type: 'live_chat_message', streamId: msg.streamId, name: msg.name, text: msg.text, id: Date.now().toString(), time: new Date().toISOString() };
             broadcastToStream(wss, msg.streamId, chatData, ws);
             break;
           }
 
           case 'live_reaction': {
+            if ((clients.get(ws) || {}).liveStreamId !== msg.streamId) break;
+            msg.emoji = String(msg.emoji || '').slice(0, 8); msg.name = String(msg.name || '').slice(0, 80);
             broadcastToStream(wss, msg.streamId, { type: 'live_reaction', streamId: msg.streamId, emoji: msg.emoji, name: msg.name }, ws);
             break;
           }
@@ -757,24 +803,6 @@ function setupWebSocket(server) {
             break;
           }
 
-          // ===== LIVE COMMUNITY CHAT =====
-
-          case 'live_join': {
-            const clientInfo = clients.get(ws) || {};
-            clientInfo.liveCommunityRoom = String(msg.roomId || 'pt');
-            clients.set(ws, clientInfo);
-            broadcastCommunityPresence(clients, clientInfo.liveCommunityRoom);
-            break;
-          }
-
-          case 'live_leave': {
-            const clientInfo = clients.get(ws) || {};
-            const roomId = clientInfo.liveCommunityRoom || String(msg.roomId || 'pt');
-            clientInfo.liveCommunityRoom = null;
-            clients.set(ws, clientInfo);
-            broadcastCommunityPresence(clients, roomId);
-            break;
-          }
         }
       } catch (err) {
         console.error('Erro no WebSocket:', err);

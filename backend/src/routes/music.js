@@ -247,9 +247,19 @@ router.post('/:id/like', authenticate, async (req, res) => {
 });
 
 // POST /api/music/:id/play — increment play count
+const recentPlays = new Map();
+setInterval(() => { const now = Date.now(); for (const [k, t] of recentPlays) if (now - t > 30 * 60e3) recentPlays.delete(k); }, 10 * 60e3).unref();
 router.post('/:id/play', async (req, res) => {
   try {
     const { id } = req.params;
+    const who = (req.headers['x-forwarded-for'] || req.ip || '').split(',')[0].trim();
+    const k = who + '|' + id;
+    const seen = recentPlays.get(k);
+    recentPlays.set(k, Date.now());
+    if (seen && Date.now() - seen < 30 * 60e3) {
+      const cur = await db.query('SELECT play_count FROM music WHERE id = $1', [id]);
+      return res.json({ play_count: cur.rows[0]?.play_count || 0 });
+    }
     await db.query(
       `UPDATE music SET play_count = play_count + 1 WHERE id = $1`,
       [id]
@@ -334,6 +344,10 @@ router.put('/:id/cover', authenticate, async (req, res) => {
 });
 
 
+// Texto vindo da base de dados nunca entra cru no HTML (evita que um título com <script> corra na página)
+const escHtml = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const safeImg = (u) => (/^https:\/\/[^\s"'<>]+$/i.test(String(u || '')) ? String(u) : 'https://sigo-com-fe.vercel.app/logo-new.png');
+
 // GET /api/music/share/:id - pagina de partilha com meta tags para redes sociais
 router.get('/share/:id', async (req, res) => {
   try {
@@ -341,8 +355,8 @@ router.get('/share/:id', async (req, res) => {
     const result = await db.query('SELECT * FROM music WHERE id = $1', [id]);
     const song = result.rows[0];
     if (!song) return res.status(404).send('Musica nao encontrada');
-    const title = song.title + (song.artist ? ' - ' + song.artist : '');
-    const cover = song.cover_url || 'https://sigo-com-fe.vercel.app/logo-new.png';
+    const title = escHtml(song.title + (song.artist ? ' - ' + song.artist : ''));
+    const cover = escHtml(safeImg(song.cover_url));
     const url = 'https://sigo-com-fe.vercel.app/musica';
     res.send(`<!DOCTYPE html>
 <html>

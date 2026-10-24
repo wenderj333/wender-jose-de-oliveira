@@ -36,8 +36,28 @@ router.get('/stats', authenticate, async (req, res) => {
   }
 });
 
+// Os números de uma igreja (membros, e-mails, dízimos) só para quem a lidera: admin, o pastor da igreja
+// ou quem tem cargo de liderança nela. Antes qualquer membro com sessão via tudo.
+async function canManageChurch(user, churchId) {
+  if (!user) return false;
+  if (user.role === 'admin') return true;
+  try {
+    const c = await db.query('SELECT 1 FROM churches WHERE id::text = $1 AND pastor_id::text = $2', [String(churchId), String(user.id)]);
+    if (c.rows.length) return true;
+  } catch (_) {}
+  try {
+    const r = await db.query(`SELECT 1 FROM church_roles WHERE church_id::text = $1 AND user_id::text = $2 AND role_type IN ('pastor', 'leader', 'admin')`, [String(churchId), String(user.id)]);
+    if (r.rows.length) return true;
+  } catch (_) {}
+  return false;
+}
+async function churchLeaderOnly(req, res, next) {
+  if (await canManageChurch(req.user, req.params.churchId)) return next();
+  return res.status(403).json({ error: 'Só a liderança desta igreja pode ver estes dados.' });
+}
+
 // GET /api/dashboard/:churchId/stats
-router.get('/:churchId/stats', authenticate, async (req, res) => {
+router.get('/:churchId/stats', authenticate, churchLeaderOnly, async (req, res) => {
   try {
     const { churchId } = req.params;
 
@@ -74,7 +94,7 @@ router.get('/:churchId/stats', authenticate, async (req, res) => {
 });
 
 // GET /api/dashboard/:churchId/inactive
-router.get('/:churchId/inactive', authenticate, async (req, res) => {
+router.get('/:churchId/inactive', authenticate, churchLeaderOnly, async (req, res) => {
   try {
     const rows = await db.prepare(
       `SELECT u.id, u.full_name, u.avatar_url, u.email, u.last_seen_at
@@ -89,7 +109,7 @@ router.get('/:churchId/inactive', authenticate, async (req, res) => {
 });
 
 // GET /api/dashboard/:churchId/growth
-router.get('/:churchId/growth', authenticate, async (req, res) => {
+router.get('/:churchId/growth', authenticate, churchLeaderOnly, async (req, res) => {
   try {
     const rows = await db.prepare(
       `SELECT to_char(assigned_at, 'YYYY-MM-01') AS month, COUNT(*) AS new_members
@@ -106,19 +126,6 @@ router.get('/:churchId/growth', authenticate, async (req, res) => {
 router.get('/users', authenticate, async (req, res) => {
   try {
     const users = await db.prepare('SELECT id, full_name, avatar_url FROM users ORDER BY full_name').all();
-    res.json({ users });
-  } catch (err) {
-    console.error('Erro ao buscar usuários:', err);
-    res.status(500).json({ error: 'Erro interno' });
-  }
-});
-
-// GET /api/dashboard/users - Lista de todos os usuários
-router.get('/users', authenticate, async (req, res) => {
-  try {
-    const users = await db.prepare(
-      'SELECT id, full_name, avatar_url FROM users ORDER BY full_name'
-    ).all();
     res.json({ users });
   } catch (err) {
     console.error('Erro ao buscar usuários:', err);

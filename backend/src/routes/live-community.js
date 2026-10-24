@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const cloudinary = require('cloudinary').v2;
@@ -55,8 +55,10 @@ router.get('/stats', async (req, res) => {
   } catch (err) { res.json({ onlineCount: 0 }); }
 });
 
-router.post('/join', async (req, res) => {
-  const { userId, roomId } = req.body;
+// Presença e histórico: sempre em nome de quem tem a sessão (antes aceitava qualquer userId/nome)
+router.post('/join', authenticate, async (req, res) => {
+  const { roomId } = req.body || {};
+  const userId = String(req.user.id);
   try {
     const room = String(roomId || 'pt').slice(0, 10);
     if (userId) await db.query(`INSERT INTO live_community_users (user_id, room_id, last_seen) VALUES ($1, $2, NOW()) ON CONFLICT (user_id) DO UPDATE SET room_id = EXCLUDED.room_id, last_seen = NOW()`, [userId, room]);
@@ -66,8 +68,8 @@ router.post('/join', async (req, res) => {
   } catch (err) { res.json({ onlineCount: 0 }); }
 });
 
-router.post('/leave', async (req, res) => {
-  const { userId } = req.body;
+router.post('/leave', authenticate, async (req, res) => {
+  const userId = String(req.user.id);
   try {
     if (userId) await db.query('DELETE FROM live_community_users WHERE user_id = $1', [userId]);
     const r = await db.query('SELECT COUNT(*) FROM live_community_users');
@@ -83,10 +85,13 @@ router.get('/history', async (req, res) => {
   } catch (err) { res.json({ messages: [] }); }
 });
 
-router.post('/history', async (req, res) => {
-  const { roomId, userId, userName, userAvatar, message } = req.body;
+router.post('/history', authenticate, async (req, res) => {
+  const { roomId } = req.body || {};
+  const message = String(req.body?.message || '').trim().slice(0, 1000);
+  if (!message) return res.status(400).json({ ok: false });
   try {
-    await db.query(`INSERT INTO live_chat_history (room_id, user_id, user_name, user_avatar, message) VALUES ($1, $2, $3, $4, $5)`, [String(roomId || 'pt').slice(0, 10), userId, userName, userAvatar, message]);
+    const userName = req.user.full_name || req.user.display_name || 'Membro';
+    await db.query(`INSERT INTO live_chat_history (room_id, user_id, user_name, user_avatar, message) VALUES ($1, $2, $3, $4, $5)`, [String(roomId || 'pt').slice(0, 10), String(req.user.id), userName, req.user.avatar_url || null, message]);
     await db.query(`DELETE FROM live_chat_history WHERE id NOT IN (SELECT id FROM live_chat_history ORDER BY created_at DESC LIMIT 200)`);
     res.json({ ok: true });
   } catch (err) { res.json({ ok: false }); }
@@ -94,8 +99,10 @@ router.post('/history', async (req, res) => {
 
 
 router.post('/start', authenticate, async (req, res) => {
-  const { userName, userAvatar, title } = req.body;
+  const { title } = req.body || {};
   const userId = req.user.id;
+  const userName = req.user.full_name || req.user.display_name || 'Membro';
+  const userAvatar = req.user.avatar_url || null;
   try {
     await db.query(`CREATE TABLE IF NOT EXISTS active_lives (id SERIAL PRIMARY KEY, user_id VARCHAR(100), user_name VARCHAR(100), user_avatar TEXT, title TEXT, started_at TIMESTAMP DEFAULT NOW())`);
     await db.query(`DELETE FROM active_lives WHERE user_id = $1`, [userId]);

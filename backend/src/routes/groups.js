@@ -88,8 +88,10 @@ router.post('/:id/requests/:userId', authenticate, async (req,res) => {
   try {
     if (!await manager(req,res)) return;
     const approve = req.body?.action === 'approve';
+    // Só se responde a um pedido que existe e está pendente (antes dava para pôr qualquer pessoa no grupo)
+    const upd = await db.query("UPDATE group_join_requests SET status=$1 WHERE group_id=$2 AND user_id=$3 AND status='pending' RETURNING user_id",[approve?'approved':'declined',req.params.id,req.params.userId]);
+    if (!upd.rows.length) return res.status(404).json({ error:'Este pedido já não está pendente.' });
     if (approve) await db.query('INSERT INTO group_members (group_id,user_id) VALUES ($1,$2) ON CONFLICT DO NOTHING',[req.params.id,req.params.userId]);
-    await db.query('UPDATE group_join_requests SET status=$1 WHERE group_id=$2 AND user_id=$3',[approve?'approved':'declined',req.params.id,req.params.userId]);
     res.json({ success:true });
   } catch { res.status(500).json({ error:'Não foi possível atualizar o pedido.' }); }
 });

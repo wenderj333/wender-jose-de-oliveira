@@ -2,6 +2,10 @@ const jwt = require('jsonwebtoken');
 const db = require('../db/connection');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'sigo-com-fe-secret-dev';
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'sigocomfe-secret-key-2026-mudar-em-producao') {
+  // Com a chave padrão (que está no código) alguém podia fabricar uma sessão de qualquer pessoa.
+  console.error('🚨 SEGURANÇA: JWT_SECRET não está definido (ou é o padrão). Defina um segredo forte nas variáveis do Render.');
+}
 
 function generateToken(user) {
   return jwt.sign(
