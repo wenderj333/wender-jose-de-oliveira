@@ -131,6 +131,9 @@ router.post('/forgot-password', async (req, res) => {
     if (!user) return res.json({ message });
 
     await ensurePasswordResetSchema();
+    // No máximo um e-mail a cada 2 minutos por conta (evita encher a caixa de alguém)
+    const recent = await db.query("SELECT 1 FROM password_reset_tokens WHERE user_id = $1 AND created_at > NOW() - INTERVAL '2 minutes' LIMIT 1", [user.id]);
+    if (recent.rows.length) return res.json({ message });
     const token = crypto.randomBytes(32).toString('hex');
     const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
     await db.query('DELETE FROM password_reset_tokens WHERE user_id = $1 OR expires_at < NOW()', [user.id]);

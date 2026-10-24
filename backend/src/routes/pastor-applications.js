@@ -16,17 +16,17 @@ async function ensureSchema() {
     status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
     reviewed_by UUID REFERENCES users(id), reviewed_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-  ));`);
+  )`);
 }
 
 router.post('/', authenticate, async (req, res) => {
   try {
     await ensureSchema();
-    const churchName = String(req.body?.church_name || '').trim();
-    const city = String(req.body?.city || '').trim();
-    const country = String(req.body?.country || '').trim();
+    const churchName = String(req.body?.church_name || '').trim().slice(0, 255);
+    const city = String(req.body?.city || '').trim().slice(0, 120);
+    const country = String(req.body?.country || '').trim().slice(0, 120);
     const address = String(req.body?.address || '').trim();
-    const phone = String(req.body?.phone || '').trim();
+    const phone = String(req.body?.phone || '').trim().slice(0, 80);
     const message = String(req.body?.message || '').trim();
     if (!churchName || !city || !country) return res.status(400).json({ error: 'Informe o nome da igreja, cidade e país.' });
     const existing = await db.query('SELECT id, status FROM pastor_applications WHERE user_id = $1', [req.user.id]);

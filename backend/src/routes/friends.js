@@ -47,11 +47,12 @@ router.get('/requests', async (req, res) => {
 router.get('/search', async (req, res) => {
   try {
     const userId = req.user.id;
-    const q = req.query.q || '';
+    const q = String(req.query.q || '').trim().slice(0, 60);
     if (q.length < 2) return res.json({ users: [] });
+    const like = '%' + q.replace(/[\\%_]/g, m => '\\' + m) + '%';
 
     const users = await db.prepare(`
-      SELECT u.id, u.full_name, u.display_name, u.avatar_url,
+      SELECT u.id, u.full_name, u.display_name, u.avatar_url, u.last_seen_at,
         f.id as friendship_id, f.status as friendship_status,
         CASE WHEN f.requester_id = ? THEN 'sent' ELSE 'received' END as direction
       FROM users u
@@ -59,10 +60,10 @@ router.get('/search', async (req, res) => {
         (f.requester_id = ? AND f.addressee_id = u.id)
         OR (f.requester_id = u.id AND f.addressee_id = ?)
       )
-      WHERE u.id != ? AND (LOWER(u.full_name) LIKE LOWER(?) OR LOWER(u.display_name) LIKE LOWER(?))
+      WHERE u.id != ? AND COALESCE(u.is_active, true) = true AND (LOWER(u.full_name) LIKE LOWER(?) OR LOWER(u.display_name) LIKE LOWER(?))
       ORDER BY u.full_name
       LIMIT 20
-    `).all(userId, userId, userId, userId, `%${q}%`, `%${q}%`);
+    `).all(userId, userId, userId, userId, like, like);
     res.json({ users });
   } catch (err) {
     console.error('Erro ao buscar usuários:', err);

@@ -35,10 +35,13 @@ function publicQuestion(question, language) {
 }
 
 async function dailyStreak(userId) {
-  const result = await pool.query(`SELECT challenge_date FROM daily_challenge_results
-    WHERE user_id = $1 AND correct = true ORDER BY challenge_date DESC`, [userId]);
-  const completed = new Set(result.rows.map(row => String(row.challenge_date).slice(0, 10)));
+  // Datas como texto: o driver devolve DATE como objeto Date e String(Date) nunca coincidia (sequência sempre 0)
+  const result = await pool.query(`SELECT to_char(challenge_date, 'YYYY-MM-DD') AS d FROM daily_challenge_results
+    WHERE user_id = $1 AND correct = true ORDER BY challenge_date DESC LIMIT 400`, [userId]);
+  const completed = new Set(result.rows.map(row => row.d));
   let date = new Date(`${challengeDate()}T00:00:00Z`);
+  // Se ainda não respondeu hoje, a sequência conta a partir de ontem (não se perde de manhã)
+  if (!completed.has(date.toISOString().slice(0, 10))) date.setUTCDate(date.getUTCDate() - 1);
   let streak = 0;
   while (completed.has(date.toISOString().slice(0, 10))) {
     streak += 1;

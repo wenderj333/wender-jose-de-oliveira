@@ -24,6 +24,24 @@ const upload = multer({
   },
 });
 
+// Quem está a ver (token opcional) — para mostrar publicações "Membros"/"Amigos" e os próprios
+function viewerId(req) {
+  const h = req.headers.authorization;
+  if (!h || !h.startsWith('Bearer ')) return null;
+  try { return require('jsonwebtoken').verify(h.slice(7), require('../middleware/auth').JWT_SECRET).id || null; } catch (_) { return null; }
+}
+const VISIBILITIES = ['public', 'members', 'friends', 'private'];
+
+(async () => {
+  try {
+    // Uma migração antiga só permitia 'public'/'church' — "Membros" e "Privado" falhavam
+    await db.query('ALTER TABLE feed_posts DROP CONSTRAINT IF EXISTS feed_posts_visibility_check');
+    await db.query(`CREATE TABLE IF NOT EXISTS post_comment_amens (
+      comment_id UUID NOT NULL, user_id UUID NOT NULL, created_at TIMESTAMPTZ DEFAULT NOW(),
+      PRIMARY KEY (comment_id, user_id))`);
+  } catch (e) { console.warn('feed migration:', e.message); }
+})();
+
 // Upload to Cloudinary helper
 function uploadToCloudinary(buffer, mimetype) {
   return new Promise((resolve, reject) => {
@@ -65,20 +83,45 @@ router.get('/', async (req, res) => {
     const limit = Math.min(parseInt(req.query.limit) || 20, 50);
     const offset = (page - 1) * limit;
 
-    const posts = await db.prepare(
+    // Público para todos; "Membros" para quem tem sessão; "Amigos" para os amigos; e o autor vê sempre os seus
+    const vid = viewerId(req);
+    const result = await db.query(
       `SELECT fp.*, u.full_name AS author_name, u.display_name AS author_display_name, u.avatar_url AS author_avatar
        FROM feed_posts fp
        JOIN users u ON u.id = fp.author_id
-       WHERE fp.visibility = 'public'
+       WHERE COALESCE(fp.visibility, 'public') = 'public'
+          OR ($3::uuid IS NOT NULL AND (
+                fp.author_id = $3::uuid
+             OR fp.visibility = 'members'
+             OR (fp.visibility = 'friends' AND EXISTS (SELECT 1 FROM friendships f WHERE f.status = 'accepted'
+                   AND ((f.requester_id = $3::uuid AND f.addressee_id = fp.author_id) OR (f.addressee_id = $3::uuid AND f.requester_id = fp.author_id))))))
        ORDER BY fp.created_at DESC
-       LIMIT ? OFFSET ?`
-    ).all(limit, offset);
+       LIMIT $1 OFFSET $2`, [limit, offset, vid]);
+    const posts = result.rows;
 
     res.json({ posts, page, limit });
   } catch (err) {
     console.error('Erro ao buscar feed:', err);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
+});
+
+// GET /api/feed/post/:id — uma publicação (para abrir a partir de uma notificação)
+router.get('/post/:id', async (req, res) => {
+  try {
+    if (!/^[0-9a-f-]{36}$/i.test(String(req.params.id))) return res.status(404).json({ error: 'not_found' });
+    const vid = viewerId(req);
+    const r = await db.query(
+      `SELECT fp.*, u.full_name AS author_name, u.display_name AS author_display_name, u.avatar_url AS author_avatar
+       FROM feed_posts fp JOIN users u ON u.id = fp.author_id
+       WHERE fp.id = $1 AND (COALESCE(fp.visibility, 'public') = 'public'
+          OR ($2::uuid IS NOT NULL AND (fp.author_id = $2::uuid OR fp.visibility = 'members'
+             OR (fp.visibility = 'friends' AND EXISTS (SELECT 1 FROM friendships f WHERE f.status = 'accepted'
+                   AND ((f.requester_id = $2::uuid AND f.addressee_id = fp.author_id) OR (f.addressee_id = $2::uuid AND f.requester_id = fp.author_id)))))))`,
+      [req.params.id, vid]);
+    if (!r.rows[0]) return res.status(404).json({ error: 'not_found' });
+    res.json({ post: r.rows[0] });
+  } catch (err) { res.status(500).json({ error: 'Erro interno' }); }
 });
 
 // GET /api/feed/user/:userId — posts by a specific user
@@ -94,7 +137,7 @@ router.get('/user/:userId', async (req, res) => {
       const fr = await db.query(`SELECT 1 FROM friendships WHERE status = 'accepted' AND ((requester_id = $1 AND addressee_id = $2) OR (requester_id = $2 AND addressee_id = $1)) LIMIT 1`, [vid, req.params.userId]);
       isFriend = fr.rows.length > 0;
     }
-    const visSql = isOwner ? '' : isFriend ? `AND COALESCE(fp.visibility, 'public') IN ('public', 'friends')` : `AND COALESCE(fp.visibility, 'public') = 'public'`;
+    const visSql = isOwner ? '' : isFriend ? `AND COALESCE(fp.visibility, 'public') IN ('public', 'members', 'friends')` : vid ? `AND COALESCE(fp.visibility, 'public') IN ('public', 'members')` : `AND COALESCE(fp.visibility, 'public') = 'public'`;
     const page = parseInt(req.query.page) || 1;
     const limit = Math.min(parseInt(req.query.limit) || 20, 50);
     const offset = (page - 1) * limit;
@@ -152,7 +195,7 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
       }
     }
     const cat = category || 'testemunho';
-    const vis = visibility || 'public';
+    const vis = VISIBILITIES.includes(visibility) ? visibility : 'public';
 
     // Insert and get the created post
     console.log('📝 Creating post:', {
@@ -322,13 +365,16 @@ router.get('/:id/liked', authenticate, async (req, res) => {
 // GET /api/feed/:id/comments — list comments
 router.get('/:id/comments', async (req, res) => {
   try {
-    const comments = await db.prepare(
-      `SELECT pc.*, u.full_name AS author_name, u.avatar_url AS author_avatar
+    const vid = viewerId(req);
+    const r = await db.query(
+      `SELECT pc.*, u.full_name AS author_name, u.avatar_url AS author_avatar,
+              (SELECT COUNT(*)::int FROM post_comment_amens a WHERE a.comment_id = pc.id) AS amen_count,
+              ($2::uuid IS NOT NULL AND EXISTS (SELECT 1 FROM post_comment_amens a WHERE a.comment_id = pc.id AND a.user_id = $2::uuid)) AS amened
        FROM post_comments pc
        JOIN users u ON u.id = pc.author_id
-       WHERE pc.post_id = ?
-       ORDER BY pc.created_at ASC`
-    ).all(req.params.id);
+       WHERE pc.post_id = $1
+       ORDER BY pc.created_at ASC`, [req.params.id, vid]);
+    const comments = r.rows;
     res.json({ comments });
   } catch (err) {
     console.error('Erro ao buscar comentários:', err);
@@ -339,8 +385,8 @@ router.get('/:id/comments', async (req, res) => {
 // POST /api/feed/:id/comments — add comment
 router.post('/:id/comments', authenticate, async (req, res) => {
   try {
-    const { content } = req.body;
-    if (!content?.trim()) return res.status(400).json({ error: 'Comentário vazio' });
+    const content = String(req.body?.content || '').slice(0, 2000);
+    if (!content.trim()) return res.status(400).json({ error: 'Comentário vazio' });
 
     const comment = await db.prepare(
       `INSERT INTO post_comments (post_id, author_id, content) VALUES (?, ?, ?) RETURNING *`
@@ -360,15 +406,33 @@ router.post('/:id/comments', authenticate, async (req, res) => {
   }
 });
 
-// DELETE /api/feed/comments/:commentId — delete own comment
+// POST /api/feed/comments/:commentId/amen — Amém num comentário (liga/desliga)
+router.post('/comments/:commentId/amen', authenticate, async (req, res) => {
+  try {
+    const id = req.params.commentId;
+    const del = await db.query('DELETE FROM post_comment_amens WHERE comment_id = $1 AND user_id = $2 RETURNING 1', [id, req.user.id]);
+    let amened = false;
+    if (!del.rows.length) {
+      const ex = await db.query('SELECT 1 FROM post_comments WHERE id = $1', [id]);
+      if (!ex.rows.length) return res.status(404).json({ error: 'not_found' });
+      await db.query('INSERT INTO post_comment_amens (comment_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING', [id, req.user.id]);
+      amened = true;
+    }
+    const c = await db.query('SELECT COUNT(*)::int AS n FROM post_comment_amens WHERE comment_id = $1', [id]);
+    res.json({ amened, amen_count: c.rows[0].n });
+  } catch (err) { res.status(500).json({ error: 'Erro interno' }); }
+});
+
+// DELETE /api/feed/comments/:commentId — apaga quem escreveu o comentário, o autor da publicação ou um admin
 router.delete('/comments/:commentId', authenticate, async (req, res) => {
   try {
-    const comment = await db.prepare(
-      'DELETE FROM post_comments WHERE id = ? AND author_id = ? RETURNING post_id'
-    ).get(req.params.commentId, req.user.id);
-    if (comment) {
-      await db.prepare('UPDATE feed_posts SET comment_count = GREATEST(comment_count - 1, 0) WHERE id = ?').run(comment.post_id);
-    }
+    const comment = (await db.query(
+      `DELETE FROM post_comments pc USING feed_posts fp
+        WHERE pc.id = $1 AND fp.id = pc.post_id AND (pc.author_id = $2 OR fp.author_id = $2 OR $3 = 'admin')
+        RETURNING pc.post_id`, [req.params.commentId, req.user.id, req.user.role || ''])).rows[0];
+    if (!comment) return res.status(404).json({ error: 'not_found' });
+    await db.prepare('UPDATE feed_posts SET comment_count = GREATEST(comment_count - 1, 0) WHERE id = ?').run(comment.post_id);
+    await db.query('DELETE FROM post_comment_amens WHERE comment_id = $1', [req.params.commentId]).catch(() => {});
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Erro interno' });
