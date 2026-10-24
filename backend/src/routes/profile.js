@@ -196,7 +196,7 @@ router.get('/:userId/overview', async (req, res) => {
     await profileColumnsReady;
     const { userId } = req.params;
     if (!/^[0-9a-f-]{36}$/i.test(String(userId))) return res.status(404).json({ error: 'not_found' });
-    const u = await db.query('SELECT id, full_name, role, created_at FROM users WHERE id = $1', [userId]);
+    const u = await db.query('SELECT id, full_name, role, created_at, profile_visibility FROM users WHERE id = $1', [userId]);
     const target = u.rows[0];
     if (!target) return res.status(404).json({ error: 'not_found' });
     const vid = viewerId(req);
@@ -244,6 +244,8 @@ router.get('/:userId/overview', async (req, res) => {
         ORDER BY (c.pastor_id = $1) DESC LIMIT 1`, [userId]);
       church = c.rows[0] || null;
     } catch (_) { church = null; }
+    // a igreja segue a escolha «Quem vê» da secção Igreja
+    if (church && !canSee(normalizedVisibility(target.profile_visibility || {}).church, isOwner, isFriend)) church = null;
     const joined = target.created_at ? new Date(target.created_at) : null;
     const badges = [];
     if (joined && joined < FOUNDER_UNTIL) badges.push('founder');
