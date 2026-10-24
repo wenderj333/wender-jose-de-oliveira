@@ -886,8 +886,8 @@ function duelProxima(sid) {
   } else {
     const resultado = sala.j.map(j=>({nome:j.nome,pontos:j.pts,foto:j.foto||null,bot:!!j.bot}));
     ioduelo.to(sid).emit('fimJogo', resultado);
-    // Só pessoas reais entram no ranking; o Bot Bíblico nunca é classificado.
-    const jogadoresReais = resultado.filter(j => !j.bot);
+    // Só partidas entre pessoas reais contam para o ranking (jogar contra o bot não dá pontos ao ranking/prémio).
+    const jogadoresReais = resultado.some(j => j.bot) ? [] : resultado;
     jogadoresReais.forEach(j => {
       if (!rankingSemanal[j.nome]) rankingSemanal[j.nome] = {pontos:0,foto:null};
       rankingSemanal[j.nome].pontos += j.pontos;

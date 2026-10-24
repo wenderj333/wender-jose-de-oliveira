@@ -99,15 +99,28 @@ router.post('/daily/answer', auth, async (req, res) => {
 // Guardar resultado do jogo
 router.post('/resultado', auth, async (req, res) => {
   try {
-    const { pontos, perguntas_corretas, perguntas_total, livro, tempo_medio } = req.body;
+    // Os pontos vêm do jogo no navegador: limitamos ao máximo possível de uma partida
+    // e ao ritmo de um jogo real, para ninguém encher o ranking com resultados inventados.
+    const int = (v, min, max, def) => { const n = Math.round(Number(v)); return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : def; };
+    const total = int(req.body?.perguntas_total, 1, 10, 5);
+    const corretas = int(req.body?.perguntas_corretas, 0, total, 0);
+    const pontos = int(req.body?.pontos, 0, total * 10, 0);
+    const livro = String(req.body?.livro || 'Todos').slice(0, 50);
+    const tempo = Math.min(60, Math.max(0, Number(req.body?.tempo_medio) || 0));
     const user_id = req.user.id;
+    const recent = await pool.query(
+      `SELECT COUNT(*) FILTER (WHERE criado_em > NOW() - INTERVAL '30 seconds')::int AS last30,
+              COUNT(*) FILTER (WHERE criado_em > NOW() - INTERVAL '1 day')::int AS today
+         FROM quiz_resultados WHERE user_id = $1 AND criado_em > NOW() - INTERVAL '1 day'`, [user_id]);
+    const r = recent.rows[0] || {};
+    if (r.last30 > 0 || r.today >= 60) return res.status(429).json({ error: 'too_fast' });
     await pool.query(
       'INSERT INTO quiz_resultados (user_id, pontos, perguntas_corretas, perguntas_total, livro, tempo_medio) VALUES ($1,$2,$3,$4,$5,$6)',
-      [user_id, pontos, perguntas_corretas || 5, perguntas_total || 5, livro || 'Todos', tempo_medio || 0]
+      [user_id, pontos, corretas, total, livro, tempo]
     );
     res.json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Erro interno' });
   }
 });
 

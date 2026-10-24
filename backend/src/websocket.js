@@ -1104,12 +1104,18 @@ function terminarPartida(roomId) {
   const jogadores = jogadoresPublicos(room);
   const vencedor = jogadores.reduce((melhor, jogador) => jogador.pontos > melhor.pontos ? jogador : melhor, jogadores[0]);
   room.jogadores.forEach(j => { if (j.ws?.readyState === 1) j.ws.send(JSON.stringify({ type: 'game_finished', jogadores, vencedor })); });
-  // Só utilizadores reais aparecem entre os 10 primeiros do ranking.
-  room.jogadores.filter(j => !String(j.userId).startsWith('bot-') && !String(j.userId).startsWith('guest-')).forEach(async (jogador) => {
+  // Só partidas entre pessoas reais e com sessão contam para o ranking (contra o bot não conta),
+  // e o nome vem da conta (antes vinha do navegador e dava para pontuar em nome de outra pessoa).
+  const realPlayers = room.jogadores.filter(j => !String(j.userId).startsWith('bot-') && !String(j.userId).startsWith('guest-'));
+  if (!room.isBot && realPlayers.length >= 2) realPlayers.forEach(async (jogador) => {
     try {
+      const sessionUser = jogador.ws ? clients.get(jogador.ws)?.userId : null;
+      if (!sessionUser || String(sessionUser) !== String(jogador.userId)) return;
+      const u = await db.query('SELECT full_name, avatar_url FROM users WHERE id = $1', [sessionUser]);
+      const nome = u.rows[0]?.full_name; if (!nome) return;
       await db.query(
         'INSERT INTO duelo_ranking (nome,pontos,foto) VALUES ($1,$2,$3) ON CONFLICT (nome) DO UPDATE SET pontos=duelo_ranking.pontos+$2, foto=COALESCE($3,duelo_ranking.foto), updated_at=NOW()',
-        [jogador.userName, jogador.pontos, jogador.avatar || null],
+        [nome, Math.min(Number(jogador.pontos) || 0, 60), u.rows[0].avatar_url || null],
       );
     } catch (_) {}
   });
@@ -1265,8 +1271,9 @@ function handleGame(ws, msg) {
     const pontosAntigos = Number(msg.pontos) || 0;
     // Clientes novos enviam a opção escolhida; o servidor valida a resposta.
     // Mantemos a compatibilidade com clientes antigos, limitando a pontuação.
-    const acertou = Number.isInteger(choice) ? choice === question?.r : pontosAntigos > 0;
-    j.pontos += acertou ? 3 : Math.max(0, Math.min(3, pontosAntigos));
+    void pontosAntigos;
+    const acertou = Number.isInteger(choice) && choice === question?.r;
+    if (acertou) j.pontos += 3;
     j.respondeu = true;
     const jogadores = jogadoresPublicos(room);
     room.jogadores.forEach(player => { if (player.ws?.readyState === 1) player.ws.send(JSON.stringify({ type: 'game_score', jogadores })); });
