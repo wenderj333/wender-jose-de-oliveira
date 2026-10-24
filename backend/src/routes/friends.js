@@ -60,7 +60,7 @@ router.get('/search', async (req, res) => {
         (f.requester_id = ? AND f.addressee_id = u.id)
         OR (f.requester_id = u.id AND f.addressee_id = ?)
       )
-      WHERE u.id != ? AND COALESCE(u.is_active, true) = true AND (LOWER(u.full_name) LIKE LOWER(?) OR LOWER(u.display_name) LIKE LOWER(?))
+      WHERE u.id != ? AND COALESCE(u.is_active, true) = true AND LOWER(TRIM(COALESCE(u.full_name, ''))) <> 'test user' AND (LOWER(u.full_name) LIKE LOWER(?) OR LOWER(u.display_name) LIKE LOWER(?))
       ORDER BY u.full_name
       LIMIT 20
     `).all(userId, userId, userId, userId, like, like);

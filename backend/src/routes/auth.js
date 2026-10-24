@@ -26,7 +26,8 @@ function cleanSignupSource(raw) {
 
 async function notifyAdminSignup(req, user, method) {
   const source = cleanSignupSource(req.body?.signup_source);
-  const sourceLabel = signupSourceLabel(source) + (source.landing ? ` · entrou por ${source.landing}` : '');
+  const isBot = String(user?.full_name || '').trim().toLowerCase() === 'test user';
+  const sourceLabel = (isBot ? 'Robô de teste do Google Play (escondido no site) · ' : '') + signupSourceLabel(source) + (source.landing ? ` · entrou por ${source.landing}` : '');
   try {
     const db = require('../db/connection');
     await db.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS signup_source TEXT');

@@ -10,7 +10,7 @@ let onlineCache = { at: 0, count: 0 };
 router.get('/online-count', async (req, res) => {
   try {
     if (Date.now() - onlineCache.at > 30000) {
-      const r = await db.query(`SELECT COUNT(*)::int AS n FROM users WHERE last_seen_at > NOW() - INTERVAL '5 minutes'`);
+      const r = await db.query(`SELECT COUNT(*)::int AS n FROM users u WHERE u.last_seen_at > NOW() - INTERVAL '5 minutes' AND LOWER(TRIM(COALESCE(u.full_name, ''))) <> 'test user'`);
       onlineCache = { at: Date.now(), count: r.rows[0].n || 0 };
     }
     res.json({ count: onlineCache.count });
@@ -39,7 +39,7 @@ router.get('/', authenticate, async (req, res) => {
         CASE WHEN f.id IS NULL THEN NULL WHEN f.requester_id = $2 THEN 'sent' ELSE 'received' END AS direction
       FROM users u
       LEFT JOIN friendships f ON ((f.requester_id = $2 AND f.addressee_id = u.id) OR (f.requester_id = u.id AND f.addressee_id = $2)) AND f.status IN ('pending', 'accepted')
-      WHERE COALESCE(u.is_active, true) AND u.id <> $2 AND ($1 = '' OR u.full_name ILIKE '%' || $1 || '%' OR u.display_name ILIKE '%' || $1 || '%')
+      WHERE COALESCE(u.is_active, true) AND u.id <> $2 AND LOWER(TRIM(COALESCE(u.full_name, ''))) <> 'test user' /* robôs de teste do Google */ AND ($1 = '' OR u.full_name ILIKE '%' || $1 || '%' OR u.display_name ILIKE '%' || $1 || '%')
       ORDER BY CASE WHEN LOWER(u.full_name) = LOWER($1) THEN 0 ELSE 1 END, u.last_seen_at DESC NULLS LAST, u.created_at DESC
       LIMIT 100`, [q, req.user.id]);
     res.json({ members: result.rows });
