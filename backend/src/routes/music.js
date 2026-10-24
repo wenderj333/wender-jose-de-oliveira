@@ -70,7 +70,7 @@ router.get('/', async (req, res) => {
     if (authHeader && authHeader.startsWith('Bearer ')) {
       try {
         const jwt = require('jsonwebtoken');
-        const decoded = jwt.verify(authHeader.slice(7), process.env.JWT_SECRET || 'sigocomfe-secret-key-2026-mudar-em-producao');
+        const decoded = jwt.verify(authHeader.slice(7), require('../middleware/auth').JWT_SECRET);
         authUserId = decoded.id || decoded.userId || decoded.sub;
       } catch (e) { /* not authenticated */ }
     }
@@ -80,7 +80,9 @@ router.get('/', async (req, res) => {
     const viewerUserId = authUserId;
     if (viewerUserId) {
       params.push(viewerUserId);
-      let sql = `SELECT * FROM music WHERE (is_public = true OR user_id = $${params.length})`;
+      // "liked": se a pessoa já disse que gosta (antes o coração aparecia sempre vazio e o clique desfazia o like)
+      let sql = `SELECT music.*, EXISTS (SELECT 1 FROM music_likes l WHERE l.music_id = music.id AND l.user_id = $1) AS liked
+        FROM music WHERE (is_public = true OR user_id = $${params.length})`;
 
       if (userId) {
         params.push(userId);

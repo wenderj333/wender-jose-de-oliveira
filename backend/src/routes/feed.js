@@ -318,7 +318,8 @@ router.post('/:id/like', authenticate, async (req, res) => {
       try {
         if (post.author_id && post.author_id !== req.user.id) {
           const { createNotification } = require('./notifications');
-          await createNotification(post.author_id, 'like', (req.user.full_name || 'Alguem') + ' deu Amen!', '', { postId });
+          const [title, body] = await require('../services/notifyText').textFor('post_amen', post.author_id, req.user.full_name);
+          await createNotification(post.author_id, 'like', title, body, { postId, kind: 'post_amen', who: req.user.full_name || null, from: req.user.id });
         }
       } catch(e) { console.error('Notif like error:', e.message); }
       const updated = await db.prepare('SELECT like_count FROM feed_posts WHERE id = ?').get(postId);

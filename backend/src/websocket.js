@@ -288,6 +288,11 @@ function setupWebSocket(server) {
               const blk = await db.query('SELECT 1 FROM dm_blocks WHERE (user_id::text = $1 AND blocked_id::text = $2) OR (user_id::text = $2 AND blocked_id::text = $1) LIMIT 1', [String(caller.userId), String(msg.targetUserId)]);
               if (blk.rows.length) { ws.send(JSON.stringify({ type: 'call_declined', callId: msg.callId, mode: msg.mode, reason: 'blocked' })); break; }
             } catch (_) { /* tabela ainda não existe: ninguém bloqueou */ }
+            // Nome e foto de quem liga vêm da conta (antes o navegador podia mostrar qualquer nome, ex.: de um pastor)
+            try {
+              const cu = await db.query('SELECT full_name, display_name, avatar_url FROM users WHERE id = $1', [caller.userId]);
+              if (cu.rows[0]) { msg.callerName = cu.rows[0].display_name || cu.rows[0].full_name || 'Sigo com Fé'; msg.callerAvatar = cu.rows[0].avatar_url || null; }
+            } catch (_) {}
             msg.callerName = String(msg.callerName || '').slice(0, 80);
             const target = [...clients.entries()].find(([, info]) => info?.userId === msg.targetUserId)?.[0];
             const call = { id: msg.callId, callerId: caller.userId, receiverId: msg.targetUserId, mode: msg.mode, callerName: msg.callerName, callerAvatar: msg.callerAvatar || null };

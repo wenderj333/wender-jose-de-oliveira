@@ -90,12 +90,12 @@ router.post('/request', async (req, res) => {
       if (existing.status === 'pending') return res.status(400).json({ error: 'Pedido já enviado' });
       // If rejected, allow re-request by updating
       await db.prepare(`UPDATE friendships SET status = 'pending', requester_id = ?, addressee_id = ?, updated_at = NOW() WHERE id = ?`).run(userId, addressee_id, existing.id);
-      try { await createNotification(addressee_id, 'friend_request', 'Pedido de amizade', `${req.user.full_name || 'Alguem'} quer ser seu amigo!`, { from: userId }); } catch(e) {}
+      try { const [title, body] = await require('../services/notifyText').textFor('friend_request', addressee_id, req.user.full_name); await createNotification(addressee_id, 'friend_request', title, body, { from: userId, kind: 'friend_request', who: req.user.full_name || null }); } catch(e) {}
       return res.json({ message: 'Pedido enviado' });
     }
 
     await db.prepare(`INSERT INTO friendships (requester_id, addressee_id) VALUES (?, ?)`).run(userId, addressee_id);
-    try { await createNotification(addressee_id, 'friend_request', 'Pedido de amizade', `${req.user.full_name || 'Alguem'} quer ser seu amigo!`, { from: userId }); } catch(e) {}
+    try { const [title, body] = await require('../services/notifyText').textFor('friend_request', addressee_id, req.user.full_name); await createNotification(addressee_id, 'friend_request', title, body, { from: userId, kind: 'friend_request', who: req.user.full_name || null }); } catch(e) {}
     res.json({ message: 'Pedido enviado' });
   } catch (err) {
     console.error('Erro ao enviar pedido:', err);
@@ -116,7 +116,7 @@ router.put('/accept/:friendshipId', async (req, res) => {
     // Notify the requester that their request was accepted
     const friendship = await db.prepare('SELECT requester_id FROM friendships WHERE id = ?').get(friendshipId);
     if (friendship) {
-      try { await createNotification(friendship.requester_id, 'friend_accepted', 'Amizade aceita!', `${req.user.full_name || 'Alguem'} aceitou seu pedido de amizade!`, { from: userId }); } catch(e) {}
+      try { const [title, body] = await require('../services/notifyText').textFor('friend_accepted', friendship.requester_id, req.user.full_name); await createNotification(friendship.requester_id, 'friend_accepted', title, body, { from: userId, kind: 'friend_accepted', who: req.user.full_name || null }); } catch(e) {}
     }
     res.json({ message: 'Amizade aceita' });
   } catch (err) {
