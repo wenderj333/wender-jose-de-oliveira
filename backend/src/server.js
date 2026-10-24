@@ -1,4 +1,4 @@
-﻿require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
@@ -30,6 +30,7 @@ app.use(cors({
 }));
 // Stripe webhook needs raw body BEFORE express.json()
 app.use('/api/stripe/webhook', express.raw({type: 'application/json'}));
+app.use('/api/course/webhook', express.raw({type: 'application/json'}));
 app.use(express.json());
 app.use(require('helmet')());
 

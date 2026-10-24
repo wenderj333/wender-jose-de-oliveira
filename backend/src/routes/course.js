@@ -140,6 +140,11 @@ router.get('/total', async (req, res) => {
       )
     `);
     console.log('[course] course_purchases table ready');
+    await db.query("ALTER TABLE course_purchases ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'pending'");
+    // A tabela pode ter sido criada com outro formato (havia duas migrações diferentes)
+    await db.query('ALTER TABLE course_purchases ADD COLUMN IF NOT EXISTS amount_cents INTEGER');
+    await db.query('ALTER TABLE course_purchases ADD COLUMN IF NOT EXISTS currency TEXT');
+    try { await db.query('ALTER TABLE course_purchases ALTER COLUMN amount DROP NOT NULL'); } catch (_) {}
   } catch (e) { console.error('[course] purchases migration error:', e.message); }
 })();
 
@@ -207,18 +212,16 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
     const stripe = require('stripe')(STRIPE_SECRET);
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-    let event;
-    if (endpointSecret) {
-      const sig = req.headers['stripe-signature'];
-      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-    } else {
-      event = req.body;
-    }
+    // Só aceita avisos assinados pelo Stripe (antes, sem segredo, qualquer pessoa podia fingir um pagamento)
+    if (!endpointSecret || !Buffer.isBuffer(req.body)) return res.status(400).send('Webhook not configured');
+    const event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], endpointSecret);
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
       const email = session.metadata?.email || session.customer_email;
-      if (email) {
+      if (session.metadata?.course_type || session.metadata?.courseType) {
+        await db.query("UPDATE course_purchases SET status = 'paid' WHERE stripe_session_id = $1", [session.id]).catch(() => {});
+      } else if (email && session.payment_status === 'paid') {
         await db.prepare('UPDATE course_enrollments SET is_premium = true WHERE email = ?')
           .run(email.trim().toLowerCase());
         console.log('[course] Payment confirmed for:', email);
@@ -235,11 +238,18 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 // POST /api/course/confirm-payment — manual confirmation (for success_url fallback)
 router.post('/confirm-payment', async (req, res) => {
   try {
-    const { email } = req.body;
-    if (!email) return res.status(400).json({ error: 'Email obrigat\u00f3rio' });
-    // Mark as premium (in production, verify with Stripe API)
-    await db.prepare('UPDATE course_enrollments SET is_premium = true WHERE email = ?')
-      .run(email.trim().toLowerCase());
+    // Antes marcava como premium qualquer e-mail sem pagar. Agora confirma o pagamento no Stripe.
+    const { sessionId } = req.body || {};
+    if (!STRIPE_SECRET || !/^cs_[A-Za-z0-9_]+$/.test(String(sessionId || ''))) return res.status(400).json({ error: 'invalid_session' });
+    const stripe = require('stripe')(STRIPE_SECRET);
+    const session = await stripe.checkout.sessions.retrieve(String(sessionId));
+    if (!session || session.payment_status !== 'paid') return res.status(402).json({ error: 'not_paid' });
+    const email = String(session.metadata?.email || session.customer_email || '').trim().toLowerCase();
+    if (session.metadata?.course_type || session.metadata?.courseType) {
+      await db.query("UPDATE course_purchases SET status = 'paid' WHERE stripe_session_id = $1", [session.id]).catch(() => {});
+      return res.json({ success: true, courseType: session.metadata.course_type || session.metadata.courseType });
+    }
+    if (email) await db.prepare('UPDATE course_enrollments SET is_premium = true WHERE email = ?').run(email);
     res.json({ success: true });
   } catch (e) {
     console.error('[course] confirm error:', e);
@@ -255,11 +265,13 @@ const COURSE_PRICES = {
     EUR: { amount: 1999, name: 'Finan\u00e7as B\u00edblicas - Sigo com F\u00e9' },
     USD: { amount: 1999, name: 'Biblical Finance - Sigo com F\u00e9' },
     BRL: { amount: 4990, name: 'Finan\u00e7as B\u00edblicas - Sigo com F\u00e9' },
+    OTHER: { amount: 999, name: 'Biblical Finance - Sigo com F\u00e9' },
   },
   theology: {
     EUR: { amount: 2999, name: 'Curso de Teologia - Sigo com F\u00e9' },
     USD: { amount: 2999, name: 'Theology Course - Sigo com F\u00e9' },
     BRL: { amount: 7990, name: 'Curso de Teologia - Sigo com F\u00e9' },
+    OTHER: { amount: 1499, name: 'Theology Course - Sigo com F\u00e9' },
   },
 };
 
@@ -268,12 +280,16 @@ function createCourseCheckout(courseType) {
     try {
       if (!STRIPE_SECRET) return res.status(500).json({ error: 'Stripe not configured' });
       const stripe = require('stripe')(STRIPE_SECRET);
-      const { email, currency, amount } = req.body;
-      if (!email) return res.status(400).json({ error: 'Email obrigat\u00f3rio' });
+      const { email } = req.body || {};
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).trim())) return res.status(400).json({ error: 'Email obrigat\u00f3rio' });
 
-      const cur = (currency || 'EUR').toUpperCase();
+      // O preço é sempre o do servidor (antes vinha do navegador e podia ser alterado para 1 cêntimo)
+      const REGION = { eu: 'EUR', us: 'USD', br: 'BRL', other: 'OTHER' };
+      let cur = REGION[String(req.body?.region || '').toLowerCase()];
+      if (!cur) cur = ({ eur: 'EUR', usd: 'USD', brl: 'BRL' })[String(req.body?.currency || '').toLowerCase()] || 'EUR';
       const config = COURSE_PRICES[courseType]?.[cur] || COURSE_PRICES[courseType]?.EUR;
-      const finalAmount = amount || config.amount;
+      const finalAmount = config.amount;
+      if (cur === 'OTHER') cur = 'USD';
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -292,15 +308,15 @@ function createCourseCheckout(courseType) {
           quantity: 1,
         }],
         mode: 'payment',
-        success_url: `${SITE_URL}/curso-${courseType === 'finance' ? 'financas' : 'teologia'}?paid=success&email=${encodeURIComponent(email)}`,
+        success_url: `${SITE_URL}/curso-${courseType === 'finance' ? 'financas' : 'teologia'}?paid=success&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${SITE_URL}/curso-${courseType === 'finance' ? 'financas' : 'teologia'}?paid=cancel`,
-        metadata: { email: email.trim().toLowerCase(), courseType },
+        metadata: { email: email.trim().toLowerCase(), courseType, course_type: courseType },
       });
 
       // Record purchase attempt
       try {
         await db.prepare(
-          'INSERT INTO course_purchases (email, course_type, currency, amount_cents, stripe_session_id) VALUES (?, ?, ?, ?, ?)'
+          "INSERT INTO course_purchases (email, course_type, currency, amount_cents, stripe_session_id, status) VALUES (?, ?, ?, ?, ?, 'pending')"
         ).run(email.trim().toLowerCase(), courseType, cur, finalAmount, session.id);
       } catch (e) { console.error('[course] record purchase error:', e.message); }
 
@@ -314,99 +330,5 @@ function createCourseCheckout(courseType) {
 
 router.post('/create-checkout-finance', createCourseCheckout('finance'));
 router.post('/create-checkout-theology', createCourseCheckout('theology'));
-
-// =================== AUTO-MIGRATE: course_purchases ===================
-(async () => {
-  try {
-    await db.exec(`
-      CREATE TABLE IF NOT EXISTS course_purchases (
-        id SERIAL PRIMARY KEY,
-        email TEXT NOT NULL,
-        course_type TEXT NOT NULL,
-        amount INTEGER NOT NULL,
-        currency TEXT NOT NULL DEFAULT 'eur',
-        stripe_session_id TEXT,
-        status TEXT DEFAULT 'completed',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-  } catch (e) { console.log('[course] course_purchases table ready'); }
-})();
-
-// POST /api/course/create-checkout-finance — Stripe checkout for Biblical Finance course
-router.post('/create-checkout-finance', async (req, res) => {
-  try {
-    if (!STRIPE_SECRET) return res.status(500).json({ error: 'Stripe not configured' });
-    const stripe = require('stripe')(STRIPE_SECRET);
-    const { email, amount, currency } = req.body;
-    if (!email) return res.status(400).json({ error: 'Email obrigat\u00f3rio' });
-
-    const unitAmount = amount || 1999;
-    const cur = currency || 'eur';
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      customer_email: email.trim().toLowerCase(),
-      line_items: [{
-        price_data: {
-          currency: cur,
-          product_data: {
-            name: 'Finan\u00e7as B\u00edblicas - Sigo com F\u00e9',
-            description: 'Curso completo de Finan\u00e7as B\u00edblicas com 15 li\u00e7\u00f5es.',
-          },
-          unit_amount: unitAmount,
-        },
-        quantity: 1,
-      }],
-      mode: 'payment',
-      success_url: `${SITE_URL}/curso-financas?paid=success&email=${encodeURIComponent(email)}`,
-      cancel_url: `${SITE_URL}/curso-financas?paid=cancel`,
-      metadata: { email: email.trim().toLowerCase(), course_type: 'finance' },
-    });
-
-    res.json({ url: session.url });
-  } catch (e) {
-    console.error('[course] finance checkout error:', e);
-    res.status(500).json({ error: 'Erro ao criar pagamento' });
-  }
-});
-
-// POST /api/course/create-checkout-theology — Stripe checkout for Theology course
-router.post('/create-checkout-theology', async (req, res) => {
-  try {
-    if (!STRIPE_SECRET) return res.status(500).json({ error: 'Stripe not configured' });
-    const stripe = require('stripe')(STRIPE_SECRET);
-    const { email, amount, currency } = req.body;
-    if (!email) return res.status(400).json({ error: 'Email obrigat\u00f3rio' });
-
-    const unitAmount = amount || 2999;
-    const cur = currency || 'eur';
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      customer_email: email.trim().toLowerCase(),
-      line_items: [{
-        price_data: {
-          currency: cur,
-          product_data: {
-            name: 'Teologia Crist\u00e3 - Sigo com F\u00e9',
-            description: 'Curso completo de Teologia com 20 li\u00e7\u00f5es aprofundadas.',
-          },
-          unit_amount: unitAmount,
-        },
-        quantity: 1,
-      }],
-      mode: 'payment',
-      success_url: `${SITE_URL}/curso-teologia?paid=success&email=${encodeURIComponent(email)}`,
-      cancel_url: `${SITE_URL}/curso-teologia?paid=cancel`,
-      metadata: { email: email.trim().toLowerCase(), course_type: 'theology' },
-    });
-
-    res.json({ url: session.url });
-  } catch (e) {
-    console.error('[course] theology checkout error:', e);
-    res.status(500).json({ error: 'Erro ao criar pagamento' });
-  }
-});
 
 module.exports = router;
