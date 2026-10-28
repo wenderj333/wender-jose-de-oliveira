@@ -574,6 +574,7 @@ app.use('/api/ai-louvor', require('./routes/ai-louvor'));
 app.use('/api/openclaw', require('./routes/openclaw'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/help-posts', require('./routes/help-posts'));
+app.use('/api/garden', require('./routes/garden'));
 app.use('/api/live-community', require('./routes/live-community'));
 app.use('/api/prayer-chat', require('./routes/prayer-chat'));
 app.use('/api/community-chat', require('./routes/community-chat'));
