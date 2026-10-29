@@ -97,7 +97,12 @@ router.get('/', async (req, res) => {
         split_part(COALESCE(u.display_name, u.full_name, ''), ' ', 1) AS name, u.avatar_url,
         (gt.last_seen > NOW() - INTERVAL '3 minutes') AS present,
         (SELECT MAX(hpp.created_at) FROM help_post_prayers hpp JOIN help_posts hp ON hp.id = hpp.post_id
-          WHERE hp.user_id = gt.user_id AND hpp.user_id <> gt.user_id) AS last_prayer_received
+          WHERE hp.user_id = gt.user_id AND hpp.user_id <> gt.user_id) AS last_prayer_received,
+        -- Última vez que a pessoa orou (sem orar, a árvore vai perdendo as folhas ao longo de uma semana)
+        GREATEST(gt.created_at,
+          (SELECT MAX(x.created_at) FROM help_post_prayers x WHERE x.user_id = gt.user_id),
+          (SELECT MAX(m.created_at) FROM garden_marks m WHERE m.user_id = gt.user_id AND m.kind IN ('world','share')),
+          (SELECT MAX(h.created_at) FROM help_posts h WHERE h.user_id = gt.user_id AND h.post_type IN ('prayer','request'))) AS last_active
       FROM garden_trees gt JOIN users u ON u.id = gt.user_id
       WHERE LOWER(TRIM(COALESCE(u.full_name,''))) <> 'test user'
       ORDER BY (gt.user_id = $1::uuid) DESC, gt.growth DESC, gt.created_at ASC
