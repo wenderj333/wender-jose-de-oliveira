@@ -8,7 +8,7 @@
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
-const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
+const { geminiModels } = require('./geminiModels');
 const ANTHROPIC_MODELS = ['claude-haiku-4-5', 'claude-haiku-5-5', 'claude-3-5-haiku-latest'];
 const geminiUrl = (m) => `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${GEMINI_API_KEY}`;
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
@@ -29,7 +29,7 @@ async function callOllama(systemPrompt, userMessage) {
   return data.response;
 }
 
-async function callGemini(systemPrompt, userMessage, model = GEMINI_MODELS[0]) {
+async function callGemini(systemPrompt, userMessage, model) {
   if (!GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not set');
 
   const response = await fetch(geminiUrl(model), {
@@ -98,7 +98,7 @@ async function callAnthropic(systemPrompt, userMessage, model = ANTHROPIC_MODELS
 async function generateReply(systemPrompt, userMessage) {
   const errors = [];
   const tries = [
-    ...(GEMINI_API_KEY ? GEMINI_MODELS.map(m => ['Gemini', m, callGemini]) : []),
+    ...(GEMINI_API_KEY ? (await geminiModels()).map(m => ['Gemini', m, callGemini]) : []),
     ...(ANTHROPIC_API_KEY ? ANTHROPIC_MODELS.map(m => ['Anthropic', m, callAnthropic]) : []),
   ];
   for (const [name, model, fn] of tries) {
@@ -107,8 +107,8 @@ async function generateReply(systemPrompt, userMessage) {
       console.log(`[LLM] Used: ${name} ${model}`);
       return reply;
     } catch (err) {
-      console.warn(`[LLM] ${name} ${model} failed:`, String(err.message).slice(0, 200));
-      errors.push(`${name} ${model}: ${String(err.message).slice(0, 120)}`);
+      console.warn(`[LLM] ${name} ${model} failed:`, String(err.message).replace(/\s+/g, ' ').slice(0, 300));
+      errors.push(`${name} ${model}: ${String(err.message).replace(/\s+/g, ' ').slice(0, 160)}`);
     }
   }
   throw new Error(`All LLMs failed: ${errors.join(' | ')}`);

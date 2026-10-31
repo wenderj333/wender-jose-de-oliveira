@@ -52,7 +52,8 @@ async function ensureTables() {
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const SUNO_API_KEY = process.env.SUNO_API_KEY;
 // Use 2.5-flash for higher rate limits on free tier
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+const { geminiModels } = require('../services/geminiModels');
+const geminiUrl = (m) => `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${GEMINI_API_KEY}`;
 const FREE_CREDITS = 4;
 const PACK_CREDITS = 250;
 
@@ -101,10 +102,11 @@ router.post('/generate', authenticate, async (req, res) => {
     const prompt = `Voce e um compositor cristao profissional. Crie uma letra de louvor completa em ${langName}. Tema: ${theme || ''}. Estilo: ${style || 'worship'}. Emocao: ${emotion || 'inspiradora'}. ${bibleBook ? 'Livro: ' + bibleBook : ''} ${verse ? 'Versiculo: ' + verse : ''}\n\nFormato:\nTITULO: [titulo]\n\n[Verso 1]\n...\n[Coro]\n...\n[Verso 2]\n...\n[Ponte]\n...\n[Coro Final]\n...`;
     let lastError = '';
     let response;
+    const models = await geminiModels();
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         if (attempt > 0) await new Promise(r => setTimeout(r, attempt * 2000));
-        response = await fetch(GEMINI_URL, {
+        response = await fetch(geminiUrl(models[Math.min(attempt, models.length - 1)]), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -112,7 +114,7 @@ router.post('/generate', authenticate, async (req, res) => {
             generationConfig: { temperature: 0.9, maxOutputTokens: 1000 },
           }),
         });
-        if (response.status !== 429) break;
+        if (response.ok || (response.status !== 429 && response.status !== 404)) break;
       } catch (e) { lastError = e.message; break; }
     }
     let lyrics = null;

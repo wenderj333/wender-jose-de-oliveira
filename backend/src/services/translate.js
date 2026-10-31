@@ -6,11 +6,16 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const LANG_NAMES = { pt: 'Brazilian Portuguese', es: 'Spanish', en: 'English', de: 'German', fr: 'French', ro: 'Romanian', ru: 'Russian' };
 
 // Gemini primeiro (bem mais barato); Claude só como reserva.
-const CANDIDATES = [
-  ...(GEMINI_API_KEY ? ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'].map(m => ({ kind: 'gemini', model: m })) : []),
+const { geminiModels } = require('./geminiModels');
+const ANTHROPIC_CANDIDATES = [
   ...(ANTHROPIC_API_KEY ? ['claude-haiku-4-5', 'claude-haiku-5-5', 'claude-3-5-haiku-latest'].map(m => ({ kind: 'anthropic', model: m })) : []),
 ];
 let working = null;
+async function candidates() {
+  const g = GEMINI_API_KEY ? (await geminiModels()).map(m => ({ kind: 'gemini', model: m })) : [];
+  return [...g, ...ANTHROPIC_CANDIDATES];
+}
+const same = (a, b) => a && b && a.kind === b.kind && a.model === b.model;
 
 async function call(c, prompt) {
   if (c.kind === 'anthropic') {
@@ -42,7 +47,8 @@ function parseArray(text, n) {
 
 // Pergunta curta a um modelo (usa o mesmo modelo que já funcionou)
 async function ask(prompt) {
-  const order = working ? [working, ...CANDIDATES.filter(c => c !== working)] : CANDIDATES;
+  const all = await candidates();
+  const order = working ? [working, ...all.filter(c => !same(c, working))] : all;
   let lastErr = new Error('no provider configured');
   for (const c of order) {
     try { const out = await call(c, prompt); if (out) { working = c; return out; } } catch (e) { lastErr = e; }
@@ -60,7 +66,8 @@ Return ONLY a JSON array of ${texts.length} strings, in the same order.
 
 Messages (JSON):
 ${JSON.stringify(texts)}`;
-  const order = working ? [working, ...CANDIDATES.filter(c => c !== working)] : CANDIDATES;
+  const all = await candidates();
+  const order = working ? [working, ...all.filter(c => !same(c, working))] : all;
   let lastErr = new Error('no translation provider configured');
   for (const c of order) {
     try {
