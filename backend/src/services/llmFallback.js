@@ -1,13 +1,16 @@
 /**
  * LLM Fallback Service
- * Tries Gemini first, then Claude (Anthropic) as fallback.
+ * Tries Gemini first (cheaper), then Claude (Anthropic) as fallback.
+ * Each provider tries a short list of models, so a retired model does not break the feature.
  * Set GEMINI_API_KEY and/or ANTHROPIC_API_KEY on Render.
  */
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
+const ANTHROPIC_MODELS = ['claude-haiku-4-5', 'claude-haiku-5-5', 'claude-3-5-haiku-latest'];
+const geminiUrl = (m) => `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${GEMINI_API_KEY}`;
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 
 
@@ -26,10 +29,10 @@ async function callOllama(systemPrompt, userMessage) {
   return data.response;
 }
 
-async function callGemini(systemPrompt, userMessage) {
+async function callGemini(systemPrompt, userMessage, model = GEMINI_MODELS[0]) {
   if (!GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not set');
 
-  const response = await fetch(GEMINI_URL, {
+  const response = await fetch(geminiUrl(model), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -57,7 +60,7 @@ async function callGemini(systemPrompt, userMessage) {
   return reply;
 }
 
-async function callAnthropic(systemPrompt, userMessage) {
+async function callAnthropic(systemPrompt, userMessage, model = ANTHROPIC_MODELS[0]) {
   if (!ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY not set');
 
   const response = await fetch(ANTHROPIC_URL, {
@@ -68,7 +71,7 @@ async function callAnthropic(systemPrompt, userMessage) {
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-3-haiku-20240307',
+      model,
       max_tokens: 2048,
       system: systemPrompt,
       messages: [{ role: 'user', content: userMessage }],
@@ -94,31 +97,20 @@ async function callAnthropic(systemPrompt, userMessage) {
  */
 async function generateReply(systemPrompt, userMessage) {
   const errors = [];
-
-  // 1. Try Anthropic Claude first
-  if (ANTHROPIC_API_KEY) {
+  const tries = [
+    ...(GEMINI_API_KEY ? GEMINI_MODELS.map(m => ['Gemini', m, callGemini]) : []),
+    ...(ANTHROPIC_API_KEY ? ANTHROPIC_MODELS.map(m => ['Anthropic', m, callAnthropic]) : []),
+  ];
+  for (const [name, model, fn] of tries) {
     try {
-      const reply = await callAnthropic(systemPrompt, userMessage);
-      console.log('[LLM] Used: Anthropic Claude');
+      const reply = await fn(systemPrompt, userMessage, model);
+      console.log(`[LLM] Used: ${name} ${model}`);
       return reply;
     } catch (err) {
-      console.warn('[LLM] Anthropic failed:', err.message);
-      errors.push(`Anthropic: ${err.message}`);
+      console.warn(`[LLM] ${name} ${model} failed:`, String(err.message).slice(0, 200));
+      errors.push(`${name} ${model}: ${String(err.message).slice(0, 120)}`);
     }
   }
-
-  // 2. Fallback to Gemini
-  if (GEMINI_API_KEY) {
-    try {
-      const reply = await callGemini(systemPrompt, userMessage);
-      console.log('[LLM] Used: Gemini (fallback)');
-      return reply;
-    } catch (err) {
-      console.warn('[LLM] Gemini failed:', err.message);
-      errors.push(`Gemini: ${err.message}`);
-    }
-  }
-
   throw new Error(`All LLMs failed: ${errors.join(' | ')}`);
 }
 

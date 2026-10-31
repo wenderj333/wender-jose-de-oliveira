@@ -5,9 +5,10 @@ const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const LANG_NAMES = { pt: 'Brazilian Portuguese', es: 'Spanish', en: 'English', de: 'German', fr: 'French', ro: 'Romanian', ru: 'Russian' };
 
+// Gemini primeiro (bem mais barato); Claude só como reserva.
 const CANDIDATES = [
-  ...(ANTHROPIC_API_KEY ? ['claude-haiku-5-5', 'claude-haiku-4-5', 'claude-3-5-haiku-latest', 'claude-3-haiku-20240307'].map(m => ({ kind: 'anthropic', model: m })) : []),
-  ...(GEMINI_API_KEY ? ['gemini-2.5-flash', 'gemini-2.0-flash'].map(m => ({ kind: 'gemini', model: m })) : []),
+  ...(GEMINI_API_KEY ? ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'].map(m => ({ kind: 'gemini', model: m })) : []),
+  ...(ANTHROPIC_API_KEY ? ['claude-haiku-4-5', 'claude-haiku-5-5', 'claude-3-5-haiku-latest'].map(m => ({ kind: 'anthropic', model: m })) : []),
 ];
 let working = null;
 
