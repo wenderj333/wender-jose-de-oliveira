@@ -162,6 +162,18 @@ const LAUNCH_TEXT = {
   ro: { day: ['🙏 Mâine: lansarea Rugăciunii Mondiale', 'Mâine ne rugăm împreună cu frați din multe țări. Nu lipsi!'], soon: ['⏰ În 15 minute începe Rugăciunea Mondială', 'Pregătește-ți inima și intră în camera vocală.'], now: ['🎉 A început Rugăciunea Mondială!', 'Intră acum și roagă-te cu frați din toată lumea.'], praying: ['🟢 Sunt oameni care se roagă acum', '{n} persoane sunt în Rugăciunea Mondială. Vino să te rogi!'] },
   ru: { day: ['🙏 Завтра: открытие Мировой молитвы', 'Завтра мы будем молиться вместе с верующими из многих стран. Не пропустите!'], soon: ['⏰ Через 15 минут начнётся Мировая молитва', 'Приготовьте сердце и войдите в голосовую комнату.'], now: ['🎉 Мировая молитва началась!', 'Присоединяйтесь сейчас и молитесь с верующими со всего мира.'], praying: ['🟢 Сейчас люди молятся', '{n} человек в Мировой молитве. Присоединяйтесь!'] }
 };
+// Inauguração adiada (1/11/2026): o pastor não pôde fazer a inauguração. Sem lembretes de "começou";
+// em vez disso, um único aviso de desculpas a inscritos e a quem fez pedido. Desligar: PRAYER_LAUNCH_POSTPONED=false
+const LAUNCH_POSTPONED = String(process.env.PRAYER_LAUNCH_POSTPONED ?? 'true') !== 'false';
+const POSTPONED_TEXT = {
+  pt: ['🙏 Inauguração da Oração Mundial adiada', 'Hoje o pastor não pôde fazer a inauguração. Pedimos perdão a todos! Em breve vamos comunicar a nova data. Deus abençoe cada um de vocês.'],
+  es: ['🙏 Inauguración de la Oración Mundial aplazada', 'Hoy el pastor no pudo hacer la inauguración. ¡Pedimos perdón a todos! Pronto comunicaremos la nueva fecha. Dios bendiga a cada uno de ustedes.'],
+  en: ['🙏 World Prayer launch postponed', 'Today the pastor was unable to lead the launch. We sincerely apologize to everyone! We will announce the new date soon. God bless each one of you.'],
+  de: ['🙏 Start des Weltgebets verschoben', 'Heute konnte der Pastor den Start leider nicht leiten. Wir bitten alle um Entschuldigung! Den neuen Termin geben wir bald bekannt. Gott segne jeden von euch.'],
+  fr: ['🙏 Lancement de la Prière Mondiale reporté', 'Aujourd’hui, le pasteur n’a pas pu faire le lancement. Nous demandons pardon à tous ! Nous annoncerons bientôt la nouvelle date. Que Dieu bénisse chacun de vous.'],
+  ro: ['🙏 Lansarea Rugăciunii Mondiale a fost amânată', 'Astăzi pastorul nu a putut face lansarea. Ne cerem iertare de la toți! În curând vom anunța noua dată. Dumnezeu să vă binecuvânteze pe fiecare.'],
+  ru: ['🙏 Открытие Мировой молитвы перенесено', 'Сегодня пастор не смог провести открытие. Просим у всех прощения! Скоро мы сообщим новую дату. Да благословит Бог каждого из вас.'],
+};
 // Quem fez um pedido de oração desde o início da campanha também recebe os lembretes (com texto próprio)
 const ASK_SINCE = process.env.PRAYER_ASK_SINCE || '2026-10-15T00:00:00Z';
 const ASK_TEXT = {
@@ -206,8 +218,8 @@ router.get('/launch', optionalAuth, async (req, res) => {
       joined = !!a.rows[0]; alerts = !!b.rows[0];
     }
     res.set('Cache-Control', 'no-store');
-    res.json({ startsAt: LAUNCH_AT.toISOString(), count: c.rows[0].n, joined, alerts });
-  } catch (e) { res.json({ startsAt: LAUNCH_AT.toISOString(), count: 0, joined: false, alerts: false }); }
+    res.json({ startsAt: LAUNCH_AT.toISOString(), postponed: LAUNCH_POSTPONED, count: c.rows[0].n, joined, alerts });
+  } catch (e) { res.json({ startsAt: LAUNCH_AT.toISOString(), postponed: LAUNCH_POSTPONED, count: 0, joined: false, alerts: false }); }
 });
 // GET /api/help-posts/launch/people — quem já confirmou presença na inauguração (só para membros com sessão)
 router.get('/launch/people', authenticate, async (req, res) => {
@@ -261,7 +273,8 @@ async function sendLaunchStage(stage) {
   const all = [...r.rows, ...askers];
   console.log(`Oração Mundial: lembrete "${stage}" para ${all.length} pessoas (${askers.length} com pedido)`);
   for (const row of all) {
-    const [title, body] = row.asker ? (ASK_TEXT[pickLang(row.lang)] || ASK_TEXT.pt)[stage] : lt(row.lang)[stage];
+    const [title, body] = stage === 'postponed' ? (POSTPONED_TEXT[pickLang(row.lang)] || POSTPONED_TEXT.pt)
+      : row.asker ? (ASK_TEXT[pickLang(row.lang)] || ASK_TEXT.pt)[stage] : lt(row.lang)[stage];
     await createNotification(row.user_id, 'prayer', title, body, { url: '/praca-oracao', kind: 'prayer_launch' });
     await sleep(40);
   }
@@ -269,6 +282,7 @@ async function sendLaunchStage(stage) {
 async function launchTick() {
   try {
     const now = Date.now(); const at = LAUNCH_AT.getTime();
+    if (LAUNCH_POSTPONED) { if (now < at + 3 * 3600e3) await sendLaunchStage('postponed'); return; }
     if (now >= at - 24 * 3600e3 && now < at - 20 * 3600e3) await sendLaunchStage('day');
     if (now >= at - 15 * 60e3 && now < at) await sendLaunchStage('soon');
     if (now >= at && now < at + 60 * 60e3) await sendLaunchStage('now');
