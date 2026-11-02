@@ -381,6 +381,10 @@ const { Pool: MigratePool } = require('pg');
       );
       CREATE INDEX IF NOT EXISTS idx_group_post_comments_post ON group_post_comments(post_id, created_at);
     `);
+    // Grupos estilo Facebook: privacidade oculta, perguntas, reações, enquetes, eventos com presenças, etc.
+    try {
+      await require('./db/groupsSchema').ensureGroupsSchema((sql) => mp.query(sql));
+    } catch (groupsErr) { console.error('Grupos: migração falhou:', groupsErr.message); }
 
     // Consecrations
     await mp.query(`
