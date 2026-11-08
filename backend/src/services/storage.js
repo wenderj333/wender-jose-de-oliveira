@@ -52,6 +52,9 @@ function makeKey(folder, contentType) {
   return `${folder}/${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${id}.${ext}`;
 }
 
+// Os ficheiros nunca mudam (nome aleatório), então podem ficar em cache por 1 ano
+const CACHE = 'public, max-age=31536000, immutable';
+
 // --- AWS SigV4 ---
 const enc = (s) => encodeURIComponent(s).replace(/[!'()*]/g, (c) => '%' + c.charCodeAt(0).toString(16).toUpperCase());
 const sha256 = (s) => crypto.createHash('sha256').update(s).digest('hex');
@@ -95,9 +98,9 @@ function presignPut({ key, contentType, contentLength, expiresIn = 600 }) {
   const uploadUrl = presignQuery({
     method: 'PUT', host, path, region: 'auto', amzDate, expiresIn,
     keyId: e.keyId, secret: e.secret,
-    headers: { 'content-length': Number(contentLength), 'content-type': type, host },
+    headers: { 'cache-control': CACHE, 'content-length': Number(contentLength), 'content-type': type, host },
   });
-  return { uploadUrl, headers: { 'Content-Type': type }, publicUrl: `${e.publicUrl}/${key}` };
+  return { uploadUrl, headers: { 'Content-Type': type, 'Cache-Control': CACHE }, publicUrl: `${e.publicUrl}/${key}` };
 }
 
 /** Pede um envio: valida pasta, tipo e tamanho. Lança erro com .status em caso de recusa. */
@@ -122,7 +125,7 @@ async function putBuffer(buffer, folder, contentType) {
   const p = prepareUpload({ folder, contentType, size: buffer.length });
   const r = await fetch(p.uploadUrl, {
     method: 'PUT',
-    headers: { 'Content-Type': cleanType(contentType), 'Content-Length': String(buffer.length) },
+    headers: { ...p.headers, 'Content-Length': String(buffer.length) },
     body: buffer,
   });
   if (!r.ok) throw new Error(`R2 PUT ${r.status}`);
