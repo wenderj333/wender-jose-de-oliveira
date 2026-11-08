@@ -20,7 +20,10 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 
 const uploadToCloud = (buffer, folder) => new Promise((resolve, reject) => { const stream = cloudinary.uploader.upload_stream({ folder, resource_type: 'auto' }, (error, result) => error ? reject(error) : resolve(result)); stream.end(buffer); });
 
 // Pontos de extensão (os testes trocam-nos por versões falsas)
-let uploader = async (buffer, folder) => (await uploadToCloud(buffer, folder)).secure_url;
+const storage = require('../services/storage');
+let uploader = async (buffer, folder, mimetype = 'image/jpeg') => (storage.isConfigured()
+  ? storage.putBuffer(buffer, String(folder).replace(/^sigo-com-fe\//, ''), mimetype)
+  : (await uploadToCloud(buffer, folder)).secure_url);
 let notify = (...args) => require('./notifications').createNotification(...args);
 router.setUploader = (fn) => { uploader = fn; };
 router.setNotifier = (fn) => { notify = fn; };
@@ -250,7 +253,7 @@ router.post('/', authenticate, upload.single('cover'), async (req, res) => {
     if (!s.name || s.name.length < 3) return fail(res, 400, 'O nome do grupo deve ter pelo menos 3 letras.');
     const visibility = s.visibility === undefined ? 'public' : s.visibility;
     if (!VISIBILITIES.includes(visibility)) return fail(res, 400, 'Privacidade inválida.');
-    const coverUrl = req.file && /^image\//.test(req.file.mimetype) ? await uploader(req.file.buffer, 'sigo-com-fe/groups') : null;
+    const coverUrl = req.file && /^image\//.test(req.file.mimetype) ? await uploader(req.file.buffer, 'sigo-com-fe/groups', req.file.mimetype) : null;
     const group = (await db.query(`INSERT INTO groups (name,description,cover_url,creator_id,privacy,visibility,require_approval,rules,rules_list,category,membership_questions,post_approval,invite_code,last_activity_at)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10,$11::jsonb,$12,$13,NOW()) RETURNING *`,
     [s.name, s.description || null, coverUrl, req.user.id, visibility === 'public' ? 'public' : 'private', visibility, Boolean(s.require_approval),
@@ -492,7 +495,7 @@ router.patch('/:id/settings', authenticate, upload.single('cover'), async (req, 
     if (s.name !== undefined && s.name.length < 3) return fail(res, 400, 'O nome do grupo deve ter pelo menos 3 letras.');
     if (s.visibility !== undefined && !VISIBILITIES.includes(s.visibility)) return res.status(400).json({ error: 'Privacidade inválida.' });
     let coverUrl = null;
-    if (req.file && /^image\//.test(req.file.mimetype)) coverUrl = await uploader(req.file.buffer, 'sigo-com-fe/groups');
+    if (req.file && /^image\//.test(req.file.mimetype)) coverUrl = await uploader(req.file.buffer, 'sigo-com-fe/groups', req.file.mimetype);
     const removeCover = bool(req.body?.remove_cover);
     const group = (await db.query(`UPDATE groups SET
         name=COALESCE($1,name), description=CASE WHEN $2::boolean THEN $3 ELSE description END,
@@ -594,7 +597,7 @@ router.post('/:id/posts', authenticate, upload.fields([{ name: 'media', maxCount
     const files = [...(req.files?.media || []), ...(req.files?.photos || [])].slice(0, 6);
     if (mutedNow(c.m)) return fail(res, 403, 'Está silenciado(a) neste grupo e não pode publicar por agora.', { code: 'muted', muted_until: c.m.muted_until });
     const media = [];
-    for (const f of files) media.push(await uploader(f.buffer, 'sigo-com-fe/group-posts'));
+    for (const f of files) media.push(await uploader(f.buffer, 'sigo-com-fe/group-posts', f.mimetype));
     await createPost(req, res, c, { ...req.body, media });
   } catch (error) { console.error('Group post error:', error.message); res.status(500).json({ error: 'Não foi possível publicar.' }); }
 });

@@ -585,6 +585,7 @@ app.use('/api/community-chat', require('./routes/community-chat'));
 app.use('/api/diary', require('./routes/diary'));
 app.use('/api/reflection', require('./routes/reflection'));
 app.use('/api/calls', require('./routes/calls'));
+app.use('/api/media', require('./routes/media'));
 
 // Log OpenClaw routes for debugging
 console.log('✅ OpenClaw routes registered: /api/openclaw/health, /api/openclaw/users/new');

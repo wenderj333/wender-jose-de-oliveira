@@ -6,6 +6,8 @@
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'groups-test-secret';
 process.env.GROUPS_DISABLE_JOBS = '1';
 if (!process.env.DATABASE_URL) throw new Error('Defina DATABASE_URL (ex.: postgres://postgres@localhost:5491/groupstest)');
+// Proteção: este harness APAGA a base inteira (DROP SCHEMA). Só corre numa base local cujo nome tenha "test".
+if (!/@(localhost|127\.0\.0\.1)(:\d+)?\/[^/?]*test/i.test(process.env.DATABASE_URL)) throw new Error('Recuso-me: o harness só corre numa base LOCAL com "test" no nome.');
 
 const express = require('express');
 const jwt = require('jsonwebtoken');

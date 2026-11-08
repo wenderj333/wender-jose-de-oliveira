@@ -43,7 +43,11 @@ const VISIBILITIES = ['public', 'members', 'friends', 'private'];
 })();
 
 // Upload to Cloudinary helper
+const storage = require('../services/storage');
 function uploadToCloudinary(buffer, mimetype) {
+  if (storage.isConfigured()) {
+    return storage.putBuffer(buffer, 'posts', mimetype).then((url) => ({ secure_url: url }));
+  }
   return new Promise((resolve, reject) => {
     const resourceType = mimetype.startsWith('video/') ? 'video' : 'image';
     const stream = cloudinary.uploader.upload_stream(
