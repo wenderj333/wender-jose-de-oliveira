@@ -45,9 +45,9 @@ function cleanType(contentType) {
   return String(contentType || '').toLowerCase().split(';')[0].trim();
 }
 
-function makeKey(folder, contentType) {
+function makeKey(folder, contentType, extOverride) {
   const d = new Date();
-  const ext = EXT[cleanType(contentType)] || 'bin';
+  const ext = extOverride || EXT[cleanType(contentType)] || 'bin';
   const id = crypto.randomBytes(12).toString('hex');
   return `${folder}/${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${id}.${ext}`;
 }
@@ -120,9 +120,21 @@ function prepareUpload({ folder, contentType, size }) {
   return { key, kind, ...presignPut({ key, contentType, contentLength: n }) };
 }
 
-/** Envio feito pelo servidor (ex.: capa de grupo recebida por multer). Devolve a URL pública. */
-async function putBuffer(buffer, folder, contentType) {
-  const p = prepareUpload({ folder, contentType, size: buffer.length });
+/** Envio feito pelo servidor (ex.: capa de grupo recebida por multer). Devolve a URL pública.
+ *  opts.legacy: resgate de ficheiros antigos (sem limite de tamanho/tipo, pasta "legacy"). */
+async function putBuffer(buffer, folder, contentType, opts = {}) {
+  let p;
+  if (opts.legacy) {
+    if (!isConfigured()) throw new Error('Armazenamento não configurado');
+    const type = cleanType(contentType) || 'application/octet-stream';
+    // svg/html nunca são servidos como tal (mesmo domínio do site): ficam como download binário
+    const safe = /^(image|video|audio)\//.test(type) && type !== 'image/svg+xml';
+    const finalType = safe ? type : 'application/octet-stream';
+    const key = makeKey('legacy', finalType, safe ? undefined : 'bin');
+    p = { key, ...presignPut({ key, contentType: finalType, contentLength: buffer.length, expiresIn: 3600 }) };
+  } else {
+    p = prepareUpload({ folder, contentType, size: buffer.length });
+  }
   const r = await fetch(p.uploadUrl, {
     method: 'PUT',
     headers: { ...p.headers, 'Content-Length': String(buffer.length) },
